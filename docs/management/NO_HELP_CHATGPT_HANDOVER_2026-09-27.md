@@ -112,6 +112,22 @@ ticket alone later in a plainer form; never copy another ticket's text.
 
 **One go (owner, 2026-09-28):** when Claude opens the remaining tickets, deliver ALL of them (summary tickets and stories, in serial order) without waiting for sign-off or review in between; hand the baton to Claude once, at the end.
 
+**Recalls (owner, 2026-09-29).** A quality problem found after clues are in
+the game (by a count, or later by a player) becomes a recall in
+`content/nohelp/recalls.json`: why, the pieces it removes (`ban`), a rarity
+floor (`rare`) and the recalled clue ids with the side each one's blind read
+gave. For each recalled id, write one replacement: deliver
+`content/nohelp/incoming/<ticket>.json` holding **only the replacement rows,
+each under the recalled id** (the ticket's other rows stay untouched). A
+replacement keeps the form (a set stays a set), aims at the same side, uses
+none of the banned pieces and, as a set, uses at least one piece that fewer
+than `rare` other clues use, so every fix adds variety. Make it better than
+the old clue, not a copy with one object swapped. The converter check
+enforces form, ban and rarity (`RECALL_FORM`, `RECALL_BAN`, `RECALL_RARE`,
+`RECALL_ID`) and prints `recall R1: n/94 replaced`. Claude runs the one
+blind read; A, B or both goes in, none comes back. The old clue stays in the
+game until its replacement passes, then moves to `content/nohelp/retired/`.
+
 **Rounds (owner, 2026-09-27: the relay was too slow).** Work in rounds of
 **every open ticket** (the whole first release at once): deliver them one after another, one commit each, without
 waiting for Claude in between; then set the baton to CLAUDE with `REVIEW`

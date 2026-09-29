@@ -214,4 +214,36 @@ do
     assert(#out.rejected==1 and out.rejected[1].reasons[1].code=="EMPTY","an empty ticket is returned, not dropped silently")
 end
 
+-- RECALLS (owner, 2026-09-29): a recalled clue is replaced on its own; the
+-- ticket's other rows stay; the old clue goes to retired/ with its recall.
+do
+    assert(os.execute('mkdir -p "'..root..'/incoming" "'..root..'/accepted/sidecar" "'..root..'/rejected"')==0)
+    local TR="PLACE-zzrecall"
+    local keep=row(TR,"set","containment",{pieces={"Twine","Tarp"}})
+    local old=row(TR,"set","agricultural",{pieces={"KeyRing","Tarp"}})
+    write(TR,{keep,old}); run()
+    OPTS.recalls={R9={why="test",ban={"KeyRing"},rare=1,clues={[old.id]={side="B"}}}}
+    local function try(new,with)
+        write(TR,with or {new}); local rep=table.concat(run(),"\n")
+        local c=rejectedCodes(TR); os.remove(root.."/rejected/"..TR..".json")
+        return c[new.id] and c[new.id].code or "ok",rep
+    end
+    local function repl(extra) local r=row(TR,"set","agricultural",extra); r.id=old.id; return r end
+    assert(try(repl({pieces={"KeyRing","Bucket"}}))=="RECALL_BAN","a banned piece")
+    assert(try(repl({kind="written",pieces={"letter"}}))=="RECALL_FORM","the same form")
+    assert(try(repl({pieces={"Twine","Tarp"}}))=="RECALL_RARE","at least one rare piece")
+    local other=row(TR,"set","agricultural",{pieces={"Rope","Axe"}})
+    local code,rep=try(other,{other,repl({pieces={"Tarp","Axe"}})})
+    assert(code=="RECALL_ID","only recalled clues in a recall delivery")
+    assert(rep:find(TR..": replaced 1, returned 1",1,true),"the good replacement goes in")
+    local acc=J.decode(read(root.."/accepted/"..TR..".json"))
+    assert(#acc==2 and acc[1].id==keep.id and acc[2].id==old.id and acc[2].pieces[2]=="Axe","swapped in place, the rest kept")
+    local side=J.decode(read(root.."/accepted/sidecar/"..TR..".json"))
+    assert(side[keep.id] and side[old.id],"both sidecars kept")
+    local drawer=J.decode(read(root.."/retired/"..TR..".json"))
+    assert(#drawer==1 and drawer[1].recall=="R9" and drawer[1].row.pieces[1]=="KeyRing","the old clue is in the drawer")
+    assert(rep:find("recall R9: 1/1 replaced"),"progress")
+    OPTS.recalls={}; os.execute('rm -rf "'..root..'"')
+end
+
 print("nohelp_content_convert: ok")

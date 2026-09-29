@@ -1,3 +1,21 @@
+## DR-20260929-NOHELP-RECALLS — a repeatable recall round for quality problems
+
+Owner decision, 2026-09-29: an object appeared in 23% of the clues (players
+would learn that it means "clue"); the target is well under 5%, and the fix
+must be interesting and reusable for problems players report later. Every
+such problem becomes a recall (`content/nohelp/recalls.json`):
+
+1. The problem is written as a rule the converter checks (here: pieces banned).
+2. The affected clues are listed; each stays in the game until its
+   replacement passes.
+3. Each replacement keeps the form and aims at the same side, and a set uses
+   at least one piece that few other clues use, so the fix adds variety.
+4. The usual one blind read: A, B or both goes in; none is rewritten.
+5. The old clue moves to `content/nohelp/retired/` with its recall.
+
+Recall R1: 94 clues (all key-ring clues outside the 6 tickets whose recipe
+allows one); afterwards about 6 of ~429 clues carry one (about 1.4%).
+
 ## DR-20260928-NOHELP-CLUE-CHECK — one read: A, B, both or none
 
 Owner decision, 2026-09-28, after asking why the review had become a test

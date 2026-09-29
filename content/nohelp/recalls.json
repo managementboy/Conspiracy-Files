@@ -1,0 +1,297 @@
+{
+ "R1": {
+  "ban": [
+   "KeyRing",
+   "Key1",
+   "KeyRing_Hotel"
+  ],
+  "clues": {
+   "t0001-01": {
+    "side": "A"
+   },
+   "t0003-01": {
+    "side": "both"
+   },
+   "t0007-01": {
+    "side": "A"
+   },
+   "t0008-01": {
+    "side": "both"
+   },
+   "t0011-02": {
+    "side": "A"
+   },
+   "t0012-02": {
+    "side": "B"
+   },
+   "t0013-01": {
+    "side": "both"
+   },
+   "t0015-01": {
+    "side": "A"
+   },
+   "t0016-01": {
+    "side": "A"
+   },
+   "t0018-01": {
+    "side": "A"
+   },
+   "t0020-01": {
+    "side": "A"
+   },
+   "t0021-01": {
+    "side": "A"
+   },
+   "t0022-01": {
+    "side": "A"
+   },
+   "t0027-01": {
+    "side": "A"
+   },
+   "t0029-01": {
+    "side": "A"
+   },
+   "t0030-02": {
+    "side": "both"
+   },
+   "t0032-01": {
+    "side": "A"
+   },
+   "t0033-01": {
+    "side": "A"
+   },
+   "t0037-01": {
+    "side": "A"
+   },
+   "t0041-01": {
+    "side": "A"
+   },
+   "t0044-01": {
+    "side": "both"
+   },
+   "t0047-01": {
+    "side": "A"
+   },
+   "t0049-01": {
+    "side": "A"
+   },
+   "t0055-01": {
+    "side": "A"
+   },
+   "t0059-01": {
+    "side": "A"
+   },
+   "t0063-01": {
+    "side": "A"
+   },
+   "t0072-01": {
+    "side": "both"
+   },
+   "t0078-01": {
+    "side": "A"
+   },
+   "t0085-01": {
+    "side": "A"
+   },
+   "t0087-01": {
+    "side": "A"
+   },
+   "t0094-01": {
+    "side": "both"
+   },
+   "t0095-01": {
+    "side": "A"
+   },
+   "t0103-01": {
+    "side": "A"
+   },
+   "t0110-01": {
+    "side": "B"
+   },
+   "t0113-01": {
+    "side": "A"
+   },
+   "t0115-01": {
+    "side": "A"
+   },
+   "t0119-01": {
+    "side": "A"
+   },
+   "t0123-01": {
+    "side": "A"
+   },
+   "t0125-01": {
+    "side": "A"
+   },
+   "t0127-01": {
+    "side": "A"
+   },
+   "t0135-01": {
+    "side": "A"
+   },
+   "t0141-01": {
+    "side": "A"
+   },
+   "t0143-01": {
+    "side": "A"
+   },
+   "t0144-01": {
+    "side": "A"
+   },
+   "t0147-01": {
+    "side": "A"
+   },
+   "t0151-01": {
+    "side": "A"
+   },
+   "t0156-01": {
+    "side": "A"
+   },
+   "t0157-01": {
+    "side": "A"
+   },
+   "t0159-01": {
+    "side": "A"
+   },
+   "t0161-01": {
+    "side": "A"
+   },
+   "t0163-01": {
+    "side": "A"
+   },
+   "t0166-01": {
+    "side": "B"
+   },
+   "t0171-01": {
+    "side": "A"
+   },
+   "t0173-01": {
+    "side": "A"
+   },
+   "t0179-01": {
+    "side": "both"
+   },
+   "t0180-01": {
+    "side": "A"
+   },
+   "t0184-01": {
+    "side": "B"
+   },
+   "t0188-01": {
+    "side": "A"
+   },
+   "t0189-01": {
+    "side": "both"
+   },
+   "t0194-01": {
+    "side": "A"
+   },
+   "t0196-01": {
+    "side": "A"
+   },
+   "t0198-01": {
+    "side": "A"
+   },
+   "t0199-01": {
+    "side": "B"
+   },
+   "t0200-01": {
+    "side": "A"
+   },
+   "t0202-01": {
+    "side": "A"
+   },
+   "t0203-01": {
+    "side": "A"
+   },
+   "t0206-01": {
+    "side": "A"
+   },
+   "t0210-01": {
+    "side": "A"
+   },
+   "t0211-01": {
+    "side": "both"
+   },
+   "t0212-01": {
+    "side": "A"
+   },
+   "t0214-01": {
+    "side": "A"
+   },
+   "t0217-01": {
+    "side": "both"
+   },
+   "t0218-01": {
+    "side": "A"
+   },
+   "t0220-01": {
+    "side": "A"
+   },
+   "t0222-01": {
+    "side": "A"
+   },
+   "t0224-01": {
+    "side": "A"
+   },
+   "t0227-01": {
+    "side": "A"
+   },
+   "t0233-01": {
+    "side": "A"
+   },
+   "t0235-01": {
+    "side": "B"
+   },
+   "t0240-01": {
+    "side": "A"
+   },
+   "t0242-01": {
+    "side": "A"
+   },
+   "t0244-01": {
+    "side": "A"
+   },
+   "t0245-01": {
+    "side": "both"
+   },
+   "t0247-01": {
+    "side": "both"
+   },
+   "t0253-01": {
+    "side": "A"
+   },
+   "t0256-01": {
+    "side": "both"
+   },
+   "t0258-01": {
+    "side": "A"
+   },
+   "t0260-01": {
+    "side": "A"
+   },
+   "t0266-01": {
+    "side": "A"
+   },
+   "t0268-01": {
+    "side": "A"
+   },
+   "t0271-01": {
+    "side": "A"
+   },
+   "t0276-01": {
+    "side": "both"
+   },
+   "t0277-01": {
+    "side": "A"
+   },
+   "t0279-01": {
+    "side": "A"
+   }
+  },
+  "opened": "2026-09-29",
+  "rare": 5,
+  "why": "one object in too many clues: players would learn it means clue"
+ },
+ "_about": "Recalls (owner, 2026-09-29; handover section 5). One recall per quality problem: why, the pieces it removes (ban), and rare = a replacement set uses at least one piece that fewer than this many other clues use. clues: recalled id -> the side its blind read gave, which the replacement keeps. Deliver content/nohelp/incoming/<ticket>.json with only the replacement rows, each under the recalled id; the rest of the ticket stays. A replacement keeps the form. Done when content/nohelp/retired/ holds the id."
+}

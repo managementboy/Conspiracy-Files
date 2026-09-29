@@ -38,6 +38,15 @@
 -- A ticket delivered again replaces its earlier accepted rows only if some of
 -- the new rows are accepted.
 --
+-- RECALLS (owner, 2026-09-29; content/nohelp/recalls.json): a quality problem
+-- becomes a named recall with a rule and a list of clue ids. A delivery whose
+-- rows carry recalled ids replaces just those clues: the ticket's other rows
+-- stay, the old clue stays in the game until its replacement passes, and the
+-- old clue goes to retired/<ticket>.json with its recall. A replacement keeps
+-- the old clue's form, uses none of the recall's banned pieces and, when the
+-- recall sets "rare", a set uses at least one piece fewer than that many other
+-- clues use. A recalled id is done once retired/ holds it.
+--
 -- Ticket-level rules on top of the clue-list rules:
 --   * a row id is unique, at most 60 characters, and starts with the ticket
 --     name in lower case and a dash (ticket PLACE-farm: "place-farm-03");
@@ -131,6 +140,11 @@ function M.context(opts)
     if ctx.recipes==nil then
         local text=readFile((opts.root or M.ROOT).."/recipes.json")
         ctx.recipes=text and J.decode(text) or {}
+    end
+    ctx.recalls=opts.recalls
+    if ctx.recalls==nil then
+        local text=readFile((opts.root or M.ROOT).."/recalls.json")
+        ctx.recalls=text and J.decode(text) or {}
     end
     local retired=opts.retired
     if retired==nil then
@@ -271,6 +285,36 @@ function M.textKey(row)
     return t
 end
 
+-- THE RECALL CHECK for one replacement row. old: the clue it replaces;
+-- counts: piece -> number of accepted clues using it, the old clue left out.
+function M.recallCheck(row,old,recall,counts)
+    if row.kind~=old.kind then return reason("RECALL_FORM","a replacement keeps the form: "..tostring(old.kind)) end
+    local banned={}
+    for _,p in ipairs(recall.ban or {}) do banned[p]=true end
+    for _,p in ipairs(row.pieces or {}) do
+        if banned[p] then return reason("RECALL_BAN",tostring(p).." is what this recall removes") end
+    end
+    if recall.rare and row.kind=="set" then
+        local ok=false
+        for _,p in ipairs(row.pieces or {}) do if (counts[p] or 0)<recall.rare then ok=true end end
+        if not ok then return reason("RECALL_RARE","a replacement uses a piece fewer than "..recall.rare.." clues use") end
+    end
+    return nil
+end
+
+-- Open recalled ids: id -> {name, recall}; retired: {ticket = rows}.
+function M.openRecalls(recalls,retired)
+    local done={}
+    for _,rows in pairs(retired or {}) do for _,r in ipairs(rows) do done[r.row.id.."|"..r.recall]=true end end
+    local open={}
+    for name,rc in pairs(recalls or {}) do
+        if type(rc)=="table" then
+            for id in pairs(rc.clues or {}) do if not done[id.."|"..name] then open[id]={name=name,recall=rc} end end
+        end
+    end
+    return open
+end
+
 -- One ticket. accepted: {ticket = {game rows}} of every ticket accepted so
 -- far. Returns {accepted = game rows, sidecar = {id = fields}, rejected =
 -- {{row, reasons}}, unverified = {ids}}.
@@ -288,6 +332,21 @@ function M.convertTicket(ticket,rows,accepted,ctx,status)
     end
     local good,seen={}, {}
     local ttype=M.ticketType(ticket,ctx.registry)
+    -- A recall delivery: its rows carry recalled ids of this ticket.
+    local open,oldById,recallMode=ctx.open or {},{},false
+    for _,c in ipairs(accepted[ticket] or {}) do oldById[c.id]=c end
+    for _,row in ipairs(rows) do
+        if type(row)=="table" and open[row.id] and oldById[row.id] then recallMode=true end
+    end
+    local counts={}
+    if recallMode then
+        for _,cs in pairs(accepted) do for _,c in ipairs(cs) do
+            if not (open[c.id] and oldById[c.id]==c) then
+                local once={}
+                for _,p in ipairs(c.pieces or {}) do if not once[p] then once[p]=true; counts[p]=(counts[p] or 0)+1 end end
+            end
+        end end
+    end
     for _,row in ipairs(rows) do
         local r=M.schema(row,ticket,seen,ttype)
         if type(row)=="table" and type(row.id)=="string" then seen[row.id]=true end
@@ -297,6 +356,10 @@ function M.convertTicket(ticket,rows,accepted,ctx,status)
         end
         if not r then r=M.sceneCheck(row,ctx) end
         if not r then r=M.recipeCheck(row,ticket,ctx) end
+        if not r and recallMode then
+            if not (open[row.id] and oldById[row.id]) then r=reason("RECALL_ID","a recall delivery holds only this ticket's recalled clues")
+            else r=M.recallCheck(row,oldById[row.id],open[row.id].recall,counts) end
+        end
         if not r and type(row)=="table" then
             local k=M.textKey(row)
             if ctx.texts and ctx.texts[k] and ctx.texts[k]~=row.id then r=reason("TEXT_REPEAT","the same text as "..ctx.texts[k]) end
@@ -319,6 +382,11 @@ function M.convertTicket(ticket,rows,accepted,ctx,status)
         for name in pairs(accepted) do if name~=ticket then names[#names+1]=name end end
         table.sort(names)
         for _,name in ipairs(names) do for _,c in ipairs(accepted[name]) do merged[#merged+1]=c end end
+        if recallMode then
+            local replaced={}
+            for _,row in ipairs(good) do replaced[row.id]=true end
+            for _,c in ipairs(accepted[ticket] or {}) do if not replaced[c.id] then merged[#merged+1]=c end end
+        end
         for _,row in ipairs(good) do merged[#merged+1]=gameFields(row) end
         local ok,why,code=Manifest.lint(merged)
         if not ok then
@@ -333,6 +401,21 @@ function M.convertTicket(ticket,rows,accepted,ctx,status)
         out.accepted[#out.accepted+1]=gameFields(row)
         out.sidecar[row.id]=sidecarFields(row)
         if Manifest.anchorStatus(row)=="unverified" then out.unverified[#out.unverified+1]=row.id end
+    end
+    out.count=#out.accepted
+    if recallMode and #good>0 then
+        -- The ticket's rows with the replacements swapped in, in their places.
+        local new,whole,side={},{},ctx.oldSidecar or {}
+        for _,c in ipairs(out.accepted) do new[c.id]=c end
+        out.retired={}
+        for _,c in ipairs(accepted[ticket]) do
+            if new[c.id] then
+                whole[#whole+1]=new[c.id]
+                out.retired[#out.retired+1]={recall=open[c.id].name,row=c,sidecar=side[c.id] or J.null}
+            else whole[#whole+1]=c; out.sidecar[c.id]=side[c.id] end
+        end
+        out.accepted=whole
+        out.recall=true
     end
     return out
 end
@@ -410,6 +493,11 @@ function M.run(opts)
     local nTickets,nAccepted,nReturned,nStage0=0,0,0,0
     ctx.texts={}
     for _,rows in pairs(accepted) do for _,c in ipairs(rows) do ctx.texts[M.textKey(c)]=c.id end end
+    local retired={}
+    for _,name in ipairs(listJson(root.."/retired")) do
+        retired[name]=J.decode(readFile(root.."/retired/"..name..".json") or "[]") or {}
+    end
+    ctx.open=M.openRecalls(ctx.recalls,retired)
     if not opts.rebuild then
         for _,ticket in ipairs(listJson(root.."/incoming")) do
           if M.ticketType(ticket,ctx.registry)=="STAGE0" then
@@ -428,14 +516,23 @@ function M.run(opts)
             elseif not rows then
                 res={accepted={},sidecar={},unverified={},rejected={{row=data or J.null,reasons={reason("SCHEMA","not an array of rows: "..tostring(err or "empty"))}}}}
             else
+                ctx.oldSidecar=J.decode(readFile(root.."/accepted/sidecar/"..ticket..".json") or "{}") or {}
                 res=M.convertTicket(ticket,rows,accepted,ctx,status)
             end
-            nAccepted,nReturned=nAccepted+#res.accepted,nReturned+#res.rejected
+            local nOk=res.count or #res.accepted
+            nAccepted,nReturned=nAccepted+nOk,nReturned+#res.rejected
             if #res.accepted>0 then accepted[ticket]=res.accepted end
             if #res.accepted>0 and not check then
                 writeFile(root.."/accepted/"..ticket..".json",J.encode(J.array(res.accepted)).."\n")
                 os.execute('mkdir -p "'..root..'/accepted/sidecar"')
                 writeFile(root.."/accepted/sidecar/"..ticket..".json",J.encode(res.sidecar).."\n")
+                if res.retired then
+                    local drawer=retired[ticket] or {}
+                    for _,r in ipairs(res.retired) do drawer[#drawer+1]=r end
+                    retired[ticket]=drawer
+                    os.execute('mkdir -p "'..root..'/retired"')
+                    writeFile(root.."/retired/"..ticket..".json",J.encode(J.array(drawer)).."\n")
+                end
             end
             if #res.rejected>0 and not check then
                 writeFile(root.."/rejected/"..ticket..".json",J.encode(J.array(res.rejected)).."\n")
@@ -446,13 +543,23 @@ function M.run(opts)
                 local id=type(r.row)=="table" and type(r.row.id)=="string" and r.row.id or "?"
                 codes[#codes+1]=id.." "..r.reasons[1].code..(r.merged and " (merged)" or "")
             end
-            report[#report+1]=ticket..": accepted "..#res.accepted..", returned "..#res.rejected
+            report[#report+1]=ticket..": "..(res.recall and "replaced " or "accepted ")..nOk..", returned "..#res.rejected
             for _,c in ipairs(codes) do report[#report+1]="    returned "..c end
             for _,id in ipairs(res.unverified) do report[#report+1]="    "..id..": scene anchor unverified (no Generated/VanillaScenes.lua yet)" end
           end
         end
     end
     local n=0; for _,rows in pairs(accepted) do n=n+#rows end
+    -- Recall progress, counts only.
+    local rnames={}
+    for name,rc in pairs(ctx.recalls or {}) do if type(rc)=="table" then rnames[#rnames+1]=name end end
+    table.sort(rnames)
+    local open=M.openRecalls(ctx.recalls,retired)
+    for _,name in ipairs(rnames) do
+        local total,left=0,0
+        for id in pairs(ctx.recalls[name].clues or {}) do total=total+1; if open[id] and open[id].name==name then left=left+1 end end
+        report[#report+1]="recall "..name..": "..(total-left).."/"..total.." replaced"
+    end
     if check then
         -- Counts only: this line goes to the CI summary.
         report[#report+1]="check: "..nTickets.." tickets, "..nAccepted.." rows pass, "..nReturned.." returned, "
