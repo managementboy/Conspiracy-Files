@@ -1,0 +1,39 @@
+[
+  {
+    "id": "t0310-01",
+    "kind": "written",
+    "pieces": [
+      "photograph"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "furniture",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "anchor": {
+      "scene": "RBStripclub"
+    },
+    "title": "Photograph after the matinee",
+    "body": "Written on the back: “The two men from the crop trial left yellow dust on every chair. We felt dizzy before the county van came.”",
+    "rival_reading": "Emergency workers could have encountered the same residue while responding; the personal trace does not by itself prove the field program caused the emergency.",
+    "gloss": "A personal trace places field-program residue before a later restriction.",
+    "axioms": {
+      "containment": [
+        "c-warning",
+        "c-orders"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0310"
+    }
+  }
+]
