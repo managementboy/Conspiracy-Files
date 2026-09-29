@@ -1,0 +1,39 @@
+[
+  {
+    "id": "t0389-01",
+    "kind": "written",
+    "pieces": [
+      "receipt"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "corpse",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "anchor": {
+      "scene": "RZSMurderScene"
+    },
+    "title": "coat pocket note — at tuesday dawn",
+    "body": "feed, soap, and a clean jar, paid cash. my note below says a medicinal odor came from the sprayer trial; the driver grew dizzy before the shelter message aired.",
+    "rival_reading": "Responders could have collected the a medicinal odor while crossing treated land; the note or objects do not prove the program began the emergency.",
+    "gloss": "A personal field trace precedes the visible emergency response.",
+    "axioms": {
+      "containment": [
+        "c-warning",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0389"
+    }
+  }
+]
