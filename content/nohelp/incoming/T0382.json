@@ -1,0 +1,75 @@
+[
+  {
+    "anchor": {
+      "scene": "RZSDean"
+    },
+    "body": "the fertilizer sack with a drained sprayer carry a greasy sheen from the fertilizer trial. they were packed before traffic was turned around.",
+    "id": "t0382-01",
+    "kind": "set",
+    "pieces": [
+      "Fertilizer",
+      "GardeningSprayEmpty"
+    ],
+    "title": "fertilizer sack with a drained sprayer at saturday before sunrise",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ],
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-warning",
+        "c-failure"
+      ]
+    },
+    "gloss": "A personal field trace precedes the visible emergency response.",
+    "prov": {
+      "batch": "T0382",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "Responders could have collected the a greasy sheen while crossing treated land; the note or objects do not prove the program began the emergency."
+  },
+  {
+    "id": "t0382-02",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ],
+    "title": "A head count by the fire",
+    "body": "Our camp was told the pickup would stop where the smoke could be seen. A vehicle came, copied the number of tents, and drove away before the sleeping people woke. The next day someone had crossed our site off the rescue map.",
+    "anchor": {
+      "scene": "RZSDean"
+    },
+    "rival_reading": "The agricultural trial may have caused the disorder that forced improvised decisions.",
+    "gloss": "A witness records a failed evacuation count or route.",
+    "axioms": {
+      "containment": [
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0382"
+    }
+  }
+]
