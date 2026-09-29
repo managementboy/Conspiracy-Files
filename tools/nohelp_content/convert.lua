@@ -372,9 +372,15 @@ function M.convertTicket(ticket,rows,accepted,ctx,status)
     -- A recall delivery: its rows carry recalled ids of this ticket.
     local open,oldById,recallMode=ctx.open or {},{},false
     for _,c in ipairs(accepted[ticket] or {}) do oldById[c.id]=c end
+    -- A recall delivery holds ONLY recalled clues of this ticket. A delivery
+    -- with any other row (a whole ticket again, its rows copied unchanged
+    -- plus a new one) is an ordinary delivery, even when some of its rows
+    -- are also recalled: those stay recalled until a recall delivery.
+    local recalled=0
     for _,row in ipairs(rows) do
-        if type(row)=="table" and open[row.id] and oldById[row.id] then recallMode=true end
+        if type(row)=="table" and open[row.id] and oldById[row.id] then recalled=recalled+1 end
     end
+    recallMode=recalled>0 and recalled==#rows
     local counts,stems={},{}
     if recallMode then
         for _,cs in pairs(accepted) do for _,c in ipairs(cs) do
@@ -396,8 +402,7 @@ function M.convertTicket(ticket,rows,accepted,ctx,status)
         if not r then r=M.sceneCheck(row,ctx) end
         if not r then r=M.recipeCheck(row,ticket,ctx) end
         if not r and recallMode then
-            if not (open[row.id] and oldById[row.id]) then r=reason("RECALL_ID","a recall delivery holds only this ticket's recalled clues")
-            else r=M.recallCheck(row,oldById[row.id],open[row.id].recall,counts,open[row.id].entry,stems) end
+            r=M.recallCheck(row,oldById[row.id],open[row.id].recall,counts,open[row.id].entry,stems)
         end
         if not r and type(row)=="table" then
             local k=M.textKey(row)

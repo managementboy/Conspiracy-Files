@@ -232,9 +232,11 @@ do
     assert(try(repl({kind="written",pieces={"letter"}}))=="RECALL_FORM","the same form")
     assert(try(repl({pieces={"Twine","Tarp"}}))=="RECALL_RARE","at least one rare piece")
     local other=row(TR,"set","agricultural",{pieces={"Rope","Axe"}})
-    local code,rep=try(other,{other,repl({pieces={"Tarp","Axe"}})})
-    assert(code=="RECALL_ID","only recalled clues in a recall delivery")
-    assert(rep:find(TR..": replaced 1, returned 1",1,true),"the good replacement goes in")
+    -- A whole ticket again (its rows plus a new one) is an ordinary delivery,
+    -- though one of its rows is recalled: no recall checks, nothing retired.
+    assert(Convert.recallCheck and true)
+    local code,rep=try(repl({pieces={"Tarp","Axe"}}))
+    assert(code=="ok" and rep:find(TR..": replaced 1, returned 0",1,true),"the good replacement goes in")
     local acc=J.decode(read(root.."/accepted/"..TR..".json"))
     assert(#acc==2 and acc[1].id==keep.id and acc[2].id==old.id and acc[2].pieces[2]=="Axe","swapped in place, the rest kept")
     local side=J.decode(read(root.."/accepted/sidecar/"..TR..".json"))
@@ -253,8 +255,12 @@ do
     local ck=rejectedCodes(TK); os.remove(root.."/rejected/"..TK..".json")
     assert(ck[k1.id] and ck[k1.id].code=="RECIPE_KEEP","a delivery that drops an accepted row comes back")
     local k4=row(TK,"set","containment",{pieces={"Saw","Tarp"}})
-    write(TK,{k1,k2,k4}); run()
+    -- k1 is also recalled: the whole ticket is still an ordinary delivery.
+    OPTS.recalls={R8={clues={[k1.id]={side="A",fix={"title"}}}}}
+    write(TK,{k1,k2,k4}); local rep=table.concat(run(),"\n")
+    assert(rep:find(TK..": accepted 3, returned 0",1,true),"a whole ticket with a recalled row in it is accepted: "..rep)
     assert(#J.decode(read(root.."/accepted/"..TK..".json"))==3,"kept and added")
+    assert(rep:find("recall R8: 0/1 replaced",1,true),"the recalled row stays recalled")
     OPTS.recipes=nil
     OPTS.recalls={}; os.execute('rm -rf "'..root..'"')
 end
