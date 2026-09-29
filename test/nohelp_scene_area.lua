@@ -58,6 +58,20 @@ for seed=1,60 do
 end
 assert(leans.containment and leans.agricultural,"random per world: both conspiracies across worlds")
 
+-- E6: a scene with a clue for one side only takes it, whatever the draw.
+do
+    local only={set("so-b",cite.kind,"agricultural",citeSpot,"B")}
+    local drew={}
+    for seed=1,40 do
+        local next,ids=AreaCase.decideScene{case=AreaCase.new(seed),site=site(cite.key),key=cite.key,kind=cite.kind,clues=only,version="v",hours=2}
+        assert(next and #ids==1,"a one-sided scene is never empty (seed "..seed..")")
+        local d=next.documents[1]
+        assert(d.clue=="so-b" and d.lean=="agricultural" and AreaCase.validate(next),"the side that has a clue")
+        drew[Scenes.lean(seed,"scene:"..cite.key,cite.kind)]=true
+    end
+    assert(drew.containment,"including worlds whose draw fell on the other side")
+end
+
 -- Refusals and "empty" (not a decision).
 local w=AreaCase.new(7)
 assert(select(2,AreaCase.decideScene{case=w,site=site("k"),key="k",kind="RBBasic",clues=sceneClues})=="this kind of scene holds no clue")

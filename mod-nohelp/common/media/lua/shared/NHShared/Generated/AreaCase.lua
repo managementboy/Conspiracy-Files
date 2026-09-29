@@ -330,11 +330,16 @@ function M.decideScene(args)
     local areaIds={}; for _,a in ipairs(case.areas) do areaIds[a.id]=true end
     if areaIds[site.id] then return nil,"decided" end
     local spot=Scenes.spotFor(args.kind)
-    local lean=Scenes.lean(case.seed,site.id,args.kind)
+    local drawn=Scenes.lean(case.seed,site.id,args.kind)
     local row=Scenes.get(args.kind)
     local placed=(case.ledger.scene or {}).placed or {}
-    local best
-    for _,c in ipairs(args.clues or Manifest.clues) do
+    -- The world's lean first; when nothing is written for it, the other side
+    -- (E6, DR-20260929-NOHELP-GAP-PLAN): a scene is never left empty only
+    -- because the draw fell on the side without a clue.
+    local best,lean
+    for _,try in ipairs({drawn,drawn=="containment" and "agricultural" or "containment"}) do
+      lean=try
+      for _,c in ipairs(args.clues or Manifest.clues) do
         local copies=placed[c.id] or 0
         if type(c.anchor)=="table" and c.anchor.scene==args.kind and (copies==0 or c.kind=="set") then
             for _,w in ipairs(c.where) do
@@ -349,6 +354,8 @@ function M.decideScene(args)
                 end
             end
         end
+      end
+      if best then break end
     end
     if not best then return nil,"empty" end
     local next=extend(case)

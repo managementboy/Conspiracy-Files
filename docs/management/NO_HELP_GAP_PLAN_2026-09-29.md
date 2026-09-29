@@ -16,7 +16,15 @@ MapMediaRuntime's R.subject, not GeneratedRuntime's); the rest hold.
   similar kind, then any container, then a body, then the floor; never
   silently dropped (today a missing spot waits 72 h and is lost:
   GeneratedRuntime.lua ~1952, Session.lua ~472).
-- [ ] **E3 Outdoor containers.** Check whether the fixed-container census
+- [x] **E3 Outdoor containers - measured** (2026-09-29, a reflection-only
+  exporter run on the game's own Java 25; scratch tool, not shipped). The
+  runtime already finds outdoor containers live; the shipped census lists
+  only rooms and mailboxes. At z=0, fruit bushes left out: all 11 area sites
+  have containers near their marks; 56 of 81 point sites have at least one
+  inside their 33x33 box, 62 within 12 more tiles; 19 have none (those clues
+  fall back to a body, then the floor, E2). Open: search the 12-tile band at
+  point sites too?
+- [ ] **E3 (original text)** Check whether the fixed-container census
   (Generated/FixedContainerIndexData.lua) covers outdoor containers; add them
   if not; count outdoor map marks (MapSites kind "point"/"area") with one near.
 - [ ] **E4 ZombieBuddy scene listener (required dependency).** A Java patch
@@ -27,7 +35,7 @@ MapMediaRuntime's R.subject, not GeneratedRuntime's); the rest hold.
 - [ ] **E5 Thin sites topped up** from a stock of both-side clues per place
   type when an anchored site has fewer than its minimum or one side only
   (AreaCase.anchorPool).
-- [ ] **E6 Scenes pick a side that has a clue** (VanillaScenes lean choice).
+- [x] **E6 Scenes pick a side that has a clue** (2026-09-29: drawn lean first, else the other; test/nohelp_scene_area.lua) (VanillaScenes lean choice).
 - [x] **E8 Map markers scale with the game.** (2026-09-29: ceiling removed, shape kept, unchanged table not re-walked per frame; test/nohelp_markers_scale.lua; native check pending) Markers stay (owner). Their
   store refuses more than 64 records or 24 KB (ClueMarkers.lua valid()),
   far below 518 clues: lift the ceiling and test a world with hundreds of
