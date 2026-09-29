@@ -1,0 +1,40 @@
+[
+  {
+    "id": "t0341-01",
+    "kind": "set",
+    "pieces": [
+      "FirstAidKit",
+      "WaterBottle"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "corpse",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "anchor": {
+      "scene": "RDSPrisonEscape"
+    },
+    "title": "First-aid kit and water bottle, monday morning",
+    "body": "The first-aid kit and water bottle share sticky pollen from the seed trial. They were bundled before the county van arrived.",
+    "rival_reading": "Emergency workers could have picked up the same sticky pollen while responding near a field; this personal trace does not prove the trial caused the emergency.",
+    "gloss": "A personal trace connects a farm trial to symptoms before a later restriction.",
+    "axioms": {
+      "containment": [
+        "c-warning",
+        "c-orders"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0341"
+    }
+  }
+]
