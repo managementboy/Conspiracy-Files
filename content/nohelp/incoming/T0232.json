@@ -1,0 +1,52 @@
+[
+  {
+    "anchor": {
+      "print": "WPDIY"
+    },
+    "body": "The tool receipt lists a watering can with the saws and hammers; the field-use box is checked before the delivery truck is unloaded.",
+    "id": "t0232-01",
+    "kind": "set",
+    "pieces": [
+      "Hammer",
+      "Nails"
+    ],
+    "title": "Tools at the rural stop",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture",
+        "containers": [
+          "toolcabinet",
+          "crate",
+          "shelves",
+          "desk",
+          "counter",
+          "cardboardbox"
+        ]
+      }
+    ],
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "West Point DIY",
+      "source": "print:WPDIY"
+    },
+    "gloss": "A field-use entry precedes the tool delivery.",
+    "prov": {
+      "batch": "T0232",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A town crew could use the same tools during emergency repairs; the receipt does not show what the watering can was for."
+  }
+]
