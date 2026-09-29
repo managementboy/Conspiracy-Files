@@ -1,0 +1,40 @@
+[
+  {
+    "id": "t0403-01",
+    "kind": "set",
+    "pieces": [
+      "Bread",
+      "CannedCorn"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "anchor": {
+      "scene": "RZSTragicPicnic"
+    },
+    "title": "picnic food under pale field dust",
+    "body": "A wrapped loaf and can of corn carry the same pale field dust. The loaf is tied shut with twine cut from a treated seed sack.",
+    "rival_reading": "Emergency workers could have encountered the same residue while crossing treated land; the personal trace does not by itself prove the farm program caused the emergency.",
+    "gloss": "A personal trace links farm-program residue to symptoms before a restriction.",
+    "axioms": {
+      "containment": [
+        "c-warning",
+        "c-orders"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0403"
+    }
+  }
+]
