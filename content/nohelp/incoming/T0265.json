@@ -1,0 +1,52 @@
+[
+  {
+    "anchor": {
+      "print": "HobbsandPerkinsHardware"
+    },
+    "body": "The hardware receipt lists nails and repair tools; a field note says to hold the shipment until the soil test is finished.",
+    "id": "t0265-01",
+    "kind": "set",
+    "pieces": [
+      "Hammer",
+      "Nails"
+    ],
+    "title": "Hardware for the next repair",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture",
+        "containers": [
+          "toolcabinet",
+          "crate",
+          "shelves",
+          "desk",
+          "counter",
+          "cardboardbox"
+        ]
+      }
+    ],
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "Hobbs & Perkins Hardware (Irvington)",
+      "source": "print:HobbsandPerkinsHardware"
+    },
+    "gloss": "A repair shipment waits on a soil test.",
+    "prov": {
+      "batch": "T0265",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A response crew could pause repairs while checking ground safety; the note does not identify what was tested."
+  }
+]
