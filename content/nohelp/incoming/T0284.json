@@ -1,0 +1,47 @@
+[
+  {
+    "anchor": {
+      "scene": "RBBarn"
+    },
+    "body": "My note from at dusk: the field trial crew carried rinsed gloves. my brother started coughing. I had not yet heard that the siren began.\n\nThe first account was spoken quickly, as if there might be a bus to catch. I wrote it down before another person could replace it.\n\nThe person who was supposed to collect it had no time to stop. I did not put it back with the rest of the ordinary papers.",
+    "id": "t0284-01",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "At dusk: rinsed gloves",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture",
+        "containers": [
+          "desk",
+          "crate",
+          "shelves",
+          "counter",
+          "cardboardbox",
+          "bin"
+        ]
+      }
+    ],
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-warning",
+        "c-orders"
+      ]
+    },
+    "gloss": "A personal trace links trial residue to illness before a later restriction.",
+    "prov": {
+      "batch": "T0284",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A response team could have carried farm supplies while checking exposure; the objects and timing do not establish that the trial caused it."
+  }
+]
