@@ -1,0 +1,244 @@
+{
+  "stories": [
+    {
+      "ticket": "T0355",
+      "target": "scene:RDSZombiesEating",
+      "lean": "agricultural",
+      "gloss": "A carried personal trace can fit prior field exposure or the effects of a failing response."
+    },
+    {
+      "ticket": "T0356",
+      "target": "scene:RVSAmbulanceCrash",
+      "lean": "random",
+      "gloss": "A vehicle-held personal trace can fit earlier field work or a disrupted emergency response."
+    },
+    {
+      "ticket": "T0357",
+      "target": "scene:RVSAnimalTrailerOnRoad",
+      "lean": "agricultural",
+      "gloss": "A vehicle-held personal trace can fit earlier field work or a disrupted emergency response."
+    },
+    {
+      "ticket": "T0358",
+      "target": "scene:RVSBanditRoad",
+      "lean": "agricultural",
+      "gloss": "A vehicle-held personal trace can fit earlier field work or a disrupted emergency response."
+    },
+    {
+      "ticket": "T0359",
+      "target": "scene:RVSBurntCar",
+      "lean": "agricultural",
+      "gloss": "A ground-level trace can fit earlier field activity or hurried response work."
+    },
+    {
+      "ticket": "T0360",
+      "target": "scene:RVSCarCrash",
+      "lean": "agricultural",
+      "gloss": "A vehicle-held personal trace can fit earlier field work or a disrupted emergency response."
+    },
+    {
+      "ticket": "T0361",
+      "target": "scene:RVSCarCrashCorpse",
+      "lean": "agricultural",
+      "gloss": "A vehicle-held personal trace can fit earlier field work or a disrupted emergency response."
+    },
+    {
+      "ticket": "T0362",
+      "target": "scene:RVSCarCrashDeer",
+      "lean": "random",
+      "gloss": "A vehicle-held personal trace can fit earlier field work or a disrupted emergency response."
+    },
+    {
+      "ticket": "T0363",
+      "target": "scene:RVSChangingTire",
+      "lean": "agricultural",
+      "gloss": "A vehicle-held personal trace can fit earlier field work or a disrupted emergency response."
+    },
+    {
+      "ticket": "T0364",
+      "target": "scene:RVSConstructionSite",
+      "lean": "agricultural",
+      "gloss": "A vehicle-held personal trace can fit earlier field work or a disrupted emergency response."
+    },
+    {
+      "ticket": "T0365",
+      "target": "scene:RVSCrashHorde",
+      "lean": "agricultural",
+      "gloss": "A vehicle-held personal trace can fit earlier field work or a disrupted emergency response."
+    },
+    {
+      "ticket": "T0366",
+      "target": "scene:RVSDeadEnd",
+      "lean": "agricultural",
+      "gloss": "The scene carries a self-contained trace that leaves the order of field activity and response uncertain."
+    },
+    {
+      "ticket": "T0367",
+      "target": "scene:RVSFlippedCrash",
+      "lean": "agricultural",
+      "gloss": "A vehicle-held personal trace can fit earlier field work or a disrupted emergency response."
+    },
+    {
+      "ticket": "T0368",
+      "target": "scene:RVSPoliceBlockade",
+      "lean": "random",
+      "gloss": "A vehicle-held personal trace can fit earlier field work or a disrupted emergency response."
+    },
+    {
+      "ticket": "T0369",
+      "target": "scene:RVSPoliceBlockadeShooting",
+      "lean": "agricultural",
+      "gloss": "A vehicle-held personal trace can fit earlier field work or a disrupted emergency response."
+    },
+    {
+      "ticket": "T0370",
+      "target": "scene:RVSRegionalProfessionVehicle",
+      "lean": "agricultural",
+      "gloss": "A vehicle-held personal trace can fit earlier field work or a disrupted emergency response."
+    },
+    {
+      "ticket": "T0371",
+      "target": "scene:RVSRichJerk",
+      "lean": "agricultural",
+      "gloss": "The scene carries a self-contained trace that leaves the order of field activity and response uncertain."
+    },
+    {
+      "ticket": "T0372",
+      "target": "scene:RVSRoadKill",
+      "lean": "agricultural",
+      "gloss": "A vehicle-held personal trace can fit earlier field work or a disrupted emergency response."
+    },
+    {
+      "ticket": "T0373",
+      "target": "scene:RVSTrailerCrash",
+      "lean": "agricultural",
+      "gloss": "A vehicle-held personal trace can fit earlier field work or a disrupted emergency response."
+    },
+    {
+      "ticket": "T0374",
+      "target": "scene:RVSUtilityVehicle",
+      "lean": "random",
+      "gloss": "A vehicle-held personal trace can fit earlier field work or a disrupted emergency response."
+    },
+    {
+      "ticket": "T0375",
+      "target": "scene:RZSBBQParty",
+      "lean": "agricultural",
+      "gloss": "The scene carries a self-contained trace that leaves the order of field activity and response uncertain."
+    },
+    {
+      "ticket": "T0376",
+      "target": "scene:RZSBaseball",
+      "lean": "agricultural",
+      "gloss": "The scene carries a self-contained trace that leaves the order of field activity and response uncertain."
+    },
+    {
+      "ticket": "T0377",
+      "target": "scene:RZSBeachParty",
+      "lean": "agricultural",
+      "gloss": "The scene carries a self-contained trace that leaves the order of field activity and response uncertain."
+    },
+    {
+      "ticket": "T0378",
+      "target": "scene:RZSBurntWreck",
+      "lean": "agricultural",
+      "gloss": "A ground-level trace can fit earlier field activity or hurried response work."
+    },
+    {
+      "ticket": "T0379",
+      "target": "scene:RZSBuryingCamp",
+      "lean": "agricultural",
+      "gloss": "A ground-level trace can fit earlier field activity or hurried response work."
+    },
+    {
+      "ticket": "T0380",
+      "target": "scene:RZSCampsite",
+      "lean": "random",
+      "gloss": "A ground-level trace can fit earlier field activity or hurried response work."
+    },
+    {
+      "ticket": "T0381",
+      "target": "scene:RZSCharcoalBurner",
+      "lean": "agricultural",
+      "gloss": "A ground-level trace can fit earlier field activity or hurried response work."
+    },
+    {
+      "ticket": "T0382",
+      "target": "scene:RZSDean",
+      "lean": "agricultural",
+      "gloss": "A ground-level trace can fit earlier field activity or hurried response work."
+    },
+    {
+      "ticket": "T0383",
+      "target": "scene:RZSFishingTrip",
+      "lean": "agricultural",
+      "gloss": "A ground-level trace can fit earlier field activity or hurried response work."
+    },
+    {
+      "ticket": "T0384",
+      "target": "scene:RZSForestCamp",
+      "lean": "agricultural",
+      "gloss": "A ground-level trace can fit earlier field activity or hurried response work."
+    },
+    {
+      "ticket": "T0385",
+      "target": "scene:RZSForestCampEaten",
+      "lean": "agricultural",
+      "gloss": "A ground-level trace can fit earlier field activity or hurried response work."
+    },
+    {
+      "ticket": "T0386",
+      "target": "scene:RZSHermitCamp",
+      "lean": "random",
+      "gloss": "A ground-level trace can fit earlier field activity or hurried response work."
+    },
+    {
+      "ticket": "T0387",
+      "target": "scene:RZSHillbillyHoedown",
+      "lean": "agricultural",
+      "gloss": "The scene carries a self-contained trace that leaves the order of field activity and response uncertain."
+    },
+    {
+      "ticket": "T0388",
+      "target": "scene:RZSHunterCamp",
+      "lean": "agricultural",
+      "gloss": "A ground-level trace can fit earlier field activity or hurried response work."
+    },
+    {
+      "ticket": "T0389",
+      "target": "scene:RZSMurderScene",
+      "lean": "agricultural",
+      "gloss": "A carried personal trace can fit prior field exposure or the effects of a failing response."
+    },
+    {
+      "ticket": "T0390",
+      "target": "scene:RZSMusicFest",
+      "lean": "agricultural",
+      "gloss": "The scene carries a self-contained trace that leaves the order of field activity and response uncertain."
+    },
+    {
+      "ticket": "T0391",
+      "target": "scene:RZSMusicFestStage",
+      "lean": "agricultural",
+      "gloss": "The scene carries a self-contained trace that leaves the order of field activity and response uncertain."
+    },
+    {
+      "ticket": "T0392",
+      "target": "scene:RZSNastyMattress",
+      "lean": "random",
+      "gloss": "The scene carries a self-contained trace that leaves the order of field activity and response uncertain."
+    },
+    {
+      "ticket": "T0393",
+      "target": "scene:RZSOccultActivity",
+      "lean": "agricultural",
+      "gloss": "A ground-level trace can fit earlier field activity or hurried response work."
+    },
+    {
+      "ticket": "T0394",
+      "target": "scene:RZSOldFirepit",
+      "lean": "agricultural",
+      "gloss": "A ground-level trace can fit earlier field activity or hurried response work."
+    }
+  ]
+}
