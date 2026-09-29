@@ -1,0 +1,40 @@
+[
+  {
+    "id": "t0353-01",
+    "kind": "set",
+    "pieces": [
+      "Fertilizer",
+      "GardeningSprayEmpty"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "furniture",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "anchor": {
+      "scene": "RDSZombieLockedBathroom"
+    },
+    "title": "Fertilizer sack and empty sprayer, tuesday at dusk",
+    "body": "The fertilizer sack and empty sprayer share red grit from the pest-control test. They were bundled before the checkpoint appeared.",
+    "rival_reading": "Emergency workers could have picked up the same red grit while responding near a field; this personal trace does not prove the trial caused the emergency.",
+    "gloss": "A personal trace connects a farm trial to symptoms before a later restriction.",
+    "axioms": {
+      "containment": [
+        "c-warning",
+        "c-orders"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0353"
+    }
+  }
+]
