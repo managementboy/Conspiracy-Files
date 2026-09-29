@@ -1,0 +1,412 @@
+[
+  {
+    "id": "t0419-01",
+    "kind": "set",
+    "pieces": [
+      "EmptyJar",
+      "SeedBag"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "furniture",
+        "lean": "agricultural",
+        "rival": "containment",
+        "containers": [
+          "crate",
+          "shelves",
+          "desk",
+          "counter",
+          "cardboardbox",
+          "bin"
+        ]
+      }
+    ],
+    "title": "A jar beyond the rows at closing",
+    "body": "The jar is dusted with the same yellow grains as the torn sack. Its label names a test plot, but the string tying them together is wet with roadside mud. The string has been retied since morning.",
+    "rival_reading": "The emergency response could have moved or contaminated these things.",
+    "gloss": "A trace of trial material appears beyond a field boundary.",
+    "axioms": {
+      "containment": [
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0419"
+    }
+  },
+  {
+    "id": "t0419-02",
+    "kind": "set",
+    "pieces": [
+      "WaterBottle",
+      "Bucket"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "furniture",
+        "lean": "agricultural",
+        "rival": "containment",
+        "containers": [
+          "crate",
+          "shelves",
+          "desk",
+          "counter",
+          "cardboardbox",
+          "bin"
+        ]
+      }
+    ],
+    "title": "Water kept for comparison at closing",
+    "body": "A clean bottle and a cloudy bucket share a chalk mark. The bucket was filled far from the rows after the sprayer passed. The date is on the wrapper, not on the object.",
+    "rival_reading": "The emergency response could have moved or contaminated these things.",
+    "gloss": "A trace of trial material appears beyond a field boundary.",
+    "axioms": {
+      "containment": [
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0419"
+    }
+  },
+  {
+    "id": "t0419-03",
+    "kind": "set",
+    "pieces": [
+      "Gloves_LeatherGloves",
+      "GardeningSprayEmpty"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "furniture",
+        "lean": "agricultural",
+        "rival": "containment",
+        "containers": [
+          "toolcabinet",
+          "crate",
+          "shelves",
+          "desk",
+          "counter",
+          "cardboardbox"
+        ]
+      }
+    ],
+    "title": "The gloves used twice at closing",
+    "body": "One cuff holds field dust; the other is stained with kitchen soap. The empty sprayer was carried past a household door. A strip of cloth keeps the pair together.",
+    "rival_reading": "The emergency response could have moved or contaminated these things.",
+    "gloss": "A trace of trial material appears beyond a field boundary.",
+    "axioms": {
+      "containment": [
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0419"
+    }
+  },
+  {
+    "id": "t0419-04",
+    "kind": "set",
+    "pieces": [
+      "AnimalFeedBag",
+      "Bucket"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "furniture",
+        "lean": "agricultural",
+        "rival": "containment",
+        "containers": [
+          "crate",
+          "shelves",
+          "desk",
+          "counter",
+          "cardboardbox",
+          "bin"
+        ]
+      }
+    ],
+    "title": "Feed beside a rinse pail at closing",
+    "body": "The feed sack has an oily streak beneath its fold. A rinse pail carries the same mark above the waterline. The corner still bears a hurried thumbprint.",
+    "rival_reading": "The emergency response could have moved or contaminated these things.",
+    "gloss": "A trace of trial material appears beyond a field boundary.",
+    "axioms": {
+      "containment": [
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0419"
+    }
+  },
+  {
+    "id": "t0419-05",
+    "kind": "set",
+    "pieces": [
+      "SeedBag",
+      "DuctTape"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "furniture",
+        "lean": "agricultural",
+        "rival": "containment",
+        "containers": [
+          "crate",
+          "shelves",
+          "desk",
+          "counter",
+          "cardboardbox",
+          "bin"
+        ]
+      }
+    ],
+    "title": "The unopened seed allotment at closing",
+    "body": "Tape seals a slit in the seed sack, but the pale dust beneath it is caught on the outside. A child’s height is marked on the tape. One edge was kept dry beneath a coat.",
+    "rival_reading": "The emergency response could have moved or contaminated these things.",
+    "gloss": "A trace of trial material appears beyond a field boundary.",
+    "axioms": {
+      "containment": [
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0419"
+    }
+  },
+  {
+    "id": "t0419-06",
+    "kind": "set",
+    "pieces": [
+      "EmptyJar",
+      "Map"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "furniture",
+        "lean": "agricultural",
+        "rival": "containment",
+        "containers": [
+          "crate",
+          "shelves",
+          "desk",
+          "counter",
+          "cardboardbox",
+          "bin"
+        ]
+      }
+    ],
+    "title": "A sample without its field at closing",
+    "body": "The jar’s paper label names a trial row. A thumbprint in its residue falls on a different roadside mark on the map. A short tally was added after the bundle was tied.",
+    "rival_reading": "The emergency response could have moved or contaminated these things.",
+    "gloss": "A trace of trial material appears beyond a field boundary.",
+    "axioms": {
+      "containment": [
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0419"
+    }
+  },
+  {
+    "id": "t0419-07",
+    "kind": "set",
+    "pieces": [
+      "Bread",
+      "DishCloth"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "furniture",
+        "lean": "agricultural",
+        "rival": "containment",
+        "containers": [
+          "crate",
+          "shelves",
+          "desk",
+          "counter",
+          "cardboardbox",
+          "bin"
+        ]
+      }
+    ],
+    "title": "Bread under field dust at closing",
+    "body": "The loaf was wrapped in a clean cloth. Yellow powder lies between the cloth and the crust, though the knot was never opened. The string has been retied since morning.",
+    "rival_reading": "The emergency response could have moved or contaminated these things.",
+    "gloss": "A trace of trial material appears beyond a field boundary.",
+    "axioms": {
+      "containment": [
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0419"
+    }
+  },
+  {
+    "id": "t0419-08",
+    "kind": "set",
+    "pieces": [
+      "Soap2",
+      "Sponge"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "furniture",
+        "lean": "agricultural",
+        "rival": "containment",
+        "containers": [
+          "crate",
+          "shelves",
+          "desk",
+          "counter",
+          "cardboardbox",
+          "bin"
+        ]
+      }
+    ],
+    "title": "The wash that failed at closing",
+    "body": "The sponge is green at the center and the soap is worn only on one edge. Both were wrapped in a bag beside a small cup. The date is on the wrapper, not on the object.",
+    "rival_reading": "The emergency response could have moved or contaminated these things.",
+    "gloss": "A trace of trial material appears beyond a field boundary.",
+    "axioms": {
+      "containment": [
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0419"
+    }
+  },
+  {
+    "id": "t0419-09",
+    "kind": "set",
+    "pieces": [
+      "GardeningSprayEmpty",
+      "Postcard"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "furniture",
+        "lean": "agricultural",
+        "rival": "containment",
+        "containers": [
+          "toolcabinet",
+          "crate",
+          "shelves",
+          "desk",
+          "counter",
+          "cardboardbox"
+        ]
+      }
+    ],
+    "title": "A warning carried home at closing",
+    "body": "The card asks for supper to be kept warm. A ring from the sprayer crosses the writing before the ink has dried. A strip of cloth keeps the pair together.",
+    "rival_reading": "The emergency response could have moved or contaminated these things.",
+    "gloss": "A trace of trial material appears beyond a field boundary.",
+    "axioms": {
+      "containment": [
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0419"
+    }
+  },
+  {
+    "id": "t0419-10",
+    "kind": "set",
+    "pieces": [
+      "Fertilizer",
+      "GlassTumbler"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "furniture",
+        "lean": "agricultural",
+        "rival": "containment",
+        "containers": [
+          "crate",
+          "shelves",
+          "desk",
+          "counter",
+          "cardboardbox",
+          "bin"
+        ]
+      }
+    ],
+    "title": "Fertilizer and a dry cup at closing",
+    "body": "Fine grains cling to the rim of a drinking glass. The fertilizer sack beside it was sealed with household thread. The corner still bears a hurried thumbprint.",
+    "rival_reading": "The emergency response could have moved or contaminated these things.",
+    "gloss": "A trace of trial material appears beyond a field boundary.",
+    "axioms": {
+      "containment": [
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0419"
+    }
+  }
+]
