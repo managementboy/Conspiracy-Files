@@ -1,0 +1,39 @@
+[
+  {
+    "id": "t0317-01",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "furniture",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "anchor": {
+      "scene": "RBTSFoodPreparation"
+    },
+    "title": "Recipe page, lower corner",
+    "body": "My note says the farm crew washed their sample jars in this sink. The water turned milky; two hours later a patrol told us not to use the tap.",
+    "rival_reading": "Emergency workers could have encountered the same residue while responding; the personal trace does not by itself prove the field program caused the emergency.",
+    "gloss": "A personal trace places field-program residue before a later restriction.",
+    "axioms": {
+      "containment": [
+        "c-warning",
+        "c-orders"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0317"
+    }
+  }
+]
