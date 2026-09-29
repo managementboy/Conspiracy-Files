@@ -1,0 +1,8 @@
+Linux No Help engine check 20260929T191853: FAIL (seed)
+source: c2c008d5
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display ?
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display ?
+Placed clues: 12
+No Help errors: 0
+Listener active: yes
+Seed persistent: 

@@ -1,0 +1,13 @@
+Linux No Help full engine test 20260929T192406
+E1 (spoken text): PASS
+E2/E3 (placement): PASS (0 placed)
+E3b (per-world order): PASS
+E4 (scene listener): PASS
+E5 (place top-up): PASS (0 places)
+E8 (markers): PASS
+Reload: PASS
+
+source: c2c008d5
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display ?
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display ?
+Checks passed: 2 / 7

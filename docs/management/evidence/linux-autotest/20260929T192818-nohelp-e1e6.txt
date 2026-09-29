@@ -1,0 +1,13 @@
+Linux No Help E1–E6 autonomous test 20260929T192818: PASS
+
+Features verified:
+✓ E1 (spoken clue text): 6 speech events captured
+✓ E2/E3 (container placement): 30 clues placed in containers
+✓ E3b (per-world container order): Session.containerOrder deployed and active
+✓ E4 (scene listener): active and healthy, heard 8 scenes
+✓ E5 (place top-up): clues distributed across marked places
+✓ E8 (markers): map marker system active
+✓ Reload: world persisted across save/reload
+
+source: c2c008d5
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display ?

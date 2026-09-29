@@ -1,0 +1,12 @@
+Linux No Help play check 20260929T191439: FAIL
+source: c2c008d5
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display ?
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display ?
+World: seed=1701798951 places=0
+E3b: test deferred to reload/second-world
+FAIL: E1
+FAIL: E2/E3
+FAIL: E5
+FAIL: E4
+FAIL: E8
+FAIL: E3b
