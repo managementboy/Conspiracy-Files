@@ -1,0 +1,44 @@
+[
+  {
+    "id": "t0282-01",
+    "kind": "set",
+    "pieces": [
+      "WaterBottle",
+      "SheetPaper2"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "anchor": {
+      "print": "Twiggys"
+    },
+    "title": "Friday’s entertainment",
+    "body": "The bar’s entertainment list is clipped to a water check for the back room; the beverage delivery was marked complete before the door was opened.",
+    "rival_reading": "An emergency team could test a room and receive drinks during a response; the records do not say what prompted the check.",
+    "gloss": "The back-room water check and bar delivery are recorded out of order.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "cites": {
+      "source": "print:Twiggys",
+      "quote": "Twiggy's"
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-28",
+      "batch": "T0282"
+    }
+  }
+]

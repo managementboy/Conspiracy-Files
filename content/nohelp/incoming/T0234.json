@@ -1,0 +1,44 @@
+[
+  {
+    "id": "t0234-01",
+    "kind": "set",
+    "pieces": [
+      "Notebook",
+      "WaterBottle"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "anchor": {
+      "print": "RosewoodFD"
+    },
+    "title": "Fire safety checklist",
+    "body": "The safety sheet marks the detectors checked before the extinguisher was delivered; a note asks the next crew to keep the windows shut.",
+    "rival_reading": "A response crew could prepare a building for any hazard; the sequence does not show what prompted the check.",
+    "gloss": "A safety check is recorded before the equipment arrives.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "cites": {
+      "source": "print:RosewoodFD",
+      "quote": "Rosewood Fire Department"
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-28",
+      "batch": "T0234"
+    }
+  }
+]

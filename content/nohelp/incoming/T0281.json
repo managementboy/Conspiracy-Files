@@ -1,0 +1,44 @@
+[
+  {
+    "id": "t0281-01",
+    "kind": "set",
+    "pieces": [
+      "Book",
+      "Map"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "containment",
+        "rival": "agricultural"
+      }
+    ],
+    "anchor": {
+      "print": "TheWizardsKeep"
+    },
+    "title": "A shop tour in two languages",
+    "body": "The store map is folded into a book with a handwritten translation; the entry log says the room was empty before the last visitor signed out.",
+    "rival_reading": "A staged tour could clear a room ahead of a visitor; the log does not identify who was responsible.",
+    "gloss": "An empty-room mark precedes the last visitor’s sign-out.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "cites": {
+      "source": "print:TheWizardsKeep",
+      "quote": "The Wizard's Keep"
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-28",
+      "batch": "T0281"
+    }
+  }
+]

@@ -1,0 +1,44 @@
+[
+  {
+    "id": "t0269-01",
+    "kind": "set",
+    "pieces": [
+      "Pistol",
+      "Notebook"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "anchor": {
+      "print": "IrvingtonGunClub"
+    },
+    "title": "Range inspection record",
+    "body": "The range log records a target inspection and a field briefing on the same page; the safety officer’s sign-off is missing.",
+    "rival_reading": "A response team could inspect the range during an emergency; the missing sign-off does not identify the briefing.",
+    "gloss": "A field briefing overlaps a range inspection without a safety sign-off.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "cites": {
+      "source": "print:IrvingtonGunClub",
+      "quote": "Irvington Gun Club"
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-28",
+      "batch": "T0269"
+    }
+  }
+]

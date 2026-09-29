@@ -1,0 +1,44 @@
+[
+  {
+    "id": "t0251-01",
+    "kind": "set",
+    "pieces": [
+      "RadioBlack",
+      "SheetPaper2"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "anchor": {
+      "print": "RustyRifle"
+    },
+    "title": "Friday’s extra set",
+    "body": "The band schedule lists an extra set after closing; a venue note asks staff to air out the room after the field crew leaves.",
+    "rival_reading": "A response crew could use the venue as a staging room and air it afterward; the note does not say what was brought inside.",
+    "gloss": "A music venue adds a set after a field crew’s visit.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "cites": {
+      "source": "print:RustyRifle",
+      "quote": "The Rusty Rifle"
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-28",
+      "batch": "T0251"
+    }
+  }
+]

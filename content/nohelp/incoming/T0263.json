@@ -1,0 +1,44 @@
+[
+  {
+    "id": "t0263-01",
+    "kind": "set",
+    "pieces": [
+      "Bandage",
+      "Notebook"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "anchor": {
+      "print": "GoldenSunset"
+    },
+    "title": "Elder-care delivery",
+    "body": "The care log lists a routine delivery, while the field sample box is marked outside the room before the resident’s check-in.",
+    "rival_reading": "A response team could sample a room after a medical visit; the log does not say what the sample was.",
+    "gloss": "A care visit and field sample share a room handoff.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "cites": {
+      "source": "print:GoldenSunset",
+      "quote": "Golden Sunset Nursing Home"
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-28",
+      "batch": "T0263"
+    }
+  }
+]

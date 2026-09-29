@@ -1,0 +1,44 @@
+[
+  {
+    "id": "t0277-01",
+    "kind": "set",
+    "pieces": [
+      "SheetPaper2",
+      "KeyRing"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "containment",
+        "rival": "agricultural"
+      }
+    ],
+    "anchor": {
+      "print": "Sammies"
+    },
+    "title": "The watch discount card",
+    "body": "The discount card is stamped paid before the watch stock was counted; the closing sheet says every customer left before the store was checked.",
+    "rival_reading": "A sales clerk could complete a transaction before the stock count; the sheet does not prove a customer was left inside.",
+    "gloss": "A sale closes before stock and room checks are complete.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "cites": {
+      "source": "print:Sammies",
+      "quote": "Sammie's (Brandenburg)"
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-28",
+      "batch": "T0277"
+    }
+  }
+]

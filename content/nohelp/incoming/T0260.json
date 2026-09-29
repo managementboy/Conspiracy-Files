@@ -1,0 +1,44 @@
+[
+  {
+    "id": "t0260-01",
+    "kind": "set",
+    "pieces": [
+      "KeyRing",
+      "WaterBottle"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "containment",
+        "rival": "agricultural"
+      }
+    ],
+    "anchor": {
+      "print": "DarkwallowGuestHouse"
+    },
+    "title": "Guest rooms before inspection",
+    "body": "The guest-house key rack is marked full before the room inspection is signed. One water bottle is tagged for a room without a guest name.",
+    "rival_reading": "A work crew could use a guest room without a reservation; the rack does not show who stayed there.",
+    "gloss": "A full room rack and an unnamed water delivery overlap.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "cites": {
+      "source": "print:DarkwallowGuestHouse",
+      "quote": "Darkwallow Guest House"
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-28",
+      "batch": "T0260"
+    }
+  }
+]

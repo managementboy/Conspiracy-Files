@@ -1,0 +1,44 @@
+[
+  {
+    "id": "t0237-01",
+    "kind": "set",
+    "pieces": [
+      "Notebook",
+      "Pencil"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "anchor": {
+      "print": "MuldraughPD"
+    },
+    "title": "The public meeting notes",
+    "body": "The meeting sheet lists a community protection discussion and a separate field visit; the same speaker is recorded at both at once.",
+    "rival_reading": "An emergency meeting could overlap a site inspection; the notes do not show what the field visit concerned.",
+    "gloss": "A public meeting and field visit share one speaker and one time.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "cites": {
+      "source": "print:MuldraughPD",
+      "quote": "Muldraugh Police"
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-28",
+      "batch": "T0237"
+    }
+  }
+]

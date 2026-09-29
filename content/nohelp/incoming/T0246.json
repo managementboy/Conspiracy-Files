@@ -1,0 +1,44 @@
+[
+  {
+    "id": "t0246-01",
+    "kind": "set",
+    "pieces": [
+      "FishingRod",
+      "HandTorch"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "containment",
+        "rival": "agricultural"
+      }
+    ],
+    "anchor": {
+      "print": "CabinforRentDixie"
+    },
+    "title": "Cabin rules after dark",
+    "body": "The cabin key is tied to a trail map and a note to leave no litter. The checkout sheet says the guests left before the caretaker reached the road.",
+    "rival_reading": "A visitor could leave early for ordinary reasons; the sheet does not show why the caretaker was delayed.",
+    "gloss": "The guests depart before the caretaker reaches the cabin road.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "cites": {
+      "source": "print:CabinforRentDixie",
+      "quote": "Cabin for Rent (Dixie)"
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-28",
+      "batch": "T0246"
+    }
+  }
+]

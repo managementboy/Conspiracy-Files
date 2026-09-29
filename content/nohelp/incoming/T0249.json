@@ -1,0 +1,44 @@
+[
+  {
+    "id": "t0249-01",
+    "kind": "set",
+    "pieces": [
+      "Book",
+      "LetterHandwritten"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "anchor": {
+      "print": "FallasLakeChurch"
+    },
+    "title": "A gathering after dark",
+    "body": "The prayer gathering notice is folded around a letter asking the caretaker to keep the well covered until the next test.",
+    "rival_reading": "Emergency cleanup could cover a well pending testing; the letter does not identify what was tested.",
+    "gloss": "A community gathering and a pending well test share the same site.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "cites": {
+      "source": "print:FallasLakeChurch",
+      "quote": "Fallas Lake Church"
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-28",
+      "batch": "T0249"
+    }
+  }
+]

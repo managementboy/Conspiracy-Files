@@ -1,0 +1,44 @@
+[
+  {
+    "id": "t0267-01",
+    "kind": "set",
+    "pieces": [
+      "WaterBottle",
+      "Notebook"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "anchor": {
+      "print": "HouseforSale799"
+    },
+    "title": "Central listing sample",
+    "body": "The listing packet includes a water-test appointment after the move-in date. A note asks the owner to leave the kitchen tap unused until then.",
+    "rival_reading": "A containment crew could restrict a tap during a response inspection; the appointment does not say what prompted it.",
+    "gloss": "A new occupant is scheduled before the water test.",
+    "axioms": {
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "cites": {
+      "source": "print:HouseforSale799",
+      "quote": "House for Sale (no. 799)"
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-28",
+      "batch": "T0267"
+    }
+  }
+]
