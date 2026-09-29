@@ -1,0 +1,47 @@
+[
+  {
+    "anchor": {
+      "scene": "RBShopLooted"
+    },
+    "body": "Soap, gloves, and two water jugs, paid cash. On the back: “Trial crew used the sink at dawn. My eyes burned before the road was shut.”\n\nI saved it from the bag of rubbish because there was a name on the reverse. The name was not on the list they posted.\n\nIt could be a mistake in the copying. The things stacked beside the page were real enough, and still waiting to be moved.",
+    "id": "t0308-01",
+    "kind": "written",
+    "pieces": [
+      "receipt"
+    ],
+    "title": "Soap bought after the field run",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture",
+        "containers": [
+          "crate",
+          "shelves",
+          "desk",
+          "counter",
+          "cardboardbox",
+          "bin"
+        ]
+      }
+    ],
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-warning",
+        "c-orders"
+      ]
+    },
+    "gloss": "A personal trace places field-program residue before a later restriction.",
+    "prov": {
+      "batch": "T0308",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "Emergency workers could have encountered the same residue while responding; the personal trace does not by itself prove the field program caused the emergency."
+  }
+]
