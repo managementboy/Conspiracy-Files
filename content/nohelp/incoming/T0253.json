@@ -1,0 +1,41 @@
+[
+  {
+    "anchor": {
+      "print": "Airport"
+    },
+    "body": "red and blue cord join the box of matches to the hand torch. the red route is cut; the blue route ends in a sealed knot.",
+    "id": "t0253-01",
+    "kind": "set",
+    "pieces": [
+      "Matches",
+      "HandTorch"
+    ],
+    "title": "missing count beside the box of matches",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ],
+    "rival_reading": "A farm-program crew could have counted routes, repacked tools, or removed ownership marks during hurried field work; the objects do not prove a concealed public response.",
+    "gloss": "A response bundle preserves a missing count, changed route, or erased identity.",
+    "axioms": {
+      "containment": [
+        "c-warning",
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0253"
+    }
+  }
+]
