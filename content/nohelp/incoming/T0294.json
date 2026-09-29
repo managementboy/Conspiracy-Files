@@ -1,0 +1,39 @@
+[
+  {
+    "id": "t0294-01",
+    "kind": "written",
+    "pieces": [
+      "diary"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "furniture",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "anchor": {
+      "scene": "RBJoanHartford"
+    },
+    "title": "At dusk: sealed seed packet",
+    "body": "at dusk: the crop trial crew brought sealed seed packet. my brother started coughing. I washed everything twice before the siren began.",
+    "rival_reading": "A response team could have carried farm supplies while checking exposure; the objects and timing do not establish that the trial caused it.",
+    "gloss": "A personal trace links trial residue to illness before a later restriction.",
+    "axioms": {
+      "containment": [
+        "c-warning",
+        "c-orders"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0294"
+    }
+  }
+]
