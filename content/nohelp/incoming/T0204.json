@@ -1,0 +1,52 @@
+[
+  {
+    "anchor": {
+      "print": "RoxysRollerRink"
+    },
+    "body": "The session tally is closed before the last skater returned the rental pair. A note asks staff to keep the rear exit open for the next group.",
+    "id": "t0204-01",
+    "kind": "set",
+    "pieces": [
+      "Shoes_Black",
+      "SheetPaper2"
+    ],
+    "title": "The rink’s last session",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture",
+        "containers": [
+          "desk",
+          "crate",
+          "shelves",
+          "counter",
+          "cardboardbox",
+          "bin"
+        ]
+      }
+    ],
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "Roxy's Roller Rink",
+      "source": "print:RoxysRollerRink"
+    },
+    "gloss": "The session closes before all equipment is returned.",
+    "prov": {
+      "batch": "T0204",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A normal session could close while rentals were still returning; the note does not say why the rear exit was needed."
+  }
+]
