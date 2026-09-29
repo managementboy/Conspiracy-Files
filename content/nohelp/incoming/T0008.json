@@ -1,0 +1,88 @@
+[
+  {
+    "body": "green crop residue marks the short rope; a scraped warning stripe marks the water bottle. both are tied with the same cord.",
+    "id": "t0008-01",
+    "kind": "set",
+    "pieces": [
+      "Rope",
+      "WaterBottle"
+    ],
+    "title": "Short rope carrying two traces",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "warehouse",
+        "rival": "agricultural",
+        "spot": "furniture",
+        "containers": [
+          "crate",
+          "shelves",
+          "desk",
+          "counter",
+          "cardboardbox",
+          "bin"
+        ]
+      }
+    ],
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-warning",
+        "c-orders"
+      ]
+    },
+    "gloss": "Farm residue and response markings share one deliberately ambiguous bundle.",
+    "prov": {
+      "batch": "T0008",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "The farm program and the emergency response each explain one layer of the bundle, and the shared knot does not establish which purpose came first."
+  },
+  {
+    "body": "The notebook rests across the bucket. Its page labels two strips “control — standing” and “trial spray — curled by noon.” The next line reads “mix still active after valve shut.”",
+    "id": "t0008-02",
+    "kind": "set",
+    "pieces": [
+      "Bucket",
+      "Notebook"
+    ],
+    "title": "The trial strip curled after spraying",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "warehouse",
+        "rival": "containment",
+        "spot": "furniture",
+        "containers": [
+          "desk",
+          "crate",
+          "shelves",
+          "counter",
+          "cardboardbox",
+          "bin"
+        ]
+      }
+    ],
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-malfunction"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "gloss": "A trial mixture remained active after application and damaged the test strip.",
+    "prov": {
+      "batch": "T0008",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A farm worker could record ordinary crop damage and a poorly shut valve; the notes do not establish an experimental program."
+  }
+]
