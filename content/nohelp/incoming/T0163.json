@@ -1,0 +1,49 @@
+[
+  {
+    "anchor": {
+      "print": "Fossoil5"
+    },
+    "body": "matching white stripes cross the warning whistle and first-aid kit. a name-sized patch on the warning whistle has been scrubbed bare.",
+    "id": "t0163-01",
+    "kind": "set",
+    "pieces": [
+      "Whistle",
+      "FirstAidKit"
+    ],
+    "title": "Warning whistle beside the spare mark",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture",
+        "containers": [
+          "dresser",
+          "crate",
+          "shelves",
+          "desk",
+          "counter",
+          "cardboardbox"
+        ]
+      }
+    ],
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-warning",
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "gloss": "A response bundle preserves a missing count, changed route, or erased identity.",
+    "prov": {
+      "batch": "T0163",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A farm-program crew could have counted routes, repacked tools, or removed ownership marks during hurried field work; the objects do not prove a concealed public response."
+  }
+]
