@@ -1,0 +1,40 @@
+[
+  {
+    "id": "t0307-01",
+    "kind": "set",
+    "pieces": [
+      "WaterBottle",
+      "EmptyJar"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "furniture",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "anchor": {
+      "scene": "RBSchool"
+    },
+    "title": "Two jars from the school garden",
+    "body": "A cloudy water bottle and an empty sample jar share a strip of twine. Pale spray dust remains beneath both, inside the cupboard.",
+    "rival_reading": "Emergency workers could have encountered the same residue while responding; the personal trace does not by itself prove the field program caused the emergency.",
+    "gloss": "A personal trace places field-program residue before a later restriction.",
+    "axioms": {
+      "containment": [
+        "c-warning",
+        "c-orders"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0307"
+    }
+  }
+]
