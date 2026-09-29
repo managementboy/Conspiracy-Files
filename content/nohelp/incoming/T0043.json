@@ -1,0 +1,53 @@
+[
+  {
+    "anchor": {
+      "map": "IrvingtonStashMap4",
+      "mark": 1
+    },
+    "body": "A copied verse about helping a wounded stranger is folded around an unpaid bar tab; the return slip marks the road pass as revoked.",
+    "id": "t0043-01",
+    "kind": "set",
+    "pieces": [
+      "SheetPaper2",
+      "Pencil"
+    ],
+    "title": "A verse on the return",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture",
+        "containers": [
+          "crate",
+          "shelves",
+          "desk",
+          "counter",
+          "cardboardbox",
+          "bin"
+        ]
+      }
+    ],
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "How quaint and curious war is",
+      "source": "map:IrvingtonStashMap4"
+    },
+    "gloss": "A revoked road pass sits with a personal reminder about helping someone.",
+    "prov": {
+      "batch": "T0043",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "The pass could have been withdrawn for ordinary work or security reasons; the poem and tab do not prove a failed response."
+  }
+]
