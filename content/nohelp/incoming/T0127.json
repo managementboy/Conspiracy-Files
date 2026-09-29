@@ -1,0 +1,1448 @@
+[
+  {
+    "anchor": {
+      "map": "WorldStashMap18",
+      "mark": 1
+    },
+    "body": "the alcohol wipes and briefcase are wrapped in a child's raincoat. one stayed dry while the other was left in road mud.",
+    "id": "t0127-01",
+    "kind": "set",
+    "pieces": [
+      "AlcoholWipes",
+      "Briefcase"
+    ],
+    "title": "missing count beside the alcohol wipes",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ],
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-warning",
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "gloss": "A response bundle preserves a missing count, changed route, or erased identity.",
+    "prov": {
+      "batch": "T0127",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A farm-program crew could have counted routes, repacked tools, or removed ownership marks during hurried field work; the objects do not prove a concealed public response."
+  },
+  {
+    "id": "t0127-02",
+    "kind": "written",
+    "pieces": [
+      "diary"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "title": "First fire under the assay table",
+    "body": "Farm diary: the first fire started beneath the assay table after a field sample cracked. The wet soil burned blue before any building caught.",
+    "anchor": {
+      "map": "WorldStashMap18",
+      "note": 1
+    },
+    "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work.",
+    "gloss": "First fire under the assay table",
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-29",
+      "batch": "T0127"
+    }
+  },
+  {
+    "id": "t0127-03",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "title": "Second fire, scorched assay tray",
+    "body": "Diary entry: beside the second fire mark lay a scorched tray from the soil assay. Its unburned label says the orchard batch was reapplied after rain.",
+    "anchor": {
+      "map": "WorldStashMap18",
+      "note": 2
+    },
+    "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work.",
+    "gloss": "Second fire, scorched assay tray",
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-29",
+      "batch": "T0127"
+    }
+  },
+  {
+    "id": "t0127-04",
+    "kind": "written",
+    "pieces": [
+      "receipt"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "title": "Third fire, seed sacks first",
+    "body": "Photograph back: the third fire began among returned seed sacks, not the nearby lumber. Violet grains remained in the seams after the flames went out.",
+    "anchor": {
+      "map": "WorldStashMap18",
+      "note": 3
+    },
+    "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work.",
+    "gloss": "Third fire, seed sacks first",
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-29",
+      "batch": "T0127"
+    }
+  },
+  {
+    "id": "t0127-05",
+    "kind": "written",
+    "pieces": [
+      "photograph"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "title": "Fourth fire beside the rinse pit",
+    "body": "Farm log: smoke at the fourth fire rose from the rinse pit after the trial crew emptied its hoses. The grass died in a clean ring before dusk.",
+    "anchor": {
+      "map": "WorldStashMap18",
+      "note": 4
+    },
+    "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work.",
+    "gloss": "Fourth fire beside the rinse pit",
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-29",
+      "batch": "T0127"
+    }
+  },
+  {
+    "id": "t0127-06",
+    "kind": "written",
+    "pieces": [
+      "notebook"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "title": "Fifth fire after the drum split",
+    "body": "Torn notebook page: the fifth fire followed a split treatment drum. Water spread the burning film, so we covered it with field soil and left.",
+    "anchor": {
+      "map": "WorldStashMap18",
+      "note": 5
+    },
+    "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work.",
+    "gloss": "Fifth fire after the drum split",
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-29",
+      "batch": "T0127"
+    }
+  },
+  {
+    "id": "t0127-07",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "title": "Sixth fire on the sample route",
+    "body": "Receipt margin: replace two boots burned at the sixth fire on the sampling route. Both soles carried the same sticky amber residue.",
+    "anchor": {
+      "map": "WorldStashMap18",
+      "note": 6
+    },
+    "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work.",
+    "gloss": "Sixth fire on the sample route",
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-29",
+      "batch": "T0127"
+    }
+  },
+  {
+    "id": "t0127-08",
+    "kind": "written",
+    "pieces": [
+      "diary"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "title": "Seventh fire at the hay edge",
+    "body": "Letter draft: the seventh fire caught damp hay where the pasture spray settled. The extension worker asked us to call it a lantern accident.",
+    "anchor": {
+      "map": "WorldStashMap18",
+      "note": 7
+    },
+    "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work.",
+    "gloss": "Seventh fire at the hay edge",
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-29",
+      "batch": "T0127"
+    }
+  },
+  {
+    "id": "t0127-09",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "title": "Eighth fire before sunrise",
+    "body": "Diary line: the eighth fire glowed before sunrise around bags from the night application. No homes were burning and no siren had sounded.",
+    "anchor": {
+      "map": "WorldStashMap18",
+      "note": 8
+    },
+    "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work.",
+    "gloss": "Eighth fire before sunrise",
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-29",
+      "batch": "T0127"
+    }
+  },
+  {
+    "id": "t0127-10",
+    "kind": "written",
+    "pieces": [
+      "receipt"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "title": "Ninth fire by the drainage cut",
+    "body": "Photograph note: the ninth fire follows the drainage cut from the experimental plot. Frogs floated below it while the bank still smoked.",
+    "anchor": {
+      "map": "WorldStashMap18",
+      "note": 9
+    },
+    "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work.",
+    "gloss": "Ninth fire by the drainage cut",
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-29",
+      "batch": "T0127"
+    }
+  },
+  {
+    "id": "t0127-11",
+    "kind": "written",
+    "pieces": [
+      "photograph"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "title": "Tenth fire under the sprayer",
+    "body": "Maintenance page: the tenth fire blackened the parked sprayer from beneath. The fuel line was intact; dried treatment foam covered the hot shield.",
+    "anchor": {
+      "map": "WorldStashMap18",
+      "note": 10
+    },
+    "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work.",
+    "gloss": "Tenth fire under the sprayer",
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-29",
+      "batch": "T0127"
+    }
+  },
+  {
+    "id": "t0127-12",
+    "kind": "written",
+    "pieces": [
+      "notebook"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "title": "Eleventh fire and empty cages",
+    "body": "Personal note: after the eleventh fire, every test cage stood open. The rabbits were gone, but their water pans held white crystals.",
+    "anchor": {
+      "map": "WorldStashMap18",
+      "note": 11
+    },
+    "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work.",
+    "gloss": "Eleventh fire and empty cages",
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-29",
+      "batch": "T0127"
+    }
+  },
+  {
+    "id": "t0127-13",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "title": "Twelfth fire at the row flags",
+    "body": "Farm diary: the twelfth fire consumed only the flagged crop rows. Untreated rows on either side stayed green until the next rain.",
+    "anchor": {
+      "map": "WorldStashMap18",
+      "note": 12
+    },
+    "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work.",
+    "gloss": "Twelfth fire at the row flags",
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-29",
+      "batch": "T0127"
+    }
+  },
+  {
+    "id": "t0127-14",
+    "kind": "written",
+    "pieces": [
+      "diary"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "title": "Thirteenth fire behind the shed",
+    "body": "Feed receipt back: at the thirteenth fire we found six empty additive tins behind the shed. The purchase line lists five.",
+    "anchor": {
+      "map": "WorldStashMap18",
+      "note": 13
+    },
+    "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work.",
+    "gloss": "Thirteenth fire behind the shed",
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-29",
+      "batch": "T0127"
+    }
+  },
+  {
+    "id": "t0127-15",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "title": "Fourteenth fire along wet ground",
+    "body": "Notebook sketch: the fourteenth fire crawled across wet ground in the same path as yesterday’s trial runoff. Ordinary straw would not burn there.",
+    "anchor": {
+      "map": "WorldStashMap18",
+      "note": 14
+    },
+    "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work.",
+    "gloss": "Fourteenth fire along wet ground",
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-29",
+      "batch": "T0127"
+    }
+  },
+  {
+    "id": "t0127-16",
+    "kind": "written",
+    "pieces": [
+      "receipt"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "title": "Fifteenth fire and the buried jar",
+    "body": "Letter fragment: beneath the fifteenth fire mark I buried a sealed leaf jar. Its leaves spotted black before the heat reached them.",
+    "anchor": {
+      "map": "WorldStashMap18",
+      "note": 15
+    },
+    "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work.",
+    "gloss": "Fifteenth fire and the buried jar",
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-29",
+      "batch": "T0127"
+    }
+  },
+  {
+    "id": "t0127-17",
+    "kind": "written",
+    "pieces": [
+      "photograph"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "title": "Sad face after the field meal",
+    "body": "Diary line at the sad face: the field cook wept when three workers could not swallow lunch. All had handled the new grain coating that morning.",
+    "anchor": {
+      "map": "WorldStashMap18",
+      "note": 16
+    },
+    "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work.",
+    "gloss": "Sad face after the field meal",
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-29",
+      "batch": "T0127"
+    }
+  },
+  {
+    "id": "t0127-18",
+    "kind": "written",
+    "pieces": [
+      "notebook"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "title": "Gun beside the locked sample case",
+    "body": "Photograph back at the first gun: a guard watched the sample case while the sick applicator waited outside. The case left before the ambulance came.",
+    "anchor": {
+      "map": "WorldStashMap18",
+      "note": 17
+    },
+    "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work.",
+    "gloss": "Gun beside the locked sample case",
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-29",
+      "batch": "T0127"
+    }
+  },
+  {
+    "id": "t0127-19",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "title": "Happy face on the bonus sheet",
+    "body": "Pay-envelope note at the first happy face: bonus for completing the late spray despite complaints. My hands were numb when I signed.",
+    "anchor": {
+      "map": "WorldStashMap18",
+      "note": 18
+    },
+    "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work.",
+    "gloss": "Happy face on the bonus sheet",
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-29",
+      "batch": "T0127"
+    }
+  },
+  {
+    "id": "t0127-20",
+    "kind": "written",
+    "pieces": [
+      "diary"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "title": "First dead face, stained gloves",
+    "body": "Torn diary page: at the first dead face, stained gloves remained beside a crop-trial badge. The public list later called the wearer an unknown traveler.",
+    "anchor": {
+      "map": "WorldStashMap18",
+      "note": 19
+    },
+    "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work.",
+    "gloss": "First dead face, stained gloves",
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-29",
+      "batch": "T0127"
+    }
+  },
+  {
+    "id": "t0127-21",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "title": "Second dead face by the well",
+    "body": "Notebook line: the second dead face marks the well tender who sampled cloudy water for the pasture study. His bottle disappeared before dawn.",
+    "anchor": {
+      "map": "WorldStashMap18",
+      "note": 20
+    },
+    "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work.",
+    "gloss": "Second dead face by the well",
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-29",
+      "batch": "T0127"
+    }
+  },
+  {
+    "id": "t0127-22",
+    "kind": "written",
+    "pieces": [
+      "receipt"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "title": "Third dead face near clean corn",
+    "body": "Photograph note: the third dead face lies beside corn that looks untouched. A trial flag was pulled from the row but its wire hole remains.",
+    "anchor": {
+      "map": "WorldStashMap18",
+      "note": 21
+    },
+    "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work.",
+    "gloss": "Third dead face near clean corn",
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-29",
+      "batch": "T0127"
+    }
+  },
+  {
+    "id": "t0127-23",
+    "kind": "written",
+    "pieces": [
+      "photograph"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "title": "Fourth dead face on the truck path",
+    "body": "Mileage slip back: the fourth dead face was found on the field truck path. Tire tracks lead away before the road closure begins.",
+    "anchor": {
+      "map": "WorldStashMap18",
+      "note": 22
+    },
+    "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work.",
+    "gloss": "Fourth dead face on the truck path",
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-29",
+      "batch": "T0127"
+    }
+  },
+  {
+    "id": "t0127-24",
+    "kind": "written",
+    "pieces": [
+      "notebook"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "title": "Fifth dead face and the wash basin",
+    "body": "Diary entry: the fifth dead face is beside the crew wash basin. The water smelled of bleach and the rinse ledger had been torn out.",
+    "anchor": {
+      "map": "WorldStashMap18",
+      "note": 23
+    },
+    "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work.",
+    "gloss": "Fifth dead face and the wash basin",
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-29",
+      "batch": "T0127"
+    }
+  },
+  {
+    "id": "t0127-25",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "title": "Sixth dead face under orchard netting",
+    "body": "Torn letter: at the sixth dead face, orchard netting covered a man still wearing sample tags. The fruit above him had split without ripening.",
+    "anchor": {
+      "map": "WorldStashMap18",
+      "note": 24
+    },
+    "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work.",
+    "gloss": "Sixth dead face under orchard netting",
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-29",
+      "batch": "T0127"
+    }
+  },
+  {
+    "id": "t0127-26",
+    "kind": "written",
+    "pieces": [
+      "diary"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "title": "Seventh dead face at the feed cart",
+    "body": "Receipt note: the seventh dead face fell beside feed mixed for the supplement trial. The cart number is absent from the barn account.",
+    "anchor": {
+      "map": "WorldStashMap18",
+      "note": 25
+    },
+    "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work.",
+    "gloss": "Seventh dead face at the feed cart",
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-29",
+      "batch": "T0127"
+    }
+  },
+  {
+    "id": "t0127-27",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "title": "Eighth dead face beyond the flags",
+    "body": "Personal map note: the eighth dead face lay beyond the last trial flag, where the wind carried the mist. Officials later measured only inside the flags.",
+    "anchor": {
+      "map": "WorldStashMap18",
+      "note": 26
+    },
+    "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work.",
+    "gloss": "Eighth dead face beyond the flags",
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-29",
+      "batch": "T0127"
+    }
+  },
+  {
+    "id": "t0127-28",
+    "kind": "written",
+    "pieces": [
+      "receipt"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "title": "Ninth dead face and the sealed flask",
+    "body": "Notebook page: a sealed flask beside the ninth dead face contains green field water. The label asks for testing, but no laboratory is named.",
+    "anchor": {
+      "map": "WorldStashMap18",
+      "note": 27
+    },
+    "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work.",
+    "gloss": "Ninth dead face and the sealed flask",
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-29",
+      "batch": "T0127"
+    }
+  },
+  {
+    "id": "t0127-29",
+    "kind": "written",
+    "pieces": [
+      "photograph"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "title": "Second happy face on a clean report",
+    "body": "Photograph back at the second happy face: the supervisor held up a clean inspection sheet while smoke rose behind the trial rows.",
+    "anchor": {
+      "map": "WorldStashMap18",
+      "note": 28
+    },
+    "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work.",
+    "gloss": "Second happy face on a clean report",
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-29",
+      "batch": "T0127"
+    }
+  },
+  {
+    "id": "t0127-30",
+    "kind": "written",
+    "pieces": [
+      "notebook"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "title": "Second gun guarding rinse records",
+    "body": "Diary margin at the second gun: an armed man collected the rinse records and left the seed invoices. He wore no county badge.",
+    "anchor": {
+      "map": "WorldStashMap18",
+      "note": 29
+    },
+    "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work.",
+    "gloss": "Second gun guarding rinse records",
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-29",
+      "batch": "T0127"
+    }
+  },
+  {
+    "id": "t0127-31",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "title": "Second sad face beside calf tags",
+    "body": "Letter fragment at the second sad face: twelve calf tags came back from the supplement pasture, but only eleven calves were unloaded.",
+    "anchor": {
+      "map": "WorldStashMap18",
+      "note": 30
+    },
+    "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work.",
+    "gloss": "Second sad face beside calf tags",
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-29",
+      "batch": "T0127"
+    }
+  },
+  {
+    "id": "t0127-32",
+    "kind": "written",
+    "pieces": [
+      "diary"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "title": "First skull, rejected soil core",
+    "body": "Field log at the first skull: this soil core was rejected for a sharp solvent smell. The replacement core came from outside the treated rows.",
+    "anchor": {
+      "map": "WorldStashMap18",
+      "note": 31
+    },
+    "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work.",
+    "gloss": "First skull, rejected soil core",
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-29",
+      "batch": "T0127"
+    }
+  },
+  {
+    "id": "t0127-33",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "title": "Second skull, rain-barrel sample",
+    "body": "Receipt back at the second skull: one rain-barrel sample, paid cash. The barrel stood downwind of the experimental orchard.",
+    "anchor": {
+      "map": "WorldStashMap18",
+      "note": 32
+    },
+    "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work.",
+    "gloss": "Second skull, rain-barrel sample",
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-29",
+      "batch": "T0127"
+    }
+  },
+  {
+    "id": "t0127-34",
+    "kind": "written",
+    "pieces": [
+      "receipt"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "title": "Third skull, birds under the wire",
+    "body": "Diary line at the third skull: birds dropped beneath the plot wire after dawn spraying. The crew buried them before opening the gate.",
+    "anchor": {
+      "map": "WorldStashMap18",
+      "note": 33
+    },
+    "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work.",
+    "gloss": "Third skull, birds under the wire",
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-29",
+      "batch": "T0127"
+    }
+  },
+  {
+    "id": "t0127-35",
+    "kind": "written",
+    "pieces": [
+      "photograph"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "title": "Fourth skull, missing drum weight",
+    "body": "Warehouse note at the fourth skull: the returned treatment drum weighed nine pounds less than dispatch. Its seal appeared untouched.",
+    "anchor": {
+      "map": "WorldStashMap18",
+      "note": 34
+    },
+    "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work.",
+    "gloss": "Fourth skull, missing drum weight",
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-29",
+      "batch": "T0127"
+    }
+  },
+  {
+    "id": "t0127-36",
+    "kind": "written",
+    "pieces": [
+      "notebook"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "title": "Fifth skull, milk poured away",
+    "body": "Farm notebook at the fifth skull: pour away milk from the test pasture until told otherwise. The instruction arrived before the cattle looked ill.",
+    "anchor": {
+      "map": "WorldStashMap18",
+      "note": 35
+    },
+    "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work.",
+    "gloss": "Fifth skull, milk poured away",
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-29",
+      "batch": "T0127"
+    }
+  },
+  {
+    "id": "t0127-37",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "title": "Sixth skull, blackened bean leaves",
+    "body": "Photograph back at the sixth skull: bean leaves blackened in the shape of yesterday’s spray fan. The roots remained pale and firm.",
+    "anchor": {
+      "map": "WorldStashMap18",
+      "note": 36
+    },
+    "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work.",
+    "gloss": "Sixth skull, blackened bean leaves",
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-29",
+      "batch": "T0127"
+    }
+  },
+  {
+    "id": "t0127-38",
+    "kind": "written",
+    "pieces": [
+      "diary"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "title": "Seventh skull, final field count",
+    "body": "Torn ledger at the seventh skull: the final field count omits two applicators and one sample case. Their truck is still marked returned.",
+    "anchor": {
+      "map": "WorldStashMap18",
+      "note": 37
+    },
+    "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work.",
+    "gloss": "Seventh skull, final field count",
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-29",
+      "batch": "T0127"
+    }
+  }
+]
