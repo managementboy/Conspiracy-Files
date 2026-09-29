@@ -1004,6 +1004,15 @@ function R.inspect(item,inPlace)
     -- document would let a player find every clue by hovering, which would
     -- replace the investigation with a sweep of the furniture.
     pcall(function() item:setTooltip("Tooltip_NHShared_Recorded") end)
+    -- Its words, said out loud, on every Inspect (DR-20260929-NOHELP-GAP-PLAN).
+    if voice and voice.sayClue then
+        for _,doc in ipairs(root.case.documents or {}) do
+            if doc.id==md.cfGeneratedId then
+                if type(doc.body)=="string" and doc.body~="" then pcall(voice.sayClue,doc.title,doc.body) end
+                break
+            end
+        end
+    end
     return true
 end
 function R.subject(item)

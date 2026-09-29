@@ -7,7 +7,7 @@ MapMediaRuntime's R.subject, not GeneratedRuntime's); the rest hold.
 
 ## Engine (Claude)
 
-- [ ] **E1 Spoken captions.** On the first Inspect the survivor says the
+- [x] **E1 Spoken captions.** (2026-09-29: code and test/nohelp_voice_clue.lua; every Inspect, all clues, title in the bubble - owner answers; native check pending) On the first Inspect the survivor says the
   clue's text (PlayerVoice, the vanilla speech line); a long text is split
   into several lines said in turn. Paper clues are still read from pages.
 - [ ] **E2 Real container choice.** A clue may name a container kind from the

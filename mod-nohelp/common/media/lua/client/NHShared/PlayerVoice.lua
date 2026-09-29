@@ -372,6 +372,49 @@ local function once(key)
     return true
 end
 
+-- A CLUE'S OWN WORDS (DR-20260929-NOHELP-GAP-PLAN, owner 2026-09-29): on every
+-- Inspect the survivor says the clue's text, the white line carrying the words
+-- and the bubble its title. A long text is said a piece at a time, each piece
+-- held long enough to read; inspecting another clue drops what is left of the
+-- one before. Not bounded by QUEUE_MAX: a diary is as long as it is.
+V.PIECE_CHARS=140
+function V.pieces(text)
+    local out,cur={},""
+    local function push(s) if s~="" then out[#out+1]=s end end
+    local sentences={}
+    for sentence in tostring(text or ""):gsub("%s+"," "):gmatch("[^%.!?]+[%.!?]*%s*") do
+        sentence=sentence:gsub("^%s+",""):gsub("%s+$","")
+        -- A sentence longer than a piece is cut between words.
+        while #sentence>V.PIECE_CHARS do
+            local cut=sentence:sub(1,V.PIECE_CHARS):match("^.*()%s") or V.PIECE_CHARS+1
+            sentences[#sentences+1]=sentence:sub(1,cut-1)
+            sentence=sentence:sub(cut):gsub("^%s+","")
+        end
+        sentences[#sentences+1]=sentence
+    end
+    for _,sentence in ipairs(sentences) do
+        if cur=="" then cur=sentence
+        elseif #cur+1+#sentence<=V.PIECE_CHARS then cur=cur.." "..sentence
+        else push(cur); cur=sentence end
+    end
+    push(cur)
+    return out
+end
+function V.sayClue(title,text)
+    local p=player(); if not p then return 0 end
+    local label=tostring(title or "")
+    local kept={}
+    for _,q in ipairs(queue) do if not q.reading then kept[#kept+1]=q end end
+    queue=kept
+    local list=V.pieces(text)
+    for _,piece in ipairs(list) do
+        queue[#queue+1]={text=piece,label=(label~="" and label~=piece) and label or "...",reading=true}
+    end
+    log("clue text: "..#list.." piece(s) queued")
+    V.drain()
+    return #list
+end
+
 -- Set E: a newly found document connects to one already held.
 -- `kind` is the connection's own kind, as recorded on the document.
 function V.onConnection(kind,documentId)
