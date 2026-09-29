@@ -1,0 +1,74 @@
+[
+  {
+    "anchor": {
+      "scene": "RZSSurvivalistCamp"
+    },
+    "body": "My entry says the orchard crew rinsed its sprayer upstream. The water turned milky, and my hands blistered before the bridge was blocked.",
+    "id": "t0402-01",
+    "kind": "written",
+    "pieces": [
+      "notebook"
+    ],
+    "title": "camp notebook, page torn short",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ],
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-warning",
+        "c-orders"
+      ]
+    },
+    "gloss": "A personal trace links farm-program residue to symptoms before a restriction.",
+    "prov": {
+      "batch": "T0402",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "Emergency workers could have encountered the same residue while crossing treated land; the personal trace does not by itself prove the farm program caused the emergency."
+  },
+  {
+    "id": "t0402-02",
+    "kind": "written",
+    "pieces": [
+      "notebook"
+    ],
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ],
+    "title": "Supplies for the wrong route",
+    "body": "The survivalist had packed for a three-day hike along the official safe corridor. At its first crossing a new barrier sent him back toward the town he had left. He wrote the change in the margin so he would not trust the printed route again.",
+    "anchor": {
+      "scene": "RZSSurvivalistCamp"
+    },
+    "rival_reading": "The agricultural trial may have caused the disorder that forced improvised decisions.",
+    "gloss": "A witness records a failed evacuation count or route.",
+    "axioms": {
+      "containment": [
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0402"
+    }
+  }
+]
