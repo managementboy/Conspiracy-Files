@@ -1,0 +1,40 @@
+[
+  {
+    "id": "t0399-01",
+    "kind": "set",
+    "pieces": [
+      "Battery",
+      "RadioBlack"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "anchor": {
+      "scene": "RZSRockerParty"
+    },
+    "title": "field radio wrapped in warning tape",
+    "body": "A fresh battery and field radio are wrapped together. Red field grit fills the speaker; county warning tape covers the tuning dial.",
+    "rival_reading": "Field workers and emergency responders could each have made this mixed bundle; it does not settle which activity came first.",
+    "gloss": "Field residue and response material share one ambiguous bundle.",
+    "axioms": {
+      "containment": [
+        "c-warning",
+        "c-orders"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0399"
+    }
+  }
+]
