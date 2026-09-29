@@ -1,0 +1,40 @@
+[
+  {
+    "id": "t0347-01",
+    "kind": "set",
+    "pieces": [
+      "Battery",
+      "RadioBlack"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "corpse",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "anchor": {
+      "scene": "RDSSkeletonPsycho"
+    },
+    "title": "Battery and field radio, sunday after supper",
+    "body": "The battery and field radio share yellow dust from the greenhouse trial. They were bundled before the phones went dead.",
+    "rival_reading": "Emergency workers could have picked up the same yellow dust while responding near a field; this personal trace does not prove the trial caused the emergency.",
+    "gloss": "A personal trace connects a farm trial to symptoms before a later restriction.",
+    "axioms": {
+      "containment": [
+        "c-warning",
+        "c-orders"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0347"
+    }
+  }
+]
