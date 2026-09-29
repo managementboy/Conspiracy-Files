@@ -1,0 +1,39 @@
+[
+  {
+    "id": "t0292-01",
+    "kind": "written",
+    "pieces": [
+      "diary"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "furniture",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "anchor": {
+      "scene": "RBHairSalon"
+    },
+    "title": "Tuesday, after opening",
+    "body": "Three customers from the east fields brought the same sweet chemical smell in their hair. They said the crop trial crew had sprayed before sunrise. I washed everyone twice; by noon a county van had blocked the road.",
+    "rival_reading": "The matching smell and road closure could mark exposure discovered during an emergency response rather than a farm program that caused it.",
+    "gloss": "A hairdresser records matching residue on field workers before a road closure.",
+    "axioms": {
+      "containment": [
+        "c-warning",
+        "c-orders"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0292"
+    }
+  }
+]
