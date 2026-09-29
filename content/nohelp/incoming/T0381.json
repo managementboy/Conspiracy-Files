@@ -1,0 +1,39 @@
+[
+  {
+    "id": "t0381-01",
+    "kind": "written",
+    "pieces": [
+      "photograph"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "anchor": {
+      "scene": "RZSCharcoalBurner"
+    },
+    "title": "weathered bundle note — friday at closing",
+    "body": "on the back: “friday at closing, silver specks in the weathered bundle after the feed test. the ditch smelled metallic. later, the noon siren sounded.”",
+    "rival_reading": "Responders could have collected the silver specks while crossing treated land; the note or objects do not prove the program began the emergency.",
+    "gloss": "A personal field trace precedes the visible emergency response.",
+    "axioms": {
+      "containment": [
+        "c-warning",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0381"
+    }
+  }
+]
