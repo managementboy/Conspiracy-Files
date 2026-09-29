@@ -134,7 +134,9 @@ The round, in this order, all in one go, one commit per ticket:
    deliver the whole ticket again, every accepted row unchanged, plus one
    new clue for the scene leaning the recipe's `addSide` (same scene anchor
    and spot as the existing row). The check returns a delivery that drops a
-   row (`RECIPE_KEEP`) or lacks the side (`RECIPE_SIDES`).
+   row (`RECIPE_KEEP`) or lacks the side (`RECIPE_SIDES`). A whole-ticket delivery is an
+   ordinary delivery even when some of its rows are also in recall R2 (they
+   stay recalled until step 2).
 2. **Recall R2** (446 clues, `recalls.json`): one replacement per recalled
    id, under the same id, only the recalled rows in the delivery (as in R1).
    Each id lists its fixes: `spot` (move it off the floor into the right

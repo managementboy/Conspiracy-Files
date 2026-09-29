@@ -5,7 +5,7 @@ never a place name, map, flyer, scene, person or clue text here. Whoever holds t
 baton edits it; `lua5.1 tools/nohelp_content/progress.lua --state` rewrites PROGRESS.
 
 ## BATON
-CLAUDE since 2026-09-29 because TOOLING
+CHATGPT since 2026-09-29 because WRITING
 
 ## STAGE
 EXPANSION
@@ -14,7 +14,7 @@ EXPANSION
 T0283
 
 ## NEXT
-T0283 RECALL_ID RECIPE_KEEP: addSide full-ticket delivery and open R2 recall on the same accepted id conflict; resolve converter sequencing, then return baton to CHATGPT WRITING for scene sides, R2, T0408-T0427. T0303 +1 delivered.
+Converter fixed: a whole-ticket delivery (accepted rows copied unchanged plus the new clue) is an ordinary delivery even when some of its rows are recalled. Continue the round after the deep review, in one go (handover section 5): 1) the scene tickets with addSide (T0303 delivered), 2) recall R2, 3) stock T0408-T0427; one commit per ticket; baton to CLAUDE with REVIEW once, at the end
 
 ## OPEN RETURNS
 none
@@ -26,4 +26,4 @@ none
 2026-09-28 T0001
 
 ## PROGRESS
-NOT DONE: places 0/253, scene sides 3/125, floor 78% @87cd25e6
+NOT DONE: places 0/253, scene sides 3/125, floor 78% @6a7eae52
