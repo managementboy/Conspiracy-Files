@@ -1,0 +1,47 @@
+[
+  {
+    "anchor": {
+      "scene": "RBTSSewing"
+    },
+    "body": "Friday: I mended three work shirts from the seed trial. White powder shook from every cuff; my hands blistered before anyone closed the road.\n\nThe clerk wanted a cleaner version. I kept the stained one because it showed which part had been changed after the road closed.\n\nThere may be a simple reason for the change. Nobody at the next stop could tell us what to do with the first version.",
+    "id": "t0319-01",
+    "kind": "written",
+    "pieces": [
+      "diary"
+    ],
+    "title": "Hemmed cuffs from the trial field",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture",
+        "containers": [
+          "dresser",
+          "crate",
+          "shelves",
+          "desk",
+          "counter",
+          "cardboardbox"
+        ]
+      }
+    ],
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-warning",
+        "c-orders"
+      ]
+    },
+    "gloss": "A personal trace places field-program residue before a later restriction.",
+    "prov": {
+      "batch": "T0319",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "Emergency workers could have encountered the same residue while responding; the personal trace does not by itself prove the field program caused the emergency."
+  }
+]
