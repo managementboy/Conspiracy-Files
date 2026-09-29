@@ -1,0 +1,84 @@
+[
+  {
+    "anchor": {
+      "scene": "RBTSFoodPreparation"
+    },
+    "body": "My note says the farm crew washed their sample jars in this sink. The water turned milky; two hours later a patrol told us not to use the tap.",
+    "id": "t0317-01",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "Recipe page, lower corner",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ],
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-warning",
+        "c-orders"
+      ]
+    },
+    "gloss": "A personal trace places field-program residue before a later restriction.",
+    "prov": {
+      "batch": "T0317",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "Emergency workers could have encountered the same residue while responding; the personal trace does not by itself prove the field program caused the emergency."
+  },
+  {
+    "anchor": {
+      "scene": "RBTSFoodPreparation"
+    },
+    "body": "They told us to throw away the board but to leave the knife. I said we had served from both, and the man at the door asked only who had signed the delivery.\n\nMy helper had signed because I was late. She stayed behind to clean when they took the board. They asked for her address, then said she could go home.\n\nWe still have the order book. A page is gone, though the food from that order was already on the table.",
+    "id": "t0317-02",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "The missing cutting board",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture",
+        "containers": [
+          "counter",
+          "desk",
+          "crate",
+          "locker",
+          "shelves",
+          "bin"
+        ]
+      }
+    ],
+    "axioms": {
+      "containment": [
+        "c-warning",
+        "c-accounting"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "gloss": "An altered count or retained object was left at the scene.",
+    "prov": {
+      "batch": "T0317",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A response to an agricultural exposure could explain the same record or object."
+  }
+]
