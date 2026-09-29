@@ -1,0 +1,83 @@
+[
+  {
+    "anchor": {
+      "scene": "RBWoodcraft"
+    },
+    "body": "The hand shovel and wash pail share a bitter residue from the field-sprayer test. They were bundled before the radio warned everyone indoors.",
+    "id": "t0323-01",
+    "kind": "set",
+    "pieces": [
+      "KeyRing",
+      "Bucket"
+    ],
+    "title": "Hand shovel and wash pail, friday before dawn",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ],
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-warning",
+        "c-orders"
+      ]
+    },
+    "gloss": "A personal trace connects a farm trial to symptoms before a later restriction.",
+    "prov": {
+      "batch": "T0323",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "Emergency workers could have picked up the same a bitter residue while responding near a field; this personal trace does not prove the trial caused the emergency."
+  },
+  {
+    "id": "t0323-02",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture",
+        "containers": [
+          "desk",
+          "dresser",
+          "shelves",
+          "counter",
+          "crate",
+          "bin"
+        ]
+      }
+    ],
+    "title": "Carpenter’s margin",
+    "body": "The men building shelves were told to make another partition before the evacuation trucks came. Someone measured for beds and then scratched the measurements out. My brother still brought his tools, because the invoice for the first day had already been paid.",
+    "anchor": {
+      "scene": "RBWoodcraft"
+    },
+    "rival_reading": "The agricultural trial may have caused the disorder that forced improvised decisions.",
+    "gloss": "A witness records a failed evacuation count or route.",
+    "axioms": {
+      "containment": [
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0323"
+    }
+  }
+]
