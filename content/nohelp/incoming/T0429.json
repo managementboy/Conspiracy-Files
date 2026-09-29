@@ -1,0 +1,409 @@
+[
+  {
+    "id": "t0429-01",
+    "kind": "set",
+    "pieces": [
+      "Bucket",
+      "Bowl"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "furniture",
+        "lean": "agricultural",
+        "rival": "containment",
+        "containers": [
+          "crate",
+          "metal_shelves",
+          "counter",
+          "shelves",
+          "cardboardbox",
+          "locker"
+        ]
+      }
+    ],
+    "title": "The shared trough",
+    "body": "The bucket has a white tide mark above a green one. The little bowl filled from it has the green line too.",
+    "rival_reading": "A failure of the later response could still have left this exposure unaddressed.",
+    "gloss": "An ordinary trace links a farm exposure to a distinct observed outcome: the shared trough.",
+    "axioms": {
+      "containment": [
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-pathway",
+        "a-timing"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0429"
+    }
+  },
+  {
+    "id": "t0429-02",
+    "kind": "set",
+    "pieces": [
+      "WaterBottle",
+      "Twine"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "furniture",
+        "lean": "agricultural",
+        "rival": "containment",
+        "containers": [
+          "fridge",
+          "counter",
+          "shelves",
+          "smallbox",
+          "bin",
+          "cardboardbox"
+        ]
+      }
+    ],
+    "title": "The upstream bottle",
+    "body": "Two bottles are tied to opposite ends of this cord. The one marked upstream is clear; the other holds a green sediment.",
+    "rival_reading": "A failure of the later response could still have left this exposure unaddressed.",
+    "gloss": "An ordinary trace links a farm exposure to a distinct observed outcome: the upstream bottle.",
+    "axioms": {
+      "containment": [
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-pathway",
+        "a-timing"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0429"
+    }
+  },
+  {
+    "id": "t0429-03",
+    "kind": "set",
+    "pieces": [
+      "Kettle",
+      "Bucket",
+      "Tarp"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "furniture",
+        "lean": "agricultural",
+        "rival": "containment",
+        "containers": [
+          "toolcabinet",
+          "locker",
+          "crate",
+          "shelves",
+          "cardboardbox",
+          "desk"
+        ]
+      }
+    ],
+    "title": "The dry tap",
+    "body": "The kettle holds clean water. The bucket beside it is stained where it caught the first rain running off the field tarp.",
+    "rival_reading": "A failure of the later response could still have left this exposure unaddressed.",
+    "gloss": "An ordinary trace links a farm exposure to a distinct observed outcome: the dry tap.",
+    "axioms": {
+      "containment": [
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-pathway",
+        "a-timing"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0429"
+    }
+  },
+  {
+    "id": "t0429-04",
+    "kind": "set",
+    "pieces": [
+      "Bowl",
+      "Bucket",
+      "WaterBottle"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "furniture",
+        "lean": "agricultural",
+        "rival": "containment",
+        "containers": [
+          "dresser",
+          "wardrobe",
+          "sidetable",
+          "desk",
+          "locker",
+          "smallbox"
+        ]
+      }
+    ],
+    "title": "The dog that refused",
+    "body": "The untouched bowl has the same green ring as the watering can. An overturned water bottle near it is clear.",
+    "rival_reading": "A failure of the later response could still have left this exposure unaddressed.",
+    "gloss": "An ordinary trace links a farm exposure to a distinct observed outcome: the dog that refused.",
+    "axioms": {
+      "containment": [
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-pathway",
+        "a-timing"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0429"
+    }
+  },
+  {
+    "id": "t0429-05",
+    "kind": "set",
+    "pieces": [
+      "FishingNet",
+      "Bucket"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "vehicle",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "title": "The lower ditch",
+    "body": "A net catches grass and pale granules where the runoff narrowed. There are none in the dry mud above the waterline.",
+    "rival_reading": "A failure of the later response could still have left this exposure unaddressed.",
+    "gloss": "An ordinary trace links a farm exposure to a distinct observed outcome: the lower ditch.",
+    "axioms": {
+      "containment": [
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-pathway",
+        "a-timing"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0429"
+    }
+  },
+  {
+    "id": "t0429-06",
+    "kind": "set",
+    "pieces": [
+      "EmptyJar",
+      "JarLid"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "furniture",
+        "lean": "agricultural",
+        "rival": "containment",
+        "containers": [
+          "shelves",
+          "grocerstand",
+          "counter",
+          "smallcrate",
+          "cardboardbox",
+          "crate"
+        ]
+      }
+    ],
+    "title": "The two jars",
+    "body": "One jar is filled with rainwater and sealed. The other has flakes from a trough stuck inside the lid; only that one smells sour.",
+    "rival_reading": "A failure of the later response could still have left this exposure unaddressed.",
+    "gloss": "An ordinary trace links a farm exposure to a distinct observed outcome: the two jars.",
+    "axioms": {
+      "containment": [
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-pathway",
+        "a-timing"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0429"
+    }
+  },
+  {
+    "id": "t0429-07",
+    "kind": "set",
+    "pieces": [
+      "RubberHose",
+      "Wrench",
+      "Fertilizer"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "vehicle",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "title": "The moved hose",
+    "body": "The old hose end is brown with well water. A newer clamp is green inside, beside an empty sack of field additive.",
+    "rival_reading": "A failure of the later response could still have left this exposure unaddressed.",
+    "gloss": "An ordinary trace links a farm exposure to a distinct observed outcome: the moved hose.",
+    "axioms": {
+      "containment": [
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-pathway",
+        "a-timing"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0429"
+    }
+  },
+  {
+    "id": "t0429-08",
+    "kind": "set",
+    "pieces": [
+      "Bucket",
+      "Spoon"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "furniture",
+        "lean": "agricultural",
+        "rival": "containment",
+        "containers": [
+          "medicine",
+          "sidetable",
+          "dresser",
+          "desk",
+          "smallbox",
+          "locker"
+        ]
+      }
+    ],
+    "title": "The settled bucket",
+    "body": "The spoon comes up green from the bottom of the bucket. At the surface the water looks clear enough to drink.",
+    "rival_reading": "A failure of the later response could still have left this exposure unaddressed.",
+    "gloss": "An ordinary trace links a farm exposure to a distinct observed outcome: the settled bucket.",
+    "axioms": {
+      "containment": [
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-pathway",
+        "a-timing"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0429"
+    }
+  },
+  {
+    "id": "t0429-09",
+    "kind": "set",
+    "pieces": [
+      "Shoes_WorkBoots",
+      "Bucket"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "furniture",
+        "lean": "agricultural",
+        "rival": "containment",
+        "containers": [
+          "smallbox",
+          "cardboardbox",
+          "shelves",
+          "desk",
+          "counter",
+          "crate"
+        ]
+      }
+    ],
+    "title": "The washed boots",
+    "body": "One boot still has residue in its tread; its mate was scrubbed. A bucket of gray wash water sits beside them.",
+    "rival_reading": "A failure of the later response could still have left this exposure unaddressed.",
+    "gloss": "An ordinary trace links a farm exposure to a distinct observed outcome: the washed boots.",
+    "axioms": {
+      "containment": [
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-pathway",
+        "a-timing"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0429"
+    }
+  },
+  {
+    "id": "t0429-10",
+    "kind": "set",
+    "pieces": [
+      "Wrench",
+      "Bucket"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "furniture",
+        "lean": "agricultural",
+        "rival": "containment",
+        "containers": [
+          "dishescabinet",
+          "counter",
+          "shelves",
+          "sidetable",
+          "smallbox",
+          "bin"
+        ]
+      }
+    ],
+    "title": "The closed valve",
+    "body": "The wrench has fresh scrape marks, and the bucket beyond the pipe is clear. The bucket on the field side still holds a green rim.",
+    "rival_reading": "A failure of the later response could still have left this exposure unaddressed.",
+    "gloss": "An ordinary trace links a farm exposure to a distinct observed outcome: the closed valve.",
+    "axioms": {
+      "containment": [
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-pathway",
+        "a-timing"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0429"
+    }
+  }
+]
