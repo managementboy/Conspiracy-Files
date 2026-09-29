@@ -1,0 +1,75 @@
+[
+  {
+    "anchor": {
+      "scene": "RZSNastyMattress"
+    },
+    "body": "the battery with a field radio are tied in one bundle. rust-colored grit marks the field side; torn warning tape marks the other.",
+    "id": "t0392-01",
+    "kind": "set",
+    "pieces": [
+      "Battery",
+      "RadioBlack"
+    ],
+    "title": "battery with a field radio at friday at closing",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ],
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-warning",
+        "c-failure"
+      ]
+    },
+    "gloss": "A mixed bundle keeps field activity and emergency response equally plausible.",
+    "prov": {
+      "batch": "T0392",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "The bundle could belong to field workers caught in a response or responders crossing a work site; it preserves both readings."
+  },
+  {
+    "id": "t0392-02",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ],
+    "title": "A mattress by the ditch",
+    "body": "The woman had been sleeping beside a field where the trial sprayers passed at dawn. She moved her bedding when the smell reached it, but the pale film returned overnight. Nobody in camp had seen a warning sign.",
+    "anchor": {
+      "scene": "RZSNastyMattress"
+    },
+    "rival_reading": "The containment response might explain a contaminated object or warning being displaced.",
+    "gloss": "A witness records evidence of exposure near treated land.",
+    "axioms": {
+      "containment": [
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0392"
+    }
+  }
+]
