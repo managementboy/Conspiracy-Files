@@ -19,5 +19,34 @@
         "spot": "furniture"
       }
     ]
+  },
+  {
+    "anchor": {
+      "scene": "RBSpiffo"
+    },
+    "body": "A fresh dish cloth lies under the register beside the empty spool where the morning receipts should be. Someone cleaned the counter after the rush, then removed only the record of it.",
+    "id": "t0309-02",
+    "kind": "set",
+    "pieces": [
+      "DishCloth",
+      "Paperclip"
+    ],
+    "title": "A clean counter and a missing roll",
+    "where": [
+      {
+        "containers": [
+          "cashregister",
+          "desk",
+          "counter",
+          "crate",
+          "locker",
+          "shelves"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
   }
 ]

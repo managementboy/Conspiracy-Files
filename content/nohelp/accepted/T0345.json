@@ -19,5 +19,34 @@
         "spot": "furniture"
       }
     ]
+  },
+  {
+    "anchor": {
+      "scene": "RDSRatWar"
+    },
+    "body": "A water bottle is tied to a pencil with string. The scratched tally on the bottle differs from the number copied onto the sheet beside it.",
+    "id": "t0345-02",
+    "kind": "set",
+    "pieces": [
+      "WaterBottle",
+      "Pencil"
+    ],
+    "title": "A corrected tally by the wall",
+    "where": [
+      {
+        "containers": [
+          "toolcabinet",
+          "desk",
+          "counter",
+          "crate",
+          "locker",
+          "shelves"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
   }
 ]

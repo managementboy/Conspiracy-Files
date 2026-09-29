@@ -18,5 +18,33 @@
         "spot": "furniture"
       }
     ]
+  },
+  {
+    "anchor": {
+      "scene": "RDSHenDo"
+    },
+    "body": "We put the guests names on a sheet so we could keep the surprise. A stranger arrived with a copy that had two names removed.\n\nHe asked whether those two had already left. I said one was still upstairs, getting ready. He folded his copy and waited at the foot of the stairs.\n\nNobody wanted to spoil the party by arguing. I have kept our list because it is the only one with everyone on it.",
+    "id": "t0336-02",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "title": "The list for the party",
+    "where": [
+      {
+        "containers": [
+          "dresser",
+          "desk",
+          "counter",
+          "crate",
+          "locker",
+          "shelves"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
   }
 ]

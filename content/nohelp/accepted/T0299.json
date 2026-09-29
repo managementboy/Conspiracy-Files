@@ -19,5 +19,34 @@
         "spot": "furniture"
       }
     ]
+  },
+  {
+    "anchor": {
+      "scene": "RBOffice"
+    },
+    "body": "A sheet of paper has been pressed over a handwritten count. The marks beneath still show a larger number than the typed line above it. Someone saved the carbon but discarded the original.",
+    "id": "t0299-02",
+    "kind": "set",
+    "pieces": [
+      "Sheet",
+      "Pencil"
+    ],
+    "title": "Carbon under the blotter",
+    "where": [
+      {
+        "containers": [
+          "desk",
+          "counter",
+          "crate",
+          "locker",
+          "shelves",
+          "bin"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
   }
 ]

@@ -18,5 +18,33 @@
         "spot": "furniture"
       }
     ]
+  },
+  {
+    "anchor": {
+      "scene": "RBSafehouse"
+    },
+    "body": "They gave us a count for the beds and told us it was final. Then another family arrived at the back door with a child too tired to stand.\n\nWe made room and I put her shoes under the bed so nobody would trip. In the morning the list still had the old count. A visitor looked at the shoes and asked us to move them before the next inspection.\n\nThe child did not understand why her mother kept calling her by a different name. I did, but I did not tell her.",
+    "id": "t0306-02",
+    "kind": "written",
+    "pieces": [
+      "diary"
+    ],
+    "title": "The extra occupant",
+    "where": [
+      {
+        "containers": [
+          "wardrobe",
+          "desk",
+          "counter",
+          "crate",
+          "locker",
+          "shelves"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
   }
 ]

@@ -19,5 +19,34 @@
         "spot": "furniture"
       }
     ]
+  },
+  {
+    "anchor": {
+      "scene": "RBTrashed"
+    },
+    "body": "A bucket bears a faded field lot mark beneath a newer cleaning label. A hand shovel still has the same fine yellow dust caught in its handle.",
+    "id": "t0321-02",
+    "kind": "set",
+    "pieces": [
+      "Bucket",
+      "HandShovel"
+    ],
+    "title": "The spoiled pail",
+    "where": [
+      {
+        "containers": [
+          "toolcabinet",
+          "desk",
+          "counter",
+          "crate",
+          "locker",
+          "shelves"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
   }
 ]

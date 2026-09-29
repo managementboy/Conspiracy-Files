@@ -18,5 +18,33 @@
         "spot": "furniture"
       }
     ]
+  },
+  {
+    "anchor": {
+      "scene": "RBTSDrink"
+    },
+    "body": "I put aside four glasses after the men came in. They said the others would be back for them and asked me to write the names on a napkin.\n\nI watched them pour the drinks away when they thought I had gone. The glasses were washed and returned to the shelf, but they kept the napkin.\n\nOne of the four had borrowed my coat. I still have the claim ticket for it, and no one will tell me where to take it.",
+    "id": "t0315-02",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "title": "The drinks still owed",
+    "where": [
+      {
+        "containers": [
+          "counter",
+          "desk",
+          "crate",
+          "locker",
+          "shelves",
+          "bin"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
   }
 ]

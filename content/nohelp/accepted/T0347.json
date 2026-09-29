@@ -19,5 +19,26 @@
         "spot": "corpse"
       }
     ]
+  },
+  {
+    "anchor": {
+      "scene": "RDSSkeletonPsycho"
+    },
+    "body": "The map is creased at the junction and tied with string. One destination has been erased so deeply that the paper nearly split; the route leading to it remains clear.",
+    "id": "t0347-02",
+    "kind": "set",
+    "pieces": [
+      "Map",
+      "Rope"
+    ],
+    "title": "A route folded into a pocket",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "corpse"
+      }
+    ]
   }
 ]

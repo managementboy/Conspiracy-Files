@@ -18,5 +18,33 @@
         "spot": "furniture"
       }
     ]
+  },
+  {
+    "anchor": {
+      "scene": "RDSTinFoilHat"
+    },
+    "body": "I made a hat to keep the rain off the radio. It looked ridiculous, so nobody noticed when I carried it from room to room.\n\nThe same street names came through three times. After the second reading a visitor told us the broadcast had never happened and asked for the radio.\n\nI took the battery out first. The station may be silent now, but I want to know what it says if it comes back.",
+    "id": "t0352-02",
+    "kind": "written",
+    "pieces": [
+      "diary"
+    ],
+    "title": "The person at the window",
+    "where": [
+      {
+        "containers": [
+          "desk",
+          "counter",
+          "crate",
+          "locker",
+          "shelves",
+          "bin"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
   }
 ]

@@ -18,5 +18,33 @@
         "spot": "furniture"
       }
     ]
+  },
+  {
+    "anchor": {
+      "scene": "RBHairSalon"
+    },
+    "body": "I kept the book open so they could see when the last customer had come in. The woman asked for the names instead of the times.\n\nShe did not take the whole book. She tore out two pages and left the small notes about hair color and the money owed. One customer had asked me to call his wife. I still have her number, but I cannot remember which page it was on.\n\nWe swept after they left. A curl of paper caught under the chair and I put it here in case the customer comes back to pay.",
+    "id": "t0292-02",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "Appointments crossed out",
+    "where": [
+      {
+        "containers": [
+          "counter",
+          "desk",
+          "crate",
+          "locker",
+          "shelves",
+          "bin"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
   }
 ]

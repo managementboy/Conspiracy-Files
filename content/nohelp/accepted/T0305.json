@@ -19,5 +19,34 @@
         "spot": "furniture"
       }
     ]
+  },
+  {
+    "anchor": {
+      "scene": "RBSWATStation"
+    },
+    "body": "The battery is new; the radio has been wrapped in a shirt to muffle it. A narrow strip of tape fixes the dial at the channel used before the order to leave.",
+    "id": "t0305-02",
+    "kind": "set",
+    "pieces": [
+      "Battery",
+      "RadioBlack"
+    ],
+    "title": "A channel behind the lockers",
+    "where": [
+      {
+        "containers": [
+          "locker",
+          "desk",
+          "counter",
+          "crate",
+          "shelves",
+          "bin"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
   }
 ]

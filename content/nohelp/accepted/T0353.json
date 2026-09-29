@@ -19,5 +19,34 @@
         "spot": "furniture"
       }
     ]
+  },
+  {
+    "anchor": {
+      "scene": "RDSZombieLockedBathroom"
+    },
+    "body": "A pencil and sheet are pushed beneath the door together. The sheet has an earlier head count, then a later number written over it without any sign the door was opened.",
+    "id": "t0353-02",
+    "kind": "set",
+    "pieces": [
+      "Pencil",
+      "Sheet"
+    ],
+    "title": "A count through a locked door",
+    "where": [
+      {
+        "containers": [
+          "sidetable",
+          "desk",
+          "counter",
+          "crate",
+          "locker",
+          "shelves"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
   }
 ]

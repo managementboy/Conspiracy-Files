@@ -17,5 +17,24 @@
       "writer": "ChatGPT"
     },
     "rival_reading": "Emergency workers could have picked up the same white crystals while responding near a field; this personal trace does not prove the trial caused the emergency."
+  },
+  "t0326-02": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-warning",
+        "c-accounting"
+      ]
+    },
+    "gloss": "An altered count or retained object was left at the scene.",
+    "prov": {
+      "batch": "T0326",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A response to an agricultural exposure could explain the same record or object."
   }
 }

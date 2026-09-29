@@ -19,5 +19,34 @@
         "spot": "furniture"
       }
     ]
+  },
+  {
+    "anchor": {
+      "scene": "RDSPokerNight"
+    },
+    "body": "A pencil lies through a ring of playing cards. The score sheet counts one more player than the chairs, and a later hand has rubbed the extra column thin.",
+    "id": "t0339-02",
+    "kind": "set",
+    "pieces": [
+      "Pencil",
+      "Book"
+    ],
+    "title": "An empty seat at the table",
+    "where": [
+      {
+        "containers": [
+          "desk",
+          "counter",
+          "crate",
+          "locker",
+          "shelves",
+          "bin"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
   }
 ]

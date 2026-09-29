@@ -19,5 +19,34 @@
         "spot": "furniture"
       }
     ]
+  },
+  {
+    "anchor": {
+      "scene": "RDSStagDo"
+    },
+    "body": "A sheet and pencil are tucked under an empty glass. The guest count was changed after the first toast, but the marks around the glass show it had been there all night.",
+    "id": "t0349-02",
+    "kind": "set",
+    "pieces": [
+      "GlassTumbler",
+      "Pencil"
+    ],
+    "title": "The extra name on the score",
+    "where": [
+      {
+        "containers": [
+          "counter",
+          "desk",
+          "crate",
+          "locker",
+          "shelves",
+          "bin"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
   }
 ]

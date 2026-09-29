@@ -253,7 +253,7 @@ function M.measure(opts)
     -- Orphans.
     local orphans=0
     for _,name in ipairs(Convert.listJson(root.."/incoming")) do
-        if not reg[name] then orphans=orphans+1 end
+        if not reg[name:match("^(.-)%.recall$") or name] then orphans=orphans+1 end
     end
     if orphans>0 then fail("orphans "..orphans) end
 

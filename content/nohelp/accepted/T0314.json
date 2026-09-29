@@ -19,5 +19,34 @@
         "spot": "furniture"
       }
     ]
+  },
+  {
+    "anchor": {
+      "scene": "RBTSDinner"
+    },
+    "body": "A spoon is laid across a bowl with a penciled count on its underside. The number is two higher than the count entered beside the meal.",
+    "id": "t0314-02",
+    "kind": "set",
+    "pieces": [
+      "Spoon",
+      "Bowl"
+    ],
+    "title": "A cleared place setting",
+    "where": [
+      {
+        "containers": [
+          "dishescabinet",
+          "desk",
+          "counter",
+          "crate",
+          "locker",
+          "shelves"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
   }
 ]

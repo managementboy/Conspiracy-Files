@@ -19,5 +19,34 @@
         "spot": "furniture"
       }
     ]
+  },
+  {
+    "anchor": {
+      "scene": "RBPoliceSiege"
+    },
+    "body": "The radio dial is bound with a narrow strip of tape. Its battery has been replaced recently, although the callers barricaded here had no way to send a reply. Someone wanted them listening to one channel.",
+    "id": "t0303-02",
+    "kind": "set",
+    "pieces": [
+      "Battery",
+      "RadioBlack"
+    ],
+    "title": "Frequency held through the siege",
+    "where": [
+      {
+        "containers": [
+          "desk",
+          "locker",
+          "filingcabinet",
+          "counter",
+          "crate",
+          "shelves"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
   }
 ]

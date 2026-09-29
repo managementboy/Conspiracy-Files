@@ -19,5 +19,34 @@
         "spot": "furniture"
       }
     ]
+  },
+  {
+    "anchor": {
+      "scene": "RBTSElectronics"
+    },
+    "body": "A radio sits beside a loose battery. A pencil mark on the dial matches one on the workbench; every other frequency has been scratched away.",
+    "id": "t0316-02",
+    "kind": "set",
+    "pieces": [
+      "RadioBlack",
+      "Battery"
+    ],
+    "title": "A receiver with a single mark",
+    "where": [
+      {
+        "containers": [
+          "toolcabinet",
+          "desk",
+          "counter",
+          "crate",
+          "locker",
+          "shelves"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
   }
 ]

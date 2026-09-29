@@ -18,5 +18,33 @@
         "spot": "furniture"
       }
     ]
+  },
+  {
+    "anchor": {
+      "scene": "RBTSSewing"
+    },
+    "body": "The woman brought in a coat with its pocket torn. While I pinned it, a folded list fell out. She asked me to sew the pocket closed with the list inside.\n\nShe said her brother would need the coat if he returned. I offered to write his name on the label. She shook her head so hard she dropped the thread.\n\nI used a different color along the seam. If he comes back, someone can find the paper without ruining the whole coat.",
+    "id": "t0319-02",
+    "kind": "written",
+    "pieces": [
+      "diary"
+    ],
+    "title": "A sleeve sewn shut",
+    "where": [
+      {
+        "containers": [
+          "dresser",
+          "desk",
+          "counter",
+          "crate",
+          "locker",
+          "shelves"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
   }
 ]

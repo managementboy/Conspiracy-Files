@@ -19,5 +19,26 @@
         "spot": "corpse"
       }
     ]
+  },
+  {
+    "anchor": {
+      "scene": "RDSBanditRaid"
+    },
+    "body": "A map and a pencil are kept together in a pocket. Three homes have been circled, but only one has been crossed off; the mark was made before the door was forced.",
+    "id": "t0325-02",
+    "kind": "set",
+    "pieces": [
+      "Map",
+      "Pencil"
+    ],
+    "title": "A folded address beside the raid",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "corpse"
+      }
+    ]
   }
 ]

@@ -17,5 +17,24 @@
       "writer": "ChatGPT"
     },
     "rival_reading": "A response team could have carried farm supplies while checking exposure; the objects and timing do not establish that the trial caused it."
+  },
+  "t0285-02": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-warning",
+        "c-accounting"
+      ]
+    },
+    "gloss": "A personal account or object records an intervention that left part of the account missing.",
+    "prov": {
+      "batch": "T0285",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "The waterline could document the spread of a farm chemical washed into the building."
   }
 }

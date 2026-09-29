@@ -18,5 +18,33 @@
         "spot": "furniture"
       }
     ]
+  },
+  {
+    "anchor": {
+      "scene": "RDSStudentNight"
+    },
+    "body": "We were supposed to be studying. When the lights failed, we counted everyone by calling out names across the room.\n\nA visitor came with a shorter list and said two people had gone home. One of them answered from the far corner. He crossed her name out anyway.\n\nShe wanted to leave then, but none of us knew whether the door was still open. I kept this page with her name on it.",
+    "id": "t0350-02",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "A list after the lights went out",
+    "where": [
+      {
+        "containers": [
+          "desk",
+          "counter",
+          "crate",
+          "locker",
+          "shelves",
+          "bin"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
   }
 ]

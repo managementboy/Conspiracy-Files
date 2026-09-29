@@ -19,5 +19,34 @@
         "spot": "furniture"
       }
     ]
+  },
+  {
+    "anchor": {
+      "scene": "RDSGrouchos"
+    },
+    "body": "A dish cloth is knotted around a water bottle. Inside it is a penciled count of people seen that afternoon, with one line altered after the cloth had been washed.",
+    "id": "t0333-02",
+    "kind": "set",
+    "pieces": [
+      "DishCloth",
+      "WaterBottle"
+    ],
+    "title": "A cleaned pair of spectacles",
+    "where": [
+      {
+        "containers": [
+          "counter",
+          "desk",
+          "crate",
+          "locker",
+          "shelves",
+          "bin"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
   }
 ]

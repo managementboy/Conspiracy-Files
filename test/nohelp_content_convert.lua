@@ -261,6 +261,17 @@ do
     assert(rep:find(TK..": accepted 3, returned 0",1,true),"a whole ticket with a recalled row in it is accepted: "..rep)
     assert(#J.decode(read(root.."/accepted/"..TK..".json"))==3,"kept and added")
     assert(rep:find("recall R8: 0/1 replaced",1,true),"the recalled row stays recalled")
+    -- A recall waiting beside the same ticket's whole delivery: both run,
+    -- the whole ticket first, the recall on top (<ticket>.recall.json).
+    OPTS.recipes={[TK]={keep=true}}
+    local k5=row(TK,"set","agricultural",{pieces={"Hammer","Tarp"}})
+    write(TK,{k1,k2,k4,k5})
+    local rk=row(TK,"set","containment",{pieces={"Nails","Tarp"}}); rk.id=k1.id; rk.title="A new opening entirely"
+    local f=assert(io.open(root.."/incoming/"..TK..".recall.json","wb")); f:write(J.encode({rk})); f:close()
+    local rep2=table.concat(run(),"\n")
+    assert(rep2:find(TK..": accepted 4",1,true) and rep2:find(TK..".recall: replaced 1, returned 0",1,true),"both deliveries go in: "..rep2)
+    local acc=J.decode(read(root.."/accepted/"..TK..".json"))
+    assert(#acc==4 and acc[1].id==k1.id and acc[1].pieces[1]=="Nails" and acc[4].id==k5.id,"the new row kept, the recalled row replaced")
     OPTS.recipes=nil
     OPTS.recalls={}; os.execute('rm -rf "'..root..'"')
 end

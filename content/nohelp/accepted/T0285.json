@@ -19,5 +19,34 @@
         "spot": "furniture"
       }
     ]
+  },
+  {
+    "anchor": {
+      "scene": "RBBurnt"
+    },
+    "body": "The kit is unopened. The water bottle has a black line drawn halfway down it and the same line repeated on the charred wall. Whoever marked it was measuring what survived the fire, not treating a burn.",
+    "id": "t0285-02",
+    "kind": "set",
+    "pieces": [
+      "FirstAidKit",
+      "WaterBottle"
+    ],
+    "title": "A waterline after the fire",
+    "where": [
+      {
+        "containers": [
+          "crate",
+          "bin",
+          "locker",
+          "counter",
+          "shelves",
+          "desk"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
   }
 ]

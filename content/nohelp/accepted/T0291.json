@@ -19,5 +19,34 @@
         "spot": "furniture"
       }
     ]
+  },
+  {
+    "anchor": {
+      "scene": "RBGunstoreSiege"
+    },
+    "body": "A battery sits beside a radio whose tuning knob has been removed. The barricade can hear a single station, but no one inside can change it.",
+    "id": "t0291-02",
+    "kind": "set",
+    "pieces": [
+      "Battery",
+      "RadioBlack"
+    ],
+    "title": "The spare receiver",
+    "where": [
+      {
+        "containers": [
+          "locker",
+          "desk",
+          "counter",
+          "crate",
+          "shelves",
+          "bin"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
   }
 ]

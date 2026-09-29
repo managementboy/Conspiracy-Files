@@ -18,5 +18,25 @@
         "spot": "corpse"
       }
     ]
+  },
+  {
+    "anchor": {
+      "scene": "RDSPoliceAtHouse"
+    },
+    "body": "They asked me to count the people inside while they were still walking through the house. I gave the number I knew.\n\nOne of them looked at a folded sheet and said it was too high. He asked whether a visitor had already gone home. The visitor was asleep upstairs.\n\nI left the number on the back of this envelope. If someone asks later, I want to remember what I actually saw.",
+    "id": "t0340-02",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "title": "A number given at the door",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "corpse"
+      }
+    ]
   }
 ]

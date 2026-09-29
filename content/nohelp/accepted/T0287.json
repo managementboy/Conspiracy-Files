@@ -19,5 +19,26 @@
         "spot": "corpse"
       }
     ]
+  },
+  {
+    "anchor": {
+      "scene": "RBBurntFireman"
+    },
+    "body": "The jar contains ash beneath its lid. A potato is wrapped in a clean bandage beside it. These were packed together before the fire spread; the jar was being carried out, while the food was left where it could be found.",
+    "id": "t0287-02",
+    "kind": "set",
+    "pieces": [
+      "Potato",
+      "EmptyJar"
+    ],
+    "title": "Ash inside the sealed jar",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "corpse"
+      }
+    ]
   }
 ]

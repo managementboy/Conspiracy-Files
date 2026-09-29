@@ -18,5 +18,33 @@
         "spot": "furniture"
       }
     ]
+  },
+  {
+    "anchor": {
+      "scene": "RBTwiggy"
+    },
+    "body": "A man sat by the back door and asked for the names of everyone who had come in. I assumed he meant the people still here.\n\nHe wanted the earlier customers too. I wrote down the one I knew because she brought her own mug. He crossed out her name, then asked whether I was certain she had arrived.\n\nHer mug is still under the counter. I have not washed it, though I cannot say what that proves.",
+    "id": "t0322-02",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "The visitor at closing",
+    "where": [
+      {
+        "containers": [
+          "counter",
+          "desk",
+          "crate",
+          "locker",
+          "shelves",
+          "bin"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
   }
 ]

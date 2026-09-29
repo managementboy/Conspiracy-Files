@@ -18,5 +18,33 @@
         "spot": "furniture"
       }
     ]
+  },
+  {
+    "anchor": {
+      "scene": "RDSBathroomZed"
+    },
+    "body": "I heard someone knock while I was hiding here. He said he was checking the rooms and read a list aloud.\n\nThe name of the person with me was on it, though she had not told anyone we were here. She whispered that they had copied an older list from another building.\n\nHe left after we stayed quiet. I wrote the names I could remember so I can ask her later where that list came from.",
+    "id": "t0326-02",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "title": "The names beyond the door",
+    "where": [
+      {
+        "containers": [
+          "medicine",
+          "desk",
+          "counter",
+          "crate",
+          "locker",
+          "shelves"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
   }
 ]

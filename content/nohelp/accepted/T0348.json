@@ -18,5 +18,25 @@
         "spot": "corpse"
       }
     ]
+  },
+  {
+    "anchor": {
+      "scene": "RDSSpecificProfession"
+    },
+    "body": "The man writing the names asked what I did for a living. I told him, and he put down something else.\n\nHe said the form had no space for my work. I could see there was a space; it was already filled. The person beside me told me to let him finish.\n\nI wrote my own occupation here because I do not want the next person to think I lied about it.",
+    "id": "t0348-02",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "title": "The wrong occupation",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "corpse"
+      }
+    ]
   }
 ]

@@ -18,5 +18,25 @@
         "spot": "corpse"
       }
     ]
+  },
+  {
+    "anchor": {
+      "scene": "RDSGunmanInBathroom"
+    },
+    "body": "He told us to stay in the room and wait for the count. We could hear boots in the hall and someone asking whether to include the people behind the bathroom door.\n\nThe answer was no. They read out a number, then asked us to leave one at a time. He stayed behind with the door locked.\n\nI wrote the number down because it was smaller than the number of voices I had heard.",
+    "id": "t0334-02",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "What he said through the door",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "corpse"
+      }
+    ]
   }
 ]

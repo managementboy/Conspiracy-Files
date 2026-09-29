@@ -18,5 +18,33 @@
         "spot": "furniture"
       }
     ]
+  },
+  {
+    "anchor": {
+      "scene": "RBLooted"
+    },
+    "body": "They came while the room was still full. I thought they were stopping the stealing, but one of them knew which drawer held the names.\n\nI stood outside with a neighbor who was holding a lamp. We heard drawers open, then the men carried out one thin folder. They left the money and the jewelry where the thieves had scattered it.\n\nIn the morning the front door was broken and everyone said the folder had been stolen with the rest. I could not persuade the neighbor to say what we had seen.",
+    "id": "t0296-02",
+    "kind": "written",
+    "pieces": [
+      "diary"
+    ],
+    "title": "Things left behind the lock",
+    "where": [
+      {
+        "containers": [
+          "dresser",
+          "desk",
+          "counter",
+          "crate",
+          "locker",
+          "shelves"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
   }
 ]
