@@ -1,0 +1,52 @@
+[
+  {
+    "anchor": {
+      "print": "TheSeaShanty"
+    },
+    "body": "A fish order is kept beside a tasting sheet that says the water sample was taken after the kitchen was cleaned. The cook marked the meal served.",
+    "id": "t0176-01",
+    "kind": "set",
+    "pieces": [
+      "FishFillet",
+      "KitchenKnife"
+    ],
+    "title": "The kitchen’s tasting note",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture",
+        "containers": [
+          "fridge",
+          "crate",
+          "shelves",
+          "desk",
+          "counter",
+          "cardboardbox"
+        ]
+      }
+    ],
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "The Sea Shanty",
+      "source": "print:TheSeaShanty"
+    },
+    "gloss": "A meal is served before a water sample is recorded.",
+    "prov": {
+      "batch": "T0176",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "An emergency cleanup could precede a water test; the sheet does not say why the sample was taken."
+  }
+]
