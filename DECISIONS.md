@@ -1,3 +1,19 @@
+## DR-20260929-NOHELP-GAP-PLAN — after the deep review
+
+Owner decisions, 2026-09-29 (plan: docs/management/NO_HELP_GAP_PLAN_2026-09-29.md):
+
+1. A clue's meaning reaches the player by the survivor saying its text out
+   loud on the first Inspect (not hover text, not an added note).
+2. Clue texts have no maximum; diaries and similar get much longer text.
+3. Clues use the full range of the game's containers, not only furniture,
+   cars, bodies and mailboxes; outdoor sites mostly have containers too.
+   Target: under 15% of clues on the floor.
+4. Scenes are known by hooking the moment the game generates them, through
+   ZombieBuddy. ZombieBuddy is a REQUIRED dependency of No Help ("we can use
+   it for so much more"). Supersedes ADR-0001's "Java only if needed" for
+   this mod.
+5. Thin marked sites are topped up from a stock of both-side clues.
+
 ## DR-20260929-NOHELP-BALANCE-BY-READ — balance by what a reader sees; add B; ADHD cadence retired
 
 Owner decisions, 2026-09-29:
