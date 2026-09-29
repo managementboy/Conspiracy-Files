@@ -1,0 +1,75 @@
+[
+  {
+    "anchor": {
+      "scene": "RZSWaterPump"
+    },
+    "body": "A bucket and capped water bottle hold the same gray foam. Yellow spray dust circles both rims, above the waterline.",
+    "id": "t0407-01",
+    "kind": "set",
+    "pieces": [
+      "Bucket",
+      "WaterBottle"
+    ],
+    "title": "bitter water saved beside the pump",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ],
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-warning",
+        "c-orders"
+      ]
+    },
+    "gloss": "A personal trace links farm-program residue to symptoms before a restriction.",
+    "prov": {
+      "batch": "T0407",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "Emergency workers could have encountered the same residue while crossing treated land; the personal trace does not by itself prove the farm program caused the emergency."
+  },
+  {
+    "id": "t0407-02",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ],
+    "title": "A queue for water",
+    "body": "They shut the pump after assigning the households one pail apiece. More people came from the road, but their names belonged to a different district on the list. My father shared his pail while the clerk went to find another page.",
+    "anchor": {
+      "scene": "RZSWaterPump"
+    },
+    "rival_reading": "The agricultural trial may have caused the disorder that forced improvised decisions.",
+    "gloss": "A witness records a failed evacuation count or route.",
+    "axioms": {
+      "containment": [
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0407"
+    }
+  }
+]
