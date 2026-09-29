@@ -1,0 +1,102 @@
+[
+  {
+    "anchor": {
+      "print": "WestMapleCountryClub"
+    },
+    "body": "The grounds sheet closes one course entrance for a pickup, but the meal receipt at that entrance is dated after the vehicle left.",
+    "id": "t0152-01",
+    "kind": "set",
+    "pieces": [
+      "WaterBottle",
+      "SheetPaper2"
+    ],
+    "title": "The course notice",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture",
+        "containers": [
+          "crate",
+          "shelves",
+          "desk",
+          "counter",
+          "cardboardbox",
+          "bin"
+        ]
+      }
+    ],
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "West Maple Country Club",
+      "source": "print:WestMapleCountryClub"
+    },
+    "gloss": "A course closure and meal delivery fall on opposite sides of a pickup.",
+    "prov": {
+      "batch": "T0152",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A maintenance crew could have used the course during field work; the receipt does not say why the pickup was arranged."
+  },
+  {
+    "anchor": {
+      "print": "WestMapleCountryClub"
+    },
+    "body": "A tee sheet has two copies: one marks the grounds open, the other says to keep carts away until the test strip is dry.",
+    "id": "t0152-02",
+    "kind": "set",
+    "pieces": [
+      "Pencil",
+      "Notebook"
+    ],
+    "title": "The second tee sheet",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture",
+        "containers": [
+          "crate",
+          "shelves",
+          "desk",
+          "counter",
+          "cardboardbox",
+          "bin"
+        ]
+      }
+    ],
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "West Maple Country Club",
+      "source": "print:WestMapleCountryClub"
+    },
+    "gloss": "Two course notices disagree about whether the grounds were ready.",
+    "prov": {
+      "batch": "T0152",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A response crew could have restricted the grounds while checking a spill; the sheet does not identify the substance."
+  }
+]
