@@ -312,7 +312,7 @@ function S.validScenes(scenes)
         if rec.kind~=nil then
             if not fields(rec,{kind=true,x=true,y=true,z=true,hours=true,source=true,room=true,bounds=true})
                 or not str(rec.kind,60) or not rec.kind:find("^%u[%w_]*$")
-                or not ({seen=true,citation=true})[rec.source] then return false,"invalid scene" end
+                or not ({seen=true,citation=true,generated=true})[rec.source] then return false,"invalid scene" end
             if rec.room~=nil and not str(rec.room,120) then return false,"invalid scene" end
             if rec.bounds~=nil then
                 local b=rec.bounds
