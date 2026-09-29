@@ -14,10 +14,18 @@
     "title": "The stop at the station",
     "where": [
       {
+        "containers": [
+          "crate",
+          "shelves",
+          "desk",
+          "counter",
+          "cardboardbox",
+          "bin"
+        ],
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

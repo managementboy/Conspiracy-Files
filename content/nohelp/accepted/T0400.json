@@ -3,7 +3,7 @@
     "anchor": {
       "scene": "RZSSadCamp"
     },
-    "body": "I kept the gloves with blue powder from the seed trial. Our dog stopped drinking before the road patrol turned us back toward camp.",
+    "body": "I kept the gloves with blue powder from the seed trial. Our dog stopped drinking before the road patrol turned us back toward camp.\n\nThe person beside me recognized the handwriting and went quiet. We had been told not to rely on yesterday’s directions.\n\nThe person who was supposed to collect it had no time to stop. I did not put it back with the rest of the ordinary papers.",
     "id": "t0400-01",
     "kind": "written",
     "pieces": [
@@ -15,6 +15,26 @@
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RZSSadCamp"
+    },
+    "body": "The camp had four spaces marked on the board but five people sleeping under the canvas. The volunteer tried to add one line after the supply truck departed. Someone had already sent the board’s total onward.",
+    "id": "t0400-02",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "title": "Shelter allocation",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
         "spot": "ground"
       }
     ]

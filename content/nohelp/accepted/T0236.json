@@ -13,10 +13,18 @@
     "title": "The open-day roster",
     "where": [
       {
+        "containers": [
+          "crate",
+          "shelves",
+          "desk",
+          "counter",
+          "cardboardbox",
+          "bin"
+        ],
         "lean": "containment",
         "place": "mapNamed",
         "rival": "agricultural",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

@@ -13,10 +13,18 @@
     "title": "Supply order for the rural stop",
     "where": [
       {
+        "containers": [
+          "toolcabinet",
+          "crate",
+          "shelves",
+          "desk",
+          "counter",
+          "cardboardbox"
+        ],
         "lean": "containment",
         "place": "mapNamed",
         "rival": "agricultural",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

@@ -19,5 +19,25 @@
         "spot": "ground"
       }
     ]
+  },
+  {
+    "anchor": {
+      "scene": "RZSCampsite"
+    },
+    "body": "We pitched the tent beyond the trial orchard because they said the fields were the only treated ground. Rain ran down the canvas and left the same yellow dust on our cups. My daughter had not eaten anything from the orchard.",
+    "id": "t0380-02",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "Bitter rain at camp",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
   }
 ]

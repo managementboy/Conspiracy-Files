@@ -10,9 +10,17 @@
       "Bread",
       "CannedCorn"
     ],
-    "title": "Marked feed sack by the coat pocket",
+    "title": "Feed sack beneath the coat hem",
     "where": [
       {
+        "containers": [
+          "dresser",
+          "crate",
+          "shelves",
+          "desk",
+          "counter",
+          "cardboardbox"
+        ],
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",

@@ -11,13 +11,21 @@
       "Tarp",
       "BathTowel"
     ],
-    "title": "missing count beside the folded tarp",
+    "title": "Folded tarp beside the spare mark",
     "where": [
       {
+        "containers": [
+          "crate",
+          "shelves",
+          "desk",
+          "counter",
+          "cardboardbox",
+          "bin"
+        ],
         "lean": "containment",
         "place": "mapNamed",
         "rival": "agricultural",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   },
@@ -26,7 +34,7 @@
       "map": "BBurgStashMap2",
       "mark": 1
     },
-    "body": "The caretaker says the grounds crew borrowed the kitchen sink for a rinse. Please keep the side room locked until the treated beds are dry; the folding chairs are still needed tomorrow.",
+    "body": "The caretaker says the grounds crew borrowed the kitchen sink for a rinse. Please keep the side room locked until the treated beds are dry; the folding chairs are still needed tomorrow.\n\nThe person beside me recognized the handwriting and went quiet. We had been told not to rely on yesterday’s directions.\n\nThe person who was supposed to collect it had no time to stop. I did not put it back with the rest of the ordinary papers.",
     "id": "t0027-02",
     "kind": "written",
     "pieces": [
@@ -35,10 +43,18 @@
     "title": "Before the beds dry",
     "where": [
       {
+        "containers": [
+          "dresser",
+          "crate",
+          "shelves",
+          "desk",
+          "counter",
+          "cardboardbox"
+        ],
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

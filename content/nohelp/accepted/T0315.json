@@ -3,7 +3,7 @@
     "anchor": {
       "scene": "RBTSDrink"
     },
-    "body": "I saved the bottle for you because it smelled like the trial orchard after spraying. I poured out the glasses before the roadblock appeared.",
+    "body": "I saved the bottle for you because it smelled like the trial orchard after spraying. I poured out the glasses before the roadblock appeared.\n\nWe waited for a correction that never came. Every passing driver had a different instruction and no room for one more passenger.\n\nI could have mistaken the order in which those things happened. I could not mistake the empty place left for the person we had been waiting for.",
     "id": "t0315-01",
     "kind": "written",
     "pieces": [
@@ -12,6 +12,14 @@
     "title": "The drink I poured away",
     "where": [
       {
+        "containers": [
+          "crate",
+          "shelves",
+          "desk",
+          "counter",
+          "cardboardbox",
+          "bin"
+        ],
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",

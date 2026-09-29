@@ -1,0 +1,49 @@
+[
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "print": "GrandOhioMall"
+      },
+      "body": "A mall directory is folded into a receipt for the last open shop; the security sheet says every entrance was clear before the shop’s closing time.",
+      "id": "t0169-01",
+      "kind": "set",
+      "pieces": [
+        "Map",
+        "Wallet"
+      ],
+      "title": "The directory after closing",
+      "where": [
+        {
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "Grand Ohio Mall",
+        "source": "print:GrandOhioMall"
+      },
+      "gloss": "A security sweep is complete before the listed shop closes.",
+      "prov": {
+        "batch": "T0169",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A store manager could close after a routine security sweep; the sheet does not show who was still inside."
+    }
+  }
+]

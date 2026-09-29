@@ -19,5 +19,25 @@
         "spot": "vehicle"
       }
     ]
+  },
+  {
+    "anchor": {
+      "scene": "RVSRoadKill"
+    },
+    "body": "The highway worker kept a tally of cars that stopped beside the dead animal. He was ordered to leave out the cars that turned around before reaching the barrier. My uncle was in one of those cars; we found his blanket by the milepost.",
+    "id": "t0372-02",
+    "kind": "written",
+    "pieces": [
+      "notebook"
+    ],
+    "title": "Counting the shoulder",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "vehicle"
+      }
+    ]
   }
 ]

@@ -1,0 +1,49 @@
+[
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "print": "LVFD"
+      },
+      "body": "The firehouse roster marks every visitor checked out before the last demonstration ended. One pair of gloves is still listed for pickup.",
+      "id": "t0236-01",
+      "kind": "set",
+      "pieces": [
+        "Gloves_LeatherGloves",
+        "Notebook"
+      ],
+      "title": "The open-day roster",
+      "where": [
+        {
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "Louisville Fire Department",
+        "source": "print:LVFD"
+      },
+      "gloss": "The visitor count closes before the demonstration and equipment return.",
+      "prov": {
+        "batch": "T0236",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A visitor could leave early and return gloves later; the roster does not establish an emergency or a missed headcount."
+    }
+  }
+]

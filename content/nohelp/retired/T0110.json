@@ -46,5 +46,50 @@
       },
       "rival_reading": "An emergency detour could explain both the slow route and early arrival entry; the note does not identify the plots."
     }
+  },
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "map": "WorldStashMap1",
+        "mark": 1
+      },
+      "body": "the toilet roll and water bottle are packed with treated seed. every kernel has the same cracked green coating.",
+      "id": "t0110-01",
+      "kind": "set",
+      "pieces": [
+        "ToiletPaper",
+        "WaterBottle"
+      ],
+      "title": "field residue on the toilet roll",
+      "where": [
+        {
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-malfunction",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-warning",
+          "c-orders"
+        ]
+      },
+      "gloss": "A rare everyday object carries residue tied to field work before restriction.",
+      "prov": {
+        "batch": "T0110",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "Emergency workers crossing treated land could have picked up the same residue; the objects do not prove the farm program began the emergency."
+    }
   }
 ]

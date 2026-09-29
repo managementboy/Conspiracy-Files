@@ -10,9 +10,17 @@
       "FishingRod",
       "WaterBottle"
     ],
-    "title": "Marked feed sack by the toolbox",
+    "title": "After sack by the toolbox, the first copy",
     "where": [
       {
+        "containers": [
+          "toolcabinet",
+          "crate",
+          "shelves",
+          "desk",
+          "counter",
+          "cardboardbox"
+        ],
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",

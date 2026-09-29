@@ -1,0 +1,50 @@
+[
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "map": "RiversideStashMap3",
+        "mark": 1
+      },
+      "body": "The bottle is beside a delivery note that asks the next shift to keep the back room ventilated after the test. The food order is still unpaid.",
+      "id": "t0096-01",
+      "kind": "set",
+      "pieces": [
+        "Wine",
+        "SheetPaper2"
+      ],
+      "title": "The bottle left open",
+      "where": [
+        {
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "booze",
+        "source": "map:RiversideStashMap3"
+      },
+      "gloss": "A test and a ventilation request interrupt a routine food order.",
+      "prov": {
+        "batch": "T0096",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A response crew could have ventilated a room after cleaning or exposure; the note does not say what the test involved."
+    }
+  }
+]

@@ -13,10 +13,18 @@
     "title": "Steel order not received",
     "where": [
       {
+        "containers": [
+          "crate",
+          "shelves",
+          "desk",
+          "counter",
+          "cardboardbox",
+          "bin"
+        ],
         "lean": "containment",
         "place": "mapNamed",
         "rival": "agricultural",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

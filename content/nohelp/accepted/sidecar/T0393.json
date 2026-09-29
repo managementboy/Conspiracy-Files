@@ -17,5 +17,22 @@
       "writer": "ChatGPT"
     },
     "rival_reading": "Responders could have collected the waxy pollen while crossing treated land; the note or objects do not prove the program began the emergency."
+  },
+  "t0393-02": {
+    "axioms": {
+      "agricultural": [
+        "a-pathway"
+      ],
+      "containment": [
+        "c-failure"
+      ]
+    },
+    "gloss": "A witness records a failed evacuation count or route.",
+    "prov": {
+      "batch": "T0393",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "The agricultural trial may have caused the disorder that forced improvised decisions."
   }
 }

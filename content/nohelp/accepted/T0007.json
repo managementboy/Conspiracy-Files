@@ -7,7 +7,7 @@
       "Whistle",
       "FirstAidKit"
     ],
-    "title": "missing count beside the warning whistle",
+    "title": "Warning whistle beside the spare mark",
     "where": [
       {
         "lean": "containment",

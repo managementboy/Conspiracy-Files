@@ -3,7 +3,7 @@
     "anchor": {
       "scene": "RBJoanHartford"
     },
-    "body": "at dusk: the crop trial crew brought sealed seed packet. my brother started coughing. I washed everything twice before the siren began.",
+    "body": "at dusk: the crop trial crew brought sealed seed packet. my brother started coughing. I washed everything twice before the siren began.\n\nThe mark was made in a hurry, before the queue moved. I checked it twice against the people standing with me.\n\nWhen I returned, the window was closed and the board was blank. I kept the page because it was the only one with our address.",
     "id": "t0294-01",
     "kind": "written",
     "pieces": [
@@ -12,6 +12,14 @@
     "title": "At dusk: sealed seed packet",
     "where": [
       {
+        "containers": [
+          "crate",
+          "shelves",
+          "desk",
+          "counter",
+          "cardboardbox",
+          "bin"
+        ],
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",

@@ -19,5 +19,25 @@
         "spot": "vehicle"
       }
     ]
+  },
+  {
+    "anchor": {
+      "scene": "RVSCarCrashDeer"
+    },
+    "body": "The deer came from a pasture that had been sprayed yesterday. Its mouth was wet with a bitter smell; the driver said the creek near the rows smelled the same. We had just crossed the county line and had not heard any warning about the fields.",
+    "id": "t0362-02",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "Grass along the shoulder",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "vehicle"
+      }
+    ]
   }
 ]

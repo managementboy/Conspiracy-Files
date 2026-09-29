@@ -1,0 +1,49 @@
+[
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "print": "MusicFest93"
+      },
+      "body": "The festival schedule is marked complete before the gates opened; a note leaves one band’s arrival time blank and asks the crew to keep the side road clear.",
+      "id": "t0273-01",
+      "kind": "set",
+      "pieces": [
+        "VHS_Retail",
+        "SheetPaper2"
+      ],
+      "title": "Festival schedule copy",
+      "where": [
+        {
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "Louisville Music Festival 1993",
+        "source": "print:MusicFest93"
+      },
+      "gloss": "An event is marked complete before its performers arrive.",
+      "prov": {
+        "batch": "T0273",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A normal event can change its schedule and traffic plan; the blank time does not show an emergency order."
+    }
+  }
+]

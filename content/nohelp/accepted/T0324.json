@@ -3,7 +3,7 @@
     "anchor": {
       "scene": "RDSBandPractice"
     },
-    "body": "Saturday near lunch: two workers from the crop plot carried a sharp solvent smell. two hens went still before the lane was closed.",
+    "body": "Saturday near lunch: two workers from the crop plot carried a sharp solvent smell. two hens went still before the lane was closed.\n\nThe mark was made in a hurry, before the queue moved. I checked it twice against the people standing with me.\n\nI wanted to keep a clean copy, but the stain is where the first entry was crossed out. I have not tried to improve it.",
     "id": "t0324-01",
     "kind": "written",
     "pieces": [
@@ -12,6 +12,14 @@
     "title": "Saturday near lunch — a sharp solvent smell",
     "where": [
       {
+        "containers": [
+          "crate",
+          "shelves",
+          "desk",
+          "counter",
+          "cardboardbox",
+          "bin"
+        ],
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",

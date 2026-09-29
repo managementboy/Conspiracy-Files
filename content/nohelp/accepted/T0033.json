@@ -11,13 +11,21 @@
       "PaperclipBox",
       "WalkieTalkie1"
     ],
-    "title": "missing count beside the paperclip box",
+    "title": "Paperclip box beside the spare mark",
     "where": [
       {
+        "containers": [
+          "desk",
+          "crate",
+          "shelves",
+          "counter",
+          "cardboardbox",
+          "bin"
+        ],
         "lean": "containment",
         "place": "mapNamed",
         "rival": "agricultural",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   },
@@ -26,19 +34,27 @@
       "map": "BBurgStashMap8",
       "mark": 1
     },
-    "body": "The room smells like the liquid from the field bottles, and Mom’s throat still hurts. I opened the window; the return truck says nothing spilled.",
+    "body": "The room smells like the liquid from the field bottles, and Mom’s throat still hurts. I opened the window; the return truck says nothing spilled.\n\nWe needed the supplies listed here for the following morning. The people who took the count left without asking whether we had them.\n\nIt may have started elsewhere; none of us saw the beginning. I only know what had reached this place before they closed the road.",
     "id": "t0033-02",
     "kind": "written",
     "pieces": [
       "letter"
     ],
-    "title": "Kept from the drawer",
+    "title": "One page put aside",
     "where": [
       {
+        "containers": [
+          "medicine",
+          "crate",
+          "shelves",
+          "desk",
+          "counter",
+          "cardboardbox"
+        ],
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

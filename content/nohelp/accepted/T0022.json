@@ -11,13 +11,21 @@
       "LugWrench",
       "HandTorch"
     ],
-    "title": "missing count beside the lug wrench",
+    "title": "Lug wrench with the unclosed tally",
     "where": [
       {
+        "containers": [
+          "toolcabinet",
+          "crate",
+          "shelves",
+          "desk",
+          "counter",
+          "cardboardbox"
+        ],
         "lean": "containment",
         "place": "mapNamed",
         "rival": "agricultural",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   },
@@ -26,7 +34,7 @@
       "map": "MarchRidgeStashMap1",
       "mark": 1
     },
-    "body": "Keep the pesticide trial jars sealed until the boundary check is done. The neighbor keeps knocking because the map says don't go; the dog is still in the yard.",
+    "body": "Keep the pesticide trial jars sealed until the boundary check is done. The neighbor keeps knocking because the map says don't go; the dog is still in the yard.\n\nWe kept one copy for ourselves. The person collecting the other one said the numbers would be corrected later, once everyone had moved.\n\nI do not know which of the two accounts was repeated afterward. The older one is the one I had in my hands that day.",
     "id": "t0022-02",
     "kind": "written",
     "pieces": [
@@ -35,10 +43,18 @@
     "title": "The jars stay sealed",
     "where": [
       {
+        "containers": [
+          "crate",
+          "shelves",
+          "desk",
+          "counter",
+          "cardboardbox",
+          "bin"
+        ],
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

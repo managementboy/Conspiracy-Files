@@ -1,0 +1,44 @@
+[
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "scene": "RZSBuryingCamp"
+      },
+      "body": "my weathered bundle entry says the crop trial workers brushed off rust-colored grit. the chickens stopped moving before the back road closed.",
+      "id": "t0379-01",
+      "kind": "written",
+      "pieces": [
+        "notebook"
+      ],
+      "title": "weathered bundle note — late wednesday",
+      "where": [
+        {
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-warning",
+          "c-failure"
+        ]
+      },
+      "gloss": "A personal field trace precedes the visible emergency response.",
+      "prov": {
+        "batch": "T0379",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "Responders could have collected the rust-colored grit while crossing treated land; the note or objects do not prove the program began the emergency."
+    }
+  }
+]

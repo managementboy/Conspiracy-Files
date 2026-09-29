@@ -1,0 +1,308 @@
+[
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "map": "IrvingtonStashMap9",
+        "mark": 1
+      },
+      "body": "A hammer and unopened nails sit beside a note to brace the garden-side door before the next treatment. The note does not say who will return.",
+      "id": "t0048-01",
+      "kind": "set",
+      "pieces": [
+        "Hammer",
+        "Nails"
+      ],
+      "title": "Fortification order",
+      "where": [
+        {
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "we can fortify here",
+        "source": "map:IrvingtonStashMap9"
+      },
+      "gloss": "A door is reinforced ahead of a treatment, with no return plan.",
+      "prov": {
+        "batch": "T0048",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A response crew might secure a building after any hazard; the timing of the treatment is not recorded."
+    }
+  },
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "map": "IrvingtonStashMap9",
+        "note": 1
+      },
+      "body": "Farm log: “fortify here” meant boards over the garden door before the next treatment truck. The crew promised to collect its sample jars and never returned.",
+      "id": "t0048-02",
+      "kind": "written",
+      "pieces": [
+        "diary"
+      ],
+      "title": "Fortify before the treatment",
+      "where": [
+        {
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "gloss": "Fortify before the treatment",
+      "prov": {
+        "batch": "T0048",
+        "handoff": "2026-09-29",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work."
+    }
+  },
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "map": "IrvingtonStashMap9",
+        "note": 2
+      },
+      "body": "Diary margin: the first heart marks the cot where the orchard crew slept after the spray run. Their boots left a sweet yellow dust; the family returned before anyone posted a warning.",
+      "id": "t0048-03",
+      "kind": "written",
+      "pieces": [
+        "notepad"
+      ],
+      "title": "First heart, clean cot",
+      "where": [
+        {
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "gloss": "First heart, clean cot",
+      "prov": {
+        "batch": "T0048",
+        "handoff": "2026-09-29",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work."
+    }
+  },
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "map": "IrvingtonStashMap9",
+        "note": 3
+      },
+      "body": "On the photograph back: second heart, our spare blanket. I rinsed green flecks from it after the seed-treatment men left, then the well began tasting of pennies.",
+      "id": "t0048-04",
+      "kind": "written",
+      "pieces": [
+        "receipt"
+      ],
+      "title": "Second heart, rinsed blanket",
+      "where": [
+        {
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "gloss": "Second heart, rinsed blanket",
+      "prov": {
+        "batch": "T0048",
+        "handoff": "2026-09-29",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work."
+    }
+  },
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "map": "IrvingtonStashMap9",
+        "note": 4
+      },
+      "body": "Torn notebook page: the third heart is the room lent to two pasture-test workers. One wrote that the calves refused water before the county cars arrived.",
+      "id": "t0048-05",
+      "kind": "written",
+      "pieces": [
+        "photograph"
+      ],
+      "title": "Third heart, borrowed room",
+      "where": [
+        {
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "gloss": "Third heart, borrowed room",
+      "prov": {
+        "batch": "T0048",
+        "handoff": "2026-09-29",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work."
+    }
+  },
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "map": "IrvingtonStashMap9",
+        "note": 5
+      },
+      "body": "Personal note: at the fourth heart we shut the window during the field misting. The kitchen herbs curled by supper, hours before the road patrol appeared.",
+      "id": "t0048-06",
+      "kind": "written",
+      "pieces": [
+        "notebook"
+      ],
+      "title": "Fourth heart, sealed window",
+      "where": [
+        {
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "gloss": "Fourth heart, sealed window",
+      "prov": {
+        "batch": "T0048",
+        "handoff": "2026-09-29",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work."
+    }
+  },
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "map": "IrvingtonStashMap9",
+        "note": 6
+      },
+      "body": "Letter draft: the fifth heart was for the baby room. A crop-trial driver warned us not to use the rain barrel, but would not put his warning on the delivery slip.",
+      "id": "t0048-07",
+      "kind": "written",
+      "pieces": [
+        "letter"
+      ],
+      "title": "Fifth heart, empty cradle",
+      "where": [
+        {
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "gloss": "Fifth heart, empty cradle",
+      "prov": {
+        "batch": "T0048",
+        "handoff": "2026-09-29",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work."
+    }
+  }
+]

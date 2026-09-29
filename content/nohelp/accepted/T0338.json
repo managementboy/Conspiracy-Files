@@ -3,7 +3,7 @@
     "anchor": {
       "scene": "RDSHouseParty"
     },
-    "body": "Personal note — the early shift: wash off the blue powder left by the fertilizer test crew. the dog refused its water, and I had not yet heard that the buses quit running.",
+    "body": "Personal note — the early shift: wash off the blue powder left by the fertilizer test crew. the dog refused its water, and I had not yet heard that the buses quit running.\n\nI saved it from the bag of rubbish because there was a name on the reverse. The name was not on the list they posted.\n\nThere may be a simple reason for the change. Nobody at the next stop could tell us what to do with the first version.",
     "id": "t0338-01",
     "kind": "written",
     "pieces": [
@@ -12,6 +12,14 @@
     "title": "the early shift — blue powder",
     "where": [
       {
+        "containers": [
+          "desk",
+          "crate",
+          "shelves",
+          "counter",
+          "cardboardbox",
+          "bin"
+        ],
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",

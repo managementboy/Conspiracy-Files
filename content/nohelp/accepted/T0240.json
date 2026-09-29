@@ -10,13 +10,21 @@
       "Soap2",
       "Briefcase"
     ],
-    "title": "missing count beside the bar of soap",
+    "title": "Bar of soap with the unclosed tally",
     "where": [
       {
+        "containers": [
+          "crate",
+          "shelves",
+          "desk",
+          "counter",
+          "cardboardbox",
+          "bin"
+        ],
         "lean": "containment",
         "place": "mapNamed",
         "rival": "agricultural",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

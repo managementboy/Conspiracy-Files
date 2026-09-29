@@ -10,9 +10,17 @@
       "Battery",
       "RadioBlack"
     ],
-    "title": "Clouded sample jar by the coat pocket",
+    "title": "The jar with its clouded rim",
     "where": [
       {
+        "containers": [
+          "dresser",
+          "crate",
+          "shelves",
+          "desk",
+          "counter",
+          "cardboardbox"
+        ],
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",

@@ -11,13 +11,21 @@
       "Pen",
       "BathTowel"
     ],
-    "title": "missing count beside the black pen",
+    "title": "Black pen beside the spare mark",
     "where": [
       {
+        "containers": [
+          "crate",
+          "shelves",
+          "desk",
+          "counter",
+          "cardboardbox",
+          "bin"
+        ],
         "lean": "containment",
         "place": "mapNamed",
         "rival": "agricultural",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

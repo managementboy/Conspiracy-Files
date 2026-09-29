@@ -13,10 +13,18 @@
     "title": "Tools at the rural stop",
     "where": [
       {
+        "containers": [
+          "toolcabinet",
+          "crate",
+          "shelves",
+          "desk",
+          "counter",
+          "cardboardbox"
+        ],
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

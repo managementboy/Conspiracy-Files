@@ -14,10 +14,18 @@
     "title": "Stable stores",
     "where": [
       {
+        "containers": [
+          "fridge",
+          "crate",
+          "shelves",
+          "desk",
+          "counter",
+          "cardboardbox"
+        ],
         "lean": "containment",
         "place": "mapNamed",
         "rival": "agricultural",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

@@ -19,5 +19,25 @@
         "spot": "ground"
       }
     ]
+  },
+  {
+    "anchor": {
+      "scene": "RZSWaterPump"
+    },
+    "body": "They shut the pump after assigning the households one pail apiece. More people came from the road, but their names belonged to a different district on the list. My father shared his pail while the clerk went to find another page.",
+    "id": "t0407-02",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "A queue for water",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
   }
 ]

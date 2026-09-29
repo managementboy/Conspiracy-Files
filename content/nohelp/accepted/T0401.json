@@ -19,5 +19,25 @@
         "spot": "ground"
       }
     ]
+  },
+  {
+    "anchor": {
+      "scene": "RZSSexyTime"
+    },
+    "body": "They left in a hurry when a patrol announced this area was clear. One of them went back for a coat, and the patrol told her no one had been here since morning. The date on the coat label was today.",
+    "id": "t0401-02",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "The folded coat label",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
   }
 ]

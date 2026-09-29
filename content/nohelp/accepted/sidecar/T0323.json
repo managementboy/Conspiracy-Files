@@ -17,5 +17,22 @@
       "writer": "ChatGPT"
     },
     "rival_reading": "Emergency workers could have picked up the same a bitter residue while responding near a field; this personal trace does not prove the trial caused the emergency."
+  },
+  "t0323-02": {
+    "axioms": {
+      "agricultural": [
+        "a-pathway"
+      ],
+      "containment": [
+        "c-failure"
+      ]
+    },
+    "gloss": "A witness records a failed evacuation count or route.",
+    "prov": {
+      "batch": "T0323",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "The agricultural trial may have caused the disorder that forced improvised decisions."
   }
 }

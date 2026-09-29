@@ -1,0 +1,179 @@
+[
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "map": "WorldStashMap3",
+        "mark": 1
+      },
+      "body": "A fuel can is paired with a route slip for a field visit; the return line says “full” though the can is nearly empty.",
+      "id": "t0112-01",
+      "kind": "set",
+      "pieces": [
+        "PetrolCan",
+        "Pencil"
+      ],
+      "title": "Fuel before the run",
+      "where": [
+        {
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "gas here",
+        "source": "map:WorldStashMap3"
+      },
+      "gloss": "A field route ends with a fuel record that conflicts with the container.",
+      "prov": {
+        "batch": "T0112",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "An emergency run could use the same fuel and route; the inconsistent return line does not identify the trip."
+    }
+  },
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "map": "WorldStashMap3",
+        "mark": 2
+      },
+      "body": "Repair note: flush the field sprayer at the wrench mark before returning it. The pump seal had softened and the mechanic wrote that the rinse water stung his hands.",
+      "id": "t0112-02",
+      "kind": "written",
+      "pieces": [
+        "diary"
+      ],
+      "title": "Wrench stop after the sprayer run",
+      "where": [
+        {
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "gloss": "Wrench stop after the sprayer run",
+      "prov": {
+        "batch": "T0112",
+        "handoff": "2026-09-29",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work."
+    }
+  },
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "map": "WorldStashMap3",
+        "note": 1
+      },
+      "body": "Cash receipt: fuel at the marked stop, charged to the late-season crop trial. The driver added that the tank was full before the detour and nearly dry afterward.",
+      "id": "t0112-03",
+      "kind": "written",
+      "pieces": [
+        "notepad"
+      ],
+      "title": "Gas charged to the trial plot",
+      "where": [
+        {
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "gloss": "Gas charged to the trial plot",
+      "prov": {
+        "batch": "T0112",
+        "handoff": "2026-09-29",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work."
+    }
+  },
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "map": "WorldStashMap3",
+        "note": 2
+      },
+      "body": "Notebook line under “you’ll need it”: reserve another can for the second pasture pass. The first crew came home coughing before any emergency convoy used the road.",
+      "id": "t0112-04",
+      "kind": "written",
+      "pieces": [
+        "receipt"
+      ],
+      "title": "Fuel needed for a second pass",
+      "where": [
+        {
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "gloss": "Fuel needed for a second pass",
+      "prov": {
+        "batch": "T0112",
+        "handoff": "2026-09-29",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work."
+    }
+  }
+]

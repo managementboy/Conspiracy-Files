@@ -1,0 +1,50 @@
+[
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "map": "MarchRidgeStashMap10",
+        "mark": 1
+      },
+      "body": "A small book is wrapped around a note asking that the lamp stay outside until the treated ground dries. The writer has left a space for a reply.",
+      "id": "t0074-01",
+      "kind": "set",
+      "pieces": [
+        "Book",
+        "HandTorch"
+      ],
+      "title": "A blessing and a warning",
+      "where": [
+        {
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "Blessing for an angel",
+        "source": "map:MarchRidgeStashMap10"
+      },
+      "gloss": "A personal blessing is kept with a request to avoid treated ground.",
+      "prov": {
+        "batch": "T0074",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A response crew might have treated the ground during decontamination; the note does not identify what was applied."
+    }
+  }
+]

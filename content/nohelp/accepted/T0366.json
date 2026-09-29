@@ -19,5 +19,25 @@
         "spot": "ground"
       }
     ]
+  },
+  {
+    "anchor": {
+      "scene": "RVSDeadEnd"
+    },
+    "body": "They painted an arrow to the exit, then shifted the barrier beyond the last turn. I walked back for my mother, who cannot climb the ditch. By then the painted arrow was covered and the man with the clipboard said he had seen no one.",
+    "id": "t0366-02",
+    "kind": "written",
+    "pieces": [
+      "notebook"
+    ],
+    "title": "The road ends twice",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
   }
 ]

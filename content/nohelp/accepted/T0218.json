@@ -10,13 +10,21 @@
       "MagnifyingGlass",
       "Map"
     ],
-    "title": "missing count beside the magnifying glass",
+    "title": "Magnifying glass with the unclosed tally",
     "where": [
       {
+        "containers": [
+          "crate",
+          "shelves",
+          "desk",
+          "counter",
+          "cardboardbox",
+          "bin"
+        ],
         "lean": "containment",
         "place": "mapNamed",
         "rival": "agricultural",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

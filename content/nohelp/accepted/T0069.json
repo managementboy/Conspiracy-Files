@@ -14,10 +14,18 @@
     "title": "Quiet supplies",
     "where": [
       {
+        "containers": [
+          "medicine",
+          "crate",
+          "shelves",
+          "desk",
+          "counter",
+          "cardboardbox"
+        ],
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

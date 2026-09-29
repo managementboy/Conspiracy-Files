@@ -1,0 +1,44 @@
+[
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "scene": "RBPizzaWhirled"
+      },
+      "body": "My note from near lunchtime: the field trial crew carried sealed seed packet. my brother started coughing. I had not yet heard that the bridge was blocked.",
+      "id": "t0302-01",
+      "kind": "written",
+      "pieces": [
+        "notepad"
+      ],
+      "title": "Near lunchtime: sealed seed packet",
+      "where": [
+        {
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-warning",
+          "c-orders"
+        ]
+      },
+      "gloss": "A personal trace links trial residue to illness before a later restriction.",
+      "prov": {
+        "batch": "T0302",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A response team could have carried farm supplies while checking exposure; the objects and timing do not establish that the trial caused it."
+    }
+  }
+]

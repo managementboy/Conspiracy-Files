@@ -1,0 +1,50 @@
+[
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "map": "MarchRidgeStashMap9",
+        "mark": 1
+      },
+      "body": "The food bundle is tied to a route note for new arrivals; the last line says the group left before the next watch could bring the promised supplies.",
+      "id": "t0073-01",
+      "kind": "set",
+      "pieces": [
+        "Pistol",
+        "Bread"
+      ],
+      "title": "A place at the table",
+      "where": [
+        {
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "survivors welcome to join us - always",
+        "source": "map:MarchRidgeStashMap9"
+      },
+      "gloss": "A group left before the next scheduled supply handoff.",
+      "prov": {
+        "batch": "T0073",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A work crew could have left a meal bundle at a field stop; the timing does not establish why they departed."
+    }
+  }
+]

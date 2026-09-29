@@ -14,10 +14,18 @@
     "title": "Too heavy to carry",
     "where": [
       {
+        "containers": [
+          "filingcabinet",
+          "crate",
+          "shelves",
+          "desk",
+          "counter",
+          "cardboardbox"
+        ],
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

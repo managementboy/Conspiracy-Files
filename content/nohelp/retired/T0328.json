@@ -1,0 +1,44 @@
+[
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "scene": "RDSBleach"
+      },
+      "body": "I saved the cloth with sticky pollen for you. The orchard spray test crew passed the late afternoon; the mare refused her feed, and afterward the bridge was blocked.",
+      "id": "t0328-01",
+      "kind": "written",
+      "pieces": [
+        "letter"
+      ],
+      "title": "the late afternoon — sticky pollen",
+      "where": [
+        {
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "corpse"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-warning",
+          "c-orders"
+        ]
+      },
+      "gloss": "A personal trace connects a farm trial to symptoms before a later restriction.",
+      "prov": {
+        "batch": "T0328",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "Emergency workers could have picked up the same sticky pollen while responding near a field; this personal trace does not prove the trial caused the emergency."
+    }
+  }
+]

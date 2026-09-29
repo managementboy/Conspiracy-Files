@@ -10,9 +10,17 @@
       "FirstAidKit",
       "WaterBottle"
     ],
-    "title": "Clouded sample jar by the cab",
+    "title": "The jar with its clouded rim",
     "where": [
       {
+        "containers": [
+          "crate",
+          "shelves",
+          "desk",
+          "counter",
+          "cardboardbox",
+          "bin"
+        ],
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",

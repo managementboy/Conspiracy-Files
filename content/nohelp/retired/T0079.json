@@ -1,0 +1,50 @@
+[
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "map": "MulStashMap4",
+        "mark": 1
+      },
+      "body": "The medical bag is left beside a route card that sends the occupants through the side exit; the building check says the main door was already cleared.",
+      "id": "t0079-01",
+      "kind": "set",
+      "pieces": [
+        "Bandage",
+        "FirstAidKit"
+      ],
+      "title": "The easier exit",
+      "where": [
+        {
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "easier way out",
+        "source": "map:MulStashMap4"
+      },
+      "gloss": "A side exit is assigned after the main door was marked clear.",
+      "prov": {
+        "batch": "T0079",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A field team could have used a medical bag and side route; the card does not explain why the main door was closed."
+    }
+  }
+]

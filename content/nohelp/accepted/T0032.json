@@ -11,13 +11,21 @@
       "DishCloth",
       "Map"
     ],
-    "title": "missing count beside the dish cloth",
+    "title": "Dish cloth with the unclosed tally",
     "where": [
       {
+        "containers": [
+          "crate",
+          "shelves",
+          "desk",
+          "counter",
+          "cardboardbox",
+          "bin"
+        ],
         "lean": "containment",
         "place": "mapNamed",
         "rival": "agricultural",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   },
@@ -26,19 +34,27 @@
       "map": "BBurgStashMap7",
       "mark": 1
     },
-    "body": "Leave the canisters outside the fence until the grounds crew finishes the test. The gate was already locked when the delivery arrived; the return form charges us for the missing seal.",
+    "body": "Leave the canisters outside the fence until the grounds crew finishes the test. The gate was already locked when the delivery arrived; the return form charges us for the missing seal.\n\nWe waited for a correction that never came. Every passing driver had a different instruction and no room for one more passenger.\n\nI could have mistaken the order in which those things happened. I could not mistake the empty place left for the person we had been waiting for.",
     "id": "t0032-02",
     "kind": "written",
     "pieces": [
       "notepad"
     ],
-    "title": "Kept from the drawer",
+    "title": "The drawer copy survived",
     "where": [
       {
+        "containers": [
+          "crate",
+          "shelves",
+          "desk",
+          "counter",
+          "cardboardbox",
+          "bin"
+        ],
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

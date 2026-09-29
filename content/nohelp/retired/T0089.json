@@ -1,0 +1,50 @@
+[
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "map": "MulStashMap15",
+        "mark": 1
+      },
+      "body": "The bandage wrapper is tucked into a route book whose clinic stop is stamped complete before the patient’s return line is signed.",
+      "id": "t0089-01",
+      "kind": "set",
+      "pieces": [
+        "Bandage",
+        "Notebook"
+      ],
+      "title": "Careful past the clinic",
+      "where": [
+        {
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "old doctor",
+        "source": "map:MulStashMap15"
+      },
+      "gloss": "A clinic stop is closed out before the patient’s return is logged.",
+      "prov": {
+        "batch": "T0089",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "An agricultural worker could have received care during a field visit; the order of entries does not prove a failed evacuation."
+    }
+  }
+]

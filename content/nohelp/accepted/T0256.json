@@ -10,13 +10,21 @@
       "Lighter",
       "GardeningSprayEmpty"
     ],
-    "title": "two traces on the lighter",
+    "title": "Lighter carrying two traces",
     "where": [
       {
+        "containers": [
+          "crate",
+          "shelves",
+          "desk",
+          "counter",
+          "cardboardbox",
+          "bin"
+        ],
         "lean": "containment",
         "place": "mapNamed",
         "rival": "agricultural",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

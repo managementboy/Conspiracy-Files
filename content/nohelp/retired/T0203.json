@@ -45,5 +45,49 @@
       },
       "rival_reading": "An emergency vehicle could receive a fast battery check before dispatch; the card does not identify the test."
     }
+  },
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "print": "UpscaleMobility"
+      },
+      "body": "the paperclip box and hand radio were sealed together but never opened. soot darkens the bundle; clean outlines show it was packed before the fire.",
+      "id": "t0203-01",
+      "kind": "set",
+      "pieces": [
+        "PaperclipBox",
+        "WalkieTalkie1"
+      ],
+      "title": "missing count beside the paperclip box",
+      "where": [
+        {
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-warning",
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "gloss": "A response bundle preserves a missing count, changed route, or erased identity.",
+      "prov": {
+        "batch": "T0203",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A farm-program crew could have counted routes, repacked tools, or removed ownership marks during hurried field work; the objects do not prove a concealed public response."
+    }
   }
 ]

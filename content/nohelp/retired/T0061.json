@@ -1,0 +1,50 @@
+[
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "map": "LouisvilleStashMap13",
+        "mark": 1
+      },
+      "body": "The house list calls the yards secure, but a tied garbage bag contains the last gate latch and a note to check behind each fence.",
+      "id": "t0061-01",
+      "kind": "set",
+      "pieces": [
+        "Hammer",
+        "Garbagebag"
+      ],
+      "title": "Backyard clearing list",
+      "where": [
+        {
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "good secure houses",
+        "source": "map:LouisvilleStashMap13"
+      },
+      "gloss": "A secure-house list still calls for a second check behind the fences.",
+      "prov": {
+        "batch": "T0061",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A grounds crew could have bagged a damaged latch during routine work; the list does not prove anyone was left exposed."
+    }
+  }
+]

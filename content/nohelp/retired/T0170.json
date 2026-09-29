@@ -1,0 +1,48 @@
+[
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "print": "DragRacingTrack"
+      },
+      "body": "A feed-store receipt lists fuel and rinse soap beside a handwritten line: “Trial rig at the track before sunrise. Wash the tank before the county cars arrive.”",
+      "id": "t0170-01",
+      "kind": "written",
+      "pieces": [
+        "receipt"
+      ],
+      "title": "Fuel bought for the field sprayer",
+      "where": [
+        {
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-malfunction"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "Drag Racing Track",
+        "source": "print:DragRacingTrack"
+      },
+      "gloss": "A personal receipt links a trial rig and tank washing to the track before county vehicles arrive.",
+      "prov": {
+        "batch": "T0170",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A response crew could use an isolated track to clean and refuel equipment; the note does not prove the field trial caused the emergency."
+    }
+  }
+]

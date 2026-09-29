@@ -1,0 +1,50 @@
+[
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "map": "MarchRidgeStashMap6",
+        "mark": 1
+      },
+      "body": "The hardware receipt is pinned to a building checklist marked secure; its final line asks who collected the key after the crew left.",
+      "id": "t0070-01",
+      "kind": "set",
+      "pieces": [
+        "Hammer",
+        "Nails"
+      ],
+      "title": "The secured doorway",
+      "where": [
+        {
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "stuff we can use to secure building",
+        "source": "map:MarchRidgeStashMap6"
+      },
+      "gloss": "A closure checklist is complete while the final key handoff is missing.",
+      "prov": {
+        "batch": "T0070",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A maintenance team could have secured a program site and forgotten the key record; the receipt does not identify the crew."
+    }
+  }
+]

@@ -1,0 +1,44 @@
+[
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "scene": "RZSMusicFestStage"
+      },
+      "body": "my weathered bundle entry says the greenhouse test workers brushed off saltlike grains. my wrists blistered before the telephone line died.",
+      "id": "t0391-01",
+      "kind": "written",
+      "pieces": [
+        "notebook"
+      ],
+      "title": "weathered bundle note — before thursday lunch",
+      "where": [
+        {
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-warning",
+          "c-failure"
+        ]
+      },
+      "gloss": "A personal field trace precedes the visible emergency response.",
+      "prov": {
+        "batch": "T0391",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "Responders could have collected the saltlike grains while crossing treated land; the note or objects do not prove the program began the emergency."
+    }
+  }
+]

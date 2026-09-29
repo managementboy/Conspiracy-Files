@@ -11,13 +11,21 @@
       "Lighter",
       "BathTowel"
     ],
-    "title": "missing count beside the lighter",
+    "title": "Lighter beside the spare mark",
     "where": [
       {
+        "containers": [
+          "crate",
+          "shelves",
+          "desk",
+          "counter",
+          "cardboardbox",
+          "bin"
+        ],
         "lean": "containment",
         "place": "mapNamed",
         "rival": "agricultural",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

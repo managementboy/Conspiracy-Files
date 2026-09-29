@@ -13,10 +13,18 @@
     "title": "The kitchen rinse",
     "where": [
       {
+        "containers": [
+          "fridge",
+          "crate",
+          "shelves",
+          "desk",
+          "counter",
+          "cardboardbox"
+        ],
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

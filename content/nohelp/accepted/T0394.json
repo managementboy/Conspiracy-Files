@@ -19,5 +19,25 @@
         "spot": "ground"
       }
     ]
+  },
+  {
+    "anchor": {
+      "scene": "RZSOldFirepit"
+    },
+    "body": "The group burned the map after the marked road failed them. One corner survived with an arrow pointing to a station that had stopped taking arrivals. I recognized my own handwriting on the corner; I had copied the directions from a uniformed man.",
+    "id": "t0394-02",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "title": "Firepit directions",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
   }
 ]

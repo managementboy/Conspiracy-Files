@@ -10,13 +10,21 @@
       "Whistle",
       "FirstAidKit"
     ],
-    "title": "missing count beside the warning whistle",
+    "title": "Warning whistle beside the spare mark",
     "where": [
       {
+        "containers": [
+          "dresser",
+          "crate",
+          "shelves",
+          "desk",
+          "counter",
+          "cardboardbox"
+        ],
         "lean": "containment",
         "place": "mapNamed",
         "rival": "agricultural",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

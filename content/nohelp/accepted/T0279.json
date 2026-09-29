@@ -10,13 +10,21 @@
       "Toothbrush",
       "BathTowel"
     ],
-    "title": "missing count beside the toothbrush",
+    "title": "Toothbrush beside the spare mark",
     "where": [
       {
+        "containers": [
+          "crate",
+          "shelves",
+          "desk",
+          "counter",
+          "cardboardbox",
+          "bin"
+        ],
         "lean": "containment",
         "place": "mapNamed",
         "rival": "agricultural",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

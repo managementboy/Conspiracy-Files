@@ -10,9 +10,17 @@
       "WalkieTalkie1",
       "FirstAidKit"
     ],
-    "title": "Clouded sample jar by the kitchen chair",
+    "title": "The jar with its clouded rim",
     "where": [
       {
+        "containers": [
+          "crate",
+          "shelves",
+          "desk",
+          "counter",
+          "cardboardbox",
+          "bin"
+        ],
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",

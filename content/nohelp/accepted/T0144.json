@@ -11,13 +11,21 @@
       "MeasuringTape",
       "Clipboard"
     ],
-    "title": "missing count beside the measuring tape",
+    "title": "Measuring tape with the unclosed tally",
     "where": [
       {
+        "containers": [
+          "crate",
+          "shelves",
+          "desk",
+          "counter",
+          "cardboardbox",
+          "bin"
+        ],
         "lean": "containment",
         "place": "mapNamed",
         "rival": "agricultural",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

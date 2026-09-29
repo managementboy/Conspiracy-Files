@@ -13,10 +13,18 @@
     "title": "Meeting range sheet",
     "where": [
       {
+        "containers": [
+          "filingcabinet",
+          "crate",
+          "shelves",
+          "desk",
+          "counter",
+          "cardboardbox"
+        ],
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

@@ -3,7 +3,7 @@
     "anchor": {
       "scene": "RBTSButcher"
     },
-    "body": "I wrote down the sour smell after the field truck unloaded its rinse barrels. The meat was still cold when the flies vanished and the siren began.",
+    "body": "I wrote down the sour smell after the field truck unloaded its rinse barrels. The meat was still cold when the flies vanished and the siren began.\n\nI thought the date would settle it. When I asked, the person at the barrier looked at the seal instead and handed it back.\n\nI wrote the time before I went back for the others. The clock may have been slow; the second vehicle was already gone.",
     "id": "t0312-01",
     "kind": "written",
     "pieces": [
@@ -12,6 +12,14 @@
     "title": "Freezer note in a butcher's hand",
     "where": [
       {
+        "containers": [
+          "fridge",
+          "crate",
+          "shelves",
+          "desk",
+          "counter",
+          "cardboardbox"
+        ],
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",

@@ -79,6 +79,21 @@ for _,spot in ipairs({"furniture","mailbox"}) do
 end
 assert(not S.intentMatches({spot="ground"},T.furniture) and not S.intentMatches({spot="corpse"},T.ground),"ground and body clues stay strict")
 
+-- Per world, the six kinds are tried in a drawn order (owner, 2026-09-29):
+-- the same clue lands in different kinds of container from world to world.
+do
+    local six={"fridge","freezer","counter","crate","desk","bin"}
+    local o=S.containerOrder(six,7,"doc-a")
+    local same=S.containerOrder(six,7,"doc-a")
+    assert(#o==6 and table.concat(o,",")==table.concat(same,","),"the same world, the same order")
+    local seen={}; for _,k in ipairs(o) do seen[k]=true end
+    for _,k in ipairs(six) do assert(seen[k],"every kind kept") end
+    local firsts={}
+    for seed=1,60 do firsts[S.containerOrder(six,seed,"doc-a")[1]]=true end
+    local n=0; for _ in pairs(firsts) do n=n+1 end
+    assert(n>=5,"across worlds, most of the six come first: "..n)
+end
+
 -- A named kind is never crowded out of the candidate pool.
 local pool=SC.new({"fridge"})
 for i=1,SC.MAX_KINDS do SC.offer(pool,{x=i,y=0,z=0,objectIndex=0,containerIndex=0,containerType="k"..i,sprite="s"}) end
@@ -169,5 +184,6 @@ assert(filler:find("if not carrier and fallback then",1,true) and filler:find("f
     and filler:find("scan=groundScan(site,",1,true),"no body: the floor")
 assert(filler:find("if fallback and floorTried then",1,true),"declined only after the floor too")
 assert(filler:find("end,id,areaClue,prefer or nil)",1,true),"the named kinds reach the container scan")
+assert(filler:find("Session.containerOrder(doc.containers,R.worldSeed(),id)",1,true),"in this world's order")
 
 print("nohelp containers: a clue names its container and five fallbacks; then any container, a body, the floor")

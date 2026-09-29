@@ -10,13 +10,21 @@
       "RedPen",
       "Camera"
     ],
-    "title": "missing count beside the red pen",
+    "title": "Red pen with the unclosed tally",
     "where": [
       {
+        "containers": [
+          "dresser",
+          "crate",
+          "shelves",
+          "desk",
+          "counter",
+          "cardboardbox"
+        ],
         "lean": "containment",
         "place": "mapNamed",
         "rival": "agricultural",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

@@ -14,10 +14,18 @@
     "title": "Basement supply record",
     "where": [
       {
+        "containers": [
+          "filingcabinet",
+          "crate",
+          "shelves",
+          "desk",
+          "counter",
+          "cardboardbox"
+        ],
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   },
@@ -26,7 +34,7 @@
       "map": "WorldStashMap23",
       "mark": 2
     },
-    "body": "Maintenance note: use the hammer mark to find the basement vent. Yellow dust appeared inside after the seed-treatment truck idled above it.",
+    "body": "Maintenance note: use the hammer mark to find the basement vent. Yellow dust appeared inside after the seed-treatment truck idled above it.\n\nNo one wanted to keep the wet copy. It dried unevenly, and the ink from the first entry stayed visible beneath the second.\n\nI wrote the time before I went back for the others. The clock may have been slow; the second vehicle was already gone.",
     "id": "t0132-02",
     "kind": "written",
     "pieces": [
@@ -35,10 +43,18 @@
     "title": "Hammer beside the basement vent",
     "where": [
       {
+        "containers": [
+          "toolcabinet",
+          "crate",
+          "shelves",
+          "desk",
+          "counter",
+          "cardboardbox"
+        ],
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   },
@@ -47,7 +63,7 @@
       "map": "WorldStashMap23",
       "note": 1
     },
-    "body": "Cash receipt at the fuel mark: the crop-study truck took two cans but returned one. The driver wrote that the missing can stayed with the basement samples.",
+    "body": "Cash receipt at the fuel mark: the crop-study truck took two cans but returned one. The driver wrote that the missing can stayed with the basement samples.\n\nI saved it from the bag of rubbish because there was a name on the reverse. The name was not on the list they posted.\n\nThere may be a simple reason for the change. Nobody at the next stop could tell us what to do with the first version.",
     "id": "t0132-03",
     "kind": "written",
     "pieces": [
@@ -56,10 +72,18 @@
     "title": "Fuel mark on the crop account",
     "where": [
       {
+        "containers": [
+          "filingcabinet",
+          "crate",
+          "shelves",
+          "desk",
+          "counter",
+          "cardboardbox"
+        ],
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   },
@@ -68,7 +92,7 @@
       "map": "WorldStashMap23",
       "note": 2
     },
-    "body": "Fuel receipt headed “Thunder Gas”: two cans billed to the county crop trial. One can returned with a sharp herbal smell and no cap.",
+    "body": "Fuel receipt headed “Thunder Gas”: two cans billed to the county crop trial. One can returned with a sharp herbal smell and no cap.\n\nThe first person who saw it called it routine. The second asked me to stop using the well until another visit could be arranged.\n\nThere may be a simple reason for the change. Nobody at the next stop could tell us what to do with the first version.",
     "id": "t0132-04",
     "kind": "written",
     "pieces": [
@@ -77,10 +101,18 @@
     "title": "Thunder Gas charged the field account",
     "where": [
       {
+        "containers": [
+          "filingcabinet",
+          "crate",
+          "shelves",
+          "desk",
+          "counter",
+          "cardboardbox"
+        ],
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   },
@@ -89,7 +121,7 @@
       "map": "WorldStashMap23",
       "note": 3
     },
-    "body": "Photograph back at the hammer mark: the basement vent was nailed shut after yellow dust appeared inside. The treatment truck had idled directly above it.",
+    "body": "Photograph back at the hammer mark: the basement vent was nailed shut after yellow dust appeared inside. The treatment truck had idled directly above it.\n\nWe tried to finish the ordinary work around it. The notice changed faster than the deliveries, and no one came to collect what was left.\n\nThere may be a simple reason for the change. Nobody at the next stop could tell us what to do with the first version.",
     "id": "t0132-05",
     "kind": "written",
     "pieces": [
@@ -98,10 +130,18 @@
     "title": "Hammer mark over a sealed vent",
     "where": [
       {
+        "containers": [
+          "toolcabinet",
+          "crate",
+          "shelves",
+          "desk",
+          "counter",
+          "cardboardbox"
+        ],
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   },
@@ -110,7 +150,7 @@
       "map": "WorldStashMap23",
       "note": 4
     },
-    "body": "Diary line under “basement”: leaf jars from three farms occupied the lower shelf. By morning every label had been peeled away, but the dates remained on the lids.",
+    "body": "Diary line under “basement”: leaf jars from three farms occupied the lower shelf. By morning every label had been peeled away, but the dates remained on the lids.\n\nNobody agreed on whose list this belonged to. I left it where the next person would look for the things we still owed each other.\n\nI thought someone would ask for this at the gate. They asked instead how many were in the car, and let the paper stay in my hand.",
     "id": "t0132-06",
     "kind": "written",
     "pieces": [
@@ -119,10 +159,18 @@
     "title": "Basement shelf of leaf samples",
     "where": [
       {
+        "containers": [
+          "desk",
+          "crate",
+          "shelves",
+          "counter",
+          "cardboardbox",
+          "bin"
+        ],
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

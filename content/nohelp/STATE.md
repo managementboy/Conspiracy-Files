@@ -14,7 +14,7 @@ EXPANSION
 none
 
 ## NEXT
-Review 51 scene additions, R2 446 rows, stock T0408-T0427 200 rows. T0364 T0384 T0405 blocked RECIPE_KEY: accepted rows contain a key ring, recipes forbid it; whole-ticket deliveries keep those rows unchanged. Resolve recipes and return baton for the remaining 3 scene additions.
+Round after the deep review reviewed and added: 748 rows (51 scene sides, R2 446/446, stock 200). T0127 salvaged (34 intact, 4 rewritten by Claude); t0234-01 rewritten by Claude (read none). T0364 T0384 T0405 recipes allow their key ring again. Claude now spreads the container kinds; next round waits on the owner
 
 ## OPEN RETURNS
 none
@@ -26,4 +26,4 @@ none
 2026-09-28 T0001
 
 ## PROGRESS
-check: 407 tickets, 748 rows pass, 0 returned, 0 stage 0 awaiting sign-off; 3 scene tickets blocked RECIPE_KEY @pending-review
+NOT DONE: scene sides 122/125, balance 69% @75971b78

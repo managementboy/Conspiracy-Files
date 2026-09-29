@@ -1,0 +1,49 @@
+[
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "print": "BrooksLibrary"
+      },
+      "body": "The library room card reserves a table for a field briefing; the public sign says the room is closed for quiet study.",
+      "id": "t0209-01",
+      "kind": "set",
+      "pieces": [
+        "Book",
+        "SheetPaper2"
+      ],
+      "title": "Quiet study reservation",
+      "where": [
+        {
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "Brooks Public Library of Louisville",
+        "source": "print:BrooksLibrary"
+      },
+      "gloss": "A private briefing occupies a room listed as closed.",
+      "prov": {
+        "batch": "T0209",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A containment team could use a library room during a public closure; the card does not identify the briefing."
+    }
+  }
+]

@@ -3,7 +3,7 @@
     "anchor": {
       "scene": "RVSAnimalTrailerOnRoad"
     },
-    "body": "On the back: “late Wednesday, emerald flecks in the cab after the crop trial. the chickens stopped moving. Later, the back road closed.”",
+    "body": "On the back: “late Wednesday, emerald flecks in the cab after the crop trial. the chickens stopped moving. Later, the back road closed.”\n\nI asked for the old page back after the new instructions arrived. They said it had been destroyed, but its corner was still in my pocket.\n\nI wrote the time before I went back for the others. The clock may have been slow; the second vehicle was already gone.",
     "id": "t0357-01",
     "kind": "written",
     "pieces": [
@@ -15,6 +15,26 @@
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",
+        "spot": "vehicle"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RVSAnimalTrailerOnRoad"
+    },
+    "body": "The driver said the animals had to wait until the officials finished counting cars. He asked whether the trailer counted as one vehicle or several lives. They copied the plate and waved the empty truck ahead.",
+    "id": "t0357-02",
+    "kind": "written",
+    "pieces": [
+      "notebook"
+    ],
+    "title": "A crossing marked in pencil",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
         "spot": "vehicle"
       }
     ]

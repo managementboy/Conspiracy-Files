@@ -13,10 +13,18 @@
     "title": "Feed delivery record",
     "where": [
       {
+        "containers": [
+          "filingcabinet",
+          "crate",
+          "shelves",
+          "desk",
+          "counter",
+          "cardboardbox"
+        ],
         "lean": "containment",
         "place": "mapNamed",
         "rival": "agricultural",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

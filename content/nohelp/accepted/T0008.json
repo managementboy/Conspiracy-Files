@@ -7,13 +7,21 @@
       "Rope",
       "WaterBottle"
     ],
-    "title": "two traces on the short rope",
+    "title": "Short rope carrying two traces",
     "where": [
       {
+        "containers": [
+          "crate",
+          "shelves",
+          "desk",
+          "counter",
+          "cardboardbox",
+          "bin"
+        ],
         "lean": "containment",
         "place": "warehouse",
         "rival": "agricultural",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   },
@@ -28,10 +36,18 @@
     "title": "The trial strip curled after spraying",
     "where": [
       {
+        "containers": [
+          "desk",
+          "crate",
+          "shelves",
+          "counter",
+          "cardboardbox",
+          "bin"
+        ],
         "lean": "agricultural",
         "place": "warehouse",
         "rival": "containment",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

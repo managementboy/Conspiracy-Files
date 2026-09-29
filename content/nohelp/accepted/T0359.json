@@ -3,7 +3,7 @@
     "anchor": {
       "scene": "RVSBurntCar"
     },
-    "body": "Feed, soap, and a clean jar, paid cash. My note below says chalky water came from the feed test; the ditch smelled metallic before the noon siren sounded.",
+    "body": "Feed, soap, and a clean jar, paid cash. My note below says chalky water came from the feed test; the ditch smelled metallic before the noon siren sounded.\n\nThe children asked why the same place had two different names on the two papers. I told them to hold on to both until we knew.\n\nThe younger one wanted to throw it away. I promised we would ask in the morning, and put it where neither of us could forget.",
     "id": "t0359-01",
     "kind": "written",
     "pieces": [
@@ -15,6 +15,26 @@
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RVSBurntCar"
+    },
+    "body": "The car burned after they copied its registration onto the clear list. I watched them carry a new list to the far side of the road. My father was told he had never arrived, although his name was on my first copy.",
+    "id": "t0359-02",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "Two copies of a plate",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
         "spot": "ground"
       }
     ]

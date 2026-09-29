@@ -1,0 +1,50 @@
+[
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "map": "MulStashMap16",
+        "mark": 1
+      },
+      "body": "The bank security kit is paired with a radio card for a shift that never checked in. A note asks whether the cold room still has power.",
+      "id": "t0090-01",
+      "kind": "set",
+      "pieces": [
+        "RadioBlack",
+        "Pistol"
+      ],
+      "title": "Security and the missing shift",
+      "where": [
+        {
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "security at bank got guns",
+        "source": "map:MulStashMap16"
+      },
+      "gloss": "A security kit remains beside a missing check-in and a power question.",
+      "prov": {
+        "batch": "T0090",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A response team could have left security gear while checking a utility failure; the card does not identify the shift."
+    }
+  }
+]

@@ -3,7 +3,7 @@
     "anchor": {
       "scene": "RBOther"
     },
-    "body": "before dawn: the crop trial crew brought rinsed gloves. my brother started coughing. I washed everything twice before the county van arrived.",
+    "body": "before dawn: the crop trial crew brought rinsed gloves. my brother started coughing. I washed everything twice before the county van arrived.\n\nI meant to ask about it in the morning. By then the person who could answer had gone with the last vehicle, and this was all that remained.\n\nI thought someone would ask for this at the gate. They asked instead how many were in the car, and let the paper stay in my hand.",
     "id": "t0300-01",
     "kind": "written",
     "pieces": [
@@ -12,6 +12,14 @@
     "title": "Before dawn: rinsed gloves",
     "where": [
       {
+        "containers": [
+          "crate",
+          "shelves",
+          "desk",
+          "counter",
+          "cardboardbox",
+          "bin"
+        ],
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",

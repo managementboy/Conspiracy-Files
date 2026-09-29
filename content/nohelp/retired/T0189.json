@@ -45,5 +45,48 @@
       },
       "rival_reading": "An emergency office could train staff before reopening; the roster does not identify the field use."
     }
+  },
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "print": "KnoxBankJobAdRosewood"
+      },
+      "body": "the tire pump and first-aid kit were wiped on one face and left dusty on the other. field twine and warning tape cross at the handle.",
+      "id": "t0189-01",
+      "kind": "set",
+      "pieces": [
+        "TirePump",
+        "FirstAidKit"
+      ],
+      "title": "two traces on the tire pump",
+      "where": [
+        {
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-warning",
+          "c-orders"
+        ]
+      },
+      "gloss": "Farm residue and response markings share one deliberately ambiguous bundle.",
+      "prov": {
+        "batch": "T0189",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "The farm program and the emergency response each explain one layer of the bundle, and the shared knot does not establish which purpose came first."
+    }
   }
 ]

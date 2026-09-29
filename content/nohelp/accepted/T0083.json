@@ -14,10 +14,18 @@
     "title": "Plan B in the margin",
     "where": [
       {
+        "containers": [
+          "medicine",
+          "crate",
+          "shelves",
+          "desk",
+          "counter",
+          "cardboardbox"
+        ],
         "lean": "containment",
         "place": "mapNamed",
         "rival": "agricultural",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

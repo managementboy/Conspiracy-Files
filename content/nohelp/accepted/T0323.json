@@ -19,5 +19,33 @@
         "spot": "furniture"
       }
     ]
+  },
+  {
+    "anchor": {
+      "scene": "RBWoodcraft"
+    },
+    "body": "The men building shelves were told to make another partition before the evacuation trucks came. Someone measured for beds and then scratched the measurements out. My brother still brought his tools, because the invoice for the first day had already been paid.",
+    "id": "t0323-02",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "Carpenter’s margin",
+    "where": [
+      {
+        "containers": [
+          "desk",
+          "dresser",
+          "shelves",
+          "counter",
+          "crate",
+          "bin"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
   }
 ]

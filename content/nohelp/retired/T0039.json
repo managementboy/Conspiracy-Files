@@ -1,0 +1,50 @@
+[
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "map": "EkronStashMap6",
+        "mark": 1
+      },
+      "body": "A bottle of bleach sits beside a copied warning and a water bottle with its cap still sealed. The note says the caller was told to wait for instructions.",
+      "id": "t0039-01",
+      "kind": "set",
+      "pieces": [
+        "Bleach",
+        "WaterBottle"
+      ],
+      "title": "Advice by the sink",
+      "where": [
+        {
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "if your reading this",
+        "source": "map:EkronStashMap6"
+      },
+      "gloss": "A caller waits for instructions while household water remains untouched.",
+      "prov": {
+        "batch": "T0039",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "The warning may concern a local chemical or sanitation problem; the sealed bottle and delayed reply do not establish the cause."
+    }
+  }
+]

@@ -3,7 +3,7 @@
     "anchor": {
       "scene": "RDSDeadDrunk"
     },
-    "body": "Monday morning: two workers from the seed trial carried an oily film. my eyes began burning before the county van arrived.",
+    "body": "Monday morning: two workers from the seed trial carried an oily film. my eyes began burning before the county van arrived.\n\nI meant to ask about it in the morning. By then the person who could answer had gone with the last vehicle, and this was all that remained.\n\nPerhaps the new instructions were meant to help us. They arrived after we had already followed the old ones.",
     "id": "t0330-01",
     "kind": "written",
     "pieces": [
@@ -12,6 +12,14 @@
     "title": "Monday morning — an oily film",
     "where": [
       {
+        "containers": [
+          "crate",
+          "shelves",
+          "desk",
+          "counter",
+          "cardboardbox",
+          "bin"
+        ],
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",

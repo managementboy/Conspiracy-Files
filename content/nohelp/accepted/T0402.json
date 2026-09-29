@@ -3,7 +3,7 @@
     "anchor": {
       "scene": "RZSSurvivalistCamp"
     },
-    "body": "My entry says the orchard crew rinsed its sprayer upstream. The water turned milky, and my hands blistered before the bridge was blocked.",
+    "body": "My entry says the orchard crew rinsed its sprayer upstream. The water turned milky, and my hands blistered before the bridge was blocked.\n\nI thought the date would settle it. When I asked, the person at the barrier looked at the seal instead and handed it back.\n\nI wrote the time before I went back for the others. The clock may have been slow; the second vehicle was already gone.",
     "id": "t0402-01",
     "kind": "written",
     "pieces": [
@@ -15,6 +15,26 @@
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RZSSurvivalistCamp"
+    },
+    "body": "The survivalist had packed for a three-day hike along the official safe corridor. At its first crossing a new barrier sent him back toward the town he had left. He wrote the change in the margin so he would not trust the printed route again.",
+    "id": "t0402-02",
+    "kind": "written",
+    "pieces": [
+      "notebook"
+    ],
+    "title": "Supplies for the wrong route",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
         "spot": "ground"
       }
     ]

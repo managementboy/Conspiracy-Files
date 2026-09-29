@@ -19,5 +19,25 @@
         "spot": "ground"
       }
     ]
+  },
+  {
+    "anchor": {
+      "scene": "RZSOrphanedFawn"
+    },
+    "body": "The ranger brought the fawn to the road and asked for a wildlife pickup. The checkpoint worker recorded one animal and no people, though the child holding its blanket stood beside him. She was still there when they shut the lane.",
+    "id": "t0397-02",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "title": "The fawn tally",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
   }
 ]

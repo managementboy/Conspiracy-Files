@@ -1892,7 +1892,8 @@ local function filler(api,onlyArea)
                     -- furniture); Session.assign refuses anything else, so a
                     -- container of the wrong kind is never even chosen.
                     -- A drawer searched earlier may take a No Help clue.
-                    local prefer=doc and (doc.containers or (doc.spot=="mailbox" and {Storage.MAILBOX}))
+                    local prefer=doc and ((doc.containers and Session.containerOrder(doc.containers,R.worldSeed(),id))
+                        or (doc.spot=="mailbox" and {Storage.MAILBOX}))
                     scan=boundsScan(site,function(t) target=t end,
                         function(candidate)
                             return not taken[Session.physicalKey(candidate)] and Session.intentMatches(doc,candidate)

@@ -1,0 +1,49 @@
+[
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "print": "Fossoil4"
+      },
+      "body": "A sample bottle is paired with a fuel ledger; the entry says the test was routine, then asks the next shift not to use the same hose.",
+      "id": "t0162-01",
+      "kind": "set",
+      "pieces": [
+        "PetrolCan",
+        "Notebook"
+      ],
+      "title": "The second fuel sample",
+      "where": [
+        {
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "Fossoil (Ekron)",
+        "source": "print:Fossoil4"
+      },
+      "gloss": "A routine test ends with a request to stop using the hose.",
+      "prov": {
+        "batch": "T0162",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "An emergency crew could isolate a hose after contamination or damage; the record does not identify the test."
+    }
+  }
+]

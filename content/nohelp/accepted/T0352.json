@@ -3,7 +3,7 @@
     "anchor": {
       "scene": "RDSTinFoilHat"
     },
-    "body": "I saved the cloth with white crystals for you. The seed trial crew passed Monday morning; my eyes began burning, and afterward the county van arrived.",
+    "body": "I saved the cloth with white crystals for you. The seed trial crew passed Monday morning; my eyes began burning, and afterward the county van arrived.\n\nI carried it home because there was nowhere open to return it. The mark did not come off when I tried to wash my hands.\n\nWhen I returned, the window was closed and the board was blank. I kept the page because it was the only one with our address.",
     "id": "t0352-01",
     "kind": "written",
     "pieces": [
@@ -12,6 +12,14 @@
     "title": "Monday morning — white crystals",
     "where": [
       {
+        "containers": [
+          "crate",
+          "shelves",
+          "desk",
+          "counter",
+          "cardboardbox",
+          "bin"
+        ],
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",

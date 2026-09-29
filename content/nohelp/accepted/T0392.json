@@ -19,5 +19,25 @@
         "spot": "ground"
       }
     ]
+  },
+  {
+    "anchor": {
+      "scene": "RZSNastyMattress"
+    },
+    "body": "The woman had been sleeping beside a field where the trial sprayers passed at dawn. She moved her bedding when the smell reached it, but the pale film returned overnight. Nobody in camp had seen a warning sign.",
+    "id": "t0392-02",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "A mattress by the ditch",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
   }
 ]

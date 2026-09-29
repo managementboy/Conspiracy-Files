@@ -47,5 +47,96 @@
       },
       "rival_reading": "A shipment of field supplies could have been delayed or misrouted; the paperwork does not identify the cargo."
     }
+  },
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "map": "BBurgStashMap5",
+        "mark": 1
+      },
+      "body": "Do not sell the catch until the county finishes its water check. They called it routine, but the fish order is still in the icebox and the supplier wants payment.",
+      "id": "t0030-01",
+      "kind": "written",
+      "pieces": [
+        "receipt"
+      ],
+      "title": "The unfinished handoff",
+      "where": [
+        {
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "catfish restaurant",
+        "source": "map:BBurgStashMap5"
+      },
+      "gloss": "A restaurant order remains unpaid while a routine water check delays the catch.",
+      "prov": {
+        "batch": "T0030",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "Officials could have restricted food during an emergency; the note never says what the water check was looking for."
+    }
+  },
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "map": "BBurgStashMap5",
+        "mark": 1
+      },
+      "body": "green crop residue marks the empty sandbag; a scraped warning stripe marks the water bottle. both are tied with the same cord.",
+      "id": "t0030-02",
+      "kind": "set",
+      "pieces": [
+        "EmptySandbag",
+        "WaterBottle"
+      ],
+      "title": "two traces on the empty sandbag",
+      "where": [
+        {
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-warning",
+          "c-orders"
+        ]
+      },
+      "gloss": "Farm residue and response markings share one deliberately ambiguous bundle.",
+      "prov": {
+        "batch": "T0030",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "The farm program and the emergency response each explain one layer of the bundle, and the shared knot does not establish which purpose came first."
+    }
   }
 ]

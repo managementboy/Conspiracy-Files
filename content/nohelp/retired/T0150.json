@@ -1,0 +1,49 @@
+[
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "print": "McCoyLoggingCorp"
+      },
+      "body": "The mill tool sheet records a saw crew sent home before its truck was cleared; the last sharpening charge is still billed to the next shift.",
+      "id": "t0150-01",
+      "kind": "set",
+      "pieces": [
+        "Axe",
+        "SheetPaper2"
+      ],
+      "title": "Tools on the unpaid shift",
+      "where": [
+        {
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "McCoy Logging Co.",
+        "source": "print:McCoyLoggingCorp"
+      },
+      "gloss": "A work crew leaves before its truck is cleared, with costs carried forward.",
+      "prov": {
+        "batch": "T0150",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A field program could also hire mill workers and bill tools across shifts; the sheet does not say who ordered the crew home."
+    }
+  }
+]

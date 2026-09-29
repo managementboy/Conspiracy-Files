@@ -11,13 +11,21 @@
       "HolePuncher",
       "Clipboard"
     ],
-    "title": "missing count beside the hole punch",
+    "title": "Hole punch beside the spare mark",
     "where": [
       {
+        "containers": [
+          "dresser",
+          "crate",
+          "shelves",
+          "desk",
+          "counter",
+          "cardboardbox"
+        ],
         "lean": "containment",
         "place": "mapNamed",
         "rival": "agricultural",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

@@ -3,7 +3,7 @@
     "anchor": {
       "scene": "RBBarn"
     },
-    "body": "My note from at dusk: the field trial crew carried rinsed gloves. my brother started coughing. I had not yet heard that the siren began.",
+    "body": "My note from at dusk: the field trial crew carried rinsed gloves. my brother started coughing. I had not yet heard that the siren began.\n\nThe first account was spoken quickly, as if there might be a bus to catch. I wrote it down before another person could replace it.\n\nThe person who was supposed to collect it had no time to stop. I did not put it back with the rest of the ordinary papers.",
     "id": "t0284-01",
     "kind": "written",
     "pieces": [
@@ -12,6 +12,14 @@
     "title": "At dusk: rinsed gloves",
     "where": [
       {
+        "containers": [
+          "desk",
+          "crate",
+          "shelves",
+          "counter",
+          "cardboardbox",
+          "bin"
+        ],
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",

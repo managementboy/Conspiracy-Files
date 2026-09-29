@@ -1,0 +1,265 @@
+[
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "map": "WorldStashMap11",
+        "mark": 1
+      },
+      "body": "The radio test sheet says the signal dropped at the tower; the technician’s note asks the field crew to check power before changing equipment.",
+      "id": "t0120-01",
+      "kind": "set",
+      "pieces": [
+        "RadioReceiver",
+        "SheetPaper2"
+      ],
+      "title": "A signal sent for testing",
+      "where": [
+        {
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "Dish 3 on Tower 2 - loses signal",
+        "source": "map:WorldStashMap11"
+      },
+      "gloss": "A field check is requested after an unexplained signal and power failure.",
+      "prov": {
+        "batch": "T0120",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A response network could lose power during an emergency; the note does not explain why the crew was at the site."
+    }
+  },
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "map": "WorldStashMap11",
+        "note": 1
+      },
+      "body": "Personal service note: dish three on tower two relayed moisture readings from the trial plots. The signal vanished during the night application, before any public emergency traffic.",
+      "id": "t0120-02",
+      "kind": "written",
+      "pieces": [
+        "diary"
+      ],
+      "title": "Dish three carried plot readings",
+      "where": [
+        {
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "gloss": "Dish three carried plot readings",
+      "prov": {
+        "batch": "T0120",
+        "handoff": "2026-09-29",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work."
+    }
+  },
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "map": "WorldStashMap11",
+        "note": 2
+      },
+      "body": "Torn meter log: near six gigahertz, power dipped as the spraying crew entered the eastern field. The station batteries were full and no storm was recorded.",
+      "id": "t0120-03",
+      "kind": "written",
+      "pieces": [
+        "notepad"
+      ],
+      "title": "Power dip during the field pass",
+      "where": [
+        {
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "gloss": "Power dip during the field pass",
+      "prov": {
+        "batch": "T0120",
+        "handoff": "2026-09-29",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work."
+    }
+  },
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "map": "WorldStashMap11",
+        "note": 3
+      },
+      "body": "Letter draft: ask headquarters to compare the Lexington receiver with two leaf samples. The samples carry the same gray film found inside the tower cabinet.",
+      "id": "t0120-04",
+      "kind": "written",
+      "pieces": [
+        "receipt"
+      ],
+      "title": "Test request with samples attached",
+      "where": [
+        {
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "gloss": "Test request with samples attached",
+      "prov": {
+        "batch": "T0120",
+        "handoff": "2026-09-29",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work."
+    }
+  },
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "map": "WorldStashMap11",
+        "note": 4
+      },
+      "body": "Photograph back at the sun mark: the crop-weather receiver is lit, but its plot channel reads blank. The operator noted a chemical smell inside the cabinet.",
+      "id": "t0120-05",
+      "kind": "written",
+      "pieces": [
+        "photograph"
+      ],
+      "title": "Sun mark over the crop receiver",
+      "where": [
+        {
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "gloss": "Sun mark over the crop receiver",
+      "prov": {
+        "batch": "T0120",
+        "handoff": "2026-09-29",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work."
+    }
+  },
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "map": "WorldStashMap11",
+        "note": 5
+      },
+      "body": "Technician’s notebook: the cross marks the receiver used for crop-weather telemetry. It failed whenever the treated field pump ran, then recovered after the pump stopped.",
+      "id": "t0120-06",
+      "kind": "written",
+      "pieces": [
+        "notebook"
+      ],
+      "title": "Cross placed over the test receiver",
+      "where": [
+        {
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "gloss": "Cross placed over the test receiver",
+      "prov": {
+        "batch": "T0120",
+        "handoff": "2026-09-29",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work."
+    }
+  }
+]

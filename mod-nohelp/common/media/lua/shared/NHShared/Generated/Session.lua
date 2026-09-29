@@ -174,6 +174,22 @@ function S.mobileAllowed(root,id)
     if not a or S.isMobile(a.target) then return false end
     return S.mobileCount(root)<S.MOBILE_PER_CASE
 end
+-- A CLUE'S CONTAINER KINDS IN THIS WORLD'S ORDER (owner, 2026-09-29): its
+-- six named kinds are tried in an order drawn from the world seed and the
+-- clue, not always the first, so the same clue is found in different kinds of
+-- container from world to world. Deterministic: a reload draws the same order.
+function S.containerOrder(list,seed,docId)
+    if type(list)~="table" then return nil end
+    local Pick=require("NHShared/Generated/Pick")
+    local keyed={}
+    for i,kind in ipairs(list) do
+        keyed[i]={kind=kind,h=Pick.hash(Pick.key({seed or 0,tostring(docId),kind,"container-order"}))}
+    end
+    table.sort(keyed,function(a,b) if a.h~=b.h then return a.h<b.h end return a.kind<b.kind end)
+    local out={}
+    for i,k in ipairs(keyed) do out[i]=k.kind end
+    return out
+end
 -- AN OUTDOOR MAP PLACE (E3, owner 2026-09-29): a map's mark or a flyer's
 -- place with no building of its own. Its containers are searched twelve tiles
 -- beyond its box, as a mailbox is at a house: a bin across the lot counts.

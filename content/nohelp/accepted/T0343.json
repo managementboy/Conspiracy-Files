@@ -19,5 +19,33 @@
         "spot": "furniture"
       }
     ]
+  },
+  {
+    "anchor": {
+      "scene": "RDSRPGNight"
+    },
+    "body": "We played until a man outside told us the road would be closed at dawn. He let the other car through and said the count had been made yesterday. I kept my score sheet; it is the only record that we were here.",
+    "id": "t0343-02",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "title": "Last game in the margin",
+    "where": [
+      {
+        "containers": [
+          "desk",
+          "dresser",
+          "shelves",
+          "counter",
+          "crate",
+          "bin"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
   }
 ]

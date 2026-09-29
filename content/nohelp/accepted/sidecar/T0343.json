@@ -17,5 +17,22 @@
       "writer": "ChatGPT"
     },
     "rival_reading": "Field workers or an emergency crew could have assembled this bundle; the mixed residue and road tape do not show which came first."
+  },
+  "t0343-02": {
+    "axioms": {
+      "agricultural": [
+        "a-pathway"
+      ],
+      "containment": [
+        "c-failure"
+      ]
+    },
+    "gloss": "A witness records a failed evacuation count or route.",
+    "prov": {
+      "batch": "T0343",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "The agricultural trial may have caused the disorder that forced improvised decisions."
   }
 }

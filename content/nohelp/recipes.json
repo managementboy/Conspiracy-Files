@@ -475,7 +475,7 @@
  },
  "T0364": {
   "side": "A",
-  "keyRing": false,
+  "keyRing": true,
   "keep": true,
   "addSide": "containment"
  },
@@ -595,7 +595,7 @@
  },
  "T0384": {
   "side": "A",
-  "keyRing": false,
+  "keyRing": true,
   "keep": true,
   "addSide": "containment"
  },
@@ -715,7 +715,7 @@
  },
  "T0405": {
   "side": "A",
-  "keyRing": false,
+  "keyRing": true,
   "keep": true,
   "addSide": "containment"
  },
