@@ -1,0 +1,84 @@
+[
+  {
+    "anchor": {
+      "scene": "RBTwiggy"
+    },
+    "body": "I saved the cloth with a sweet chemical smell for you. The water-treatment trial crew passed Thursday after closing; the rats left the shed, and afterward the clinic stopped answering.",
+    "id": "t0322-01",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "title": "Thursday after closing \u2014 a sweet chemical smell",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ],
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-warning",
+        "c-orders"
+      ]
+    },
+    "gloss": "A personal trace connects a farm trial to symptoms before a later restriction.",
+    "prov": {
+      "batch": "T0322",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "Emergency workers could have picked up the same a sweet chemical smell while responding near a field; this personal trace does not prove the trial caused the emergency."
+  },
+  {
+    "anchor": {
+      "scene": "RBTwiggy"
+    },
+    "body": "A man sat by the back door and asked for the names of everyone who had come in. I assumed he meant the people still here.\n\nHe wanted the earlier customers too. I wrote down the one I knew because she brought her own mug. He crossed out her name, then asked whether I was certain she had arrived.\n\nHer mug is still under the counter. I have not washed it, though I cannot say what that proves.",
+    "id": "t0322-02",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "The visitor at closing",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture",
+        "containers": [
+          "counter",
+          "desk",
+          "crate",
+          "locker",
+          "shelves",
+          "bin"
+        ]
+      }
+    ],
+    "axioms": {
+      "containment": [
+        "c-warning",
+        "c-accounting"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "gloss": "An altered count or retained object was left at the scene.",
+    "prov": {
+      "batch": "T0322",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A response to an agricultural exposure could explain the same record or object."
+  }
+]
