@@ -1,0 +1,75 @@
+[
+  {
+    "anchor": {
+      "scene": "RVSRegionalProfessionVehicle"
+    },
+    "body": "the first-aid kit with a water bottle carry emerald flecks from the feed test. they were packed before the noon siren sounded.",
+    "id": "t0370-01",
+    "kind": "set",
+    "pieces": [
+      "FirstAidKit",
+      "WaterBottle"
+    ],
+    "title": "first-aid kit with a water bottle at friday at closing",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "vehicle"
+      }
+    ],
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-warning",
+        "c-failure"
+      ]
+    },
+    "gloss": "A personal field trace precedes the visible emergency response.",
+    "prov": {
+      "batch": "T0370",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "Responders could have collected the emerald flecks while crossing treated land; the note or objects do not prove the program began the emergency."
+  },
+  {
+    "id": "t0370-02",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "vehicle"
+      }
+    ],
+    "title": "The empty roster",
+    "body": "The service driver showed me a card saying she could cross because her trade was needed. At the barrier they let the van through but asked her helper to wait. She had no line for him on the roster, only a place for the tools.",
+    "anchor": {
+      "scene": "RVSRegionalProfessionVehicle"
+    },
+    "rival_reading": "The agricultural trial may have caused the disorder that forced improvised decisions.",
+    "gloss": "A witness records a failed evacuation count or route.",
+    "axioms": {
+      "containment": [
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0370"
+    }
+  }
+]
