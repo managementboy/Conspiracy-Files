@@ -1,0 +1,76 @@
+[
+  {
+    "anchor": {
+      "scene": "RDSPoliceAtHouse"
+    },
+    "body": "I saved the cloth with red grit for you. The pasture study crew passed the first hot day; the flies vanished, and afterward a patrol turned us back.",
+    "id": "t0340-01",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "title": "the first hot day \u2014 red grit",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "corpse"
+      }
+    ],
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-warning",
+        "c-orders"
+      ]
+    },
+    "gloss": "A personal trace connects a farm trial to symptoms before a later restriction.",
+    "prov": {
+      "batch": "T0340",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "Emergency workers could have picked up the same red grit while responding near a field; this personal trace does not prove the trial caused the emergency."
+  },
+  {
+    "anchor": {
+      "scene": "RDSPoliceAtHouse"
+    },
+    "body": "They asked me to count the people inside while they were still walking through the house. I gave the number I knew.\n\nOne of them looked at a folded sheet and said it was too high. He asked whether a visitor had already gone home. The visitor was asleep upstairs.\n\nI left the number on the back of this envelope. If someone asks later, I want to remember what I actually saw.",
+    "id": "t0340-02",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "title": "A number given at the door",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "corpse"
+      }
+    ],
+    "axioms": {
+      "containment": [
+        "c-warning",
+        "c-accounting"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "gloss": "An altered count or retained object was left at the scene.",
+    "prov": {
+      "batch": "T0340",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A response to an agricultural exposure could explain the same record or object."
+  }
+]

@@ -1,0 +1,84 @@
+[
+  {
+    "anchor": {
+      "scene": "RDSFootballNight"
+    },
+    "body": "Personal note \u2014 Wednesday before rain: wash off the gray foam left by the feed additive trial crew. my brother started coughing, and I had not yet heard that a deputy taped off the road.",
+    "id": "t0332-01",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "Wednesday before rain \u2014 gray foam",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ],
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-warning",
+        "c-orders"
+      ]
+    },
+    "gloss": "A personal trace connects a farm trial to symptoms before a later restriction.",
+    "prov": {
+      "batch": "T0332",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "Emergency workers could have picked up the same gray foam while responding near a field; this personal trace does not prove the trial caused the emergency."
+  },
+  {
+    "anchor": {
+      "scene": "RDSFootballNight"
+    },
+    "body": "At halftime we heard the street announcement through the open window. The others kept watching the game and I wrote the names of the roads on the back of the score sheet.\n\nSomeone came by after dark and asked me for it. He already knew the score and said he only wanted to check my spelling.\n\nI gave him the front half. The names are still here because I tore the page across the fold first.",
+    "id": "t0332-02",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "The score at halftime",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture",
+        "containers": [
+          "desk",
+          "counter",
+          "crate",
+          "locker",
+          "shelves",
+          "bin"
+        ]
+      }
+    ],
+    "axioms": {
+      "containment": [
+        "c-warning",
+        "c-accounting"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "gloss": "An altered count or retained object was left at the scene.",
+    "prov": {
+      "batch": "T0332",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A response to an agricultural exposure could explain the same record or object."
+  }
+]

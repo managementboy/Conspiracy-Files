@@ -1,0 +1,86 @@
+[
+  {
+    "anchor": {
+      "scene": "RBSchool"
+    },
+    "body": "A cloudy water bottle and an empty sample jar share a strip of twine. Pale spray dust remains beneath both, inside the cupboard.",
+    "id": "t0307-01",
+    "kind": "set",
+    "pieces": [
+      "WaterBottle",
+      "EmptyJar"
+    ],
+    "title": "Two jars from the school garden",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ],
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-warning",
+        "c-orders"
+      ]
+    },
+    "gloss": "A personal trace places field-program residue before a later restriction.",
+    "prov": {
+      "batch": "T0307",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "Emergency workers could have encountered the same residue while responding; the personal trace does not by itself prove the field program caused the emergency."
+  },
+  {
+    "anchor": {
+      "scene": "RBSchool"
+    },
+    "body": "The roll book is open to an ordinary lesson. A pencil note on its back records a later head count, including pupils whose names are absent from the official list.",
+    "id": "t0307-02",
+    "kind": "set",
+    "pieces": [
+      "Book",
+      "Pencil"
+    ],
+    "title": "Attendance from the wrong day",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture",
+        "containers": [
+          "desk",
+          "counter",
+          "crate",
+          "locker",
+          "shelves",
+          "bin"
+        ]
+      }
+    ],
+    "axioms": {
+      "containment": [
+        "c-warning",
+        "c-accounting"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "gloss": "A scene-specific count or record was controlled while people were still present.",
+    "prov": {
+      "batch": "T0307",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "The same trace could follow an investigation of contaminated farm goods or an ordinary emergency response."
+  }
+]

@@ -1,0 +1,84 @@
+[
+  {
+    "anchor": {
+      "scene": "RBStripclub"
+    },
+    "body": "Written on the back: \u201cThe two men from the crop trial left yellow dust on every chair. We felt dizzy before the county van came.\u201d",
+    "id": "t0310-01",
+    "kind": "written",
+    "pieces": [
+      "photograph"
+    ],
+    "title": "Photograph after the matinee",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ],
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-warning",
+        "c-orders"
+      ]
+    },
+    "gloss": "A personal trace places field-program residue before a later restriction.",
+    "prov": {
+      "batch": "T0310",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "Emergency workers could have encountered the same residue while responding; the personal trace does not by itself prove the field program caused the emergency."
+  },
+  {
+    "anchor": {
+      "scene": "RBStripclub"
+    },
+    "body": "I wrote the closing time on the chalkboard. Later a man asked me to rub it out and say we had shut earlier.\n\nThe people at the last table were still here when he came in. One of them had gone to call a friend and left a coat behind. I did not know whether to give the coat back when the man took their names.\n\nThe board is clean. The coat is in the cupboard with my own things. If anyone comes for it, I will tell them when I last saw its owner.",
+    "id": "t0310-02",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "title": "The last table",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture",
+        "containers": [
+          "wardrobe",
+          "desk",
+          "counter",
+          "crate",
+          "locker",
+          "shelves"
+        ]
+      }
+    ],
+    "axioms": {
+      "containment": [
+        "c-warning",
+        "c-accounting"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "gloss": "A scene-specific count or record was controlled while people were still present.",
+    "prov": {
+      "batch": "T0310",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "The same trace could follow an investigation of contaminated farm goods or an ordinary emergency response."
+  }
+]

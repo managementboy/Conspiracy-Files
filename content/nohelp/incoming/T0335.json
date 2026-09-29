@@ -1,0 +1,78 @@
+[
+  {
+    "anchor": {
+      "scene": "RDSGunslinger"
+    },
+    "body": "The wrapped loaf and canned corn share a sweet chemical smell from the crop plot. They were bundled before the lane was closed.",
+    "id": "t0335-01",
+    "kind": "set",
+    "pieces": [
+      "Bread",
+      "CannedCorn"
+    ],
+    "title": "Wrapped loaf and canned corn, saturday near lunch",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "corpse"
+      }
+    ],
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-warning",
+        "c-orders"
+      ]
+    },
+    "gloss": "A personal trace connects a farm trial to symptoms before a later restriction.",
+    "prov": {
+      "batch": "T0335",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "Emergency workers could have picked up the same a sweet chemical smell while responding near a field; this personal trace does not prove the trial caused the emergency."
+  },
+  {
+    "anchor": {
+      "scene": "RDSGunslinger"
+    },
+    "body": "The map is folded open to a road that has been erased in pencil. A strip of tape on the back carries the earlier route, preserved after the printed one was changed.",
+    "id": "t0335-02",
+    "kind": "set",
+    "pieces": [
+      "Map",
+      "DuctTape"
+    ],
+    "title": "A second route in the pocket",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "corpse"
+      }
+    ],
+    "axioms": {
+      "containment": [
+        "c-warning",
+        "c-accounting"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "gloss": "An altered count or retained object was left at the scene.",
+    "prov": {
+      "batch": "T0335",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A response to an agricultural exposure could explain the same record or object."
+  }
+]
