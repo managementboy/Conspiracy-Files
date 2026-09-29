@@ -21,3 +21,6 @@ sha256sum "$OUT"
 # The listener's own test, against fake story objects.
 javac -cp "$OUT:.build/stubs" -d .build/test test/SceneListenerTest.java
 java -cp ".build/test:$OUT:.build/stubs" SceneListenerTest
+# Sign the new jar when the author's key is here (sign.sh; key outside the repo).
+if [ -f "${NH_SIGN_KEY:-$HOME/.signing/nohelp-ed25519.pem}" ]; then ./sign.sh "${NH_SIGN_KEY:-$HOME/.signing/nohelp-ed25519.pem}"
+else echo "NOT SIGNED: no key; run sign.sh before shipping" >&2; fi

@@ -20,5 +20,16 @@ returns `version|seen|dropped|failed|queued` for playtests.
   `mod-nohelp/42/media/java/NoHelpScenes.jar` and runs
   `test/SceneListenerTest.java`.
 
-Rebuild after a game update that adds or renames story classes. The jar is
-unsigned: ZombieBuddy asks the player to approve it once.
+Rebuild after a game update that adds or renames story classes.
+
+## Signing (owner, 2026-09-29: it must open without an approval click)
+
+`sign.sh` writes `NoHelpScenes.jar.zbs` (ZombieBuddy ZBS: Ed25519 over
+`ZBS:<SteamID64>:<jar sha256>`); `build.sh` calls it when the key exists.
+The private key lives outside the repo (`~/.signing/nohelp-ed25519.pem`, never
+committed). The author's Steam profile summary must carry
+`JavaModZBS:4a74ae101677a6e8e4e4cbdbd9b5640b4a5d43b0e58af910b0737fbef2c60b4c`
+(SteamID64 76561198083988095), or ZombieBuddy cannot find the key. A player
+approves the author once ("trust this author"); later signed builds load
+without asking. Every rebuild must be re-signed: the signature covers the
+jar's exact bytes.
