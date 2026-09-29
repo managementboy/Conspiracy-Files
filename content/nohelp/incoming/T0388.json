@@ -1,0 +1,75 @@
+[
+  {
+    "anchor": {
+      "scene": "RZSHunterCamp"
+    },
+    "body": "the cut potato with a soil jar carry an acrid film from the well-water study. they were packed before the nurse stopped taking calls.",
+    "id": "t0388-01",
+    "kind": "set",
+    "pieces": [
+      "Potato",
+      "EmptyJar"
+    ],
+    "title": "cut potato with a soil jar at after monday supper",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ],
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-warning",
+        "c-failure"
+      ]
+    },
+    "gloss": "A personal field trace precedes the visible emergency response.",
+    "prov": {
+      "batch": "T0388",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "Responders could have collected the an acrid film while crossing treated land; the note or objects do not prove the program began the emergency."
+  },
+  {
+    "id": "t0388-02",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ],
+    "title": "Hunter’s return",
+    "body": "The group came back to find a notice saying the camp had been cleared. Their boots were still here and the fire was warm. I carried the notice along the trail because I knew the youngest had gone for water.",
+    "anchor": {
+      "scene": "RZSHunterCamp"
+    },
+    "rival_reading": "The agricultural trial may have caused the disorder that forced improvised decisions.",
+    "gloss": "A witness records a failed evacuation count or route.",
+    "axioms": {
+      "containment": [
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0388"
+    }
+  }
+]
