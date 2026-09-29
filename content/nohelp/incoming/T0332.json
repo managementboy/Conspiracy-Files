@@ -1,0 +1,39 @@
+[
+  {
+    "id": "t0332-01",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "furniture",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "anchor": {
+      "scene": "RDSFootballNight"
+    },
+    "title": "Wednesday before rain — gray foam",
+    "body": "Personal note — Wednesday before rain: wash off the gray foam left by the feed additive trial crew. my brother started coughing, and I had not yet heard that a deputy taped off the road.",
+    "rival_reading": "Emergency workers could have picked up the same gray foam while responding near a field; this personal trace does not prove the trial caused the emergency.",
+    "gloss": "A personal trace connects a farm trial to symptoms before a later restriction.",
+    "axioms": {
+      "containment": [
+        "c-warning",
+        "c-orders"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0332"
+    }
+  }
+]
