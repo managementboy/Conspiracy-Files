@@ -1,0 +1,39 @@
+[
+  {
+    "id": "t0312-01",
+    "kind": "written",
+    "pieces": [
+      "notebook"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "furniture",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "anchor": {
+      "scene": "RBTSButcher"
+    },
+    "title": "Freezer note in a butcher's hand",
+    "body": "I wrote down the sour smell after the field truck unloaded its rinse barrels. The meat was still cold when the flies vanished and the siren began.",
+    "rival_reading": "Emergency workers could have encountered the same residue while responding; the personal trace does not by itself prove the field program caused the emergency.",
+    "gloss": "A personal trace places field-program residue before a later restriction.",
+    "axioms": {
+      "containment": [
+        "c-warning",
+        "c-orders"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0312"
+    }
+  }
+]
