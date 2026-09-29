@@ -1,0 +1,40 @@
+[
+  {
+    "id": "t0362-01",
+    "kind": "set",
+    "pieces": [
+      "Axe",
+      "SeedBag"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "vehicle",
+        "lean": "containment",
+        "rival": "agricultural"
+      }
+    ],
+    "anchor": {
+      "scene": "RVSCarCrashDeer"
+    },
+    "title": "Hand axe with a seed sack at on the cold night",
+    "body": "The hand axe with a seed sack are tied in one bundle. an acrid film marks the field side; torn warning tape marks the other.",
+    "rival_reading": "The bundle could belong to field workers caught in a response or responders crossing a work site; it preserves both readings.",
+    "gloss": "A mixed bundle keeps field activity and emergency response equally plausible.",
+    "axioms": {
+      "containment": [
+        "c-warning",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0362"
+    }
+  }
+]
