@@ -1,0 +1,50 @@
+[
+  {
+    "anchor": {
+      "map": "MulStashMap10",
+      "mark": 1
+    },
+    "body": "the leather strips and bath towel are wedged beneath unused warning tape. footprints pass around the bundle rather than toward it.",
+    "id": "t0087-01",
+    "kind": "set",
+    "pieces": [
+      "LeatherStrips",
+      "BathTowel"
+    ],
+    "title": "Leather strips beside the spare mark",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture",
+        "containers": [
+          "crate",
+          "shelves",
+          "desk",
+          "counter",
+          "cardboardbox",
+          "bin"
+        ]
+      }
+    ],
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-warning",
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "gloss": "A response bundle preserves a missing count, changed route, or erased identity.",
+    "prov": {
+      "batch": "T0087",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A farm-program crew could have counted routes, repacked tools, or removed ownership marks during hurried field work; the objects do not prove a concealed public response."
+  }
+]
