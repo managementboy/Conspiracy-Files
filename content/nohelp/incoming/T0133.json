@@ -1,0 +1,53 @@
+[
+  {
+    "anchor": {
+      "map": "WpStashMap1",
+      "mark": 1
+    },
+    "body": "The route map points to a residence, but the weapon handover form says the occupant was already marked missing. The return route has no driver.",
+    "id": "t0133-01",
+    "kind": "set",
+    "pieces": [
+      "Pistol",
+      "Map"
+    ],
+    "title": "Do not fire at the house",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture",
+        "containers": [
+          "crate",
+          "shelves",
+          "desk",
+          "counter",
+          "cardboardbox",
+          "bin"
+        ]
+      }
+    ],
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "Sure this was where he lived",
+      "source": "map:WpStashMap1"
+    },
+    "gloss": "A missing-person mark precedes the weapon handover.",
+    "prov": {
+      "batch": "T0133",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A field crew could have left security equipment at an empty property; the missing driver does not identify who was expected."
+  }
+]
