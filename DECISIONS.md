@@ -7,7 +7,7 @@ Owner decisions, 2026-09-29, responding to `docs/reviews/NO_HELP_MORE_THEORIES_2
 3. Theories may both be partly right. Neither pair member has to logically exclude the other, but each needs an independently understandable argument.
 4. A world keeps the pair selected when it was created, including an existing A/B world. Updating the mod never rerolls that world's pair.
 5. The mod description tells players that a world randomly selects two theories at creation. In play, there is no further explanation and no disclosure of which pair was selected.
-6. Whether the three clues at a marked target must all have distinct text across targets, or a reusable set may appear at several targets, remains open; the owner requested a plain-language explanation before choosing.
+6. The existing marked-target minimum remains: at least three clues with two leaning toward the target's favoured theory and one toward the other. The goal is to place more clues whenever possible; 2:1 describes the minimum composition, not a required ratio for larger groups. The two selected theories alone would require only two clues for representation, but the owner explicitly keeps this higher floor. Whether a reusable set may recur at a different marked target remains open.
 
 ## DR-20260929-NOHELP-B-OWN-EVIDENCE — both theories stay; B gets its own evidence
 
