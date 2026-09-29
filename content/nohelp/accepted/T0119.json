@@ -20,5 +20,194 @@
         "spot": "ground"
       }
     ]
+  },
+  {
+    "anchor": {
+      "map": "WorldStashMap10",
+      "mark": 2
+    },
+    "body": "Laundry receipt: coveralls from the second circle carried orange pollen from the test rows. The clerk noted numb fingers before patrol cars reached the highway.",
+    "id": "t0119-02",
+    "kind": "written",
+    "pieces": [
+      "diary"
+    ],
+    "title": "Clothes bag from the test rows",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "WorldStashMap10",
+      "mark": 3
+    },
+    "body": "Meal receipt back: six lunches went to the greenhouse crew at the third circle. Two were untouched; beside them someone wrote, “metal taste after noon spray.”",
+    "id": "t0119-03",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "Lunch stop for the field crew",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "WorldStashMap10",
+      "mark": 4
+    },
+    "body": "Photograph note: the fourth circle shows where three field cars were hosed down. Pale foam ran toward the ditch while the garage was still open to families.",
+    "id": "t0119-04",
+    "kind": "written",
+    "pieces": [
+      "receipt"
+    ],
+    "title": "Cars rinsed behind the garage",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "WorldStashMap10",
+      "note": 1
+    },
+    "body": "Pocket ledger: gas at this circle was charged to the orchard rig, not the relief trucks. The return mileage exceeds the marked field route by forty miles.",
+    "id": "t0119-05",
+    "kind": "written",
+    "pieces": [
+      "photograph"
+    ],
+    "title": "Fuel for the orchard rig",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "WorldStashMap10",
+      "note": 2
+    },
+    "body": "Torn note under the clothes label: bag the trial coveralls separately and leave them off the laundry invoice. My wrists blistered while tying the second bag.",
+    "id": "t0119-06",
+    "kind": "written",
+    "pieces": [
+      "notebook"
+    ],
+    "title": "Coveralls kept off the invoice",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "WorldStashMap10",
+      "note": 3
+    },
+    "body": "Receipt from the marked restaurant: lunches for the crop crew, plus soap and bottled water. A handwritten line says the tap smelled sharp before closing.",
+    "id": "t0119-07",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "title": "Field lunches at the restaurant",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "WorldStashMap10",
+      "note": 4
+    },
+    "body": "Farm-program mileage page: four cars left for the plots, three returned for washing. The blank driver line is dated before the county barricade went up.",
+    "id": "t0119-08",
+    "kind": "written",
+    "pieces": [
+      "diary"
+    ],
+    "title": "Fleet note with one car missing",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "WorldStashMap10",
+      "note": 5
+    },
+    "body": "Garage receipt at the car label: rinse three crop-study vehicles and keep the fourth outside. The fourth plate is the only one copied into the county log.",
+    "id": "t0119-09",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "Car label beside a field rinse bill",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "WorldStashMap10",
+      "note": 6
+    },
+    "body": "Notebook line at the final circle: one trial car returned after the others had gone. Its seats were dusted white and its mileage page had been removed.",
+    "id": "t0119-10",
+    "kind": "written",
+    "pieces": [
+      "receipt"
+    ],
+    "title": "Final circle after the convoy left",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
   }
 ]

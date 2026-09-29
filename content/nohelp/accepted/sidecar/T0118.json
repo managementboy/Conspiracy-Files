@@ -21,5 +21,138 @@
       "writer": "ChatGPT"
     },
     "rival_reading": "An emergency storage count could list crates without contents; the tally does not identify the shipment."
+  },
+  "t0118-02": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "gloss": "Crates reserved for field samples",
+    "prov": {
+      "batch": "T0118",
+      "handoff": "2026-09-29",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work."
+  },
+  "t0118-03": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "gloss": "Railyard pickup before dawn",
+    "prov": {
+      "batch": "T0118",
+      "handoff": "2026-09-29",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work."
+  },
+  "t0118-04": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "gloss": "Muldraugh route crossed out",
+    "prov": {
+      "batch": "T0118",
+      "handoff": "2026-09-29",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work."
+  },
+  "t0118-05": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "gloss": "Muldraugh field route in the margin",
+    "prov": {
+      "batch": "T0118",
+      "handoff": "2026-09-29",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work."
+  },
+  "t0118-06": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "gloss": "Office ledger with no owner",
+    "prov": {
+      "batch": "T0118",
+      "handoff": "2026-09-29",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work."
+  },
+  "t0118-07": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "gloss": "Warehouse bay washed twice",
+    "prov": {
+      "batch": "T0118",
+      "handoff": "2026-09-29",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work."
+  },
+  "t0118-08": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "gloss": "Trains idle after the shipment",
+    "prov": {
+      "batch": "T0118",
+      "handoff": "2026-09-29",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work."
   }
 }

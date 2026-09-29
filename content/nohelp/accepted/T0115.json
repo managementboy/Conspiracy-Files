@@ -20,5 +20,110 @@
         "spot": "ground"
       }
     ]
+  },
+  {
+    "anchor": {
+      "map": "WorldStashMap6",
+      "mark": 2
+    },
+    "body": "Photograph back: the cross marks the store used by the crop trial. One sample crate was removed before the inventory and left a blue outline on the floor.",
+    "id": "t0115-02",
+    "kind": "written",
+    "pieces": [
+      "diary"
+    ],
+    "title": "Cross beside the trial store",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "WorldStashMap6",
+      "note": 1
+    },
+    "body": "Torn page: there should be sampling jars and boot covers here. The crop crew left them when two workers developed rashes and the planned collection was cancelled.",
+    "id": "t0115-03",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "Supplies at the first written mark",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "WorldStashMap6",
+      "note": 2
+    },
+    "body": "Personal farm log: “too big to secure” was the old packing floor. The trial team used only one bay, yet fresh powder reached the locked bays overnight.",
+    "id": "t0115-04",
+    "kind": "written",
+    "pieces": [
+      "receipt"
+    ],
+    "title": "Too large for one field crew",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "WorldStashMap6",
+      "note": 3
+    },
+    "body": "Receipt margin: count the sealed seed sacks again at the cross. The driver signed for twelve, while only eleven appear on the field tally.",
+    "id": "t0115-05",
+    "kind": "written",
+    "pieces": [
+      "photograph"
+    ],
+    "title": "Cross checked after the seed delivery",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "WorldStashMap6",
+      "note": 4
+    },
+    "body": "On a faded photograph: the handwritten name by the cross belonged to the man counting treated rows. His tally ends one row before the plants turned black.",
+    "id": "t0115-06",
+    "kind": "written",
+    "pieces": [
+      "notebook"
+    ],
+    "title": "Initials beside the plot count",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
   }
 ]

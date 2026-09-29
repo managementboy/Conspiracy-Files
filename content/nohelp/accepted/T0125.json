@@ -20,5 +20,152 @@
         "spot": "ground"
       }
     ]
+  },
+  {
+    "anchor": {
+      "map": "WorldStashMap16",
+      "note": 1
+    },
+    "body": "Diary line at the first trap: a torn pasture-test tag was caught beneath the spring. Its number belongs to a drum the return ledger calls sealed.",
+    "id": "t0125-02",
+    "kind": "written",
+    "pieces": [
+      "diary"
+    ],
+    "title": "First trap held a torn field tag",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "WorldStashMap16",
+      "note": 2
+    },
+    "body": "Camp log: the pasture-study team slept here for three nights. On the fourth morning their cook poured out the water because it smelled medicinal.",
+    "id": "t0125-03",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "Camp used by the pasture team",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "WorldStashMap16",
+      "note": 3
+    },
+    "body": "Field diary: the first north arrow leads past drums used to wash pasture-test gear. One drum was already sealed when the checkpoint crew arrived.",
+    "id": "t0125-04",
+    "kind": "written",
+    "pieces": [
+      "receipt"
+    ],
+    "title": "North arrow past the wash drums",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "WorldStashMap16",
+      "note": 4
+    },
+    "body": "Photograph back: the second trap contained a torn soil-sample bag, not an animal. Blue granules beneath it matched the coating on the trial seed.",
+    "id": "t0125-05",
+    "kind": "written",
+    "pieces": [
+      "photograph"
+    ],
+    "title": "Second trap held a sample bag",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "WorldStashMap16",
+      "note": 5
+    },
+    "body": "Personal note from the checkpoint: wave through the green field badges before recording civilian plates. I copied one badge number after its wearer began shaking.",
+    "id": "t0125-06",
+    "kind": "written",
+    "pieces": [
+      "notebook"
+    ],
+    "title": "Checkpoint checked field badges",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "WorldStashMap16",
+      "note": 6
+    },
+    "body": "Road-crew receipt: barriers were moved downhill after a trial drum leaked. The billed time is two hours before the radio announced an emergency route.",
+    "id": "t0125-07",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "title": "Barriers moved after the spill",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "WorldStashMap16",
+      "note": 7
+    },
+    "body": "Torn page: follow the upper north arrow to the trial gate and count every rinse can. The crew counted seven going in and six coming back.",
+    "id": "t0125-08",
+    "kind": "written",
+    "pieces": [
+      "diary"
+    ],
+    "title": "Upper arrow toward the trial gate",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
   }
 ]

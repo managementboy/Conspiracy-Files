@@ -14,7 +14,7 @@ EXPANSION
 T0279
 
 ## NEXT
-Review T0048 T0112 T0115 T0118 T0119 T0120 T0125 T0127 T0130 T0132: 10 whole tickets, 89 new side B rows, 10 accepted rows unchanged
+Map round reviewed: 89 rows accepted. Next waits on the owner
 
 ## OPEN RETURNS
 none
@@ -26,4 +26,4 @@ none
 2026-09-28 T0001
 
 ## PROGRESS
-NOT DONE: maps 115/125, balance 54% @3792880
+NOT DONE: balance 53% @2ce3f63

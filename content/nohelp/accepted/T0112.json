@@ -20,5 +20,68 @@
         "spot": "ground"
       }
     ]
+  },
+  {
+    "anchor": {
+      "map": "WorldStashMap3",
+      "mark": 2
+    },
+    "body": "Repair note: flush the field sprayer at the wrench mark before returning it. The pump seal had softened and the mechanic wrote that the rinse water stung his hands.",
+    "id": "t0112-02",
+    "kind": "written",
+    "pieces": [
+      "diary"
+    ],
+    "title": "Wrench stop after the sprayer run",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "WorldStashMap3",
+      "note": 1
+    },
+    "body": "Cash receipt: fuel at the marked stop, charged to the late-season crop trial. The driver added that the tank was full before the detour and nearly dry afterward.",
+    "id": "t0112-03",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "Gas charged to the trial plot",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "WorldStashMap3",
+      "note": 2
+    },
+    "body": "Notebook line under “you’ll need it”: reserve another can for the second pasture pass. The first crew came home coughing before any emergency convoy used the road.",
+    "id": "t0112-04",
+    "kind": "written",
+    "pieces": [
+      "receipt"
+    ],
+    "title": "Fuel needed for a second pass",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
   }
 ]
