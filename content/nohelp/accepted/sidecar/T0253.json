@@ -1,0 +1,25 @@
+{
+  "t0253-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "Louisville International Airport",
+      "source": "print:Airport"
+    },
+    "gloss": "Passenger transfer is recorded before boarding.",
+    "prov": {
+      "batch": "T0253",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A response team could transfer passengers during a delay; the list does not identify why the route changed."
+  }
+}

@@ -1,0 +1,23 @@
+[
+  {
+    "anchor": {
+      "print": "PremisesforLease863"
+    },
+    "body": "The office key is issued for the leased suite before the building check is signed. The rent card marks the space occupied that morning.",
+    "id": "t0244-01",
+    "kind": "set",
+    "pieces": [
+      "KeyRing",
+      "SheetPaper2"
+    ],
+    "title": "Office lease before clearance",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
+  }
+]

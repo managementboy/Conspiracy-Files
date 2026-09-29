@@ -1,0 +1,25 @@
+{
+  "t0277-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "Sammie's (Brandenburg)",
+      "source": "print:Sammies"
+    },
+    "gloss": "A sale closes before stock and room checks are complete.",
+    "prov": {
+      "batch": "T0277",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A sales clerk could complete a transaction before the stock count; the sheet does not prove a customer was left inside."
+  }
+}

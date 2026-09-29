@@ -1,0 +1,23 @@
+[
+  {
+    "anchor": {
+      "print": "Sammies"
+    },
+    "body": "The discount card is stamped paid before the watch stock was counted; the closing sheet says every customer left before the store was checked.",
+    "id": "t0277-01",
+    "kind": "set",
+    "pieces": [
+      "SheetPaper2",
+      "KeyRing"
+    ],
+    "title": "The watch discount card",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
+  }
+]

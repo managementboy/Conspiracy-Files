@@ -1,0 +1,23 @@
+[
+  {
+    "anchor": {
+      "print": "A1Hay"
+    },
+    "body": "The feed receipt lists a delivery before the animals were counted; a note asks the driver to leave the water trough sealed until the next shift.",
+    "id": "t0252-01",
+    "kind": "set",
+    "pieces": [
+      "SeedBag",
+      "WaterBottle"
+    ],
+    "title": "Feed delivery record",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
+  }
+]

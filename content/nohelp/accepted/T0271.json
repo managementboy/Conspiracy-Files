@@ -1,0 +1,23 @@
+[
+  {
+    "anchor": {
+      "print": "MadDansDen"
+    },
+    "body": "The furniture delivery sheet marks the appliances tested, but the installer’s key is returned before the power check is signed.",
+    "id": "t0271-01",
+    "kind": "set",
+    "pieces": [
+      "Screwdriver",
+      "KeyRing"
+    ],
+    "title": "The appliance inventory",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  }
+]

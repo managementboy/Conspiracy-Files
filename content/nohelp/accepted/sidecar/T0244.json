@@ -1,0 +1,25 @@
+{
+  "t0244-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "Premises for Lease (listing no. 863)",
+      "source": "print:PremisesforLease863"
+    },
+    "gloss": "An office is occupied before its building check is signed.",
+    "prov": {
+      "batch": "T0244",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A work group could lease the suite before an inspection; the card does not show whether anyone was turned away."
+  }
+}

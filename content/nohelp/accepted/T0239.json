@@ -1,0 +1,23 @@
+[
+  {
+    "anchor": {
+      "print": "RiversidePD"
+    },
+    "body": "The firearms briefing sheet says the safety check was complete before the range was inspected. A visitor’s card asks whether the samples were secured.",
+    "id": "t0239-01",
+    "kind": "set",
+    "pieces": [
+      "Pistol",
+      "SheetPaper2"
+    ],
+    "title": "Safety briefing copy",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  }
+]

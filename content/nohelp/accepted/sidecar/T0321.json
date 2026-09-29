@@ -1,0 +1,21 @@
+{
+  "t0321-01": {
+    "axioms": {
+      "agricultural": [
+        "a-malfunction",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "gloss": "A prepared pair is left without a clear account of why it was needed.",
+    "prov": {
+      "batch": "T0321",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "The tools may have been set out for an everyday repair; nothing identifies what prompted it."
+  }
+}

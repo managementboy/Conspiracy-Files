@@ -1,0 +1,23 @@
+[
+  {
+    "anchor": {
+      "print": "EPToolsLV"
+    },
+    "body": "The store tally closes before the last customer’s tool is returned. The line for items borrowed by the repair crew is blank.",
+    "id": "t0233-01",
+    "kind": "set",
+    "pieces": [
+      "Screwdriver",
+      "KeyRing"
+    ],
+    "title": "The extra item",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
+  }
+]

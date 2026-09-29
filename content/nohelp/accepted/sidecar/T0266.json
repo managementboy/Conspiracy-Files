@@ -1,0 +1,25 @@
+{
+  "t0266-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "House for Sale (no. 787)",
+      "source": "print:HouseforSale787"
+    },
+    "gloss": "A house is recorded clear before its road check ends.",
+    "prov": {
+      "batch": "T0266",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A property could be cleared for sale while a nearby route was inspected; the map does not prove anyone was stranded."
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "t0235-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "Brandenburg Fire Department",
+      "source": "print:BrandenburgFD"
+    },
+    "gloss": "A storage room is sealed during a public safety check.",
+    "prov": {
+      "batch": "T0235",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A field team could seal a room during a routine safety inspection; the card does not say who ordered it."
+  }
+}

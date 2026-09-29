@@ -358,4 +358,10 @@ Fix the pattern, not just the row.
   about a third of the clues and no written clues at all (note in the
   T0170 return). One read each, 162 clues: 102 A, 21 B, 38 both, 1 none.
   T0170 dropped for a rewrite (FITS_NEITHER); 161 added (256 in the game).
+- **T0231-T0321** (2026-09-29): summary tickets T0231 T0272 T0313 signed off.
+  12 story tickets came back empty (CLASSIFIER_STOP; left in incoming/ for
+  a smaller retry). 25 clues were word-for-word copies of 8 texts across
+  different scenes: returned (DUPLICATE; owner: copies go back). One read
+  each for the 76 delivered: 50 A, 9 B, 17 both, 0 none; the 51 originals
+  added (307 in the game).
 

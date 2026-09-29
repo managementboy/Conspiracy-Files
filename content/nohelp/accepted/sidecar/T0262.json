@@ -1,0 +1,25 @@
+{
+  "t0262-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "Five Alarm Firehouse Chili",
+      "source": "print:FiveAlarmChili"
+    },
+    "gloss": "The kitchen count closes before every shift is served.",
+    "prov": {
+      "batch": "T0262",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A delayed crew could miss a meal for ordinary reasons; the list does not identify why that shift was away."
+  }
+}

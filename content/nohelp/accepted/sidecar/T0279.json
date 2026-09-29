@@ -1,0 +1,25 @@
+{
+  "t0279-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "Sleep EaZZZe Inn (Louisville Airport)",
+      "source": "print:SleepEazzzeInn"
+    },
+    "gloss": "A room turns over before its guest’s pickup.",
+    "prov": {
+      "batch": "T0279",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A delayed guest could leave the same gap; the ledger does not show why the pickup ran late."
+  }
+}

@@ -1,0 +1,23 @@
+[
+  {
+    "anchor": {
+      "print": "WPTownHall"
+    },
+    "body": "The town meeting agenda lists a field update after the public session; the room key is logged returned before residents signed out.",
+    "id": "t0247-01",
+    "kind": "set",
+    "pieces": [
+      "SheetPaper2",
+      "KeyRing"
+    ],
+    "title": "Town hall agenda",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  }
+]

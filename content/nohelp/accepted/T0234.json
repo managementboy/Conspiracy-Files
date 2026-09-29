@@ -1,0 +1,23 @@
+[
+  {
+    "anchor": {
+      "print": "RosewoodFD"
+    },
+    "body": "The safety sheet marks the detectors checked before the extinguisher was delivered; a note asks the next crew to keep the windows shut.",
+    "id": "t0234-01",
+    "kind": "set",
+    "pieces": [
+      "Notebook",
+      "WaterBottle"
+    ],
+    "title": "Fire safety checklist",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  }
+]

@@ -1,0 +1,23 @@
+[
+  {
+    "anchor": {
+      "print": "IrvingtonGunClub"
+    },
+    "body": "The range log records a target inspection and a field briefing on the same page; the safety officer’s sign-off is missing.",
+    "id": "t0269-01",
+    "kind": "set",
+    "pieces": [
+      "Pistol",
+      "Notebook"
+    ],
+    "title": "Range inspection record",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  }
+]

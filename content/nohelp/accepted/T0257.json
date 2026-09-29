@@ -1,0 +1,23 @@
+[
+  {
+    "anchor": {
+      "print": "CatonaHotTinGrill"
+    },
+    "body": "The fish order is paired with a pond sample slip dated after the kitchen served lunch. The cook’s note says the catch was fresh.",
+    "id": "t0257-01",
+    "kind": "set",
+    "pieces": [
+      "FishFillet",
+      "KitchenKnife"
+    ],
+    "title": "Catch and sample slip",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  }
+]

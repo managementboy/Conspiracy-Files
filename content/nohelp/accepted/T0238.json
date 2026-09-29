@@ -1,0 +1,23 @@
+[
+  {
+    "anchor": {
+      "print": "LVPDHQ"
+    },
+    "body": "The seminar roster is complete, but the supply sheet says the demonstration kit was removed before the room was opened.",
+    "id": "t0238-01",
+    "kind": "set",
+    "pieces": [
+      "Pills",
+      "Notebook"
+    ],
+    "title": "Seminar attendance",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
+  }
+]

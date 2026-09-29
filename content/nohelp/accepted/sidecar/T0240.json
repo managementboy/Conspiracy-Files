@@ -1,0 +1,25 @@
+{
+  "t0240-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "House and Land for Sale (listing no. 845)",
+      "source": "print:HouseforSale845"
+    },
+    "gloss": "A property is marked clear before its last inspection.",
+    "prov": {
+      "batch": "T0240",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A routine sale could clear rooms before the owner returned; the map does not show who was inside."
+  }
+}

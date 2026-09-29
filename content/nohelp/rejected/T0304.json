@@ -1,0 +1,51 @@
+{
+  "ticket": "T0304",
+  "returned_by": "Claude review, 2026-09-29",
+  "rows": [
+    {
+      "id": "t0304-01",
+      "codes": [
+        "DUPLICATE"
+      ],
+      "note": "Word-for-word copy of another clue delivered for a different scene (owner, 2026-09-29: copies go back). Write a clue of its own for this ticket.",
+      "row": {
+        "id": "t0304-01",
+        "kind": "set",
+        "pieces": [
+          "Garbagebag",
+          "DuctTape"
+        ],
+        "where": [
+          {
+            "place": "mapNamed",
+            "spot": "furniture",
+            "lean": "agricultural",
+            "rival": "containment"
+          }
+        ],
+        "anchor": {
+          "scene": "RBReverend"
+        },
+        "title": "A routine kept past its use",
+        "body": "The arrangement is practical on its own; its careful order is the part no one explained.",
+        "rival_reading": "Ordinary work leaves tools arranged this way; the unexplained step could be mundane rather than institutional.",
+        "gloss": "A prepared pair is left without a clear account of why it was needed.",
+        "axioms": {
+          "containment": [
+            "c-orders",
+            "c-failure"
+          ],
+          "agricultural": [
+            "a-malfunction",
+            "a-pathway"
+          ]
+        },
+        "prov": {
+          "writer": "ChatGPT",
+          "handoff": "2026-09-28",
+          "batch": "T0304"
+        }
+      }
+    }
+  ]
+}

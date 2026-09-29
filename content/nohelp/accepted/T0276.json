@@ -1,0 +1,23 @@
+[
+  {
+    "anchor": {
+      "print": "QuillManor"
+    },
+    "body": "The manor tour key is signed out beside a field note asking the guide to keep visitors away from the north lawn until the test is over.",
+    "id": "t0276-01",
+    "kind": "set",
+    "pieces": [
+      "Book",
+      "KeyRing"
+    ],
+    "title": "The Saturday tour key",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  }
+]

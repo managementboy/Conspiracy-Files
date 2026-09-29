@@ -1,0 +1,23 @@
+[
+  {
+    "anchor": {
+      "print": "OldCGECorpBuilding"
+    },
+    "body": "The preservation notice is attached to a demolition schedule; the building survey is signed complete before the listed heritage review.",
+    "id": "t0250-01",
+    "kind": "set",
+    "pieces": [
+      "Book",
+      "SheetPaper2"
+    ],
+    "title": "A preservation request",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
+  }
+]

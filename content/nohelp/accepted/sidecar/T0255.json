@@ -1,0 +1,25 @@
+{
+  "t0255-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "Beef Chunk Jerky Co.",
+      "source": "print:BeefChunk"
+    },
+    "gloss": "A food delivery is paid before the field crew leaves.",
+    "prov": {
+      "batch": "T0255",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A containment team could pack food before a route change; the receipt does not show where the crew went."
+  }
+}

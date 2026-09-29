@@ -1,0 +1,23 @@
+[
+  {
+    "anchor": {
+      "print": "HouseforSale851"
+    },
+    "body": "The garden seed packet is stored with a water bottle; the property note says the next owner should wait for a soil test before planting.",
+    "id": "t0241-01",
+    "kind": "set",
+    "pieces": [
+      "SeedBag",
+      "WaterBottle"
+    ],
+    "title": "Self-sustaining garden notes",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  }
+]

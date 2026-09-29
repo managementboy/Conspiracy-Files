@@ -1,0 +1,25 @@
+{
+  "t0280-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "Stuart and Log Scrapyard",
+      "source": "print:StuartandLogScrapyard"
+    },
+    "gloss": "A vehicle is cleared before the event opens.",
+    "prov": {
+      "batch": "T0280",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A routine inspection could test a vehicle before an event; the sheet does not show why the yard opened late."
+  }
+}

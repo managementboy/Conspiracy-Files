@@ -1,0 +1,23 @@
+[
+  {
+    "anchor": {
+      "scene": "RBTrashed"
+    },
+    "body": "The tools match a small repair, but the spare was prepared before anyone recorded a fault.",
+    "id": "t0321-01",
+    "kind": "set",
+    "pieces": [
+      "Saw",
+      "Plank"
+    ],
+    "title": "A repair set aside",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

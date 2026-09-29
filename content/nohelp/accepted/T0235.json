@@ -1,0 +1,23 @@
+[
+  {
+    "anchor": {
+      "print": "BrandenburgFD"
+    },
+    "body": "The prevention sheet asks residents to store combustible supplies safely; the inspection card says the supply room was already sealed.",
+    "id": "t0235-01",
+    "kind": "set",
+    "pieces": [
+      "SheetPaper2",
+      "KeyRing"
+    ],
+    "title": "Storage advice and a locked room",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
+  }
+]

@@ -1,0 +1,25 @@
+{
+  "t0271-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "Mad Dan's Den",
+      "source": "print:MadDansDen"
+    },
+    "gloss": "Appliances are marked tested before the power check is signed.",
+    "prov": {
+      "batch": "T0271",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "An emergency maintenance crew could test appliances during a power interruption; the sheet does not identify the cause."
+  }
+}

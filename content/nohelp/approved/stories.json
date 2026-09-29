@@ -1543,5 +1543,845 @@
     "lean": "random",
     "gloss": "The supply-related mark opens a local lead that could fit either earlier program work or disrupted response logistics.",
     "signed": "T0190 2026-09-28"
+  },
+  {
+    "ticket": "T0232",
+    "target": "print:WPDIY",
+    "lean": "random",
+    "gloss": "The supply-related mark opens a local lead that could fit either earlier program work or disrupted response logistics.",
+    "signed": "T0231 2026-09-29"
+  },
+  {
+    "ticket": "T0233",
+    "target": "print:EPToolsLV",
+    "lean": "random",
+    "gloss": "The supply-related mark opens a local lead that could fit either earlier program work or disrupted response logistics.",
+    "signed": "T0231 2026-09-29"
+  },
+  {
+    "ticket": "T0234",
+    "target": "print:RosewoodFD",
+    "lean": "random",
+    "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings.",
+    "signed": "T0231 2026-09-29"
+  },
+  {
+    "ticket": "T0235",
+    "target": "print:BrandenburgFD",
+    "lean": "random",
+    "gloss": "The supply-related mark opens a local lead that could fit either earlier program work or disrupted response logistics.",
+    "signed": "T0231 2026-09-29"
+  },
+  {
+    "ticket": "T0236",
+    "target": "print:LVFD",
+    "lean": "random",
+    "gloss": "The work-related mark opens a local lead where a program task and later emergency activity remain plausible.",
+    "signed": "T0231 2026-09-29"
+  },
+  {
+    "ticket": "T0237",
+    "target": "print:MuldraughPD",
+    "lean": "random",
+    "gloss": "The household mark opens a personal trail that could fit either an exposure concern or a failed effort to move people safely.",
+    "signed": "T0231 2026-09-29"
+  },
+  {
+    "ticket": "T0238",
+    "target": "print:LVPDHQ",
+    "lean": "random",
+    "gloss": "The route mark opens a local lead where field movement and emergency orders remain possible readings.",
+    "signed": "T0231 2026-09-29"
+  },
+  {
+    "ticket": "T0239",
+    "target": "print:RiversidePD",
+    "lean": "random",
+    "gloss": "The household mark opens a personal trail that could fit either an exposure concern or a failed effort to move people safely.",
+    "signed": "T0231 2026-09-29"
+  },
+  {
+    "ticket": "T0240",
+    "target": "print:HouseforSale845",
+    "lean": "random",
+    "gloss": "The household mark opens a personal trail that could fit either an exposure concern or a failed effort to move people safely.",
+    "signed": "T0231 2026-09-29"
+  },
+  {
+    "ticket": "T0241",
+    "target": "print:HouseforSale851",
+    "lean": "random",
+    "gloss": "The household mark opens a personal trail that could fit either an exposure concern or a failed effort to move people safely.",
+    "signed": "T0231 2026-09-29"
+  },
+  {
+    "ticket": "T0242",
+    "target": "print:HouseforSale855",
+    "lean": "random",
+    "gloss": "The route mark opens a local lead where field movement and emergency orders remain possible readings.",
+    "signed": "T0231 2026-09-29"
+  },
+  {
+    "ticket": "T0243",
+    "target": "print:HouseforSale860",
+    "lean": "random",
+    "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings.",
+    "signed": "T0231 2026-09-29"
+  },
+  {
+    "ticket": "T0244",
+    "target": "print:PremisesforLease863",
+    "lean": "random",
+    "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings.",
+    "signed": "T0231 2026-09-29"
+  },
+  {
+    "ticket": "T0245",
+    "target": "print:HouseforSale867",
+    "lean": "random",
+    "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings.",
+    "signed": "T0231 2026-09-29"
+  },
+  {
+    "ticket": "T0246",
+    "target": "print:CabinforRentDixie",
+    "lean": "random",
+    "gloss": "The route mark opens a local lead where field movement and emergency orders remain possible readings.",
+    "signed": "T0231 2026-09-29"
+  },
+  {
+    "ticket": "T0247",
+    "target": "print:WPTownHall",
+    "lean": "random",
+    "gloss": "The route mark opens a local lead where field movement and emergency orders remain possible readings.",
+    "signed": "T0231 2026-09-29"
+  },
+  {
+    "ticket": "T0248",
+    "target": "print:DinerInTheWoods",
+    "lean": "random",
+    "gloss": "The route mark opens a local lead where field movement and emergency orders remain possible readings.",
+    "signed": "T0231 2026-09-29"
+  },
+  {
+    "ticket": "T0249",
+    "target": "print:FallasLakeChurch",
+    "lean": "random",
+    "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings.",
+    "signed": "T0231 2026-09-29"
+  },
+  {
+    "ticket": "T0250",
+    "target": "print:OldCGECorpBuilding",
+    "lean": "random",
+    "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings.",
+    "signed": "T0231 2026-09-29"
+  },
+  {
+    "ticket": "T0251",
+    "target": "print:RustyRifle",
+    "lean": "random",
+    "gloss": "The route mark opens a local lead where field movement and emergency orders remain possible readings.",
+    "signed": "T0231 2026-09-29"
+  },
+  {
+    "ticket": "T0252",
+    "target": "print:A1Hay",
+    "lean": "random",
+    "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings.",
+    "signed": "T0231 2026-09-29"
+  },
+  {
+    "ticket": "T0253",
+    "target": "print:Airport",
+    "lean": "random",
+    "gloss": "The school-related mark opens a local lead where program activity and emergency disruption remain plausible readings.",
+    "signed": "T0231 2026-09-29"
+  },
+  {
+    "ticket": "T0254",
+    "target": "print:AMZSteel",
+    "lean": "random",
+    "gloss": "The route mark opens a local lead where field movement and emergency orders remain possible readings.",
+    "signed": "T0231 2026-09-29"
+  },
+  {
+    "ticket": "T0255",
+    "target": "print:BeefChunk",
+    "lean": "random",
+    "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings.",
+    "signed": "T0231 2026-09-29"
+  },
+  {
+    "ticket": "T0256",
+    "target": "print:BrottAuction",
+    "lean": "random",
+    "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings.",
+    "signed": "T0231 2026-09-29"
+  },
+  {
+    "ticket": "T0257",
+    "target": "print:CatonaHotTinGrill",
+    "lean": "random",
+    "gloss": "The supply-related mark opens a local lead that could fit either earlier program work or disrupted response logistics.",
+    "signed": "T0231 2026-09-29"
+  },
+  {
+    "ticket": "T0258",
+    "target": "print:Coalfield",
+    "lean": "random",
+    "gloss": "The supply-related mark opens a local lead that could fit either earlier program work or disrupted response logistics.",
+    "signed": "T0231 2026-09-29"
+  },
+  {
+    "ticket": "T0259",
+    "target": "print:ColdWarBunker",
+    "lean": "random",
+    "gloss": "The supply-related mark opens a local lead that could fit either earlier program work or disrupted response logistics.",
+    "signed": "T0231 2026-09-29"
+  },
+  {
+    "ticket": "T0260",
+    "target": "print:DarkwallowGuestHouse",
+    "lean": "random",
+    "gloss": "The supply-related mark opens a local lead that could fit either earlier program work or disrupted response logistics.",
+    "signed": "T0231 2026-09-29"
+  },
+  {
+    "ticket": "T0261",
+    "target": "print:EkronCollege",
+    "lean": "random",
+    "gloss": "The school-related mark opens a local lead where program activity and emergency disruption remain plausible readings.",
+    "signed": "T0231 2026-09-29"
+  },
+  {
+    "ticket": "T0262",
+    "target": "print:FiveAlarmChili",
+    "lean": "random",
+    "gloss": "The supply-related mark opens a local lead that could fit either earlier program work or disrupted response logistics.",
+    "signed": "T0231 2026-09-29"
+  },
+  {
+    "ticket": "T0263",
+    "target": "print:GoldenSunset",
+    "lean": "random",
+    "gloss": "The school-related mark opens a local lead where program activity and emergency disruption remain plausible readings.",
+    "signed": "T0231 2026-09-29"
+  },
+  {
+    "ticket": "T0264",
+    "target": "print:GunsUnlimitedEchoCreek",
+    "lean": "random",
+    "gloss": "The route mark opens a local lead where field movement and emergency orders remain possible readings.",
+    "signed": "T0231 2026-09-29"
+  },
+  {
+    "ticket": "T0265",
+    "target": "print:HobbsandPerkinsHardware",
+    "lean": "random",
+    "gloss": "The work-related mark opens a local lead where a program task and later emergency activity remain plausible.",
+    "signed": "T0231 2026-09-29"
+  },
+  {
+    "ticket": "T0266",
+    "target": "print:HouseforSale787",
+    "lean": "random",
+    "gloss": "The school-related mark opens a local lead where program activity and emergency disruption remain plausible readings.",
+    "signed": "T0231 2026-09-29"
+  },
+  {
+    "ticket": "T0267",
+    "target": "print:HouseforSale799",
+    "lean": "random",
+    "gloss": "The school-related mark opens a local lead where program activity and emergency disruption remain plausible readings.",
+    "signed": "T0231 2026-09-29"
+  },
+  {
+    "ticket": "T0268",
+    "target": "print:HouseforSale818",
+    "lean": "random",
+    "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings.",
+    "signed": "T0231 2026-09-29"
+  },
+  {
+    "ticket": "T0269",
+    "target": "print:IrvingtonGunClub",
+    "lean": "random",
+    "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings.",
+    "signed": "T0231 2026-09-29"
+  },
+  {
+    "ticket": "T0270",
+    "target": "print:LoveDuet",
+    "lean": "random",
+    "gloss": "The household mark opens a personal trail that could fit either an exposure concern or a failed effort to move people safely.",
+    "signed": "T0231 2026-09-29"
+  },
+  {
+    "ticket": "T0271",
+    "target": "print:MadDansDen",
+    "lean": "random",
+    "gloss": "The household mark opens a personal trail that could fit either an exposure concern or a failed effort to move people safely.",
+    "signed": "T0231 2026-09-29"
+  },
+  {
+    "ticket": "T0273",
+    "target": "print:MusicFest93",
+    "lean": "random",
+    "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings.",
+    "signed": "T0272 2026-09-29"
+  },
+  {
+    "ticket": "T0274",
+    "target": "print:OvoFarms",
+    "lean": "random",
+    "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings.",
+    "signed": "T0272 2026-09-29"
+  },
+  {
+    "ticket": "T0275",
+    "target": "print:Pondview",
+    "lean": "random",
+    "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings.",
+    "signed": "T0272 2026-09-29"
+  },
+  {
+    "ticket": "T0276",
+    "target": "print:QuillManor",
+    "lean": "random",
+    "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings.",
+    "signed": "T0272 2026-09-29"
+  },
+  {
+    "ticket": "T0277",
+    "target": "print:Sammies",
+    "lean": "random",
+    "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings.",
+    "signed": "T0272 2026-09-29"
+  },
+  {
+    "ticket": "T0278",
+    "target": "print:Sanatorium",
+    "lean": "random",
+    "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings.",
+    "signed": "T0272 2026-09-29"
+  },
+  {
+    "ticket": "T0279",
+    "target": "print:SleepEazzzeInn",
+    "lean": "random",
+    "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings.",
+    "signed": "T0272 2026-09-29"
+  },
+  {
+    "ticket": "T0280",
+    "target": "print:StuartandLogScrapyard",
+    "lean": "random",
+    "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings.",
+    "signed": "T0272 2026-09-29"
+  },
+  {
+    "ticket": "T0281",
+    "target": "print:TheWizardsKeep",
+    "lean": "random",
+    "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings.",
+    "signed": "T0272 2026-09-29"
+  },
+  {
+    "ticket": "T0282",
+    "target": "print:Twiggys",
+    "lean": "random",
+    "gloss": "The marked location opens a local lead where ordinary work and emergency disruption remain plausible readings.",
+    "signed": "T0272 2026-09-29"
+  },
+  {
+    "ticket": "T0283",
+    "target": "scene:RBBar",
+    "lean": "random",
+    "gloss": "A room-contained trace can fit earlier program activity or a disrupted response.",
+    "signed": "T0272 2026-09-29"
+  },
+  {
+    "ticket": "T0284",
+    "target": "scene:RBBarn",
+    "lean": "agricultural",
+    "gloss": "A room-contained trace can fit earlier program activity or a disrupted response.",
+    "signed": "T0272 2026-09-29"
+  },
+  {
+    "ticket": "T0285",
+    "target": "scene:RBBurnt",
+    "lean": "containment",
+    "gloss": "A room-contained trace can fit earlier program activity or a disrupted response.",
+    "signed": "T0272 2026-09-29"
+  },
+  {
+    "ticket": "T0286",
+    "target": "scene:RBBurntCorpse",
+    "lean": "containment",
+    "gloss": "A body-carried trace can fit an exposure pathway or a missed response handoff.",
+    "signed": "T0272 2026-09-29"
+  },
+  {
+    "ticket": "T0287",
+    "target": "scene:RBBurntFireman",
+    "lean": "containment",
+    "gloss": "A body-carried trace can fit an exposure pathway or a missed response handoff.",
+    "signed": "T0272 2026-09-29"
+  },
+  {
+    "ticket": "T0288",
+    "target": "scene:RBCafe",
+    "lean": "random",
+    "gloss": "A room-contained trace can fit earlier program activity or a disrupted response.",
+    "signed": "T0272 2026-09-29"
+  },
+  {
+    "ticket": "T0289",
+    "target": "scene:RBClinic",
+    "lean": "random",
+    "gloss": "A room-contained trace can fit earlier program activity or a disrupted response.",
+    "signed": "T0272 2026-09-29"
+  },
+  {
+    "ticket": "T0290",
+    "target": "scene:RBDorm",
+    "lean": "random",
+    "gloss": "A room-contained trace can fit earlier program activity or a disrupted response.",
+    "signed": "T0272 2026-09-29"
+  },
+  {
+    "ticket": "T0291",
+    "target": "scene:RBGunstoreSiege",
+    "lean": "containment",
+    "gloss": "A room-contained trace can fit earlier program activity or a disrupted response.",
+    "signed": "T0272 2026-09-29"
+  },
+  {
+    "ticket": "T0292",
+    "target": "scene:RBHairSalon",
+    "lean": "random",
+    "gloss": "The scene anchor carries a self-contained trail that leaves both explanations possible.",
+    "signed": "T0272 2026-09-29"
+  },
+  {
+    "ticket": "T0293",
+    "target": "scene:RBHeatBreakAfternoon",
+    "lean": "containment",
+    "gloss": "A vehicle-held trace can fit field movement or interrupted emergency transport.",
+    "signed": "T0272 2026-09-29"
+  },
+  {
+    "ticket": "T0294",
+    "target": "scene:RBJoanHartford",
+    "lean": "random",
+    "gloss": "A room-contained trace can fit earlier program activity or a disrupted response.",
+    "signed": "T0272 2026-09-29"
+  },
+  {
+    "ticket": "T0295",
+    "target": "scene:RBJudge",
+    "lean": "containment",
+    "gloss": "A room-contained trace can fit earlier program activity or a disrupted response.",
+    "signed": "T0272 2026-09-29"
+  },
+  {
+    "ticket": "T0296",
+    "target": "scene:RBLooted",
+    "lean": "random",
+    "gloss": "A room-contained trace can fit earlier program activity or a disrupted response.",
+    "signed": "T0272 2026-09-29"
+  },
+  {
+    "ticket": "T0297",
+    "target": "scene:RBMayorWestPoint",
+    "lean": "containment",
+    "gloss": "A room-contained trace can fit earlier program activity or a disrupted response.",
+    "signed": "T0272 2026-09-29"
+  },
+  {
+    "ticket": "T0298",
+    "target": "scene:RBNolans",
+    "lean": "random",
+    "gloss": "A room-contained trace can fit earlier program activity or a disrupted response.",
+    "signed": "T0272 2026-09-29"
+  },
+  {
+    "ticket": "T0299",
+    "target": "scene:RBOffice",
+    "lean": "containment",
+    "gloss": "A room-contained trace can fit earlier program activity or a disrupted response.",
+    "signed": "T0272 2026-09-29"
+  },
+  {
+    "ticket": "T0300",
+    "target": "scene:RBOther",
+    "lean": "random",
+    "gloss": "The scene anchor carries a self-contained trail that leaves both explanations possible.",
+    "signed": "T0272 2026-09-29"
+  },
+  {
+    "ticket": "T0301",
+    "target": "scene:RBPileOCrepe",
+    "lean": "random",
+    "gloss": "The scene anchor carries a self-contained trail that leaves both explanations possible.",
+    "signed": "T0272 2026-09-29"
+  },
+  {
+    "ticket": "T0302",
+    "target": "scene:RBPizzaWhirled",
+    "lean": "random",
+    "gloss": "The scene anchor carries a self-contained trail that leaves both explanations possible.",
+    "signed": "T0272 2026-09-29"
+  },
+  {
+    "ticket": "T0303",
+    "target": "scene:RBPoliceSiege",
+    "lean": "containment",
+    "gloss": "A room-contained trace can fit earlier program activity or a disrupted response.",
+    "signed": "T0272 2026-09-29"
+  },
+  {
+    "ticket": "T0304",
+    "target": "scene:RBReverend",
+    "lean": "random",
+    "gloss": "A room-contained trace can fit earlier program activity or a disrupted response.",
+    "signed": "T0272 2026-09-29"
+  },
+  {
+    "ticket": "T0305",
+    "target": "scene:RBSWATStation",
+    "lean": "containment",
+    "gloss": "A room-contained trace can fit earlier program activity or a disrupted response.",
+    "signed": "T0272 2026-09-29"
+  },
+  {
+    "ticket": "T0306",
+    "target": "scene:RBSafehouse",
+    "lean": "containment",
+    "gloss": "A room-contained trace can fit earlier program activity or a disrupted response.",
+    "signed": "T0272 2026-09-29"
+  },
+  {
+    "ticket": "T0307",
+    "target": "scene:RBSchool",
+    "lean": "containment",
+    "gloss": "A room-contained trace can fit earlier program activity or a disrupted response.",
+    "signed": "T0272 2026-09-29"
+  },
+  {
+    "ticket": "T0308",
+    "target": "scene:RBShopLooted",
+    "lean": "random",
+    "gloss": "A room-contained trace can fit earlier program activity or a disrupted response.",
+    "signed": "T0272 2026-09-29"
+  },
+  {
+    "ticket": "T0309",
+    "target": "scene:RBSpiffo",
+    "lean": "random",
+    "gloss": "The scene anchor carries a self-contained trail that leaves both explanations possible.",
+    "signed": "T0272 2026-09-29"
+  },
+  {
+    "ticket": "T0310",
+    "target": "scene:RBStripclub",
+    "lean": "random",
+    "gloss": "The scene anchor carries a self-contained trail that leaves both explanations possible.",
+    "signed": "T0272 2026-09-29"
+  },
+  {
+    "ticket": "T0311",
+    "target": "scene:RBTSBreakfast",
+    "lean": "random",
+    "gloss": "The scene anchor carries a self-contained trail that leaves both explanations possible.",
+    "signed": "T0272 2026-09-29"
+  },
+  {
+    "ticket": "T0312",
+    "target": "scene:RBTSButcher",
+    "lean": "agricultural",
+    "gloss": "A room-contained trace can fit earlier program activity or a disrupted response.",
+    "signed": "T0272 2026-09-29"
+  },
+  {
+    "ticket": "T0314",
+    "target": "scene:RBTSDinner",
+    "lean": "agricultural",
+    "gloss": "This scene has no approved clue anchor in the scene table.",
+    "signed": "T0313 2026-09-29"
+  },
+  {
+    "ticket": "T0315",
+    "target": "scene:RBTSDrink",
+    "lean": "containment",
+    "gloss": "This scene has no approved clue anchor in the scene table.",
+    "signed": "T0313 2026-09-29"
+  },
+  {
+    "ticket": "T0316",
+    "target": "scene:RBTSElectronics",
+    "lean": "containment",
+    "gloss": "The scene anchor offers a contained trace that can fit ordinary activity or a disrupted emergency response.",
+    "signed": "T0313 2026-09-29"
+  },
+  {
+    "ticket": "T0317",
+    "target": "scene:RBTSFoodPreparation",
+    "lean": "agricultural",
+    "gloss": "The scene anchor offers a contained trace that can fit ordinary activity or a disrupted emergency response.",
+    "signed": "T0313 2026-09-29"
+  },
+  {
+    "ticket": "T0318",
+    "target": "scene:RBTSSandwich",
+    "lean": "agricultural",
+    "gloss": "This scene has no approved clue anchor in the scene table.",
+    "signed": "T0313 2026-09-29"
+  },
+  {
+    "ticket": "T0319",
+    "target": "scene:RBTSSewing",
+    "lean": "containment",
+    "gloss": "This scene has no approved clue anchor in the scene table.",
+    "signed": "T0313 2026-09-29"
+  },
+  {
+    "ticket": "T0320",
+    "target": "scene:RBTSSoup",
+    "lean": "agricultural",
+    "gloss": "This scene has no approved clue anchor in the scene table.",
+    "signed": "T0313 2026-09-29"
+  },
+  {
+    "ticket": "T0321",
+    "target": "scene:RBTrashed",
+    "lean": "containment",
+    "gloss": "The scene anchor offers a contained trace that can fit ordinary activity or a disrupted emergency response.",
+    "signed": "T0313 2026-09-29"
+  },
+  {
+    "ticket": "T0322",
+    "target": "scene:RBTwiggy",
+    "lean": "agricultural",
+    "gloss": "The scene anchor offers a contained trace that can fit ordinary activity or a disrupted emergency response.",
+    "signed": "T0313 2026-09-29"
+  },
+  {
+    "ticket": "T0323",
+    "target": "scene:RBWoodcraft",
+    "lean": "agricultural",
+    "gloss": "The scene anchor offers a contained trace that can fit ordinary activity or a disrupted emergency response.",
+    "signed": "T0313 2026-09-29"
+  },
+  {
+    "ticket": "T0324",
+    "target": "scene:RDSBandPractice",
+    "lean": "agricultural",
+    "gloss": "This scene has no approved clue anchor in the scene table.",
+    "signed": "T0313 2026-09-29"
+  },
+  {
+    "ticket": "T0325",
+    "target": "scene:RDSBanditRaid",
+    "lean": "containment",
+    "gloss": "The scene anchor preserves an individual trace that can fit prior exposure or the effects of a failing response.",
+    "signed": "T0313 2026-09-29"
+  },
+  {
+    "ticket": "T0326",
+    "target": "scene:RDSBathroomZed",
+    "lean": "agricultural",
+    "gloss": "This scene has no approved clue anchor in the scene table.",
+    "signed": "T0313 2026-09-29"
+  },
+  {
+    "ticket": "T0327",
+    "target": "scene:RDSBedroomZed",
+    "lean": "containment",
+    "gloss": "This scene has no approved clue anchor in the scene table.",
+    "signed": "T0313 2026-09-29"
+  },
+  {
+    "ticket": "T0328",
+    "target": "scene:RDSBleach",
+    "lean": "agricultural",
+    "gloss": "The scene anchor preserves an individual trace that can fit prior exposure or the effects of a failing response.",
+    "signed": "T0313 2026-09-29"
+  },
+  {
+    "ticket": "T0329",
+    "target": "scene:RDSCorpsePsycho",
+    "lean": "containment",
+    "gloss": "The scene anchor preserves an individual trace that can fit prior exposure or the effects of a failing response.",
+    "signed": "T0313 2026-09-29"
+  },
+  {
+    "ticket": "T0330",
+    "target": "scene:RDSDeadDrunk",
+    "lean": "agricultural",
+    "gloss": "This scene has no approved clue anchor in the scene table.",
+    "signed": "T0313 2026-09-29"
+  },
+  {
+    "ticket": "T0331",
+    "target": "scene:RDSDevouredByRats",
+    "lean": "agricultural",
+    "gloss": "The scene anchor preserves an individual trace that can fit prior exposure or the effects of a failing response.",
+    "signed": "T0313 2026-09-29"
+  },
+  {
+    "ticket": "T0332",
+    "target": "scene:RDSFootballNight",
+    "lean": "agricultural",
+    "gloss": "This scene has no approved clue anchor in the scene table.",
+    "signed": "T0313 2026-09-29"
+  },
+  {
+    "ticket": "T0333",
+    "target": "scene:RDSGrouchos",
+    "lean": "containment",
+    "gloss": "This scene has no approved clue anchor in the scene table.",
+    "signed": "T0313 2026-09-29"
+  },
+  {
+    "ticket": "T0334",
+    "target": "scene:RDSGunmanInBathroom",
+    "lean": "agricultural",
+    "gloss": "The scene anchor preserves an individual trace that can fit prior exposure or the effects of a failing response.",
+    "signed": "T0313 2026-09-29"
+  },
+  {
+    "ticket": "T0335",
+    "target": "scene:RDSGunslinger",
+    "lean": "containment",
+    "gloss": "The scene anchor preserves an individual trace that can fit prior exposure or the effects of a failing response.",
+    "signed": "T0313 2026-09-29"
+  },
+  {
+    "ticket": "T0336",
+    "target": "scene:RDSHenDo",
+    "lean": "agricultural",
+    "gloss": "This scene has no approved clue anchor in the scene table.",
+    "signed": "T0313 2026-09-29"
+  },
+  {
+    "ticket": "T0337",
+    "target": "scene:RDSHockeyPsycho",
+    "lean": "containment",
+    "gloss": "The scene anchor preserves an individual trace that can fit prior exposure or the effects of a failing response.",
+    "signed": "T0313 2026-09-29"
+  },
+  {
+    "ticket": "T0338",
+    "target": "scene:RDSHouseParty",
+    "lean": "agricultural",
+    "gloss": "This scene has no approved clue anchor in the scene table.",
+    "signed": "T0313 2026-09-29"
+  },
+  {
+    "ticket": "T0339",
+    "target": "scene:RDSPokerNight",
+    "lean": "containment",
+    "gloss": "This scene has no approved clue anchor in the scene table.",
+    "signed": "T0313 2026-09-29"
+  },
+  {
+    "ticket": "T0340",
+    "target": "scene:RDSPoliceAtHouse",
+    "lean": "containment",
+    "gloss": "The scene anchor preserves an individual trace that can fit prior exposure or the effects of a failing response.",
+    "signed": "T0313 2026-09-29"
+  },
+  {
+    "ticket": "T0341",
+    "target": "scene:RDSPrisonEscape",
+    "lean": "containment",
+    "gloss": "The scene anchor preserves an individual trace that can fit prior exposure or the effects of a failing response.",
+    "signed": "T0313 2026-09-29"
+  },
+  {
+    "ticket": "T0342",
+    "target": "scene:RDSPrisonEscapeWithPolice",
+    "lean": "containment",
+    "gloss": "The scene anchor preserves an individual trace that can fit prior exposure or the effects of a failing response.",
+    "signed": "T0313 2026-09-29"
+  },
+  {
+    "ticket": "T0343",
+    "target": "scene:RDSRPGNight",
+    "lean": "containment",
+    "gloss": "This scene has no approved clue anchor in the scene table.",
+    "signed": "T0313 2026-09-29"
+  },
+  {
+    "ticket": "T0344",
+    "target": "scene:RDSRatInfested",
+    "lean": "agricultural",
+    "gloss": "The scene anchor offers a contained trace that can fit ordinary activity or a disrupted emergency response.",
+    "signed": "T0313 2026-09-29"
+  },
+  {
+    "ticket": "T0345",
+    "target": "scene:RDSRatWar",
+    "lean": "agricultural",
+    "gloss": "The scene anchor offers a contained trace that can fit ordinary activity or a disrupted emergency response.",
+    "signed": "T0313 2026-09-29"
+  },
+  {
+    "ticket": "T0346",
+    "target": "scene:RDSResourceGarage",
+    "lean": "agricultural",
+    "gloss": "The scene anchor offers a contained trace that can fit ordinary activity or a disrupted emergency response.",
+    "signed": "T0313 2026-09-29"
+  },
+  {
+    "ticket": "T0347",
+    "target": "scene:RDSSkeletonPsycho",
+    "lean": "containment",
+    "gloss": "The scene anchor preserves an individual trace that can fit prior exposure or the effects of a failing response.",
+    "signed": "T0313 2026-09-29"
+  },
+  {
+    "ticket": "T0348",
+    "target": "scene:RDSSpecificProfession",
+    "lean": "agricultural",
+    "gloss": "The scene anchor preserves an individual trace that can fit prior exposure or the effects of a failing response.",
+    "signed": "T0313 2026-09-29"
+  },
+  {
+    "ticket": "T0349",
+    "target": "scene:RDSStagDo",
+    "lean": "containment",
+    "gloss": "This scene has no approved clue anchor in the scene table.",
+    "signed": "T0313 2026-09-29"
+  },
+  {
+    "ticket": "T0350",
+    "target": "scene:RDSStudentNight",
+    "lean": "agricultural",
+    "gloss": "This scene has no approved clue anchor in the scene table.",
+    "signed": "T0313 2026-09-29"
+  },
+  {
+    "ticket": "T0351",
+    "target": "scene:RDSSuicidePact",
+    "lean": "containment",
+    "gloss": "The scene anchor preserves an individual trace that can fit prior exposure or the effects of a failing response.",
+    "signed": "T0313 2026-09-29"
+  },
+  {
+    "ticket": "T0352",
+    "target": "scene:RDSTinFoilHat",
+    "lean": "agricultural",
+    "gloss": "The scene anchor offers a contained trace that can fit ordinary activity or a disrupted emergency response.",
+    "signed": "T0313 2026-09-29"
+  },
+  {
+    "ticket": "T0353",
+    "target": "scene:RDSZombieLockedBathroom",
+    "lean": "containment",
+    "gloss": "This scene has no approved clue anchor in the scene table.",
+    "signed": "T0313 2026-09-29"
   }
 ]

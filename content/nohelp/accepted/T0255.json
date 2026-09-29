@@ -1,0 +1,23 @@
+[
+  {
+    "anchor": {
+      "print": "BeefChunk"
+    },
+    "body": "The jerky bundle is packed with a field route note; the receipt says the delivery was paid before the crew’s departure time.",
+    "id": "t0255-01",
+    "kind": "set",
+    "pieces": [
+      "Bread",
+      "Bag_ALICEpack"
+    ],
+    "title": "Jerky for the trip",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  }
+]

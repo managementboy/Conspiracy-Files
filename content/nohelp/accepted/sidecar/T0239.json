@@ -1,0 +1,25 @@
+{
+  "t0239-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "Riverside Police",
+      "source": "print:RiversidePD"
+    },
+    "gloss": "The safety briefing closes before the site inspection and sample check.",
+    "prov": {
+      "batch": "T0239",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A containment detail could inspect a range after a safety check; the card does not identify the samples."
+  }
+}

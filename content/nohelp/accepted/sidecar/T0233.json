@@ -1,0 +1,25 @@
+{
+  "t0233-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "E.P. Tools (Louisville)",
+      "source": "print:EPToolsLV"
+    },
+    "gloss": "The tally closes before a borrowed tool returns.",
+    "prov": {
+      "batch": "T0233",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A field crew could borrow a tool during ordinary work; the blank line does not prove the store was closed by an order."
+  }
+}

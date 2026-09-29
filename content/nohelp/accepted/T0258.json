@@ -1,0 +1,23 @@
+[
+  {
+    "anchor": {
+      "print": "Coalfield"
+    },
+    "body": "The town map is folded around a gate key; the population sheet says the district was cleared before the last road check.",
+    "id": "t0258-01",
+    "kind": "set",
+    "pieces": [
+      "Map",
+      "KeyRing"
+    ],
+    "title": "Town boundary map",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
+  }
+]

@@ -1,0 +1,25 @@
+{
+  "t0260-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "Darkwallow Guest House",
+      "source": "print:DarkwallowGuestHouse"
+    },
+    "gloss": "A full room rack and an unnamed water delivery overlap.",
+    "prov": {
+      "batch": "T0260",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A work crew could use a guest room without a reservation; the rack does not show who stayed there."
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "t0256-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "Brott Cattle Farm Auction",
+      "source": "print:BrottAuction"
+    },
+    "gloss": "The gate closes before the buyer vehicles are counted.",
+    "prov": {
+      "batch": "T0256",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A farm office could close the gate before vehicles left for ordinary reasons; the ledger does not show who remained."
+  }
+}

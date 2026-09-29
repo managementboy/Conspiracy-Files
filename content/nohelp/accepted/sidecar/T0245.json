@@ -1,0 +1,25 @@
+{
+  "t0245-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "House for Sale (no. 867)",
+      "source": "print:HouseforSale867"
+    },
+    "gloss": "A home handover comes with a temporary garden-water restriction.",
+    "prov": {
+      "batch": "T0245",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A containment inspection could restrict a tap during cleanup; the note does not identify the water concern."
+  }
+}

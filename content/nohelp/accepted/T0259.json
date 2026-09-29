@@ -1,0 +1,23 @@
+[
+  {
+    "anchor": {
+      "print": "ColdWarBunker"
+    },
+    "body": "The tour log lists the bunker ready for visitors; a field note asks guides to keep the ventilation hatch closed until the next reading.",
+    "id": "t0259-01",
+    "kind": "set",
+    "pieces": [
+      "HandTorch",
+      "Notebook"
+    ],
+    "title": "The bunker tour log",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  }
+]

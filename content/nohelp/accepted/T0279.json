@@ -1,0 +1,23 @@
+[
+  {
+    "anchor": {
+      "print": "SleepEazzzeInn"
+    },
+    "body": "The room key is marked returned before the airport pickup arrived; a water bottle is tagged for a guest whose name is missing from the ledger.",
+    "id": "t0279-01",
+    "kind": "set",
+    "pieces": [
+      "KeyRing",
+      "WaterBottle"
+    ],
+    "title": "Airport room turnover",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
+  }
+]

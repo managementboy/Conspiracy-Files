@@ -1,0 +1,23 @@
+[
+  {
+    "anchor": {
+      "print": "DarkwallowGuestHouse"
+    },
+    "body": "The guest-house key rack is marked full before the room inspection is signed. One water bottle is tagged for a room without a guest name.",
+    "id": "t0260-01",
+    "kind": "set",
+    "pieces": [
+      "KeyRing",
+      "WaterBottle"
+    ],
+    "title": "Guest rooms before inspection",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
+  }
+]

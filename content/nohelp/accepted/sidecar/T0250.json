@@ -1,0 +1,25 @@
+{
+  "t0250-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "Old CGE Corp Building",
+      "source": "print:OldCGECorpBuilding"
+    },
+    "gloss": "A demolition schedule advances before its heritage review.",
+    "prov": {
+      "batch": "T0250",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A routine government survey could precede a demolition review; the notice does not show who changed the schedule."
+  }
+}
