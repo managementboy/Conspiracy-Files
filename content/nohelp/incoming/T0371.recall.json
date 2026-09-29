@@ -1,0 +1,39 @@
+[
+  {
+    "anchor": {
+      "scene": "RVSRichJerk"
+    },
+    "body": "feed, soap, and a clean jar, paid cash. my note below says brown foam came from the fertilizer trial; our cat hid from the water bowl before traffic was turned around.\n\nSomeone said the smell was only from cleaning. I kept the scrap because the same smell had followed us from the previous stop.\n\nWhen I returned, the window was closed and the board was blank. I kept the page because it was the only one with our address.",
+    "id": "t0371-01",
+    "kind": "written",
+    "pieces": [
+      "receipt"
+    ],
+    "title": "cab note — saturday before sunrise",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "vehicle"
+      }
+    ],
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-warning",
+        "c-failure"
+      ]
+    },
+    "gloss": "A personal field trace precedes the visible emergency response.",
+    "prov": {
+      "batch": "T0371",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "Responders could have collected the brown foam while crossing treated land; the note or objects do not prove the program began the emergency."
+  }
+]
