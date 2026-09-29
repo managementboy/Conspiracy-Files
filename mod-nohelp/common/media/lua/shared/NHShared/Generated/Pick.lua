@@ -87,7 +87,13 @@ function P.choose(args)
     for _,c in ipairs(clues) do if c.kind=="written" and count(placed,c.id)==0 then writtenLeft=true end end
 
     local candidates={}
-    for _,c in ipairs(clues) do
+    -- `stock` (optional, E5): clues drawn on only after every fresh one of
+    -- `clues`, to give a marked place its number and both sides.
+    local all={}
+    for _,c in ipairs(clues) do all[#all+1]={c=c} end
+    for _,c in ipairs(args.stock or {}) do all[#all+1]={c=c,stock=true} end
+    for _,entry in ipairs(all) do
+        local c=entry.c
         local copies=count(placed,c.id)
         -- A set already placed is a "spare": a new copy of it is used only
         -- when nothing fresh is left for this area and conspiracy, so an area
@@ -99,7 +105,7 @@ function P.choose(args)
         if available then
             for _,w in ipairs(c.where) do
                 if w.place==area.place then
-                    candidates[#candidates+1]={clue=c,where=w,copy=copies+1,spare=spare,
+                    candidates[#candidates+1]={clue=c,where=w,copy=copies+1,spare=spare,stock=entry.stock,
                         order=P.hash(key({seed,area.id,c.id,copies+1,version}))}
                 end
             end
@@ -142,13 +148,15 @@ function P.choose(args)
         if not lean then break end
         -- Sets first while they are no more than half of what is placed.
         local wantSet=count(world,"set")*2<=count(world,"set")+count(world,"written")
-        -- Fresh clues first (the wanted kind, then either kind); a copy of a
-        -- set already placed elsewhere only when nothing fresh is left here.
+        -- Fresh clues first (the wanted kind, then either kind), then fresh
+        -- stock (E5); a copy of a set already placed elsewhere only when
+        -- nothing fresh is left here.
         local choice
-        for pass=1,3 do
+        for pass=1,4 do
             for _,cand in ipairs(candidates) do
                 if not taken[cand.clue.id] and cand.where.lean==lean
-                    and (not cand.spare or pass==3)
+                    and (not cand.spare or pass==4)
+                    and (not cand.stock or pass>=3)
                     and (pass>=2 or (cand.clue.kind=="set")==wantSet) then choice=cand; break end
             end
             if choice then break end

@@ -89,7 +89,8 @@ local list={
     set("s1","containment",{scene=groundKind}),
 }
 local function ids(l) local out={}; for _,c in ipairs(l) do out[#out+1]=c.id end; return table.concat(out,",") end
-assert(ids(AreaCase.anchorPool(list,{markKey}))=="a1,a2","a place its anchored clues name takes only those")
+assert(ids(AreaCase.anchorPool(list,{markKey}))=="a1,a2","a place its anchored clues name takes those first")
+assert(ids(select(2,AreaCase.anchorPool(list,{markKey})))=="p1,p2","and the unanchored ones as its stock (E5)")
 assert(ids(AreaCase.anchorPool(list,{markKey,"print:"..printMark.print}))=="a1,a2,f1","every anchor naming it")
 assert(ids(AreaCase.anchorPool(list,{"map:ZzOther:mark:1"}))=="p1,p2","a marked place nothing is anchored to: unanchored clues")
 assert(ids(AreaCase.anchorPool(list,nil))=="p1,p2","a place no map marks: unanchored clues only")
@@ -104,10 +105,21 @@ local case=AreaCase.new(4242)
 local next=assert(AreaCase.decide{case=case,site=site,place="mapNamed",clues=list,version="v",
     designs={mark.design},anchors={markKey}})
 assert(#next.documents>=1,"the place is decided")
+-- Its own anchored clues first; the unanchored stock only fills what they
+-- cannot (E5, DR-20260929-NOHELP-GAP-PLAN); never another place's anchor.
+local own,stockUsed=0,0
 for _,d in ipairs(next.documents) do
-    assert(d.clue=="a1" or d.clue=="a2","only clues anchored to its mark")
-    assert(d.anchor and d.anchor.map==mark.design and d.anchor.mark==mark.mark,"the anchor is carried onto the document")
+    if d.clue=="a1" or d.clue=="a2" then
+        own=own+1
+        assert(d.anchor and d.anchor.map==mark.design and d.anchor.mark==mark.mark,"the anchor is carried onto the document")
+    else
+        assert(d.clue=="p1" or d.clue=="p2","only its own anchored clues or unanchored stock")
+        assert(d.anchor==nil,"stock carries no anchor")
+        stockUsed=stockUsed+1
+    end
 end
+assert(own==2,"both anchored clues are used before any stock")
+assert(#next.documents>=3 and stockUsed>=1,"a place with two anchored clues is topped up to its minimum from the stock")
 assert(AreaCase.validate(next),"a record with anchored documents is valid")
 local bad=AreaCase.new(4242); bad=assert(AreaCase.decide{case=bad,site=site,place="mapNamed",clues=list,version="v",
     designs={mark.design},anchors={markKey}})

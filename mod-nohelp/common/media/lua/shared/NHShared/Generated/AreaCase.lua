@@ -227,13 +227,17 @@ end
 -- "print:P"), or nil for a place no map or flyer marks. The rule:
 --   * no clue in the list has an anchor: the list, untouched (so the picker's
 --     choices are exactly what they were before anchors existed);
---   * a place some anchored clue names: ONLY those clues - its map's story is
---     told there and nowhere else, and generic clues do not dilute it;
+--   * a place some anchored clue names: those clues first - its map's story
+--     is told there and nowhere else - and the unanchored ones only as stock
+--     (below);
 --   * any other place: only the clues with no anchor. An anchored clue never
 --     lands at a place its map or flyer does not mark, and a scene-anchored
 --     clue only ever goes to its scene (M.decideScene).
 -- Unanchored clues fill a marked place only while no clue is anchored to it,
 -- so a map with written clues and a map still unwritten both work.
+-- THE STOCK (E5, DR-20260929-NOHELP-GAP-PLAN): at a place with anchored
+-- clues, the unanchored ones come back second, as a stock the picker draws on
+-- only when the anchored ones cannot give the place its number or both sides.
 function M.anchorPool(clues,keys)
     local any=false
     for _,c in ipairs(clues) do if c.anchor~=nil then any=true; break end end
@@ -245,7 +249,7 @@ function M.anchorPool(clues,keys)
         if c.anchor==nil then plain[#plain+1]=c
         elseif c.anchor.scene==nil and here[Manifest.anchorKey(c.anchor)] then anchored[#anchored+1]=c end
     end
-    if #anchored>0 then return anchored end
+    if #anchored>0 then return anchored,plain end
     return plain
 end
 
@@ -277,12 +281,13 @@ function M.decide(args)
     if not PLACE[args.place] then return nil,"not an interesting place" end
     local areaIds={}; for _,a in ipairs(case.areas) do areaIds[a.id]=true end
     if areaIds[site.id] then return nil,"decided" end
-    local clues=M.anchorPool(args.clues or Manifest.clues,args.anchors)
+    local clues,stock=M.anchorPool(args.clues or Manifest.clues,args.anchors)
     local byId={}; for _,c in ipairs(clues) do byId[c.id]=c end
+    for _,c in ipairs(stock or {}) do byId[c.id]=c end
     local trail,lean=M.trailFor(case.seed,args.designs,site.id,args.marks)
     if args.designs~=nil and not trail then return nil,"unknown map design" end
     lean=lean or {}
-    local picks,short=Pick.choose{clues=clues,area={id=site.id,place=args.place},
+    local picks,short=Pick.choose{clues=clues,stock=stock,area={id=site.id,place=args.place},
         ledger=case.ledger,seed=case.seed,version=args.version,
         favour=lean.favour,rivalMin=lean.rivalMin,minCount=lean.minCount}
     if #picks==0 then return nil,"empty" end

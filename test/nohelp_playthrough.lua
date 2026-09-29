@@ -667,7 +667,9 @@ local function check(saved,capOn,tally)
             for j=a.first,a.first+a.count-1 do
                 local d=case.documents[j]
                 if anchoredHere then
-                    assert(d.anchor and keys[Manifest.anchorKey(d.anchor)],STEP..": an anchored place took a clue not anchored to it")
+                    -- Its own anchored clues, or unanchored stock filling it
+                    -- (E5); never a clue anchored somewhere else.
+                    assert(d.anchor==nil or keys[Manifest.anchorKey(d.anchor)],STEP..": an anchored place took a clue anchored elsewhere")
                 else
                     assert(d.anchor==nil,STEP..": an anchored clue landed at a place its mark does not name")
                 end

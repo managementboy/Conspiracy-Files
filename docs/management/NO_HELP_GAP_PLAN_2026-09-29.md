@@ -29,7 +29,7 @@ MapMediaRuntime's R.subject, not GeneratedRuntime's); the rest hold.
   (kind, building/zone/chunk, time) to Lua; replaces trace matching as the
   way scenes are known. Research: ZombieBuddy 2.3.2, @Patch advice, queue
   drained on the Lua thread. mod.info gains javaJarFile/javaPkgName.
-- [ ] **E5 Thin sites topped up** from a stock of both-side clues per place
+- [x] **E5 Thin sites topped up** (2026-09-29: anchored clues first, then unanchored clues of the place as stock, then spares; Pick stock pass; inert until C3 writes unanchored mapNamed stock) from a stock of both-side clues per place
   type when an anchored site has fewer than its minimum or one side only
   (AreaCase.anchorPool).
 - [x] **E6 Scenes pick a side that has a clue** (2026-09-29: drawn lean first, else the other; test/nohelp_scene_area.lua) (VanillaScenes lean choice).
