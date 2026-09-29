@@ -1,0 +1,400 @@
+[
+  {
+    "id": "t0428-01",
+    "kind": "set",
+    "pieces": [
+      "SeedBag",
+      "Fertilizer"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "furniture",
+        "lean": "agricultural",
+        "rival": "containment",
+        "containers": [
+          "desk",
+          "filingcabinet",
+          "shelves",
+          "cardboardbox",
+          "smallbox",
+          "crate"
+        ]
+      }
+    ],
+    "title": "The dry half of the sack",
+    "body": "This seam has two colors of dust. The fertilizer reached the lower half; the dry seed at the top still comes away clean.",
+    "rival_reading": "A failure of the later response could still have left this exposure unaddressed.",
+    "gloss": "An ordinary trace links a farm exposure to a distinct observed outcome: the dry half of the sack.",
+    "axioms": {
+      "containment": [
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-pathway",
+        "a-timing"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0428"
+    }
+  },
+  {
+    "id": "t0428-02",
+    "kind": "set",
+    "pieces": [
+      "HandShovel",
+      "Bucket"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "vehicle",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "title": "The washed border",
+    "body": "The soil on this shovel stops at a sharp pale band. Someone rinsed one side and left the other coated in field grit.",
+    "rival_reading": "A failure of the later response could still have left this exposure unaddressed.",
+    "gloss": "An ordinary trace links a farm exposure to a distinct observed outcome: the washed border.",
+    "axioms": {
+      "containment": [
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-pathway",
+        "a-timing"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0428"
+    }
+  },
+  {
+    "id": "t0428-03",
+    "kind": "set",
+    "pieces": [
+      "CornSeed",
+      "Twine"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "furniture",
+        "lean": "agricultural",
+        "rival": "containment",
+        "containers": [
+          "fridge",
+          "counter",
+          "shelves",
+          "smallbox",
+          "bin",
+          "cardboardbox"
+        ]
+      }
+    ],
+    "title": "The second planting",
+    "body": "These seeds are separated with twine into two little piles. The damp ones have black tips; the dry ones have begun to sprout.",
+    "rival_reading": "A failure of the later response could still have left this exposure unaddressed.",
+    "gloss": "An ordinary trace links a farm exposure to a distinct observed outcome: the second planting.",
+    "axioms": {
+      "containment": [
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-pathway",
+        "a-timing"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0428"
+    }
+  },
+  {
+    "id": "t0428-04",
+    "kind": "set",
+    "pieces": [
+      "SeedBag",
+      "Rope"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "furniture",
+        "lean": "agricultural",
+        "rival": "containment",
+        "containers": [
+          "toolcabinet",
+          "locker",
+          "crate",
+          "shelves",
+          "cardboardbox",
+          "desk"
+        ]
+      }
+    ],
+    "title": "The empty return",
+    "body": "This folded bag has loose feed at the bottom and a tied-off strip from another bag. The strip is marked for a different delivery day.",
+    "rival_reading": "A failure of the later response could still have left this exposure unaddressed.",
+    "gloss": "An ordinary trace links a farm exposure to a distinct observed outcome: the empty return.",
+    "axioms": {
+      "containment": [
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-pathway",
+        "a-timing"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0428"
+    }
+  },
+  {
+    "id": "t0428-05",
+    "kind": "set",
+    "pieces": [
+      "EmptyJar",
+      "WaterBottle"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "furniture",
+        "lean": "agricultural",
+        "rival": "containment",
+        "containers": [
+          "dresser",
+          "wardrobe",
+          "sidetable",
+          "desk",
+          "locker",
+          "smallbox"
+        ]
+      }
+    ],
+    "title": "The patch beneath the lid",
+    "body": "There is a sticky green rim inside the jar and clean water in the bottle beside it. Only the jar's contents have gone cloudy.",
+    "rival_reading": "A failure of the later response could still have left this exposure unaddressed.",
+    "gloss": "An ordinary trace links a farm exposure to a distinct observed outcome: the patch beneath the lid.",
+    "axioms": {
+      "containment": [
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-pathway",
+        "a-timing"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0428"
+    }
+  },
+  {
+    "id": "t0428-06",
+    "kind": "set",
+    "pieces": [
+      "SeedBag",
+      "CompostBag"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "furniture",
+        "lean": "agricultural",
+        "rival": "containment",
+        "containers": [
+          "postbox",
+          "shelves",
+          "counter",
+          "smallbox",
+          "cardboardbox",
+          "desk"
+        ]
+      }
+    ],
+    "title": "The bottom of the stack",
+    "body": "The lowest sack has sprouted through its stitches. The bag above it is dry and still sealed.",
+    "rival_reading": "A failure of the later response could still have left this exposure unaddressed.",
+    "gloss": "An ordinary trace links a farm exposure to a distinct observed outcome: the bottom of the stack.",
+    "axioms": {
+      "containment": [
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-pathway",
+        "a-timing"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0428"
+    }
+  },
+  {
+    "id": "t0428-07",
+    "kind": "set",
+    "pieces": [
+      "Gloves_Dish",
+      "CarrotSeed"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "corpse",
+        "lean": "agricultural",
+        "rival": "containment",
+        "outfit": "farm"
+      }
+    ],
+    "title": "The hand at the fence",
+    "body": "A garden glove is folded around a seed packet; the fingertips have a dark crust that the packet's paper doesn't have.",
+    "rival_reading": "A failure of the later response could still have left this exposure unaddressed.",
+    "gloss": "An ordinary trace links a farm exposure to a distinct observed outcome: the hand at the fence.",
+    "axioms": {
+      "containment": [
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-pathway",
+        "a-timing"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0428"
+    }
+  },
+  {
+    "id": "t0428-08",
+    "kind": "set",
+    "pieces": [
+      "Tarp",
+      "HandShovel"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "furniture",
+        "lean": "agricultural",
+        "rival": "containment",
+        "containers": [
+          "filingcabinet",
+          "desk",
+          "shelves",
+          "crate",
+          "locker",
+          "cardboardbox"
+        ]
+      }
+    ],
+    "title": "The covered seedlings",
+    "body": "The tarp's underside is dotted with pale leaves. Outside its edge the same size stems have gone dark at their tips.",
+    "rival_reading": "A failure of the later response could still have left this exposure unaddressed.",
+    "gloss": "An ordinary trace links a farm exposure to a distinct observed outcome: the covered seedlings.",
+    "axioms": {
+      "containment": [
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-pathway",
+        "a-timing"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0428"
+    }
+  },
+  {
+    "id": "t0428-09",
+    "kind": "set",
+    "pieces": [
+      "CornSeed",
+      "Pot"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "furniture",
+        "lean": "agricultural",
+        "rival": "containment",
+        "containers": [
+          "medicine",
+          "sidetable",
+          "dresser",
+          "desk",
+          "smallbox",
+          "locker"
+        ]
+      }
+    ],
+    "title": "The spared row",
+    "body": "This packet is unopened, tucked into a pot of healthy starts. A matching empty packet is stuck to the soil of the wilted tray.",
+    "rival_reading": "A failure of the later response could still have left this exposure unaddressed.",
+    "gloss": "An ordinary trace links a farm exposure to a distinct observed outcome: the spared row.",
+    "axioms": {
+      "containment": [
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-pathway",
+        "a-timing"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0428"
+    }
+  },
+  {
+    "id": "t0428-10",
+    "kind": "set",
+    "pieces": [
+      "Bowl",
+      "Fork",
+      "SeedBag"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "vehicle",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "title": "The first return from the field",
+    "body": "There is fresh soil in the lunch bowl and none on the fork. Someone set food down to carry a wet seed bag back in.",
+    "rival_reading": "A failure of the later response could still have left this exposure unaddressed.",
+    "gloss": "An ordinary trace links a farm exposure to a distinct observed outcome: the first return from the field.",
+    "axioms": {
+      "containment": [
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-pathway",
+        "a-timing"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0428"
+    }
+  }
+]
