@@ -210,12 +210,6 @@ do
     assert(Convert.recipeCheck({id="t9003-01",kind="set",pieces={"KeyRing","Twine"}},"T9003",rctx)==nil,"a key ring where allowed")
     assert(Convert.recipeCheck(set,"T9999",rctx)==nil,"no recipe, no recipe check")
     assert(Convert.textKey({title="A  Title",body="Same, body!"})==Convert.textKey({title="a title",body="same body"}),"case, spaces and punctuation ignored")
-    local lctx={registry={},recipes={T9005={leanShare={containment=0.75}}}}
-    local function lrow(n,lean) return {id="t9005-0"..n,kind="set",pieces={"Twine","Tarp"},title="Lean title "..n,body="Lean body "..n..".",
-        where={{place="farm",spot="furniture",lean=lean,rival=lean=="containment" and "agricultural" or "containment"}},
-        rival_reading="r",gloss="g",axioms={containment={"ax-a1"},agricultural={"ax-b1"}},prov={writer="w",handoff="h",batch="T9005"}} end
-    local lo=Convert.convertTicket("T9005",{lrow(1,"containment"),lrow(2,"agricultural")},{},lctx)
-    assert(#lo.accepted==0 and lo.rejected[1].reasons[1].code=="RECIPE_LEAN","a ticket under its lean share comes back whole")
     local out=Convert.convertTicket("T9004",{},{},{registry={}},"CLASSIFIER_STOP")
     assert(#out.rejected==1 and out.rejected[1].reasons[1].code=="EMPTY","an empty ticket is returned, not dropped silently")
 end

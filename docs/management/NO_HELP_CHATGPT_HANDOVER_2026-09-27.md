@@ -115,12 +115,13 @@ ticket alone later in a plainer form; never copy another ticket's text.
 **Map completion and balance (owner, 2026-09-29).** Ten map tickets have a
 clue for only part of their map (progress line `maps x/125`: every mark and
 note of a map needs an accepted clue anchored to it). Their recipes say
-`complete: true` and `leanShare: {"containment": 0.75}`: deliver the whole
-ticket again, with the row already accepted copied unchanged and one new row
-for each missing mark and note, and at least 75% of the ticket's placements
-leaning containment (A), which brings the game's lean balance under 55%. Any
-form; no key ring. The check returns a ticket under its share whole
-(`RECIPE_LEAN`). The ADHD cadence (section 7) is retired: no ADHD passes.
+`complete: true` and `side: B`: deliver the whole ticket again, with the row
+already accepted copied unchanged and one new row for each missing mark and
+note, written so a farm-program (B) believer could point to it. Balance is
+counted by the blind read: clues read A only against B only, the larger at
+most 52% (`balance` in the progress line); B is behind, so these new clues
+add B. Nothing is removed: more clues, better game. Any form; no key ring;
+paper items are fine. The ADHD cadence (section 7) is retired: no ADHD passes.
 
 **Recalls (owner, 2026-09-29).** A quality problem found after clues are in
 the game (by a count, or later by a player) becomes a recall in

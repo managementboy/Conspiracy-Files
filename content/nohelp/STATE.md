@@ -14,7 +14,7 @@ EXPANSION
 T0279
 
 ## NEXT
-Recall R1 done. Now, in one go: T0048 T0112 T0115 T0118 T0119 T0120 T0125 T0127 T0130 T0132 per their recipes (handover section 5, Map completion and balance); one commit per ticket; baton to CLAUDE with REVIEW once, at the end
+Recall R1 done. Now, in one go: T0048 T0112 T0115 T0118 T0119 T0120 T0125 T0127 T0130 T0132 per their recipes (handover section 5, Map completion and balance: side B, whole ticket, nothing removed); one commit per ticket; baton to CLAUDE with REVIEW once, at the end
 
 ## OPEN RETURNS
 none
@@ -26,4 +26,4 @@ none
 2026-09-28 T0001
 
 ## PROGRESS
-NOT DONE: maps 115/125, balance 61% @fa2bd9f
+NOT DONE: maps 115/125, balance 54% @3792880

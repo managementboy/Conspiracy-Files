@@ -1,5 +1,5 @@
 {
- "_about": "Recipes (owner, 2026-09-29). Per ticket: side = which believer the clue should mainly serve (A cover-up, B farm program, both); form = written or set; keyRing = whether a key ring may appear. The converter check enforces form and keyRing; side is checked by the blind read and only reported. leanShare (owner, 2026-09-29): at least this share of the whole ticket's placements (where entries) on that lean, else the ticket comes back whole (RECIPE_LEAN). complete: the delivery covers every mark and note of the ticket's map, the rows already accepted kept unchanged in it (a ticket delivered again replaces all its rows).",
+ "_about": "Recipes (owner, 2026-09-29). Per ticket: side = which believer the clue should mainly serve (A cover-up, B farm program, both); form = written or set; keyRing = whether a key ring may appear. The converter check enforces form and keyRing; side is checked by the blind read and only reported. complete: the delivery covers every mark and note of the ticket's map, the rows already accepted kept unchanged in it (a ticket delivered again replaces all its rows).",
  "T0170": {
   "side": "B",
   "form": "written",
@@ -611,83 +611,53 @@
   "keyRing": false
  },
  "T0048": {
-  "side": "A",
+  "side": "B",
   "keyRing": false,
-  "leanShare": {
-   "containment": 0.75
-  },
   "complete": true
  },
  "T0112": {
-  "side": "A",
+  "side": "B",
   "keyRing": false,
-  "leanShare": {
-   "containment": 0.75
-  },
   "complete": true
  },
  "T0115": {
-  "side": "A",
+  "side": "B",
   "keyRing": false,
-  "leanShare": {
-   "containment": 0.75
-  },
   "complete": true
  },
  "T0118": {
-  "side": "A",
+  "side": "B",
   "keyRing": false,
-  "leanShare": {
-   "containment": 0.75
-  },
   "complete": true
  },
  "T0119": {
-  "side": "A",
+  "side": "B",
   "keyRing": false,
-  "leanShare": {
-   "containment": 0.75
-  },
   "complete": true
  },
  "T0120": {
-  "side": "A",
+  "side": "B",
   "keyRing": false,
-  "leanShare": {
-   "containment": 0.75
-  },
   "complete": true
  },
  "T0125": {
-  "side": "A",
+  "side": "B",
   "keyRing": false,
-  "leanShare": {
-   "containment": 0.75
-  },
   "complete": true
  },
  "T0127": {
-  "side": "A",
+  "side": "B",
   "keyRing": false,
-  "leanShare": {
-   "containment": 0.75
-  },
   "complete": true
  },
  "T0130": {
-  "side": "A",
+  "side": "B",
   "keyRing": false,
-  "leanShare": {
-   "containment": 0.75
-  },
   "complete": true
  },
  "T0132": {
-  "side": "A",
+  "side": "B",
   "keyRing": false,
-  "leanShare": {
-   "containment": 0.75
-  },
   "complete": true
  }
 }

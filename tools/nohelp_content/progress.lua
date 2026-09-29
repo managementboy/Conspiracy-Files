@@ -18,7 +18,8 @@
 --                     Generated/VanillaScenes.lua exists)
 --   persons x/y       person ids with exactly one card and at least one mention
 --   sets a/b          object sets among accepted clues, below targets.setShare
---   balance p%        the larger conspiracy's share of placements, above targets.leanMax
+--   balance p%        by the blind read (owner, 2026-09-29): clues read A only vs B only,
+--                     the larger one's share above targets.leanMax
 --   tickets x/y       first-release tickets accepted in the registry
 --   returns n         non-empty rejected/ files not acknowledged in STATE.md OPEN RETURNS
 --   stale n           deferred tickets or quarantined serials older than targets.staleDays
@@ -141,10 +142,18 @@ function M.measure(opts)
         end
     end
     if #rows==0 or sets<T.setShare*#rows then fail("sets "..sets.."/"..#rows) end
-    local placed,top=0,0
-    for _,l in ipairs(Manifest.LEANS) do placed=placed+(lean[l] or 0); if (lean[l] or 0)>top then top=lean[l] end end
-    if placed==0 then fail("balance 0/0")
-    elseif top>T.leanMax*placed then fail("balance "..math.floor(100*top/placed+0.5).."%") end
+    -- Balance by what a reader sees (DR-20260929-NOHELP-BALANCE-BY-READ):
+    -- each accepted clue's blind-read receipt, A only against B only.
+    local reads={A=0,B=0}
+    local rdir=opts.receiptsDir or "tools/cluegates/receipts"
+    for _,c in ipairs(rows) do
+        local r=J.decode(readFile(rdir.."/"..tostring(c.id)..".json") or "null")
+        local v=type(r)=="table" and r.votes or {}
+        if (v.A or 0)>0 then reads.A=reads.A+1 elseif (v.B or 0)>0 then reads.B=reads.B+1 end
+    end
+    local one=reads.A+reads.B
+    local top=math.max(reads.A,reads.B)
+    if one>0 and top>T.leanMax*one then fail("balance "..math.floor(100*top/one+0.5).."%") end
 
     -- First-release tickets.
     local want,got=0,0

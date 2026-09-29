@@ -1,11 +1,18 @@
-## DR-20260929-NOHELP-MAPS-BALANCE — finish the maps toward side A; ADHD cadence retired
+## DR-20260929-NOHELP-BALANCE-BY-READ — balance by what a reader sees; add B; ADHD cadence retired
 
-Owner decision, 2026-09-29: the ten partly covered map tickets are finished in
-one ChatGPT round, each with at least 75% of its placements on containment,
-which brings the lean balance from 61% to about 53% (target: at most 55%).
-The every-5-tickets ADHD pass is retired (`targets.adhdEvery=nil`); the one
-blind read (DR-20260928-NOHELP-CLUE-CHECK) replaced it. Paper items
-(notebooks, sheets, letters) may repeat freely: they suit conspiracies.
+Owner decisions, 2026-09-29:
+
+1. The two sides are counted by the blind read (DR-20260928-NOHELP-CLUE-CHECK):
+   clues read A only against B only (`both` not counted), and they should
+   match: the larger at most 52% (`targets.leanMax`). The writer's lean tag
+   no longer decides balance. Now: A only 163, B only 140 (54%).
+2. Balance is fixed by adding clues to the short side, never by removing
+   any ("More clues better game"). The ten partly covered map tickets are
+   finished in one ChatGPT round aimed at B (about 89 new clues).
+3. The every-5-tickets ADHD pass is retired (`targets.adhdEvery=nil`); the
+   one blind read replaced it.
+4. Paper items (notebooks, sheets, letters) may repeat freely: they suit
+   conspiracies.
 
 ## DR-20260929-NOHELP-RECALLS — a repeatable recall round for quality problems
 

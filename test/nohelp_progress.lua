@@ -52,6 +52,17 @@ line,detail=measure()
 assert(line:find("maps 1/125",1,true),line)
 assert(not line:find("sets ",1,true) and not line:find("balance",1,true),"all sets, balanced: those gates pass")
 assert(detail:find("mapNamed c:s"..#T.designs[design].."w0",1,true),detail)
+-- Balance by the blind read: A only against B only, "both" not counted.
+do
+    local rdir=root.."/receipts"; os.execute('mkdir -p "'..rdir..'"')
+    local function vote(id,k) local v={A=0,B=0,both=0,none=0}; v[k]=1; write("receipts/"..id..".json",J.encode({votes=v})) end
+    vote(rows[1].id,"A"); vote(rows[2].id,"both")
+    local l=measure({receiptsDir=rdir})
+    assert(l:find("balance 100%",1,true),"one A, no B: "..l)
+    vote(rows[2].id,"B")
+    l=measure({receiptsDir=rdir})
+    assert(not l:find("balance",1,true),"one and one: balanced "..l)
+end
 noNames(line); noNames(detail)
 
 -- Stage 0 sign-off: the sha256 of approved/axioms.json.
