@@ -1,0 +1,39 @@
+[
+  {
+    "id": "t0365-01",
+    "kind": "written",
+    "pieces": [
+      "receipt"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "vehicle",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "anchor": {
+      "scene": "RVSCrashHorde"
+    },
+    "title": "cab receipt before sunday's rain",
+    "body": "feed, soap, and a clean jar, paid cash. my note below says saltlike grains came from the livestock supplement test; my sister coughed all night before warning tape went up.",
+    "rival_reading": "Responders could have collected the saltlike grains while crossing treated land; the note or objects do not prove the program began the emergency.",
+    "gloss": "A personal field trace precedes the visible emergency response.",
+    "axioms": {
+      "containment": [
+        "c-warning",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0365"
+    }
+  }
+]
