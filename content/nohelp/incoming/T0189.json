@@ -1,0 +1,40 @@
+[
+  {
+    "anchor": {
+      "print": "KnoxBankJobAdRosewood"
+    },
+    "body": "the tire pump and first-aid kit were wiped on one face and left dusty on the other. field twine and warning tape cross at the handle.",
+    "id": "t0189-01",
+    "kind": "set",
+    "pieces": [
+      "TirePump",
+      "FirstAidKit"
+    ],
+    "title": "two traces on the tire pump",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ],
+    "rival_reading": "The farm program and the emergency response each explain one layer of the bundle, and the shared knot does not establish which purpose came first.",
+    "gloss": "Farm residue and response markings share one deliberately ambiguous bundle.",
+    "axioms": {
+      "containment": [
+        "c-warning",
+        "c-orders"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0189"
+    }
+  }
+]
