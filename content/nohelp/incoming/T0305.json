@@ -1,0 +1,40 @@
+[
+  {
+    "id": "t0305-01",
+    "kind": "set",
+    "pieces": [
+      "FirstAidKit",
+      "SeedBag"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "furniture",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "anchor": {
+      "scene": "RBSWATStation"
+    },
+    "title": "Seed dust under the bandages",
+    "body": "A first-aid kit sits open beside a split seed sack. Yellow dust covers the gauze; black road tape is stuck to the sack.",
+    "rival_reading": "Field workers or an emergency crew could have bundled these supplies; dust and road tape leave the order of events unresolved.",
+    "gloss": "Field residue and response material share one everyday bundle.",
+    "axioms": {
+      "containment": [
+        "c-warning",
+        "c-orders"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0305"
+    }
+  }
+]
