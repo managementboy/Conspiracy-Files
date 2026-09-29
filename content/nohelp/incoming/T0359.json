@@ -1,0 +1,74 @@
+[
+  {
+    "anchor": {
+      "scene": "RVSBurntCar"
+    },
+    "body": "Feed, soap, and a clean jar, paid cash. My note below says chalky water came from the feed test; the ditch smelled metallic before the noon siren sounded.",
+    "id": "t0359-01",
+    "kind": "written",
+    "pieces": [
+      "receipt"
+    ],
+    "title": "Weathered bundle note — Friday at closing",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ],
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-warning",
+        "c-failure"
+      ]
+    },
+    "gloss": "A personal field trace precedes the visible emergency response.",
+    "prov": {
+      "batch": "T0359",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "Responders could have collected the chalky water while crossing treated land; the note or objects do not prove the program began the emergency."
+  },
+  {
+    "id": "t0359-02",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ],
+    "title": "Two copies of a plate",
+    "body": "The car burned after they copied its registration onto the clear list. I watched them carry a new list to the far side of the road. My father was told he had never arrived, although his name was on my first copy.",
+    "anchor": {
+      "scene": "RVSBurntCar"
+    },
+    "rival_reading": "The agricultural trial may have caused the disorder that forced improvised decisions.",
+    "gloss": "A witness records a failed evacuation count or route.",
+    "axioms": {
+      "containment": [
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0359"
+    }
+  }
+]
