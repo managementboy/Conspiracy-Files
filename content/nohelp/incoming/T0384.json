@@ -1,0 +1,40 @@
+[
+  {
+    "id": "t0384-01",
+    "kind": "set",
+    "pieces": [
+      "KeyRing",
+      "Bucket"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "anchor": {
+      "scene": "RZSForestCamp"
+    },
+    "title": "hand shovel with a scrub bucket at on the cold night",
+    "body": "the hand shovel with a scrub bucket carry brown foam from the pasture treatment. they were packed before a cruiser waved us away.",
+    "rival_reading": "Responders could have collected the brown foam while crossing treated land; the note or objects do not prove the program began the emergency.",
+    "gloss": "A personal field trace precedes the visible emergency response.",
+    "axioms": {
+      "containment": [
+        "c-warning",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0384"
+    }
+  }
+]
