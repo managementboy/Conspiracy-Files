@@ -119,7 +119,7 @@ note of a map needs an accepted clue anchored to it). Their recipes say
 already accepted copied unchanged and one new row for each missing mark and
 note, written so a farm-program (B) believer could point to it. Balance is
 counted by the blind read: clues read A only against B only, the larger at
-most 52% (`balance` in the progress line); B is behind, so these new clues
+most 55% (`balance` in the progress line); B is behind, so these new clues
 add B. Nothing is removed: more clues, better game. Any form; no key ring;
 paper items are fine. The ADHD cadence (section 7) is retired: no ADHD passes.
 

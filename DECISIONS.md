@@ -4,7 +4,7 @@ Owner decisions, 2026-09-29:
 
 1. The two sides are counted by the blind read (DR-20260928-NOHELP-CLUE-CHECK):
    clues read A only against B only (`both` not counted), and they should
-   match: the larger at most 52% (`targets.leanMax`). The writer's lean tag
+   match: the larger at most 55% (`targets.leanMax`; owner moved it back from 52% after the map round landed at 53%). The writer's lean tag
    no longer decides balance. Now: A only 163, B only 140 (54%).
 2. Balance is fixed by adding clues to the short side, never by removing
    any ("More clues better game"). The ten partly covered map tickets are

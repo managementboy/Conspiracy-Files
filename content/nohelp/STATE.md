@@ -26,4 +26,4 @@ none
 2026-09-28 T0001
 
 ## PROGRESS
-NOT DONE: balance 53% @2ce3f63
+DONE-CANDIDATE @12bcaab3
