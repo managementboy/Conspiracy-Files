@@ -1,0 +1,40 @@
+[
+  {
+    "anchor": {
+      "print": "HouseforSale867"
+    },
+    "body": "the packet of tissues and first-aid kit were wiped on one face and left dusty on the other. field twine and warning tape cross at the handle.",
+    "id": "t0245-01",
+    "kind": "set",
+    "pieces": [
+      "Tissue",
+      "FirstAidKit"
+    ],
+    "title": "two traces on the packet of tissues",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ],
+    "rival_reading": "The farm program and the emergency response each explain one layer of the bundle, and the shared knot does not establish which purpose came first.",
+    "gloss": "Farm residue and response markings share one deliberately ambiguous bundle.",
+    "axioms": {
+      "containment": [
+        "c-warning",
+        "c-orders"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0245"
+    }
+  }
+]
