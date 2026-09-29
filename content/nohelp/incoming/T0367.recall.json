@@ -1,0 +1,39 @@
+[
+  {
+    "anchor": {
+      "scene": "RVSFlippedCrash"
+    },
+    "body": "my cab entry says the sprayer trial workers brushed off waxy pollen. the driver grew dizzy before the shelter message aired.\n\nOur copy stayed on the kitchen table. The official account came later and asked us to remember a much shorter day.\n\nThe next morning I looked for a second copy and found only the envelope. I left this one unfolded for whoever came after us.",
+    "id": "t0367-01",
+    "kind": "written",
+    "pieces": [
+      "notebook"
+    ],
+    "title": "cab note — at tuesday dawn",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "vehicle"
+      }
+    ],
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-warning",
+        "c-failure"
+      ]
+    },
+    "gloss": "A personal field trace precedes the visible emergency response.",
+    "prov": {
+      "batch": "T0367",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "Responders could have collected the waxy pollen while crossing treated land; the note or objects do not prove the program began the emergency."
+  }
+]
