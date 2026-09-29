@@ -1,0 +1,39 @@
+[
+  {
+    "id": "t0398-01",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "anchor": {
+      "scene": "RZSRangerSmith"
+    },
+    "title": "torn note from the north trail",
+    "body": "Personal note: the insecticide crew crossed at dawn, leaving yellow dust on the grass. The deer fled before the county trucks reached the trail.",
+    "rival_reading": "Emergency workers could have encountered the same residue while crossing treated land; the personal trace does not by itself prove the farm program caused the emergency.",
+    "gloss": "A personal trace links farm-program residue to symptoms before a restriction.",
+    "axioms": {
+      "containment": [
+        "c-warning",
+        "c-orders"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0398"
+    }
+  }
+]
