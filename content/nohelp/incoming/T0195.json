@@ -1,0 +1,52 @@
+[
+  {
+    "anchor": {
+      "print": "HouseforSale903"
+    },
+    "body": "The floor plan marks two potential rooms; a field note asks whether the upstairs water sample was taken before the new tenant arrived.",
+    "id": "t0195-01",
+    "kind": "set",
+    "pieces": [
+      "WaterBottle",
+      "Notebook"
+    ],
+    "title": "Potential rooms",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture",
+        "containers": [
+          "desk",
+          "crate",
+          "shelves",
+          "counter",
+          "cardboardbox",
+          "bin"
+        ]
+      }
+    ],
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "House for Sale (no. 903)",
+      "source": "print:HouseforSale903"
+    },
+    "gloss": "A water check is tied to a room before its next occupant.",
+    "prov": {
+      "batch": "T0195",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A landlord could test water before any occupancy; the note does not say what prompted the sample."
+  }
+]
