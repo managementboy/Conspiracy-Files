@@ -1,0 +1,39 @@
+[
+  {
+    "id": "t0315-01",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "furniture",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "anchor": {
+      "scene": "RBTSDrink"
+    },
+    "title": "The drink I poured away",
+    "body": "I saved the bottle for you because it smelled like the trial orchard after spraying. I poured out the glasses before the roadblock appeared.",
+    "rival_reading": "Emergency workers could have encountered the same residue while responding; the personal trace does not by itself prove the field program caused the emergency.",
+    "gloss": "A personal trace places field-program residue before a later restriction.",
+    "axioms": {
+      "containment": [
+        "c-warning",
+        "c-orders"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0315"
+    }
+  }
+]
