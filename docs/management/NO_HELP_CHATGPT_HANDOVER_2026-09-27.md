@@ -8,6 +8,15 @@ handoff"); read that too, in full, before your first clue. Shaped by an
 `/adhd` run (logistics, 3am on-call, remove-the-assumption, competitor, ant
 colony; three ideas deepened).
 
+> **Fast-generation update (2026-09-28).** Use
+> `docs/management/NO_HELP_FAST_GENERATION_2026-09-28.md` for the writer's
+> operating loop. It replaces repeated idea frames, per-row self-blind reads,
+> one-ticket-at-a-time writing, and per-ticket pushes. The existing content
+> rules, row schema, validator, spoiler protections, and independent Claude
+> review still apply. This fast path becomes active after it is reviewed and
+> merged; do not use it while the baton is CLAUDE.
+
+
 ## 1. Who is who
 
 - **You (ChatGPT)** write the clue text and deliver it as JSON rows.
