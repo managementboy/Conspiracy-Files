@@ -1,0 +1,39 @@
+[
+  {
+    "body": "yellow fertilizer crystals fill the seam between the wax crayons and animal-feed sack. the crystals are damp beneath a dry outer layer.",
+    "id": "t0012-02",
+    "kind": "set",
+    "person": "person-c",
+    "pieces": [
+      "Crayons",
+      "AnimalFeedBag"
+    ],
+    "title": "After on the wax crayons, the first copy",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "checkpoint",
+        "rival": "containment",
+        "spot": "vehicle"
+      }
+    ],
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-malfunction",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-warning",
+        "c-orders"
+      ]
+    },
+    "gloss": "A rare everyday object carries residue tied to field work before restriction.",
+    "prov": {
+      "batch": "T0012",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "Emergency workers crossing treated land could have picked up the same residue; the objects do not prove the farm program began the emergency."
+  }
+]
