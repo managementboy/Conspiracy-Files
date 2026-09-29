@@ -1,0 +1,39 @@
+[
+  {
+    "anchor": {
+      "scene": "RDSPoliceAtHouse"
+    },
+    "body": "I saved the cloth with red grit for you. The pasture study crew passed the first hot day; the flies vanished, and afterward a patrol turned us back.\n\nThe person beside me recognized the handwriting and went quiet. We had been told not to rely on yesterday’s directions.\n\nThe younger one wanted to throw it away. I promised we would ask in the morning, and put it where neither of us could forget.",
+    "id": "t0340-01",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "title": "the first hot day — red grit",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "corpse"
+      }
+    ],
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-warning",
+        "c-orders"
+      ]
+    },
+    "gloss": "A personal trace connects a farm trial to symptoms before a later restriction.",
+    "prov": {
+      "batch": "T0340",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "Emergency workers could have picked up the same red grit while responding near a field; this personal trace does not prove the trial caused the emergency."
+  }
+]
