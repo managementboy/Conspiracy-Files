@@ -1,0 +1,86 @@
+[
+  {
+    "anchor": {
+      "scene": "RDSBedroomZed"
+    },
+    "body": "The cut potato and sample jar share red grit from the fertilizer test. They were bundled before the buses quit running.",
+    "id": "t0327-01",
+    "kind": "set",
+    "pieces": [
+      "Potato",
+      "EmptyJar"
+    ],
+    "title": "Cut potato and sample jar, the early shift",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ],
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-warning",
+        "c-orders"
+      ]
+    },
+    "gloss": "A personal trace connects a farm trial to symptoms before a later restriction.",
+    "prov": {
+      "batch": "T0327",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "Emergency workers could have picked up the same red grit while responding near a field; this personal trace does not prove the trial caused the emergency."
+  },
+  {
+    "anchor": {
+      "scene": "RDSBedroomZed"
+    },
+    "body": "A bottle of water and a strip of bandage have matching pencil marks. The marks are dates, not doses; someone was checking this bed before its occupant woke.",
+    "id": "t0327-02",
+    "kind": "set",
+    "pieces": [
+      "WaterBottle",
+      "Bandage"
+    ],
+    "title": "A label under the pillow",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture",
+        "containers": [
+          "sidetable",
+          "desk",
+          "counter",
+          "crate",
+          "locker",
+          "shelves"
+        ]
+      }
+    ],
+    "axioms": {
+      "containment": [
+        "c-warning",
+        "c-accounting"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "gloss": "An altered count or retained object was left at the scene.",
+    "prov": {
+      "batch": "T0327",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A response to an agricultural exposure could explain the same record or object."
+  }
+]
