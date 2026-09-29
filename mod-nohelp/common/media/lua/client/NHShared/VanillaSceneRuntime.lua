@@ -302,7 +302,32 @@ end
 -- box: every kind, not only the few the traces below can recognise. With the
 -- listener present the trace scan is not run at all.
 R.DRAIN_PER_TICK=32
+-- A count-only health line (ev=scan why=scene-listener): when the listener is
+-- first heard, every R.STATUS_EVERY_MS, and at once when a failure or a
+-- dropped line is new - what an unattended run or a player's log needs to
+-- tell "no scenes nearby" from "listener broken".
+R.STATUS_EVERY_MS=300000
 local listenerMissingNoted=false
+local lastStatusAt,lastBad
+-- The jar's status: {version, seen, dropped, failed, queued, err} or nil.
+function R.listenerStatus()
+    if type(NHSceneListener)~="function" then return nil end
+    local ok,s=pcall(NHSceneListener)
+    if not ok or type(s)~="string" then return nil end
+    local v,seen,dropped,failed,queued,err=s:match("^([^|]*)|(%d+)|(%d+)|(%d+)|(%d+)|?(.*)$")
+    if not v then return nil end
+    return {version=v,seen=tonumber(seen),dropped=tonumber(dropped),failed=tonumber(failed),queued=tonumber(queued),err=err~="" and err or nil}
+end
+local function statusLine(force)
+    local st=R.listenerStatus(); if not st then return end
+    local now=getTimeInMillis and getTimeInMillis() or 0
+    local bad=st.failed+st.dropped
+    if not force and lastStatusAt and now-lastStatusAt<R.STATUS_EVERY_MS and bad==lastBad then return end
+    lastStatusAt,lastBad=now,bad
+    local n=0; for _ in pairs(confirmed) do n=n+1 end
+    CFLog.write(bad>0 and "w" or "i","scan",{why=force and "scene-listener-live" or "scene-listener",v=st.version,
+        seen=st.seen,dropped=st.dropped,failed=st.failed,queued=st.queued,confirmed=n,err=st.err})
+end
 function R.generated(kind,family,x1,y1,x2,y2,z,cx,cy)
     local gr=runtime()
     if not gr or not gr.scene or not gr.sceneSeen then return false,"no runtime" end
@@ -330,6 +355,7 @@ local function listen()
     end
     local gr=runtime()
     if not gr or not gr.scene or not gr.sceneSeen or not gr.worldSeed or not gr.worldSeed() then return true end
+    statusLine(lastStatusAt==nil)
     local ok,text=pcall(NHSceneDrain,R.DRAIN_PER_TICK)
     if not ok or type(text)~="string" or text=="" then return true end
     for line in text:gmatch("[^\n]+") do
@@ -388,6 +414,7 @@ function R._testRecordWait(mode,hours)
     recordWait(mode,hours)
 end
 function R.reset()
+    lastStatusAt,lastBad=nil,nil
     flagged,nFlagged,job,waiting,confirmed={},0,nil,{},{}
     allow,allowRead,ticks=nil,false,0
     waitCounts={walk_h0_1=0,walk_h1_6=0,walk_h6_24=0,walk_h24_plus=0,

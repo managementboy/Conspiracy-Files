@@ -24,7 +24,7 @@ public class SceneListenerTest {
     check(l[1].equals("RZSFake|zone|100|200|110|206|0|104|203"),"zone");
     check(l[2].equals("RVSFake|vehicle|1|2|3|4|0|2|3"),"vehicle");
     check(SceneListener.drain(10).equals(""),"drained");
-    check(SceneListener.status().startsWith("1|3|0|0|0"),"status "+SceneListener.status());
+    check(SceneListener.status().equals("2|3|0|0|0|"),"status "+SceneListener.status());
     SceneListener.enter(new RBFake(),"building",new Object[]{null}); SceneListener.exit();
     check(SceneListener.drain(10).equals(""),"no argument, no line");
     System.out.println("OK "+SceneListener.status());

@@ -1,0 +1,9 @@
+Linux No Help boot check 20260929T122851: PASS
+source: 535e6b96
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display ?
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display ?
+new world: ZombieBuddy advices 144; listener v2 seen=9 queued=0 failed=0 dropped=0
+new world dump: areasDecided=5 bytes=68474 carrier=29 cluesAgricultural=4 cluesContainment=5 deferred=6 filler=36491 foundByLook=0 foundBySearch=0 identity=6217 lost=0 map_areas=4 peakMs=44 placed=8 placement=91 preparation=2142 queued_filler=1 queued_identity=1 queued_tracking=1 relocation=29 scenes=5 short=5 tracking=28 zbDropped=0 zbFailed=0 zbQueued=0 zbSeen=9
+reloaded save: ZombieBuddy advices 144; listener v2 seen=0 queued=0 failed=0 dropped=0
+reloaded save dump: areasDecided=5 bytes=68474 carrier=30 cluesAgricultural=4 cluesContainment=5 deferred=6 filler=29606 foundByLook=0 foundBySearch=0 identity=7290 lost=0 peakMs=40 placed=8 preparation=3549 relocation=30 scenes=5 short=5 tracking=30 zbDropped=0 zbFailed=0 zbQueued=0 zbSeen=0
+reload: seed kept, confirmed scenes 5 -> 5

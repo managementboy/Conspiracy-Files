@@ -62,4 +62,16 @@ local info=assert(io.open("mod-nohelp/42/mod.info","rb")):read("*a")
 assert(info:find("\nrequire=\\ZombieBuddy",1,true) and info:find("\njavaJarFile=media/java/NoHelpScenes.jar",1,true)
     and info:find("\njavaPkgName=conspiracyfiles.nohelp",1,true),"mod.info requires ZombieBuddy and names the jar")
 assert(io.open("mod-nohelp/42/media/java/NoHelpScenes.jar","rb"),"the jar ships")
+-- Health: the jar's status parsed; the state dump carries the counts.
+NHSceneListener=function() return "2|9|0|1|0|NoSuchFieldException:x" end
+local st=R.listenerStatus()
+assert(st and st.version=="2" and st.seen==9 and st.failed==1 and st.err=="NoSuchFieldException:x","status parsed")
+NHSceneListener=function() return "2|9|0|0|3|" end
+assert(R.listenerStatus().err==nil and R.listenerStatus().queued==3,"no error, no err field")
+local Dump=require("NHShared/StateDump")
+local f=Dump.build({scenes=scenes,assignments={},case={documents={}}},nil,nil,true)
+assert(f.scenes>=3 and f.zbSeen==9 and f.zbQueued==3 and f.zbMissing==nil,"the dump line counts scenes and the listener")
+for k in pairs(f) do assert(Dump.FIELDS[k],"dump field "..k.." is declared") end
+NHSceneListener=nil
+assert(Dump.build({scenes={},assignments={},case={documents={}}},nil,nil,true).zbMissing==1,"no listener: zbMissing=1")
 print("nohelp scene listener: every generated scene of an allowed kind is confirmed at its point, once")

@@ -86,9 +86,39 @@ sync_mod() { # sync_mod <source> <name>
     rsync -a --delete "$1/" "$dest/"
 }
 
+# ZOMBIEBUDDY (No Help requires it; DR-20260929-NOHELP-GAP-PLAN). The game
+# starts with the ZombieBuddy Java agent, policy deny-new: no dialog ever
+# blocks an unattended run, and a jar that is not approved is skipped - and
+# says so in the log. The No Help jar is approved here for its current hash
+# (the owner's own jar on the owner's machine; on Windows the owner approves it
+# once in ZombieBuddy's dialog). PZ_ZB=0 launches without the agent.
+ZB_WORKSHOP="${PZ_ZB_WORKSHOP:-$HOME/.steam/steam/steamapps/workshop/content/108600/3619862853/mods/ZombieBuddy}"
+ZB_AGENT_ARGS="${PZ_ZB_AGENT_ARGS:-policy=deny-new,verbosity=1}"
+approve_nohelp_jar() {
+    local jar="$REPO/mod-nohelp/42/media/java/NoHelpScenes.jar"
+    [ -f "$jar" ] || return 0
+    python3 - "$jar" "$HOME/.zombie_buddy/mod_approvals.json" <<'PY'
+import hashlib, json, os, sys, datetime
+jar, path = sys.argv[1], sys.argv[2]
+sha = hashlib.sha256(open(jar, "rb").read()).hexdigest()
+os.makedirs(os.path.dirname(path), exist_ok=True)
+try: data = json.load(open(path))
+except Exception: data = {}
+mods = [m for m in data.get("mods", []) if not (m.get("id") == "ConspiracyFilesNoHelp" and m.get("jar_hash") != sha)]
+if not any(m.get("id") == "ConspiracyFilesNoHelp" and m.get("jar_hash") == sha for m in mods):
+    mods.append({"id": "ConspiracyFilesNoHelp", "jar_hash": sha, "decision": True,
+                 "time": datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ"), "author_id": 76561198083988095})
+data["mods"] = mods
+json.dump(data, open(path, "w"), indent=2)
+PY
+}
+
 setup() {
     mkdir -p "$LOCAL/inbox" "$LOCAL/log" "$ZOMBOID/Lua" "$ZOMBOID/mods"
     sync_mod "$REPO/mod" ConspiracyFiles
+    sync_mod "$REPO/mod-nohelp" ConspiracyFilesNoHelp
+    [ -d "$ZB_WORKSHOP" ] && sync_mod "$ZB_WORKSHOP" ZombieBuddy
+    approve_nohelp_jar
     sync_mod "$REPO/tools/autotest/CFAutoTest" CFAutoTest
     link "$LOCAL/inbox/cf_inbox.lua" "$ZOMBOID/Lua/cf_inbox.lua"
     link "$CONSOLE" "$LOCAL/log/live-local.txt"
@@ -102,7 +132,7 @@ setup() {
     # New worlds take their mod list from default.txt.
     local d="$ZOMBOID/mods/default.txt"
     sed -i '/^ *mod = FieldnoteTest,$/d' "$d"
-    for m in ConspiracyFiles CFAutoTest; do
+    for m in ConspiracyFiles CFAutoTest ConspiracyFilesNoHelp ZombieBuddy; do
         grep -qE "mod = $m," "$d" || sed -i "/^mods$/,/^}/ s/^{$/{\n    mod = $m,/" "$d"
     done
 }
@@ -257,7 +287,9 @@ cmd_start() {
     # the game, this script's own bash, and a flock that had been waiting
     # thirteen minutes. The Xvfb case was fixed months earlier and the comment
     # above it describes this exact failure; the game launch was simply missed.
-    (cd "$GAME" && exec setsid -f ./projectzomboid.sh -debug -nosteam </dev/null >/dev/null 2>&1 9>&-)
+    local agent=()
+    [ "${PZ_ZB:-1}" = 0 ] || agent=("-javaagent:ZombieBuddy.jar=$ZB_AGENT_ARGS" --)
+    (cd "$GAME" && exec setsid -f ./projectzomboid.sh "${agent[@]}" -debug -nosteam </dev/null >/dev/null 2>&1 9>&-)
 
     local deadline=$(( $(date +%s) + 300 )) stage=launch last_click=0 seen=""
     while [ "$(date +%s)" -lt "$deadline" ]; do

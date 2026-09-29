@@ -22,19 +22,30 @@ import java.util.concurrent.atomic.AtomicLong;
 import se.krka.kahlua.integration.annotations.LuaMethod;
 
 public class SceneListener {
-    public static final String VERSION = "1";
+    public static final String VERSION = "2";
     static final int MAX_QUEUED = 4096;
     static final ConcurrentLinkedQueue<String> QUEUE = new ConcurrentLinkedQueue<>();
     static final AtomicLong SEEN = new AtomicLong(), DROPPED = new AtomicLong(), FAILED = new AtomicLong();
     static final ThreadLocal<int[]> DEPTH = ThreadLocal.withInitial(() -> new int[1]);
     static final ThreadLocal<String> PENDING = new ThreadLocal<>();
+    // The first failure, kept for the status line: what broke, never a scene.
+    static volatile String firstError = "";
+
+    static void failed(Throwable t) {
+        FAILED.incrementAndGet();
+        if (firstError.isEmpty()) {
+            String m = t.getClass().getSimpleName() + ":" + String.valueOf(t.getMessage());
+            m = m.replace('|', '/').replace('\n', ' ').replace('\r', ' ');
+            firstError = m.length() > 120 ? m.substring(0, 120) : m;
+        }
+    }
 
     public static void enter(Object story, String family, Object[] args) {
         try {
             int[] d = DEPTH.get();
             d[0]++;
             if (d[0] == 1) PENDING.set(describe(story, family, args));
-        } catch (Throwable t) { FAILED.incrementAndGet(); }
+        } catch (Throwable t) { failed(t); }
     }
 
     public static void exit() {
@@ -49,7 +60,7 @@ public class SceneListener {
                     if (QUEUE.size() >= MAX_QUEUED) DROPPED.incrementAndGet(); else QUEUE.add(line);
                 }
             }
-        } catch (Throwable t) { FAILED.incrementAndGet(); }
+        } catch (Throwable t) { failed(t); }
     }
 
     static String describe(Object story, String family, Object[] args) {
@@ -80,7 +91,7 @@ public class SceneListener {
 
     static int call(Object o, String name) {
         try { Method m = o.getClass().getMethod(name); return ((Number) m.invoke(o)).intValue(); }
-        catch (Throwable t) { FAILED.incrementAndGet(); return 0; }
+        catch (Throwable t) { failed(t); return 0; }
     }
     static Field find(Class<?> c, String name) throws NoSuchFieldException {
         for (Class<?> k = c; k != null; k = k.getSuperclass()) {
@@ -90,15 +101,15 @@ public class SceneListener {
     }
     static int field(Object o, String name) {
         try { return ((Number) find(o.getClass(), name).get(o)).intValue(); }
-        catch (Throwable t) { FAILED.incrementAndGet(); return 0; }
+        catch (Throwable t) { failed(t); return 0; }
     }
     static float floatField(Object o, String name) {
         try { return ((Number) find(o.getClass(), name).get(o)).floatValue(); }
-        catch (Throwable t) { FAILED.incrementAndGet(); return 0f; }
+        catch (Throwable t) { failed(t); return 0f; }
     }
     static Object fieldObject(Object o, String name) {
         try { return find(o.getClass(), name).get(o); }
-        catch (Throwable t) { FAILED.incrementAndGet(); return null; }
+        catch (Throwable t) { failed(t); return null; }
     }
 
     // Lua: every waiting line, newline-separated ("" when none), at most `max`.
@@ -115,10 +126,11 @@ public class SceneListener {
         return out.toString();
     }
 
-    // Lua: "version|seen|dropped|failed|queued", so a playtest can say the
-    // listener is alive and how much it has seen.
+    // Lua: "version|seen|dropped|failed|queued|first error", so a playtest
+    // and the log can say the listener is alive, how much it has seen, and
+    // what broke first.
     @LuaMethod(name = "NHSceneListener", global = true)
     public static String status() {
-        return VERSION + "|" + SEEN.get() + "|" + DROPPED.get() + "|" + FAILED.get() + "|" + QUEUE.size();
+        return VERSION + "|" + SEEN.get() + "|" + DROPPED.get() + "|" + FAILED.get() + "|" + QUEUE.size() + "|" + firstError;
     }
 }
