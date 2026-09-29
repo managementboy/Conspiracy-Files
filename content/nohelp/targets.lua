@@ -57,6 +57,7 @@ end
 -- THRESHOLDS.
 T.setShare=0.5          -- object sets among all accepted clues, at least
 T.leanMax=0.55          -- clues read A only vs B only: neither above this share (owner, 2026-09-29)
+T.checkWorlds=6         -- worlds each map/flyer place is decided in by the progress check (E7)
 T.staleDays=14          -- a deferral or quarantine older than this is stale
 T.adhdEvery=nil         -- retired (owner, 2026-09-29): the one blind read replaced the ADHD cadence
 

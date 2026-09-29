@@ -26,4 +26,4 @@ none
 2026-09-28 T0001
 
 ## PROGRESS
-DONE-CANDIDATE @12bcaab3
+NOT DONE: places 0/253, scene sides 3/125 @dee34ae3

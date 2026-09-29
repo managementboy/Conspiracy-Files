@@ -13,6 +13,9 @@
 -- Gates (targets and thresholds: content/nohelp/targets.lua):
 --   stage0 unsigned   approved/SIGNOFF does not hold the sha256 of approved/axioms.json
 --   maps x/y          designs whose every mark and note has an accepted anchored clue
+--   places x/y        map and flyer places the game's own decision gives their full
+--                     number and both sides in each of targets.checkWorlds worlds (E7)
+--   scene sides x/y   scene kinds with a clue for each side
 --   flyers x/y        prints with an accepted anchored clue
 --   scenes x/y        scene kinds with an accepted anchored clue ("unshipped" until
 --                     Generated/VanillaScenes.lua exists)
@@ -102,6 +105,49 @@ function M.measure(opts)
         if ok and #keys>0 then maps=maps+1 end
     end
     if maps<#T.designOrder then fail("maps "..maps.."/"..#T.designOrder) end
+    -- PLAYABLE COVERAGE (E7, DR-20260929-NOHELP-GAP-PLAN): every map and
+    -- flyer place run through the game's own decision (AreaCase.decide, with
+    -- MapSiteArgs as the runtime passes it) in T.checkWorlds worlds; a place
+    -- is ready when every world gives it its full number and both sides.
+    if T.checkWorlds and T.checkWorlds>0 then
+        local Sites=require("NHShared/Generated/MapSites")
+        local AreaCase=require("NHShared/Generated/AreaCase")
+        local Args=require("NHShared/Generated/MapSiteArgs")
+        local ready,all=0,0
+        for _,e in ipairs(Sites.sites) do
+            all=all+1
+            local designs=Args.designsOf(e)
+            local ok=true
+            for seed=1,T.checkWorlds do
+                local next=AreaCase.decide{case=AreaCase.new(seed),site={id=e.areaId,bounds=e.bounds},place=e.place,
+                    designs=#designs>0 and designs or nil,marks=Args.ownMarksOf(e,designs),anchors=Args.anchorsOf(e),
+                    clues=rows,version=Manifest.VERSION,hours=0}
+                local area=next and next.areas[#next.areas]
+                if not area or (area.short or 0)>0 then ok=false; break end
+                local sides={}
+                for i=area.first,area.first+area.count-1 do sides[next.documents[i].lean]=true end
+                if not (sides.containment and sides.agricultural) then ok=false; break end
+            end
+            if ok then ready=ready+1 end
+        end
+        if ready<all then fail("places "..ready.."/"..all) end
+        -- Every scene kind has a clue for each side (the world draws one).
+        local Scenes=require("NHShared/Generated/VanillaScenes")
+        local both,kinds=0,0
+        for _,kind in ipairs(Scenes.allowedKinds()) do
+            kinds=kinds+1
+            local spot,side=Scenes.spotFor(kind),{}
+            for _,c in ipairs(rows) do
+                if type(c.anchor)=="table" and c.anchor.scene==kind then
+                    for _,w in ipairs(c.where or {}) do if w.spot==spot then side[w.lean]=true end end
+                end
+            end
+            -- A kind whose fit pair rules a side out needs only the other.
+            local r=Scenes.get(kind)
+            if (side.containment or r.c==0) and (side.agricultural or r.a==0) then both=both+1 end
+        end
+        if both<kinds then fail("scene sides "..both.."/"..kinds) end
+    end
     local flyers=0
     for _,p in ipairs(T.prints) do if anchored["print:"..p] then flyers=flyers+1 end end
     if flyers<#T.prints then fail("flyers "..flyers.."/"..#T.prints) end

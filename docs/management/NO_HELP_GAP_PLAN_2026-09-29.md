@@ -37,7 +37,11 @@ MapMediaRuntime's R.subject, not GeneratedRuntime's); the rest hold.
   store refuses more than 64 records or 24 KB (ClueMarkers.lua valid()),
   far below 518 clues: lift the ceiling and test a world with hundreds of
   finds.
-- [ ] **E7 "DONE" means reachable.** progress.lua runs the real picker over
+- [x] **E7 "DONE" means reachable.** (2026-09-29: progress.lua decides every
+  map/flyer place with the game's own AreaCase.decide in 6 worlds, arguments
+  shared with the runtime via Generated/MapSiteArgs; gates "places x/y" and
+  "scene sides x/y". First run: places 0/253, scene sides 3/125; in one world
+  246 places fall short by 1,210 clues in all and 227 have one side only.) progress.lua runs the real picker over
   every site and both scene sides; fails on short or one-sided sites.
 
 ## Content (ChatGPT, after its engine step)

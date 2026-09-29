@@ -32,6 +32,8 @@ local line,detail=measure()
 assert(line:find("^NOT DONE: "),line)
 assert(line:find("stage0",1,true) and line:find("maps 0/125",1,true) and line:find("flyers 0/133",1,true),line)
 assert(not line:find("\n"),"one line")
+assert(line:find("places 0/"..#Sites.sites,1,true),"E7: no clue, no place ready: "..line)
+assert(line:find("scene sides 0/",1,true),"E7: no scene has its sides")
 assert(detail:find("^detail: "),detail)
 noNames(line); noNames(detail)
 
