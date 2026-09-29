@@ -58,7 +58,7 @@ end
 T.setShare=0.5          -- object sets among all accepted clues, at least
 T.leanMax=0.55          -- neither conspiracy above this share of placements
 T.staleDays=14          -- a deferral or quarantine older than this is stale
-T.adhdEvery=5           -- an ADHD pass at least every this many accepted tickets
+T.adhdEvery=nil         -- retired (owner, 2026-09-29): the one blind read replaced the ADHD cadence
 
 -- FIRST RELEASE: tickets per type (handoff section 5), accepted in the
 -- registry. SCENE and UNIQUE are open now the scene table ships.

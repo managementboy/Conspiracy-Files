@@ -368,6 +368,24 @@ function M.convertTicket(ticket,rows,accepted,ctx,status)
         if r then out.rejected[#out.rejected+1]={row=row,reasons={r}}
         else good[#good+1]=row end
     end
+    -- A recipe's lean share (owner, 2026-09-29): at least this share of the
+    -- ticket's placements on that side, or the ticket comes back whole.
+    local rc=ctx.recipes and ctx.recipes[ticket]
+    if type(rc)=="table" and type(rc.leanShare)=="table" and #good>0 then
+        local total,by=0,{}
+        for _,row in ipairs(good) do for _,w in ipairs(row.where or {}) do
+            total=total+1; by[w.lean]=(by[w.lean] or 0)+1
+        end end
+        for l,share in pairs(rc.leanShare) do
+            if (by[l] or 0)<share*total then
+                for _,row in ipairs(good) do
+                    out.rejected[#out.rejected+1]={row=row,reasons={reason("RECIPE_LEAN","at least "..math.floor(share*100+0.5).."% of the ticket's placements lean "..l)}}
+                end
+                good={}
+                break
+            end
+        end
+    end
     -- A person ticket is accepted or returned whole.
     if ttype=="PERSON" and #out.rejected>0 then
         for _,row in ipairs(good) do

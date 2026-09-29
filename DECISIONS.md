@@ -1,3 +1,12 @@
+## DR-20260929-NOHELP-MAPS-BALANCE — finish the maps toward side A; ADHD cadence retired
+
+Owner decision, 2026-09-29: the ten partly covered map tickets are finished in
+one ChatGPT round, each with at least 75% of its placements on containment,
+which brings the lean balance from 61% to about 53% (target: at most 55%).
+The every-5-tickets ADHD pass is retired (`targets.adhdEvery=nil`); the one
+blind read (DR-20260928-NOHELP-CLUE-CHECK) replaced it. Paper items
+(notebooks, sheets, letters) may repeat freely: they suit conspiracies.
+
 ## DR-20260929-NOHELP-RECALLS — a repeatable recall round for quality problems
 
 Owner decision, 2026-09-29: an object appeared in 23% of the clues (players

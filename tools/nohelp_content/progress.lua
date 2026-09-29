@@ -24,6 +24,7 @@
 --   stale n           deferred tickets or quarantined serials older than targets.staleDays
 --   orphans n         incoming/ files whose serial is not in the registry (ORPHAN_TICKET)
 --   adhd n            accepted tickets since STATE.md LAST ADHD, above targets.adhdEvery
+--                     (retired by the owner 2026-09-29: targets.adhdEvery is nil)
 package.path="mod-nohelp/common/media/lua/shared/?.lua;tools/nohelp_content/?.lua;tools/cluegates/?.lua;"..package.path
 local J=require("json")
 local Convert=dofile("tools/nohelp_content/convert.lua")
@@ -196,7 +197,7 @@ function M.measure(opts)
     for s,r in pairs(reg) do
         if r.status=="accepted" and r.type~="STAGE0" and (not last or s>last) then since=since+1 end
     end
-    if since>T.adhdEvery then fail("adhd "..since) end
+    if T.adhdEvery and since>T.adhdEvery then fail("adhd "..since) end
 
     local line=#fails==0 and "DONE-CANDIDATE" or ("NOT DONE: "..table.concat(fails,", "))
     local sha=opts.sha

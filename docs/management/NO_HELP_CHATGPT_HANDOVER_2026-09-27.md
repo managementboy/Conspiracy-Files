@@ -112,6 +112,16 @@ ticket alone later in a plainer form; never copy another ticket's text.
 
 **One go (owner, 2026-09-28):** when Claude opens the remaining tickets, deliver ALL of them (summary tickets and stories, in serial order) without waiting for sign-off or review in between; hand the baton to Claude once, at the end.
 
+**Map completion and balance (owner, 2026-09-29).** Ten map tickets have a
+clue for only part of their map (progress line `maps x/125`: every mark and
+note of a map needs an accepted clue anchored to it). Their recipes say
+`complete: true` and `leanShare: {"containment": 0.75}`: deliver the whole
+ticket again, with the row already accepted copied unchanged and one new row
+for each missing mark and note, and at least 75% of the ticket's placements
+leaning containment (A), which brings the game's lean balance under 55%. Any
+form; no key ring. The check returns a ticket under its share whole
+(`RECIPE_LEAN`). The ADHD cadence (section 7) is retired: no ADHD passes.
+
 **Recalls (owner, 2026-09-29).** A quality problem found after clues are in
 the game (by a count, or later by a player) becomes a recall in
 `content/nohelp/recalls.json`: why, the pieces it removes (`ban`), a rarity
