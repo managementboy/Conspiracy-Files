@@ -1,0 +1,40 @@
+[
+  {
+    "id": "t0356-01",
+    "kind": "set",
+    "pieces": [
+      "Potato",
+      "EmptyJar"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "vehicle",
+        "lean": "containment",
+        "rival": "agricultural"
+      }
+    ],
+    "anchor": {
+      "scene": "RVSAmbulanceCrash"
+    },
+    "title": "Cut potato with a soil jar at at Tuesday dawn",
+    "body": "The cut potato with a soil jar are tied in one bundle. a greasy sheen marks the field side; torn warning tape marks the other.",
+    "rival_reading": "The bundle could belong to field workers caught in a response or responders crossing a work site; it preserves both readings.",
+    "gloss": "A mixed bundle keeps field activity and emergency response equally plausible.",
+    "axioms": {
+      "containment": [
+        "c-warning",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0356"
+    }
+  }
+]
