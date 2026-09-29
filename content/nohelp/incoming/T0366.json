@@ -1,0 +1,75 @@
+[
+  {
+    "anchor": {
+      "scene": "RVSDeadEnd"
+    },
+    "body": "the fertilizer sack with a drained sprayer carry rust-colored grit from the well-water study. they were packed before the nurse stopped taking calls.",
+    "id": "t0366-01",
+    "kind": "set",
+    "pieces": [
+      "Fertilizer",
+      "GardeningSprayEmpty"
+    ],
+    "title": "fertilizer sack with a drained sprayer at after monday supper",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ],
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-warning",
+        "c-failure"
+      ]
+    },
+    "gloss": "A personal field trace precedes the visible emergency response.",
+    "prov": {
+      "batch": "T0366",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "Responders could have collected the rust-colored grit while crossing treated land; the note or objects do not prove the program began the emergency."
+  },
+  {
+    "id": "t0366-02",
+    "kind": "written",
+    "pieces": [
+      "notebook"
+    ],
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ],
+    "title": "The road ends twice",
+    "body": "They painted an arrow to the exit, then shifted the barrier beyond the last turn. I walked back for my mother, who cannot climb the ditch. By then the painted arrow was covered and the man with the clipboard said he had seen no one.",
+    "anchor": {
+      "scene": "RVSDeadEnd"
+    },
+    "rival_reading": "The agricultural trial may have caused the disorder that forced improvised decisions.",
+    "gloss": "A witness records a failed evacuation count or route.",
+    "axioms": {
+      "containment": [
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0366"
+    }
+  }
+]
