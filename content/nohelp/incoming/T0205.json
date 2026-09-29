@@ -1,0 +1,52 @@
+[
+  {
+    "anchor": {
+      "print": "ElveeArena"
+    },
+    "body": "The event schedule is marked completed before the gate receipt was issued; the supply list reserves water for a crew at the loading door.",
+    "id": "t0205-01",
+    "kind": "set",
+    "pieces": [
+      "WaterBottle",
+      "Notebook"
+    ],
+    "title": "The bout schedule",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture",
+        "containers": [
+          "crate",
+          "shelves",
+          "desk",
+          "counter",
+          "cardboardbox",
+          "bin"
+        ]
+      }
+    ],
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "Elvee Arena",
+      "source": "print:ElveeArena"
+    },
+    "gloss": "A public event closes before its gate receipt is issued.",
+    "prov": {
+      "batch": "T0205",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A response crew could use the loading door during a public event; the schedule does not identify why they were there."
+  }
+]
