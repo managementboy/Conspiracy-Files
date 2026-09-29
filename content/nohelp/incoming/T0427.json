@@ -1,0 +1,402 @@
+[
+  {
+    "id": "t0427-01",
+    "kind": "written",
+    "pieces": [
+      "diary"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "furniture",
+        "lean": "agricultural",
+        "rival": "containment",
+        "containers": [
+          "desk",
+          "crate",
+          "shelves",
+          "counter",
+          "cardboardbox",
+          "bin"
+        ]
+      }
+    ],
+    "title": "A mark above the water — after the rain",
+    "body": "The bottle looked clean until it dried, when a green line appeared above the water. We had filled it after the field truck passed, at a tap on the other side of the road.\n\nThe dog would no longer drink from the dish left outside. My family asked me to put the paper away with the bills. I kept it separate because the person involved might come back for it.",
+    "rival_reading": "The emergency response could have moved or contaminated these things.",
+    "gloss": "A trace of trial material appears beyond a field boundary.",
+    "axioms": {
+      "containment": [
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0427"
+    }
+  },
+  {
+    "id": "t0427-02",
+    "kind": "written",
+    "pieces": [
+      "notebook"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "furniture",
+        "lean": "agricultural",
+        "rival": "containment",
+        "containers": [
+          "desk",
+          "crate",
+          "shelves",
+          "counter",
+          "cardboardbox",
+          "bin"
+        ]
+      }
+    ],
+    "title": "The garden after misting — after the rain",
+    "body": "I covered the herbs when the trial vehicle passed. By evening the leaves under the cover had curled too. The neighbor said the spray could not have crossed the fence, but her laundry had the same pale grains.\n\nThe shop had already closed before I could return with the question. I had meant to save it only until someone could explain the difference. By then the ordinary work around us had stopped.",
+    "rival_reading": "The emergency response could have moved or contaminated these things.",
+    "gloss": "A trace of trial material appears beyond a field boundary.",
+    "axioms": {
+      "containment": [
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0427"
+    }
+  },
+  {
+    "id": "t0427-03",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "furniture",
+        "lean": "agricultural",
+        "rival": "containment",
+        "containers": [
+          "desk",
+          "crate",
+          "shelves",
+          "counter",
+          "cardboardbox",
+          "bin"
+        ]
+      }
+    ],
+    "title": "Supper from the wrong side — after the rain",
+    "body": "The feed-store driver left a sack and stopped to wash his hands before accepting a cup of tea. He asked us not to use the rain barrel. His warning never appeared on the delivery slip.\n\nThe next family along the road noticed the smell without seeing the truck. We compared what we had seen with what was written there. The second account omitted the small part that had frightened us.",
+    "rival_reading": "The emergency response could have moved or contaminated these things.",
+    "gloss": "A trace of trial material appears beyond a field boundary.",
+    "axioms": {
+      "containment": [
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0427"
+    }
+  },
+  {
+    "id": "t0427-04",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "furniture",
+        "lean": "agricultural",
+        "rival": "containment",
+        "containers": [
+          "desk",
+          "crate",
+          "shelves",
+          "counter",
+          "cardboardbox",
+          "bin"
+        ]
+      }
+    ],
+    "title": "Boots by the threshold — after the rain",
+    "body": "The workers removed their boots outside. By morning the pale dust had traveled inside on the dog’s paws. No one in the house had gone near the trial rows.\n\nI wrote down the day because the first warning arrived after it. I left the date on the page and did not try to straighten the damaged edge. Someone else might remember the same afternoon.",
+    "rival_reading": "The emergency response could have moved or contaminated these things.",
+    "gloss": "A trace of trial material appears beyond a field boundary.",
+    "axioms": {
+      "containment": [
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0427"
+    }
+  },
+  {
+    "id": "t0427-05",
+    "kind": "written",
+    "pieces": [
+      "diary"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "furniture",
+        "lean": "agricultural",
+        "rival": "containment",
+        "containers": [
+          "desk",
+          "crate",
+          "shelves",
+          "counter",
+          "cardboardbox",
+          "bin"
+        ]
+      }
+    ],
+    "title": "The jar in a grocery bag — after the rain",
+    "body": "I was asked to keep this sample apart from the cooking jars. Its lid came loose on the way back from the orchard. The grocery bag was set on the table before I noticed the smell.\n\nThe child’s blanket was drying nearby and held the same fine dust. My family asked me to put the paper away with the bills. I kept it separate because the person involved might come back for it.",
+    "rival_reading": "The emergency response could have moved or contaminated these things.",
+    "gloss": "A trace of trial material appears beyond a field boundary.",
+    "axioms": {
+      "containment": [
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0427"
+    }
+  },
+  {
+    "id": "t0427-06",
+    "kind": "written",
+    "pieces": [
+      "notebook"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "furniture",
+        "lean": "agricultural",
+        "rival": "containment",
+        "containers": [
+          "desk",
+          "crate",
+          "shelves",
+          "counter",
+          "cardboardbox",
+          "bin"
+        ]
+      }
+    ],
+    "title": "A fence too late — after the rain",
+    "body": "They painted the boundary posts after the field test was done. The path we use for water lies beyond the last post. We had walked it that morning with the children.\n\nWe washed the small cup twice and put it away from the others. I had meant to save it only until someone could explain the difference. By then the ordinary work around us had stopped.",
+    "rival_reading": "The emergency response could have moved or contaminated these things.",
+    "gloss": "A trace of trial material appears beyond a field boundary.",
+    "axioms": {
+      "containment": [
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0427"
+    }
+  },
+  {
+    "id": "t0427-07",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "furniture",
+        "lean": "agricultural",
+        "rival": "containment",
+        "containers": [
+          "desk",
+          "crate",
+          "shelves",
+          "counter",
+          "cardboardbox",
+          "bin"
+        ]
+      }
+    ],
+    "title": "The calf’s water pail — after the rain",
+    "body": "The calves refused their water before the county car appeared. I poured it into a spare pail and found an oily rim when it settled. We had drawn it from the same shallow well as ours.\n\nThe dog would no longer drink from the dish left outside. We compared what we had seen with what was written there. The second account omitted the small part that had frightened us.",
+    "rival_reading": "The emergency response could have moved or contaminated these things.",
+    "gloss": "A trace of trial material appears beyond a field boundary.",
+    "axioms": {
+      "containment": [
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0427"
+    }
+  },
+  {
+    "id": "t0427-08",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "furniture",
+        "lean": "agricultural",
+        "rival": "containment",
+        "containers": [
+          "desk",
+          "crate",
+          "shelves",
+          "counter",
+          "cardboardbox",
+          "bin"
+        ]
+      }
+    ],
+    "title": "A wash after the shift — after the rain",
+    "body": "The driver washed the sprayer beside the closed shop. He paid for soap but not for another bucket. The water ran through the drain toward houses that had no notice about the trial.\n\nThe shop had already closed before I could return with the question. I left the date on the page and did not try to straighten the damaged edge. Someone else might remember the same afternoon.",
+    "rival_reading": "The emergency response could have moved or contaminated these things.",
+    "gloss": "A trace of trial material appears beyond a field boundary.",
+    "axioms": {
+      "containment": [
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0427"
+    }
+  },
+  {
+    "id": "t0427-09",
+    "kind": "written",
+    "pieces": [
+      "diary"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "furniture",
+        "lean": "agricultural",
+        "rival": "containment",
+        "containers": [
+          "desk",
+          "crate",
+          "shelves",
+          "counter",
+          "cardboardbox",
+          "bin"
+        ]
+      }
+    ],
+    "title": "First rain on the roof — after the rain",
+    "body": "The first rain after the field treatment left yellow flecks in a pan under the leak. We had shut the window before the truck came. I saved the pan because no one believed me when I described it.\n\nThe next family along the road noticed the smell without seeing the truck. My family asked me to put the paper away with the bills. I kept it separate because the person involved might come back for it.",
+    "rival_reading": "The emergency response could have moved or contaminated these things.",
+    "gloss": "A trace of trial material appears beyond a field boundary.",
+    "axioms": {
+      "containment": [
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0427"
+    }
+  },
+  {
+    "id": "t0427-10",
+    "kind": "written",
+    "pieces": [
+      "notebook"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "furniture",
+        "lean": "agricultural",
+        "rival": "containment",
+        "containers": [
+          "desk",
+          "crate",
+          "shelves",
+          "counter",
+          "cardboardbox",
+          "bin"
+        ]
+      }
+    ],
+    "title": "A receipt from the seed counter — after the rain",
+    "body": "The receipt includes a small charge for sample jars. The shopkeeper wrote a household address beside it, not a field number. I asked why, and he said the delivery men used whatever route remained open.\n\nI wrote down the day because the first warning arrived after it. I had meant to save it only until someone could explain the difference. By then the ordinary work around us had stopped.",
+    "rival_reading": "The emergency response could have moved or contaminated these things.",
+    "gloss": "A trace of trial material appears beyond a field boundary.",
+    "axioms": {
+      "containment": [
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0427"
+    }
+  }
+]
