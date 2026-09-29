@@ -24,7 +24,7 @@ MapMediaRuntime's R.subject, not GeneratedRuntime's); the rest hold.
   inside their 33x33 box, 62 within 12 more tiles; 19 have none (those clues
   fall back to a body, then the floor, E2). Owner: yes, search 12 tiles
   beyond outdoor map and flyer places (Session.outdoorSite; done 2026-09-29).
-- [ ] **E4 ZombieBuddy scene listener (required dependency).** A Java patch
+- [x] **E4 ZombieBuddy scene listener (required dependency).** (2026-09-29: tools/nohelp-scenes, NoHelpScenes.jar, 143 story classes, mod.info require=\ZombieBuddy; VanillaSceneRuntime drains it and skips the trace scan when present; test/nohelp_scene_listener.lua + SceneListenerTest.java; NATIVE CHECK PENDING - needs a visible run with ZombieBuddy) A Java patch
   on the game's story `randomize*` methods reports every generated scene
   (kind, building/zone/chunk, time) to Lua; replaces trace matching as the
   way scenes are known. Research: ZombieBuddy 2.3.2, @Patch advice, queue

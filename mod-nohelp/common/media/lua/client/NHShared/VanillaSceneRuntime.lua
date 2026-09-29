@@ -292,9 +292,60 @@ local function stepJob()
     end
 end
 
+-- THE SCENE LISTENER (E4, DR-20260929-NOHELP-GAP-PLAN; ZombieBuddy is a
+-- required dependency, owner 2026-09-29). NoHelpScenes.jar hears every story
+-- the game builds, as it builds it, and queues "kind|family|x1|y1|x2|y2|z|
+-- cx|cy" lines (tools/nohelp-scenes/src/.../SceneListener.java). Drained
+-- here, R.DRAIN_PER_TICK a tick, only once the world record is open (until
+-- then the lines wait in the jar's queue). Each allowed kind becomes a
+-- confirmed scene at its own point, in its building's, zone's or vehicle's
+-- box: every kind, not only the few the traces below can recognise. With the
+-- listener present the trace scan is not run at all.
+R.DRAIN_PER_TICK=32
+local listenerMissingNoted=false
+function R.generated(kind,family,x1,y1,x2,y2,z,cx,cy)
+    local gr=runtime()
+    if not gr or not gr.scene or not gr.sceneSeen then return false,"no runtime" end
+    if not Scenes.allowed(kind) then return false,"not a clue kind" end
+    -- A hand-checked scene is its citation's, decided by place.
+    if Scenes.citation(kind) then return false,"cited" end
+    local key=SceneMatch.keyAt(cx,cy,z)
+    local old=gr.scene(key)
+    if old and old.kind then return false,"known" end
+    local rec={kind=kind,x=cx,y=cy,z=z,hours=hoursNow(),source="generated"}
+    if x2>x1 and y2>y1 then rec.bounds={x1=x1,y1=y1,x2=x2,y2=y2}
+    else local ccx,ccy=SceneMatch.cellOf(cx,cy); rec.bounds=SceneMatch.cellBounds(ccx,ccy) end
+    local ok,why=gr.sceneSeen(key,rec)
+    if ok then confirmed[key]=kind end
+    CFLog.write(ok and "i" or "d","scan",{why=ok and "scene-generated" or ("scene-generated-"..tostring(why)),area=key,kind=kind,family=family})
+    return ok,why
+end
+local function listen()
+    if type(NHSceneDrain)~="function" then
+        if not listenerMissingNoted then
+            listenerMissingNoted=true
+            CFLog.write("w","scan",{why="scene-listener-missing"})
+        end
+        return false
+    end
+    local gr=runtime()
+    if not gr or not gr.scene or not gr.sceneSeen or not gr.worldSeed or not gr.worldSeed() then return true end
+    local ok,text=pcall(NHSceneDrain,R.DRAIN_PER_TICK)
+    if not ok or type(text)~="string" or text=="" then return true end
+    for line in text:gmatch("[^\n]+") do
+        local kind,family,a,b,c,d,z,e,f=line:match("^([%w_]+)|(%a+)|(%-?%d+)|(%-?%d+)|(%-?%d+)|(%-?%d+)|(%-?%d+)|(%-?%d+)|(%-?%d+)$")
+        if kind then
+            pcall(R.generated,kind,family,tonumber(a),tonumber(b),tonumber(c),tonumber(d),tonumber(z),tonumber(e),tonumber(f))
+        end
+    end
+    return true
+end
+R.listen=listen
+
 local function tick()
     if not enabled() then return end
     ticks=ticks+1
+    if listen() then return end
     if job then stepJob(); return end
     if ticks%R.CHECK_TICKS~=0 or nFlagged==0 then return end
     local gr=runtime()
