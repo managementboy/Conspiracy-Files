@@ -1,0 +1,9 @@
+Linux No Help soak test 20260929T194034
+Save size: 
+Clues placed: 35
+Listener events: 1
+Reload: yes
+
+source: 3f55f0ab
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display ?
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display ?
