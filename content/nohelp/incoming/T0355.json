@@ -1,0 +1,76 @@
+[
+  {
+    "anchor": {
+      "scene": "RDSZombiesEating"
+    },
+    "body": "My coat pocket entry says the well-water study workers brushed off silver specks. the mice abandoned the bin before the nurse stopped taking calls.",
+    "id": "t0355-01",
+    "kind": "written",
+    "pieces": [
+      "notebook"
+    ],
+    "title": "Coat pocket note \u2014 after Monday supper",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "corpse"
+      }
+    ],
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-warning",
+        "c-failure"
+      ]
+    },
+    "gloss": "A personal field trace precedes the visible emergency response.",
+    "prov": {
+      "batch": "T0355",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "Responders could have collected the silver specks while crossing treated land; the note or objects do not prove the program began the emergency."
+  },
+  {
+    "anchor": {
+      "scene": "RDSZombiesEating"
+    },
+    "body": "I counted four names in the book they carried, but only three people lay here. The man with the book asked me not to look for the fourth.\n\nHe turned the page toward me to show that the missing person had already been accounted for. The writing was too small to read and he closed it before I could ask.\n\nI wrote the four names as well as I remember them. I may have misspelled one, but I know I heard it.",
+    "id": "t0355-02",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "title": "Four names, three bodies",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "corpse"
+      }
+    ],
+    "axioms": {
+      "containment": [
+        "c-warning",
+        "c-accounting"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "gloss": "An altered count or retained object was left at the scene.",
+    "prov": {
+      "batch": "T0355",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A response to an agricultural exposure could explain the same record or object."
+  }
+]
