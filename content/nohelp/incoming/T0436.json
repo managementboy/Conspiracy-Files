@@ -1,0 +1,396 @@
+[
+  {
+    "id": "t0436-01",
+    "kind": "written",
+    "pieces": [
+      "diary"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "furniture",
+        "lean": "agricultural",
+        "rival": "containment",
+        "containers": [
+          "medicine",
+          "sidetable",
+          "dresser",
+          "desk",
+          "smallbox",
+          "locker"
+        ]
+      }
+    ],
+    "title": "The first sick calf",
+    "body": "The calf stopped drinking after we opened the new feed. Its sister stayed in the back pen on the old sack and still pushed me for breakfast.\n\nI wrote that down before anyone thought to count people. The feed bill was due Friday. I kept telling myself the animal was sulking because I was late.",
+    "rival_reading": "A failure of the later response could still have left this exposure unaddressed.",
+    "gloss": "An ordinary trace links a farm exposure to a distinct observed outcome: the first sick calf.",
+    "axioms": {
+      "containment": [
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-pathway",
+        "a-timing"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0436"
+    }
+  },
+  {
+    "id": "t0436-02",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "furniture",
+        "lean": "agricultural",
+        "rival": "containment",
+        "containers": [
+          "smallbox",
+          "cardboardbox",
+          "shelves",
+          "desk",
+          "counter",
+          "crate"
+        ]
+      }
+    ],
+    "title": "Sunday at the water trough",
+    "body": "We filled the near trough from the field line and the far one from the well. By dusk the near pen was quiet; the far pen made its usual racket.\n\nI switched the hose myself. My mother asked why I kept a note about water when the cattle needed hay.",
+    "rival_reading": "A failure of the later response could still have left this exposure unaddressed.",
+    "gloss": "An ordinary trace links a farm exposure to a distinct observed outcome: sunday at the water trough.",
+    "axioms": {
+      "containment": [
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-pathway",
+        "a-timing"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0436"
+    }
+  },
+  {
+    "id": "t0436-03",
+    "kind": "written",
+    "pieces": [
+      "notebook"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "furniture",
+        "lean": "agricultural",
+        "rival": "containment",
+        "containers": [
+          "dishescabinet",
+          "counter",
+          "shelves",
+          "sidetable",
+          "smallbox",
+          "bin"
+        ]
+      }
+    ],
+    "title": "The hay stayed clean",
+    "body": "The bale under the roof was sound. The loose hay left beside the sprayer curled at the edges, and the rabbits would only eat from the roofed bale.\n\nI had promised to sweep both piles before supper. Now the clean one is marked with my old blue string so I can find it in a hurry.",
+    "rival_reading": "A failure of the later response could still have left this exposure unaddressed.",
+    "gloss": "An ordinary trace links a farm exposure to a distinct observed outcome: the hay stayed clean.",
+    "axioms": {
+      "containment": [
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-pathway",
+        "a-timing"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0436"
+    }
+  },
+  {
+    "id": "t0436-04",
+    "kind": "written",
+    "pieces": [
+      "diary"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "furniture",
+        "lean": "agricultural",
+        "rival": "containment",
+        "containers": [
+          "wardrobe",
+          "dresser",
+          "desk",
+          "filingcabinet",
+          "smallbox",
+          "shelves"
+        ]
+      }
+    ],
+    "title": "The feed before the fever",
+    "body": "My brother took the sacks to the poultry shed on Tuesday. He came back nauseated and slept through Wednesday's milking. The children who stayed in town were well that night.\n\nThe invoice sat under the sugar bowl because we still owed for the load. I was angry about the money before I was frightened about him.",
+    "rival_reading": "A failure of the later response could still have left this exposure unaddressed.",
+    "gloss": "An ordinary trace links a farm exposure to a distinct observed outcome: the feed before the fever.",
+    "axioms": {
+      "containment": [
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-pathway",
+        "a-timing"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0436"
+    }
+  },
+  {
+    "id": "t0436-05",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "mailbox",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "title": "The open gate",
+    "body": "Our goats grazed the ditch after the field truck passed. The ones shut in the upper pen ate the same hay but never reached the ditch, and they kept their appetites.\n\nI used to complain that the upper gate stuck. That day I was grateful and ashamed of how long it took me to notice why.",
+    "rival_reading": "A failure of the later response could still have left this exposure unaddressed.",
+    "gloss": "An ordinary trace links a farm exposure to a distinct observed outcome: the open gate.",
+    "axioms": {
+      "containment": [
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-pathway",
+        "a-timing"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0436"
+    }
+  },
+  {
+    "id": "t0436-06",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "furniture",
+        "lean": "agricultural",
+        "rival": "containment",
+        "containers": [
+          "locker",
+          "filingcabinet",
+          "desk",
+          "shelves",
+          "cardboardbox",
+          "crate"
+        ]
+      }
+    ],
+    "title": "The day the hens fell silent",
+    "body": "Only the flock beside the new grain bin stopped laying. I gave the birds in the yard from the old tin; they made noise all morning and left eggs by noon.\n\nI put the feed scoop on a shelf rather than wash it. It seemed useful to know exactly which bin it had touched.",
+    "rival_reading": "A failure of the later response could still have left this exposure unaddressed.",
+    "gloss": "An ordinary trace links a farm exposure to a distinct observed outcome: the day the hens fell silent.",
+    "axioms": {
+      "containment": [
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-pathway",
+        "a-timing"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0436"
+    }
+  },
+  {
+    "id": "t0436-07",
+    "kind": "written",
+    "pieces": [
+      "diary"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "furniture",
+        "lean": "agricultural",
+        "rival": "containment",
+        "containers": [
+          "desk",
+          "filingcabinet",
+          "shelves",
+          "cardboardbox",
+          "smallbox",
+          "crate"
+        ]
+      }
+    ],
+    "title": "The barn dust",
+    "body": "I swept the packing room while the new seed bags were stacked there. By evening my throat burned. My cousin swept the empty stall next door and went to the dance.\n\nWe both laughed at my cough at first. I can still see the pale stripe the sacks left on the floor.",
+    "rival_reading": "A failure of the later response could still have left this exposure unaddressed.",
+    "gloss": "An ordinary trace links a farm exposure to a distinct observed outcome: the barn dust.",
+    "axioms": {
+      "containment": [
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-pathway",
+        "a-timing"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0436"
+    }
+  },
+  {
+    "id": "t0436-08",
+    "kind": "written",
+    "pieces": [
+      "notebook"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "furniture",
+        "lean": "agricultural",
+        "rival": "containment",
+        "containers": [
+          "crate",
+          "metal_shelves",
+          "counter",
+          "shelves",
+          "cardboardbox",
+          "locker"
+        ]
+      }
+    ],
+    "title": "The second watering",
+    "body": "A row of beans wilted after water from the field barrel. The next row, planted the same day, had rainwater saved under the porch and still stood upright.\n\nI let the dry row grow long because I wanted to be sure I hadn't simply planted too late. Now both rows are easy to tell apart.",
+    "rival_reading": "A failure of the later response could still have left this exposure unaddressed.",
+    "gloss": "An ordinary trace links a farm exposure to a distinct observed outcome: the second watering.",
+    "axioms": {
+      "containment": [
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-pathway",
+        "a-timing"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0436"
+    }
+  },
+  {
+    "id": "t0436-09",
+    "kind": "written",
+    "pieces": [
+      "receipt"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "furniture",
+        "lean": "agricultural",
+        "rival": "containment",
+        "containers": [
+          "fridge",
+          "counter",
+          "shelves",
+          "smallbox",
+          "bin",
+          "cardboardbox"
+        ]
+      }
+    ],
+    "title": "The morning after the delivery",
+    "body": "Three calves were off their feed in the pen that received the new grain. The others had the same weather and the same night watch but ate from an unopened older sack.\n\nI was supposed to balance the feed bill. Instead I drew the pen divisions on the back of the envelope.",
+    "rival_reading": "A failure of the later response could still have left this exposure unaddressed.",
+    "gloss": "An ordinary trace links a farm exposure to a distinct observed outcome: the morning after the delivery.",
+    "axioms": {
+      "containment": [
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-pathway",
+        "a-timing"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0436"
+    }
+  },
+  {
+    "id": "t0436-10",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "mailbox",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "title": "What the river did not reach",
+    "body": "The lower garden took the muddy overflow from the field. The upper garden stayed dry. A week later the lower leaves had black edges and the upper cabbage was still growing.\n\nI meant to take a photograph for the seed supplier. The camera was full of birthday pictures and I could not bring myself to use the last frame.",
+    "rival_reading": "A failure of the later response could still have left this exposure unaddressed.",
+    "gloss": "An ordinary trace links a farm exposure to a distinct observed outcome: what the river did not reach.",
+    "axioms": {
+      "containment": [
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-pathway",
+        "a-timing"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0436"
+    }
+  }
+]

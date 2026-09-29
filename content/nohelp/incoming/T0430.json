@@ -1,0 +1,416 @@
+[
+  {
+    "id": "t0430-01",
+    "kind": "set",
+    "pieces": [
+      "SeedBag",
+      "Rope"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "furniture",
+        "lean": "agricultural",
+        "rival": "containment",
+        "containers": [
+          "fridge",
+          "counter",
+          "shelves",
+          "smallbox",
+          "bin",
+          "cardboardbox"
+        ]
+      }
+    ],
+    "title": "The feed left untouched",
+    "body": "A tied sack is full of pale pellets. The opened sack beside it has dark pellets and a chewed edge where something fed.",
+    "rival_reading": "A failure of the later response could still have left this exposure unaddressed.",
+    "gloss": "An ordinary trace links a farm exposure to a distinct observed outcome: the feed left untouched.",
+    "axioms": {
+      "containment": [
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-pathway",
+        "a-timing"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0430"
+    }
+  },
+  {
+    "id": "t0430-02",
+    "kind": "set",
+    "pieces": [
+      "Milk",
+      "Spoon"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "furniture",
+        "lean": "agricultural",
+        "rival": "containment",
+        "containers": [
+          "toolcabinet",
+          "locker",
+          "crate",
+          "shelves",
+          "cardboardbox",
+          "desk"
+        ]
+      }
+    ],
+    "title": "The milk before morning",
+    "body": "The bottle of milk is curdled, though the sealed carton stayed cold beside it. A feed scoop is crusted at one end.",
+    "rival_reading": "A failure of the later response could still have left this exposure unaddressed.",
+    "gloss": "An ordinary trace links a farm exposure to a distinct observed outcome: the milk before morning.",
+    "axioms": {
+      "containment": [
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-pathway",
+        "a-timing"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0430"
+    }
+  },
+  {
+    "id": "t0430-03",
+    "kind": "set",
+    "pieces": [
+      "Egg",
+      "CornSeed"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "furniture",
+        "lean": "agricultural",
+        "rival": "containment",
+        "containers": [
+          "dresser",
+          "wardrobe",
+          "sidetable",
+          "desk",
+          "locker",
+          "smallbox"
+        ]
+      }
+    ],
+    "title": "The coop threshold",
+    "body": "Eggshells from the inside nest are clean. The ones near the spilled feed have flecks of the same green grit.",
+    "rival_reading": "A failure of the later response could still have left this exposure unaddressed.",
+    "gloss": "An ordinary trace links a farm exposure to a distinct observed outcome: the coop threshold.",
+    "axioms": {
+      "containment": [
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-pathway",
+        "a-timing"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0430"
+    }
+  },
+  {
+    "id": "t0430-04",
+    "kind": "set",
+    "pieces": [
+      "Bucket",
+      "Wire"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "furniture",
+        "lean": "agricultural",
+        "rival": "containment",
+        "containers": [
+          "postbox",
+          "shelves",
+          "counter",
+          "smallbox",
+          "cardboardbox",
+          "desk"
+        ]
+      }
+    ],
+    "title": "The unused pail",
+    "body": "The clean bucket is hung above reach; the one on the ground has hoof marks in its rim and residue at the bottom.",
+    "rival_reading": "A failure of the later response could still have left this exposure unaddressed.",
+    "gloss": "An ordinary trace links a farm exposure to a distinct observed outcome: the unused pail.",
+    "axioms": {
+      "containment": [
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-pathway",
+        "a-timing"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0430"
+    }
+  },
+  {
+    "id": "t0430-05",
+    "kind": "set",
+    "pieces": [
+      "FishingNet",
+      "SeedBag"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "furniture",
+        "lean": "agricultural",
+        "rival": "containment",
+        "containers": [
+          "shelves",
+          "grocerstand",
+          "counter",
+          "smallcrate",
+          "cardboardbox",
+          "crate"
+        ]
+      }
+    ],
+    "title": "The bird feeder",
+    "body": "Seed caught in the mesh has gone gray. The spare packet beneath it is dry and yellow.",
+    "rival_reading": "A failure of the later response could still have left this exposure unaddressed.",
+    "gloss": "An ordinary trace links a farm exposure to a distinct observed outcome: the bird feeder.",
+    "axioms": {
+      "containment": [
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-pathway",
+        "a-timing"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0430"
+    }
+  },
+  {
+    "id": "t0430-06",
+    "kind": "set",
+    "pieces": [
+      "Rope",
+      "Bowl"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "furniture",
+        "lean": "agricultural",
+        "rival": "containment",
+        "containers": [
+          "filingcabinet",
+          "desk",
+          "shelves",
+          "crate",
+          "locker",
+          "cardboardbox"
+        ]
+      }
+    ],
+    "title": "The pen rope",
+    "body": "One end is polished by an animal's neck, the other stiff with dark feed dust. A small feed bowl is still tied beside it.",
+    "rival_reading": "A failure of the later response could still have left this exposure unaddressed.",
+    "gloss": "An ordinary trace links a farm exposure to a distinct observed outcome: the pen rope.",
+    "axioms": {
+      "containment": [
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-pathway",
+        "a-timing"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0430"
+    }
+  },
+  {
+    "id": "t0430-07",
+    "kind": "set",
+    "pieces": [
+      "Apple",
+      "Corn"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "furniture",
+        "lean": "agricultural",
+        "rival": "containment",
+        "containers": [
+          "medicine",
+          "sidetable",
+          "dresser",
+          "desk",
+          "smallbox",
+          "locker"
+        ]
+      }
+    ],
+    "title": "The untouched crate",
+    "body": "Two apples are bruised but clean. The corn in the same crate has a powder along its seam that was not there on the fruit.",
+    "rival_reading": "A failure of the later response could still have left this exposure unaddressed.",
+    "gloss": "An ordinary trace links a farm exposure to a distinct observed outcome: the untouched crate.",
+    "axioms": {
+      "containment": [
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-pathway",
+        "a-timing"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0430"
+    }
+  },
+  {
+    "id": "t0430-08",
+    "kind": "set",
+    "pieces": [
+      "Broom",
+      "SeedBag"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "furniture",
+        "lean": "agricultural",
+        "rival": "containment",
+        "containers": [
+          "smallbox",
+          "cardboardbox",
+          "shelves",
+          "desk",
+          "counter",
+          "crate"
+        ]
+      }
+    ],
+    "title": "The barn sweep",
+    "body": "The broom has dark grain caught in its bristles. The swept pile was bagged separately from the clean straw.",
+    "rival_reading": "A failure of the later response could still have left this exposure unaddressed.",
+    "gloss": "An ordinary trace links a farm exposure to a distinct observed outcome: the barn sweep.",
+    "axioms": {
+      "containment": [
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-pathway",
+        "a-timing"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0430"
+    }
+  },
+  {
+    "id": "t0430-09",
+    "kind": "set",
+    "pieces": [
+      "Spoon",
+      "Twine",
+      "Corn"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "vehicle",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "title": "The borrowed scoop",
+    "body": "A spoon holds pale feed beneath darker grains. Its handle is wrapped with twine as if someone meant to find it again.",
+    "rival_reading": "A failure of the later response could still have left this exposure unaddressed.",
+    "gloss": "An ordinary trace links a farm exposure to a distinct observed outcome: the borrowed scoop.",
+    "axioms": {
+      "containment": [
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-pathway",
+        "a-timing"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0430"
+    }
+  },
+  {
+    "id": "t0430-10",
+    "kind": "set",
+    "pieces": [
+      "Bowl",
+      "Rope",
+      "CornSeed"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "furniture",
+        "lean": "agricultural",
+        "rival": "containment",
+        "containers": [
+          "wardrobe",
+          "dresser",
+          "desk",
+          "filingcabinet",
+          "smallbox",
+          "shelves"
+        ]
+      }
+    ],
+    "title": "The closed side of the gate",
+    "body": "The water bowl on this side is clean. Feed scattered across the hinge has the same dark flecks as the animal's collar.",
+    "rival_reading": "A failure of the later response could still have left this exposure unaddressed.",
+    "gloss": "An ordinary trace links a farm exposure to a distinct observed outcome: the closed side of the gate.",
+    "axioms": {
+      "containment": [
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-pathway",
+        "a-timing"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0430"
+    }
+  }
+]

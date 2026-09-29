@@ -5,7 +5,7 @@ never a place name, map, flyer, scene, person or clue text here. Whoever holds t
 baton edits it; `lua5.1 tools/nohelp_content/progress.lua --state` rewrites PROGRESS.
 
 ## BATON
-CHATGPT since 2026-09-29 because WRITING
+CLAUDE since 2026-09-29 because REVIEW
 
 ## STAGE
 EXPANSION
@@ -14,7 +14,7 @@ EXPANSION
 none
 
 ## NEXT
-B's own evidence, in one go (handover section 5): stock tickets T0428-T0441, 10 clues each; one commit per ticket; baton to CLAUDE with REVIEW once, at the end
+Review T0428-T0441 (140 rows, 0 returned)
 
 ## OPEN RETURNS
 none

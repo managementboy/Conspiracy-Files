@@ -1,3 +1,14 @@
+## DR-20260929-NOHELP-MORE-THEORIES — two live theories from the full pool
+
+Owner decisions, 2026-09-29, responding to `docs/reviews/NO_HELP_MORE_THEORIES_2026-09-29.md`:
+
+1. In a new world, any pair of available theories can be selected. With N available theories, all N(N-1)/2 unordered pairs must be eligible; do not use a restricted compatibility list. Every newly added theory therefore requires complete content and coverage against every existing theory before it joins the selectable pool.
+2. All eligible pairs have equal odds. The ordering of the two theory IDs is not a different mystery; each distinct pair participates equally.
+3. Theories may both be partly right. Neither pair member has to logically exclude the other, but each needs an independently understandable argument.
+4. A world keeps the pair selected when it was created, including an existing A/B world. Updating the mod never rerolls that world's pair.
+5. The mod description tells players that a world randomly selects two theories at creation. In play, there is no further explanation and no disclosure of which pair was selected.
+6. The existing marked-target minimum remains: at least three clues with two leaning toward the target's favoured theory and one toward the other. The goal is to place more clues whenever possible; 2:1 describes the minimum composition, not a required ratio for larger groups. The two selected theories alone would require only two clues for representation, but the owner explicitly keeps this higher floor. The existing picker may reuse an object set at another target after fresh eligible clues run out; a written clue is placed once. This is existing behavior, not a new decision requested here.
+
 ## DR-20260929-NOHELP-B-OWN-EVIDENCE — both theories stay; B gets its own evidence
 
 Owner decisions, 2026-09-29, after the B accessibility review
