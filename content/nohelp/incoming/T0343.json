@@ -1,0 +1,40 @@
+[
+  {
+    "id": "t0343-01",
+    "kind": "set",
+    "pieces": [
+      "KeyRing",
+      "EmptyJar"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "furniture",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "anchor": {
+      "scene": "RDSRPGNight"
+    },
+    "title": "Cut potato and sample jar, wednesday before rain",
+    "body": "The cut potato and sample jar are tied together. an oily film coats one side; a torn strip of road tape covers the other.",
+    "rival_reading": "Field workers or an emergency crew could have assembled this bundle; the mixed residue and road tape do not show which came first.",
+    "gloss": "Field residue and response material meet in one ambiguous personal bundle.",
+    "axioms": {
+      "containment": [
+        "c-warning",
+        "c-orders"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0343"
+    }
+  }
+]
