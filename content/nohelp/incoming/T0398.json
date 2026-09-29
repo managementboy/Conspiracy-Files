@@ -1,0 +1,74 @@
+[
+  {
+    "anchor": {
+      "scene": "RZSRangerSmith"
+    },
+    "body": "Personal note: the insecticide crew crossed at dawn, leaving yellow dust on the grass. The deer fled before the county trucks reached the trail.",
+    "id": "t0398-01",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "torn note from the north trail",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ],
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-warning",
+        "c-orders"
+      ]
+    },
+    "gloss": "A personal trace links farm-program residue to symptoms before a restriction.",
+    "prov": {
+      "batch": "T0398",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "Emergency workers could have encountered the same residue while crossing treated land; the personal trace does not by itself prove the farm program caused the emergency."
+  },
+  {
+    "id": "t0398-02",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ],
+    "title": "A patrol in pencil",
+    "body": "The north trail was marked clear after the patrol turned back halfway. I asked why my brother’s campsite appeared on the completed section. The ranger said the box only had room for one kind of mark.",
+    "anchor": {
+      "scene": "RZSRangerSmith"
+    },
+    "rival_reading": "The agricultural trial may have caused the disorder that forced improvised decisions.",
+    "gloss": "A witness records a failed evacuation count or route.",
+    "axioms": {
+      "containment": [
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0398"
+    }
+  }
+]
