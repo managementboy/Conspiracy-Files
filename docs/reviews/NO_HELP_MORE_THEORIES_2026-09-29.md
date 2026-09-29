@@ -1,6 +1,6 @@
 # No Help: more theories, two live per world
 
-Design analysis, 2026-09-29. No code or content changes. Source: `nohelp-content` at `3fcfaf33`. Spoiler-free: theory letters, counts, file and function names only. A and B remain the existing theories; C denotes a proposed third. This is a recommendation, not a new owner decision. The current design documents' language about mutually contradictory accounts is superseded for the existing pair by `DR-20260929-NOHELP-B-OWN-EVIDENCE`: both may be true. The proposed pair-selection rule needs an explicit owner decision.
+Design analysis, 2026-09-29. No code or content changes. Subsequent owner decisions in `DR-20260929-NOHELP-MORE-THEORIES` supersede this review's restricted-pair recommendation: every unordered pair in the available pool is eligible and equally likely, while pair coverage remains a prerequisite to adding a theory. Source: `nohelp-content` at `3fcfaf33`. Spoiler-free: theory letters, counts, file and function names only. A and B remain the existing theories; C denotes a proposed third. This is a recommendation, not a new owner decision. The current design documents' language about mutually contradictory accounts is superseded for the existing pair by `DR-20260929-NOHELP-B-OWN-EVIDENCE`: both may be true. The proposed pair-selection rule needs an explicit owner decision.
 
 ## Three overall approaches
 
