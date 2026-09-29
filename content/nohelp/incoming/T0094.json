@@ -1,0 +1,49 @@
+[
+  {
+    "anchor": {
+      "map": "RiversideStashMap1",
+      "mark": 1
+    },
+    "body": "the broom bears a treated-seed stain and the camera a closure mark. one rope knot holds both objects together.",
+    "id": "t0094-01",
+    "kind": "set",
+    "pieces": [
+      "Broom",
+      "Camera"
+    ],
+    "title": "Broom carrying two traces",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture",
+        "containers": [
+          "crate",
+          "shelves",
+          "desk",
+          "counter",
+          "cardboardbox",
+          "bin"
+        ]
+      }
+    ],
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-warning",
+        "c-orders"
+      ]
+    },
+    "gloss": "Farm residue and response markings share one deliberately ambiguous bundle.",
+    "prov": {
+      "batch": "T0094",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "The farm program and the emergency response each explain one layer of the bundle, and the shared knot does not establish which purpose came first."
+  }
+]
