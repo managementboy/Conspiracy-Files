@@ -174,6 +174,13 @@ function S.mobileAllowed(root,id)
     if not a or S.isMobile(a.target) then return false end
     return S.mobileCount(root)<S.MOBILE_PER_CASE
 end
+-- AN OUTDOOR MAP PLACE (E3, owner 2026-09-29): a map's mark or a flyer's
+-- place with no building of its own. Its containers are searched twelve tiles
+-- beyond its box, as a mailbox is at a house: a bin across the lot counts.
+function S.outdoorSite(site)
+    return type(site)=="table" and type(site.id)=="string" and S.unobserved(site)
+        and (site.id:find("^mark:")~=nil or site.id:find("^flyer:")~=nil)
+end
 -- A PLACE DECIDED FROM AFAR (task 3 plan, step 4). A vanilla map's mark is
 -- decided when the map is read or the survivor heads toward it, usually from
 -- far away, so nothing was ever observed there: the row says paperStorage
@@ -248,7 +255,7 @@ function S.target(t,site)
     -- Inside the footprint, unless it is a mailbox at the gate (above), which
     -- gets the driveway's twelve tiles. The kind must still be one the scan
     -- actually observed at this site, exactly as before.
-    local margin=outdoorKind(t.containerType) and S.OUTDOOR_RADIUS or 0
+    local margin=(outdoorKind(t.containerType) or S.outdoorSite(site)) and S.OUTDOOR_RADIUS or 0
     if t.x<b.x1-margin or t.x>=b.x2+margin or t.y<b.y1-margin or t.y>=b.y2+margin or t.z~=b.z then return false end
     if S.unobserved(site) then return StorageChoices.fixedKind(t.containerType) end
     for _,kind in ipairs(site.containerTypes) do if kind==t.containerType then return true end end

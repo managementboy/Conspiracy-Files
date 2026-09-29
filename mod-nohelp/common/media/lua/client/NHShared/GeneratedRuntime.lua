@@ -1315,7 +1315,8 @@ local function boundsScan(site,done,accept,salt,searchedOk,prefer)
         local c=o:getContainerByIndex(ci)
         local sprite=o:getSprite(); local name=sprite and sprite:getName()
         local inside=x>=b.x1 and x<b.x2 and y>=b.y1 and y<b.y2
-        if c and name and Storage.fixedKind(c:getType()) and (any or kinds[c:getType()]) and (inside or c:getType()==Storage.MAILBOX) then
+        if c and name and Storage.fixedKind(c:getType()) and (any or kinds[c:getType()])
+            and (inside or c:getType()==Storage.MAILBOX or Session.outdoorSite(site)) then
             local found={x=x,y=y,z=b.z,objectIndex=oi,containerIndex=ci,containerType=c:getType(),sprite=name}
             local fresh=FixedContainers.fresh(c,searchedOk)
             if fresh and (not accept or accept(found)) and World.resolve(found)==c then

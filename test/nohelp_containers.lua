@@ -139,6 +139,25 @@ assert(scan({"fridge","freezer"})=="wardrobe","none named: any container there")
 furniture={}; objects={}
 assert(scan({"fridge"})==nil,"no container at all: the scan finds nothing, and the filler goes on")
 
+-- E3 (owner, 2026-09-29): an outdoor map place searches 12 tiles beyond its
+-- box; a building's place does not (a neighbour's yard is not its furniture).
+local function row(id) return {id=id,bounds={x1=300,y1=300,x2=310,y2=310,z=0},paperStorage="unknown",containerTypes={}} end
+local out={x=305,y=318,z=0,objectIndex=0,containerIndex=0,containerType="dumpster",sprite="s"}
+assert(S.outdoorSite(row("mark:X:1")) and S.outdoorSite(row("flyer:Y")) and not S.outdoorSite(row("t3:123")),"outdoor places are marks and flyers")
+assert(S.target(out,row("mark:X:1")) and S.target(out,row("flyer:Y")),"a bin 8 tiles outside an outdoor place is a spot")
+assert(not S.target(out,row("t3:123")),"not outside a building's place")
+assert(not S.target({x=305,y=323,z=0,objectIndex=0,containerIndex=0,containerType="dumpster",sprite="s"},row("mark:X:1")),"12 tiles, no further")
+local outdoor={id="mark:Z:1",bounds={x1=200,y1=200,x2=206,y2=206,z=0},containerTypes={},paperStorage="unknown"}
+local function scanAt(site)
+    local got
+    local s=R.boundsScan(site,function(t) got=t end,nil,"doc2",true,nil)
+    local n=0; while not s() do n=n+1; assert(n<100000,"the scan ends") end
+    return got and got.containerType
+end
+furniture={["210,203"]="bin"}; objects={}
+assert(scanAt(outdoor)=="bin","the scan finds the bin beyond an outdoor place's box")
+assert(scanAt({id="t3:9",bounds=outdoor.bounds,containerTypes={},paperStorage="unknown"})==nil,"but not beyond a building's")
+
 -- The filler: no container -> a body (not held to the one-mobile cap) ->
 -- the floor; only then does it decline.
 local f=assert(io.open("mod-nohelp/common/media/lua/client/NHShared/GeneratedRuntime.lua","rb"))
