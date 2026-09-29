@@ -1,0 +1,83 @@
+[
+  {
+    "anchor": {
+      "scene": "RDSRPGNight"
+    },
+    "body": "The cut potato and sample jar are tied together. an oily film coats one side; a torn strip of road tape covers the other.",
+    "id": "t0343-01",
+    "kind": "set",
+    "pieces": [
+      "KeyRing",
+      "EmptyJar"
+    ],
+    "title": "Cut potato and sample jar, wednesday before rain",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ],
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-warning",
+        "c-orders"
+      ]
+    },
+    "gloss": "Field residue and response material meet in one ambiguous personal bundle.",
+    "prov": {
+      "batch": "T0343",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "Field workers or an emergency crew could have assembled this bundle; the mixed residue and road tape do not show which came first."
+  },
+  {
+    "id": "t0343-02",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture",
+        "containers": [
+          "desk",
+          "dresser",
+          "shelves",
+          "counter",
+          "crate",
+          "bin"
+        ]
+      }
+    ],
+    "title": "Last game in the margin",
+    "body": "We played until a man outside told us the road would be closed at dawn. He let the other car through and said the count had been made yesterday. I kept my score sheet; it is the only record that we were here.",
+    "anchor": {
+      "scene": "RDSRPGNight"
+    },
+    "rival_reading": "The agricultural trial may have caused the disorder that forced improvised decisions.",
+    "gloss": "A witness records a failed evacuation count or route.",
+    "axioms": {
+      "containment": [
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0343"
+    }
+  }
+]
