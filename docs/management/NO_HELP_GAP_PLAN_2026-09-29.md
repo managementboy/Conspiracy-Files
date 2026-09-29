@@ -28,6 +28,10 @@ MapMediaRuntime's R.subject, not GeneratedRuntime's); the rest hold.
   type when an anchored site has fewer than its minimum or one side only
   (AreaCase.anchorPool).
 - [ ] **E6 Scenes pick a side that has a clue** (VanillaScenes lean choice).
+- [ ] **E8 Map markers scale with the game.** Markers stay (owner). Their
+  store refuses more than 64 records or 24 KB (ClueMarkers.lua valid()),
+  far below 518 clues: lift the ceiling and test a world with hundreds of
+  finds.
 - [ ] **E7 "DONE" means reachable.** progress.lua runs the real picker over
   every site and both scene sides; fails on short or one-sided sites.
 
@@ -41,7 +45,6 @@ MapMediaRuntime's R.subject, not GeneratedRuntime's); the rest hold.
 - [ ] **C4 Other-side scene clues** (about 120). After E4.
 - [ ] **C5 Samey title openings rewritten.**
 
-## Open owner question
+## Settled
 
-- Map markers (ClueMarkers: a question mark on the world map for a found
-  clue when a pen is carried): keep in No Help, or drop as "help"?
+- Map markers stay in No Help (owner, 2026-09-29: "Absolutely!").

@@ -13,6 +13,8 @@ Owner decisions, 2026-09-29 (plan: docs/management/NO_HELP_GAP_PLAN_2026-09-29.m
    it for so much more"). Supersedes ADR-0001's "Java only if needed" for
    this mod.
 5. Thin marked sites are topped up from a stock of both-side clues.
+6. Map markers stay: a found clue gets its question mark on the world map
+   when the survivor carries a pen ("Absolutely!"). They are not "help".
 
 ## DR-20260929-NOHELP-BALANCE-BY-READ — balance by what a reader sees; add B; ADHD cadence retired
 
