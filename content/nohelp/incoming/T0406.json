@@ -1,0 +1,39 @@
+[
+  {
+    "id": "t0406-01",
+    "kind": "written",
+    "pieces": [
+      "receipt"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "anchor": {
+      "scene": "RZSWasteDump"
+    },
+    "title": "feed-store receipt under the drums",
+    "body": "Soap, work gloves, and two sample jars, paid cash. My note says the fertilizer crew left oily residue here before the road was closed.",
+    "rival_reading": "Emergency workers could have encountered the same residue while crossing treated land; the personal trace does not by itself prove the farm program caused the emergency.",
+    "gloss": "A personal trace links farm-program residue to symptoms before a restriction.",
+    "axioms": {
+      "containment": [
+        "c-warning",
+        "c-orders"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0406"
+    }
+  }
+]

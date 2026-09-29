@@ -1,0 +1,39 @@
+[
+  {
+    "id": "t0402-01",
+    "kind": "written",
+    "pieces": [
+      "notebook"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "anchor": {
+      "scene": "RZSSurvivalistCamp"
+    },
+    "title": "camp notebook, page torn short",
+    "body": "My entry says the orchard crew rinsed its sprayer upstream. The water turned milky, and my hands blistered before the bridge was blocked.",
+    "rival_reading": "Emergency workers could have encountered the same residue while crossing treated land; the personal trace does not by itself prove the farm program caused the emergency.",
+    "gloss": "A personal trace links farm-program residue to symptoms before a restriction.",
+    "axioms": {
+      "containment": [
+        "c-warning",
+        "c-orders"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0402"
+    }
+  }
+]

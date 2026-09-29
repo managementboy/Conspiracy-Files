@@ -1,0 +1,40 @@
+[
+  {
+    "id": "t0401-01",
+    "kind": "set",
+    "pieces": [
+      "Garbagebag",
+      "Gloves_LeatherGloves"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "anchor": {
+      "scene": "RZSSexyTime"
+    },
+    "title": "work gloves tied inside a trash sack",
+    "body": "Leather gloves sit inside a knotted trash sack. Mustard-colored crop dust coats the cuffs, while the outside remains clean.",
+    "rival_reading": "Emergency workers could have encountered the same residue while crossing treated land; the personal trace does not by itself prove the farm program caused the emergency.",
+    "gloss": "A personal trace links farm-program residue to symptoms before a restriction.",
+    "axioms": {
+      "containment": [
+        "c-warning",
+        "c-orders"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0401"
+    }
+  }
+]
