@@ -1,0 +1,53 @@
+[
+  {
+    "anchor": {
+      "map": "WorldStashMap17",
+      "mark": 1
+    },
+    "body": "A camera is packed with a field notebook that says to photograph the blind side of the fence; the sensor check is marked complete before the crew arrives.",
+    "id": "t0126-01",
+    "kind": "set",
+    "pieces": [
+      "Camera",
+      "Notebook"
+    ],
+    "title": "Photographs from the blind spot",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture",
+        "containers": [
+          "desk",
+          "crate",
+          "shelves",
+          "counter",
+          "cardboardbox",
+          "bin"
+        ]
+      }
+    ],
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "patrol blindspot",
+      "source": "map:WorldStashMap17"
+    },
+    "gloss": "A fence inspection is completed before the crew’s arrival.",
+    "prov": {
+      "batch": "T0126",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A response team could document a security gap during containment; the record does not identify what the crew expected to find."
+  }
+]
