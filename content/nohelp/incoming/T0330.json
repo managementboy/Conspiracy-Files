@@ -1,0 +1,39 @@
+[
+  {
+    "id": "t0330-01",
+    "kind": "written",
+    "pieces": [
+      "diary"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "furniture",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "anchor": {
+      "scene": "RDSDeadDrunk"
+    },
+    "title": "Monday morning — an oily film",
+    "body": "Monday morning: two workers from the seed trial carried an oily film. my eyes began burning before the county van arrived.",
+    "rival_reading": "Emergency workers could have picked up the same an oily film while responding near a field; this personal trace does not prove the trial caused the emergency.",
+    "gloss": "A personal trace connects a farm trial to symptoms before a later restriction.",
+    "axioms": {
+      "containment": [
+        "c-warning",
+        "c-orders"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0330"
+    }
+  }
+]
