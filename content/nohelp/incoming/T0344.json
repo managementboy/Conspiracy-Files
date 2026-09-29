@@ -1,0 +1,39 @@
+[
+  {
+    "id": "t0344-01",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "furniture",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "anchor": {
+      "scene": "RDSRatInfested"
+    },
+    "title": "Thursday after closing — green flecks",
+    "body": "Personal note — Thursday after closing: wash off the green flecks left by the water-treatment trial crew. the rats left the shed, and I had not yet heard that the clinic stopped answering.",
+    "rival_reading": "Emergency workers could have picked up the same green flecks while responding near a field; this personal trace does not prove the trial caused the emergency.",
+    "gloss": "A personal trace connects a farm trial to symptoms before a later restriction.",
+    "axioms": {
+      "containment": [
+        "c-warning",
+        "c-orders"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0344"
+    }
+  }
+]
