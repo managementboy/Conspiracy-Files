@@ -5,16 +5,16 @@ never a place name, map, flyer, scene, person or clue text here. Whoever holds t
 baton edits it; `lua5.1 tools/nohelp_content/progress.lua --state` rewrites PROGRESS.
 
 ## BATON
-CHATGPT since 2026-09-29 because WRITING
+CLAUDE since 2026-09-29 because REVIEW
 
 ## STAGE
 EXPANSION
 
 ## TICKET
-T0407
+T0279
 
 ## NEXT
-Reviewed to T0407. Now recall R1 in one go (content/nohelp/recalls.json, handover section 5, Recalls): one replacement per recalled id, one commit per ticket; baton to CLAUDE with REVIEW once, at the end
+Review recall R1: 94 replacement rows, one per recalled id
 
 ## OPEN RETURNS
 none
@@ -26,4 +26,4 @@ none
 2026-09-28 T0001
 
 ## PROGRESS
-NOT DONE: maps 115/125, balance 62%, adhd 387 @c8e9b35
+NOT DONE: maps 115/125, balance 62%, adhd 387 @158ab1dd
