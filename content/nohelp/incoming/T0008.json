@@ -1,0 +1,37 @@
+[
+  {
+    "body": "green crop residue marks the short rope; a scraped warning stripe marks the water bottle. both are tied with the same cord.",
+    "id": "t0008-01",
+    "kind": "set",
+    "pieces": [
+      "Rope",
+      "WaterBottle"
+    ],
+    "title": "two traces on the short rope",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "warehouse",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ],
+    "rival_reading": "The farm program and the emergency response each explain one layer of the bundle, and the shared knot does not establish which purpose came first.",
+    "gloss": "Farm residue and response markings share one deliberately ambiguous bundle.",
+    "axioms": {
+      "containment": [
+        "c-warning",
+        "c-orders"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0008"
+    }
+  }
+]
