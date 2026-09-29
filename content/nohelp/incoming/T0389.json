@@ -1,0 +1,74 @@
+[
+  {
+    "anchor": {
+      "scene": "RZSMurderScene"
+    },
+    "body": "feed, soap, and a clean jar, paid cash. my note below says a medicinal odor came from the sprayer trial; the driver grew dizzy before the shelter message aired.",
+    "id": "t0389-01",
+    "kind": "written",
+    "pieces": [
+      "receipt"
+    ],
+    "title": "coat pocket note — at tuesday dawn",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "corpse"
+      }
+    ],
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-warning",
+        "c-failure"
+      ]
+    },
+    "gloss": "A personal field trace precedes the visible emergency response.",
+    "prov": {
+      "batch": "T0389",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "Responders could have collected the a medicinal odor while crossing treated land; the note or objects do not prove the program began the emergency."
+  },
+  {
+    "id": "t0389-02",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "corpse"
+      }
+    ],
+    "title": "Pocket list of witnesses",
+    "body": "I heard three shots, then the person taking statements told me the file would say two. He said the third sound might have come from a car door. I put a mark beside it, because the woman on the ground heard it too.",
+    "anchor": {
+      "scene": "RZSMurderScene"
+    },
+    "rival_reading": "The agricultural trial may have caused the disorder that forced improvised decisions.",
+    "gloss": "A witness records a failed evacuation count or route.",
+    "axioms": {
+      "containment": [
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0389"
+    }
+  }
+]
