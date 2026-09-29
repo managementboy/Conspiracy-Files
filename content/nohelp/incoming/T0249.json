@@ -1,0 +1,52 @@
+[
+  {
+    "anchor": {
+      "print": "FallasLakeChurch"
+    },
+    "body": "The prayer gathering notice is folded around a letter asking the caretaker to keep the well covered until the next test.",
+    "id": "t0249-01",
+    "kind": "set",
+    "pieces": [
+      "Book",
+      "LetterHandwritten"
+    ],
+    "title": "A gathering after dark",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture",
+        "containers": [
+          "desk",
+          "crate",
+          "shelves",
+          "counter",
+          "cardboardbox",
+          "bin"
+        ]
+      }
+    ],
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "Fallas Lake Church",
+      "source": "print:FallasLakeChurch"
+    },
+    "gloss": "A community gathering and a pending well test share the same site.",
+    "prov": {
+      "batch": "T0249",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "Emergency cleanup could cover a well pending testing; the letter does not identify what was tested."
+  }
+]
