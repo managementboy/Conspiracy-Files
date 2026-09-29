@@ -270,6 +270,13 @@ end
 function M.recipeCheck(row,ticket,ctx)
     local r=ctx.recipes and ctx.recipes[ticket]
     if type(r)~="table" then return nil end
+    -- Stock (E5): unanchored clues for any place of the recipe's kind.
+    if r.stock then
+        if row.anchor~=nil then return reason("RECIPE_STOCK","a stock clue has no anchor") end
+        for _,w in ipairs(row.where or {}) do
+            if w.place~=r.stock then return reason("RECIPE_STOCK","a stock clue is for a "..tostring(r.stock).." place") end
+        end
+    end
     if r.form and row.kind~=r.form then return reason("RECIPE_FORM","the recipe asks for a "..tostring(r.form).." clue") end
     if not r.keyRing then
         for _,p in ipairs(row.pieces or {}) do
@@ -287,8 +294,38 @@ end
 
 -- THE RECALL CHECK for one replacement row. old: the clue it replaces;
 -- counts: piece -> number of accepted clues using it, the old clue left out.
-function M.recallCheck(row,old,recall,counts)
+-- A title's opening: its first four words, case and punctuation ignored.
+function M.titleStem(title)
+    local words={}
+    for w in tostring(title or ""):lower():gsub("[^%w%s]",""):gmatch("%S+") do
+        words[#words+1]=w; if #words==4 then break end
+    end
+    return table.concat(words," ")
+end
+M.STEM_MAX=5     -- a title opening shared by this many clues is a pattern
+local function words(s) local n=0; for _ in tostring(s or ""):gmatch("%S+") do n=n+1 end; return n end
+-- `entry`: the recalled clue's own line in the recall ({side, fix}); `stems`:
+-- title opening -> number of accepted clues using it, the old clue left out.
+function M.recallCheck(row,old,recall,counts,entry,stems)
     if row.kind~=old.kind then return reason("RECALL_FORM","a replacement keeps the form: "..tostring(old.kind)) end
+    local fix={}
+    for _,f in ipairs(type(entry)=="table" and entry.fix or {}) do fix[f]=true end
+    -- A furniture spot names its container and its fallbacks (E2).
+    if recall.containers then
+        for _,w in ipairs(row.where or {}) do
+            if w.spot=="furniture" and (type(w.containers)~="table" or #w.containers~=recall.containers) then
+                return reason("RECALL_CONTAINERS","a furniture spot names "..recall.containers.." containers: the exact one and its fallbacks")
+            end
+        end
+    end
+    if fix.title then
+        local stem=M.titleStem(row.title)
+        if stem==M.titleStem(old.title) then return reason("RECALL_TITLE","the title opens as the old one did") end
+        if (stems and stems[stem] or 0)>=M.STEM_MAX-1 then return reason("RECALL_TITLE","the title opens like "..M.STEM_MAX-1 .." other clues already") end
+    end
+    if fix.longer and words(row.body)<2*words(old.body) then
+        return reason("RECALL_LONGER","the text is at least twice as long as the old one")
+    end
     local banned={}
     for _,p in ipairs(recall.ban or {}) do banned[p]=true end
     for _,p in ipairs(row.pieces or {}) do
@@ -309,7 +346,7 @@ function M.openRecalls(recalls,retired)
     local open={}
     for name,rc in pairs(recalls or {}) do
         if type(rc)=="table" then
-            for id in pairs(rc.clues or {}) do if not done[id.."|"..name] then open[id]={name=name,recall=rc} end end
+            for id,entry in pairs(rc.clues or {}) do if not done[id.."|"..name] then open[id]={name=name,recall=rc,entry=entry} end end
         end
     end
     return open
@@ -338,10 +375,12 @@ function M.convertTicket(ticket,rows,accepted,ctx,status)
     for _,row in ipairs(rows) do
         if type(row)=="table" and open[row.id] and oldById[row.id] then recallMode=true end
     end
-    local counts={}
+    local counts,stems={},{}
     if recallMode then
         for _,cs in pairs(accepted) do for _,c in ipairs(cs) do
             if not (open[c.id] and oldById[c.id]==c) then
+                local stem=M.titleStem(c.title)
+                stems[stem]=(stems[stem] or 0)+1
                 local once={}
                 for _,p in ipairs(c.pieces or {}) do if not once[p] then once[p]=true; counts[p]=(counts[p] or 0)+1 end end
             end
@@ -358,7 +397,7 @@ function M.convertTicket(ticket,rows,accepted,ctx,status)
         if not r then r=M.recipeCheck(row,ticket,ctx) end
         if not r and recallMode then
             if not (open[row.id] and oldById[row.id]) then r=reason("RECALL_ID","a recall delivery holds only this ticket's recalled clues")
-            else r=M.recallCheck(row,oldById[row.id],open[row.id].recall,counts) end
+            else r=M.recallCheck(row,oldById[row.id],open[row.id].recall,counts,open[row.id].entry,stems) end
         end
         if not r and type(row)=="table" then
             local k=M.textKey(row)
@@ -367,6 +406,27 @@ function M.convertTicket(ticket,rows,accepted,ctx,status)
         end
         if r then out.rejected[#out.rejected+1]={row=row,reasons={r}}
         else good[#good+1]=row end
+    end
+    -- A recipe that keeps the ticket's accepted rows and adds a side (C4): the
+    -- delivery holds every accepted row and a clue leaning that side.
+    local rc=ctx.recipes and ctx.recipes[ticket]
+    if type(rc)=="table" and (rc.keep or rc.addSide) and #good>0 and not recallMode then
+        local have,lean={}, {}
+        for _,row in ipairs(good) do
+            have[row.id]=true
+            for _,w in ipairs(row.where or {}) do lean[w.lean]=true end
+        end
+        local why
+        if rc.keep then
+            for _,c in ipairs(accepted[ticket] or {}) do
+                if not have[c.id] then why=reason("RECIPE_KEEP","the delivery keeps accepted row "..c.id); break end
+            end
+        end
+        if not why and rc.addSide and not lean[rc.addSide] then why=reason("RECIPE_SIDES","the ticket adds a clue leaning "..rc.addSide) end
+        if why then
+            for _,row in ipairs(good) do out.rejected[#out.rejected+1]={row=row,reasons={why}} end
+            good={}
+        end
     end
     -- A person ticket is accepted or returned whole.
     if ttype=="PERSON" and #out.rejected>0 then

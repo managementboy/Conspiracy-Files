@@ -66,7 +66,6 @@ local bad={
     SET_SIZE=row(T1,"set","containment",{pieces={"Tarp"}}),
     BAD_CARRIER=row(T1,"written","containment",{pieces={"Tarp"}}),
     SAME_LEAN=row(T1,"set","containment",{where={{place="farm",spot="furniture",lean="containment",rival="containment"}}}),
-    TOO_LONG=row(T1,"set","containment",{body=string.rep("a",241)}),
     TOO_LONG_CARD=row(T1,"written","containment",{pieces={"idcard"},body=string.rep("a",281)}),
     NO_RIVAL=row(T1,"set","containment",{rival_reading=J.null}),
     NO_PROV=row(T1,"set","containment",{prov=J.null}),
@@ -243,7 +242,43 @@ do
     local drawer=J.decode(read(root.."/retired/"..TR..".json"))
     assert(#drawer==1 and drawer[1].recall=="R9" and drawer[1].row.pieces[1]=="KeyRing","the old clue is in the drawer")
     assert(rep:find("recall R9: 1/1 replaced"),"progress")
+    -- keep + addSide (C4): the delivery keeps the accepted rows and adds the side.
+    local TK="PLACE-zzkeep"
+    local k1=row(TK,"set","containment",{pieces={"Twine","Tarp"}})
+    local k2=row(TK,"set","agricultural",{pieces={"Rope","Tarp"}})
+    write(TK,{k1,k2}); run()
+    OPTS.recipes={[TK]={keep=true,addSide="agricultural"}}
+    local k3=row(TK,"set","containment",{pieces={"Axe","Tarp"}})
+    write(TK,{k1,k3}); run()
+    local ck=rejectedCodes(TK); os.remove(root.."/rejected/"..TK..".json")
+    assert(ck[k1.id] and ck[k1.id].code=="RECIPE_KEEP","a delivery that drops an accepted row comes back")
+    local k4=row(TK,"set","containment",{pieces={"Saw","Tarp"}})
+    write(TK,{k1,k2,k4}); run()
+    assert(#J.decode(read(root.."/accepted/"..TK..".json"))==3,"kept and added")
+    OPTS.recipes=nil
     OPTS.recalls={}; os.execute('rm -rf "'..root..'"')
+end
+
+-- RECALL R2 FIXES, STOCK AND ADDED SIDES (owner, 2026-09-29).
+do
+    local old={id="x-1",kind="written",pieces={"diary"},title="The same four words here",body="one two three four"}
+    local function rc(row,fix,rec,stems) return Convert.recallCheck(row,old,rec or {},{},{fix=fix},stems or {}) end
+    local function row(extra) local r={id="x-1",kind="written",pieces={"diary"},title="A different opening now",body="one two three four five six seven eight",
+        where={{place="farm",spot="furniture",lean="containment",rival="agricultural",containers={"desk","dresser","wardrobe","shelves","counter","crate"}}}}
+        for k,v in pairs(extra or {}) do r[k]=v end; return r end
+    assert(Convert.titleStem("The Same, four words HERE again")=="the same four words","a title's opening")
+    assert(rc(row(),{"title","longer"},{containers=6})==nil,"all fixes met")
+    assert(rc(row({title="The same four words, later"}),{"title"}).code=="RECALL_TITLE","the old opening")
+    assert(rc(row(),{"title"},nil,{["a different opening now"]=4}).code=="RECALL_TITLE","an opening four others use")
+    assert(rc(row({body="one two three"}),{"longer"}).code=="RECALL_LONGER","twice as long")
+    local r3=row(); r3.where[1].containers={"desk"}
+    assert(rc(r3,{},{containers=6}).code=="RECALL_CONTAINERS","a furniture spot names six containers")
+    local g=row(); g.where[1]={place="farm",spot="ground",lean="containment",rival="agricultural"}
+    assert(rc(g,{"spot"},{containers=6})==nil,"the floor stays possible outside")
+    local sctx={recipes={T9101={stock="mapNamed"}}}
+    assert(Convert.recipeCheck({id="t9101-01",kind="set",pieces={"Twine"},anchor={map="M",mark=1},where={{place="mapNamed"}}},"T9101",sctx).code=="RECIPE_STOCK","stock has no anchor")
+    assert(Convert.recipeCheck({id="t9101-01",kind="set",pieces={"Twine"},where={{place="farm"}}},"T9101",sctx).code=="RECIPE_STOCK","stock is for its place")
+    assert(Convert.recipeCheck({id="t9101-01",kind="set",pieces={"Twine"},where={{place="mapNamed"}}},"T9101",sctx)==nil,"a stock clue")
 end
 
 print("nohelp_content_convert: ok")

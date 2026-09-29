@@ -5,7 +5,7 @@ never a place name, map, flyer, scene, person or clue text here. Whoever holds t
 baton edits it; `lua5.1 tools/nohelp_content/progress.lua --state` rewrites PROGRESS.
 
 ## BATON
-CLAUDE since 2026-09-29 because REVIEW
+CHATGPT since 2026-09-29 because WRITING
 
 ## STAGE
 EXPANSION
@@ -14,7 +14,7 @@ EXPANSION
 T0279
 
 ## NEXT
-Map round reviewed: 89 rows accepted. Next waits on the owner
+Round after the deep review, in one go (handover section 5, "Round after the deep review"): 1) the 122 scene tickets with addSide, 2) recall R2 (446 clues), 3) stock tickets T0408-T0427; one commit per ticket; baton to CLAUDE with REVIEW once, at the end
 
 ## OPEN RETURNS
 none
@@ -26,4 +26,4 @@ none
 2026-09-28 T0001
 
 ## PROGRESS
-NOT DONE: places 0/253, scene sides 3/125 @dee34ae3
+NOT DONE: places 0/253, scene sides 3/125, floor 78% @bcf05fe5

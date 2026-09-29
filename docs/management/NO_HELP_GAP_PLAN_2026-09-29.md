@@ -46,12 +46,12 @@ MapMediaRuntime's R.subject, not GeneratedRuntime's); the rest hold.
 
 ## Content (ChatGPT, after its engine step)
 
-- [ ] **C1 Longer texts, no maximum** (owner): diaries, letters, notebooks
+- [ ] **C1 Longer texts, no maximum** (opened 2026-09-29: engine limits lifted, cards stay ~280 - owner; existing paper clues lengthened in R2 - owner) (owner): diaries, letters, notebooks
   much longer; spoken captions may be longer too. After E1.
-- [ ] **C2 Spot round (recall R2):** floor clues move into the full range of
+- [ ] **C2 Spot round (recall R2, opened 2026-09-29, 446 clues with C1/C5 fixes; some may stay outside - owner):** floor clues move into the full range of
   containers; floor under 15% of clues (about 77 of 518). After E2, E3.
-- [ ] **C3 Spare stock** of both-side clues per place type. After E5.
-- [ ] **C4 Other-side scene clues** (about 120). After E4.
+- [ ] **C3 Spare stock** (opened 2026-09-29: T0408-T0427, 200 clues, owner chose stock over per-place) of both-side clues per place type. After E5.
+- [ ] **C4 Other-side scene clues** (opened 2026-09-29: 122 scene tickets, recipes keep+addSide) (about 120). After E4.
 - [ ] **C5 Samey title openings rewritten.**
 
 ## Settled

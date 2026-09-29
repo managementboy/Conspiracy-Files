@@ -16,6 +16,7 @@
 --   places x/y        map and flyer places the game's own decision gives their full
 --                     number and both sides in each of targets.checkWorlds worlds (E7)
 --   scene sides x/y   scene kinds with a clue for each side
+--   floor p%          clues whose every spot is the ground, above targets.groundMax
 --   flyers x/y        prints with an accepted anchored clue
 --   scenes x/y        scene kinds with an accepted anchored clue ("unshipped" until
 --                     Generated/VanillaScenes.lua exists)
@@ -188,6 +189,16 @@ function M.measure(opts)
         end
     end
     if #rows==0 or sets<T.setShare*#rows then fail("sets "..sets.."/"..#rows) end
+    -- The floor (owner, 2026-09-29): under T.groundMax of all clues lie loose.
+    if T.groundMax then
+        local ground=0
+        for _,c in ipairs(rows) do
+            local only=true
+            for _,w in ipairs(c.where or {}) do if w.spot~="ground" then only=false end end
+            if only and #(c.where or {})>0 then ground=ground+1 end
+        end
+        if #rows>0 and ground>T.groundMax*#rows then fail("floor "..math.floor(100*ground/#rows+0.5).."%") end
+    end
     -- Balance by what a reader sees (DR-20260929-NOHELP-BALANCE-BY-READ):
     -- each accepted clue's blind-read receipt, A only against B only.
     local reads={A=0,B=0}

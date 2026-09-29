@@ -17,7 +17,9 @@ local Trails=require("NHShared/Generated/Trails")
 local Scenes=require("NHShared/Generated/VanillaScenes")
 local M={KIND="nohelp-areas",SCHEMA=1,CASE_ID="nohelp:world"}
 M.MAX_TITLE=120
-M.MAX_BODY=8000
+-- Texts have no maximum (owner, 2026-09-29); this only bounds a corrupt save,
+-- at a diary of a hundred full pages (DocumentPages).
+M.MAX_BODY=70000
 
 local function set(list) local out={}; for _,v in ipairs(list) do out[v]=true end; return out end
 local LEAN,PLACE,SPOT=set(Manifest.LEANS),set(Manifest.PLACES),set(Manifest.SPOTS)

@@ -197,9 +197,10 @@ function M.validClue(c)
     elseif #c.pieces~=1 then
         return false,c.id..": a written clue is carried on one item","BAD_CARRIER"
     end
-    -- A set's text is read off an ordinary object: at most OBJECT_MAX_CHARS.
-    if c.kind=="set" and c.body~=nil and (type(c.body)~="string" or #c.body>Kinds.OBJECT_MAX_CHARS) then
-        return false,c.id..": a set's text holds at most "..Kinds.OBJECT_MAX_CHARS.." characters","TOO_LONG"
+    -- A set's text is said by the survivor on Inspect, a piece at a time
+    -- (E1): no maximum (owner, 2026-09-29, DR-20260929-NOHELP-GAP-PLAN).
+    if c.kind=="set" and c.body~=nil and (type(c.body)~="string" or c.body=="") then
+        return false,c.id..": a set's text is a string","SCHEMA"
     end
     if type(c.where)~="table" or #c.where<1 then return false,c.id..": goes nowhere","SCHEMA" end
     -- A person thread (owner, 2026-09-27): clues about one person share a
