@@ -3,7 +3,7 @@
     "anchor": {
       "scene": "RZSHillbillyHoedown"
     },
-    "body": "on the back: “before sunday's rain, a cloying orchard smell in the weathered bundle after the livestock supplement test. my sister coughed all night. later, warning tape went up.”",
+    "body": "on the back: “before sunday's rain, a cloying orchard smell in the weathered bundle after the livestock supplement test. my sister coughed all night. later, warning tape went up.”\n\nI asked for the old page back after the new instructions arrived. They said it had been destroyed, but its corner was still in my pocket.\n\nThe person who was supposed to collect it had no time to stop. I did not put it back with the rest of the ordinary papers.",
     "id": "t0387-01",
     "kind": "written",
     "pieces": [
@@ -15,6 +15,26 @@
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RZSHillbillyHoedown"
+    },
+    "body": "We counted people for a ride home by the pairs on the dance card. The driver was instructed to use the official total, two fewer than ours. He asked the two without partners to stand by the road until another truck came.",
+    "id": "t0387-02",
+    "kind": "written",
+    "pieces": [
+      "notebook"
+    ],
+    "title": "The dance list",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
         "spot": "ground"
       }
     ]

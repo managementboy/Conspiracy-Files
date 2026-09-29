@@ -10,13 +10,21 @@
       "Thread",
       "FirstAidKit"
     ],
-    "title": "missing count beside the spool of thread",
+    "title": "Spool of thread with the unclosed tally",
     "where": [
       {
+        "containers": [
+          "wardrobe",
+          "smallbox",
+          "toolcabinet",
+          "locker",
+          "crate",
+          "medicine"
+        ],
         "lean": "containment",
         "place": "mapNamed",
         "rival": "agricultural",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

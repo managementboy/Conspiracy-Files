@@ -19,5 +19,27 @@
         "spot": "vehicle"
       }
     ]
+  },
+  {
+    "anchor": {
+      "scene": "RVSConstructionSite"
+    },
+    "body": "A work radio with its dial taped down on one channel, spare batteries beside it. Someone told the crew to stay off the air and listen only, days before the road was closed.",
+    "id": "t0364-02",
+    "kind": "set",
+    "pieces": [
+      "WalkieTalkie1",
+      "DuctTape",
+      "Battery"
+    ],
+    "title": "Taped radio in the site truck",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "vehicle"
+      }
+    ]
   }
 ]

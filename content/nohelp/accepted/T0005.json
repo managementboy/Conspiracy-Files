@@ -10,6 +10,14 @@
     "title": "The briefcase with an intact lock",
     "where": [
       {
+        "containers": [
+          "locker",
+          "toolcabinet",
+          "desk",
+          "metal_shelves",
+          "wardrobe",
+          "crate"
+        ],
         "lean": "containment",
         "place": "office",
         "rival": "agricultural",
@@ -28,6 +36,14 @@
     "title": "The seed packet tucked in the fertilizer fold",
     "where": [
       {
+        "containers": [
+          "shelves",
+          "composter",
+          "metal_shelves",
+          "cardboardbox",
+          "crate",
+          "smallcrate"
+        ],
         "lean": "agricultural",
         "place": "office",
         "rival": "containment",

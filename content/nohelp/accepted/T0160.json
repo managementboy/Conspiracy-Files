@@ -13,10 +13,18 @@
     "title": "The low-cost fuel test",
     "where": [
       {
+        "containers": [
+          "metal_shelves",
+          "toolcabinet",
+          "crate",
+          "smallcrate",
+          "doghouse",
+          "smallbox"
+        ],
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

@@ -13,10 +13,18 @@
     "title": "Catch and sample slip",
     "where": [
       {
+        "containers": [
+          "cardboardbox",
+          "grocerstand",
+          "crate",
+          "smallbox",
+          "freezer",
+          "dishescabinet"
+        ],
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

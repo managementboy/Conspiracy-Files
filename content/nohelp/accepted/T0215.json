@@ -13,10 +13,18 @@
     "title": "The worker’s first shift",
     "where": [
       {
+        "containers": [
+          "wardrobe",
+          "desk",
+          "dresser",
+          "shelves",
+          "clothingrack",
+          "filingcabinet"
+        ],
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

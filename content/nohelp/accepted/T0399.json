@@ -19,5 +19,25 @@
         "spot": "ground"
       }
     ]
+  },
+  {
+    "anchor": {
+      "scene": "RZSRockerParty"
+    },
+    "body": "A road crew passed the gathering and said there would be transport at daylight. The handwritten passenger list filled before the first vehicle arrived. The musicians kept playing so the people at the far end would not hear the argument.",
+    "id": "t0399-02",
+    "kind": "written",
+    "pieces": [
+      "notebook"
+    ],
+    "title": "Between two songs",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
   }
 ]

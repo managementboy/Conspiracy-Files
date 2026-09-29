@@ -14,10 +14,18 @@
     "title": "A family moved on",
     "where": [
       {
+        "containers": [
+          "wardrobe",
+          "fridge",
+          "dresser",
+          "counter",
+          "clothingrack",
+          "overhead"
+        ],
         "lean": "containment",
         "place": "mapNamed",
         "rival": "agricultural",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

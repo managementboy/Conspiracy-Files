@@ -10,13 +10,21 @@
       "Jack",
       "Clipboard"
     ],
-    "title": "missing count beside the car jack",
+    "title": "Car jack with the unclosed tally",
     "where": [
       {
+        "containers": [
+          "metal_shelves",
+          "toolcabinet",
+          "crate",
+          "smallcrate",
+          "militarycrate",
+          "smallbox"
+        ],
         "lean": "containment",
         "place": "mapNamed",
         "rival": "agricultural",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

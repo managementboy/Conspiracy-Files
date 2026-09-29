@@ -1,0 +1,96 @@
+[
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "scene": "RDSStagDo"
+      },
+      "body": "The hand axe and seed sack are tied together. a bitter residue coats one side; a torn strip of road tape covers the other.",
+      "id": "t0349-01",
+      "kind": "set",
+      "pieces": [
+        "Axe",
+        "SeedBag"
+      ],
+      "title": "Hand axe and seed sack, the early shift",
+      "where": [
+        {
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-warning",
+          "c-orders"
+        ]
+      },
+      "gloss": "Field residue and response material meet in one ambiguous personal bundle.",
+      "prov": {
+        "batch": "T0349",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "Field workers or an emergency crew could have assembled this bundle; the mixed residue and road tape do not show which came first."
+    }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "scene": "RDSStagDo"
+      },
+      "body": "A sheet and pencil are tucked under an empty glass. The guest count was changed after the first toast, but the marks around the glass show it had been there all night.",
+      "id": "t0349-02",
+      "kind": "set",
+      "pieces": [
+        "GlassTumbler",
+        "Pencil"
+      ],
+      "title": "The extra name on the score",
+      "where": [
+        {
+          "containers": [
+            "counter",
+            "desk",
+            "crate",
+            "locker",
+            "shelves",
+            "bin"
+          ],
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-warning",
+          "c-accounting"
+        ]
+      },
+      "gloss": "An altered count or retained object was left at the scene.",
+      "prov": {
+        "batch": "T0349",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A response to an agricultural exposure could explain the same record or object."
+    }
+  }
+]

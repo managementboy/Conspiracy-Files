@@ -11,13 +11,21 @@
       "TirePump",
       "FirstAidKit"
     ],
-    "title": "missing count beside the tire pump",
+    "title": "Tire pump with the unclosed tally",
     "where": [
       {
+        "containers": [
+          "medicine",
+          "toolcabinet",
+          "metal_shelves",
+          "sidetable",
+          "crate",
+          "locker"
+        ],
         "lean": "containment",
         "place": "mapNamed",
         "rival": "agricultural",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   },
@@ -26,7 +34,7 @@
       "map": "BBurgStashMap1",
       "mark": 1
     },
-    "body": "Please keep the lesson room shut until the roadside spray test is over. The children can still hear the truck from the front room; their mother has paid for the whole week already.",
+    "body": "Please keep the lesson room shut until the roadside spray test is over. The children can still hear the truck from the front room; their mother has paid for the whole week already.\n\nA pencil line had been rubbed thin but not erased. I could still read enough of it to recognize what had been there first.\n\nIt may have started elsewhere; none of us saw the beginning. I only know what had reached this place before they closed the road.",
     "id": "t0020-02",
     "kind": "written",
     "pieces": [
@@ -35,10 +43,18 @@
     "title": "Closed windows",
     "where": [
       {
+        "containers": [
+          "filingcabinet",
+          "desk",
+          "sidetable",
+          "shelves",
+          "smallbox",
+          "cashregister"
+        ],
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

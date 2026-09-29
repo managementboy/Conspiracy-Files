@@ -13,10 +13,18 @@
     "title": "The dry storage request",
     "where": [
       {
+        "containers": [
+          "trough",
+          "fridge",
+          "metal_shelves",
+          "counter",
+          "toolcabinet",
+          "overhead"
+        ],
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

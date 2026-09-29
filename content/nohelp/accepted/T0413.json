@@ -1,0 +1,262 @@
+[
+  {
+    "body": "The jar is dusted with the same yellow grains as the torn sack. Its label names a test plot, but the string tying them together is wet with roadside mud. The corner still bears a hurried thumbprint.",
+    "id": "t0413-01",
+    "kind": "set",
+    "pieces": [
+      "EmptyJar",
+      "SeedBag"
+    ],
+    "title": "A jar beyond the rows beside the road",
+    "where": [
+      {
+        "containers": [
+          "dishescabinet",
+          "shelves",
+          "overhead",
+          "metal_shelves",
+          "counter",
+          "cardboardbox"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "A clean bottle and a cloudy bucket share a chalk mark. The bucket was filled far from the rows after the sprayer passed. One edge was kept dry beneath a coat.",
+    "id": "t0413-02",
+    "kind": "set",
+    "pieces": [
+      "WaterBottle",
+      "Bucket"
+    ],
+    "title": "Water kept for comparison beside the road",
+    "where": [
+      {
+        "containers": [
+          "fridge",
+          "metal_shelves",
+          "counter",
+          "toolcabinet",
+          "cardboardbox",
+          "crate"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "One cuff holds field dust; the other is stained with kitchen soap. The empty sprayer was carried past a household door. A short tally was added after the bundle was tied.",
+    "id": "t0413-03",
+    "kind": "set",
+    "pieces": [
+      "Gloves_LeatherGloves",
+      "GardeningSprayEmpty"
+    ],
+    "title": "The gloves used twice beside the road",
+    "where": [
+      {
+        "containers": [
+          "wardrobe",
+          "metal_shelves",
+          "dresser",
+          "shelves",
+          "clothingrack",
+          "cardboardbox"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "The feed sack has an oily streak beneath its fold. A rinse pail carries the same mark above the waterline. The string has been retied since morning.",
+    "id": "t0413-04",
+    "kind": "set",
+    "pieces": [
+      "AnimalFeedBag",
+      "Bucket"
+    ],
+    "title": "Feed beside a rinse pail beside the road",
+    "where": [
+      {
+        "containers": [
+          "trough",
+          "metal_shelves",
+          "doghouse",
+          "toolcabinet",
+          "composter",
+          "crate"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "Tape seals a slit in the seed sack, but the pale dust beneath it is caught on the outside. A child’s height is marked on the tape. The date is on the wrapper, not on the object.",
+    "id": "t0413-05",
+    "kind": "set",
+    "pieces": [
+      "SeedBag",
+      "DuctTape"
+    ],
+    "title": "The unopened seed allotment beside the road",
+    "where": [
+      {
+        "containers": [
+          "dumpster",
+          "bin",
+          "smallcrate",
+          "crate",
+          "trough",
+          "composter"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "The jar’s paper label names a trial row. A thumbprint in its residue falls on a different roadside mark on the map. A strip of cloth keeps the pair together.",
+    "id": "t0413-06",
+    "kind": "set",
+    "pieces": [
+      "EmptyJar",
+      "Map"
+    ],
+    "title": "A sample without its field beside the road",
+    "where": [
+      {
+        "containers": [
+          "crate",
+          "cardboardbox",
+          "smallbox",
+          "locker",
+          "dishescabinet",
+          "desk"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "The loaf was wrapped in a clean cloth. Yellow powder lies between the cloth and the crust, though the knot was never opened. The corner still bears a hurried thumbprint.",
+    "id": "t0413-07",
+    "kind": "set",
+    "pieces": [
+      "Bread",
+      "DishCloth"
+    ],
+    "title": "Bread under field dust beside the road",
+    "where": [
+      {
+        "containers": [
+          "cardboardbox",
+          "smallbox",
+          "fridge",
+          "dishescabinet",
+          "counter",
+          "overhead"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "The sponge is green at the center and the soap is worn only on one edge. Both were wrapped in a bag beside a small cup. One edge was kept dry beneath a coat.",
+    "id": "t0413-08",
+    "kind": "set",
+    "pieces": [
+      "Soap2",
+      "Sponge"
+    ],
+    "title": "The wash that failed beside the road",
+    "where": [
+      {
+        "containers": [
+          "crate",
+          "cardboardbox",
+          "smallbox",
+          "locker",
+          "wardrobe",
+          "dishescabinet"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "The card asks for supper to be kept warm. A ring from the sprayer crosses the writing before the ink has dried. A short tally was added after the bundle was tied.",
+    "id": "t0413-09",
+    "kind": "set",
+    "pieces": [
+      "GardeningSprayEmpty",
+      "Postcard"
+    ],
+    "title": "A warning carried home beside the road",
+    "where": [
+      {
+        "containers": [
+          "dresser",
+          "metal_shelves",
+          "desk",
+          "shelves",
+          "sidetable",
+          "cardboardbox"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "Fine grains cling to the rim of a drinking glass. The fertilizer sack beside it was sealed with household thread. The string has been retied since morning.",
+    "id": "t0413-10",
+    "kind": "set",
+    "pieces": [
+      "Fertilizer",
+      "GlassTumbler"
+    ],
+    "title": "Fertilizer and a dry cup beside the road",
+    "where": [
+      {
+        "containers": [
+          "composter",
+          "dishescabinet",
+          "metal_shelves",
+          "overhead",
+          "shelves",
+          "counter"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

@@ -3,7 +3,7 @@
     "anchor": {
       "scene": "RBShopLooted"
     },
-    "body": "Soap, gloves, and two water jugs, paid cash. On the back: “Trial crew used the sink at dawn. My eyes burned before the road was shut.”",
+    "body": "Soap, gloves, and two water jugs, paid cash. On the back: “Trial crew used the sink at dawn. My eyes burned before the road was shut.”\n\nI saved it from the bag of rubbish because there was a name on the reverse. The name was not on the list they posted.\n\nIt could be a mistake in the copying. The things stacked beside the page were real enough, and still waiting to be moved.",
     "id": "t0308-01",
     "kind": "written",
     "pieces": [
@@ -12,6 +12,14 @@
     "title": "Soap bought after the field run",
     "where": [
       {
+        "containers": [
+          "desk",
+          "filingcabinet",
+          "sidetable",
+          "shelves",
+          "smallbox",
+          "cashregister"
+        ],
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",
@@ -33,12 +41,12 @@
     "where": [
       {
         "containers": [
-          "counter",
           "desk",
-          "crate",
-          "locker",
+          "filingcabinet",
+          "sidetable",
           "shelves",
-          "bin"
+          "smallbox",
+          "cashregister"
         ],
         "lean": "containment",
         "place": "mapNamed",

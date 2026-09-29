@@ -10,13 +10,21 @@
       "Rope",
       "WaterBottle"
     ],
-    "title": "field residue on the short rope",
+    "title": "After on the short rope, the first copy",
     "where": [
       {
+        "containers": [
+          "toolcabinet",
+          "fridge",
+          "metal_shelves",
+          "counter",
+          "crate",
+          "overhead"
+        ],
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

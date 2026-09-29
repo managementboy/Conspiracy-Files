@@ -10,13 +10,21 @@
       "Candle",
       "AnimalFeedBag"
     ],
-    "title": "two traces on the candle",
+    "title": "Candle with the second residue",
     "where": [
       {
+        "containers": [
+          "dresser",
+          "trough",
+          "sidetable",
+          "metal_shelves",
+          "shelves",
+          "toolcabinet"
+        ],
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

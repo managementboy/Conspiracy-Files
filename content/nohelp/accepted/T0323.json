@@ -13,9 +13,45 @@
     "title": "Hand shovel and wash pail, friday before dawn",
     "where": [
       {
+        "containers": [
+          "dresser",
+          "metal_shelves",
+          "desk",
+          "toolcabinet",
+          "sidetable",
+          "crate"
+        ],
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RBWoodcraft"
+    },
+    "body": "The men building shelves were told to make another partition before the evacuation trucks came. Someone measured for beds and then scratched the measurements out. My brother still brought his tools, because the invoice for the first day had already been paid.",
+    "id": "t0323-02",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "Carpenter’s margin",
+    "where": [
+      {
+        "containers": [
+          "cardboardbox",
+          "desk",
+          "sidetable",
+          "filingcabinet",
+          "shelves",
+          "cashregister"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
         "spot": "furniture"
       }
     ]

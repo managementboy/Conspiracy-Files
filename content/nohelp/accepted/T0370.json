@@ -19,5 +19,25 @@
         "spot": "vehicle"
       }
     ]
+  },
+  {
+    "anchor": {
+      "scene": "RVSRegionalProfessionVehicle"
+    },
+    "body": "The service driver showed me a card saying she could cross because her trade was needed. At the barrier they let the van through but asked her helper to wait. She had no line for him on the roster, only a place for the tools.",
+    "id": "t0370-02",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "title": "The empty roster",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "vehicle"
+      }
+    ]
   }
 ]

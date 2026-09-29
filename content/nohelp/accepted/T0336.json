@@ -3,7 +3,7 @@
     "anchor": {
       "scene": "RDSHenDo"
     },
-    "body": "Sunday after supper: two workers from the greenhouse trial carried a bitter residue. my hands blistered before the phones went dead.",
+    "body": "Sunday after supper: two workers from the greenhouse trial carried a bitter residue. my hands blistered before the phones went dead.\n\nThey counted the containers before anyone counted who had carried them. I wrote the second number here while I could still remember it.\n\nThe amount mattered to the office more than the people waiting outside. We stayed until dark because the last line still said to wait.",
     "id": "t0336-01",
     "kind": "written",
     "pieces": [
@@ -12,6 +12,14 @@
     "title": "Sunday after supper — a bitter residue",
     "where": [
       {
+        "containers": [
+          "sidetable",
+          "desk",
+          "dresser",
+          "filingcabinet",
+          "shelves",
+          "smallbox"
+        ],
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",
@@ -33,12 +41,12 @@
     "where": [
       {
         "containers": [
-          "dresser",
+          "cashregister",
           "desk",
-          "counter",
-          "crate",
-          "locker",
-          "shelves"
+          "filingcabinet",
+          "sidetable",
+          "shelves",
+          "smallbox"
         ],
         "lean": "containment",
         "place": "mapNamed",

@@ -13,10 +13,18 @@
     "title": "The second fuel sample",
     "where": [
       {
+        "containers": [
+          "metal_shelves",
+          "desk",
+          "toolcabinet",
+          "shelves",
+          "crate",
+          "filingcabinet"
+        ],
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

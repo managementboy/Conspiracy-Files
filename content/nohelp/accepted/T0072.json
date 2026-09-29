@@ -11,13 +11,21 @@
       "Thread",
       "FirstAidKit"
     ],
-    "title": "two traces on the spool of thread",
+    "title": "Spool of thread carrying two traces",
     "where": [
       {
+        "containers": [
+          "smallbox",
+          "crate",
+          "toolcabinet",
+          "locker",
+          "wardrobe",
+          "medicine"
+        ],
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

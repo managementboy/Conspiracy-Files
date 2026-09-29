@@ -47,5 +47,205 @@
       },
       "rival_reading": "A program site could also have been closed to visitors; the late notice and blocked gate do not identify who ordered it."
     }
+  },
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "map": "BBurgStashMap7",
+        "mark": 1
+      },
+      "body": "the dish cloth and folded road map are tied with cut warning tape. six tally cuts mark the dish cloth; only four are crossed through.",
+      "id": "t0032-01",
+      "kind": "set",
+      "pieces": [
+        "DishCloth",
+        "Map"
+      ],
+      "title": "missing count beside the dish cloth",
+      "where": [
+        {
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-warning",
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "gloss": "A response bundle preserves a missing count, changed route, or erased identity.",
+      "prov": {
+        "batch": "T0032",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A farm-program crew could have counted routes, repacked tools, or removed ownership marks during hurried field work; the objects do not prove a concealed public response."
+    }
+  },
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "map": "BBurgStashMap7",
+        "mark": 1
+      },
+      "body": "Leave the canisters outside the fence until the grounds crew finishes the test. The gate was already locked when the delivery arrived; the return form charges us for the missing seal.",
+      "id": "t0032-02",
+      "kind": "written",
+      "pieces": [
+        "notepad"
+      ],
+      "title": "Kept from the drawer",
+      "where": [
+        {
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "fucks wouldn't let me in",
+        "source": "map:BBurgStashMap7"
+      },
+      "gloss": "A grounds test and a locked gate leave a delivery outside its expected handoff.",
+      "prov": {
+        "batch": "T0032",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "Emergency crews could have restricted access and returned sealed containers; the note does not say what was inside."
+    }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "map": "BBurgStashMap7",
+        "mark": 1
+      },
+      "body": "the dish cloth and folded road map are tied with cut warning tape. six tally cuts mark the dish cloth; only four are crossed through.",
+      "id": "t0032-01",
+      "kind": "set",
+      "pieces": [
+        "DishCloth",
+        "Map"
+      ],
+      "title": "Dish cloth with the unclosed tally",
+      "where": [
+        {
+          "containers": [
+            "crate",
+            "shelves",
+            "desk",
+            "counter",
+            "cardboardbox",
+            "bin"
+          ],
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-warning",
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "gloss": "A response bundle preserves a missing count, changed route, or erased identity.",
+      "prov": {
+        "batch": "T0032",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A farm-program crew could have counted routes, repacked tools, or removed ownership marks during hurried field work; the objects do not prove a concealed public response."
+    }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "map": "BBurgStashMap7",
+        "mark": 1
+      },
+      "body": "Leave the canisters outside the fence until the grounds crew finishes the test. The gate was already locked when the delivery arrived; the return form charges us for the missing seal.\n\nWe waited for a correction that never came. Every passing driver had a different instruction and no room for one more passenger.\n\nI could have mistaken the order in which those things happened. I could not mistake the empty place left for the person we had been waiting for.",
+      "id": "t0032-02",
+      "kind": "written",
+      "pieces": [
+        "notepad"
+      ],
+      "title": "The drawer copy survived",
+      "where": [
+        {
+          "containers": [
+            "crate",
+            "shelves",
+            "desk",
+            "counter",
+            "cardboardbox",
+            "bin"
+          ],
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "fucks wouldn't let me in",
+        "source": "map:BBurgStashMap7"
+      },
+      "gloss": "A grounds test and a locked gate leave a delivery outside its expected handoff.",
+      "prov": {
+        "batch": "T0032",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "Emergency crews could have restricted access and returned sealed containers; the note does not say what was inside."
+    }
   }
 ]

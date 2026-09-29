@@ -1,0 +1,104 @@
+[
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "print": "Twiggys"
+      },
+      "body": "The bar’s entertainment list is clipped to a water check for the back room; the beverage delivery was marked complete before the door was opened.",
+      "id": "t0282-01",
+      "kind": "set",
+      "pieces": [
+        "WaterBottle",
+        "SheetPaper2"
+      ],
+      "title": "Friday’s entertainment",
+      "where": [
+        {
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "Twiggy's",
+        "source": "print:Twiggys"
+      },
+      "gloss": "The back-room water check and bar delivery are recorded out of order.",
+      "prov": {
+        "batch": "T0282",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "An emergency team could test a room and receive drinks during a response; the records do not say what prompted the check."
+    }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "print": "Twiggys"
+      },
+      "body": "The bar’s entertainment list is clipped to a water check for the back room; the beverage delivery was marked complete before the door was opened.",
+      "id": "t0282-01",
+      "kind": "set",
+      "pieces": [
+        "WaterBottle",
+        "SheetPaper2"
+      ],
+      "title": "Friday’s entertainment",
+      "where": [
+        {
+          "containers": [
+            "crate",
+            "shelves",
+            "desk",
+            "counter",
+            "cardboardbox",
+            "bin"
+          ],
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "Twiggy's",
+        "source": "print:Twiggys"
+      },
+      "gloss": "The back-room water check and bar delivery are recorded out of order.",
+      "prov": {
+        "batch": "T0282",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "An emergency team could test a room and receive drinks during a response; the records do not say what prompted the check."
+    }
+  }
+]

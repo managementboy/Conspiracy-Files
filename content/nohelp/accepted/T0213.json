@@ -13,10 +13,18 @@
     "title": "The garden ornament order",
     "where": [
       {
+        "containers": [
+          "trough",
+          "desk",
+          "metal_shelves",
+          "filingcabinet",
+          "toolcabinet",
+          "sidetable"
+        ],
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

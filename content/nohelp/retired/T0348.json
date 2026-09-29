@@ -1,0 +1,44 @@
+[
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "scene": "RDSSpecificProfession"
+      },
+      "body": "the night shift: two workers from the livestock-feed study carried a sweet chemical smell. the creek smelled wrong before the siren began.",
+      "id": "t0348-01",
+      "kind": "written",
+      "pieces": [
+        "diary"
+      ],
+      "title": "the night shift — a sweet chemical smell",
+      "where": [
+        {
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "corpse"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-warning",
+          "c-orders"
+        ]
+      },
+      "gloss": "A personal trace connects a farm trial to symptoms before a later restriction.",
+      "prov": {
+        "batch": "T0348",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "Emergency workers could have picked up the same a sweet chemical smell while responding near a field; this personal trace does not prove the trial caused the emergency."
+    }
+  }
+]

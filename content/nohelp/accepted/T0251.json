@@ -13,10 +13,18 @@
     "title": "Friday’s extra set",
     "where": [
       {
+        "containers": [
+          "sidetable",
+          "desk",
+          "filingcabinet",
+          "shelves",
+          "dresser",
+          "smallbox"
+        ],
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

@@ -26,7 +26,7 @@
       "Twine",
       "HandTorch"
     ],
-    "title": "missing count beside the baling twine",
+    "title": "Baling twine with the unclosed tally",
     "where": [
       {
         "lean": "containment",

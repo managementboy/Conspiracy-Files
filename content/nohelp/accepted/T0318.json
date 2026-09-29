@@ -13,6 +13,14 @@
     "title": "Lunch wrapped with a bandage",
     "where": [
       {
+        "containers": [
+          "overhead",
+          "medicine",
+          "fridge",
+          "smallbox",
+          "counter",
+          "sidetable"
+        ],
         "lean": "containment",
         "place": "mapNamed",
         "rival": "agricultural",
@@ -35,12 +43,12 @@
     "where": [
       {
         "containers": [
-          "counter",
+          "dishescabinet",
           "desk",
-          "crate",
-          "locker",
-          "shelves",
-          "bin"
+          "overhead",
+          "filingcabinet",
+          "counter",
+          "sidetable"
         ],
         "lean": "agricultural",
         "place": "mapNamed",

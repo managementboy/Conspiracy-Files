@@ -10,13 +10,21 @@
       "Stapler",
       "FirstAidKit"
     ],
-    "title": "missing count beside the stapler",
+    "title": "Stapler with the unclosed tally",
     "where": [
       {
+        "containers": [
+          "sidetable",
+          "medicine",
+          "filingcabinet",
+          "desk",
+          "locker",
+          "shelves"
+        ],
         "lean": "containment",
         "place": "mapNamed",
         "rival": "agricultural",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

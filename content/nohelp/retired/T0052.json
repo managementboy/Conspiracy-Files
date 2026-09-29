@@ -1,0 +1,106 @@
+[
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "map": "LouisvilleStashMap4",
+        "mark": 1
+      },
+      "body": "A sledge is marked for a station delivery while the fuel can is logged as empty before the driver’s return. The receipt leaves the destination blank.",
+      "id": "t0052-01",
+      "kind": "set",
+      "pieces": [
+        "Sledgehammer",
+        "PetrolCan"
+      ],
+      "title": "The stop at the station",
+      "where": [
+        {
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "don't bother",
+        "source": "map:LouisvilleStashMap4"
+      },
+      "gloss": "A station delivery and fuel record disagree about the trip’s destination.",
+      "prov": {
+        "batch": "T0052",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "An emergency detour could consume fuel and delay a tool delivery; the blank destination does not establish a test route."
+    }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "map": "LouisvilleStashMap4",
+        "mark": 1
+      },
+      "body": "A sledge is marked for a station delivery while the fuel can is logged as empty before the driver’s return. The receipt leaves the destination blank.",
+      "id": "t0052-01",
+      "kind": "set",
+      "pieces": [
+        "Sledgehammer",
+        "PetrolCan"
+      ],
+      "title": "The stop at the station",
+      "where": [
+        {
+          "containers": [
+            "crate",
+            "shelves",
+            "desk",
+            "counter",
+            "cardboardbox",
+            "bin"
+          ],
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "don't bother",
+        "source": "map:LouisvilleStashMap4"
+      },
+      "gloss": "A station delivery and fuel record disagree about the trip’s destination.",
+      "prov": {
+        "batch": "T0052",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "An emergency detour could consume fuel and delay a tool delivery; the blank destination does not establish a test route."
+    }
+  }
+]

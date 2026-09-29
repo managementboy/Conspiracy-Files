@@ -10,13 +10,21 @@
       "Badge",
       "Map"
     ],
-    "title": "missing count beside the loose badge",
+    "title": "Loose badge beside the spare mark",
     "where": [
       {
+        "containers": [
+          "dresser",
+          "desk",
+          "filingcabinet",
+          "sidetable",
+          "shelves",
+          "smallbox"
+        ],
         "lean": "containment",
         "place": "mapNamed",
         "rival": "agricultural",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

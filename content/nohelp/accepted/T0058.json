@@ -14,10 +14,18 @@
     "title": "Food without a gun",
     "where": [
       {
+        "containers": [
+          "counter",
+          "desk",
+          "overhead",
+          "filingcabinet",
+          "fridge",
+          "sidetable"
+        ],
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

@@ -13,10 +13,18 @@
     "title": "Safety briefing copy",
     "where": [
       {
+        "containers": [
+          "locker",
+          "desk",
+          "dresser",
+          "filingcabinet",
+          "wardrobe",
+          "sidetable"
+        ],
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

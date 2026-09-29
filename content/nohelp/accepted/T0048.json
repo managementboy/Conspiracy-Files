@@ -14,10 +14,18 @@
     "title": "Fortification order",
     "where": [
       {
+        "containers": [
+          "toolcabinet",
+          "metal_shelves",
+          "crate",
+          "smallbox",
+          "smallcrate",
+          "militarycrate"
+        ],
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   },
@@ -26,7 +34,7 @@
       "map": "IrvingtonStashMap9",
       "note": 1
     },
-    "body": "Farm log: “fortify here” meant boards over the garden door before the next treatment truck. The crew promised to collect its sample jars and never returned.",
+    "body": "Farm log: “fortify here” meant boards over the garden door before the next treatment truck. The crew promised to collect its sample jars and never returned.\n\nMy mother put it with the household bills so it would not be thrown away. It was the only part of the week that still had a date.\n\nI do not know which of the two accounts was repeated afterward. The older one is the one I had in my hands that day.",
     "id": "t0048-02",
     "kind": "written",
     "pieces": [
@@ -35,10 +43,18 @@
     "title": "Fortify before the treatment",
     "where": [
       {
+        "containers": [
+          "smallbox",
+          "desk",
+          "sidetable",
+          "dresser",
+          "filingcabinet",
+          "shelves"
+        ],
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   },
@@ -47,7 +63,7 @@
       "map": "IrvingtonStashMap9",
       "note": 2
     },
-    "body": "Diary margin: the first heart marks the cot where the orchard crew slept after the spray run. Their boots left a sweet yellow dust; the family returned before anyone posted a warning.",
+    "body": "Diary margin: the first heart marks the cot where the orchard crew slept after the spray run. Their boots left a sweet yellow dust; the family returned before anyone posted a warning.\n\nThe first account was spoken quickly, as if there might be a bus to catch. I wrote it down before another person could replace it.\n\nI wrote the time before I went back for the others. The clock may have been slow; the second vehicle was already gone.",
     "id": "t0048-03",
     "kind": "written",
     "pieces": [
@@ -56,10 +72,18 @@
     "title": "First heart, clean cot",
     "where": [
       {
+        "containers": [
+          "cardboardbox",
+          "crate",
+          "bin",
+          "smallbox",
+          "locker",
+          "desk"
+        ],
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   },
@@ -68,7 +92,7 @@
       "map": "IrvingtonStashMap9",
       "note": 3
     },
-    "body": "On the photograph back: second heart, our spare blanket. I rinsed green flecks from it after the seed-treatment men left, then the well began tasting of pennies.",
+    "body": "On the photograph back: second heart, our spare blanket. I rinsed green flecks from it after the seed-treatment men left, then the well began tasting of pennies.\n\nI asked for the old page back after the new instructions arrived. They said it had been destroyed, but its corner was still in my pocket.\n\nI wrote the time before I went back for the others. The clock may have been slow; the second vehicle was already gone.",
     "id": "t0048-04",
     "kind": "written",
     "pieces": [
@@ -77,10 +101,18 @@
     "title": "Second heart, rinsed blanket",
     "where": [
       {
+        "containers": [
+          "cardboardbox",
+          "crate",
+          "bin",
+          "smallbox",
+          "locker",
+          "desk"
+        ],
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   },
@@ -89,7 +121,7 @@
       "map": "IrvingtonStashMap9",
       "note": 4
     },
-    "body": "Torn notebook page: the third heart is the room lent to two pasture-test workers. One wrote that the calves refused water before the county cars arrived.",
+    "body": "Torn notebook page: the third heart is the room lent to two pasture-test workers. One wrote that the calves refused water before the county cars arrived.\n\nThe person beside me recognized the handwriting and went quiet. We had been told not to rely on yesterday’s directions.\n\nI wrote the time before I went back for the others. The clock may have been slow; the second vehicle was already gone.",
     "id": "t0048-05",
     "kind": "written",
     "pieces": [
@@ -98,10 +130,18 @@
     "title": "Third heart, borrowed room",
     "where": [
       {
+        "containers": [
+          "cardboardbox",
+          "crate",
+          "bin",
+          "smallbox",
+          "locker",
+          "desk"
+        ],
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   },
@@ -110,7 +150,7 @@
       "map": "IrvingtonStashMap9",
       "note": 5
     },
-    "body": "Personal note: at the fourth heart we shut the window during the field misting. The kitchen herbs curled by supper, hours before the road patrol appeared.",
+    "body": "Personal note: at the fourth heart we shut the window during the field misting. The kitchen herbs curled by supper, hours before the road patrol appeared.\n\nI set it aside to show the neighbor when she returned. Her porch was empty by the time the light was good enough to read it.\n\nThere may be a simple reason for the change. Nobody at the next stop could tell us what to do with the first version.",
     "id": "t0048-06",
     "kind": "written",
     "pieces": [
@@ -119,10 +159,18 @@
     "title": "Fourth heart, sealed window",
     "where": [
       {
+        "containers": [
+          "cardboardbox",
+          "crate",
+          "bin",
+          "smallbox",
+          "locker",
+          "desk"
+        ],
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   },
@@ -131,7 +179,7 @@
       "map": "IrvingtonStashMap9",
       "note": 6
     },
-    "body": "Letter draft: the fifth heart was for the baby room. A crop-trial driver warned us not to use the rain barrel, but would not put his warning on the delivery slip.",
+    "body": "Letter draft: the fifth heart was for the baby room. A crop-trial driver warned us not to use the rain barrel, but would not put his warning on the delivery slip.\n\nThey counted the containers before anyone counted who had carried them. I wrote the second number here while I could still remember it.\n\nThere may be a simple reason for the change. Nobody at the next stop could tell us what to do with the first version.",
     "id": "t0048-07",
     "kind": "written",
     "pieces": [
@@ -140,10 +188,18 @@
     "title": "Fifth heart, empty cradle",
     "where": [
       {
+        "containers": [
+          "smallbox",
+          "desk",
+          "filingcabinet",
+          "sidetable",
+          "cashregister",
+          "shelves"
+        ],
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

@@ -46,5 +46,761 @@
       },
       "rival_reading": "A work site could have used the same barrier and shift list; the timing does not establish who was kept out."
     }
+  },
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "map": "WorldStashMap16",
+        "mark": 1
+      },
+      "body": "chalk numbers run across the fire extinguisher and camera. the count skips one place, then resumes in a different hand.",
+      "id": "t0125-01",
+      "kind": "set",
+      "pieces": [
+        "Extinguisher",
+        "Camera"
+      ],
+      "title": "missing count beside the fire extinguisher",
+      "where": [
+        {
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-warning",
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "gloss": "A response bundle preserves a missing count, changed route, or erased identity.",
+      "prov": {
+        "batch": "T0125",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A farm-program crew could have counted routes, repacked tools, or removed ownership marks during hurried field work; the objects do not prove a concealed public response."
+    }
+  },
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "map": "WorldStashMap16",
+        "note": 1
+      },
+      "body": "Diary line at the first trap: a torn pasture-test tag was caught beneath the spring. Its number belongs to a drum the return ledger calls sealed.",
+      "id": "t0125-02",
+      "kind": "written",
+      "pieces": [
+        "diary"
+      ],
+      "title": "First trap held a torn field tag",
+      "where": [
+        {
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "gloss": "First trap held a torn field tag",
+      "prov": {
+        "batch": "T0125",
+        "handoff": "2026-09-29",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work."
+    }
+  },
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "map": "WorldStashMap16",
+        "note": 2
+      },
+      "body": "Camp log: the pasture-study team slept here for three nights. On the fourth morning their cook poured out the water because it smelled medicinal.",
+      "id": "t0125-03",
+      "kind": "written",
+      "pieces": [
+        "notepad"
+      ],
+      "title": "Camp used by the pasture team",
+      "where": [
+        {
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "gloss": "Camp used by the pasture team",
+      "prov": {
+        "batch": "T0125",
+        "handoff": "2026-09-29",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work."
+    }
+  },
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "map": "WorldStashMap16",
+        "note": 3
+      },
+      "body": "Field diary: the first north arrow leads past drums used to wash pasture-test gear. One drum was already sealed when the checkpoint crew arrived.",
+      "id": "t0125-04",
+      "kind": "written",
+      "pieces": [
+        "receipt"
+      ],
+      "title": "North arrow past the wash drums",
+      "where": [
+        {
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "gloss": "North arrow past the wash drums",
+      "prov": {
+        "batch": "T0125",
+        "handoff": "2026-09-29",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work."
+    }
+  },
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "map": "WorldStashMap16",
+        "note": 4
+      },
+      "body": "Photograph back: the second trap contained a torn soil-sample bag, not an animal. Blue granules beneath it matched the coating on the trial seed.",
+      "id": "t0125-05",
+      "kind": "written",
+      "pieces": [
+        "photograph"
+      ],
+      "title": "Second trap held a sample bag",
+      "where": [
+        {
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "gloss": "Second trap held a sample bag",
+      "prov": {
+        "batch": "T0125",
+        "handoff": "2026-09-29",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work."
+    }
+  },
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "map": "WorldStashMap16",
+        "note": 5
+      },
+      "body": "Personal note from the checkpoint: wave through the green field badges before recording civilian plates. I copied one badge number after its wearer began shaking.",
+      "id": "t0125-06",
+      "kind": "written",
+      "pieces": [
+        "notebook"
+      ],
+      "title": "Checkpoint checked field badges",
+      "where": [
+        {
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "gloss": "Checkpoint checked field badges",
+      "prov": {
+        "batch": "T0125",
+        "handoff": "2026-09-29",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work."
+    }
+  },
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "map": "WorldStashMap16",
+        "note": 6
+      },
+      "body": "Road-crew receipt: barriers were moved downhill after a trial drum leaked. The billed time is two hours before the radio announced an emergency route.",
+      "id": "t0125-07",
+      "kind": "written",
+      "pieces": [
+        "letter"
+      ],
+      "title": "Barriers moved after the spill",
+      "where": [
+        {
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "gloss": "Barriers moved after the spill",
+      "prov": {
+        "batch": "T0125",
+        "handoff": "2026-09-29",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work."
+    }
+  },
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "map": "WorldStashMap16",
+        "note": 7
+      },
+      "body": "Torn page: follow the upper north arrow to the trial gate and count every rinse can. The crew counted seven going in and six coming back.",
+      "id": "t0125-08",
+      "kind": "written",
+      "pieces": [
+        "diary"
+      ],
+      "title": "Upper arrow toward the trial gate",
+      "where": [
+        {
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "gloss": "Upper arrow toward the trial gate",
+      "prov": {
+        "batch": "T0125",
+        "handoff": "2026-09-29",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work."
+    }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "map": "WorldStashMap16",
+        "mark": 1
+      },
+      "body": "chalk numbers run across the fire extinguisher and camera. the count skips one place, then resumes in a different hand.",
+      "id": "t0125-01",
+      "kind": "set",
+      "pieces": [
+        "Extinguisher",
+        "Camera"
+      ],
+      "title": "Fire extinguisher beside the spare mark",
+      "where": [
+        {
+          "containers": [
+            "crate",
+            "shelves",
+            "desk",
+            "counter",
+            "cardboardbox",
+            "bin"
+          ],
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-warning",
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "gloss": "A response bundle preserves a missing count, changed route, or erased identity.",
+      "prov": {
+        "batch": "T0125",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A farm-program crew could have counted routes, repacked tools, or removed ownership marks during hurried field work; the objects do not prove a concealed public response."
+    }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "map": "WorldStashMap16",
+        "note": 1
+      },
+      "body": "Diary line at the first trap: a torn pasture-test tag was caught beneath the spring. Its number belongs to a drum the return ledger calls sealed.\n\nThere was a place for a signature and no one willing to write one. I used the margin to note what we actually found.\n\nI do not know which of the two accounts was repeated afterward. The older one is the one I had in my hands that day.",
+      "id": "t0125-02",
+      "kind": "written",
+      "pieces": [
+        "diary"
+      ],
+      "title": "First trap held a torn field tag",
+      "where": [
+        {
+          "containers": [
+            "desk",
+            "crate",
+            "shelves",
+            "counter",
+            "cardboardbox",
+            "bin"
+          ],
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "gloss": "First trap held a torn field tag",
+      "prov": {
+        "batch": "T0125",
+        "handoff": "2026-09-29",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work."
+    }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "map": "WorldStashMap16",
+        "note": 2
+      },
+      "body": "Camp log: the pasture-study team slept here for three nights. On the fourth morning their cook poured out the water because it smelled medicinal.\n\nMy mother put it with the household bills so it would not be thrown away. It was the only part of the week that still had a date.\n\nI do not know which of the two accounts was repeated afterward. The older one is the one I had in my hands that day.",
+      "id": "t0125-03",
+      "kind": "written",
+      "pieces": [
+        "notepad"
+      ],
+      "title": "Camp used by the pasture team",
+      "where": [
+        {
+          "containers": [
+            "crate",
+            "shelves",
+            "desk",
+            "counter",
+            "cardboardbox",
+            "bin"
+          ],
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "gloss": "Camp used by the pasture team",
+      "prov": {
+        "batch": "T0125",
+        "handoff": "2026-09-29",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work."
+    }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "map": "WorldStashMap16",
+        "note": 3
+      },
+      "body": "Field diary: the first north arrow leads past drums used to wash pasture-test gear. One drum was already sealed when the checkpoint crew arrived.\n\nThe first account was spoken quickly, as if there might be a bus to catch. I wrote it down before another person could replace it.\n\nI wrote the time before I went back for the others. The clock may have been slow; the second vehicle was already gone.",
+      "id": "t0125-04",
+      "kind": "written",
+      "pieces": [
+        "receipt"
+      ],
+      "title": "North arrow past the wash drums",
+      "where": [
+        {
+          "containers": [
+            "desk",
+            "crate",
+            "shelves",
+            "counter",
+            "cardboardbox",
+            "bin"
+          ],
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "gloss": "North arrow past the wash drums",
+      "prov": {
+        "batch": "T0125",
+        "handoff": "2026-09-29",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work."
+    }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "map": "WorldStashMap16",
+        "note": 4
+      },
+      "body": "Photograph back: the second trap contained a torn soil-sample bag, not an animal. Blue granules beneath it matched the coating on the trial seed.\n\nI asked for the old page back after the new instructions arrived. They said it had been destroyed, but its corner was still in my pocket.\n\nI wrote the time before I went back for the others. The clock may have been slow; the second vehicle was already gone.",
+      "id": "t0125-05",
+      "kind": "written",
+      "pieces": [
+        "photograph"
+      ],
+      "title": "Second trap held a sample bag",
+      "where": [
+        {
+          "containers": [
+            "dresser",
+            "crate",
+            "shelves",
+            "desk",
+            "counter",
+            "cardboardbox"
+          ],
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "gloss": "Second trap held a sample bag",
+      "prov": {
+        "batch": "T0125",
+        "handoff": "2026-09-29",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work."
+    }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "map": "WorldStashMap16",
+        "note": 5
+      },
+      "body": "Personal note from the checkpoint: wave through the green field badges before recording civilian plates. I copied one badge number after its wearer began shaking.\n\nThe person beside me recognized the handwriting and went quiet. We had been told not to rely on yesterday’s directions.\n\nI wrote the time before I went back for the others. The clock may have been slow; the second vehicle was already gone.",
+      "id": "t0125-06",
+      "kind": "written",
+      "pieces": [
+        "notebook"
+      ],
+      "title": "Checkpoint checked field badges",
+      "where": [
+        {
+          "containers": [
+            "filingcabinet",
+            "crate",
+            "shelves",
+            "desk",
+            "counter",
+            "cardboardbox"
+          ],
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "gloss": "Checkpoint checked field badges",
+      "prov": {
+        "batch": "T0125",
+        "handoff": "2026-09-29",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work."
+    }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "map": "WorldStashMap16",
+        "note": 6
+      },
+      "body": "Road-crew receipt: barriers were moved downhill after a trial drum leaked. The billed time is two hours before the radio announced an emergency route.\n\nI set it aside to show the neighbor when she returned. Her porch was empty by the time the light was good enough to read it.\n\nThere may be a simple reason for the change. Nobody at the next stop could tell us what to do with the first version.",
+      "id": "t0125-07",
+      "kind": "written",
+      "pieces": [
+        "letter"
+      ],
+      "title": "Barriers moved after the spill",
+      "where": [
+        {
+          "containers": [
+            "medicine",
+            "crate",
+            "shelves",
+            "desk",
+            "counter",
+            "cardboardbox"
+          ],
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "gloss": "Barriers moved after the spill",
+      "prov": {
+        "batch": "T0125",
+        "handoff": "2026-09-29",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work."
+    }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "map": "WorldStashMap16",
+        "note": 7
+      },
+      "body": "Torn page: follow the upper north arrow to the trial gate and count every rinse can. The crew counted seven going in and six coming back.\n\nThey counted the containers before anyone counted who had carried them. I wrote the second number here while I could still remember it.\n\nThere may be a simple reason for the change. Nobody at the next stop could tell us what to do with the first version.",
+      "id": "t0125-08",
+      "kind": "written",
+      "pieces": [
+        "diary"
+      ],
+      "title": "Upper arrow toward the trial gate",
+      "where": [
+        {
+          "containers": [
+            "crate",
+            "shelves",
+            "desk",
+            "counter",
+            "cardboardbox",
+            "bin"
+          ],
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "gloss": "Upper arrow toward the trial gate",
+      "prov": {
+        "batch": "T0125",
+        "handoff": "2026-09-29",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work."
+    }
   }
 ]

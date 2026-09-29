@@ -13,10 +13,18 @@
     "title": "Prepared for a different threat",
     "where": [
       {
+        "containers": [
+          "locker",
+          "desk",
+          "wardrobe",
+          "filingcabinet",
+          "militarylocker",
+          "shelves"
+        ],
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

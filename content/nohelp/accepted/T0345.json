@@ -13,6 +13,14 @@
     "title": "Mop and rinse bucket, friday before dawn",
     "where": [
       {
+        "containers": [
+          "dishescabinet",
+          "metal_shelves",
+          "toolcabinet",
+          "crate",
+          "clothingwasher",
+          "bin"
+        ],
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",
@@ -35,12 +43,12 @@
     "where": [
       {
         "containers": [
-          "toolcabinet",
+          "fridge",
           "desk",
           "counter",
-          "crate",
-          "locker",
-          "shelves"
+          "sidetable",
+          "cardboardbox",
+          "filingcabinet"
         ],
         "lean": "containment",
         "place": "mapNamed",

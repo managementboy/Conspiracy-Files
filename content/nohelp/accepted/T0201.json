@@ -13,10 +13,18 @@
     "title": "The luxury water check",
     "where": [
       {
+        "containers": [
+          "fridge",
+          "desk",
+          "shelves",
+          "counter",
+          "filingcabinet",
+          "cardboardbox"
+        ],
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

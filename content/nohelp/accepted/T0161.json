@@ -10,13 +10,21 @@
       "DuctTape",
       "WalkieTalkie1"
     ],
-    "title": "missing count beside the duct tape",
+    "title": "Duct tape beside the spare mark",
     "where": [
       {
+        "containers": [
+          "metal_shelves",
+          "toolcabinet",
+          "crate",
+          "locker",
+          "smallbox",
+          "smallcrate"
+        ],
         "lean": "containment",
         "place": "mapNamed",
         "rival": "agricultural",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

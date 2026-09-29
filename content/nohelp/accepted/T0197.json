@@ -13,10 +13,18 @@
     "title": "Rust on the home survey",
     "where": [
       {
+        "containers": [
+          "sidetable",
+          "filingcabinet",
+          "desk",
+          "shelves",
+          "smallbox",
+          "cashregister"
+        ],
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

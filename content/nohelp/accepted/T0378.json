@@ -19,5 +19,25 @@
         "spot": "ground"
       }
     ]
+  },
+  {
+    "anchor": {
+      "scene": "RZSBurntWreck"
+    },
+    "body": "The car had a windshield pass for a route officially clear of traffic. At the next crossing the guards had a revised list and would not honor it. The driver folded the pass into quarters to keep it dry for his wife.",
+    "id": "t0378-02",
+    "kind": "written",
+    "pieces": [
+      "notebook"
+    ],
+    "title": "The wrecked permit",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
   }
 ]

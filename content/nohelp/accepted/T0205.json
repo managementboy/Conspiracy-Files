@@ -13,10 +13,18 @@
     "title": "The bout schedule",
     "where": [
       {
+        "containers": [
+          "fridge",
+          "desk",
+          "counter",
+          "filingcabinet",
+          "overhead",
+          "sidetable"
+        ],
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

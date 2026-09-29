@@ -17,5 +17,24 @@
       "writer": "ChatGPT"
     },
     "rival_reading": "Field workers and emergency responders could each have made this mixed bundle; it does not settle which activity came first."
+  },
+  "t0405-02": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-warning"
+      ]
+    },
+    "gloss": "A measured perimeter was laid out around the vans.",
+    "prov": {
+      "batch": "T0405",
+      "handoff": "2026-09-29",
+      "writer": "Claude"
+    },
+    "rival_reading": "Field workers could mark out a treated plot the same way; the lengths alone do not say what was fenced in."
   }
 }

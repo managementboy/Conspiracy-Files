@@ -14,10 +14,18 @@
     "title": "A private security cache",
     "where": [
       {
+        "containers": [
+          "militarylocker",
+          "desk",
+          "locker",
+          "shelves",
+          "militarycrate",
+          "filingcabinet"
+        ],
         "lean": "containment",
         "place": "mapNamed",
         "rival": "agricultural",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

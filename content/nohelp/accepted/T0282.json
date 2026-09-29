@@ -13,10 +13,18 @@
     "title": "Friday’s entertainment",
     "where": [
       {
+        "containers": [
+          "crate",
+          "cardboardbox",
+          "smallcrate",
+          "smallbox",
+          "grocerstand",
+          "fridge"
+        ],
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

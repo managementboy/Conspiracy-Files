@@ -14,10 +14,18 @@
     "title": "Trouble behind the counter",
     "where": [
       {
+        "containers": [
+          "locker",
+          "desk",
+          "dresser",
+          "filingcabinet",
+          "wardrobe",
+          "sidetable"
+        ],
         "lean": "containment",
         "place": "mapNamed",
         "rival": "agricultural",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

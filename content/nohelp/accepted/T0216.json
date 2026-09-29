@@ -13,10 +13,18 @@
     "title": "The mail route change",
     "where": [
       {
+        "containers": [
+          "locker",
+          "desk",
+          "filingcabinet",
+          "wardrobe",
+          "sidetable",
+          "militarylocker"
+        ],
         "lean": "containment",
         "place": "mapNamed",
         "rival": "agricultural",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

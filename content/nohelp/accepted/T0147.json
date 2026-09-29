@@ -11,13 +11,21 @@
       "Comb",
       "HandTorch"
     ],
-    "title": "missing count beside the comb",
+    "title": "Comb beside the spare mark",
     "where": [
       {
+        "containers": [
+          "metal_shelves",
+          "cardboardbox",
+          "smallbox",
+          "crate",
+          "toolcabinet",
+          "locker"
+        ],
         "lean": "containment",
         "place": "mapNamed",
         "rival": "agricultural",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

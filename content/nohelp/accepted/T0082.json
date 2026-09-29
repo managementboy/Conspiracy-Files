@@ -14,10 +14,18 @@
     "title": "Too heavy to carry",
     "where": [
       {
+        "containers": [
+          "locker",
+          "militarylocker",
+          "wardrobe",
+          "militarycrate",
+          "dresser",
+          "toolcabinet"
+        ],
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

@@ -19,5 +19,25 @@
         "spot": "vehicle"
       }
     ]
+  },
+  {
+    "anchor": {
+      "scene": "RVSCarCrash"
+    },
+    "body": "The driver had been told the south road was open to families. Someone moved the barrier while we stopped for water. He went back to ask and was offered a different map with the old road drawn out of it.",
+    "id": "t0360-02",
+    "kind": "written",
+    "pieces": [
+      "notebook"
+    ],
+    "title": "A route after midnight",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "vehicle"
+      }
+    ]
   }
 ]

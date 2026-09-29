@@ -13,10 +13,18 @@
     "title": "A mall meeting point",
     "where": [
       {
+        "containers": [
+          "wardrobe",
+          "cardboardbox",
+          "smallbox",
+          "locker",
+          "crate",
+          "desk"
+        ],
         "lean": "containment",
         "place": "mapNamed",
         "rival": "agricultural",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

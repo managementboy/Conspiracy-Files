@@ -10,7 +10,7 @@
       "PipeWrench",
       "Map"
     ],
-    "title": "missing count beside the pipe wrench",
+    "title": "Pipe wrench with the unclosed tally",
     "where": [
       {
         "lean": "containment",

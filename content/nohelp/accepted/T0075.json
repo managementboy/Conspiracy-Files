@@ -14,10 +14,18 @@
     "title": "Under the boards",
     "where": [
       {
+        "containers": [
+          "toolcabinet",
+          "desk",
+          "metal_shelves",
+          "filingcabinet",
+          "crate",
+          "sidetable"
+        ],
         "lean": "containment",
         "place": "mapNamed",
         "rival": "agricultural",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

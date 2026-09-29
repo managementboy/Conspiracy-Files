@@ -14,10 +14,18 @@
     "title": "Radio at the school",
     "where": [
       {
+        "containers": [
+          "shelves",
+          "desk",
+          "filingcabinet",
+          "toolcabinet",
+          "sidetable",
+          "metal_shelves"
+        ],
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

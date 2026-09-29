@@ -11,13 +11,21 @@
       "BluePen",
       "Briefcase"
     ],
-    "title": "missing count beside the blue pen",
+    "title": "Blue pen beside the spare mark",
     "where": [
       {
+        "containers": [
+          "wardrobe",
+          "desk",
+          "filingcabinet",
+          "dresser",
+          "sidetable",
+          "clothingrack"
+        ],
         "lean": "containment",
         "place": "mapNamed",
         "rival": "agricultural",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

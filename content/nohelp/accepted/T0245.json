@@ -10,13 +10,21 @@
       "Tissue",
       "FirstAidKit"
     ],
-    "title": "two traces on the packet of tissues",
+    "title": "Packet of tissues with the second residue",
     "where": [
       {
+        "containers": [
+          "medicine",
+          "crate",
+          "smallbox",
+          "toolcabinet",
+          "locker",
+          "desk"
+        ],
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

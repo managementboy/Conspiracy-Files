@@ -13,10 +13,18 @@
     "title": "A small garden behind the listing",
     "where": [
       {
+        "containers": [
+          "shelves",
+          "desk",
+          "metal_shelves",
+          "cardboardbox",
+          "filingcabinet",
+          "crate"
+        ],
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

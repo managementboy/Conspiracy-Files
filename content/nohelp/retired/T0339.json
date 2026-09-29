@@ -1,0 +1,96 @@
+[
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "scene": "RDSPokerNight"
+      },
+      "body": "The hand shovel and wash pail share white crystals from the orchard spray test. They were bundled before the bridge was blocked.",
+      "id": "t0339-01",
+      "kind": "set",
+      "pieces": [
+        "HandShovel",
+        "Bucket"
+      ],
+      "title": "Hand shovel and wash pail, the late afternoon",
+      "where": [
+        {
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-warning",
+          "c-orders"
+        ]
+      },
+      "gloss": "A personal trace connects a farm trial to symptoms before a later restriction.",
+      "prov": {
+        "batch": "T0339",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "Emergency workers could have picked up the same white crystals while responding near a field; this personal trace does not prove the trial caused the emergency."
+    }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "scene": "RDSPokerNight"
+      },
+      "body": "A pencil lies through a ring of playing cards. The score sheet counts one more player than the chairs, and a later hand has rubbed the extra column thin.",
+      "id": "t0339-02",
+      "kind": "set",
+      "pieces": [
+        "Pencil",
+        "Book"
+      ],
+      "title": "An empty seat at the table",
+      "where": [
+        {
+          "containers": [
+            "desk",
+            "counter",
+            "crate",
+            "locker",
+            "shelves",
+            "bin"
+          ],
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-warning",
+          "c-accounting"
+        ]
+      },
+      "gloss": "An altered count or retained object was left at the scene.",
+      "prov": {
+        "batch": "T0339",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A response to an agricultural exposure could explain the same record or object."
+    }
+  }
+]

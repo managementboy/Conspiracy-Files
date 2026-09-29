@@ -13,10 +13,18 @@
     "title": "A gathering after dark",
     "where": [
       {
+        "containers": [
+          "shelves",
+          "smallbox",
+          "desk",
+          "shelvesmag",
+          "filingcabinet",
+          "sidetable"
+        ],
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

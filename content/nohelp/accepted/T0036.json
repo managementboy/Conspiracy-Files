@@ -14,10 +14,18 @@
     "title": "Goods kept apart",
     "where": [
       {
+        "containers": [
+          "wardrobe",
+          "toolcabinet",
+          "dresser",
+          "metal_shelves",
+          "clothingrack",
+          "crate"
+        ],
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

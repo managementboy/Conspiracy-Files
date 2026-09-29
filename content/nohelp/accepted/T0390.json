@@ -19,5 +19,25 @@
         "spot": "ground"
       }
     ]
+  },
+  {
+    "anchor": {
+      "scene": "RZSMusicFest"
+    },
+    "body": "The festival volunteers were asked to count exits while the music still played. The man at the gate kept the old total when the rear fence came down. He said correcting it would delay the buses.",
+    "id": "t0390-02",
+    "kind": "written",
+    "pieces": [
+      "notebook"
+    ],
+    "title": "Attendance at the stage",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
   }
 ]

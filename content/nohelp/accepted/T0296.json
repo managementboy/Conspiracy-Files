@@ -3,7 +3,7 @@
     "anchor": {
       "scene": "RBLooted"
     },
-    "body": "My note from near midnight: the field trial crew carried rinsed gloves. my brother started coughing. I had not yet heard that a patrol turned everyone back.",
+    "body": "My note from near midnight: the field trial crew carried rinsed gloves. my brother started coughing. I had not yet heard that a patrol turned everyone back.\n\nI folded the corner so I could find the entry again. Someone wanted the book put away before I had even finished copying it.\n\nThe next morning I looked for a second copy and found only the envelope. I left this one unfolded for whoever came after us.",
     "id": "t0296-01",
     "kind": "written",
     "pieces": [
@@ -12,6 +12,14 @@
     "title": "Near midnight: rinsed gloves",
     "where": [
       {
+        "containers": [
+          "sidetable",
+          "filingcabinet",
+          "desk",
+          "shelves",
+          "smallbox",
+          "cashregister"
+        ],
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",
@@ -33,12 +41,12 @@
     "where": [
       {
         "containers": [
-          "dresser",
+          "sidetable",
+          "filingcabinet",
           "desk",
-          "counter",
-          "crate",
-          "locker",
-          "shelves"
+          "shelves",
+          "smallbox",
+          "cashregister"
         ],
         "lean": "containment",
         "place": "mapNamed",

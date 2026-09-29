@@ -11,13 +11,21 @@
       "AnimalFeedBag",
       "WalkieTalkie1"
     ],
-    "title": "missing count beside the animal-feed sack",
+    "title": "Animal-feed sack beside the spare mark",
     "where": [
       {
+        "containers": [
+          "trough",
+          "desk",
+          "metal_shelves",
+          "shelves",
+          "toolcabinet",
+          "crate"
+        ],
         "lean": "containment",
         "place": "mapNamed",
         "rival": "agricultural",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

@@ -14,10 +14,18 @@
     "title": "Third door supply",
     "where": [
       {
+        "containers": [
+          "medicine",
+          "desk",
+          "smallbox",
+          "shelves",
+          "sidetable",
+          "filingcabinet"
+        ],
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

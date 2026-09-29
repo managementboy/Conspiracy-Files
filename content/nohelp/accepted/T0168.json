@@ -13,10 +13,18 @@
     "title": "Cabin water note",
     "where": [
       {
+        "containers": [
+          "metal_shelves",
+          "toolcabinet",
+          "crate",
+          "doghouse",
+          "smallbox",
+          "tent"
+        ],
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

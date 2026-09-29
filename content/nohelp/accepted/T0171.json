@@ -10,13 +10,21 @@
       "Twine",
       "HandTorch"
     ],
-    "title": "missing count beside the baling twine",
+    "title": "Baling twine beside the spare mark",
     "where": [
       {
+        "containers": [
+          "toolcabinet",
+          "desk",
+          "metal_shelves",
+          "shelves",
+          "crate",
+          "smallcrate"
+        ],
         "lean": "containment",
         "place": "mapNamed",
         "rival": "agricultural",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

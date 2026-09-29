@@ -11,13 +11,21 @@
       "Jack",
       "Clipboard"
     ],
-    "title": "missing count beside the car jack",
+    "title": "Car jack beside the spare mark",
     "where": [
       {
+        "containers": [
+          "metal_shelves",
+          "desk",
+          "toolcabinet",
+          "filingcabinet",
+          "crate",
+          "sidetable"
+        ],
         "lean": "containment",
         "place": "mapNamed",
         "rival": "agricultural",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   },
@@ -26,7 +34,7 @@
       "map": "LouisvilleStashMap1",
       "mark": 1
     },
-    "body": "The test-plot sample jars lost their labels in the rain. Don't put pesticide samples in the rifle-cleaning tin again; the household still keeps its loose screws there.",
+    "body": "The test-plot sample jars lost their labels in the rain. Don't put pesticide samples in the rifle-cleaning tin again; the household still keeps its loose screws there.\n\nWe tried to finish the ordinary work around it. The notice changed faster than the deliveries, and no one came to collect what was left.\n\nThe amount mattered to the office more than the people waiting outside. We stayed until dark because the last line still said to wait.",
     "id": "t0021-02",
     "kind": "written",
     "pieces": [
@@ -35,10 +43,18 @@
     "title": "The tin is for screws",
     "where": [
       {
+        "containers": [
+          "filingcabinet",
+          "desk",
+          "sidetable",
+          "shelves",
+          "smallbox",
+          "cashregister"
+        ],
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

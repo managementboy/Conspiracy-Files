@@ -13,10 +13,18 @@
     "title": "Cabin rules after dark",
     "where": [
       {
+        "containers": [
+          "smallcrate",
+          "bin",
+          "crate",
+          "tent",
+          "cardboardbox",
+          "smallbox"
+        ],
         "lean": "containment",
         "place": "mapNamed",
         "rival": "agricultural",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

@@ -14,10 +14,18 @@
     "title": "A destination without a name",
     "where": [
       {
+        "containers": [
+          "shelves",
+          "desk",
+          "sidetable",
+          "filingcabinet",
+          "smallbox",
+          "shelvesmag"
+        ],
         "lean": "containment",
         "place": "mapNamed",
         "rival": "agricultural",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

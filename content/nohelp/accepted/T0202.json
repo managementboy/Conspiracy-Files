@@ -10,13 +10,21 @@
       "DishCloth",
       "Map"
     ],
-    "title": "missing count beside the dish cloth",
+    "title": "Dish cloth with the unclosed tally",
     "where": [
       {
+        "containers": [
+          "dishescabinet",
+          "desk",
+          "counter",
+          "filingcabinet",
+          "overhead",
+          "shelves"
+        ],
         "lean": "containment",
         "place": "mapNamed",
         "rival": "agricultural",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

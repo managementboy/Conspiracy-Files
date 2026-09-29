@@ -1,0 +1,44 @@
+[
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "scene": "RZSForestCampEaten"
+      },
+      "body": "my weathered bundle entry says the experimental seed run workers brushed off chalky water. my throat tightened before county trucks reached us.",
+      "id": "t0385-01",
+      "kind": "written",
+      "pieces": [
+        "notebook"
+      ],
+      "title": "weathered bundle note — the first morning",
+      "where": [
+        {
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-warning",
+          "c-failure"
+        ]
+      },
+      "gloss": "A personal field trace precedes the visible emergency response.",
+      "prov": {
+        "batch": "T0385",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "Responders could have collected the chalky water while crossing treated land; the note or objects do not prove the program began the emergency."
+    }
+  }
+]

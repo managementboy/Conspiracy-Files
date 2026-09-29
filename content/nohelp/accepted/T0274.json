@@ -13,10 +13,18 @@
     "title": "Egg route sample",
     "where": [
       {
+        "containers": [
+          "cardboardbox",
+          "crate",
+          "smallbox",
+          "smallcrate",
+          "grocerstand",
+          "desk"
+        ],
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

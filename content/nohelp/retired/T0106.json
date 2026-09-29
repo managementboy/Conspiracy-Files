@@ -1,0 +1,106 @@
+[
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "map": "RosewoodStashMap3",
+        "mark": 1
+      },
+      "body": "The repair kit is left with a note to keep the school-side window closed until the ground dries. The family meeting time is written in the same hand.",
+      "id": "t0106-01",
+      "kind": "set",
+      "pieces": [
+        "Hammer",
+        "Nails"
+      ],
+      "title": "Fortify while we wait",
+      "where": [
+        {
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "help us fortify while we wait it out.",
+        "source": "map:RosewoodStashMap3"
+      },
+      "gloss": "A family waits indoors while a nearby repair and drying period continue.",
+      "prov": {
+        "batch": "T0106",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A response team could have closed windows during decontamination; the note does not identify the treatment."
+    }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "map": "RosewoodStashMap3",
+        "mark": 1
+      },
+      "body": "The repair kit is left with a note to keep the school-side window closed until the ground dries. The family meeting time is written in the same hand.",
+      "id": "t0106-01",
+      "kind": "set",
+      "pieces": [
+        "Hammer",
+        "Nails"
+      ],
+      "title": "Fortify while we wait",
+      "where": [
+        {
+          "containers": [
+            "desk",
+            "crate",
+            "shelves",
+            "counter",
+            "cardboardbox",
+            "bin"
+          ],
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "help us fortify while we wait it out.",
+        "source": "map:RosewoodStashMap3"
+      },
+      "gloss": "A family waits indoors while a nearby repair and drying period continue.",
+      "prov": {
+        "batch": "T0106",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A response team could have closed windows during decontamination; the note does not identify the treatment."
+    }
+  }
+]

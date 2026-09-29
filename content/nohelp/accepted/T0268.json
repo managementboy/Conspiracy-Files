@@ -10,13 +10,21 @@
       "AnimalFeedBag",
       "WalkieTalkie1"
     ],
-    "title": "missing count beside the animal-feed sack",
+    "title": "Animal-feed sack with the unclosed tally",
     "where": [
       {
+        "containers": [
+          "smallcrate",
+          "bin",
+          "crate",
+          "trough",
+          "composter",
+          "doghouse"
+        ],
         "lean": "containment",
         "place": "mapNamed",
         "rival": "agricultural",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

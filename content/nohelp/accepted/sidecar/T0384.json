@@ -17,5 +17,24 @@
       "writer": "ChatGPT"
     },
     "rival_reading": "Responders could have collected the brown foam while crossing treated land; the note or objects do not prove the program began the emergency."
+  },
+  "t0384-02": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-warning"
+      ]
+    },
+    "gloss": "Campers knew which roads would close before it was announced.",
+    "prov": {
+      "batch": "T0384",
+      "handoff": "2026-09-29",
+      "writer": "Claude"
+    },
+    "rival_reading": "Campers could mark closed roads after hearing a bulletin about crop spraying; the map does not show who closed them."
   }
 }

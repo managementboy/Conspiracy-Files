@@ -14,10 +14,18 @@
     "title": "The patient without a weapon",
     "where": [
       {
+        "containers": [
+          "medicine",
+          "desk",
+          "sidetable",
+          "filingcabinet",
+          "locker",
+          "dresser"
+        ],
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

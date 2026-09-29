@@ -13,10 +13,18 @@
     "title": "Shelter readiness list",
     "where": [
       {
+        "containers": [
+          "wardrobe",
+          "fridge",
+          "dresser",
+          "counter",
+          "clothingrack",
+          "overhead"
+        ],
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

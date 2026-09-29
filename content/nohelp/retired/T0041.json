@@ -46,5 +46,103 @@
       },
       "rival_reading": "A private dispute could explain both objects without any official action; the missing delivery mark does not identify the sender."
     }
+  },
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "map": "IrvingtonStashMap2",
+        "mark": 1
+      },
+      "body": "matching white stripes cross the hole punch and clipboard. a name-sized patch on the hole punch has been scrubbed bare.",
+      "id": "t0041-01",
+      "kind": "set",
+      "pieces": [
+        "HolePuncher",
+        "Clipboard"
+      ],
+      "title": "missing count beside the hole punch",
+      "where": [
+        {
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-warning",
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "gloss": "A response bundle preserves a missing count, changed route, or erased identity.",
+      "prov": {
+        "batch": "T0041",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A farm-program crew could have counted routes, repacked tools, or removed ownership marks during hurried field work; the objects do not prove a concealed public response."
+    }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "map": "IrvingtonStashMap2",
+        "mark": 1
+      },
+      "body": "matching white stripes cross the hole punch and clipboard. a name-sized patch on the hole punch has been scrubbed bare.",
+      "id": "t0041-01",
+      "kind": "set",
+      "pieces": [
+        "HolePuncher",
+        "Clipboard"
+      ],
+      "title": "Hole punch beside the spare mark",
+      "where": [
+        {
+          "containers": [
+            "dresser",
+            "crate",
+            "shelves",
+            "desk",
+            "counter",
+            "cardboardbox"
+          ],
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-warning",
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "gloss": "A response bundle preserves a missing count, changed route, or erased identity.",
+      "prov": {
+        "batch": "T0041",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A farm-program crew could have counted routes, repacked tools, or removed ownership marks during hurried field work; the objects do not prove a concealed public response."
+    }
   }
 ]

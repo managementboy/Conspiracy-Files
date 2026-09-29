@@ -13,10 +13,18 @@
     "title": "The returned tape",
     "where": [
       {
+        "containers": [
+          "displaycase",
+          "desk",
+          "shelvesmag",
+          "filingcabinet",
+          "shelves",
+          "sidetable"
+        ],
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

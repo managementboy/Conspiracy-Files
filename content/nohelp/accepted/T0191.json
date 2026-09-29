@@ -13,10 +13,18 @@
     "title": "Market produce log",
     "where": [
       {
+        "containers": [
+          "cardboardbox",
+          "grocerstand",
+          "crate",
+          "smallbox",
+          "counter",
+          "desk"
+        ],
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

@@ -10,13 +10,21 @@
       "GardenHoe",
       "SeedBag"
     ],
-    "title": "field residue on the garden hoe",
+    "title": "After on the garden hoe, the first copy",
     "where": [
       {
+        "containers": [
+          "metal_shelves",
+          "shelves",
+          "toolcabinet",
+          "crate",
+          "cardboardbox",
+          "doghouse"
+        ],
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

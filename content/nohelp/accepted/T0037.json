@@ -11,13 +11,21 @@
       "Stapler",
       "FirstAidKit"
     ],
-    "title": "missing count beside the stapler",
+    "title": "Stapler beside the spare mark",
     "where": [
       {
+        "containers": [
+          "medicine",
+          "desk",
+          "filingcabinet",
+          "sidetable",
+          "locker",
+          "shelves"
+        ],
         "lean": "containment",
         "place": "mapNamed",
         "rival": "agricultural",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

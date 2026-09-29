@@ -13,10 +13,18 @@
     "title": "Hardware for the next repair",
     "where": [
       {
+        "containers": [
+          "toolcabinet",
+          "metal_shelves",
+          "crate",
+          "smallbox",
+          "smallcrate",
+          "militarycrate"
+        ],
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

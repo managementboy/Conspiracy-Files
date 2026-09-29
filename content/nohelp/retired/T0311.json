@@ -1,0 +1,96 @@
+[
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "scene": "RBTSBreakfast"
+      },
+      "body": "A wrapped loaf and first-aid kit are tied together with road tape. Fine field dust covers the bread bag, but the kit is clean.",
+      "id": "t0311-01",
+      "kind": "set",
+      "pieces": [
+        "Bread",
+        "FirstAidKit"
+      ],
+      "title": "Breakfast beside an unopened kit",
+      "where": [
+        {
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-warning",
+          "c-orders"
+        ]
+      },
+      "gloss": "Field residue and response material share one everyday bundle.",
+      "prov": {
+        "batch": "T0311",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "Field workers or an emergency crew could have bundled these supplies; dust and road tape leave the order of events unresolved."
+    }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "scene": "RBTSBreakfast"
+      },
+      "body": "Two bowls are stacked around a folded scrap with a count written on it. The number served is larger than the number entered in the book, though the food has already been eaten.",
+      "id": "t0311-02",
+      "kind": "set",
+      "pieces": [
+        "Bowl",
+        "Spoon"
+      ],
+      "title": "The missing breakfast tally",
+      "where": [
+        {
+          "containers": [
+            "dishescabinet",
+            "desk",
+            "counter",
+            "crate",
+            "locker",
+            "shelves"
+          ],
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-warning",
+          "c-accounting"
+        ]
+      },
+      "gloss": "A scene-specific count or record was controlled while people were still present.",
+      "prov": {
+        "batch": "T0311",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "The same trace could follow an investigation of contaminated farm goods or an ordinary emergency response."
+    }
+  }
+]

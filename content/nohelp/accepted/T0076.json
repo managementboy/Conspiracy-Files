@@ -14,10 +14,18 @@
     "title": "Left for the next visit",
     "where": [
       {
+        "containers": [
+          "shelves",
+          "fridge",
+          "metal_shelves",
+          "counter",
+          "cardboardbox",
+          "crate"
+        ],
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

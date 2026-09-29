@@ -13,10 +13,18 @@
     "title": "The tire offer marked on a tool handle",
     "where": [
       {
+        "containers": [
+          "metal_shelves",
+          "desk",
+          "toolcabinet",
+          "filingcabinet",
+          "crate",
+          "sidetable"
+        ],
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   },
@@ -24,7 +32,7 @@
     "anchor": {
       "print": "AmericanTire"
     },
-    "body": "The receipt charges four tires to the county road crew, but lists only three serial numbers. Beside the blank fourth line, someone wrote “keep off public return until clearance review.” Reverse: “Save the smoothest for the child's bicycle.”",
+    "body": "The receipt charges four tires to the county road crew, but lists only three serial numbers. Beside the blank fourth line, someone wrote “keep off public return until clearance review.” Reverse: “Save the smoothest for the child's bicycle.”\n\nI asked for the old page back after the new instructions arrived. They said it had been destroyed, but its corner was still in my pocket.\n\nThe person who was supposed to collect it had no time to stop. I did not put it back with the rest of the ordinary papers.",
     "id": "t0014-02",
     "kind": "written",
     "pieces": [
@@ -33,10 +41,18 @@
     "title": "The fourth tire omitted from the return",
     "where": [
       {
+        "containers": [
+          "filingcabinet",
+          "desk",
+          "sidetable",
+          "shelves",
+          "smallbox",
+          "cashregister"
+        ],
         "lean": "containment",
         "place": "mapNamed",
         "rival": "agricultural",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

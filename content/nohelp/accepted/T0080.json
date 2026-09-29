@@ -14,10 +14,18 @@
     "title": "Kitchen stores",
     "where": [
       {
+        "containers": [
+          "locker",
+          "fridge",
+          "dresser",
+          "counter",
+          "wardrobe",
+          "overhead"
+        ],
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

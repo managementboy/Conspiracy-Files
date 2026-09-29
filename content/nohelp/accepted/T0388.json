@@ -19,5 +19,25 @@
         "spot": "ground"
       }
     ]
+  },
+  {
+    "anchor": {
+      "scene": "RZSHunterCamp"
+    },
+    "body": "The group came back to find a notice saying the camp had been cleared. Their boots were still here and the fire was warm. I carried the notice along the trail because I knew the youngest had gone for water.",
+    "id": "t0388-02",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "title": "Hunter’s return",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
   }
 ]

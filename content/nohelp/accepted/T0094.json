@@ -11,13 +11,21 @@
       "Broom",
       "Camera"
     ],
-    "title": "two traces on the broom",
+    "title": "Broom carrying two traces",
     "where": [
       {
+        "containers": [
+          "toolcabinet",
+          "dresser",
+          "metal_shelves",
+          "sidetable",
+          "crate",
+          "shelves"
+        ],
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

@@ -1,0 +1,106 @@
+[
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "map": "WorldStashMap20",
+        "mark": 1
+      },
+      "body": "The access complaint has no names or dates, only a list of doors refused and a final mark that says the crew left.",
+      "id": "t0129-01",
+      "kind": "set",
+      "pieces": [
+        "SheetPaper2",
+        "Pencil"
+      ],
+      "title": "Names replaced by insults",
+      "where": [
+        {
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "DICKHEAD",
+        "source": "map:WorldStashMap20"
+      },
+      "gloss": "An access complaint records several refusals without identifying the authority.",
+      "prov": {
+        "batch": "T0129",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A program site could also refuse entry to visitors; the complaint does not establish who ordered the closure."
+    }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "map": "WorldStashMap20",
+        "mark": 1
+      },
+      "body": "The access complaint has no names or dates, only a list of doors refused and a final mark that says the crew left.",
+      "id": "t0129-01",
+      "kind": "set",
+      "pieces": [
+        "SheetPaper2",
+        "Pencil"
+      ],
+      "title": "Names replaced by insults",
+      "where": [
+        {
+          "containers": [
+            "crate",
+            "shelves",
+            "desk",
+            "counter",
+            "cardboardbox",
+            "bin"
+          ],
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "DICKHEAD",
+        "source": "map:WorldStashMap20"
+      },
+      "gloss": "An access complaint records several refusals without identifying the authority.",
+      "prov": {
+        "batch": "T0129",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A program site could also refuse entry to visitors; the complaint does not establish who ordered the closure."
+    }
+  }
+]

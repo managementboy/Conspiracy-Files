@@ -14,10 +14,18 @@
     "title": "Food tent supply",
     "where": [
       {
+        "containers": [
+          "counter",
+          "fridge",
+          "overhead",
+          "dishescabinet",
+          "freezer",
+          "grocerstand"
+        ],
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

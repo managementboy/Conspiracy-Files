@@ -1,0 +1,44 @@
+[
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "scene": "RVSPoliceBlockadeShooting"
+      },
+      "body": "on the back: “before thursday lunch, a greasy sheen in the cab after the greenhouse test. my wrists blistered. later, the telephone line died.”",
+      "id": "t0369-01",
+      "kind": "written",
+      "pieces": [
+        "photograph"
+      ],
+      "title": "cab note — before thursday lunch",
+      "where": [
+        {
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "vehicle"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-warning",
+          "c-failure"
+        ]
+      },
+      "gloss": "A personal field trace precedes the visible emergency response.",
+      "prov": {
+        "batch": "T0369",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "Responders could have collected the a greasy sheen while crossing treated land; the note or objects do not prove the program began the emergency."
+    }
+  }
+]

@@ -13,10 +13,18 @@
     "title": "Training before opening",
     "where": [
       {
+        "containers": [
+          "shelves",
+          "smallbox",
+          "desk",
+          "sidetable",
+          "filingcabinet",
+          "shelvesmag"
+        ],
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

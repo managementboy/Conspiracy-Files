@@ -10,13 +10,21 @@
       "LeatherStrips",
       "BathTowel"
     ],
-    "title": "missing count beside the leather strips",
+    "title": "Leather strips beside the spare mark",
     "where": [
       {
+        "containers": [
+          "toolcabinet",
+          "wardrobe",
+          "metal_shelves",
+          "dresser",
+          "clothingrack",
+          "crate"
+        ],
         "lean": "containment",
         "place": "mapNamed",
         "rival": "agricultural",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

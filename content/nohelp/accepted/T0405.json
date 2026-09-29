@@ -19,5 +19,27 @@
         "spot": "vehicle"
       }
     ]
+  },
+  {
+    "anchor": {
+      "scene": "RZSVanCamp"
+    },
+    "body": "A coil of rope cut into equal lengths, work gloves, and a measuring tape stopped at the same mark each time. Somebody was measuring out a perimeter around the vans, not a camp.",
+    "id": "t0405-02",
+    "kind": "set",
+    "pieces": [
+      "Rope",
+      "Gloves_LeatherGloves",
+      "MeasuringTape"
+    ],
+    "title": "Rope and gloves from a roadside perimeter",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "vehicle"
+      }
+    ]
   }
 ]

@@ -13,10 +13,18 @@
     "title": "A shopping-center pickup",
     "where": [
       {
+        "containers": [
+          "metal_shelves",
+          "cardboardbox",
+          "crate",
+          "composter",
+          "grocerstand",
+          "smallcrate"
+        ],
         "lean": "containment",
         "place": "mapNamed",
         "rival": "agricultural",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

@@ -13,10 +13,18 @@
     "title": "Color survey sample",
     "where": [
       {
+        "containers": [
+          "fridge",
+          "cardboardbox",
+          "smallbox",
+          "locker",
+          "desk",
+          "crate"
+        ],
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

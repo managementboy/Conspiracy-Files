@@ -14,10 +14,18 @@
     "title": "Eat before leaving",
     "where": [
       {
+        "containers": [
+          "counter",
+          "fridge",
+          "overhead",
+          "dishescabinet",
+          "freezer",
+          "grocerstand"
+        ],
         "lean": "containment",
         "place": "mapNamed",
         "rival": "agricultural",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

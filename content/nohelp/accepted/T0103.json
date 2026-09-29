@@ -11,13 +11,21 @@
       "Sponge",
       "Map"
     ],
-    "title": "missing count beside the sponge",
+    "title": "Sponge beside the spare mark",
     "where": [
       {
+        "containers": [
+          "dishescabinet",
+          "desk",
+          "overhead",
+          "filingcabinet",
+          "counter",
+          "sidetable"
+        ],
         "lean": "containment",
         "place": "mapNamed",
         "rival": "agricultural",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

@@ -1,0 +1,144 @@
+[
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "scene": "RDSBathroomZed"
+      },
+      "body": "Personal note — the night shift: wash off the white crystals left by the livestock-feed study crew. the creek smelled wrong, and I had not yet heard that the siren began.",
+      "id": "t0326-01",
+      "kind": "written",
+      "pieces": [
+        "notepad"
+      ],
+      "title": "the night shift — white crystals",
+      "where": [
+        {
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-warning",
+          "c-orders"
+        ]
+      },
+      "gloss": "A personal trace connects a farm trial to symptoms before a later restriction.",
+      "prov": {
+        "batch": "T0326",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "Emergency workers could have picked up the same white crystals while responding near a field; this personal trace does not prove the trial caused the emergency."
+    }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "scene": "RDSBathroomZed"
+      },
+      "body": "Personal note — the night shift: wash off the white crystals left by the livestock-feed study crew. the creek smelled wrong, and I had not yet heard that the siren began.\n\nI folded the corner so I could find the entry again. Someone wanted the book put away before I had even finished copying it.\n\nWhen I returned, the window was closed and the board was blank. I kept the page because it was the only one with our address.",
+      "id": "t0326-01",
+      "kind": "written",
+      "pieces": [
+        "notepad"
+      ],
+      "title": "the night shift — white crystals",
+      "where": [
+        {
+          "containers": [
+            "desk",
+            "crate",
+            "shelves",
+            "counter",
+            "cardboardbox",
+            "bin"
+          ],
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-warning",
+          "c-orders"
+        ]
+      },
+      "gloss": "A personal trace connects a farm trial to symptoms before a later restriction.",
+      "prov": {
+        "batch": "T0326",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "Emergency workers could have picked up the same white crystals while responding near a field; this personal trace does not prove the trial caused the emergency."
+    }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "scene": "RDSBathroomZed"
+      },
+      "body": "I heard someone knock while I was hiding here. He said he was checking the rooms and read a list aloud.\n\nThe name of the person with me was on it, though she had not told anyone we were here. She whispered that they had copied an older list from another building.\n\nHe left after we stayed quiet. I wrote the names I could remember so I can ask her later where that list came from.",
+      "id": "t0326-02",
+      "kind": "written",
+      "pieces": [
+        "letter"
+      ],
+      "title": "The names beyond the door",
+      "where": [
+        {
+          "containers": [
+            "medicine",
+            "desk",
+            "counter",
+            "crate",
+            "locker",
+            "shelves"
+          ],
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-warning",
+          "c-accounting"
+        ]
+      },
+      "gloss": "An altered count or retained object was left at the scene.",
+      "prov": {
+        "batch": "T0326",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A response to an agricultural exposure could explain the same record or object."
+    }
+  }
+]

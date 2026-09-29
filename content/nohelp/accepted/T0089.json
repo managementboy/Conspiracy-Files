@@ -14,10 +14,18 @@
     "title": "Careful past the clinic",
     "where": [
       {
+        "containers": [
+          "medicine",
+          "desk",
+          "smallbox",
+          "shelves",
+          "sidetable",
+          "filingcabinet"
+        ],
         "lean": "containment",
         "place": "mapNamed",
         "rival": "agricultural",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

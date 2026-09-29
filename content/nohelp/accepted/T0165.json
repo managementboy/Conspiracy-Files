@@ -13,10 +13,18 @@
     "title": "The route closed after fueling",
     "where": [
       {
+        "containers": [
+          "sidetable",
+          "bin",
+          "cardboardbox",
+          "smallbox",
+          "locker",
+          "desk"
+        ],
         "lean": "containment",
         "place": "mapNamed",
         "rival": "agricultural",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

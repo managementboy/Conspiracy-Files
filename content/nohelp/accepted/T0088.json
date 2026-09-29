@@ -14,10 +14,18 @@
     "title": "Barricade by the quiet house",
     "where": [
       {
+        "containers": [
+          "metal_shelves",
+          "desk",
+          "toolcabinet",
+          "filingcabinet",
+          "crate",
+          "sidetable"
+        ],
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

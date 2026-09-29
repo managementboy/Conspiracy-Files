@@ -10,13 +10,21 @@
       "Calculator",
       "FirstAidKit"
     ],
-    "title": "missing count beside the pocket calculator",
+    "title": "Pocket calculator beside the spare mark",
     "where": [
       {
+        "containers": [
+          "sidetable",
+          "crate",
+          "smallbox",
+          "toolcabinet",
+          "locker",
+          "desk"
+        ],
         "lean": "containment",
         "place": "mapNamed",
         "rival": "agricultural",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

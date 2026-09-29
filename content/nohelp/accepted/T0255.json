@@ -13,10 +13,18 @@
     "title": "Jerky for the trip",
     "where": [
       {
+        "containers": [
+          "fridge",
+          "wardrobe",
+          "counter",
+          "dresser",
+          "overhead",
+          "clothingrack"
+        ],
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

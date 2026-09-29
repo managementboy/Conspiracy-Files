@@ -11,13 +11,21 @@
       "ToiletPaper",
       "WaterBottle"
     ],
-    "title": "field residue on the toilet roll",
+    "title": "After on the toilet roll, the first copy",
     "where": [
       {
+        "containers": [
+          "dresser",
+          "fridge",
+          "sidetable",
+          "counter",
+          "shelves",
+          "overhead"
+        ],
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

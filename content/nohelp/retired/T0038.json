@@ -1,0 +1,106 @@
+[
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "map": "EkronStashMap5",
+        "mark": 1
+      },
+      "body": "The school aid list pairs a bandage with a note to keep the test-room door shut; the last line asks who will collect the used kit.",
+      "id": "t0038-01",
+      "kind": "set",
+      "pieces": [
+        "Bandage",
+        "Notebook"
+      ],
+      "title": "Aid for the school",
+      "where": [
+        {
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "school",
+        "source": "map:EkronStashMap5"
+      },
+      "gloss": "A school aid record links a closed room to an unclaimed used kit.",
+      "prov": {
+        "batch": "T0038",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A response team could have isolated an aid room after exposure from many causes; the list does not identify the hazard."
+    }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "map": "EkronStashMap5",
+        "mark": 1
+      },
+      "body": "The school aid list pairs a bandage with a note to keep the test-room door shut; the last line asks who will collect the used kit.",
+      "id": "t0038-01",
+      "kind": "set",
+      "pieces": [
+        "Bandage",
+        "Notebook"
+      ],
+      "title": "Aid for the school",
+      "where": [
+        {
+          "containers": [
+            "medicine",
+            "crate",
+            "shelves",
+            "desk",
+            "counter",
+            "cardboardbox"
+          ],
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "school",
+        "source": "map:EkronStashMap5"
+      },
+      "gloss": "A school aid record links a closed room to an unclaimed used kit.",
+      "prov": {
+        "batch": "T0038",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A response team could have isolated an aid room after exposure from many causes; the list does not identify the hazard."
+    }
+  }
+]

@@ -10,13 +10,21 @@
       "Extinguisher",
       "Camera"
     ],
-    "title": "missing count beside the fire extinguisher",
+    "title": "Fire extinguisher with the unclosed tally",
     "where": [
       {
+        "containers": [
+          "metal_shelves",
+          "toolcabinet",
+          "locker",
+          "crate",
+          "smallcrate",
+          "smallbox"
+        ],
         "lean": "containment",
         "place": "mapNamed",
         "rival": "agricultural",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

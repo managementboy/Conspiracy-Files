@@ -13,10 +13,18 @@
     "title": "Self-sustaining garden notes",
     "where": [
       {
+        "containers": [
+          "cardboardbox",
+          "metal_shelves",
+          "crate",
+          "composter",
+          "smallcrate",
+          "grocerstand"
+        ],
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

@@ -46,5 +46,103 @@
       },
       "rival_reading": "A field team could have kept a radio at a work site; the delayed battery receipt does not prove anyone was stranded."
     }
+  },
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "map": "IrvingtonStashMap10",
+        "mark": 1
+      },
+      "body": "chalk numbers run across the red pen and camera. the count skips one place, then resumes in a different hand.",
+      "id": "t0049-01",
+      "kind": "set",
+      "pieces": [
+        "RedPen",
+        "Camera"
+      ],
+      "title": "missing count beside the red pen",
+      "where": [
+        {
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-warning",
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "gloss": "A response bundle preserves a missing count, changed route, or erased identity.",
+      "prov": {
+        "batch": "T0049",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A farm-program crew could have counted routes, repacked tools, or removed ownership marks during hurried field work; the objects do not prove a concealed public response."
+    }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "map": "IrvingtonStashMap10",
+        "mark": 1
+      },
+      "body": "chalk numbers run across the red pen and camera. the count skips one place, then resumes in a different hand.",
+      "id": "t0049-01",
+      "kind": "set",
+      "pieces": [
+        "RedPen",
+        "Camera"
+      ],
+      "title": "Red pen beside the spare mark",
+      "where": [
+        {
+          "containers": [
+            "crate",
+            "shelves",
+            "desk",
+            "counter",
+            "cardboardbox",
+            "bin"
+          ],
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-warning",
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "gloss": "A response bundle preserves a missing count, changed route, or erased identity.",
+      "prov": {
+        "batch": "T0049",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A farm-program crew could have counted routes, repacked tools, or removed ownership marks during hurried field work; the objects do not prove a concealed public response."
+    }
   }
 ]

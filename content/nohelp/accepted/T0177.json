@@ -13,10 +13,18 @@
     "title": "The bottle count",
     "where": [
       {
+        "containers": [
+          "fridge",
+          "dishescabinet",
+          "counter",
+          "overhead",
+          "cardboardbox",
+          "displaycase"
+        ],
         "lean": "containment",
         "place": "mapNamed",
         "rival": "agricultural",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

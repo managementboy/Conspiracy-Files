@@ -11,13 +11,21 @@
       "SewingKit",
       "WalkieTalkie1"
     ],
-    "title": "missing count beside the sewing kit",
+    "title": "Sewing kit beside the spare mark",
     "where": [
       {
+        "containers": [
+          "wardrobe",
+          "desk",
+          "dresser",
+          "shelves",
+          "clothingrack",
+          "toolcabinet"
+        ],
         "lean": "containment",
         "place": "mapNamed",
         "rival": "agricultural",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

@@ -3,7 +3,7 @@
     "anchor": {
       "scene": "RZSRangerSmith"
     },
-    "body": "Personal note: the insecticide crew crossed at dawn, leaving yellow dust on the grass. The deer fled before the county trucks reached the trail.",
+    "body": "Personal note: the insecticide crew crossed at dawn, leaving yellow dust on the grass. The deer fled before the county trucks reached the trail.\n\nI saved it from the bag of rubbish because there was a name on the reverse. The name was not on the list they posted.\n\nIt could be a mistake in the copying. The things stacked beside the page were real enough, and still waiting to be moved.",
     "id": "t0398-01",
     "kind": "written",
     "pieces": [
@@ -15,6 +15,26 @@
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RZSRangerSmith"
+    },
+    "body": "The north trail was marked clear after the patrol turned back halfway. I asked why my brother’s campsite appeared on the completed section. The ranger said the box only had room for one kind of mark.",
+    "id": "t0398-02",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "A patrol in pencil",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
         "spot": "ground"
       }
     ]

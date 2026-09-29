@@ -14,10 +14,18 @@
     "title": "Stable stores",
     "where": [
       {
+        "containers": [
+          "militarycrate",
+          "locker",
+          "toolcabinet",
+          "cardboardbox",
+          "crate",
+          "grocerstand"
+        ],
         "lean": "containment",
         "place": "mapNamed",
         "rival": "agricultural",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

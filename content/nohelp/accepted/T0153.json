@@ -13,10 +13,18 @@
     "title": "A fitting appointment moved",
     "where": [
       {
+        "containers": [
+          "toolcabinet",
+          "desk",
+          "filingcabinet",
+          "sidetable",
+          "shelves",
+          "smallbox"
+        ],
         "lean": "containment",
         "place": "mapNamed",
         "rival": "agricultural",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

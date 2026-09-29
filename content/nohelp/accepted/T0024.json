@@ -14,10 +14,18 @@
     "title": "A citation after closing",
     "where": [
       {
+        "containers": [
+          "cardboardbox",
+          "crate",
+          "smallbox",
+          "locker",
+          "desk",
+          "fridge"
+        ],
         "lean": "containment",
         "place": "mapNamed",
         "rival": "agricultural",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   },
@@ -25,7 +33,7 @@
     "anchor": {
       "print": "IrvingtonSpeedway"
     },
-    "body": "Keep the infield closed until the pesticide trial dries. The first heat remains on the board, so the groundskeeper has to refund a child's ticket from his own coffee jar.",
+    "body": "Keep the infield closed until the pesticide trial dries. The first heat remains on the board, so the groundskeeper has to refund a child's ticket from his own coffee jar.\n\nOur copy stayed on the kitchen table. The official account came later and asked us to remember a much shorter day.\n\nWhen I returned, the window was closed and the board was blank. I kept the page because it was the only one with our address.",
     "id": "t0024-02",
     "kind": "written",
     "pieces": [
@@ -34,10 +42,18 @@
     "title": "The infield stays closed",
     "where": [
       {
+        "containers": [
+          "cardboardbox",
+          "crate",
+          "bin",
+          "smallbox",
+          "locker",
+          "desk"
+        ],
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

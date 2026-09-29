@@ -11,13 +11,21 @@
       "Antibiotics",
       "Map"
     ],
-    "title": "missing count beside the antibiotics",
+    "title": "Antibiotics beside the spare mark",
     "where": [
       {
+        "containers": [
+          "filingcabinet",
+          "medicine",
+          "desk",
+          "smallbox",
+          "sidetable",
+          "shelves"
+        ],
         "lean": "containment",
         "place": "mapNamed",
         "rival": "agricultural",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

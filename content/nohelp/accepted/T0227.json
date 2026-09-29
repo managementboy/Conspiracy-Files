@@ -10,13 +10,21 @@
       "Yarn",
       "HandTorch"
     ],
-    "title": "missing count beside the ball of yarn",
+    "title": "Ball of yarn beside the spare mark",
     "where": [
       {
+        "containers": [
+          "dresser",
+          "desk",
+          "sidetable",
+          "shelves",
+          "toolcabinet",
+          "smallbox"
+        ],
         "lean": "containment",
         "place": "mapNamed",
         "rival": "agricultural",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

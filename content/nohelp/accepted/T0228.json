@@ -13,10 +13,18 @@
     "title": "Appointment not on the calendar",
     "where": [
       {
+        "containers": [
+          "sidetable",
+          "filingcabinet",
+          "desk",
+          "shelves",
+          "smallbox",
+          "cashregister"
+        ],
         "lean": "containment",
         "place": "mapNamed",
         "rival": "agricultural",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

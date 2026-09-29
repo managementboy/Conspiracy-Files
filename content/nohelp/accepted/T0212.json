@@ -10,13 +10,21 @@
       "Pen",
       "BathTowel"
     ],
-    "title": "missing count beside the black pen",
+    "title": "Black pen with the unclosed tally",
     "where": [
       {
+        "containers": [
+          "wardrobe",
+          "desk",
+          "filingcabinet",
+          "dresser",
+          "sidetable",
+          "clothingrack"
+        ],
         "lean": "containment",
         "place": "mapNamed",
         "rival": "agricultural",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

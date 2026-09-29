@@ -13,10 +13,18 @@
     "title": "Seminar attendance",
     "where": [
       {
+        "containers": [
+          "medicine",
+          "desk",
+          "sidetable",
+          "filingcabinet",
+          "locker",
+          "dresser"
+        ],
         "lean": "containment",
         "place": "mapNamed",
         "rival": "agricultural",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

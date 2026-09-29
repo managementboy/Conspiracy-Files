@@ -11,13 +11,21 @@
       "Tissue",
       "FirstAidKit"
     ],
-    "title": "missing count beside the packet of tissues",
+    "title": "Packet of tissues beside the spare mark",
     "where": [
       {
+        "containers": [
+          "locker",
+          "smallbox",
+          "medicine",
+          "sidetable",
+          "dresser",
+          "wardrobe"
+        ],
         "lean": "containment",
         "place": "mapNamed",
         "rival": "agricultural",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

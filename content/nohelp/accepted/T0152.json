@@ -13,10 +13,18 @@
     "title": "The course notice",
     "where": [
       {
+        "containers": [
+          "cardboardbox",
+          "crate",
+          "smallcrate",
+          "smallbox",
+          "grocerstand",
+          "fridge"
+        ],
         "lean": "containment",
         "place": "mapNamed",
         "rival": "agricultural",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   },
@@ -34,10 +42,18 @@
     "title": "The second tee sheet",
     "where": [
       {
+        "containers": [
+          "sidetable",
+          "smallbox",
+          "desk",
+          "shelves",
+          "filingcabinet",
+          "cashregister"
+        ],
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

@@ -13,10 +13,18 @@
     "title": "A stadium rinse",
     "where": [
       {
+        "containers": [
+          "metal_shelves",
+          "smallbox",
+          "crate",
+          "toolcabinet",
+          "locker",
+          "fridge"
+        ],
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

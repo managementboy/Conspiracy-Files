@@ -13,10 +13,18 @@
     "title": "Benefits on the second page",
     "where": [
       {
+        "containers": [
+          "filingcabinet",
+          "smallbox",
+          "desk",
+          "sidetable",
+          "dresser",
+          "shelves"
+        ],
         "lean": "containment",
         "place": "mapNamed",
         "rival": "agricultural",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

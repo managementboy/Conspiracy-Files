@@ -10,13 +10,21 @@
       "EmptySandbag",
       "Briefcase"
     ],
-    "title": "missing count beside the empty sandbag",
+    "title": "Empty sandbag with the unclosed tally",
     "where": [
       {
+        "containers": [
+          "metal_shelves",
+          "locker",
+          "cardboardbox",
+          "desk",
+          "crate",
+          "wardrobe"
+        ],
         "lean": "containment",
         "place": "mapNamed",
         "rival": "agricultural",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

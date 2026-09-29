@@ -14,7 +14,7 @@ EXPANSION
 none
 
 ## NEXT
-Review 51 scene additions, R2 446 rows, stock T0408-T0427 200 rows. T0364 T0384 T0405 blocked RECIPE_KEY: accepted rows contain a key ring, recipes forbid it; whole-ticket deliveries keep those rows unchanged. Resolve recipes and return baton for the remaining 3 scene additions.
+Round added (840 clues, every place and scene side covered, floor 12%). Claude wrote the 3 key-ring scene sides and spread the containers (recall R3, 686 clues, no kind first for more than 5.8%; the game also draws the order per world). Open: balance by read is A 69% - next round waits on the owner
 
 ## OPEN RETURNS
 none
@@ -26,4 +26,4 @@ none
 2026-09-28 T0001
 
 ## PROGRESS
-check: 407 tickets, 748 rows pass, 0 returned, 0 stage 0 awaiting sign-off; 3 scene tickets blocked RECIPE_KEY @pending-review
+NOT DONE: balance 69% @9fdbdc90

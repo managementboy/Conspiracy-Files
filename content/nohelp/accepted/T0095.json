@@ -11,13 +11,21 @@
       "Soap2",
       "Briefcase"
     ],
-    "title": "missing count beside the bar of soap",
+    "title": "Bar of soap beside the spare mark",
     "where": [
       {
+        "containers": [
+          "smallbox",
+          "crate",
+          "locker",
+          "wardrobe",
+          "dresser",
+          "clothingrack"
+        ],
         "lean": "containment",
         "place": "mapNamed",
         "rival": "agricultural",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

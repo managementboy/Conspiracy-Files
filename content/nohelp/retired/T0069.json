@@ -1,0 +1,106 @@
+[
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "map": "MarchRidgeStashMap5",
+        "mark": 1
+      },
+      "body": "A bandage and a bat share a medical-center bag; the note on its tie says to leave the back room quiet until the wash is finished.",
+      "id": "t0069-01",
+      "kind": "set",
+      "pieces": [
+        "BaseballBat",
+        "Bandage"
+      ],
+      "title": "Quiet supplies",
+      "where": [
+        {
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "stuff you can use as weapons here",
+        "source": "map:MarchRidgeStashMap5"
+      },
+      "gloss": "A first-aid kit is held back while a room is washed.",
+      "prov": {
+        "batch": "T0069",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A response team could have cleaned a treatment room after an emergency; the note does not say what was washed."
+    }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "map": "MarchRidgeStashMap5",
+        "mark": 1
+      },
+      "body": "A bandage and a bat share a medical-center bag; the note on its tie says to leave the back room quiet until the wash is finished.",
+      "id": "t0069-01",
+      "kind": "set",
+      "pieces": [
+        "BaseballBat",
+        "Bandage"
+      ],
+      "title": "Quiet supplies",
+      "where": [
+        {
+          "containers": [
+            "medicine",
+            "crate",
+            "shelves",
+            "desk",
+            "counter",
+            "cardboardbox"
+          ],
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "stuff you can use as weapons here",
+        "source": "map:MarchRidgeStashMap5"
+      },
+      "gloss": "A first-aid kit is held back while a room is washed.",
+      "prov": {
+        "batch": "T0069",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A response team could have cleaned a treatment room after an emergency; the note does not say what was washed."
+    }
+  }
+]

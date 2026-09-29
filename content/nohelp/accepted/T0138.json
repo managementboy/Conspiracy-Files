@@ -14,10 +14,18 @@
     "title": "Tools for a difficult visit",
     "where": [
       {
+        "containers": [
+          "toolcabinet",
+          "desk",
+          "metal_shelves",
+          "shelves",
+          "crate",
+          "filingcabinet"
+        ],
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

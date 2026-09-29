@@ -14,11 +14,11 @@
       "quote": "Rosewood Fire Department",
       "source": "print:RosewoodFD"
     },
-    "gloss": "A safety check is recorded before the equipment arrives.",
+    "gloss": "A crew prepared the station for a sealed building before there was anything to answer.",
     "prov": {
       "batch": "T0234",
-      "handoff": "2026-09-28",
-      "writer": "ChatGPT"
+      "handoff": "2026-09-29",
+      "writer": "Claude"
     },
     "rival_reading": "A response crew could prepare a building for any hazard; the sequence does not show what prompted the check."
   }

@@ -14,10 +14,18 @@
     "title": "Food for the last visit",
     "where": [
       {
+        "containers": [
+          "counter",
+          "fridge",
+          "overhead",
+          "cardboardbox",
+          "crate",
+          "grocerstand"
+        ],
         "lean": "containment",
         "place": "mapNamed",
         "rival": "agricultural",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

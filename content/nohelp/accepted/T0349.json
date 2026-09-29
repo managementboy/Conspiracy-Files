@@ -13,6 +13,14 @@
     "title": "Hand axe and seed sack, the early shift",
     "where": [
       {
+        "containers": [
+          "toolcabinet",
+          "trough",
+          "metal_shelves",
+          "crate",
+          "smallcrate",
+          "shelves"
+        ],
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",
@@ -35,12 +43,12 @@
     "where": [
       {
         "containers": [
-          "counter",
+          "dishescabinet",
           "desk",
-          "crate",
-          "locker",
-          "shelves",
-          "bin"
+          "overhead",
+          "filingcabinet",
+          "counter",
+          "sidetable"
         ],
         "lean": "containment",
         "place": "mapNamed",

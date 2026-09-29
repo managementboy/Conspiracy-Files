@@ -13,10 +13,18 @@
     "title": "Bake sale pickup",
     "where": [
       {
+        "containers": [
+          "cardboardbox",
+          "grocerstand",
+          "smallbox",
+          "crate",
+          "counter",
+          "desk"
+        ],
         "lean": "containment",
         "place": "mapNamed",
         "rival": "agricultural",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

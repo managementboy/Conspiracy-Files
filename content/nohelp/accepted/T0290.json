@@ -3,7 +3,7 @@
     "anchor": {
       "scene": "RBDorm"
     },
-    "body": "My note from before dawn: the field trial crew carried sealed seed packet. my brother started coughing. I had not yet heard that the county van arrived.",
+    "body": "My note from before dawn: the field trial crew carried sealed seed packet. my brother started coughing. I had not yet heard that the county van arrived.\n\nI took the page when they shut the building. No one could tell me whether the missing line meant delayed, refused, or already gone.\n\nIt may have started elsewhere; none of us saw the beginning. I only know what had reached this place before they closed the road.",
     "id": "t0290-01",
     "kind": "written",
     "pieces": [
@@ -12,6 +12,14 @@
     "title": "Before dawn: sealed seed packet",
     "where": [
       {
+        "containers": [
+          "desk",
+          "filingcabinet",
+          "sidetable",
+          "shelves",
+          "smallbox",
+          "cashregister"
+        ],
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",
@@ -33,12 +41,12 @@
     "where": [
       {
         "containers": [
+          "sidetable",
+          "filingcabinet",
           "desk",
-          "wardrobe",
-          "dresser",
-          "locker",
           "shelves",
-          "crate"
+          "smallbox",
+          "cashregister"
         ],
         "lean": "containment",
         "place": "mapNamed",

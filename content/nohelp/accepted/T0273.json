@@ -13,10 +13,18 @@
     "title": "Festival schedule copy",
     "where": [
       {
+        "containers": [
+          "displaycase",
+          "smallbox",
+          "desk",
+          "shelves",
+          "filingcabinet",
+          "shelvesmag"
+        ],
         "lean": "containment",
         "place": "mapNamed",
         "rival": "agricultural",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

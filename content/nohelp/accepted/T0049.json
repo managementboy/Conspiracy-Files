@@ -11,13 +11,21 @@
       "RedPen",
       "Camera"
     ],
-    "title": "missing count beside the red pen",
+    "title": "Red pen beside the spare mark",
     "where": [
       {
+        "containers": [
+          "desk",
+          "dresser",
+          "sidetable",
+          "filingcabinet",
+          "cashregister",
+          "locker"
+        ],
         "lean": "containment",
         "place": "mapNamed",
         "rival": "agricultural",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

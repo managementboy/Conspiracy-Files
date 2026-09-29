@@ -11,9 +11,17 @@
       "Wrench",
       "WalkieTalkie1"
     ],
-    "title": "missing count beside the open wrench",
+    "title": "Open wrench with the unclosed tally",
     "where": [
       {
+        "containers": [
+          "toolcabinet",
+          "metal_shelves",
+          "crate",
+          "locker",
+          "smallcrate",
+          "smallbox"
+        ],
         "lean": "containment",
         "place": "office",
         "rival": "agricultural",
@@ -36,6 +44,14 @@
     "title": "The field sketch under the studio glass",
     "where": [
       {
+        "containers": [
+          "desk",
+          "fridge",
+          "shelves",
+          "counter",
+          "filingcabinet",
+          "cardboardbox"
+        ],
         "lean": "agricultural",
         "place": "office",
         "rival": "containment",

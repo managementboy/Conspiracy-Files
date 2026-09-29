@@ -3,7 +3,7 @@
     "anchor": {
       "scene": "RDSFootballNight"
     },
-    "body": "Personal note — Wednesday before rain: wash off the gray foam left by the feed additive trial crew. my brother started coughing, and I had not yet heard that a deputy taped off the road.",
+    "body": "Personal note — Wednesday before rain: wash off the gray foam left by the feed additive trial crew. my brother started coughing, and I had not yet heard that a deputy taped off the road.\n\nI did not know where to put it after the shelves were cleared. There was still someone coming back for the answer written on it.\n\nI thought someone would ask for this at the gate. They asked instead how many were in the car, and let the paper stay in my hand.",
     "id": "t0332-01",
     "kind": "written",
     "pieces": [
@@ -12,6 +12,14 @@
     "title": "Wednesday before rain — gray foam",
     "where": [
       {
+        "containers": [
+          "desk",
+          "filingcabinet",
+          "sidetable",
+          "shelves",
+          "smallbox",
+          "cashregister"
+        ],
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",
@@ -34,11 +42,11 @@
       {
         "containers": [
           "desk",
-          "counter",
-          "crate",
-          "locker",
+          "filingcabinet",
+          "sidetable",
           "shelves",
-          "bin"
+          "smallbox",
+          "cashregister"
         ],
         "lean": "containment",
         "place": "mapNamed",

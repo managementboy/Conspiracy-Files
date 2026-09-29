@@ -11,13 +11,21 @@
       "MagnifyingGlass",
       "Map"
     ],
-    "title": "missing count beside the magnifying glass",
+    "title": "Magnifying glass beside the spare mark",
     "where": [
       {
+        "containers": [
+          "desk",
+          "sidetable",
+          "filingcabinet",
+          "dresser",
+          "shelves",
+          "smallbox"
+        ],
         "lean": "containment",
         "place": "mapNamed",
         "rival": "agricultural",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

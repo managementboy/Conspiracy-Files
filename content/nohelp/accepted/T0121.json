@@ -14,10 +14,18 @@
     "title": "Camp supplies minus one person",
     "where": [
       {
+        "containers": [
+          "smallbox",
+          "crate",
+          "toolcabinet",
+          "locker",
+          "medicine",
+          "fridge"
+        ],
         "lean": "containment",
         "place": "mapNamed",
         "rival": "agricultural",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

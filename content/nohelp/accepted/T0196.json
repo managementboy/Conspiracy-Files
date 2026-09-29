@@ -10,13 +10,21 @@
       "LugWrench",
       "HandTorch"
     ],
-    "title": "missing count beside the lug wrench",
+    "title": "Lug wrench with the unclosed tally",
     "where": [
       {
+        "containers": [
+          "toolcabinet",
+          "desk",
+          "metal_shelves",
+          "shelves",
+          "crate",
+          "smallcrate"
+        ],
         "lean": "containment",
         "place": "mapNamed",
         "rival": "agricultural",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

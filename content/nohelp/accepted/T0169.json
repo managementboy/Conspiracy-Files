@@ -13,10 +13,18 @@
     "title": "The directory after closing",
     "where": [
       {
+        "containers": [
+          "cardboardbox",
+          "smallbox",
+          "locker",
+          "desk",
+          "dresser",
+          "filingcabinet"
+        ],
         "lean": "containment",
         "place": "mapNamed",
         "rival": "agricultural",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

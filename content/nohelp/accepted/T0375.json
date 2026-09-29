@@ -3,7 +3,7 @@
     "anchor": {
       "scene": "RZSBBQParty"
     },
-    "body": "on the back: “the second evening, an acrid film in the weathered bundle after the insecticide test. the tomato plants curled. later, a checkpoint opened.”",
+    "body": "on the back: “the second evening, an acrid film in the weathered bundle after the insecticide test. the tomato plants curled. later, a checkpoint opened.”\n\nWe waited for a correction that never came. Every passing driver had a different instruction and no room for one more passenger.\n\nPerhaps the new instructions were meant to help us. They arrived after we had already followed the old ones.",
     "id": "t0375-01",
     "kind": "written",
     "pieces": [
@@ -15,6 +15,26 @@
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RZSBBQParty"
+    },
+    "body": "The party stayed after the announced closing time because the official road out was marked open on the paper. When the cars got there, a worker said the paper was from yesterday. We used it to start the fire when the night turned cold.",
+    "id": "t0375-02",
+    "kind": "written",
+    "pieces": [
+      "notebook"
+    ],
+    "title": "Ash from the picnic",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
         "spot": "ground"
       }
     ]

@@ -10,13 +10,21 @@
       "Toothpaste",
       "Camera"
     ],
-    "title": "missing count beside the toothpaste",
+    "title": "Toothpaste with the unclosed tally",
     "where": [
       {
+        "containers": [
+          "locker",
+          "cardboardbox",
+          "smallbox",
+          "toolcabinet",
+          "crate",
+          "medicine"
+        ],
         "lean": "containment",
         "place": "mapNamed",
         "rival": "agricultural",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

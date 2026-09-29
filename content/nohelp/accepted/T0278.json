@@ -13,10 +13,18 @@
     "title": "The weekly ghost route",
     "where": [
       {
+        "containers": [
+          "shelves",
+          "crate",
+          "smallbox",
+          "metal_shelves",
+          "toolcabinet",
+          "locker"
+        ],
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

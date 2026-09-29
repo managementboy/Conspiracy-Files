@@ -10,6 +10,14 @@
     "title": "The headline held open over its correction",
     "where": [
       {
+        "containers": [
+          "filingcabinet",
+          "desk",
+          "cashregister",
+          "sidetable",
+          "shelves",
+          "smallbox"
+        ],
         "lean": "containment",
         "place": "government",
         "rival": "agricultural",
@@ -28,6 +36,14 @@
     "title": "The sprayer left its outline on the page",
     "where": [
       {
+        "containers": [
+          "filingcabinet",
+          "desk",
+          "cashregister",
+          "sidetable",
+          "shelves",
+          "smallbox"
+        ],
         "lean": "agricultural",
         "place": "government",
         "rival": "containment",

@@ -1,0 +1,104 @@
+[
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "print": "GunsUnlimitedEchoCreek"
+      },
+      "body": "The sales ledger lists a firearm transfer complete, but the return count for ammunition is blank. The range receipt is dated the next day.",
+      "id": "t0264-01",
+      "kind": "set",
+      "pieces": [
+        "Pistol",
+        "Pistol2"
+      ],
+      "title": "The missing ammunition count",
+      "where": [
+        {
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "Guns Unlimited (Echo Creek)",
+        "source": "print:GunsUnlimitedEchoCreek"
+      },
+      "gloss": "A firearm transfer closes before its ammunition is counted.",
+      "prov": {
+        "batch": "T0264",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A field crew could borrow equipment and return it later; the ledger does not say who authorized the transfer."
+    }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "print": "GunsUnlimitedEchoCreek"
+      },
+      "body": "The sales ledger lists a firearm transfer complete, but the return count for ammunition is blank. The range receipt is dated the next day.",
+      "id": "t0264-01",
+      "kind": "set",
+      "pieces": [
+        "Pistol",
+        "Pistol2"
+      ],
+      "title": "The missing ammunition count",
+      "where": [
+        {
+          "containers": [
+            "crate",
+            "shelves",
+            "desk",
+            "counter",
+            "cardboardbox",
+            "bin"
+          ],
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "Guns Unlimited (Echo Creek)",
+        "source": "print:GunsUnlimitedEchoCreek"
+      },
+      "gloss": "A firearm transfer closes before its ammunition is counted.",
+      "prov": {
+        "batch": "T0264",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A field crew could borrow equipment and return it later; the ledger does not say who authorized the transfer."
+    }
+  }
+]

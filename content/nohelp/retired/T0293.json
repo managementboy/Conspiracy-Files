@@ -1,0 +1,45 @@
+[
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "scene": "RBHeatBreakAfternoon"
+      },
+      "body": "The two items are bundled beside clouded sample jar; field dust lies beneath them, while a strip of road tape is caught around the bundle.",
+      "id": "t0293-01",
+      "kind": "set",
+      "pieces": [
+        "Axe",
+        "SeedBag"
+      ],
+      "title": "Clouded sample jar by the counter",
+      "where": [
+        {
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "vehicle"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-warning",
+          "c-orders"
+        ]
+      },
+      "gloss": "Field residue and response material share one personal bundle.",
+      "prov": {
+        "batch": "T0293",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "Field work and a hurried emergency response could each explain the mixed residue and road tape; neither fixes which came first."
+    }
+  }
+]

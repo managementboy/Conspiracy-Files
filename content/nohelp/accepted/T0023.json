@@ -14,10 +14,18 @@
     "title": "Acknowledged from the bench",
     "where": [
       {
+        "containers": [
+          "desk",
+          "toolcabinet",
+          "sidetable",
+          "metal_shelves",
+          "shelves",
+          "smallbox"
+        ],
         "lean": "containment",
         "place": "mapNamed",
         "rival": "agricultural",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   },
@@ -25,7 +33,7 @@
     "anchor": {
       "print": "CircuitalHealing"
     },
-    "body": "The field trial's receiver came back marked 'no fault found,' though it stopped transmitting at the plot. The owner asked to hold the invoice until after harvest; the bench still wants payment.",
+    "body": "The field trial's receiver came back marked 'no fault found,' though it stopped transmitting at the plot. The owner asked to hold the invoice until after harvest; the bench still wants payment.\n\nThey counted the containers before anyone counted who had carried them. I wrote the second number here while I could still remember it.\n\nThere may be a simple reason for the change. Nobody at the next stop could tell us what to do with the first version.",
     "id": "t0023-02",
     "kind": "written",
     "pieces": [
@@ -34,10 +42,18 @@
     "title": "No fault at the plot",
     "where": [
       {
+        "containers": [
+          "cashregister",
+          "desk",
+          "filingcabinet",
+          "sidetable",
+          "smallbox",
+          "shelves"
+        ],
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }

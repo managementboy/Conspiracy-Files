@@ -14,10 +14,18 @@
     "title": "Weapons beside the supply sack",
     "where": [
       {
+        "containers": [
+          "locker",
+          "trough",
+          "dresser",
+          "metal_shelves",
+          "wardrobe",
+          "toolcabinet"
+        ],
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",
-        "spot": "ground"
+        "spot": "furniture"
       }
     ]
   }
