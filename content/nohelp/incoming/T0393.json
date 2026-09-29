@@ -1,0 +1,74 @@
+[
+  {
+    "anchor": {
+      "scene": "RZSOccultActivity"
+    },
+    "body": "on the back: “saturday before sunrise, waxy pollen in the weathered bundle after the fertilizer trial. our cat hid from the water bowl. later, traffic was turned around.”",
+    "id": "t0393-01",
+    "kind": "written",
+    "pieces": [
+      "photograph"
+    ],
+    "title": "weathered bundle note — saturday before sunrise",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ],
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-warning",
+        "c-failure"
+      ]
+    },
+    "gloss": "A personal field trace precedes the visible emergency response.",
+    "prov": {
+      "batch": "T0393",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "Responders could have collected the waxy pollen while crossing treated land; the note or objects do not prove the program began the emergency."
+  },
+  {
+    "id": "t0393-02",
+    "kind": "written",
+    "pieces": [
+      "notebook"
+    ],
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ],
+    "title": "Names after the candles",
+    "body": "They gathered here after the road was closed, and someone carefully counted every person present. The official tally for this stretch was zero. The woman with the candles made a second list on the back of a wrapper.",
+    "anchor": {
+      "scene": "RZSOccultActivity"
+    },
+    "rival_reading": "The agricultural trial may have caused the disorder that forced improvised decisions.",
+    "gloss": "A witness records a failed evacuation count or route.",
+    "axioms": {
+      "containment": [
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0393"
+    }
+  }
+]
