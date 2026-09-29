@@ -122,3 +122,32 @@ that the mod is broken when nothing is.
 
 A game still running when the lock is granted is a leftover from a run that
 died without stopping it, so the claim clears it rather than refusing to work.
+
+## No Help with ZombieBuddy (2026-09-29)
+
+`pz.sh start` now also installs `mod-nohelp` as `ConspiracyFilesNoHelp` and
+the Workshop ZombieBuddy mod, adds both to `default.txt`, approves the current
+`NoHelpScenes.jar` hash in `~/.zombie_buddy/mod_approvals.json`, and launches
+with `-javaagent:ZombieBuddy.jar=policy=deny-new,verbosity=1 --` (no dialog can
+block an unattended run; an unapproved jar is skipped and the log says so).
+`PZ_ZB=0` launches without the agent.
+
+    tools/autotest/checks/nohelp_boot.sh     # ~6 minutes: new world + save/reload
+
+First run 20260929T122851: PASS (144 story advices, listener heard 9 scenes,
+5 confirmed, seed and scenes kept across the reload, no mod errors).
+
+### Reading the logs (autonomous runs and a player's console.txt)
+
+| Question | Where it shows |
+|---|---|
+| Did ZombieBuddy load the jar, and trust it? | `[ZB] ZBS verification valid for .../NoHelpScenes.jar`, `[ZB] added to classpath: ...NoHelpScenes.jar` |
+| Were the scene hooks installed? | `[ZB] [d] Applied advice to zombie.randomizedWorld...` (144 on 42.20.4); `Failed to apply advice` if not |
+| Is the listener alive, how much has it heard, what broke? | `[CF] ... ev=scan why=scene-listener-live ... seen= queued= failed= dropped= v=` at start, `why=scene-listener` every 5 minutes and at once on a new failure (`err=` = first Java error) |
+| ZombieBuddy missing or the jar refused | `ev=scan why=scene-listener-missing` (warn), plus ZombieBuddy's own skip line |
+| Each scene confirmed | `ev=scan why=scene-generated family=...` (kind and place blinded; set `NHShared.BlindLog=false` in the debug console to see them) |
+| Whole state, counts only | state dump line `ev=dump ... scenes= zbSeen= zbFailed= zbDropped= zbQueued=` (or `zbMissing=1`); in play: the state-dump menu entry; unattended: `NHShared.StateDump.run()` |
+
+Found by the first native run: the state dump had never worked in the game
+(it called `next()`, which Kahlua lacks); fixed, and `test/nohelp_kahlua_globals.lua`
+now refuses `next()` in shipped No Help files.

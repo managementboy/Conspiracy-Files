@@ -38,6 +38,9 @@ M.FIELDS={
     peakMs=true,  -- peak frame time (ms) as R.metrics reports it
     bytes=true,   -- record size in bytes
     saveInvalid=true,  -- 1 if SaveBudget.checkMany returned false (validation failed)
+    -- Scenes (E4): confirmed in the save; the ZombieBuddy listener's counts,
+    -- or zbMissing=1 when it is not there.
+    scenes=true, zbSeen=true, zbDropped=true, zbFailed=true, zbQueued=true, zbMissing=true,
 }
 
 -- Pure function: builds a flat table of fields from root, metrics, and bytes.
@@ -121,6 +124,16 @@ function M.build(root, metrics, bytes, saveValid)
         end
     end)
 
+    -- Scenes confirmed in the save, and the scene listener's health.
+    local scenes=0
+    for _,s in pairs(type(root.scenes)=="table" and root.scenes or {}) do if type(s)=="table" and s.kind then scenes=scenes+1 end end
+    fields.scenes=scenes
+    pcall(function()
+        local st=require("NHShared/VanillaSceneRuntime").listenerStatus()
+        if st then fields.zbSeen,fields.zbDropped,fields.zbFailed,fields.zbQueued=st.seen,st.dropped,st.failed,st.queued
+        else fields.zbMissing=1 end
+    end)
+
     -- Pick totals from case.totals (C2): areas decided and clues per lean.
     if root.case and type(root.case)=="table" and root.case.totals and type(root.case.totals)=="table" then
         local t=root.case.totals
@@ -180,7 +193,11 @@ function M.run()
 
         -- Build the dump.
         local fields=M.build(root, metrics, bytes, saveValid)
-        if not fields or next(fields)==nil then return end
+        -- No next(): the game's Kahlua has no such global (native run,
+        -- 2026-09-29: "Object tried to call nil"; the dump never ran in game).
+        local any=false
+        for _ in pairs(fields or {}) do any=true; break end
+        if not any then return end
 
         -- Validate it.
         local valid, badKey=M.clean(fields)
