@@ -1,0 +1,37 @@
+[
+  {
+    "body": "seed husks cling to the duct tape, while bleach marks the empty garden sprayer. road mud joins the two in one tied bundle.",
+    "id": "t0003-01",
+    "kind": "set",
+    "pieces": [
+      "DuctTape",
+      "GardeningSprayEmpty"
+    ],
+    "title": "two traces on the duct tape",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "farm",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ],
+    "rival_reading": "The farm program and the emergency response each explain one layer of the bundle, and the shared knot does not establish which purpose came first.",
+    "gloss": "Farm residue and response markings share one deliberately ambiguous bundle.",
+    "axioms": {
+      "containment": [
+        "c-warning",
+        "c-orders"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0003"
+    }
+  }
+]
