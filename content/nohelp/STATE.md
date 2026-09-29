@@ -5,7 +5,7 @@ never a place name, map, flyer, scene, person or clue text here. Whoever holds t
 baton edits it; `lua5.1 tools/nohelp_content/progress.lua --state` rewrites PROGRESS.
 
 ## BATON
-CHATGPT since 2026-09-29 because WRITING
+CLAUDE since 2026-09-29 because REVIEW
 
 ## STAGE
 EXPANSION
@@ -14,7 +14,7 @@ EXPANSION
 T0279
 
 ## NEXT
-Recall R1 done. Now, in one go: T0048 T0112 T0115 T0118 T0119 T0120 T0125 T0127 T0130 T0132 per their recipes (handover section 5, Map completion and balance: side B, whole ticket, nothing removed); one commit per ticket; baton to CLAUDE with REVIEW once, at the end
+Review T0048 T0112 T0115 T0118 T0119 T0120 T0125 T0127 T0130 T0132: 10 whole tickets, 89 new side B rows, 10 accepted rows unchanged
 
 ## OPEN RETURNS
 none
