@@ -1,0 +1,53 @@
+[
+  {
+    "anchor": {
+      "map": "MulStashMap5",
+      "mark": 1
+    },
+    "body": "The notebook has one page torn out and a route copy with a blank arrival box. A pencilled note asks whether the driver should wait or report the stop complete.",
+    "id": "t0081-01",
+    "kind": "set",
+    "pieces": [
+      "Notebook",
+      "Pencil"
+    ],
+    "title": "The page without a mark",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture",
+        "containers": [
+          "desk",
+          "crate",
+          "shelves",
+          "counter",
+          "cardboardbox",
+          "bin"
+        ]
+      }
+    ],
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "marked address in Muldraugh",
+      "source": "map:MulStashMap5"
+    },
+    "gloss": "A route is marked complete without an arrival time.",
+    "prov": {
+      "batch": "T0081",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A research or delivery crew could have left an incomplete route book; the blank box does not show who was expected."
+  }
+]
