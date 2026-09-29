@@ -1,0 +1,53 @@
+[
+  {
+    "anchor": {
+      "map": "RosewoodStashMap4",
+      "mark": 1
+    },
+    "body": "The packed bag is tied to a departure card that says to take what fits; the final line sends the group away before the promised pickup.",
+    "id": "t0107-01",
+    "kind": "set",
+    "pieces": [
+      "Bag_ALICEpack",
+      "WaterBottle"
+    ],
+    "title": "Take what fits",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture",
+        "containers": [
+          "crate",
+          "shelves",
+          "desk",
+          "counter",
+          "cardboardbox",
+          "bin"
+        ]
+      }
+    ],
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "Left bug-out stuff here",
+      "source": "map:RosewoodStashMap4"
+    },
+    "gloss": "A group leaves with a reduced load before its pickup arrives.",
+    "prov": {
+      "batch": "T0107",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A field crew could have carried a limited load and changed its route; the card does not explain why the pickup failed."
+  }
+]
