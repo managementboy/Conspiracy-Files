@@ -1,0 +1,23 @@
+[
+  {
+    "anchor": {
+      "scene": "RZSOrphanedFawn"
+    },
+    "body": "A cloudy bottle and sample jar share a waxy green film. A scrap of twine around both still holds treated pasture grass.",
+    "id": "t0397-01",
+    "kind": "set",
+    "pieces": [
+      "WaterBottle",
+      "EmptyJar"
+    ],
+    "title": "cloudy water beside a sample jar",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  }
+]

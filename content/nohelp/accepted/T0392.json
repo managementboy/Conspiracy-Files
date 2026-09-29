@@ -1,0 +1,23 @@
+[
+  {
+    "anchor": {
+      "scene": "RZSNastyMattress"
+    },
+    "body": "the battery with a field radio are tied in one bundle. rust-colored grit marks the field side; torn warning tape marks the other.",
+    "id": "t0392-01",
+    "kind": "set",
+    "pieces": [
+      "Battery",
+      "RadioBlack"
+    ],
+    "title": "battery with a field radio at friday at closing",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
+  }
+]

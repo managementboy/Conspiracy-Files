@@ -1,0 +1,22 @@
+[
+  {
+    "anchor": {
+      "scene": "RBBarn"
+    },
+    "body": "My note from at dusk: the field trial crew carried rinsed gloves. my brother started coughing. I had not yet heard that the siren began.",
+    "id": "t0284-01",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "At dusk: rinsed gloves",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

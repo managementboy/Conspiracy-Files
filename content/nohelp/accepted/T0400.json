@@ -1,0 +1,22 @@
+[
+  {
+    "anchor": {
+      "scene": "RZSSadCamp"
+    },
+    "body": "I kept the gloves with blue powder from the seed trial. Our dog stopped drinking before the road patrol turned us back toward camp.",
+    "id": "t0400-01",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "title": "letter folded beneath the bedroll",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  }
+]

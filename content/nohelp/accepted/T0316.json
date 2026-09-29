@@ -1,0 +1,23 @@
+[
+  {
+    "anchor": {
+      "scene": "RBTSElectronics"
+    },
+    "body": "A fresh battery is taped to a field radio. Green spray flecks fill the speaker grille, and the last tuning mark is below the county warning channel.",
+    "id": "t0316-01",
+    "kind": "set",
+    "pieces": [
+      "Battery",
+      "RadioBlack"
+    ],
+    "title": "Field radio with a fresh battery",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

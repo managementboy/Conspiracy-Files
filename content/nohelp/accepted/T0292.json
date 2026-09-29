@@ -1,0 +1,22 @@
+[
+  {
+    "anchor": {
+      "scene": "RBHairSalon"
+    },
+    "body": "Three customers from the east fields brought the same sweet chemical smell in their hair. They said the crop trial crew had sprayed before sunrise. I washed everyone twice; by noon a county van had blocked the road.",
+    "id": "t0292-01",
+    "kind": "written",
+    "pieces": [
+      "diary"
+    ],
+    "title": "Tuesday, after opening",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

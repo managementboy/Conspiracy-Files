@@ -1,0 +1,23 @@
+[
+  {
+    "anchor": {
+      "scene": "RBTSDinner"
+    },
+    "body": "A potato cut in half sits beside a jar of gray field water. Both carry the same waxy residue along the rim.",
+    "id": "t0314-01",
+    "kind": "set",
+    "pieces": [
+      "Potato",
+      "EmptyJar"
+    ],
+    "title": "Supper left with a soil jar",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

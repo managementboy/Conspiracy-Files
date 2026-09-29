@@ -1,0 +1,23 @@
+[
+  {
+    "anchor": {
+      "scene": "RZSBaseball"
+    },
+    "body": "the battery with a field radio carry a medicinal odor from the livestock supplement test. they were packed before warning tape went up.",
+    "id": "t0376-01",
+    "kind": "set",
+    "pieces": [
+      "Battery",
+      "RadioBlack"
+    ],
+    "title": "battery with a field radio at before sunday's rain",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  }
+]

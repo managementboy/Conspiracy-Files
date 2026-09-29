@@ -1,0 +1,23 @@
+[
+  {
+    "anchor": {
+      "scene": "RBTSSoup"
+    },
+    "body": "A cloudy water bottle stands beside a tin opener crusted with yellow dust. A hand-drawn line on the bottle marks the level before boiling.",
+    "id": "t0320-01",
+    "kind": "set",
+    "pieces": [
+      "WaterBottle",
+      "TinOpener"
+    ],
+    "title": "Cloudy water beside the soup",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

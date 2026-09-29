@@ -1,0 +1,22 @@
+[
+  {
+    "anchor": {
+      "scene": "RBStripclub"
+    },
+    "body": "Written on the back: “The two men from the crop trial left yellow dust on every chair. We felt dizzy before the county van came.”",
+    "id": "t0310-01",
+    "kind": "written",
+    "pieces": [
+      "photograph"
+    ],
+    "title": "Photograph after the matinee",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

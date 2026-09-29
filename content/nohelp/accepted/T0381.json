@@ -1,0 +1,22 @@
+[
+  {
+    "anchor": {
+      "scene": "RZSCharcoalBurner"
+    },
+    "body": "on the back: “friday at closing, silver specks in the weathered bundle after the feed test. the ditch smelled metallic. later, the noon siren sounded.”",
+    "id": "t0381-01",
+    "kind": "written",
+    "pieces": [
+      "photograph"
+    ],
+    "title": "weathered bundle note — friday at closing",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  }
+]

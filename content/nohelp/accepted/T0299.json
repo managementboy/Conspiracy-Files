@@ -1,0 +1,23 @@
+[
+  {
+    "anchor": {
+      "scene": "RBOffice"
+    },
+    "body": "The two items are bundled beside marked feed sack; field dust lies beneath them, while a strip of road tape is caught around the bundle.",
+    "id": "t0299-01",
+    "kind": "set",
+    "pieces": [
+      "Bread",
+      "CannedCorn"
+    ],
+    "title": "Marked feed sack by the coat pocket",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

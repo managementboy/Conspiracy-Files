@@ -1,0 +1,23 @@
+[
+  {
+    "anchor": {
+      "scene": "RDSPokerNight"
+    },
+    "body": "The hand shovel and wash pail share white crystals from the orchard spray test. They were bundled before the bridge was blocked.",
+    "id": "t0339-01",
+    "kind": "set",
+    "pieces": [
+      "HandShovel",
+      "Bucket"
+    ],
+    "title": "Hand shovel and wash pail, the late afternoon",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

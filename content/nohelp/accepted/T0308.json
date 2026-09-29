@@ -1,0 +1,22 @@
+[
+  {
+    "anchor": {
+      "scene": "RBShopLooted"
+    },
+    "body": "Soap, gloves, and two water jugs, paid cash. On the back: “Trial crew used the sink at dawn. My eyes burned before the road was shut.”",
+    "id": "t0308-01",
+    "kind": "written",
+    "pieces": [
+      "receipt"
+    ],
+    "title": "Soap bought after the field run",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

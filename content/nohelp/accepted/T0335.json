@@ -1,0 +1,23 @@
+[
+  {
+    "anchor": {
+      "scene": "RDSGunslinger"
+    },
+    "body": "The wrapped loaf and canned corn share a sweet chemical smell from the crop plot. They were bundled before the lane was closed.",
+    "id": "t0335-01",
+    "kind": "set",
+    "pieces": [
+      "Bread",
+      "CannedCorn"
+    ],
+    "title": "Wrapped loaf and canned corn, saturday near lunch",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "corpse"
+      }
+    ]
+  }
+]

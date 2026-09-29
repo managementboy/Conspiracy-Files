@@ -1,0 +1,23 @@
+[
+  {
+    "anchor": {
+      "scene": "RDSBanditRaid"
+    },
+    "body": "The first-aid kit and water bottle are tied together. blue powder coats one side; a torn strip of road tape covers the other.",
+    "id": "t0325-01",
+    "kind": "set",
+    "pieces": [
+      "FirstAidKit",
+      "WaterBottle"
+    ],
+    "title": "First-aid kit and water bottle, sunday after supper",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "corpse"
+      }
+    ]
+  }
+]

@@ -1,0 +1,23 @@
+[
+  {
+    "anchor": {
+      "scene": "RDSZombieLockedBathroom"
+    },
+    "body": "The fertilizer sack and empty sprayer share red grit from the pest-control test. They were bundled before the checkpoint appeared.",
+    "id": "t0353-01",
+    "kind": "set",
+    "pieces": [
+      "Fertilizer",
+      "GardeningSprayEmpty"
+    ],
+    "title": "Fertilizer sack and empty sprayer, tuesday at dusk",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

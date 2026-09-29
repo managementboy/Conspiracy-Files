@@ -1,0 +1,23 @@
+[
+  {
+    "anchor": {
+      "scene": "RBSpiffo"
+    },
+    "body": "A mop has dried stiff across a bucket holding an oily film. The same film marks bootprints leading away from the kitchen shelf.",
+    "id": "t0309-01",
+    "kind": "set",
+    "pieces": [
+      "Mop",
+      "Bucket"
+    ],
+    "title": "The bucket with the bitter rinse",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

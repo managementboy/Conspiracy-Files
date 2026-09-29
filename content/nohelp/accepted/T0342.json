@@ -1,0 +1,22 @@
+[
+  {
+    "anchor": {
+      "scene": "RDSPrisonEscapeWithPolice"
+    },
+    "body": "Tuesday at dusk: two workers from the pest-control test carried black specks. the garden browned before the checkpoint appeared.",
+    "id": "t0342-01",
+    "kind": "written",
+    "pieces": [
+      "diary"
+    ],
+    "title": "Tuesday at dusk — black specks",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "corpse"
+      }
+    ]
+  }
+]

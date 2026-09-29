@@ -1,0 +1,22 @@
+[
+  {
+    "anchor": {
+      "scene": "RDSBleach"
+    },
+    "body": "I saved the cloth with sticky pollen for you. The orchard spray test crew passed the late afternoon; the mare refused her feed, and afterward the bridge was blocked.",
+    "id": "t0328-01",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "title": "the late afternoon — sticky pollen",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "corpse"
+      }
+    ]
+  }
+]

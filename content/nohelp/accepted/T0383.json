@@ -1,0 +1,22 @@
+[
+  {
+    "anchor": {
+      "scene": "RZSFishingTrip"
+    },
+    "body": "feed, soap, and a clean jar, paid cash. my note below says emerald flecks came from the orchard treatment; the horse kicked away its feed before the crossing was barricaded.",
+    "id": "t0383-01",
+    "kind": "written",
+    "pieces": [
+      "receipt"
+    ],
+    "title": "weathered bundle note — during the hot afternoon",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  }
+]

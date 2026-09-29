@@ -1,0 +1,21 @@
+{
+  "t0331-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-warning",
+        "c-orders"
+      ]
+    },
+    "gloss": "Field residue and response material meet in one ambiguous personal bundle.",
+    "prov": {
+      "batch": "T0331",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "Field workers or an emergency crew could have assembled this bundle; the mixed residue and road tape do not show which came first."
+  }
+}

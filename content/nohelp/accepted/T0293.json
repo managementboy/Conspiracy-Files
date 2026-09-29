@@ -1,0 +1,23 @@
+[
+  {
+    "anchor": {
+      "scene": "RBHeatBreakAfternoon"
+    },
+    "body": "The two items are bundled beside clouded sample jar; field dust lies beneath them, while a strip of road tape is caught around the bundle.",
+    "id": "t0293-01",
+    "kind": "set",
+    "pieces": [
+      "Axe",
+      "SeedBag"
+    ],
+    "title": "Clouded sample jar by the counter",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "vehicle"
+      }
+    ]
+  }
+]

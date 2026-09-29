@@ -1,0 +1,23 @@
+[
+  {
+    "anchor": {
+      "scene": "RDSGrouchos"
+    },
+    "body": "The hand axe and seed sack share milky water from the water-treatment trial. They were bundled before the clinic stopped answering.",
+    "id": "t0333-01",
+    "kind": "set",
+    "pieces": [
+      "Axe",
+      "SeedBag"
+    ],
+    "title": "Hand axe and seed sack, thursday after closing",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

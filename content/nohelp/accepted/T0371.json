@@ -1,0 +1,22 @@
+[
+  {
+    "anchor": {
+      "scene": "RVSRichJerk"
+    },
+    "body": "feed, soap, and a clean jar, paid cash. my note below says brown foam came from the fertilizer trial; our cat hid from the water bowl before traffic was turned around.",
+    "id": "t0371-01",
+    "kind": "written",
+    "pieces": [
+      "receipt"
+    ],
+    "title": "cab note — saturday before sunrise",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "vehicle"
+      }
+    ]
+  }
+]

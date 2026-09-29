@@ -1,0 +1,23 @@
+[
+  {
+    "anchor": {
+      "scene": "RBTSSandwich"
+    },
+    "body": "A can of corn and sealed bandage are wrapped in the same strip of road tape. Yellow field dust is trapped under the tape.",
+    "id": "t0318-01",
+    "kind": "set",
+    "pieces": [
+      "CannedCorn",
+      "Bandage"
+    ],
+    "title": "Lunch wrapped with a bandage",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

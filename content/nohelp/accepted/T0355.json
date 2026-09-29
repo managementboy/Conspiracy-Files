@@ -1,0 +1,22 @@
+[
+  {
+    "anchor": {
+      "scene": "RDSZombiesEating"
+    },
+    "body": "My coat pocket entry says the well-water study workers brushed off silver specks. the mice abandoned the bin before the nurse stopped taking calls.",
+    "id": "t0355-01",
+    "kind": "written",
+    "pieces": [
+      "notebook"
+    ],
+    "title": "Coat pocket note — after Monday supper",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "corpse"
+      }
+    ]
+  }
+]

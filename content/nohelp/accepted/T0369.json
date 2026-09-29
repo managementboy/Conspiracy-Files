@@ -1,0 +1,22 @@
+[
+  {
+    "anchor": {
+      "scene": "RVSPoliceBlockadeShooting"
+    },
+    "body": "on the back: “before thursday lunch, a greasy sheen in the cab after the greenhouse test. my wrists blistered. later, the telephone line died.”",
+    "id": "t0369-01",
+    "kind": "written",
+    "pieces": [
+      "photograph"
+    ],
+    "title": "cab note — before thursday lunch",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "vehicle"
+      }
+    ]
+  }
+]

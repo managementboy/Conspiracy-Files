@@ -1,0 +1,23 @@
+[
+  {
+    "anchor": {
+      "scene": "RVSRoadKill"
+    },
+    "body": "the cut potato with a soil jar carry chalky water from the orchard treatment. they were packed before the crossing was barricaded.",
+    "id": "t0372-01",
+    "kind": "set",
+    "pieces": [
+      "Potato",
+      "EmptyJar"
+    ],
+    "title": "cut potato with a soil jar at during the hot afternoon",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "vehicle"
+      }
+    ]
+  }
+]

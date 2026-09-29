@@ -1,0 +1,23 @@
+[
+  {
+    "anchor": {
+      "scene": "RZSCampsite"
+    },
+    "body": "the wrapped bread with canned corn are tied in one bundle. waxy pollen marks the field side; torn warning tape marks the other.",
+    "id": "t0380-01",
+    "kind": "set",
+    "pieces": [
+      "Bread",
+      "CannedCorn"
+    ],
+    "title": "wrapped bread with canned corn at before thursday lunch",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
+  }
+]

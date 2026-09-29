@@ -1,0 +1,22 @@
+[
+  {
+    "anchor": {
+      "scene": "RBReverend"
+    },
+    "body": "In the margin I wrote that the orchard hands smelled of sweet spray and asked for water before service. Their youngest began shaking before the deputy closed the lane.",
+    "id": "t0304-01",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "Prayer list, Tuesday margin",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

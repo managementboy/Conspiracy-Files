@@ -1,0 +1,22 @@
+[
+  {
+    "anchor": {
+      "scene": "RZSBeachParty"
+    },
+    "body": "feed, soap, and a clean jar, paid cash. my note below says violet powder came from the well-water study; the mice abandoned the bin before the nurse stopped taking calls.",
+    "id": "t0377-01",
+    "kind": "written",
+    "pieces": [
+      "receipt"
+    ],
+    "title": "weathered bundle note — after monday supper",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  }
+]

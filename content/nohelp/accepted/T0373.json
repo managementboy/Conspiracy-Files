@@ -1,0 +1,22 @@
+[
+  {
+    "anchor": {
+      "scene": "RVSTrailerCrash"
+    },
+    "body": "my cab entry says the pasture treatment workers brushed off mustard-colored dust. not one fly remained before a cruiser waved us away.",
+    "id": "t0373-01",
+    "kind": "written",
+    "pieces": [
+      "notebook"
+    ],
+    "title": "cab note — on the cold night",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "vehicle"
+      }
+    ]
+  }
+]

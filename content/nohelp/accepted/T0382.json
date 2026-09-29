@@ -1,0 +1,23 @@
+[
+  {
+    "anchor": {
+      "scene": "RZSDean"
+    },
+    "body": "the fertilizer sack with a drained sprayer carry a greasy sheen from the fertilizer trial. they were packed before traffic was turned around.",
+    "id": "t0382-01",
+    "kind": "set",
+    "pieces": [
+      "Fertilizer",
+      "GardeningSprayEmpty"
+    ],
+    "title": "fertilizer sack with a drained sprayer at saturday before sunrise",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  }
+]

@@ -1,0 +1,22 @@
+[
+  {
+    "anchor": {
+      "scene": "RBNolans"
+    },
+    "body": "I kept the sealed seed packet you asked about. The trial crew passed before breakfast; my brother started coughing, and only later the buses quit running.",
+    "id": "t0298-01",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "title": "Before breakfast: sealed seed packet",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

@@ -1,0 +1,22 @@
+[
+  {
+    "anchor": {
+      "scene": "RZSRangerSmith"
+    },
+    "body": "Personal note: the insecticide crew crossed at dawn, leaving yellow dust on the grass. The deer fled before the county trucks reached the trail.",
+    "id": "t0398-01",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "torn note from the north trail",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  }
+]

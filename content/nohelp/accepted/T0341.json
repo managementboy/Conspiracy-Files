@@ -1,0 +1,23 @@
+[
+  {
+    "anchor": {
+      "scene": "RDSPrisonEscape"
+    },
+    "body": "The first-aid kit and water bottle share sticky pollen from the seed trial. They were bundled before the county van arrived.",
+    "id": "t0341-01",
+    "kind": "set",
+    "pieces": [
+      "FirstAidKit",
+      "WaterBottle"
+    ],
+    "title": "First-aid kit and water bottle, monday morning",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "corpse"
+      }
+    ]
+  }
+]

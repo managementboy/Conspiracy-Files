@@ -1,0 +1,23 @@
+[
+  {
+    "anchor": {
+      "scene": "RBSWATStation"
+    },
+    "body": "A first-aid kit sits open beside a split seed sack. Yellow dust covers the gauze; black road tape is stuck to the sack.",
+    "id": "t0305-01",
+    "kind": "set",
+    "pieces": [
+      "FirstAidKit",
+      "SeedBag"
+    ],
+    "title": "Seed dust under the bandages",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

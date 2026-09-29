@@ -1,0 +1,23 @@
+[
+  {
+    "anchor": {
+      "scene": "RBTSBreakfast"
+    },
+    "body": "A wrapped loaf and first-aid kit are tied together with road tape. Fine field dust covers the bread bag, but the kit is clean.",
+    "id": "t0311-01",
+    "kind": "set",
+    "pieces": [
+      "Bread",
+      "FirstAidKit"
+    ],
+    "title": "Breakfast beside an unopened kit",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

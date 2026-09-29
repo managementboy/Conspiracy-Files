@@ -1,0 +1,22 @@
+[
+  {
+    "anchor": {
+      "scene": "RDSHouseParty"
+    },
+    "body": "Personal note — the early shift: wash off the blue powder left by the fertilizer test crew. the dog refused its water, and I had not yet heard that the buses quit running.",
+    "id": "t0338-01",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "the early shift — blue powder",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

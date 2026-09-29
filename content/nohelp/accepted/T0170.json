@@ -1,0 +1,22 @@
+[
+  {
+    "anchor": {
+      "print": "DragRacingTrack"
+    },
+    "body": "A feed-store receipt lists fuel and rinse soap beside a handwritten line: “Trial rig at the track before sunrise. Wash the tank before the county cars arrive.”",
+    "id": "t0170-01",
+    "kind": "written",
+    "pieces": [
+      "receipt"
+    ],
+    "title": "Fuel bought for the field sprayer",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  }
+]

@@ -1,0 +1,22 @@
+[
+  {
+    "anchor": {
+      "scene": "RBLooted"
+    },
+    "body": "My note from near midnight: the field trial crew carried rinsed gloves. my brother started coughing. I had not yet heard that a patrol turned everyone back.",
+    "id": "t0296-01",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "Near midnight: rinsed gloves",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

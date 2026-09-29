@@ -1,0 +1,22 @@
+[
+  {
+    "anchor": {
+      "scene": "RDSDeadDrunk"
+    },
+    "body": "Monday morning: two workers from the seed trial carried an oily film. my eyes began burning before the county van arrived.",
+    "id": "t0330-01",
+    "kind": "written",
+    "pieces": [
+      "diary"
+    ],
+    "title": "Monday morning — an oily film",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

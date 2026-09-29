@@ -1,0 +1,22 @@
+[
+  {
+    "anchor": {
+      "scene": "RBTSButcher"
+    },
+    "body": "I wrote down the sour smell after the field truck unloaded its rinse barrels. The meat was still cold when the flies vanished and the siren began.",
+    "id": "t0312-01",
+    "kind": "written",
+    "pieces": [
+      "notebook"
+    ],
+    "title": "Freezer note in a butcher's hand",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

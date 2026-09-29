@@ -1,0 +1,23 @@
+[
+  {
+    "anchor": {
+      "scene": "RBJudge"
+    },
+    "body": "The pair is streaked with marked feed sack from treated rows. It was set aside after the flies vanished, before anyone marked the cab unsafe.",
+    "id": "t0295-01",
+    "kind": "set",
+    "pieces": [
+      "Mop",
+      "Bucket"
+    ],
+    "title": "Marked feed sack by the cab",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

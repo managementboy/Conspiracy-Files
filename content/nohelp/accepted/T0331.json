@@ -1,0 +1,23 @@
+[
+  {
+    "anchor": {
+      "scene": "RDSDevouredByRats"
+    },
+    "body": "The battery and field radio are tied together. green flecks coats one side; a torn strip of road tape covers the other.",
+    "id": "t0331-01",
+    "kind": "set",
+    "pieces": [
+      "Battery",
+      "RadioBlack"
+    ],
+    "title": "Battery and field radio, tuesday at dusk",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "corpse"
+      }
+    ]
+  }
+]

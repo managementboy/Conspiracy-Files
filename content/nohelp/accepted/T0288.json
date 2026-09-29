@@ -1,0 +1,22 @@
+[
+  {
+    "anchor": {
+      "scene": "RBCafe"
+    },
+    "body": "before breakfast: the crop trial crew brought rinsed gloves. my brother started coughing. I washed everything twice before the buses quit running.",
+    "id": "t0288-01",
+    "kind": "written",
+    "pieces": [
+      "diary"
+    ],
+    "title": "Before breakfast: rinsed gloves",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

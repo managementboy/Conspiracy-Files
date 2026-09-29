@@ -1,0 +1,23 @@
+[
+  {
+    "anchor": {
+      "scene": "RBGunstoreSiege"
+    },
+    "body": "The pair is streaked with marked feed sack from treated rows. It was set aside after the flies vanished, before anyone marked the toolbox unsafe.",
+    "id": "t0291-01",
+    "kind": "set",
+    "pieces": [
+      "FishingRod",
+      "WaterBottle"
+    ],
+    "title": "Marked feed sack by the toolbox",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

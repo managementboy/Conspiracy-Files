@@ -1,0 +1,22 @@
+[
+  {
+    "anchor": {
+      "scene": "RVSBurntCar"
+    },
+    "body": "Feed, soap, and a clean jar, paid cash. My note below says chalky water came from the feed test; the ditch smelled metallic before the noon siren sounded.",
+    "id": "t0359-01",
+    "kind": "written",
+    "pieces": [
+      "receipt"
+    ],
+    "title": "Weathered bundle note — Friday at closing",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  }
+]

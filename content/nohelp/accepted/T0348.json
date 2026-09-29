@@ -1,0 +1,22 @@
+[
+  {
+    "anchor": {
+      "scene": "RDSSpecificProfession"
+    },
+    "body": "the night shift: two workers from the livestock-feed study carried a sweet chemical smell. the creek smelled wrong before the siren began.",
+    "id": "t0348-01",
+    "kind": "written",
+    "pieces": [
+      "diary"
+    ],
+    "title": "the night shift — a sweet chemical smell",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "corpse"
+      }
+    ]
+  }
+]

@@ -1,0 +1,22 @@
+[
+  {
+    "anchor": {
+      "scene": "RZSBuryingCamp"
+    },
+    "body": "my weathered bundle entry says the crop trial workers brushed off rust-colored grit. the chickens stopped moving before the back road closed.",
+    "id": "t0379-01",
+    "kind": "written",
+    "pieces": [
+      "notebook"
+    ],
+    "title": "weathered bundle note — late wednesday",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  }
+]

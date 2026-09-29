@@ -364,4 +364,9 @@ Fix the pattern, not just the row.
   different scenes: returned (DUPLICATE; owner: copies go back). One read
   each for the 76 delivered: 50 A, 9 B, 17 both, 0 none; the 51 originals
   added (307 in the game).
+- **Recipe round, first 115 clues** (2026-09-29): every clue matches its
+  recipe's form, 58 written, 5 key rings (all allowed), no repeated text,
+  no empty ticket. One read each: 72 B, 43 both, 0 A, 0 none; recipe B read
+  as B or both, recipe both read as both or B. All added: 422 in the game,
+  41% A-only, 31% B-only, 28% both; key ring 23%, written 18%.
 

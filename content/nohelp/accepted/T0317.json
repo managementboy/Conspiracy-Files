@@ -1,0 +1,22 @@
+[
+  {
+    "anchor": {
+      "scene": "RBTSFoodPreparation"
+    },
+    "body": "My note says the farm crew washed their sample jars in this sink. The water turned milky; two hours later a patrol told us not to use the tap.",
+    "id": "t0317-01",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "Recipe page, lower corner",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

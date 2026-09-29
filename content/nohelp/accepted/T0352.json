@@ -1,0 +1,22 @@
+[
+  {
+    "anchor": {
+      "scene": "RDSTinFoilHat"
+    },
+    "body": "I saved the cloth with white crystals for you. The seed trial crew passed Monday morning; my eyes began burning, and afterward the county van arrived.",
+    "id": "t0352-01",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "title": "Monday morning — white crystals",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

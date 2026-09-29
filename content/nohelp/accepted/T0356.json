@@ -1,0 +1,23 @@
+[
+  {
+    "anchor": {
+      "scene": "RVSAmbulanceCrash"
+    },
+    "body": "The cut potato with a soil jar are tied in one bundle. a greasy sheen marks the field side; torn warning tape marks the other.",
+    "id": "t0356-01",
+    "kind": "set",
+    "pieces": [
+      "Potato",
+      "EmptyJar"
+    ],
+    "title": "Cut potato with a soil jar at at Tuesday dawn",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "vehicle"
+      }
+    ]
+  }
+]

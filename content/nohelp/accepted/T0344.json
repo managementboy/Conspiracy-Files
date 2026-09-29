@@ -1,0 +1,22 @@
+[
+  {
+    "anchor": {
+      "scene": "RDSRatInfested"
+    },
+    "body": "Personal note — Thursday after closing: wash off the green flecks left by the water-treatment trial crew. the rats left the shed, and I had not yet heard that the clinic stopped answering.",
+    "id": "t0344-01",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "Thursday after closing — green flecks",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

@@ -363,6 +363,8 @@ return {clues={
 {id="t0168-01",kind="set",pieces={"FishingRod","HandTorch"},where={{place="mapNamed",spot="ground",lean="agricultural",rival="containment"}},title="Cabin water note",body="A fishing rod and water bottle sit beside a cabin rental card; the host asks guests not to drink from the stream until the next test.",anchor={print="BensCabin"}},
 -- T0169
 {id="t0169-01",kind="set",pieces={"Map","Wallet"},where={{place="mapNamed",spot="ground",lean="containment",rival="agricultural"}},title="The directory after closing",body="A mall directory is folded into a receipt for the last open shop; the security sheet says every entrance was clear before the shop’s closing time.",anchor={print="GrandOhioMall"}},
+-- T0170
+{id="t0170-01",kind="written",pieces={"receipt"},where={{place="mapNamed",spot="ground",lean="agricultural",rival="containment"}},title="Fuel bought for the field sprayer",body="A feed-store receipt lists fuel and rinse soap beside a handwritten line: “Trial rig at the track before sunrise. Wash the tank before the county cars arrive.”",anchor={print="DragRacingTrack"}},
 -- T0171
 {id="t0171-01",kind="set",pieces={"Photo","KeyRing"},where={{place="mapNamed",spot="ground",lean="containment",rival="agricultural"}},title="The gallery key returned",body="A gallery key is tied to a collection checklist marked secure before the guard’s handover was signed. One frame is listed without a room.",anchor={print="ArtGalleryofLouisville"}},
 -- T0172
@@ -582,6 +584,234 @@ return {clues={
 {id="t0281-01",kind="set",pieces={"Book","Map"},where={{place="mapNamed",spot="ground",lean="containment",rival="agricultural"}},title="A shop tour in two languages",body="The store map is folded into a book with a handwritten translation; the entry log says the room was empty before the last visitor signed out.",anchor={print="TheWizardsKeep"}},
 -- T0282
 {id="t0282-01",kind="set",pieces={"WaterBottle","SheetPaper2"},where={{place="mapNamed",spot="ground",lean="agricultural",rival="containment"}},title="Friday’s entertainment",body="The bar’s entertainment list is clipped to a water check for the back room; the beverage delivery was marked complete before the door was opened.",anchor={print="Twiggys"}},
+-- T0283
+{id="t0283-01",kind="set",pieces={"HandShovel","Bucket"},where={{place="mapNamed",spot="furniture",lean="agricultural",rival="containment"}},title="Marked feed sack by the counter",body="The pair is streaked with marked feed sack from treated rows. It was set aside after the flies vanished, before anyone marked the counter unsafe.",anchor={scene="RBBar"}},
+-- T0284
+{id="t0284-01",kind="written",pieces={"notepad"},where={{place="mapNamed",spot="furniture",lean="agricultural",rival="containment"}},title="At dusk: rinsed gloves",body="My note from at dusk: the field trial crew carried rinsed gloves. my brother started coughing. I had not yet heard that the siren began.",anchor={scene="RBBarn"}},
+-- T0285
+{id="t0285-01",kind="set",pieces={"FirstAidKit","WaterBottle"},where={{place="mapNamed",spot="furniture",lean="agricultural",rival="containment"}},title="Clouded sample jar by the cab",body="The pair is streaked with clouded sample jar from treated rows. It was set aside after the flies vanished, before anyone marked the cab unsafe.",anchor={scene="RBBurnt"}},
+-- T0286
+{id="t0286-01",kind="written",pieces={"letter"},where={{place="mapNamed",spot="corpse",lean="agricultural",rival="containment"}},title="Near midnight: sealed seed packet",body="I kept the sealed seed packet you asked about. The trial crew passed near midnight; my brother started coughing, and only later a patrol turned everyone back.",anchor={scene="RBBurntCorpse"}},
+-- T0287
+{id="t0287-01",kind="set",pieces={"Potato","EmptyJar"},where={{place="mapNamed",spot="corpse",lean="agricultural",rival="containment"}},title="Marked feed sack by the kitchen chair",body="The two items are bundled beside marked feed sack; field dust lies beneath them, while a strip of road tape is caught around the bundle.",anchor={scene="RBBurntFireman"}},
+-- T0288
+{id="t0288-01",kind="written",pieces={"diary"},where={{place="mapNamed",spot="furniture",lean="agricultural",rival="containment"}},title="Before breakfast: rinsed gloves",body="before breakfast: the crop trial crew brought rinsed gloves. my brother started coughing. I washed everything twice before the buses quit running.",anchor={scene="RBCafe"}},
+-- T0289
+{id="t0289-01",kind="set",pieces={"Battery","RadioBlack"},where={{place="mapNamed",spot="furniture",lean="agricultural",rival="containment"}},title="Clouded sample jar by the coat pocket",body="The pair is streaked with clouded sample jar from treated rows. It was set aside after the flies vanished, before anyone marked the coat pocket unsafe.",anchor={scene="RBClinic"}},
+-- T0290
+{id="t0290-01",kind="written",pieces={"notepad"},where={{place="mapNamed",spot="furniture",lean="agricultural",rival="containment"}},title="Before dawn: sealed seed packet",body="My note from before dawn: the field trial crew carried sealed seed packet. my brother started coughing. I had not yet heard that the county van arrived.",anchor={scene="RBDorm"}},
+-- T0291
+{id="t0291-01",kind="set",pieces={"FishingRod","WaterBottle"},where={{place="mapNamed",spot="furniture",lean="agricultural",rival="containment"}},title="Marked feed sack by the toolbox",body="The pair is streaked with marked feed sack from treated rows. It was set aside after the flies vanished, before anyone marked the toolbox unsafe.",anchor={scene="RBGunstoreSiege"}},
+-- T0292
+{id="t0292-01",kind="written",pieces={"diary"},where={{place="mapNamed",spot="furniture",lean="agricultural",rival="containment"}},title="Tuesday, after opening",body="Three customers from the east fields brought the same sweet chemical smell in their hair. They said the crop trial crew had sprayed before sunrise. I washed everyone twice; by noon a county van had blocked the road.",anchor={scene="RBHairSalon"}},
+-- T0293
+{id="t0293-01",kind="set",pieces={"Axe","SeedBag"},where={{place="mapNamed",spot="vehicle",lean="agricultural",rival="containment"}},title="Clouded sample jar by the counter",body="The two items are bundled beside clouded sample jar; field dust lies beneath them, while a strip of road tape is caught around the bundle.",anchor={scene="RBHeatBreakAfternoon"}},
+-- T0294
+{id="t0294-01",kind="written",pieces={"diary"},where={{place="mapNamed",spot="furniture",lean="agricultural",rival="containment"}},title="At dusk: sealed seed packet",body="at dusk: the crop trial crew brought sealed seed packet. my brother started coughing. I washed everything twice before the siren began.",anchor={scene="RBJoanHartford"}},
+-- T0295
+{id="t0295-01",kind="set",pieces={"Mop","Bucket"},where={{place="mapNamed",spot="furniture",lean="agricultural",rival="containment"}},title="Marked feed sack by the cab",body="The pair is streaked with marked feed sack from treated rows. It was set aside after the flies vanished, before anyone marked the cab unsafe.",anchor={scene="RBJudge"}},
+-- T0296
+{id="t0296-01",kind="written",pieces={"notepad"},where={{place="mapNamed",spot="furniture",lean="agricultural",rival="containment"}},title="Near midnight: rinsed gloves",body="My note from near midnight: the field trial crew carried rinsed gloves. my brother started coughing. I had not yet heard that a patrol turned everyone back.",anchor={scene="RBLooted"}},
+-- T0297
+{id="t0297-01",kind="set",pieces={"WalkieTalkie1","FirstAidKit"},where={{place="mapNamed",spot="furniture",lean="agricultural",rival="containment"}},title="Clouded sample jar by the kitchen chair",body="The pair is streaked with clouded sample jar from treated rows. It was set aside after the flies vanished, before anyone marked the kitchen chair unsafe.",anchor={scene="RBMayorWestPoint"}},
+-- T0298
+{id="t0298-01",kind="written",pieces={"letter"},where={{place="mapNamed",spot="furniture",lean="agricultural",rival="containment"}},title="Before breakfast: sealed seed packet",body="I kept the sealed seed packet you asked about. The trial crew passed before breakfast; my brother started coughing, and only later the buses quit running.",anchor={scene="RBNolans"}},
+-- T0299
+{id="t0299-01",kind="set",pieces={"Bread","CannedCorn"},where={{place="mapNamed",spot="furniture",lean="agricultural",rival="containment"}},title="Marked feed sack by the coat pocket",body="The two items are bundled beside marked feed sack; field dust lies beneath them, while a strip of road tape is caught around the bundle.",anchor={scene="RBOffice"}},
+-- T0300
+{id="t0300-01",kind="written",pieces={"diary"},where={{place="mapNamed",spot="furniture",lean="agricultural",rival="containment"}},title="Before dawn: rinsed gloves",body="before dawn: the crop trial crew brought rinsed gloves. my brother started coughing. I washed everything twice before the county van arrived.",anchor={scene="RBOther"}},
+-- T0301
+{id="t0301-01",kind="set",pieces={"KeyRing","GardeningSprayEmpty"},where={{place="mapNamed",spot="furniture",lean="agricultural",rival="containment"}},title="Clouded sample jar by the toolbox",body="The pair is streaked with clouded sample jar from treated rows. It was set aside after the flies vanished, before anyone marked the toolbox unsafe.",anchor={scene="RBPileOCrepe"}},
+-- T0302
+{id="t0302-01",kind="written",pieces={"notepad"},where={{place="mapNamed",spot="furniture",lean="agricultural",rival="containment"}},title="Near lunchtime: sealed seed packet",body="My note from near lunchtime: the field trial crew carried sealed seed packet. my brother started coughing. I had not yet heard that the bridge was blocked.",anchor={scene="RBPizzaWhirled"}},
+-- T0303
+{id="t0303-01",kind="set",pieces={"HandShovel","Bucket"},where={{place="mapNamed",spot="furniture",lean="agricultural",rival="containment"}},title="Field dust on the wash pail",body="A hand shovel rests across a wash pail, both striped with yellow dust. The pail smells of crop spray; road tape is knotted through its handle.",anchor={scene="RBPoliceSiege"}},
+-- T0304
+{id="t0304-01",kind="written",pieces={"notepad"},where={{place="mapNamed",spot="furniture",lean="agricultural",rival="containment"}},title="Prayer list, Tuesday margin",body="In the margin I wrote that the orchard hands smelled of sweet spray and asked for water before service. Their youngest began shaking before the deputy closed the lane.",anchor={scene="RBReverend"}},
+-- T0305
+{id="t0305-01",kind="set",pieces={"FirstAidKit","SeedBag"},where={{place="mapNamed",spot="furniture",lean="agricultural",rival="containment"}},title="Seed dust under the bandages",body="A first-aid kit sits open beside a split seed sack. Yellow dust covers the gauze; black road tape is stuck to the sack.",anchor={scene="RBSWATStation"}},
+-- T0306
+{id="t0306-01",kind="written",pieces={"diary"},where={{place="mapNamed",spot="furniture",lean="agricultural",rival="containment"}},title="The room nobody wanted",body="Thursday: the trial crew left their work shirts in the spare room. The sharp smell reached the kitchen, and the dog was sick before the road patrol arrived.",anchor={scene="RBSafehouse"}},
+-- T0307
+{id="t0307-01",kind="set",pieces={"WaterBottle","EmptyJar"},where={{place="mapNamed",spot="furniture",lean="agricultural",rival="containment"}},title="Two jars from the school garden",body="A cloudy water bottle and an empty sample jar share a strip of twine. Pale spray dust remains beneath both, inside the cupboard.",anchor={scene="RBSchool"}},
+-- T0308
+{id="t0308-01",kind="written",pieces={"receipt"},where={{place="mapNamed",spot="furniture",lean="agricultural",rival="containment"}},title="Soap bought after the field run",body="Soap, gloves, and two water jugs, paid cash. On the back: “Trial crew used the sink at dawn. My eyes burned before the road was shut.”",anchor={scene="RBShopLooted"}},
+-- T0309
+{id="t0309-01",kind="set",pieces={"Mop","Bucket"},where={{place="mapNamed",spot="furniture",lean="agricultural",rival="containment"}},title="The bucket with the bitter rinse",body="A mop has dried stiff across a bucket holding an oily film. The same film marks bootprints leading away from the kitchen shelf.",anchor={scene="RBSpiffo"}},
+-- T0310
+{id="t0310-01",kind="written",pieces={"photograph"},where={{place="mapNamed",spot="furniture",lean="agricultural",rival="containment"}},title="Photograph after the matinee",body="Written on the back: “The two men from the crop trial left yellow dust on every chair. We felt dizzy before the county van came.”",anchor={scene="RBStripclub"}},
+-- T0311
+{id="t0311-01",kind="set",pieces={"Bread","FirstAidKit"},where={{place="mapNamed",spot="furniture",lean="agricultural",rival="containment"}},title="Breakfast beside an unopened kit",body="A wrapped loaf and first-aid kit are tied together with road tape. Fine field dust covers the bread bag, but the kit is clean.",anchor={scene="RBTSBreakfast"}},
+-- T0312
+{id="t0312-01",kind="written",pieces={"notebook"},where={{place="mapNamed",spot="furniture",lean="agricultural",rival="containment"}},title="Freezer note in a butcher's hand",body="I wrote down the sour smell after the field truck unloaded its rinse barrels. The meat was still cold when the flies vanished and the siren began.",anchor={scene="RBTSButcher"}},
+-- T0314
+{id="t0314-01",kind="set",pieces={"Potato","EmptyJar"},where={{place="mapNamed",spot="furniture",lean="agricultural",rival="containment"}},title="Supper left with a soil jar",body="A potato cut in half sits beside a jar of gray field water. Both carry the same waxy residue along the rim.",anchor={scene="RBTSDinner"}},
+-- T0315
+{id="t0315-01",kind="written",pieces={"letter"},where={{place="mapNamed",spot="furniture",lean="agricultural",rival="containment"}},title="The drink I poured away",body="I saved the bottle for you because it smelled like the trial orchard after spraying. I poured out the glasses before the roadblock appeared.",anchor={scene="RBTSDrink"}},
+-- T0316
+{id="t0316-01",kind="set",pieces={"Battery","RadioBlack"},where={{place="mapNamed",spot="furniture",lean="agricultural",rival="containment"}},title="Field radio with a fresh battery",body="A fresh battery is taped to a field radio. Green spray flecks fill the speaker grille, and the last tuning mark is below the county warning channel.",anchor={scene="RBTSElectronics"}},
+-- T0317
+{id="t0317-01",kind="written",pieces={"notepad"},where={{place="mapNamed",spot="furniture",lean="agricultural",rival="containment"}},title="Recipe page, lower corner",body="My note says the farm crew washed their sample jars in this sink. The water turned milky; two hours later a patrol told us not to use the tap.",anchor={scene="RBTSFoodPreparation"}},
+-- T0318
+{id="t0318-01",kind="set",pieces={"CannedCorn","Bandage"},where={{place="mapNamed",spot="furniture",lean="containment",rival="agricultural"}},title="Lunch wrapped with a bandage",body="A can of corn and sealed bandage are wrapped in the same strip of road tape. Yellow field dust is trapped under the tape.",anchor={scene="RBTSSandwich"}},
+-- T0319
+{id="t0319-01",kind="written",pieces={"diary"},where={{place="mapNamed",spot="furniture",lean="agricultural",rival="containment"}},title="Hemmed cuffs from the trial field",body="Friday: I mended three work shirts from the seed trial. White powder shook from every cuff; my hands blistered before anyone closed the road.",anchor={scene="RBTSSewing"}},
+-- T0320
+{id="t0320-01",kind="set",pieces={"WaterBottle","TinOpener"},where={{place="mapNamed",spot="furniture",lean="agricultural",rival="containment"}},title="Cloudy water beside the soup",body="A cloudy water bottle stands beside a tin opener crusted with yellow dust. A hand-drawn line on the bottle marks the level before boiling.",anchor={scene="RBTSSoup"}},
 -- T0321
 {id="t0321-01",kind="set",pieces={"Saw","Plank"},where={{place="mapNamed",spot="furniture",lean="containment",rival="agricultural"}},title="A repair set aside",body="The tools match a small repair, but the spare was prepared before anyone recorded a fault.",anchor={scene="RBTrashed"}},
+-- T0322
+{id="t0322-01",kind="written",pieces={"letter"},where={{place="mapNamed",spot="furniture",lean="agricultural",rival="containment"}},title="Thursday after closing — a sweet chemical smell",body="I saved the cloth with a sweet chemical smell for you. The water-treatment trial crew passed Thursday after closing; the rats left the shed, and afterward the clinic stopped answering.",anchor={scene="RBTwiggy"}},
+-- T0323
+{id="t0323-01",kind="set",pieces={"KeyRing","Bucket"},where={{place="mapNamed",spot="furniture",lean="agricultural",rival="containment"}},title="Hand shovel and wash pail, friday before dawn",body="The hand shovel and wash pail share a bitter residue from the field-sprayer test. They were bundled before the radio warned everyone indoors.",anchor={scene="RBWoodcraft"}},
+-- T0324
+{id="t0324-01",kind="written",pieces={"diary"},where={{place="mapNamed",spot="furniture",lean="agricultural",rival="containment"}},title="Saturday near lunch — a sharp solvent smell",body="Saturday near lunch: two workers from the crop plot carried a sharp solvent smell. two hens went still before the lane was closed.",anchor={scene="RDSBandPractice"}},
+-- T0325
+{id="t0325-01",kind="set",pieces={"FirstAidKit","WaterBottle"},where={{place="mapNamed",spot="corpse",lean="agricultural",rival="containment"}},title="First-aid kit and water bottle, sunday after supper",body="The first-aid kit and water bottle are tied together. blue powder coats one side; a torn strip of road tape covers the other.",anchor={scene="RDSBanditRaid"}},
+-- T0326
+{id="t0326-01",kind="written",pieces={"notepad"},where={{place="mapNamed",spot="furniture",lean="agricultural",rival="containment"}},title="the night shift — white crystals",body="Personal note — the night shift: wash off the white crystals left by the livestock-feed study crew. the creek smelled wrong, and I had not yet heard that the siren began.",anchor={scene="RDSBathroomZed"}},
+-- T0327
+{id="t0327-01",kind="set",pieces={"Potato","EmptyJar"},where={{place="mapNamed",spot="furniture",lean="agricultural",rival="containment"}},title="Cut potato and sample jar, the early shift",body="The cut potato and sample jar share red grit from the fertilizer test. They were bundled before the buses quit running.",anchor={scene="RDSBedroomZed"}},
+-- T0328
+{id="t0328-01",kind="written",pieces={"letter"},where={{place="mapNamed",spot="corpse",lean="agricultural",rival="containment"}},title="the late afternoon — sticky pollen",body="I saved the cloth with sticky pollen for you. The orchard spray test crew passed the late afternoon; the mare refused her feed, and afterward the bridge was blocked.",anchor={scene="RDSBleach"}},
+-- T0329
+{id="t0329-01",kind="set",pieces={"Mop","Bucket"},where={{place="mapNamed",spot="corpse",lean="agricultural",rival="containment"}},title="Mop and rinse bucket, the first hot day",body="The mop and rinse bucket share black specks from the pasture study. They were bundled before a patrol turned us back.",anchor={scene="RDSCorpsePsycho"}},
+-- T0330
+{id="t0330-01",kind="written",pieces={"diary"},where={{place="mapNamed",spot="furniture",lean="agricultural",rival="containment"}},title="Monday morning — an oily film",body="Monday morning: two workers from the seed trial carried an oily film. my eyes began burning before the county van arrived.",anchor={scene="RDSDeadDrunk"}},
+-- T0331
+{id="t0331-01",kind="set",pieces={"Battery","RadioBlack"},where={{place="mapNamed",spot="corpse",lean="agricultural",rival="containment"}},title="Battery and field radio, tuesday at dusk",body="The battery and field radio are tied together. green flecks coats one side; a torn strip of road tape covers the other.",anchor={scene="RDSDevouredByRats"}},
+-- T0332
+{id="t0332-01",kind="written",pieces={"notepad"},where={{place="mapNamed",spot="furniture",lean="agricultural",rival="containment"}},title="Wednesday before rain — gray foam",body="Personal note — Wednesday before rain: wash off the gray foam left by the feed additive trial crew. my brother started coughing, and I had not yet heard that a deputy taped off the road.",anchor={scene="RDSFootballNight"}},
+-- T0333
+{id="t0333-01",kind="set",pieces={"Axe","SeedBag"},where={{place="mapNamed",spot="furniture",lean="agricultural",rival="containment"}},title="Hand axe and seed sack, thursday after closing",body="The hand axe and seed sack share milky water from the water-treatment trial. They were bundled before the clinic stopped answering.",anchor={scene="RDSGrouchos"}},
+-- T0334
+{id="t0334-01",kind="written",pieces={"letter"},where={{place="mapNamed",spot="corpse",lean="agricultural",rival="containment"}},title="Friday before dawn — yellow dust",body="I saved the cloth with yellow dust for you. The field-sprayer test crew passed Friday before dawn; three people felt dizzy, and afterward the radio warned everyone indoors.",anchor={scene="RDSGunmanInBathroom"}},
+-- T0335
+{id="t0335-01",kind="set",pieces={"Bread","CannedCorn"},where={{place="mapNamed",spot="corpse",lean="agricultural",rival="containment"}},title="Wrapped loaf and canned corn, saturday near lunch",body="The wrapped loaf and canned corn share a sweet chemical smell from the crop plot. They were bundled before the lane was closed.",anchor={scene="RDSGunslinger"}},
+-- T0336
+{id="t0336-01",kind="written",pieces={"diary"},where={{place="mapNamed",spot="furniture",lean="agricultural",rival="containment"}},title="Sunday after supper — a bitter residue",body="Sunday after supper: two workers from the greenhouse trial carried a bitter residue. my hands blistered before the phones went dead.",anchor={scene="RDSHenDo"}},
+-- T0337
+{id="t0337-01",kind="set",pieces={"Fertilizer","GardeningSprayEmpty"},where={{place="mapNamed",spot="corpse",lean="agricultural",rival="containment"}},title="Fertilizer sack and empty sprayer, the night shift",body="The fertilizer sack and empty sprayer are tied together. a sharp solvent smell coats one side; a torn strip of road tape covers the other.",anchor={scene="RDSHockeyPsycho"}},
+-- T0338
+{id="t0338-01",kind="written",pieces={"notepad"},where={{place="mapNamed",spot="furniture",lean="agricultural",rival="containment"}},title="the early shift — blue powder",body="Personal note — the early shift: wash off the blue powder left by the fertilizer test crew. the dog refused its water, and I had not yet heard that the buses quit running.",anchor={scene="RDSHouseParty"}},
+-- T0339
+{id="t0339-01",kind="set",pieces={"HandShovel","Bucket"},where={{place="mapNamed",spot="furniture",lean="agricultural",rival="containment"}},title="Hand shovel and wash pail, the late afternoon",body="The hand shovel and wash pail share white crystals from the orchard spray test. They were bundled before the bridge was blocked.",anchor={scene="RDSPokerNight"}},
+-- T0340
+{id="t0340-01",kind="written",pieces={"letter"},where={{place="mapNamed",spot="corpse",lean="agricultural",rival="containment"}},title="the first hot day — red grit",body="I saved the cloth with red grit for you. The pasture study crew passed the first hot day; the flies vanished, and afterward a patrol turned us back.",anchor={scene="RDSPoliceAtHouse"}},
+-- T0341
+{id="t0341-01",kind="set",pieces={"FirstAidKit","WaterBottle"},where={{place="mapNamed",spot="corpse",lean="agricultural",rival="containment"}},title="First-aid kit and water bottle, monday morning",body="The first-aid kit and water bottle share sticky pollen from the seed trial. They were bundled before the county van arrived.",anchor={scene="RDSPrisonEscape"}},
+-- T0342
+{id="t0342-01",kind="written",pieces={"diary"},where={{place="mapNamed",spot="corpse",lean="agricultural",rival="containment"}},title="Tuesday at dusk — black specks",body="Tuesday at dusk: two workers from the pest-control test carried black specks. the garden browned before the checkpoint appeared.",anchor={scene="RDSPrisonEscapeWithPolice"}},
+-- T0343
+{id="t0343-01",kind="set",pieces={"KeyRing","EmptyJar"},where={{place="mapNamed",spot="furniture",lean="agricultural",rival="containment"}},title="Cut potato and sample jar, wednesday before rain",body="The cut potato and sample jar are tied together. an oily film coats one side; a torn strip of road tape covers the other.",anchor={scene="RDSRPGNight"}},
+-- T0344
+{id="t0344-01",kind="written",pieces={"notepad"},where={{place="mapNamed",spot="furniture",lean="agricultural",rival="containment"}},title="Thursday after closing — green flecks",body="Personal note — Thursday after closing: wash off the green flecks left by the water-treatment trial crew. the rats left the shed, and I had not yet heard that the clinic stopped answering.",anchor={scene="RDSRatInfested"}},
+-- T0345
+{id="t0345-01",kind="set",pieces={"Mop","Bucket"},where={{place="mapNamed",spot="furniture",lean="agricultural",rival="containment"}},title="Mop and rinse bucket, friday before dawn",body="The mop and rinse bucket share gray foam from the field-sprayer test. They were bundled before the radio warned everyone indoors.",anchor={scene="RDSRatWar"}},
+-- T0346
+{id="t0346-01",kind="written",pieces={"letter"},where={{place="mapNamed",spot="furniture",lean="agricultural",rival="containment"}},title="Saturday near lunch — milky water",body="I saved the cloth with milky water for you. The crop plot crew passed Saturday near lunch; two hens went still, and afterward the lane was closed.",anchor={scene="RDSResourceGarage"}},
+-- T0347
+{id="t0347-01",kind="set",pieces={"Battery","RadioBlack"},where={{place="mapNamed",spot="corpse",lean="agricultural",rival="containment"}},title="Battery and field radio, sunday after supper",body="The battery and field radio share yellow dust from the greenhouse trial. They were bundled before the phones went dead.",anchor={scene="RDSSkeletonPsycho"}},
+-- T0348
+{id="t0348-01",kind="written",pieces={"diary"},where={{place="mapNamed",spot="corpse",lean="agricultural",rival="containment"}},title="the night shift — a sweet chemical smell",body="the night shift: two workers from the livestock-feed study carried a sweet chemical smell. the creek smelled wrong before the siren began.",anchor={scene="RDSSpecificProfession"}},
+-- T0349
+{id="t0349-01",kind="set",pieces={"Axe","SeedBag"},where={{place="mapNamed",spot="furniture",lean="agricultural",rival="containment"}},title="Hand axe and seed sack, the early shift",body="The hand axe and seed sack are tied together. a bitter residue coats one side; a torn strip of road tape covers the other.",anchor={scene="RDSStagDo"}},
+-- T0350
+{id="t0350-01",kind="written",pieces={"notepad"},where={{place="mapNamed",spot="furniture",lean="agricultural",rival="containment"}},title="the late afternoon — a sharp solvent smell",body="Personal note — the late afternoon: wash off the a sharp solvent smell left by the orchard spray test crew. the mare refused her feed, and I had not yet heard that the bridge was blocked.",anchor={scene="RDSStudentNight"}},
+-- T0351
+{id="t0351-01",kind="set",pieces={"Bread","CannedCorn"},where={{place="mapNamed",spot="corpse",lean="agricultural",rival="containment"}},title="Wrapped loaf and canned corn, the first hot day",body="The wrapped loaf and canned corn share blue powder from the pasture study. They were bundled before a patrol turned us back.",anchor={scene="RDSSuicidePact"}},
+-- T0352
+{id="t0352-01",kind="written",pieces={"letter"},where={{place="mapNamed",spot="furniture",lean="agricultural",rival="containment"}},title="Monday morning — white crystals",body="I saved the cloth with white crystals for you. The seed trial crew passed Monday morning; my eyes began burning, and afterward the county van arrived.",anchor={scene="RDSTinFoilHat"}},
+-- T0353
+{id="t0353-01",kind="set",pieces={"Fertilizer","GardeningSprayEmpty"},where={{place="mapNamed",spot="furniture",lean="agricultural",rival="containment"}},title="Fertilizer sack and empty sprayer, tuesday at dusk",body="The fertilizer sack and empty sprayer share red grit from the pest-control test. They were bundled before the checkpoint appeared.",anchor={scene="RDSZombieLockedBathroom"}},
+-- T0355
+{id="t0355-01",kind="written",pieces={"notebook"},where={{place="mapNamed",spot="corpse",lean="agricultural",rival="containment"}},title="Coat pocket note — after Monday supper",body="My coat pocket entry says the well-water study workers brushed off silver specks. the mice abandoned the bin before the nurse stopped taking calls.",anchor={scene="RDSZombiesEating"}},
+-- T0356
+{id="t0356-01",kind="set",pieces={"Potato","EmptyJar"},where={{place="mapNamed",spot="vehicle",lean="containment",rival="agricultural"}},title="Cut potato with a soil jar at at Tuesday dawn",body="The cut potato with a soil jar are tied in one bundle. a greasy sheen marks the field side; torn warning tape marks the other.",anchor={scene="RVSAmbulanceCrash"}},
+-- T0357
+{id="t0357-01",kind="written",pieces={"photograph"},where={{place="mapNamed",spot="vehicle",lean="agricultural",rival="containment"}},title="Cab note — late Wednesday",body="On the back: “late Wednesday, emerald flecks in the cab after the crop trial. the chickens stopped moving. Later, the back road closed.”",anchor={scene="RVSAnimalTrailerOnRoad"}},
+-- T0358
+{id="t0358-01",kind="set",pieces={"Mop","Bucket"},where={{place="mapNamed",spot="vehicle",lean="agricultural",rival="containment"}},title="Stiff mop with a rinse bucket at before Thursday lunch",body="The stiff mop with a rinse bucket carry brown foam from the greenhouse test. They were packed before the telephone line died.",anchor={scene="RVSBanditRoad"}},
+-- T0359
+{id="t0359-01",kind="written",pieces={"receipt"},where={{place="mapNamed",spot="ground",lean="agricultural",rival="containment"}},title="Weathered bundle note — Friday at closing",body="Feed, soap, and a clean jar, paid cash. My note below says chalky water came from the feed test; the ditch smelled metallic before the noon siren sounded.",anchor={scene="RVSBurntCar"}},
+-- T0360
+{id="t0360-01",kind="set",pieces={"Battery","RadioBlack"},where={{place="mapNamed",spot="vehicle",lean="agricultural",rival="containment"}},title="Battery with a field radio at Saturday before sunrise",body="The battery with a field radio carry mustard-colored dust from the fertilizer trial. They were packed before traffic was turned around.",anchor={scene="RVSCarCrash"}},
+-- T0361
+{id="t0361-01",kind="written",pieces={"notebook"},where={{place="mapNamed",spot="vehicle",lean="agricultural",rival="containment"}},title="Cab note — during the hot afternoon",body="My cab entry says the orchard treatment workers brushed off a cloying orchard smell. the horse kicked away its feed before the crossing was barricaded.",anchor={scene="RVSCarCrashCorpse"}},
+-- T0362
+{id="t0362-01",kind="set",pieces={"Axe","SeedBag"},where={{place="mapNamed",spot="vehicle",lean="containment",rival="agricultural"}},title="Hand axe with a seed sack at on the cold night",body="The hand axe with a seed sack are tied in one bundle. an acrid film marks the field side; torn warning tape marks the other.",anchor={scene="RVSCarCrashDeer"}},
+-- T0363
+{id="t0363-01",kind="written",pieces={"photograph"},where={{place="mapNamed",spot="vehicle",lean="agricultural",rival="containment"}},title="Cab note — the first morning",body="On the back: “the first morning, a medicinal odor in the cab after the experimental seed run. my throat tightened. Later, county trucks reached us.”",anchor={scene="RVSChangingTire"}},
+-- T0364
+{id="t0364-01",kind="set",pieces={"KeyRing","CannedCorn"},where={{place="mapNamed",spot="vehicle",lean="agricultural",rival="containment"}},title="Wrapped bread with canned corn at the second evening",body="The wrapped bread with canned corn carry violet powder from the insecticide test. They were packed before a checkpoint opened.",anchor={scene="RVSConstructionSite"}},
+-- T0365
+{id="t0365-01",kind="written",pieces={"receipt"},where={{place="mapNamed",spot="vehicle",lean="agricultural",rival="containment"}},title="cab receipt before sunday's rain",body="feed, soap, and a clean jar, paid cash. my note below says saltlike grains came from the livestock supplement test; my sister coughed all night before warning tape went up.",anchor={scene="RVSCrashHorde"}},
+-- T0366
+{id="t0366-01",kind="set",pieces={"Fertilizer","GardeningSprayEmpty"},where={{place="mapNamed",spot="ground",lean="agricultural",rival="containment"}},title="fertilizer sack with a drained sprayer at after monday supper",body="the fertilizer sack with a drained sprayer carry rust-colored grit from the well-water study. they were packed before the nurse stopped taking calls.",anchor={scene="RVSDeadEnd"}},
+-- T0367
+{id="t0367-01",kind="written",pieces={"notebook"},where={{place="mapNamed",spot="vehicle",lean="agricultural",rival="containment"}},title="cab note — at tuesday dawn",body="my cab entry says the sprayer trial workers brushed off waxy pollen. the driver grew dizzy before the shelter message aired.",anchor={scene="RVSFlippedCrash"}},
+-- T0368
+{id="t0368-01",kind="set",pieces={"HandShovel","Bucket"},where={{place="mapNamed",spot="vehicle",lean="containment",rival="agricultural"}},title="hand shovel with a scrub bucket at late wednesday",body="the hand shovel with a scrub bucket are tied in one bundle. silver specks marks the field side; torn warning tape marks the other.",anchor={scene="RVSPoliceBlockade"}},
+-- T0369
+{id="t0369-01",kind="written",pieces={"photograph"},where={{place="mapNamed",spot="vehicle",lean="agricultural",rival="containment"}},title="cab note — before thursday lunch",body="on the back: “before thursday lunch, a greasy sheen in the cab after the greenhouse test. my wrists blistered. later, the telephone line died.”",anchor={scene="RVSPoliceBlockadeShooting"}},
+-- T0370
+{id="t0370-01",kind="set",pieces={"FirstAidKit","WaterBottle"},where={{place="mapNamed",spot="vehicle",lean="agricultural",rival="containment"}},title="first-aid kit with a water bottle at friday at closing",body="the first-aid kit with a water bottle carry emerald flecks from the feed test. they were packed before the noon siren sounded.",anchor={scene="RVSRegionalProfessionVehicle"}},
+-- T0371
+{id="t0371-01",kind="written",pieces={"receipt"},where={{place="mapNamed",spot="vehicle",lean="agricultural",rival="containment"}},title="cab note — saturday before sunrise",body="feed, soap, and a clean jar, paid cash. my note below says brown foam came from the fertilizer trial; our cat hid from the water bowl before traffic was turned around.",anchor={scene="RVSRichJerk"}},
+-- T0372
+{id="t0372-01",kind="set",pieces={"Potato","EmptyJar"},where={{place="mapNamed",spot="vehicle",lean="agricultural",rival="containment"}},title="cut potato with a soil jar at during the hot afternoon",body="the cut potato with a soil jar carry chalky water from the orchard treatment. they were packed before the crossing was barricaded.",anchor={scene="RVSRoadKill"}},
+-- T0373
+{id="t0373-01",kind="written",pieces={"notebook"},where={{place="mapNamed",spot="vehicle",lean="agricultural",rival="containment"}},title="cab note — on the cold night",body="my cab entry says the pasture treatment workers brushed off mustard-colored dust. not one fly remained before a cruiser waved us away.",anchor={scene="RVSTrailerCrash"}},
+-- T0374
+{id="t0374-01",kind="set",pieces={"Mop","Bucket"},where={{place="mapNamed",spot="vehicle",lean="containment",rival="agricultural"}},title="stiff mop with a rinse bucket at the first morning",body="the stiff mop with a rinse bucket are tied in one bundle. a cloying orchard smell marks the field side; torn warning tape marks the other.",anchor={scene="RVSUtilityVehicle"}},
+-- T0375
+{id="t0375-01",kind="written",pieces={"photograph"},where={{place="mapNamed",spot="ground",lean="agricultural",rival="containment"}},title="weathered bundle note — the second evening",body="on the back: “the second evening, an acrid film in the weathered bundle after the insecticide test. the tomato plants curled. later, a checkpoint opened.”",anchor={scene="RZSBBQParty"}},
+-- T0376
+{id="t0376-01",kind="set",pieces={"Battery","RadioBlack"},where={{place="mapNamed",spot="ground",lean="agricultural",rival="containment"}},title="battery with a field radio at before sunday's rain",body="the battery with a field radio carry a medicinal odor from the livestock supplement test. they were packed before warning tape went up.",anchor={scene="RZSBaseball"}},
+-- T0377
+{id="t0377-01",kind="written",pieces={"receipt"},where={{place="mapNamed",spot="ground",lean="agricultural",rival="containment"}},title="weathered bundle note — after monday supper",body="feed, soap, and a clean jar, paid cash. my note below says violet powder came from the well-water study; the mice abandoned the bin before the nurse stopped taking calls.",anchor={scene="RZSBeachParty"}},
+-- T0378
+{id="t0378-01",kind="set",pieces={"Axe","SeedBag"},where={{place="mapNamed",spot="ground",lean="agricultural",rival="containment"}},title="hand axe with a seed sack at at tuesday dawn",body="the hand axe with a seed sack carry saltlike grains from the sprayer trial. they were packed before the shelter message aired.",anchor={scene="RZSBurntWreck"}},
+-- T0379
+{id="t0379-01",kind="written",pieces={"notebook"},where={{place="mapNamed",spot="ground",lean="agricultural",rival="containment"}},title="weathered bundle note — late wednesday",body="my weathered bundle entry says the crop trial workers brushed off rust-colored grit. the chickens stopped moving before the back road closed.",anchor={scene="RZSBuryingCamp"}},
+-- T0380
+{id="t0380-01",kind="set",pieces={"Bread","CannedCorn"},where={{place="mapNamed",spot="ground",lean="containment",rival="agricultural"}},title="wrapped bread with canned corn at before thursday lunch",body="the wrapped bread with canned corn are tied in one bundle. waxy pollen marks the field side; torn warning tape marks the other.",anchor={scene="RZSCampsite"}},
+-- T0381
+{id="t0381-01",kind="written",pieces={"photograph"},where={{place="mapNamed",spot="ground",lean="agricultural",rival="containment"}},title="weathered bundle note — friday at closing",body="on the back: “friday at closing, silver specks in the weathered bundle after the feed test. the ditch smelled metallic. later, the noon siren sounded.”",anchor={scene="RZSCharcoalBurner"}},
+-- T0382
+{id="t0382-01",kind="set",pieces={"Fertilizer","GardeningSprayEmpty"},where={{place="mapNamed",spot="ground",lean="agricultural",rival="containment"}},title="fertilizer sack with a drained sprayer at saturday before sunrise",body="the fertilizer sack with a drained sprayer carry a greasy sheen from the fertilizer trial. they were packed before traffic was turned around.",anchor={scene="RZSDean"}},
+-- T0383
+{id="t0383-01",kind="written",pieces={"receipt"},where={{place="mapNamed",spot="ground",lean="agricultural",rival="containment"}},title="weathered bundle note — during the hot afternoon",body="feed, soap, and a clean jar, paid cash. my note below says emerald flecks came from the orchard treatment; the horse kicked away its feed before the crossing was barricaded.",anchor={scene="RZSFishingTrip"}},
+-- T0384
+{id="t0384-01",kind="set",pieces={"KeyRing","Bucket"},where={{place="mapNamed",spot="ground",lean="agricultural",rival="containment"}},title="hand shovel with a scrub bucket at on the cold night",body="the hand shovel with a scrub bucket carry brown foam from the pasture treatment. they were packed before a cruiser waved us away.",anchor={scene="RZSForestCamp"}},
+-- T0385
+{id="t0385-01",kind="written",pieces={"notebook"},where={{place="mapNamed",spot="ground",lean="agricultural",rival="containment"}},title="weathered bundle note — the first morning",body="my weathered bundle entry says the experimental seed run workers brushed off chalky water. my throat tightened before county trucks reached us.",anchor={scene="RZSForestCampEaten"}},
+-- T0386
+{id="t0386-01",kind="set",pieces={"FirstAidKit","WaterBottle"},where={{place="mapNamed",spot="ground",lean="containment",rival="agricultural"}},title="first-aid kit with a water bottle at the second evening",body="the first-aid kit with a water bottle are tied in one bundle. mustard-colored dust marks the field side; torn warning tape marks the other.",anchor={scene="RZSHermitCamp"}},
+-- T0387
+{id="t0387-01",kind="written",pieces={"photograph"},where={{place="mapNamed",spot="ground",lean="agricultural",rival="containment"}},title="weathered bundle note — before sunday's rain",body="on the back: “before sunday's rain, a cloying orchard smell in the weathered bundle after the livestock supplement test. my sister coughed all night. later, warning tape went up.”",anchor={scene="RZSHillbillyHoedown"}},
+-- T0388
+{id="t0388-01",kind="set",pieces={"Potato","EmptyJar"},where={{place="mapNamed",spot="ground",lean="agricultural",rival="containment"}},title="cut potato with a soil jar at after monday supper",body="the cut potato with a soil jar carry an acrid film from the well-water study. they were packed before the nurse stopped taking calls.",anchor={scene="RZSHunterCamp"}},
+-- T0389
+{id="t0389-01",kind="written",pieces={"receipt"},where={{place="mapNamed",spot="corpse",lean="agricultural",rival="containment"}},title="coat pocket note — at tuesday dawn",body="feed, soap, and a clean jar, paid cash. my note below says a medicinal odor came from the sprayer trial; the driver grew dizzy before the shelter message aired.",anchor={scene="RZSMurderScene"}},
+-- T0390
+{id="t0390-01",kind="set",pieces={"Mop","Bucket"},where={{place="mapNamed",spot="ground",lean="agricultural",rival="containment"}},title="stiff mop with a rinse bucket at late wednesday",body="the stiff mop with a rinse bucket carry violet powder from the crop trial. they were packed before the back road closed.",anchor={scene="RZSMusicFest"}},
+-- T0391
+{id="t0391-01",kind="written",pieces={"notebook"},where={{place="mapNamed",spot="ground",lean="agricultural",rival="containment"}},title="weathered bundle note — before thursday lunch",body="my weathered bundle entry says the greenhouse test workers brushed off saltlike grains. my wrists blistered before the telephone line died.",anchor={scene="RZSMusicFestStage"}},
+-- T0392
+{id="t0392-01",kind="set",pieces={"Battery","RadioBlack"},where={{place="mapNamed",spot="ground",lean="containment",rival="agricultural"}},title="battery with a field radio at friday at closing",body="the battery with a field radio are tied in one bundle. rust-colored grit marks the field side; torn warning tape marks the other.",anchor={scene="RZSNastyMattress"}},
+-- T0393
+{id="t0393-01",kind="written",pieces={"photograph"},where={{place="mapNamed",spot="ground",lean="agricultural",rival="containment"}},title="weathered bundle note — saturday before sunrise",body="on the back: “saturday before sunrise, waxy pollen in the weathered bundle after the fertilizer trial. our cat hid from the water bowl. later, traffic was turned around.”",anchor={scene="RZSOccultActivity"}},
+-- T0394
+{id="t0394-01",kind="set",pieces={"Axe","SeedBag"},where={{place="mapNamed",spot="ground",lean="agricultural",rival="containment"}},title="hand axe with a seed sack at during the hot afternoon",body="the hand axe with a seed sack carry silver specks from the orchard treatment. they were packed before the crossing was barricaded.",anchor={scene="RZSOldFirepit"}},
+-- T0396
+{id="t0396-01",kind="written",pieces={"diary"},where={{place="mapNamed",spot="ground",lean="agricultural",rival="containment"}},title="rain under the shelter roof",body="Tuesday: the pasture-test workers slept here with gray foam on their boots. The creek tasted bitter before warning tape appeared across the trail.",anchor={scene="RZSOldShelter"}},
+-- T0397
+{id="t0397-01",kind="set",pieces={"WaterBottle","EmptyJar"},where={{place="mapNamed",spot="ground",lean="agricultural",rival="containment"}},title="cloudy water beside a sample jar",body="A cloudy bottle and sample jar share a waxy green film. A scrap of twine around both still holds treated pasture grass.",anchor={scene="RZSOrphanedFawn"}},
+-- T0398
+{id="t0398-01",kind="written",pieces={"notepad"},where={{place="mapNamed",spot="ground",lean="agricultural",rival="containment"}},title="torn note from the north trail",body="Personal note: the insecticide crew crossed at dawn, leaving yellow dust on the grass. The deer fled before the county trucks reached the trail.",anchor={scene="RZSRangerSmith"}},
+-- T0399
+{id="t0399-01",kind="set",pieces={"Battery","RadioBlack"},where={{place="mapNamed",spot="ground",lean="agricultural",rival="containment"}},title="field radio wrapped in warning tape",body="A fresh battery and field radio are wrapped together. Red field grit fills the speaker; county warning tape covers the tuning dial.",anchor={scene="RZSRockerParty"}},
+-- T0400
+{id="t0400-01",kind="written",pieces={"letter"},where={{place="mapNamed",spot="ground",lean="agricultural",rival="containment"}},title="letter folded beneath the bedroll",body="I kept the gloves with blue powder from the seed trial. Our dog stopped drinking before the road patrol turned us back toward camp.",anchor={scene="RZSSadCamp"}},
 }}

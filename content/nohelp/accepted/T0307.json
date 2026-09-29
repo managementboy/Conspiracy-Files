@@ -1,0 +1,23 @@
+[
+  {
+    "anchor": {
+      "scene": "RBSchool"
+    },
+    "body": "A cloudy water bottle and an empty sample jar share a strip of twine. Pale spray dust remains beneath both, inside the cupboard.",
+    "id": "t0307-01",
+    "kind": "set",
+    "pieces": [
+      "WaterBottle",
+      "EmptyJar"
+    ],
+    "title": "Two jars from the school garden",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

@@ -1,0 +1,23 @@
+[
+  {
+    "anchor": {
+      "scene": "RVSCarCrashDeer"
+    },
+    "body": "The hand axe with a seed sack are tied in one bundle. an acrid film marks the field side; torn warning tape marks the other.",
+    "id": "t0362-01",
+    "kind": "set",
+    "pieces": [
+      "Axe",
+      "SeedBag"
+    ],
+    "title": "Hand axe with a seed sack at on the cold night",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "vehicle"
+      }
+    ]
+  }
+]

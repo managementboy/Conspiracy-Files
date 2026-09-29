@@ -1,0 +1,22 @@
+[
+  {
+    "anchor": {
+      "scene": "RZSOldShelter"
+    },
+    "body": "Tuesday: the pasture-test workers slept here with gray foam on their boots. The creek tasted bitter before warning tape appeared across the trail.",
+    "id": "t0396-01",
+    "kind": "written",
+    "pieces": [
+      "diary"
+    ],
+    "title": "rain under the shelter roof",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  }
+]

@@ -1,0 +1,22 @@
+[
+  {
+    "anchor": {
+      "scene": "RVSCrashHorde"
+    },
+    "body": "feed, soap, and a clean jar, paid cash. my note below says saltlike grains came from the livestock supplement test; my sister coughed all night before warning tape went up.",
+    "id": "t0365-01",
+    "kind": "written",
+    "pieces": [
+      "receipt"
+    ],
+    "title": "cab receipt before sunday's rain",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "vehicle"
+      }
+    ]
+  }
+]

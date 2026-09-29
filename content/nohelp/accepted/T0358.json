@@ -1,0 +1,23 @@
+[
+  {
+    "anchor": {
+      "scene": "RVSBanditRoad"
+    },
+    "body": "The stiff mop with a rinse bucket carry brown foam from the greenhouse test. They were packed before the telephone line died.",
+    "id": "t0358-01",
+    "kind": "set",
+    "pieces": [
+      "Mop",
+      "Bucket"
+    ],
+    "title": "Stiff mop with a rinse bucket at before Thursday lunch",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "vehicle"
+      }
+    ]
+  }
+]

@@ -1,0 +1,22 @@
+[
+  {
+    "anchor": {
+      "scene": "RBTwiggy"
+    },
+    "body": "I saved the cloth with a sweet chemical smell for you. The water-treatment trial crew passed Thursday after closing; the rats left the shed, and afterward the clinic stopped answering.",
+    "id": "t0322-01",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "title": "Thursday after closing — a sweet chemical smell",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

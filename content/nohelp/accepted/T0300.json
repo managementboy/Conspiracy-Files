@@ -1,0 +1,22 @@
+[
+  {
+    "anchor": {
+      "scene": "RBOther"
+    },
+    "body": "before dawn: the crop trial crew brought rinsed gloves. my brother started coughing. I washed everything twice before the county van arrived.",
+    "id": "t0300-01",
+    "kind": "written",
+    "pieces": [
+      "diary"
+    ],
+    "title": "Before dawn: rinsed gloves",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

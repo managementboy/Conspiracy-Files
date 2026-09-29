@@ -1,0 +1,23 @@
+[
+  {
+    "anchor": {
+      "scene": "RBPoliceSiege"
+    },
+    "body": "A hand shovel rests across a wash pail, both striped with yellow dust. The pail smells of crop spray; road tape is knotted through its handle.",
+    "id": "t0303-01",
+    "kind": "set",
+    "pieces": [
+      "HandShovel",
+      "Bucket"
+    ],
+    "title": "Field dust on the wash pail",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

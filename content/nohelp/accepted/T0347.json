@@ -1,0 +1,23 @@
+[
+  {
+    "anchor": {
+      "scene": "RDSSkeletonPsycho"
+    },
+    "body": "The battery and field radio share yellow dust from the greenhouse trial. They were bundled before the phones went dead.",
+    "id": "t0347-01",
+    "kind": "set",
+    "pieces": [
+      "Battery",
+      "RadioBlack"
+    ],
+    "title": "Battery and field radio, sunday after supper",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "corpse"
+      }
+    ]
+  }
+]

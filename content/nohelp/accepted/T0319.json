@@ -1,0 +1,22 @@
+[
+  {
+    "anchor": {
+      "scene": "RBTSSewing"
+    },
+    "body": "Friday: I mended three work shirts from the seed trial. White powder shook from every cuff; my hands blistered before anyone closed the road.",
+    "id": "t0319-01",
+    "kind": "written",
+    "pieces": [
+      "diary"
+    ],
+    "title": "Hemmed cuffs from the trial field",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

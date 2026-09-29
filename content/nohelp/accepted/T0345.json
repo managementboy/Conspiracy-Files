@@ -1,0 +1,23 @@
+[
+  {
+    "anchor": {
+      "scene": "RDSRatWar"
+    },
+    "body": "The mop and rinse bucket share gray foam from the field-sprayer test. They were bundled before the radio warned everyone indoors.",
+    "id": "t0345-01",
+    "kind": "set",
+    "pieces": [
+      "Mop",
+      "Bucket"
+    ],
+    "title": "Mop and rinse bucket, friday before dawn",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]
