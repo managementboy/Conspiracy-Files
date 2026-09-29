@@ -1,0 +1,40 @@
+[
+  {
+    "id": "t0372-01",
+    "kind": "set",
+    "pieces": [
+      "Potato",
+      "EmptyJar"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "vehicle",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "anchor": {
+      "scene": "RVSRoadKill"
+    },
+    "title": "cut potato with a soil jar at during the hot afternoon",
+    "body": "the cut potato with a soil jar carry chalky water from the orchard treatment. they were packed before the crossing was barricaded.",
+    "rival_reading": "Responders could have collected the chalky water while crossing treated land; the note or objects do not prove the program began the emergency.",
+    "gloss": "A personal field trace precedes the visible emergency response.",
+    "axioms": {
+      "containment": [
+        "c-warning",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0372"
+    }
+  }
+]
