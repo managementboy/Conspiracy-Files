@@ -1,0 +1,40 @@
+[
+  {
+    "id": "t0323-01",
+    "kind": "set",
+    "pieces": [
+      "KeyRing",
+      "Bucket"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "furniture",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "anchor": {
+      "scene": "RBWoodcraft"
+    },
+    "title": "Hand shovel and wash pail, friday before dawn",
+    "body": "The hand shovel and wash pail share a bitter residue from the field-sprayer test. They were bundled before the radio warned everyone indoors.",
+    "rival_reading": "Emergency workers could have picked up the same a bitter residue while responding near a field; this personal trace does not prove the trial caused the emergency.",
+    "gloss": "A personal trace connects a farm trial to symptoms before a later restriction.",
+    "axioms": {
+      "containment": [
+        "c-warning",
+        "c-orders"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0323"
+    }
+  }
+]
