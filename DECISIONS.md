@@ -1,3 +1,18 @@
+## DR-20260929-NOHELP-B-OWN-EVIDENCE — both theories stay; B gets its own evidence
+
+Owner decisions, 2026-09-29, after the B accessibility review
+(docs/reviews/NO_HELP_B_ACCESSIBILITY_2026-09-29.md):
+
+1. The theories never had to contradict each other: both are equally
+   possible, as with COVID-19's zoonotic and lab-leak origins. Evidence that
+   fits both is normal.
+2. B is broad: "their farm program went wrong" and "it spread through farms,
+   animals, feed and fields" are both B; its believers may argue either.
+3. Cover-up language in texts is fine.
+4. The balance gap (A-only 367, B-only 166 by read) is closed by adding about
+   140 clues written as B's OWN evidence - how it started and spread - as
+   stock tickets T0428-T0441. No theory change, nothing removed.
+
 ## DR-20260929-NOHELP-GAP-PLAN — after the deep review
 
 Owner decisions, 2026-09-29 (plan: docs/management/NO_HELP_GAP_PLAN_2026-09-29.md):

@@ -926,5 +926,103 @@
   "form": "written",
   "keyRing": false,
   "count": 10
+ },
+ "T0428": {
+  "stock": "mapNamed",
+  "side": "B",
+  "form": "set",
+  "keyRing": false,
+  "count": 10
+ },
+ "T0429": {
+  "stock": "mapNamed",
+  "side": "B",
+  "form": "set",
+  "keyRing": false,
+  "count": 10
+ },
+ "T0430": {
+  "stock": "mapNamed",
+  "side": "B",
+  "form": "set",
+  "keyRing": false,
+  "count": 10
+ },
+ "T0431": {
+  "stock": "mapNamed",
+  "side": "B",
+  "form": "set",
+  "keyRing": false,
+  "count": 10
+ },
+ "T0432": {
+  "stock": "mapNamed",
+  "side": "B",
+  "form": "set",
+  "keyRing": false,
+  "count": 10
+ },
+ "T0433": {
+  "stock": "mapNamed",
+  "side": "B",
+  "form": "set",
+  "keyRing": false,
+  "count": 10
+ },
+ "T0434": {
+  "stock": "mapNamed",
+  "side": "B",
+  "form": "set",
+  "keyRing": false,
+  "count": 10
+ },
+ "T0435": {
+  "stock": "mapNamed",
+  "side": "B",
+  "form": "set",
+  "keyRing": false,
+  "count": 10
+ },
+ "T0436": {
+  "stock": "mapNamed",
+  "side": "B",
+  "form": "written",
+  "keyRing": false,
+  "count": 10
+ },
+ "T0437": {
+  "stock": "mapNamed",
+  "side": "B",
+  "form": "written",
+  "keyRing": false,
+  "count": 10
+ },
+ "T0438": {
+  "stock": "mapNamed",
+  "side": "B",
+  "form": "written",
+  "keyRing": false,
+  "count": 10
+ },
+ "T0439": {
+  "stock": "mapNamed",
+  "side": "B",
+  "form": "written",
+  "keyRing": false,
+  "count": 10
+ },
+ "T0440": {
+  "stock": "mapNamed",
+  "side": "B",
+  "form": "written",
+  "keyRing": false,
+  "count": 10
+ },
+ "T0441": {
+  "stock": "mapNamed",
+  "side": "B",
+  "form": "written",
+  "keyRing": false,
+  "count": 10
  }
 }
