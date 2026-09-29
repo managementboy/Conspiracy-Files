@@ -1,0 +1,53 @@
+[
+  {
+    "anchor": {
+      "map": "WpStashMap11",
+      "mark": 1
+    },
+    "body": "The hardware list is complete, but the security transfer was signed before the building was inspected. The person who kept the key is not listed.",
+    "id": "t0137-01",
+    "kind": "set",
+    "pieces": [
+      "Shotgun",
+      "SheetPaper2"
+    ],
+    "title": "Untouched hardware list",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture",
+        "containers": [
+          "crate",
+          "shelves",
+          "desk",
+          "counter",
+          "cardboardbox",
+          "bin"
+        ]
+      }
+    ],
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "Spiffo's Manager kept shotgun",
+      "source": "map:WpStashMap11"
+    },
+    "gloss": "A security transfer predates the inspection and leaves its key holder unnamed.",
+    "prov": {
+      "batch": "T0137",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A field manager could have secured equipment before a work inspection; the missing name does not establish foreknowledge."
+  }
+]
