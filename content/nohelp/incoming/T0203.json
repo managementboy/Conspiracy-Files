@@ -1,0 +1,41 @@
+[
+  {
+    "anchor": {
+      "print": "UpscaleMobility"
+    },
+    "body": "the paperclip box and hand radio were sealed together but never opened. soot darkens the bundle; clean outlines show it was packed before the fire.",
+    "id": "t0203-01",
+    "kind": "set",
+    "pieces": [
+      "PaperclipBox",
+      "WalkieTalkie1"
+    ],
+    "title": "missing count beside the paperclip box",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ],
+    "rival_reading": "A farm-program crew could have counted routes, repacked tools, or removed ownership marks during hurried field work; the objects do not prove a concealed public response.",
+    "gloss": "A response bundle preserves a missing count, changed route, or erased identity.",
+    "axioms": {
+      "containment": [
+        "c-warning",
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0203"
+    }
+  }
+]
