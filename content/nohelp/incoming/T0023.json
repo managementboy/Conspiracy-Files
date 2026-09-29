@@ -1,0 +1,102 @@
+[
+  {
+    "anchor": {
+      "print": "CircuitalHealing"
+    },
+    "body": "The receiver sat on the repair bench during the evacuation alert, screwdriver beside its charged battery. Dispatch's log says it acknowledged the alert there. The owner signed for it next morning and lost lunch money for the missed shift.",
+    "id": "t0023-01",
+    "kind": "set",
+    "pieces": [
+      "RadioReceiver",
+      "Battery",
+      "Screwdriver"
+    ],
+    "title": "Acknowledged from the bench",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture",
+        "containers": [
+          "crate",
+          "shelves",
+          "desk",
+          "counter",
+          "cardboardbox",
+          "bin"
+        ]
+      }
+    ],
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-warning",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "Need a radio repaired?",
+      "source": "print:CircuitalHealing"
+    },
+    "gloss": "A dispatch log records an acknowledgment from a receiver held for repair during an evacuation alert.",
+    "prov": {
+      "batch": "T0023",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A field monitor could have been under repair during a test transmission, and a charged battery does not prove it was tuned to the right channel."
+  },
+  {
+    "anchor": {
+      "print": "CircuitalHealing"
+    },
+    "body": "The field trial's receiver came back marked 'no fault found,' though it stopped transmitting at the plot. The owner asked to hold the invoice until after harvest; the bench still wants payment.\n\nThey counted the containers before anyone counted who had carried them. I wrote the second number here while I could still remember it.\n\nThere may be a simple reason for the change. Nobody at the next stop could tell us what to do with the first version.",
+    "id": "t0023-02",
+    "kind": "written",
+    "pieces": [
+      "receipt"
+    ],
+    "title": "No fault at the plot",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture",
+        "containers": [
+          "crate",
+          "shelves",
+          "desk",
+          "counter",
+          "cardboardbox",
+          "bin"
+        ]
+      }
+    ],
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-malfunction"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "Over 20 years experience in electronic repair and maintenance.",
+      "source": "print:CircuitalHealing"
+    },
+    "gloss": "A field-trial radio failure and its unpaid repair are recorded together.",
+    "prov": {
+      "batch": "T0023",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A response crew might have borrowed an ordinary radio and returned it with a disputed repair bill; the note does not establish what the field trial measured."
+  }
+]
