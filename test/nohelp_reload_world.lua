@@ -109,12 +109,18 @@ local Sess=require("NHShared/Generated/Session")
 local api=assert(Sess.open(w.campaign.canonical,function(n) w.campaign.canonical=n end))
 local assigned_count=0
 local assigned_ids={}
+-- Ground clues only: since E2 a furniture clue may also take the floor, and
+-- this test's mid-placement reload counts on exactly the ground clues.
+local spotOf={}
+for _,d in ipairs(w.campaign.canonical.case.documents) do spotOf[d.id]=d.spot end
 for id,a in pairs(w.campaign.canonical.assignments) do
+ if spotOf[id]=="ground" then
   assigned_count=assigned_count+1
   local ok,why=api.assign(id,{x=1001+assigned_count,y=1002,z=0,objectIndex=0,containerIndex=0,containerType="floor",sprite="yard",ground=true},1)
   if ok then
     assigned_ids[id]=true
   end
+ end
 end
 assert(assigned_count>=2,"at least 2 clues attempted")
 

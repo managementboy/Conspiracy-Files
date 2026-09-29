@@ -118,13 +118,10 @@ assert(type(retired.salt)=="string" and retired.salt~="" and n>0,"the retired te
 Gates.configure{retired=retired,reserved={names={}}}
 assert(Manifest.validClue(clean()),"a clean placeholder passes the real tripwire")
 
--- A set's text holds at most OBJECT_MAX_CHARS (240), which validClue checks
--- for every clue, gated or not.
-local long=clean(); long.body=string.rep("a",241)
-local ok,_,code=Manifest.validClue(long)
-assert(not ok and code=="TOO_LONG","a set's text over 240 characters is refused")
-long.body=string.rep("a",240); Gates.configure{}
-assert(Manifest.validClue((function() local c=clean(); c.body=string.rep("a ",120):sub(1,239).."."; return c end)()),
-    "240 characters fit")
+-- A set's text has no maximum (owner, 2026-09-29): the survivor says it a
+-- piece at a time (E1).
+Gates.configure{}
+assert(Manifest.validClue((function() local c=clean(); c.body=string.rep("Placeholder words go on. ",200); return c end)()),
+    "a long set text fits")
 
 print("nohelp_clue_gates: ok")

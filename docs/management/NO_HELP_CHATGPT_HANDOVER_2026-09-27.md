@@ -112,6 +112,45 @@ ticket alone later in a plainer form; never copy another ticket's text.
 
 **One go (owner, 2026-09-28):** when Claude opens the remaining tickets, deliver ALL of them (summary tickets and stories, in serial order) without waiting for sign-off or review in between; hand the baton to Claude once, at the end.
 
+**Round after the deep review (owner, 2026-09-29; DR-20260929-NOHELP-GAP-PLAN).**
+New rules for everything written from now on:
+- **No maximum length.** Diaries, letters, notebooks and notepads get real
+  length (several paragraphs; a diary may run many pages). Only the tiny
+  cards (ID card, business card, credit card, parking ticket) stay at about
+  280 characters. A set's text is now **said out loud by the survivor** when
+  inspected, a sentence or two at a time, so it may be longer too.
+- **Containers.** A clue in furniture names **six** container kinds in
+  `where[].containers`: the exact one first, then five fallbacks in order
+  (kinds: `mod-nohelp/common/media/lua/shared/NHShared/Generated/ContainerKinds.lua`,
+  e.g. fridge, freezer, wardrobe, dresser, desk, filing cabinet
+  (`filingcabinet`), crate, bin, dumpster, locker, toolcabinet, shelves...).
+  If none is there the game uses any container, then a body, then the floor.
+  Spots: furniture (with containers), vehicle, corpse, mailbox, ground. The
+  floor is for what truly belongs outside; under 15% of all clues may lie
+  on the floor (progress line `floor p%`).
+
+The round, in this order, all in one go, one commit per ticket:
+1. **Scene tickets with `addSide`** (122, recipes in `recipes.json`):
+   deliver the whole ticket again, every accepted row unchanged, plus one
+   new clue for the scene leaning the recipe's `addSide` (same scene anchor
+   and spot as the existing row). The check returns a delivery that drops a
+   row (`RECIPE_KEEP`) or lacks the side (`RECIPE_SIDES`).
+2. **Recall R2** (446 clues, `recalls.json`): one replacement per recalled
+   id, under the same id, only the recalled rows in the delivery (as in R1).
+   Each id lists its fixes: `spot` (move it off the floor into the right
+   container, six kinds named; keep it on the ground only when it truly
+   lies outside), `title` (a new title that opens differently; the check
+   refuses an opening four other clues already use, `RECALL_TITLE`),
+   `longer` (at least twice as long, `RECALL_LONGER`; diaries, letters and
+   notebooks much longer). Keep the form and aim at the listed side. Do a
+   scene ticket's recall after its `addSide` delivery (step 1).
+3. **Stock tickets T0408-T0427** (new): 10 clues each, **no anchor**, place
+   `mapNamed`, general enough to fit any place a map or flyer marks (a
+   building, a lot, a roadside), each with its six containers. The recipe
+   gives side and form (12 set tickets, 8 written). The game uses them to
+   give every marked place its full number of clues and both sides.
+Baton to CLAUDE with REVIEW once, at the end.
+
 **Map completion and balance (owner, 2026-09-29).** Ten map tickets have a
 clue for only part of their map (progress line `maps x/125`: every mark and
 note of a map needs an accepted clue anchored to it). Their recipes say

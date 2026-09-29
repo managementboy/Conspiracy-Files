@@ -699,37 +699,11 @@ end
 -- copies and validates the whole world record.
 R.MAP_NEAR_TILES=100
 local mapQueue,mapQueued={},{}
--- The maps marking a place, each once, in the static order MapSites gives.
-local function designsOf(entry)
-    local out,seen={},{}
-    for _,m in ipairs(entry.marks or {}) do
-        local d=m.design or (m.print and "print:"..m.print)
-        if d and not seen[d] then seen[d]=true; out[#out+1]=d end
-    end
-    return out
-end
--- A big marked area's own map marks (their `mark` numbers, never the
--- annotation notes), when one map alone marks it: each such mark gets its own
--- minimum of clues (AreaCase.trailFor, owner 2026-09-27). Nil otherwise.
-local function ownMarksOf(entry,designs)
-    if entry.kind~="area" or #designs~=1 then return nil end
-    local out,seen={},{}
-    for _,m in ipairs(entry.marks or {}) do
-        if m.design==designs[1] and m.mark and not seen[m.mark] then seen[m.mark]=true; out[#out+1]=m.mark end
-    end
-    return #out>=2 and out or nil
-end
+-- The maps, own marks and anchor keys of a place: Generated/MapSiteArgs,
+-- shared with the offline progress check (E7).
+local MapSiteArgs=require("NHShared/Generated/MapSiteArgs")
+local designsOf,ownMarksOf,anchorsOf=MapSiteArgs.designsOf,MapSiteArgs.ownMarksOf,MapSiteArgs.anchorsOf
 R.ownMarksOf=ownMarksOf
--- The keys of every mark naming a place (Manifest.markKey), so a clue
--- anchored to one of them goes there and nowhere else (AreaCase.anchorPool).
-local function anchorsOf(entry)
-    local out,seen={},{}
-    for _,m in ipairs(entry.marks or {}) do
-        local k=Manifest.markKey(m)
-        if k and not seen[k] then seen[k]=true; out[#out+1]=k end
-    end
-    return out
-end
 R.anchorsOf=anchorsOf
 -- The site row the world record keeps, in the Catalog's shape. Nothing was
 -- observed there, so its storage is "unknown" (Session.unobserved).
@@ -1004,6 +978,15 @@ function R.inspect(item,inPlace)
     -- document would let a player find every clue by hovering, which would
     -- replace the investigation with a sweep of the furniture.
     pcall(function() item:setTooltip("Tooltip_NHShared_Recorded") end)
+    -- Its words, said out loud, on every Inspect (DR-20260929-NOHELP-GAP-PLAN).
+    if voice and voice.sayClue then
+        for _,doc in ipairs(root.case.documents or {}) do
+            if doc.id==md.cfGeneratedId then
+                if type(doc.body)=="string" and doc.body~="" then pcall(voice.sayClue,doc.title,doc.body) end
+                break
+            end
+        end
+    end
     return true
 end
 function R.subject(item)
@@ -1261,7 +1244,9 @@ end
 -- then the rest of the area (MarkedArea.window). The cost per step is the
 -- same as anywhere; the attempt count is session-only, like the ground cursor.
 local windowCursor={}
-local function boundsScan(site,done,accept,salt,searchedOk)
+-- `prefer` (optional, E2): container kinds in order of preference; the
+-- first one present wins, then any container the scan accepts.
+local function boundsScan(site,done,accept,salt,searchedOk,prefer)
     local b=site.bounds
     local kinds={}; for _,kind in ipairs(site.containerTypes) do kinds[kind]=true end
     -- A place decided from afar (a map's mark) observed nothing: any fixed
@@ -1278,13 +1263,15 @@ local function boundsScan(site,done,accept,salt,searchedOk)
     end
     local x1,y1,x2,y2=walk.x1-margin,walk.y1-margin,walk.x2+margin,walk.y2+margin
     local x,y,objects,oi,ci=x1,y1,nil,0,0
-    local pool=StorageChoices.new()
+    local pool=StorageChoices.new(prefer)
+    local rankOf={}
+    for r,kind in ipairs(prefer or {}) do rankOf[kind]=rankOf[kind] or r end
     return function()
         if y>=y2 then
             local list=StorageChoices.finish(pool)
             local i=StorageChoices.choose(list,salt or site.id,function(n)
                 return not accept or accept(list[n])
-            end)
+            end,prefer and function(n) return rankOf[list[n].containerType] or #prefer+1 end)
             done(i and list[i]); return true
         end
         if objects==nil then
@@ -1302,7 +1289,8 @@ local function boundsScan(site,done,accept,salt,searchedOk)
         local c=o:getContainerByIndex(ci)
         local sprite=o:getSprite(); local name=sprite and sprite:getName()
         local inside=x>=b.x1 and x<b.x2 and y>=b.y1 and y<b.y2
-        if c and name and Storage.fixedKind(c:getType()) and (any or kinds[c:getType()]) and (inside or c:getType()==Storage.MAILBOX) then
+        if c and name and Storage.fixedKind(c:getType()) and (any or kinds[c:getType()])
+            and (inside or c:getType()==Storage.MAILBOX or Session.outdoorSite(site)) then
             local found={x=x,y=y,z=b.z,objectIndex=oi,containerIndex=ci,containerType=c:getType(),sprite=name}
             local fresh=FixedContainers.fresh(c,searchedOk)
             if fresh and (not accept or accept(found)) and World.resolve(found)==c then
@@ -1818,6 +1806,9 @@ end
 -- trigger's attempt, run the moment the survivor enters the area's ring.
 local function filler(api,onlyArea)
     local id,site,scan,target,bodyScan,carrier,indexed,doc,distance,groundWhy,areaClue
+    -- E2: a furniture or mailbox clue with nothing of its kind free falls back
+    -- to a body nearby, then the floor (`floorTried` once the floor was scanned).
+    local spentKeys,takenKeys,floorTried
     -- A clue that could not be placed this attempt, said with where it is
     -- and how far the survivor is from its area.
     local function miss(why)
@@ -1874,6 +1865,7 @@ local function filler(api,onlyArea)
             end
             if not indexed then
                 local taken=usedPhysicalKeys()
+                spentKeys,takenKeys=type(root.spent)=="table" and root.spent or {},taken
                 -- Within a place the spots are the world's seeded choice, in
                 -- no layout order (owner, 2026-09-27).
                 local accept=function(candidate)
@@ -1900,11 +1892,12 @@ local function filler(api,onlyArea)
                     -- furniture); Session.assign refuses anything else, so a
                     -- container of the wrong kind is never even chosen.
                     -- A drawer searched earlier may take a No Help clue.
+                    local prefer=doc and (doc.containers or (doc.spot=="mailbox" and {Storage.MAILBOX}))
                     scan=boundsScan(site,function(t) target=t end,
                         function(candidate)
                             return not taken[Session.physicalKey(candidate)] and Session.intentMatches(doc,candidate)
                                 and not holdsProps(candidate,site.avoidProps)
-                        end,id,areaClue)
+                        end,id,areaClue,prefer or nil)
                 end
             end
         end
@@ -1949,9 +1942,16 @@ local function filler(api,onlyArea)
                 miss("no-confirmed-vehicle")
                 return true
             end
+            local fallback=doc and (doc.spot=="furniture" or doc.spot=="mailbox")
+            if fallback and floorTried then
+                declinePlacement("no container, body or floor free at the area for "..tostring(id))
+                miss("no-"..tostring(doc.spot).."-no-fallback")
+                return true
+            end
             -- A No Help clue that names a spot other than a body waits for a
-            -- spot of its own kind, and a body is never its fallback.
-            if doc and doc.spot~=nil and doc.spot~="corpse" then
+            -- spot of its own kind; a furniture or mailbox clue falls back to a
+            -- body and then the floor (E2) instead.
+            if doc and doc.spot~=nil and doc.spot~="corpse" and not fallback then
                 declinePlacement("no free "..tostring(doc.spot).." spot at the area for "..tostring(id))
                 if doc.spot=="ground" and groundWhy and groundWhy~="" then
                     CFLog.write("d","skip",{doc=id,area=site.id,distance=distance,refused=groundWhy,why="no-ground"})
@@ -1960,7 +1960,7 @@ local function filler(api,onlyArea)
             end
             -- A body clue of the world record is not held to the one-mobile-
             -- clue-per-case cap: the whole world is one record.
-            if not (doc and doc.spot=="corpse") and not Session.mobileAllowed(api.snapshot(),id) then
+            if not (doc and (doc.spot=="corpse" or fallback)) and not Session.mobileAllowed(api.snapshot(),id) then
                 -- Debug, not info: this is the ordinary state of an open order
                 -- and would otherwise be a line every two seconds. Named all
                 -- the same (Log.declines), so a check standing at the site can
@@ -1971,6 +1971,14 @@ local function filler(api,onlyArea)
             if not bodyScan then bodyScan=carrierScanFor(site,function(entry) carrier=entry end,doc and doc.outfit) end
             if not carrier then
                 if bodyScan() then
+                    if not carrier and fallback then
+                        -- No body either: the floor, scanned from the next step.
+                        floorTried=true
+                        scan=groundScan(site,function(t) target=t end,function(candidate)
+                            return not takenKeys[Session.physicalKey(candidate)] and Session.intentMatches(doc,candidate)
+                        end,id,{spent=spentKeys or {},used=takenKeys or {}})
+                        return false
+                    end
                     if not carrier then
                         declinePlacement("no free container at the site for "..tostring(id).." and no body nearby to carry it")
                         CFLog.write("d","skip",{doc=id,why="no-containers"}); return true

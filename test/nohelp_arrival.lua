@@ -35,7 +35,7 @@ assert(far and far:find("d>R.ARRIVE_TILES",1,true),"and a picked clue whose area
 local filler=src:match("local function filler%(api,onlyArea%).-\nend\n")
 assert(filler,"the filler takes an optional area")
 assert(filler:find("FixedContainers.fresh(destination,areaClue)",1,true),"a No Help clue's final check lets a searched drawer through")
-assert(filler:find("end,id,areaClue)",1,true),"and so does its container scan")
+assert(filler:find("end,id,areaClue,prefer or nil)",1,true),"and so does its container scan")
 assert(filler:find("if not areaClue or open then",1,true),"a closed container needs no distance guard")
 assert(filler:find("hidden=hiddenFromSurvivor(target)",1,true),"open ground and a body only out of sight")
 assert(filler:find("if not hiddenFromSurvivor(carrier) then return false end",1,true),"a body is chosen only out of sight")

@@ -17,7 +17,9 @@ local Trails=require("NHShared/Generated/Trails")
 local Scenes=require("NHShared/Generated/VanillaScenes")
 local M={KIND="nohelp-areas",SCHEMA=1,CASE_ID="nohelp:world"}
 M.MAX_TITLE=120
-M.MAX_BODY=8000
+-- Texts have no maximum (owner, 2026-09-29); this only bounds a corrupt save,
+-- at a diary of a hundred full pages (DocumentPages).
+M.MAX_BODY=70000
 
 local function set(list) local out={}; for _,v in ipairs(list) do out[v]=true end; return out end
 local LEAN,PLACE,SPOT=set(Manifest.LEANS),set(Manifest.PLACES),set(Manifest.SPOTS)
@@ -67,7 +69,8 @@ end
 -- has it; a placeholder clue gets a neutral placeholder, never invented story.
 function M.docFrom(pick,clue,areaId)
     local doc={id=M.docId(areaId,pick.clue,pick.copy),locationId=areaId,clue=pick.clue,copy=pick.copy,
-        lean=pick.lean,rival=pick.rival,spot=pick.spot,person=clue.person,outfit=pick.outfit,anchor=copy(clue.anchor)}
+        lean=pick.lean,rival=pick.rival,spot=pick.spot,person=clue.person,outfit=pick.outfit,anchor=copy(clue.anchor),
+        containers=copy(pick.containers)}
     if clue.kind=="set" then
         doc.kind=clue.pieces[1]
         doc.members=membersOf(clue.pieces)
@@ -226,13 +229,17 @@ end
 -- "print:P"), or nil for a place no map or flyer marks. The rule:
 --   * no clue in the list has an anchor: the list, untouched (so the picker's
 --     choices are exactly what they were before anchors existed);
---   * a place some anchored clue names: ONLY those clues - its map's story is
---     told there and nowhere else, and generic clues do not dilute it;
+--   * a place some anchored clue names: those clues first - its map's story
+--     is told there and nowhere else - and the unanchored ones only as stock
+--     (below);
 --   * any other place: only the clues with no anchor. An anchored clue never
 --     lands at a place its map or flyer does not mark, and a scene-anchored
 --     clue only ever goes to its scene (M.decideScene).
 -- Unanchored clues fill a marked place only while no clue is anchored to it,
 -- so a map with written clues and a map still unwritten both work.
+-- THE STOCK (E5, DR-20260929-NOHELP-GAP-PLAN): at a place with anchored
+-- clues, the unanchored ones come back second, as a stock the picker draws on
+-- only when the anchored ones cannot give the place its number or both sides.
 function M.anchorPool(clues,keys)
     local any=false
     for _,c in ipairs(clues) do if c.anchor~=nil then any=true; break end end
@@ -244,7 +251,7 @@ function M.anchorPool(clues,keys)
         if c.anchor==nil then plain[#plain+1]=c
         elseif c.anchor.scene==nil and here[Manifest.anchorKey(c.anchor)] then anchored[#anchored+1]=c end
     end
-    if #anchored>0 then return anchored end
+    if #anchored>0 then return anchored,plain end
     return plain
 end
 
@@ -276,12 +283,13 @@ function M.decide(args)
     if not PLACE[args.place] then return nil,"not an interesting place" end
     local areaIds={}; for _,a in ipairs(case.areas) do areaIds[a.id]=true end
     if areaIds[site.id] then return nil,"decided" end
-    local clues=M.anchorPool(args.clues or Manifest.clues,args.anchors)
+    local clues,stock=M.anchorPool(args.clues or Manifest.clues,args.anchors)
     local byId={}; for _,c in ipairs(clues) do byId[c.id]=c end
+    for _,c in ipairs(stock or {}) do byId[c.id]=c end
     local trail,lean=M.trailFor(case.seed,args.designs,site.id,args.marks)
     if args.designs~=nil and not trail then return nil,"unknown map design" end
     lean=lean or {}
-    local picks,short=Pick.choose{clues=clues,area={id=site.id,place=args.place},
+    local picks,short=Pick.choose{clues=clues,stock=stock,area={id=site.id,place=args.place},
         ledger=case.ledger,seed=case.seed,version=args.version,
         favour=lean.favour,rivalMin=lean.rivalMin,minCount=lean.minCount}
     if #picks==0 then return nil,"empty" end
@@ -329,11 +337,16 @@ function M.decideScene(args)
     local areaIds={}; for _,a in ipairs(case.areas) do areaIds[a.id]=true end
     if areaIds[site.id] then return nil,"decided" end
     local spot=Scenes.spotFor(args.kind)
-    local lean=Scenes.lean(case.seed,site.id,args.kind)
+    local drawn=Scenes.lean(case.seed,site.id,args.kind)
     local row=Scenes.get(args.kind)
     local placed=(case.ledger.scene or {}).placed or {}
-    local best
-    for _,c in ipairs(args.clues or Manifest.clues) do
+    -- The world's lean first; when nothing is written for it, the other side
+    -- (E6, DR-20260929-NOHELP-GAP-PLAN): a scene is never left empty only
+    -- because the draw fell on the side without a clue.
+    local best,lean
+    for _,try in ipairs({drawn,drawn=="containment" and "agricultural" or "containment"}) do
+      lean=try
+      for _,c in ipairs(args.clues or Manifest.clues) do
         local copies=placed[c.id] or 0
         if type(c.anchor)=="table" and c.anchor.scene==args.kind and (copies==0 or c.kind=="set") then
             for _,w in ipairs(c.where) do
@@ -348,6 +361,8 @@ function M.decideScene(args)
                 end
             end
         end
+      end
+      if best then break end
     end
     if not best then return nil,"empty" end
     local next=extend(case)
@@ -474,6 +489,14 @@ function M.validate(case)
         if d.person~=nil and (type(d.person)~="string" or #d.person==0 or #d.person>40) then return false,"invalid person" end
         if d.outfit~=nil and (d.spot~="corpse" or not Outfits.isClass(d.outfit)) then return false,"invalid outfit hint" end
         if d.mark~=nil and (not integer(d.mark) or d.mark<1) then return false,"invalid own mark" end
+        -- Container kinds by preference (E2). Shape only, like the anchor: a
+        -- later game update must not make a saved world unreadable.
+        if d.containers~=nil then
+            if d.spot~="furniture" or type(d.containers)~="table" or #d.containers<1 or #d.containers>6 then return false,"invalid containers" end
+            for k,v in pairs(d.containers) do
+                if type(k)~="number" or type(v)~="string" or v=="" or #v>80 then return false,"invalid containers" end
+            end
+        end
         -- The anchor a clue was written for, as the clue list gave it. Only
         -- its shape is checked: a later MapSites must not break a save.
         if d.anchor~=nil then
@@ -512,7 +535,7 @@ function M.validate(case)
             if k and not Kinds.fits(d.kind,d.body) then return false,"a clue's text does not fit its carrier" end
         end
         for k in pairs(d) do
-            if not ({id=1,locationId=1,clue=1,copy=1,lean=1,rival=1,spot=1,kind=1,members=1,quantity=1,title=1,body=1,person=1,outfit=1,mark=1,anchor=1})[k] then
+            if not ({id=1,locationId=1,clue=1,copy=1,lean=1,rival=1,spot=1,kind=1,members=1,quantity=1,title=1,body=1,person=1,outfit=1,mark=1,anchor=1,containers=1})[k] then
                 return false,"unknown clue field "..tostring(k)
             end
         end

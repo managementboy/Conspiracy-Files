@@ -140,9 +140,15 @@ function S.intentMatches(doc,target)
         if doc.spot=="ground" then return groundTarget(t) end
         if doc.spot=="corpse" then return carrierTarget(t) and t.carrierKind=="corpse" end
         if doc.spot=="vehicle" then return vehicleTarget(t) end
-        if doc.spot=="mailbox" then return type(t)=="table" and outdoorKind(t.containerType) and not S.isMobile(t) and not groundTarget(t) end
-        if doc.spot=="furniture" then
-            return type(t)=="table" and not S.isMobile(t) and not groundTarget(t) and not outdoorKind(t.containerType)
+        -- A furniture or mailbox clue is never lost for want of its kind
+        -- (E2, owner 2026-09-29): its named containers first, then any
+        -- container there, then a body nearby, then the floor. All of these
+        -- are its spot; the runtime tries them in that order.
+        if doc.spot=="mailbox" or doc.spot=="furniture" then
+            if type(t)~="table" then return false end
+            if groundTarget(t) then return true end
+            if carrierTarget(t) then return t.carrierKind=="corpse" end
+            return not S.isMobile(t)
         end
         return false
     end
@@ -167,6 +173,13 @@ function S.mobileAllowed(root,id)
     local a=type(root)=="table" and root.assignments and root.assignments[id]
     if not a or S.isMobile(a.target) then return false end
     return S.mobileCount(root)<S.MOBILE_PER_CASE
+end
+-- AN OUTDOOR MAP PLACE (E3, owner 2026-09-29): a map's mark or a flyer's
+-- place with no building of its own. Its containers are searched twelve tiles
+-- beyond its box, as a mailbox is at a house: a bin across the lot counts.
+function S.outdoorSite(site)
+    return type(site)=="table" and type(site.id)=="string" and S.unobserved(site)
+        and (site.id:find("^mark:")~=nil or site.id:find("^flyer:")~=nil)
 end
 -- A PLACE DECIDED FROM AFAR (task 3 plan, step 4). A vanilla map's mark is
 -- decided when the map is read or the survivor heads toward it, usually from
@@ -242,7 +255,7 @@ function S.target(t,site)
     -- Inside the footprint, unless it is a mailbox at the gate (above), which
     -- gets the driveway's twelve tiles. The kind must still be one the scan
     -- actually observed at this site, exactly as before.
-    local margin=outdoorKind(t.containerType) and S.OUTDOOR_RADIUS or 0
+    local margin=(outdoorKind(t.containerType) or S.outdoorSite(site)) and S.OUTDOOR_RADIUS or 0
     if t.x<b.x1-margin or t.x>=b.x2+margin or t.y<b.y1-margin or t.y>=b.y2+margin or t.z~=b.z then return false end
     if S.unobserved(site) then return StorageChoices.fixedKind(t.containerType) end
     for _,kind in ipairs(site.containerTypes) do if kind==t.containerType then return true end end

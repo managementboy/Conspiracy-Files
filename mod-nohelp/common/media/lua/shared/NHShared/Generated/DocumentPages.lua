@@ -9,7 +9,9 @@
 -- Pure: no PZ dependency, so the split is testable without launching a game.
 local PlaceNames=require("NHShared/Generated/PlaceNames")
 local H=require("NHShared/Headings")
-local M={MAX_PAGE_CHARS=700,MAX_PAGES=8}
+-- A hundred pages: texts have no maximum (owner, 2026-09-29); the item is
+-- given as many pages as its text needs (GeneratedRuntime.writePages).
+local M={MAX_PAGE_CHARS=700,MAX_PAGES=100}
 -- Headings the mod adds around the document's own text. Everything from the
 -- first of these onwards is ours.
 local OURS=H.OURS

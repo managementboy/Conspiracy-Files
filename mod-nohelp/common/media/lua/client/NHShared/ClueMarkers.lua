@@ -41,23 +41,31 @@ local function titleOf(root,id)
 end
 local function valid(r)
  local ok=V.validateStructure(r)
- if not ok or type(r)~="table" or r.schema~=1 or type(r.records)~="table" or V.estimateEncodedBytes(r)>24000 then return false end
+ -- No count or size ceiling (E8; owner, 2026-09-27 "No limit at all" and
+ -- 2026-09-29 "markers stay"): a world has hundreds of clues, and the old
+ -- 64-record, 24 kB ceiling threw once it was full. Shape is still checked.
+ if not ok or type(r)~="table" or r.schema~=1 or type(r.records)~="table" then return false end
  for k in pairs(r) do if k~="schema" and k~="records" then return false end end
- local n=0
  for id,v in pairs(r.records) do
-  n=n+1
-  if n>64 or type(id)~="string" or #id>160 or type(v)~="table" or type(v.map)~="string" or #v.map>1000 or type(v.written)~="boolean" then return false end
+  if type(id)~="string" or #id>160 or type(v)~="table" or type(v.map)~="string" or #v.map>1000 or type(v.written)~="boolean" then return false end
   for k in pairs(v) do if k~="x" and k~="y" and k~="z" and k~="map" and k~="written" and k~="ink" then return false end end
   if v.ink~=nil and (type(v.ink)~="string" or not inks[v.ink] or not v.written) then return false end
   for _,k in ipairs({"x","y","z"}) do if type(v[k])~="number" or v[k]~=math.floor(v[k]) or math.abs(v[k])>100000 then return false end end
  end
  return true
 end
+-- Every write replaces the whole record table (copy-on-write), so a table
+-- already checked needs no second walk: the map overlay reads this every
+-- frame, and hundreds of records must not be validated sixty times a second.
+local checked
 local function read()
  local p=getPlayer();if not p then return end
  local r=p:getModData()[TAG]
  if r==nil then return {schema=1,records={}} end
- if not valid(r) then error("saved marker records refused") end
+ if r~=checked then
+  if not valid(r) then error("saved marker records refused") end
+  checked=r
+ end
  return r
 end
 local function copy(r)
@@ -210,7 +218,7 @@ end
 -- Forget the marks of documents that no longer belong to any case. Only a
 -- reshuffle (GeneratedRuntime.reshuffle) has a reason to call this: its cases
 -- are gone, and their records would otherwise sit in the store forever, eating
--- the 64-record ceiling whose read() throws rather than degrades.
+-- the store for nothing.
 function M.forget(ids)
  if type(ids)~="table" then return 0 end
  local r=read(); if not r then return 0 end

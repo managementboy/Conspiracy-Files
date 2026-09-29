@@ -13,6 +13,7 @@
 local Catalogue=require("NHShared/Generated/ObjectCatalogue")
 local Kinds=require("NHShared/Generated/EvidenceKinds")
 local Outfits=require("NHShared/BodyOutfitObservations")
+local ContainerKinds=require("NHShared/Generated/ContainerKinds")
 local Gates=require("NHShared/Mystery/ClueGates")
 local M={}
 
@@ -196,9 +197,10 @@ function M.validClue(c)
     elseif #c.pieces~=1 then
         return false,c.id..": a written clue is carried on one item","BAD_CARRIER"
     end
-    -- A set's text is read off an ordinary object: at most OBJECT_MAX_CHARS.
-    if c.kind=="set" and c.body~=nil and (type(c.body)~="string" or #c.body>Kinds.OBJECT_MAX_CHARS) then
-        return false,c.id..": a set's text holds at most "..Kinds.OBJECT_MAX_CHARS.." characters","TOO_LONG"
+    -- A set's text is said by the survivor on Inspect, a piece at a time
+    -- (E1): no maximum (owner, 2026-09-29, DR-20260929-NOHELP-GAP-PLAN).
+    if c.kind=="set" and c.body~=nil and (type(c.body)~="string" or c.body=="") then
+        return false,c.id..": a set's text is a string","SCHEMA"
     end
     if type(c.where)~="table" or #c.where<1 then return false,c.id..": goes nowhere","SCHEMA" end
     -- A person thread (owner, 2026-09-27): clues about one person share a
@@ -217,6 +219,15 @@ function M.validClue(c)
         if w.outfit~=nil then
             if w.spot~="corpse" then return false,c.id..": only a body spot takes an outfit hint","SCHEMA" end
             if not Outfits.isClass(w.outfit) then return false,c.id..": unknown outfit class "..tostring(w.outfit),"SCHEMA" end
+        end
+        -- The container kinds it would be found in, in order (E2, owner
+        -- 2026-09-29): the exact one, then up to five fallbacks; a furniture
+        -- spot only.
+        if w.containers~=nil then
+            if w.spot~="furniture" then return false,c.id..": only a furniture spot names containers","SCHEMA" end
+            if not ContainerKinds.valid(w.containers) then
+                return false,c.id..": containers are 1-"..ContainerKinds.MAX.." known container kinds, no repeats","BAD_CONTAINER"
+            end
         end
     end
     if c.anchor~=nil then
