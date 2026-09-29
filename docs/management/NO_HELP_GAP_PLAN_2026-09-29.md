@@ -28,7 +28,7 @@ MapMediaRuntime's R.subject, not GeneratedRuntime's); the rest hold.
   type when an anchored site has fewer than its minimum or one side only
   (AreaCase.anchorPool).
 - [ ] **E6 Scenes pick a side that has a clue** (VanillaScenes lean choice).
-- [ ] **E8 Map markers scale with the game.** Markers stay (owner). Their
+- [x] **E8 Map markers scale with the game.** (2026-09-29: ceiling removed, shape kept, unchanged table not re-walked per frame; test/nohelp_markers_scale.lua; native check pending) Markers stay (owner). Their
   store refuses more than 64 records or 24 KB (ClueMarkers.lua valid()),
   far below 518 clues: lift the ceiling and test a world with hundreds of
   finds.
