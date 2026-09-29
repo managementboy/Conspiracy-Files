@@ -1,0 +1,344 @@
+[
+  {
+    "id": "t0435-01",
+    "kind": "set",
+    "pieces": [
+      "Map",
+      "SeedBag",
+      "Pencil"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "vehicle",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "title": "The last feed run",
+    "body": "The vehicle map has pencil ticks at three stops. Grain caught in its fold matches the dark grain in the half empty bag.",
+    "rival_reading": "A failure of the later response could still have left this exposure unaddressed.",
+    "gloss": "An ordinary trace links a farm exposure to a distinct observed outcome: the last feed run.",
+    "axioms": {
+      "containment": [
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-pathway",
+        "a-timing"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0435"
+    }
+  },
+  {
+    "id": "t0435-02",
+    "kind": "set",
+    "pieces": [
+      "Bucket",
+      "Soap2",
+      "Gloves_Dish"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "vehicle",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "title": "The shared wash bucket",
+    "body": "Soap floats in green wash water. Two different work gloves are jammed into the same bucket after a field shift.",
+    "rival_reading": "A failure of the later response could still have left this exposure unaddressed.",
+    "gloss": "An ordinary trace links a farm exposure to a distinct observed outcome: the shared wash bucket.",
+    "axioms": {
+      "containment": [
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-pathway",
+        "a-timing"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0435"
+    }
+  },
+  {
+    "id": "t0435-03",
+    "kind": "set",
+    "pieces": [
+      "Map",
+      "CarrotSeed"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "vehicle",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "title": "The change of route",
+    "body": "This map bends along a farm road. The opened packet in its crease leaked only after the route crosses the fields.",
+    "rival_reading": "A failure of the later response could still have left this exposure unaddressed.",
+    "gloss": "An ordinary trace links a farm exposure to a distinct observed outcome: the change of route.",
+    "axioms": {
+      "containment": [
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-pathway",
+        "a-timing"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0435"
+    }
+  },
+  {
+    "id": "t0435-04",
+    "kind": "set",
+    "pieces": [
+      "Tarp",
+      "SeedBag"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "vehicle",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "title": "The clean truck bed",
+    "body": "The tarp has a rectangle of untouched cloth where a crate stood. All around it lies the pale dust from the load.",
+    "rival_reading": "A failure of the later response could still have left this exposure unaddressed.",
+    "gloss": "An ordinary trace links a farm exposure to a distinct observed outcome: the clean truck bed.",
+    "axioms": {
+      "containment": [
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-pathway",
+        "a-timing"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0435"
+    }
+  },
+  {
+    "id": "t0435-05",
+    "kind": "set",
+    "pieces": [
+      "Spoon",
+      "Newspaper"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "vehicle",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "title": "The spare feed scoop",
+    "body": "The spoon is wrapped in newspaper dated before the road closures. Dark feed dust has settled inside the fold.",
+    "rival_reading": "A failure of the later response could still have left this exposure unaddressed.",
+    "gloss": "An ordinary trace links a farm exposure to a distinct observed outcome: the spare feed scoop.",
+    "axioms": {
+      "containment": [
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-pathway",
+        "a-timing"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0435"
+    }
+  },
+  {
+    "id": "t0435-06",
+    "kind": "set",
+    "pieces": [
+      "Rope",
+      "SeedBag"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "vehicle",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "title": "The split load",
+    "body": "A knotted rope divides the bags. The sack on one side has a green dust mark; those on the other are clean.",
+    "rival_reading": "A failure of the later response could still have left this exposure unaddressed.",
+    "gloss": "An ordinary trace links a farm exposure to a distinct observed outcome: the split load.",
+    "axioms": {
+      "containment": [
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-pathway",
+        "a-timing"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0435"
+    }
+  },
+  {
+    "id": "t0435-07",
+    "kind": "set",
+    "pieces": [
+      "WaterBottle",
+      "Map"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "vehicle",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "title": "The leaking water can",
+    "body": "A bottle has dripped across the map where farm roads meet. Its cap is stained green and the map dries with the same halo.",
+    "rival_reading": "A failure of the later response could still have left this exposure unaddressed.",
+    "gloss": "An ordinary trace links a farm exposure to a distinct observed outcome: the leaking water can.",
+    "axioms": {
+      "containment": [
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-pathway",
+        "a-timing"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0435"
+    }
+  },
+  {
+    "id": "t0435-08",
+    "kind": "set",
+    "pieces": [
+      "Shovel",
+      "Tarp"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "vehicle",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "title": "The shifted field kit",
+    "body": "The shovel's handle has two different colored clays. The tarp wrapped around it has fresh tears shaped by a narrow truck bed.",
+    "rival_reading": "A failure of the later response could still have left this exposure unaddressed.",
+    "gloss": "An ordinary trace links a farm exposure to a distinct observed outcome: the shifted field kit.",
+    "axioms": {
+      "containment": [
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-pathway",
+        "a-timing"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0435"
+    }
+  },
+  {
+    "id": "t0435-09",
+    "kind": "set",
+    "pieces": [
+      "Pot",
+      "Fork"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "vehicle",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "title": "The load carried home",
+    "body": "A lunch pot is packed with feed dust instead of food. The clean fork inside it is still tied in paper.",
+    "rival_reading": "A failure of the later response could still have left this exposure unaddressed.",
+    "gloss": "An ordinary trace links a farm exposure to a distinct observed outcome: the load carried home.",
+    "axioms": {
+      "containment": [
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-pathway",
+        "a-timing"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0435"
+    }
+  },
+  {
+    "id": "t0435-10",
+    "kind": "set",
+    "pieces": [
+      "TirePump",
+      "SeedBag"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "vehicle",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "title": "The residue on the spare wheel",
+    "body": "This tire pump is streaked with the same pale dust as the sack cord. The clean tool roll beside them stayed shut.",
+    "rival_reading": "A failure of the later response could still have left this exposure unaddressed.",
+    "gloss": "An ordinary trace links a farm exposure to a distinct observed outcome: the residue on the spare wheel.",
+    "axioms": {
+      "containment": [
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-pathway",
+        "a-timing"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0435"
+    }
+  }
+]
