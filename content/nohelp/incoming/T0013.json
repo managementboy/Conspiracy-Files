@@ -1,0 +1,41 @@
+[
+  {
+    "anchor": {
+      "map": "IrvingtonStashMap1",
+      "mark": 1
+    },
+    "body": "the black umbrella bears a treated-seed stain and the camera a closure mark. one rope knot holds both objects together.",
+    "id": "t0013-01",
+    "kind": "set",
+    "pieces": [
+      "UmbrellaBlack",
+      "Camera"
+    ],
+    "title": "two traces on the black umbrella",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ],
+    "rival_reading": "The farm program and the emergency response each explain one layer of the bundle, and the shared knot does not establish which purpose came first.",
+    "gloss": "Farm residue and response markings share one deliberately ambiguous bundle.",
+    "axioms": {
+      "containment": [
+        "c-warning",
+        "c-orders"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0013"
+    }
+  }
+]
