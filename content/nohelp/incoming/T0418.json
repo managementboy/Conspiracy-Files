@@ -1,0 +1,412 @@
+[
+  {
+    "id": "t0418-01",
+    "kind": "set",
+    "pieces": [
+      "Map",
+      "Pencil"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "furniture",
+        "lean": "containment",
+        "rival": "agricultural",
+        "containers": [
+          "crate",
+          "shelves",
+          "desk",
+          "counter",
+          "cardboardbox",
+          "bin"
+        ]
+      }
+    ],
+    "title": "The count beneath the route at closing",
+    "body": "A road is rubbed out on the map, while six small figures remain beside it. The pencil has worn through the paper at the place where they waited. The string has been retied since morning.",
+    "rival_reading": "The field program could have forced the response to improvise.",
+    "gloss": "A trace of route or evacuation accounting is kept with a personal detail.",
+    "axioms": {
+      "containment": [
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0418"
+    }
+  },
+  {
+    "id": "t0418-02",
+    "kind": "set",
+    "pieces": [
+      "Clipboard",
+      "Eraser"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "furniture",
+        "lean": "containment",
+        "rival": "agricultural",
+        "containers": [
+          "crate",
+          "shelves",
+          "desk",
+          "counter",
+          "cardboardbox",
+          "bin"
+        ]
+      }
+    ],
+    "title": "A tally without passengers at closing",
+    "body": "The board lists four vehicle numbers and no names. An erased fifth line still bears the pressure of a child’s small handwriting. The date is on the wrapper, not on the object.",
+    "rival_reading": "The field program could have forced the response to improvise.",
+    "gloss": "A trace of route or evacuation accounting is kept with a personal detail.",
+    "axioms": {
+      "containment": [
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0418"
+    }
+  },
+  {
+    "id": "t0418-03",
+    "kind": "set",
+    "pieces": [
+      "FirstAidKit",
+      "BathTowel"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "furniture",
+        "lean": "containment",
+        "rival": "agricultural",
+        "containers": [
+          "crate",
+          "shelves",
+          "desk",
+          "counter",
+          "cardboardbox",
+          "bin"
+        ]
+      }
+    ],
+    "title": "Supplies for an empty seat at closing",
+    "body": "The sealed kit is tied to a towel marked for a passenger. The seat allocation has been crossed off, though the towel is still damp. A strip of cloth keeps the pair together.",
+    "rival_reading": "The field program could have forced the response to improvise.",
+    "gloss": "A trace of route or evacuation accounting is kept with a personal detail.",
+    "axioms": {
+      "containment": [
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0418"
+    }
+  },
+  {
+    "id": "t0418-04",
+    "kind": "set",
+    "pieces": [
+      "Map",
+      "SheetPaper2"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "furniture",
+        "lean": "containment",
+        "rival": "agricultural",
+        "containers": [
+          "crate",
+          "shelves",
+          "desk",
+          "counter",
+          "cardboardbox",
+          "bin"
+        ]
+      }
+    ],
+    "title": "Two directions in one fold at closing",
+    "body": "The loose page gives a route at odds with the one inked on the map. Someone has traced both with a finger stained from a lunch wrapper. The corner still bears a hurried thumbprint.",
+    "rival_reading": "The field program could have forced the response to improvise.",
+    "gloss": "A trace of route or evacuation accounting is kept with a personal detail.",
+    "axioms": {
+      "containment": [
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0418"
+    }
+  },
+  {
+    "id": "t0418-05",
+    "kind": "set",
+    "pieces": [
+      "HandTorch",
+      "Battery"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "furniture",
+        "lean": "containment",
+        "rival": "agricultural",
+        "containers": [
+          "crate",
+          "shelves",
+          "desk",
+          "counter",
+          "cardboardbox",
+          "bin"
+        ]
+      }
+    ],
+    "title": "The lamp after closing at closing",
+    "body": "The battery is taped to a torch beside a handwritten departure time. Its owner waited long enough to use up the spare. One edge was kept dry beneath a coat.",
+    "rival_reading": "The field program could have forced the response to improvise.",
+    "gloss": "A trace of route or evacuation accounting is kept with a personal detail.",
+    "axioms": {
+      "containment": [
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0418"
+    }
+  },
+  {
+    "id": "t0418-06",
+    "kind": "set",
+    "pieces": [
+      "Badge",
+      "RubberBand"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "furniture",
+        "lean": "containment",
+        "rival": "agricultural",
+        "containers": [
+          "crate",
+          "shelves",
+          "desk",
+          "counter",
+          "cardboardbox",
+          "bin"
+        ]
+      }
+    ],
+    "title": "An unissued place in line at closing",
+    "body": "A badge and a band for counting arrivals are tied together. The band has an extra notch that never made it onto the badge. A short tally was added after the bundle was tied.",
+    "rival_reading": "The field program could have forced the response to improvise.",
+    "gloss": "A trace of route or evacuation accounting is kept with a personal detail.",
+    "axioms": {
+      "containment": [
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0418"
+    }
+  },
+  {
+    "id": "t0418-07",
+    "kind": "set",
+    "pieces": [
+      "Jack",
+      "LugWrench"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "furniture",
+        "lean": "containment",
+        "rival": "agricultural",
+        "containers": [
+          "toolcabinet",
+          "crate",
+          "shelves",
+          "desk",
+          "counter",
+          "cardboardbox"
+        ]
+      }
+    ],
+    "title": "Repair before the barrier at closing",
+    "body": "The jack bears fresh road grit and the wrench a strip of warning tape. The repair was abandoned beside a penciled clearance time. The string has been retied since morning.",
+    "rival_reading": "The field program could have forced the response to improvise.",
+    "gloss": "A trace of route or evacuation accounting is kept with a personal detail.",
+    "axioms": {
+      "containment": [
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0418"
+    }
+  },
+  {
+    "id": "t0418-08",
+    "kind": "set",
+    "pieces": [
+      "WalkieTalkie1",
+      "Pencil"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "furniture",
+        "lean": "containment",
+        "rival": "agricultural",
+        "containers": [
+          "crate",
+          "shelves",
+          "desk",
+          "counter",
+          "cardboardbox",
+          "bin"
+        ]
+      }
+    ],
+    "title": "The second signal at closing",
+    "body": "A frequency is scratched into the pencil’s paint. The radio’s own label names another channel, and the paper wrapped around it says to wait. The date is on the wrapper, not on the object.",
+    "rival_reading": "The field program could have forced the response to improvise.",
+    "gloss": "A trace of route or evacuation accounting is kept with a personal detail.",
+    "axioms": {
+      "containment": [
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0418"
+    }
+  },
+  {
+    "id": "t0418-09",
+    "kind": "set",
+    "pieces": [
+      "Notebook",
+      "RedPen"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "furniture",
+        "lean": "containment",
+        "rival": "agricultural",
+        "containers": [
+          "crate",
+          "shelves",
+          "desk",
+          "counter",
+          "cardboardbox",
+          "bin"
+        ]
+      }
+    ],
+    "title": "One more household at closing",
+    "body": "A penciled household count ends at six. A red pen adds one name in the margin and then runs out before the line for a seat. A strip of cloth keeps the pair together.",
+    "rival_reading": "The field program could have forced the response to improvise.",
+    "gloss": "A trace of route or evacuation accounting is kept with a personal detail.",
+    "axioms": {
+      "containment": [
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0418"
+    }
+  },
+  {
+    "id": "t0418-10",
+    "kind": "set",
+    "pieces": [
+      "Bag_Schoolbag",
+      "Map"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "furniture",
+        "lean": "containment",
+        "rival": "agricultural",
+        "containers": [
+          "crate",
+          "shelves",
+          "desk",
+          "counter",
+          "cardboardbox",
+          "bin"
+        ]
+      }
+    ],
+    "title": "Packed for the wrong stop at closing",
+    "body": "The bag contains an unused lunch wrapper; the map is folded to a stop crossed out twice. A child wrote the original time on the strap. The corner still bears a hurried thumbprint.",
+    "rival_reading": "The field program could have forced the response to improvise.",
+    "gloss": "A trace of route or evacuation accounting is kept with a personal detail.",
+    "axioms": {
+      "containment": [
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0418"
+    }
+  }
+]
