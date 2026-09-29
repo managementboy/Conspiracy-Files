@@ -19,5 +19,26 @@
         "spot": "vehicle"
       }
     ]
+  },
+  {
+    "anchor": {
+      "scene": "RBHeatBreakAfternoon"
+    },
+    "body": "The map is folded to hide three streets, and the water bottle has a fresh mark for each one. Whoever drove here was counting stops before anyone on the road knew there was a route.",
+    "id": "t0293-02",
+    "kind": "set",
+    "pieces": [
+      "Map",
+      "WaterBottle"
+    ],
+    "title": "A sealed morning route",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "vehicle"
+      }
+    ]
   }
 ]

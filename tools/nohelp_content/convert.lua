@@ -564,13 +564,17 @@ function M.run(opts)
     end
     ctx.open=M.openRecalls(ctx.recalls,retired)
     if not opts.rebuild then
-        for _,ticket in ipairs(listJson(root.."/incoming")) do
+        -- <ticket>.recall.json: a recall delivery waiting beside the same
+        -- ticket's whole delivery (<ticket>.json), run after it (name order),
+        -- so neither overwrites the other before review.
+        for _,file in ipairs(listJson(root.."/incoming")) do
+          local ticket=file:match("^(.-)%.recall$") or file
           if M.ticketType(ticket,ctx.registry)=="STAGE0" then
             nStage0=nStage0+1
             report[#report+1]=ticket..": stage 0 delivery, left in incoming/ for sign-off"
           else
             nTickets=nTickets+1
-            local path=root.."/incoming/"..ticket..".json"
+            local path=root.."/incoming/"..file..".json"
             local data,err=J.decode(readFile(path) or "")
             local rows,status
             if type(data)=="table" and #data>0 then rows=data
@@ -600,7 +604,7 @@ function M.run(opts)
                 end
             end
             if #res.rejected>0 and not check then
-                writeFile(root.."/rejected/"..ticket..".json",J.encode(J.array(res.rejected)).."\n")
+                writeFile(root.."/rejected/"..file..".json",J.encode(J.array(res.rejected)).."\n")
             end
             if not check then os.remove(path) end
             local codes={}
@@ -608,7 +612,7 @@ function M.run(opts)
                 local id=type(r.row)=="table" and type(r.row.id)=="string" and r.row.id or "?"
                 codes[#codes+1]=id.." "..r.reasons[1].code..(r.merged and " (merged)" or "")
             end
-            report[#report+1]=ticket..": "..(res.recall and "replaced " or "accepted ")..nOk..", returned "..#res.rejected
+            report[#report+1]=file..": "..(res.recall and "replaced " or "accepted ")..nOk..", returned "..#res.rejected
             for _,c in ipairs(codes) do report[#report+1]="    returned "..c end
             for _,id in ipairs(res.unverified) do report[#report+1]="    "..id..": scene anchor unverified (no Generated/VanillaScenes.lua yet)" end
           end

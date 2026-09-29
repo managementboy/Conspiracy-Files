@@ -19,5 +19,34 @@
         "spot": "furniture"
       }
     ]
+  },
+  {
+    "anchor": {
+      "scene": "RBMayorWestPoint"
+    },
+    "body": "A public notice and a pencil stub are folded together. The penciled time is earlier than the printed one, and someone has marked the first version to be collected before the doors opened.",
+    "id": "t0297-02",
+    "kind": "set",
+    "pieces": [
+      "Newspaper",
+      "Pencil"
+    ],
+    "title": "Two versions of the notice",
+    "where": [
+      {
+        "containers": [
+          "filingcabinet",
+          "desk",
+          "counter",
+          "crate",
+          "locker",
+          "shelves"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
   }
 ]

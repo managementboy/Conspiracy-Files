@@ -18,5 +18,33 @@
         "spot": "furniture"
       }
     ]
+  },
+  {
+    "anchor": {
+      "scene": "RBJoanHartford"
+    },
+    "body": "They told us the list was for families. I believed them until the families arrived and nobody would let them see it.\n\nOne woman recognized a coat through the window. The man at the door said the coat belonged to a different person and closed the curtain. She waited for hours because no one would tell her whose coat she had seen.\n\nI wrote down the time they took the list. If she comes back I can at least tell her when we stopped being allowed to answer.",
+    "id": "t0294-02",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "title": "The visitor list",
+    "where": [
+      {
+        "containers": [
+          "desk",
+          "counter",
+          "crate",
+          "locker",
+          "shelves",
+          "bin"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
   }
 ]

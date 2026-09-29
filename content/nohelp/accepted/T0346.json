@@ -18,5 +18,33 @@
         "spot": "furniture"
       }
     ]
+  },
+  {
+    "anchor": {
+      "scene": "RDSResourceGarage"
+    },
+    "body": "I told them which shelves had fuel and which held tools. They asked for the names of people who had filled containers the night before.\n\nI could remember the man who paid in coins because I had counted them twice. His number was already on their sheet. They did not ask me about the fuel after that.\n\nI put the coins away separately. The drawer still has the gap where the sheet had been kept.",
+    "id": "t0346-02",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "The garage inventory",
+    "where": [
+      {
+        "containers": [
+          "toolcabinet",
+          "desk",
+          "counter",
+          "crate",
+          "locker",
+          "shelves"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
   }
 ]

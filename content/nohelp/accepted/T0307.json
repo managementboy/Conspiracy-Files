@@ -19,5 +19,34 @@
         "spot": "furniture"
       }
     ]
+  },
+  {
+    "anchor": {
+      "scene": "RBSchool"
+    },
+    "body": "The roll book is open to an ordinary lesson. A pencil note on its back records a later head count, including pupils whose names are absent from the official list.",
+    "id": "t0307-02",
+    "kind": "set",
+    "pieces": [
+      "Book",
+      "Pencil"
+    ],
+    "title": "Attendance from the wrong day",
+    "where": [
+      {
+        "containers": [
+          "desk",
+          "counter",
+          "crate",
+          "locker",
+          "shelves",
+          "bin"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
   }
 ]

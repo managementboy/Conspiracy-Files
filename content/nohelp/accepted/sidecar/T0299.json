@@ -17,5 +17,24 @@
       "writer": "ChatGPT"
     },
     "rival_reading": "Field work and a hurried emergency response could each explain the mixed residue and road tape; neither fixes which came first."
+  },
+  "t0299-02": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-warning",
+        "c-accounting"
+      ]
+    },
+    "gloss": "A scene-specific count or record was controlled while people were still present.",
+    "prov": {
+      "batch": "T0299",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "The same trace could follow an investigation of contaminated farm goods or an ordinary emergency response."
   }
 }

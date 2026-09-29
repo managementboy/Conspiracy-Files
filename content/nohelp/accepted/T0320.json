@@ -19,5 +19,34 @@
         "spot": "furniture"
       }
     ]
+  },
+  {
+    "anchor": {
+      "scene": "RBTSSoup"
+    },
+    "body": "One bowl is clean and tied to a second with string. The count scratched into the first was reduced in pencil on the other, though both were carried to the table.",
+    "id": "t0320-02",
+    "kind": "set",
+    "pieces": [
+      "Bowl",
+      "Spoon"
+    ],
+    "title": "The unserved bowl",
+    "where": [
+      {
+        "containers": [
+          "dishescabinet",
+          "desk",
+          "counter",
+          "crate",
+          "locker",
+          "shelves"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
   }
 ]

@@ -18,5 +18,33 @@
         "spot": "furniture"
       }
     ]
+  },
+  {
+    "anchor": {
+      "scene": "RDSRatInfested"
+    },
+    "body": "I counted the traps because I thought that was why they came. The visitor asked instead which doors we had opened that morning.\n\nHe marked one room as empty before looking in it. When I asked him to check again, he said the number had already been sent.\n\nThe traps remain. The door he marked empty is shut now, and I do not want to be the person who opens it.",
+    "id": "t0344-02",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "How many traps were set",
+    "where": [
+      {
+        "containers": [
+          "counter",
+          "desk",
+          "crate",
+          "locker",
+          "shelves",
+          "bin"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
   }
 ]

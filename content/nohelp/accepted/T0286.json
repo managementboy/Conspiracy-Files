@@ -18,5 +18,25 @@
         "spot": "corpse"
       }
     ]
+  },
+  {
+    "anchor": {
+      "scene": "RBBurntCorpse"
+    },
+    "body": "If they ask you who started it, tell them I went inside for the dog. I did. I also went back for the little box under the sink, the one with the dates written on the lid.\n\nThe men outside told me to leave it where it was. One held the door while the other watched me search. When I came out without it, they let me sit by the truck. They were careful with me then. They had already put the box in a bag of their own.\n\nThe dog came out through the back, singed and furious. Please give her water first. I don't want her remembered as another thing I left inside.",
+    "id": "t0286-02",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "title": "For the dog, if anyone asks",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "corpse"
+      }
+    ]
   }
 ]

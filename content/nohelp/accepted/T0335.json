@@ -19,5 +19,26 @@
         "spot": "corpse"
       }
     ]
+  },
+  {
+    "anchor": {
+      "scene": "RDSGunslinger"
+    },
+    "body": "The map is folded open to a road that has been erased in pencil. A strip of tape on the back carries the earlier route, preserved after the printed one was changed.",
+    "id": "t0335-02",
+    "kind": "set",
+    "pieces": [
+      "Map",
+      "DuctTape"
+    ],
+    "title": "A second route in the pocket",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "corpse"
+      }
+    ]
   }
 ]

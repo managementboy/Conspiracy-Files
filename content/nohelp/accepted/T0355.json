@@ -18,5 +18,25 @@
         "spot": "corpse"
       }
     ]
+  },
+  {
+    "anchor": {
+      "scene": "RDSZombiesEating"
+    },
+    "body": "I counted four names in the book they carried, but only three people lay here. The man with the book asked me not to look for the fourth.\n\nHe turned the page toward me to show that the missing person had already been accounted for. The writing was too small to read and he closed it before I could ask.\n\nI wrote the four names as well as I remember them. I may have misspelled one, but I know I heard it.",
+    "id": "t0355-02",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "title": "Four names, three bodies",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "corpse"
+      }
+    ]
   }
 ]

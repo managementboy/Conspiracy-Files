@@ -19,5 +19,26 @@
         "spot": "corpse"
       }
     ]
+  },
+  {
+    "anchor": {
+      "scene": "RDSHockeyPsycho"
+    },
+    "body": "A notebook page is wrapped around a pencil. It counts three people at the door and four after it closed, with the extra tally squeezed into the margin.",
+    "id": "t0337-02",
+    "kind": "set",
+    "pieces": [
+      "Pencil",
+      "Paperclip"
+    ],
+    "title": "A quiet inventory in a pocket",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "corpse"
+      }
+    ]
   }
 ]

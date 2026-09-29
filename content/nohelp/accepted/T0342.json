@@ -18,5 +18,25 @@
         "spot": "corpse"
       }
     ]
+  },
+  {
+    "anchor": {
+      "scene": "RDSPrisonEscapeWithPolice"
+    },
+    "body": "We reached the gate before dawn. A man with a list asked us to give our names one at a time.\n\nWhen my companion spoke, the man stopped writing and looked at the person beside him. They argued over which list to use. We could see the road was clear.\n\nThey let the others through. We were told to wait for a second count, and I wrote the first count here so it would not disappear.",
+    "id": "t0342-02",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "title": "The names at the gate",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "corpse"
+      }
+    ]
   }
 ]

@@ -18,5 +18,33 @@
         "spot": "furniture"
       }
     ]
+  },
+  {
+    "anchor": {
+      "scene": "RBPizzaWhirled"
+    },
+    "body": "At closing I counted the remaining boxes and wrote the number on the lid. A driver came for them after I had put away the register.\n\nHe had a list of addresses, but it was folded so I could only see the first. He crossed it out without unloading anything. We waited until his radio called him away.\n\nI was told to write the boxes off as spoiled. They were still warm when he took them, and I had eaten from the same batch.",
+    "id": "t0302-02",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "Back door count",
+    "where": [
+      {
+        "containers": [
+          "counter",
+          "desk",
+          "crate",
+          "locker",
+          "shelves",
+          "bin"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
   }
 ]

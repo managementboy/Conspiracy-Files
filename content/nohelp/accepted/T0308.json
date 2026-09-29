@@ -18,5 +18,33 @@
         "spot": "furniture"
       }
     ]
+  },
+  {
+    "anchor": {
+      "scene": "RBShopLooted"
+    },
+    "body": "The shelves were emptied twice. The first group took food; the second stepped over the broken glass to ask for the delivery ledger.\n\nI showed them the register because I had no ledger left. They wanted the names of people who had bought anything that morning. I could still recall one woman because her son carried the bag.\n\nThey wrote her down and told me not to mention their visit. I keep hearing the boy ask whether he could have the receipt.",
+    "id": "t0308-02",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "The inventory they took",
+    "where": [
+      {
+        "containers": [
+          "counter",
+          "desk",
+          "crate",
+          "locker",
+          "shelves",
+          "bin"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
   }
 ]

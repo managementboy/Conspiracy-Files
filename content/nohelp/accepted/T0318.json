@@ -19,5 +19,34 @@
         "spot": "furniture"
       }
     ]
+  },
+  {
+    "anchor": {
+      "scene": "RBTSSandwich"
+    },
+    "body": "A spoon and a paperclip were caught in a folded feed sack used to line the tray. Its handwritten lot mark predates the closure notice pinned over it.",
+    "id": "t0318-02",
+    "kind": "set",
+    "pieces": [
+      "Spoon",
+      "Paperclip"
+    ],
+    "title": "A sack beneath the sandwich tray",
+    "where": [
+      {
+        "containers": [
+          "counter",
+          "desk",
+          "crate",
+          "locker",
+          "shelves",
+          "bin"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
   }
 ]

@@ -19,5 +19,34 @@
         "spot": "furniture"
       }
     ]
+  },
+  {
+    "anchor": {
+      "scene": "RBTSBreakfast"
+    },
+    "body": "Two bowls are stacked around a folded scrap with a count written on it. The number served is larger than the number entered in the book, though the food has already been eaten.",
+    "id": "t0311-02",
+    "kind": "set",
+    "pieces": [
+      "Bowl",
+      "Spoon"
+    ],
+    "title": "The missing breakfast tally",
+    "where": [
+      {
+        "containers": [
+          "dishescabinet",
+          "desk",
+          "counter",
+          "crate",
+          "locker",
+          "shelves"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
   }
 ]

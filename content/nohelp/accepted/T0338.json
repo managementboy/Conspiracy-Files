@@ -18,5 +18,33 @@
         "spot": "furniture"
       }
     ]
+  },
+  {
+    "anchor": {
+      "scene": "RDSHouseParty"
+    },
+    "body": "We wrote names on the wall when the guest book disappeared. It was a joke until a visitor asked us to paint over them.\n\nOne friend had gone for more drinks and was not there to object. By morning somebody had covered only his name. The rest remained visible through the paint.\n\nI took a photograph before anyone did the second coat. I cannot tell if he came back while we were asleep.",
+    "id": "t0338-02",
+    "kind": "written",
+    "pieces": [
+      "diary"
+    ],
+    "title": "Someone took the guest book",
+    "where": [
+      {
+        "containers": [
+          "counter",
+          "desk",
+          "crate",
+          "locker",
+          "shelves",
+          "bin"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
   }
 ]

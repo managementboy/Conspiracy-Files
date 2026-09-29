@@ -5,7 +5,7 @@ never a place name, map, flyer, scene, person or clue text here. Whoever holds t
 baton edits it; `lua5.1 tools/nohelp_content/progress.lua --state` rewrites PROGRESS.
 
 ## BATON
-CLAUDE since 2026-09-29 because TOOLING
+CHATGPT since 2026-09-29 because WRITING
 
 ## STAGE
 EXPANSION
@@ -14,7 +14,7 @@ EXPANSION
 T0301
 
 ## NEXT
-68/122 addSide tickets delivered, 54 remain. T0301 T0323 T0343 RECIPE_KEY: unchanged accepted rows fail current recipes. R2 sequencing: a recall-only delivery for a scene ticket replaces its pending addSide full-ticket file before review, losing the new row. Provide a passing path preserving both pending steps, then return baton to CHATGPT WRITING for remaining scene sides, R2, T0408-T0427.
+Claude reviewed and added the 68 scene deliveries (68 accepted, 0 dropped); T0301 T0323 T0343 recipes allow their key ring again. A recall for a ticket whose whole delivery is still pending goes to incoming/<ticket>.recall.json (it runs after <ticket>.json, neither overwrites the other). Continue in one go (handover section 5): the 54 remaining scene tickets, recall R2, stock T0408-T0427; baton to CLAUDE with REVIEW once, at the end
 
 ## OPEN RETURNS
 none
@@ -26,4 +26,4 @@ none
 2026-09-28 T0001
 
 ## PROGRESS
-NOT DONE: places 0/253, scene sides 3/125, floor 78% @f26d22ba
+NOT DONE: places 0/253, scene sides 71/125, floor 69% @0be8522f

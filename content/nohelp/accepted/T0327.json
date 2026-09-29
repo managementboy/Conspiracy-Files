@@ -19,5 +19,34 @@
         "spot": "furniture"
       }
     ]
+  },
+  {
+    "anchor": {
+      "scene": "RDSBedroomZed"
+    },
+    "body": "A bottle of water and a strip of bandage have matching pencil marks. The marks are dates, not doses; someone was checking this bed before its occupant woke.",
+    "id": "t0327-02",
+    "kind": "set",
+    "pieces": [
+      "WaterBottle",
+      "Bandage"
+    ],
+    "title": "A label under the pillow",
+    "where": [
+      {
+        "containers": [
+          "sidetable",
+          "desk",
+          "counter",
+          "crate",
+          "locker",
+          "shelves"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
   }
 ]

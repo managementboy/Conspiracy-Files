@@ -19,5 +19,34 @@
         "spot": "furniture"
       }
     ]
+  },
+  {
+    "anchor": {
+      "scene": "RBClinic"
+    },
+    "body": "The battery is taped into the radio with a strip cut from a medicine label. The dial is fixed in place. The clinic kept a receiver ready on one frequency even after ordinary broadcasts had stopped.",
+    "id": "t0289-02",
+    "kind": "set",
+    "pieces": [
+      "Battery",
+      "RadioBlack"
+    ],
+    "title": "A dial that cannot turn",
+    "where": [
+      {
+        "containers": [
+          "medicine",
+          "desk",
+          "filingcabinet",
+          "locker",
+          "counter",
+          "shelves"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
   }
 ]

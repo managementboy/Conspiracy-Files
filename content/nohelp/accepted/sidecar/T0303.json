@@ -17,5 +17,24 @@
       "writer": "ChatGPT"
     },
     "rival_reading": "A response team could have carried farm supplies while checking exposure; the objects and timing do not establish that the trial caused it."
+  },
+  "t0303-02": {
+    "axioms": {
+      "agricultural": [
+        "a-malfunction",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "gloss": "A receiver was maintained during a siege but could not be used to answer.",
+    "prov": {
+      "batch": "T0303",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "The same frequency might have carried warnings about a field treatment, not instructions to control the people inside."
   }
 }

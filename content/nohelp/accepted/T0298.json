@@ -18,5 +18,33 @@
         "spot": "furniture"
       }
     ]
+  },
+  {
+    "anchor": {
+      "scene": "RBNolans"
+    },
+    "body": "The first man said they were checking on us. The second asked which neighbors had left and wrote their names before he asked whether they were well.\n\nI told them the little boy next door was with his aunt. He had gone to fetch her because she was alone. When the men returned, they asked me to say that both houses had been empty since noon.\n\nI can say I misunderstood the hour. I cannot explain why they came back to change it.",
+    "id": "t0298-02",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "title": "A knock after dark",
+    "where": [
+      {
+        "containers": [
+          "desk",
+          "counter",
+          "crate",
+          "locker",
+          "shelves",
+          "bin"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
   }
 ]

@@ -18,5 +18,33 @@
         "spot": "furniture"
       }
     ]
+  },
+  {
+    "anchor": {
+      "scene": "RBCafe"
+    },
+    "body": "The woman at the next table asked why they were taking names with the breakfast order. I told her it was probably for the bill. The waitress folded the list and put it in her apron, though we had all paid at the counter.\n\nLater a man came in through the kitchen, spoke to her, and left with the folded paper. Nobody cleared our plates while he was there. I kept looking at the clock because my sister was due to meet me.\n\nShe never arrived. I wrote down the time, then crossed it out when I realized I couldn't remember whether the clock had stopped before or after the man came in. The waitress set a fresh pot on the stove and kept serving everyone else.",
+    "id": "t0288-02",
+    "kind": "written",
+    "pieces": [
+      "diary"
+    ],
+    "title": "Names with breakfast",
+    "where": [
+      {
+        "containers": [
+          "counter",
+          "desk",
+          "bin",
+          "shelves",
+          "crate",
+          "filingcabinet"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
   }
 ]

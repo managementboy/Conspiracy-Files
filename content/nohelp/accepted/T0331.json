@@ -19,5 +19,26 @@
         "spot": "corpse"
       }
     ]
+  },
+  {
+    "anchor": {
+      "scene": "RDSDevouredByRats"
+    },
+    "body": "The folded paper lists six arrivals and four departures. The pencil is tucked into the same pocket; two departures have been erased until the paper is almost transparent.",
+    "id": "t0331-02",
+    "kind": "set",
+    "pieces": [
+      "Paperclip",
+      "Pencil"
+    ],
+    "title": "A count beneath the torn coat",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "corpse"
+      }
+    ]
   }
 ]

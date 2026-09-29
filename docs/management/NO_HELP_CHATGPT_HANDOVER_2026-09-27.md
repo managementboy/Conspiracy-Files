@@ -146,6 +146,9 @@ The round, in this order, all in one go, one commit per ticket:
    `longer` (at least twice as long, `RECALL_LONGER`; diaries, letters and
    notebooks much longer). Keep the form and aim at the listed side. Do a
    scene ticket's recall after its `addSide` delivery (step 1).
+   If that ticket's whole delivery is still waiting in `incoming/<ticket>.json`,
+   put the recall in `incoming/<ticket>.recall.json`: the converter runs it
+   after the whole delivery, and neither file overwrites the other.
 3. **Stock tickets T0408-T0427** (new): 10 clues each, **no anchor**, place
    `mapNamed`, general enough to fit any place a map or flyer marks (a
    building, a lot, a roadside), each with its six containers. The recipe

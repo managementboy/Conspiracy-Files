@@ -19,5 +19,26 @@
         "spot": "corpse"
       }
     ]
+  },
+  {
+    "anchor": {
+      "scene": "RDSCorpsePsycho"
+    },
+    "body": "A pencil and a torn sheet are folded together in a pocket. The sheet lists rooms by number, with the last two struck out in a different hand.",
+    "id": "t0329-02",
+    "kind": "set",
+    "pieces": [
+      "Pencil",
+      "Sheet"
+    ],
+    "title": "A folded list among the tools",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "corpse"
+      }
+    ]
   }
 ]

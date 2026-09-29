@@ -18,5 +18,33 @@
         "spot": "furniture"
       }
     ]
+  },
+  {
+    "anchor": {
+      "scene": "RDSFootballNight"
+    },
+    "body": "At halftime we heard the street announcement through the open window. The others kept watching the game and I wrote the names of the roads on the back of the score sheet.\n\nSomeone came by after dark and asked me for it. He already knew the score and said he only wanted to check my spelling.\n\nI gave him the front half. The names are still here because I tore the page across the fold first.",
+    "id": "t0332-02",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "The score at halftime",
+    "where": [
+      {
+        "containers": [
+          "desk",
+          "counter",
+          "crate",
+          "locker",
+          "shelves",
+          "bin"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
   }
 ]

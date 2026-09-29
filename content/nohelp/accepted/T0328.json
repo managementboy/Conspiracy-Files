@@ -18,5 +18,25 @@
         "spot": "corpse"
       }
     ]
+  },
+  {
+    "anchor": {
+      "scene": "RDSBleach"
+    },
+    "body": "I asked for clean water. The man with the bucket asked how many people were still here before he opened it.\n\nI pointed to the room behind me. He wrote down a smaller number and said the others would be counted separately. He would not say where.\n\nThe bucket was emptied on the floor after he left. I kept the scrap he dropped because it has the number he first wrote.",
+    "id": "t0328-02",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "title": "The count in a coat pocket",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "corpse"
+      }
+    ]
   }
 ]

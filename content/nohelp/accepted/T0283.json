@@ -19,5 +19,34 @@
         "spot": "furniture"
       }
     ]
+  },
+  {
+    "anchor": {
+      "scene": "RBBar"
+    },
+    "body": "The glass was rinsed but the strip of tape stays on it, marked to be kept after closing. The cloth is stiff with bleach. Someone expected the counter to be cleaned before the glass was taken away.",
+    "id": "t0283-02",
+    "kind": "set",
+    "pieces": [
+      "GlassTumbler",
+      "DishCloth"
+    ],
+    "title": "The glass nobody collected",
+    "where": [
+      {
+        "containers": [
+          "counter",
+          "crate",
+          "bin",
+          "desk",
+          "shelves",
+          "locker"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
   }
 ]

@@ -19,5 +19,26 @@
         "spot": "corpse"
       }
     ]
+  },
+  {
+    "anchor": {
+      "scene": "RDSSuicidePact"
+    },
+    "body": "A folded sheet and pencil are held beneath the same hand. Two names are boxed together, while a third is pressed into the paper hard enough to leave a mark without ink.",
+    "id": "t0351-02",
+    "kind": "set",
+    "pieces": [
+      "Sheet",
+      "Pencil"
+    ],
+    "title": "A third mark on the page",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "corpse"
+      }
+    ]
   }
 ]

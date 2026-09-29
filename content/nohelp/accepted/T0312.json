@@ -18,5 +18,33 @@
         "spot": "furniture"
       }
     ]
+  },
+  {
+    "anchor": {
+      "scene": "RBTSButcher"
+    },
+    "body": "The shopkeeper made me bring the parcel through the back. He said the front counter was closed to anyone who had been beyond the roadblock.\n\nA visitor checked the wrapper but never asked what was inside. He took the slip with the customer name and left the parcel on the table. It began to drip while they argued about which list should keep the name.\n\nI washed the table when they left. The parcel was still there, and I could not decide whether throwing it away counted as a sale.",
+    "id": "t0312-02",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "A separate cut of meat",
+    "where": [
+      {
+        "containers": [
+          "displaycasebutcher",
+          "desk",
+          "counter",
+          "crate",
+          "locker",
+          "shelves"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
   }
 ]

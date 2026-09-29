@@ -17,5 +17,24 @@
       "writer": "ChatGPT"
     },
     "rival_reading": "A response team could have carried farm supplies while checking exposure; the objects and timing do not establish that the trial caused it."
+  },
+  "t0283-02": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-warning",
+        "c-accounting"
+      ]
+    },
+    "gloss": "A glass is retained after a hurried cleaning of the counter.",
+    "prov": {
+      "batch": "T0283",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "An ordinary sanitation check after spoiled supplies could account for the tape and bleach."
   }
 }

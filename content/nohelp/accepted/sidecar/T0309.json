@@ -17,5 +17,24 @@
       "writer": "ChatGPT"
     },
     "rival_reading": "Emergency workers could have encountered the same residue while responding; the personal trace does not by itself prove the field program caused the emergency."
+  },
+  "t0309-02": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-warning",
+        "c-accounting"
+      ]
+    },
+    "gloss": "A scene-specific count or record was controlled while people were still present.",
+    "prov": {
+      "batch": "T0309",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "The same trace could follow an investigation of contaminated farm goods or an ordinary emergency response."
   }
 }

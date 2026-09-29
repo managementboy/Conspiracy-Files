@@ -18,5 +18,33 @@
         "spot": "furniture"
       }
     ]
+  },
+  {
+    "anchor": {
+      "scene": "RBDorm"
+    },
+    "body": "Room count at noon: four beds slept in, six beds assigned, eight names on the door. Nobody could explain the difference. We had made the list from the doors because the office list had been taken.\n\nA visitor came back with the office list in her hand and asked us to erase two names. She did not ask whether either student was still here. We argued about it quietly because the girl in the end bed was asleep.\n\nBy supper the visitor had gone. I wrote the two names again on a scrap and pushed it into my shoe. If somebody asks tomorrow, I can say I made a mistake. I would rather have a mistake I can show them.",
+    "id": "t0290-02",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "Eight names on six beds",
+    "where": [
+      {
+        "containers": [
+          "desk",
+          "wardrobe",
+          "dresser",
+          "locker",
+          "shelves",
+          "crate"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
   }
 ]

@@ -18,5 +18,33 @@
         "spot": "furniture"
       }
     ]
+  },
+  {
+    "anchor": {
+      "scene": "RBOther"
+    },
+    "body": "He wanted the room cleared before he opened his bag. We moved the chairs into the hall and he put three envelopes on the table.\n\nThe first was for the people still here. The other two had names of places already shut. He took those away when I asked him why he had come so late.\n\nI thought he would leave a copy. Instead he asked for the empty envelopes back, too. The chairs are still in the hall because no one knows whether the room is open.",
+    "id": "t0300-02",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "What the messenger carried",
+    "where": [
+      {
+        "containers": [
+          "desk",
+          "counter",
+          "crate",
+          "locker",
+          "shelves",
+          "bin"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
   }
 ]
