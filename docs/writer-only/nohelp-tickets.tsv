@@ -357,7 +357,7 @@ T0350	SCENE	scene:RDSStudentNight	accepted	0	2026-09-28	2026-09-29
 T0351	SCENE	scene:RDSSuicidePact	accepted	0	2026-09-28	2026-09-29
 T0352	SCENE	scene:RDSTinFoilHat	accepted	0	2026-09-28	2026-09-29
 T0353	SCENE	scene:RDSZombieLockedBathroom	accepted	0	2026-09-28	2026-09-29
-T0354	STAGE0	glosses:T0355-T0394	open	0	2026-09-28	
+T0354	STAGE0	glosses:T0355-T0394	accepted	0	2026-09-28	2026-09-29
 T0355	SCENE	scene:RDSZombiesEating	accepted	0	2026-09-28	2026-09-29
 T0356	SCENE	scene:RVSAmbulanceCrash	accepted	0	2026-09-28	2026-09-29
 T0357	SCENE	scene:RVSAnimalTrailerOnRoad	accepted	0	2026-09-28	2026-09-29
@@ -398,7 +398,7 @@ T0391	SCENE	scene:RZSMusicFestStage	accepted	0	2026-09-28	2026-09-29
 T0392	SCENE	scene:RZSNastyMattress	accepted	0	2026-09-28	2026-09-29
 T0393	SCENE	scene:RZSOccultActivity	accepted	0	2026-09-28	2026-09-29
 T0394	SCENE	scene:RZSOldFirepit	accepted	0	2026-09-28	2026-09-29
-T0395	STAGE0	glosses:T0396-T0407	open	0	2026-09-28	
+T0395	STAGE0	glosses:T0396-T0407	accepted	0	2026-09-28	2026-09-29
 T0396	SCENE	scene:RZSOldShelter	accepted	0	2026-09-28	2026-09-29
 T0397	SCENE	scene:RZSOrphanedFawn	accepted	0	2026-09-28	2026-09-29
 T0398	SCENE	scene:RZSRangerSmith	accepted	0	2026-09-28	2026-09-29
