@@ -3,14 +3,14 @@
     "anchor": {
       "print": "Fossoil3"
     },
-    "body": "A route map sends the delivery past the station, but the receipt records it as closed before the driver reached the turn.",
+    "body": "the duct tape and hand radio were sealed together but never opened. soot darkens the bundle; clean outlines show it was packed before the fire.",
     "id": "t0161-01",
     "kind": "set",
     "pieces": [
-      "Map",
-      "KeyRing"
+      "DuctTape",
+      "WalkieTalkie1"
     ],
-    "title": "The station diversion",
+    "title": "missing count beside the duct tape",
     "where": [
       {
         "lean": "containment",

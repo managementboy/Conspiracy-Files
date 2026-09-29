@@ -3,14 +3,14 @@
     "anchor": {
       "scene": "RVSPlonkies"
     },
-    "body": "The route on the map ends at a closed road. A keyring is tucked beneath the last stop, its tag stamped “return”; the return line has been crossed out.",
+    "body": "a broken barrier board crushed the pipe wrench against the folded road map. clean undersides show both were there before the road was blocked.",
     "id": "t0016-01",
     "kind": "set",
     "pieces": [
-      "Map",
-      "KeyRing"
+      "PipeWrench",
+      "Map"
     ],
-    "title": "The last stop crossed off the van route",
+    "title": "missing count beside the pipe wrench",
     "where": [
       {
         "lean": "containment",

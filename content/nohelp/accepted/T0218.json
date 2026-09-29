@@ -3,14 +3,14 @@
     "anchor": {
       "print": "HouseforSale907"
     },
-    "body": "The viewing card says the house is empty; a room checklist says a family meal was removed after the viewing began.",
+    "body": "three pickup dots mark the magnifying glass and folded road map. two were scratched away without wear around them.",
     "id": "t0218-01",
     "kind": "set",
     "pieces": [
-      "KeyRing",
-      "SheetPaper2"
+      "MagnifyingGlass",
+      "Map"
     ],
-    "title": "The cozy house inventory",
+    "title": "missing count beside the magnifying glass",
     "where": [
       {
         "lean": "containment",

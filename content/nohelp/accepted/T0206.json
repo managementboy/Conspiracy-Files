@@ -3,14 +3,14 @@
     "anchor": {
       "print": "RiversideIndependenceDayPartyAllWelcome"
     },
-    "body": "The party route sheet lists every block as cleared, but a resident’s key is still held at the check-in table.",
+    "body": "matching white stripes cross the stapler and first-aid kit. a name-sized patch on the stapler has been scrubbed bare.",
     "id": "t0206-01",
     "kind": "set",
     "pieces": [
-      "SheetPaper2",
-      "KeyRing"
+      "Stapler",
+      "FirstAidKit"
     ],
-    "title": "Block party route",
+    "title": "missing count beside the stapler",
     "where": [
       {
         "lean": "containment",

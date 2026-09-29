@@ -1,0 +1,50 @@
+[
+  {
+    "recall": "R1",
+    "row": {
+      "anchor": {
+        "map": "MulStashMap10",
+        "mark": 1
+      },
+      "body": "A door key is kept with a cleaning bottle and a checklist that says the rooms were clear. The back asks for one more walk-through before reopening.",
+      "id": "t0087-01",
+      "kind": "set",
+      "pieces": [
+        "Disinfectant",
+        "KeyRing"
+      ],
+      "title": "Clear on the first pass",
+      "where": [
+        {
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "death house",
+        "source": "map:MulStashMap10"
+      },
+      "gloss": "A completed clearance is followed by a request for another inspection.",
+      "prov": {
+        "batch": "T0087",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A program site might require a routine recheck after cleaning; the list does not say why it was closed."
+    }
+  }
+]

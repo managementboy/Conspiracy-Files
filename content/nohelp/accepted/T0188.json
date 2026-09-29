@@ -3,14 +3,14 @@
     "anchor": {
       "print": "MarchRidgeSchoolJobAd"
     },
-    "body": "The janitor’s key is tied to a cleaning checklist marked complete before the rooms were unlocked. One classroom remains on the supply list.",
+    "body": "the open wrench is tied to the hand radio by a clipped lanyard. an empty loop shows where an identifying tag was cut off.",
     "id": "t0188-01",
     "kind": "set",
     "pieces": [
-      "Mop",
-      "KeyRing"
+      "Wrench",
+      "WalkieTalkie1"
     ],
-    "title": "The school cleaning shift",
+    "title": "missing count beside the open wrench",
     "where": [
       {
         "lean": "containment",

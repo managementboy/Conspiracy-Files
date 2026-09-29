@@ -1,0 +1,49 @@
+[
+  {
+    "recall": "R1",
+    "row": {
+      "anchor": {
+        "print": "HouseforSale787"
+      },
+      "body": "The house key is tied to a route map, and the sale card says the rooms were clear before the road inspection was finished.",
+      "id": "t0266-01",
+      "kind": "set",
+      "pieces": [
+        "KeyRing",
+        "Map"
+      ],
+      "title": "A property near the route",
+      "where": [
+        {
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "House for Sale (no. 787)",
+        "source": "print:HouseforSale787"
+      },
+      "gloss": "A house is recorded clear before its road check ends.",
+      "prov": {
+        "batch": "T0266",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A property could be cleared for sale while a nearby route was inspected; the map does not prove anyone was stranded."
+    }
+  }
+]

@@ -1,0 +1,49 @@
+[
+  {
+    "recall": "R1",
+    "row": {
+      "anchor": {
+        "print": "BrandenburgFD"
+      },
+      "body": "The prevention sheet asks residents to store combustible supplies safely; the inspection card says the supply room was already sealed.",
+      "id": "t0235-01",
+      "kind": "set",
+      "pieces": [
+        "SheetPaper2",
+        "KeyRing"
+      ],
+      "title": "Storage advice and a locked room",
+      "where": [
+        {
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "Brandenburg Fire Department",
+        "source": "print:BrandenburgFD"
+      },
+      "gloss": "A storage room is sealed during a public safety check.",
+      "prov": {
+        "batch": "T0235",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A field team could seal a room during a routine safety inspection; the card does not say who ordered it."
+    }
+  }
+]

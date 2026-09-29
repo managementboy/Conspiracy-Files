@@ -1,13 +1,13 @@
 [
   {
-    "body": "The map's pencil road ends at a barrier mark. A keyring is tied across the fold; its blank tag is polished where a number was rubbed away.",
+    "body": "the loose badge and folded road map are tied with cut warning tape. six tally cuts mark the loose badge; only four are crossed through.",
     "id": "t0001-01",
     "kind": "set",
     "pieces": [
-      "Map",
-      "KeyRing"
+      "Badge",
+      "Map"
     ],
-    "title": "The route stops at the barrier",
+    "title": "missing count beside the loose badge",
     "where": [
       {
         "lean": "containment",

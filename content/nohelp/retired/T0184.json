@@ -1,0 +1,49 @@
+[
+  {
+    "recall": "R1",
+    "row": {
+      "anchor": {
+        "print": "SpiffosHiringWestPoint"
+      },
+      "body": "A shift pack is tied to the store key and a route card; the cashier’s sign-out is stamped before the delivery van’s return.",
+      "id": "t0184-01",
+      "kind": "set",
+      "pieces": [
+        "KeyRing",
+        "Bag_ALICEpack"
+      ],
+      "title": "The shift pack",
+      "where": [
+        {
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "Spiffo's Hiring! (West Point)",
+        "source": "print:SpiffosHiringWestPoint"
+      },
+      "gloss": "A cashier signs out before the delivery van returns.",
+      "prov": {
+        "batch": "T0184",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A program crew could carry supplies and return the van later; the card does not show who authorized the schedule."
+    }
+  }
+]

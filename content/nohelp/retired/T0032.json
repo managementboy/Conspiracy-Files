@@ -1,0 +1,51 @@
+[
+  {
+    "recall": "R1",
+    "row": {
+      "anchor": {
+        "map": "BBurgStashMap7",
+        "mark": 1
+      },
+      "body": "The gate key is pinned under a closure notice dated after the guard shift ended. Someone wedged a bat across the latch from the inside.",
+      "id": "t0032-01",
+      "kind": "set",
+      "pieces": [
+        "BaseballBat",
+        "KeyRing",
+        "SheetPaper2"
+      ],
+      "title": "The unfinished handoff",
+      "where": [
+        {
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "fucks wouldn't let me in",
+        "source": "map:BBurgStashMap7"
+      },
+      "gloss": "A gate closure appears after the listed shift, with the inside latch still blocked.",
+      "prov": {
+        "batch": "T0032",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A program site could also have been closed to visitors; the late notice and blocked gate do not identify who ordered it."
+    }
+  }
+]

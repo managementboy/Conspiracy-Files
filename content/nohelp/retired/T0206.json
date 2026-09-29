@@ -1,0 +1,49 @@
+[
+  {
+    "recall": "R1",
+    "row": {
+      "anchor": {
+        "print": "RiversideIndependenceDayPartyAllWelcome"
+      },
+      "body": "The party route sheet lists every block as cleared, but a resident’s key is still held at the check-in table.",
+      "id": "t0206-01",
+      "kind": "set",
+      "pieces": [
+        "SheetPaper2",
+        "KeyRing"
+      ],
+      "title": "Block party route",
+      "where": [
+        {
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "Independence Day Party (Riverside)",
+        "source": "print:RiversideIndependenceDayPartyAllWelcome"
+      },
+      "gloss": "A block is marked clear while a resident’s key remains.",
+      "prov": {
+        "batch": "T0206",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A volunteer may have collected keys for ordinary street access; the sheet does not show who cleared the blocks."
+    }
+  }
+]

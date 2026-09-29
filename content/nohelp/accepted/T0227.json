@@ -3,19 +3,19 @@
     "anchor": {
       "print": "LennysCarRepair"
     },
-    "body": "The repair key is signed out for an engine test; the customer’s road receipt says the vehicle was cleared before the test ended.",
+    "body": "the ball of yarn and hand torch are wedged beneath unused warning tape. footprints pass around the bundle rather than toward it.",
     "id": "t0227-01",
     "kind": "set",
     "pieces": [
-      "Screwdriver",
-      "KeyRing"
+      "Yarn",
+      "HandTorch"
     ],
-    "title": "Suspension repair and route",
+    "title": "missing count beside the ball of yarn",
     "where": [
       {
-        "lean": "agricultural",
+        "lean": "containment",
         "place": "mapNamed",
-        "rival": "containment",
+        "rival": "agricultural",
         "spot": "ground"
       }
     ]

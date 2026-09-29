@@ -4,15 +4,14 @@
       "map": "BBurgStashMap4",
       "mark": 1
     },
-    "body": "The pickup card assigns each trailer a time, then records the vehicle at the gate before the first family is listed. The spare hitch key is still here.",
+    "body": "four notches on the garden hoe match four marks on the camera; a fifth mark was sanded flat on both.",
     "id": "t0029-01",
     "kind": "set",
     "pieces": [
-      "SheetPaper2",
-      "Pencil",
-      "KeyRing"
+      "GardenHoe",
+      "Camera"
     ],
-    "title": "The unfinished handoff",
+    "title": "missing count beside the garden hoe",
     "where": [
       {
         "lean": "containment",

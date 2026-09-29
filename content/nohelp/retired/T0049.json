@@ -1,0 +1,50 @@
+[
+  {
+    "recall": "R1",
+    "row": {
+      "anchor": {
+        "map": "IrvingtonStashMap10",
+        "mark": 1
+      },
+      "body": "A radio is packed with the house key and a note promising someone will remain at the marked address. The battery receipt is dated after the promised check-in.",
+      "id": "t0049-01",
+      "kind": "set",
+      "pieces": [
+        "RadioBlack",
+        "KeyRing"
+      ],
+      "title": "We will stay reachable",
+      "where": [
+        {
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "IRVINGTON",
+        "source": "map:IrvingtonStashMap10"
+      },
+      "gloss": "A promised check-in outlasts the radio’s recorded battery purchase.",
+      "prov": {
+        "batch": "T0049",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A field team could have kept a radio at a work site; the delayed battery receipt does not prove anyone was stranded."
+    }
+  }
+]

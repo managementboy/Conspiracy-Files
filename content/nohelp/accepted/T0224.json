@@ -3,14 +3,14 @@
     "anchor": {
       "print": "HouseforSale919"
     },
-    "body": "The house map is tied to a key return that predates the caretaker’s final room check. One door is marked as still in use.",
+    "body": "road dust coats the sewing needle and clipboard, but their ties are clean and newly cut. the bundle was repacked after travel.",
     "id": "t0224-01",
     "kind": "set",
     "pieces": [
-      "Map",
-      "KeyRing"
+      "Needle",
+      "Clipboard"
     ],
-    "title": "The large-home key log",
+    "title": "missing count beside the sewing needle",
     "where": [
       {
         "lean": "containment",

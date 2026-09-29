@@ -3,19 +3,19 @@
     "anchor": {
       "print": "SpiffosHiringWestPoint"
     },
-    "body": "A shift pack is tied to the store key and a route card; the cashier’s sign-out is stamped before the delivery van’s return.",
+    "body": "the pipe wrench and seed sack are packed with treated seed. every kernel has the same cracked green coating.",
     "id": "t0184-01",
     "kind": "set",
     "pieces": [
-      "KeyRing",
-      "Bag_ALICEpack"
+      "PipeWrench",
+      "SeedBag"
     ],
-    "title": "The shift pack",
+    "title": "field residue on the pipe wrench",
     "where": [
       {
-        "lean": "containment",
+        "lean": "agricultural",
         "place": "mapNamed",
-        "rival": "agricultural",
+        "rival": "containment",
         "spot": "ground"
       }
     ]

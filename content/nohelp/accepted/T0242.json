@@ -3,14 +3,14 @@
     "anchor": {
       "print": "HouseforSale855"
     },
-    "body": "The compact house key is logged as returned before the moving list is complete. A folded map remains in the room beside the final box.",
+    "body": "opposite route arrows are painted on the sponge and folded road map. the older arrow was scraped away beneath fresh road grit.",
     "id": "t0242-01",
     "kind": "set",
     "pieces": [
-      "KeyRing",
+      "Sponge",
       "Map"
     ],
-    "title": "Compact home handoff",
+    "title": "missing count beside the sponge",
     "where": [
       {
         "lean": "containment",

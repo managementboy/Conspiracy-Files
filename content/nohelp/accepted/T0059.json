@@ -4,14 +4,14 @@
       "map": "LouisvilleStashMap11",
       "mark": 1
     },
-    "body": "The storage key is attached to a list that marks the units empty, although a handwritten note asks for another count before the hospital run.",
+    "body": "a broken barrier board crushed the magnifying glass against the folded road map. clean undersides show both were there before the road was blocked.",
     "id": "t0059-01",
     "kind": "set",
     "pieces": [
-      "KeyRing",
-      "Notebook"
+      "MagnifyingGlass",
+      "Map"
     ],
-    "title": "Storage access list",
+    "title": "missing count beside the magnifying glass",
     "where": [
       {
         "lean": "containment",

@@ -3,19 +3,19 @@
     "anchor": {
       "print": "NolansUsedCars"
     },
-    "body": "The sales receipt marks a car delivered, while the test-drive log starts after its keys were returned. A note asks whether the fuel charge belongs to the buyer.",
+    "body": "the toothbrush and bath towel are wedged beneath unused warning tape. footprints pass around the bundle rather than toward it.",
     "id": "t0151-01",
     "kind": "set",
     "pieces": [
-      "KeyRing",
-      "Map"
+      "Toothbrush",
+      "BathTowel"
     ],
-    "title": "The car with no return trip",
+    "title": "missing count beside the toothbrush",
     "where": [
       {
-        "lean": "agricultural",
+        "lean": "containment",
         "place": "mapNamed",
-        "rival": "containment",
+        "rival": "agricultural",
         "spot": "ground"
       }
     ]

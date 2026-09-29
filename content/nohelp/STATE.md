@@ -14,7 +14,7 @@ EXPANSION
 T0279
 
 ## NEXT
-Review recall R1: 94 replacement rows, one per recalled id
+Recall R1 reviewed and complete (94/94 replaced). Next round waits on the owner
 
 ## OPEN RETURNS
 none
@@ -26,4 +26,4 @@ none
 2026-09-28 T0001
 
 ## PROGRESS
-NOT DONE: maps 115/125, balance 62%, adhd 387 @158ab1dd
+NOT DONE: maps 115/125, balance 61%, adhd 387 @65efd14

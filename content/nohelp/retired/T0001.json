@@ -1,0 +1,42 @@
+[
+  {
+    "recall": "R1",
+    "row": {
+      "body": "The map's pencil road ends at a barrier mark. A keyring is tied across the fold; its blank tag is polished where a number was rubbed away.",
+      "id": "t0001-01",
+      "kind": "set",
+      "pieces": [
+        "Map",
+        "KeyRing"
+      ],
+      "title": "The route stops at the barrier",
+      "where": [
+        {
+          "lean": "containment",
+          "place": "police",
+          "rival": "agricultural",
+          "spot": "mailbox"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "gloss": "A route and a key with no destination remain together.",
+      "prov": {
+        "batch": "T0001",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A field crew could tie its gate key to a road map after an access change; the rubbed tag need not mean officials stranded anyone."
+    }
+  }
+]

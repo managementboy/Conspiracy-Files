@@ -4,14 +4,14 @@
       "map": "RiversideStashMap1",
       "mark": 1
     },
-    "body": "The route map is folded around a key marked for the next shift; a note says the crew will return after checking the water line.",
+    "body": "the broom bears a treated-seed stain and the camera a closure mark. one rope knot holds both objects together.",
     "id": "t0094-01",
     "kind": "set",
     "pieces": [
-      "Map",
-      "KeyRing"
+      "Broom",
+      "Camera"
     ],
-    "title": "Here for the next shift",
+    "title": "two traces on the broom",
     "where": [
       {
         "lean": "agricultural",

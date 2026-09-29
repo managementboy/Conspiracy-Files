@@ -4,19 +4,19 @@
       "map": "MulStashMap3",
       "mark": 1
     },
-    "body": "A store key is tied to a note about a hidden supply bundle; the delivery was logged before the crew’s field date, and no one signed for it.",
+    "body": "the sewing needle and clipboard carry the same black paint. a fresh scrape exposes an older evacuation color beneath.",
     "id": "t0078-01",
     "kind": "set",
     "pieces": [
-      "Sledgehammer",
-      "KeyRing"
+      "Needle",
+      "Clipboard"
     ],
-    "title": "Hidden delivery",
+    "title": "missing count beside the sewing needle",
     "where": [
       {
-        "lean": "agricultural",
+        "lean": "containment",
         "place": "mapNamed",
-        "rival": "containment",
+        "rival": "agricultural",
         "spot": "ground"
       }
     ]

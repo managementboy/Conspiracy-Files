@@ -4,14 +4,14 @@
       "map": "WpStashMap8",
       "mark": 1
     },
-    "body": "The clinic key is attached to a note saying one patient did not become ill; the return sheet lists the helper as absent.",
+    "body": "three pickup dots mark the animal-feed sack and hand radio. two were scratched away without wear around them.",
     "id": "t0141-01",
     "kind": "set",
     "pieces": [
-      "Bandage",
-      "KeyRing"
+      "AnimalFeedBag",
+      "WalkieTalkie1"
     ],
-    "title": "The helper was not on the list",
+    "title": "missing count beside the animal-feed sack",
     "where": [
       {
         "lean": "containment",

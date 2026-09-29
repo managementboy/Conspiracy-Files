@@ -3,14 +3,14 @@
     "anchor": {
       "print": "QuillManor"
     },
-    "body": "The manor tour key is signed out beside a field note asking the guide to keep visitors away from the north lawn until the test is over.",
+    "body": "the measuring tape and empty garden sprayer share two stains: sweet field residue below and bleach above. both could have been packed during either job.",
     "id": "t0276-01",
     "kind": "set",
     "pieces": [
-      "Book",
-      "KeyRing"
+      "MeasuringTape",
+      "GardeningSprayEmpty"
     ],
-    "title": "The Saturday tour key",
+    "title": "two traces on the measuring tape",
     "where": [
       {
         "lean": "agricultural",

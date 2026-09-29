@@ -1,0 +1,50 @@
+[
+  {
+    "recall": "R1",
+    "row": {
+      "anchor": {
+        "map": "MarchRidgeStashMap8",
+        "mark": 1
+      },
+      "body": "The old tool key is attached to a service slip that records a sprayer check after the tools were put away. No recipient signed the return.",
+      "id": "t0072-01",
+      "kind": "set",
+      "pieces": [
+        "Screwdriver",
+        "KeyRing"
+      ],
+      "title": "Tools for someone else",
+      "where": [
+        {
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "Left my old tools here",
+        "source": "map:MarchRidgeStashMap8"
+      },
+      "gloss": "A tool check is recorded after the equipment was supposedly returned.",
+      "prov": {
+        "batch": "T0072",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "Emergency workers could have checked shared equipment during cleanup; the missing signature does not identify the tool’s use."
+    }
+  }
+]

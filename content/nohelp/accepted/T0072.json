@@ -4,14 +4,14 @@
       "map": "MarchRidgeStashMap8",
       "mark": 1
     },
-    "body": "The old tool key is attached to a service slip that records a sprayer check after the tools were put away. No recipient signed the return.",
+    "body": "the spool of thread and first-aid kit carry animal-feed grit under a strip of barrier tape. neither layer fully covers the other.",
     "id": "t0072-01",
     "kind": "set",
     "pieces": [
-      "Screwdriver",
-      "KeyRing"
+      "Thread",
+      "FirstAidKit"
     ],
-    "title": "Tools for someone else",
+    "title": "two traces on the spool of thread",
     "where": [
       {
         "lean": "agricultural",

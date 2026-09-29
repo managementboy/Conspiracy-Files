@@ -4,14 +4,14 @@
       "map": "EkronStashMap8",
       "mark": 1
     },
-    "body": "The map is folded toward its road line; the keyring lies beyond the fold, its tag turned face down. A short length of thread joins them but does not reach the road.",
+    "body": "the crowbar and briefcase are wrapped in a child's raincoat. one stayed dry while the other was left in road mud.",
     "id": "t0015-01",
     "kind": "set",
     "pieces": [
-      "Map",
-      "KeyRing"
+      "Crowbar",
+      "Briefcase"
     ],
-    "title": "The key points past the marked road",
+    "title": "missing count beside the crowbar",
     "where": [
       {
         "lean": "containment",

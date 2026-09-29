@@ -4,14 +4,14 @@
       "map": "LouisvilleStashMap15",
       "mark": 1
     },
-    "body": "The gallery key is wrapped in a request to protect the collection; the handover form says the building was secure before the key was returned.",
+    "body": "three pickup dots mark the sewing kit and hand radio. two were scratched away without wear around them.",
     "id": "t0063-01",
     "kind": "set",
     "pieces": [
-      "Book",
-      "KeyRing"
+      "SewingKit",
+      "WalkieTalkie1"
     ],
-    "title": "The gallery key",
+    "title": "missing count beside the sewing kit",
     "where": [
       {
         "lean": "containment",

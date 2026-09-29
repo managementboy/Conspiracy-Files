@@ -4,14 +4,14 @@
       "map": "MulStashMap8",
       "mark": 1
     },
-    "body": "The key to the gathering place is wrapped in a burial request; a second note says the crowd count has not changed since the last check.",
+    "body": "road dust coats the ball of yarn and hand torch, but their ties are clean and newly cut. the bundle was repacked after travel.",
     "id": "t0085-01",
     "kind": "set",
     "pieces": [
-      "SheetPaper2",
-      "KeyRing"
+      "Yarn",
+      "HandTorch"
     ],
-    "title": "A burial request",
+    "title": "missing count beside the ball of yarn",
     "where": [
       {
         "lean": "containment",

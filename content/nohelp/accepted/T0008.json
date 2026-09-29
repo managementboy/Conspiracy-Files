@@ -1,13 +1,13 @@
 [
   {
-    "body": "The keyring is wrapped in the lunchbox's cloth lining. A chalk boundary crosses the lid; the ring is on the clean side and the meal on the dusty one.",
+    "body": "green crop residue marks the short rope; a scraped warning stripe marks the water bottle. both are tied with the same cord.",
     "id": "t0008-01",
     "kind": "set",
     "pieces": [
-      "Lunchbox",
-      "KeyRing"
+      "Rope",
+      "WaterBottle"
     ],
-    "title": "The keys stayed outside the marked floor",
+    "title": "two traces on the short rope",
     "where": [
       {
         "lean": "containment",

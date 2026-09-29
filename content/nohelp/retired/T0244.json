@@ -1,0 +1,49 @@
+[
+  {
+    "recall": "R1",
+    "row": {
+      "anchor": {
+        "print": "PremisesforLease863"
+      },
+      "body": "The office key is issued for the leased suite before the building check is signed. The rent card marks the space occupied that morning.",
+      "id": "t0244-01",
+      "kind": "set",
+      "pieces": [
+        "KeyRing",
+        "SheetPaper2"
+      ],
+      "title": "Office lease before clearance",
+      "where": [
+        {
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "Premises for Lease (listing no. 863)",
+        "source": "print:PremisesforLease863"
+      },
+      "gloss": "An office is occupied before its building check is signed.",
+      "prov": {
+        "batch": "T0244",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A work group could lease the suite before an inspection; the card does not show whether anyone was turned away."
+    }
+  }
+]

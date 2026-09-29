@@ -1,0 +1,51 @@
+[
+  {
+    "recall": "R1",
+    "row": {
+      "anchor": {
+        "map": "BBurgStashMap4",
+        "mark": 1
+      },
+      "body": "The pickup card assigns each trailer a time, then records the vehicle at the gate before the first family is listed. The spare hitch key is still here.",
+      "id": "t0029-01",
+      "kind": "set",
+      "pieces": [
+        "SheetPaper2",
+        "Pencil",
+        "KeyRing"
+      ],
+      "title": "The unfinished handoff",
+      "where": [
+        {
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "one bite = death",
+        "source": "map:BBurgStashMap4"
+      },
+      "gloss": "A pickup record places transport at the gate before the household list was completed.",
+      "prov": {
+        "batch": "T0029",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "The same route could have moved field workers or supplies; an early vehicle mark does not identify its purpose."
+    }
+  }
+]

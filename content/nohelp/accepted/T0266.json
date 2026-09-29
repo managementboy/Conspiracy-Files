@@ -3,14 +3,14 @@
     "anchor": {
       "print": "HouseforSale787"
     },
-    "body": "The house key is tied to a route map, and the sale card says the rooms were clear before the road inspection was finished.",
+    "body": "three pickup dots mark the antibiotics and folded road map. two were scratched away without wear around them.",
     "id": "t0266-01",
     "kind": "set",
     "pieces": [
-      "KeyRing",
+      "Antibiotics",
       "Map"
     ],
-    "title": "A property near the route",
+    "title": "missing count beside the antibiotics",
     "where": [
       {
         "lean": "containment",

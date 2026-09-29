@@ -3,14 +3,14 @@
     "anchor": {
       "print": "Fossoil8"
     },
-    "body": "The pump key is signed back before the last fuel delivery, and a note asks the crew to keep the drum sealed until the next test.",
+    "body": "oily field residue links the short rope and water bottle. a clean waterline shows both were rinsed before the road closed.",
     "id": "t0166-01",
     "kind": "set",
     "pieces": [
-      "PetrolCan",
-      "KeyRing"
+      "Rope",
+      "WaterBottle"
     ],
-    "title": "The pump key was returned",
+    "title": "field residue on the short rope",
     "where": [
       {
         "lean": "agricultural",

@@ -6,20 +6,16 @@
         "a-pathway"
       ],
       "containment": [
-        "c-orders",
-        "c-failure"
+        "c-warning",
+        "c-orders"
       ]
     },
-    "cites": {
-      "quote": "Sunset Pines Funeral Home",
-      "source": "print:SunsetPinesFuneralHome"
-    },
-    "gloss": "A room is aired after the final pickup.",
+    "gloss": "Farm residue and response markings share one deliberately ambiguous bundle.",
     "prov": {
       "batch": "T0211",
-      "handoff": "2026-09-28",
+      "handoff": "2026-09-27",
       "writer": "ChatGPT"
     },
-    "rival_reading": "A response crew could ventilate a room after ordinary cleaning; the ledger does not identify what was cleaned."
+    "rival_reading": "The farm program and the emergency response each explain one layer of the bundle, and the shared knot does not establish which purpose came first."
   }
 }

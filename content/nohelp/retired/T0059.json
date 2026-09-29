@@ -1,0 +1,50 @@
+[
+  {
+    "recall": "R1",
+    "row": {
+      "anchor": {
+        "map": "LouisvilleStashMap11",
+        "mark": 1
+      },
+      "body": "The storage key is attached to a list that marks the units empty, although a handwritten note asks for another count before the hospital run.",
+      "id": "t0059-01",
+      "kind": "set",
+      "pieces": [
+        "KeyRing",
+        "Notebook"
+      ],
+      "title": "Storage access list",
+      "where": [
+        {
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "unlooted",
+        "source": "map:LouisvilleStashMap11"
+      },
+      "gloss": "A storage inventory says empty while a second count is still requested.",
+      "prov": {
+        "batch": "T0059",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A supply clerk could have requested a recount before a field transfer; the list does not say who was inside."
+    }
+  }
+]

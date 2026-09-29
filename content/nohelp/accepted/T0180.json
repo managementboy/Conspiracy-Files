@@ -3,14 +3,14 @@
     "anchor": {
       "print": "LSU"
     },
-    "body": "The classroom key is attached to an attendance page that marks a lecture complete before the instructor’s arrival time.",
+    "body": "a broken barrier board crushed the crowbar against the briefcase. clean undersides show both were there before the road was blocked.",
     "id": "t0180-01",
     "kind": "set",
     "pieces": [
-      "Book",
-      "KeyRing"
+      "Crowbar",
+      "Briefcase"
     ],
-    "title": "The classroom key",
+    "title": "missing count beside the crowbar",
     "where": [
       {
         "lean": "containment",

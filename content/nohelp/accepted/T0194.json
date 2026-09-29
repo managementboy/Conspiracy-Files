@@ -3,14 +3,14 @@
     "anchor": {
       "print": "HouseforSale895"
     },
-    "body": "The listing key is checked out for inspection, but the house is recorded clear before the inspector’s arrival. The price card stays on the door.",
+    "body": "road dust coats the car jack and clipboard, but their ties are clean and newly cut. the bundle was repacked after travel.",
     "id": "t0194-01",
     "kind": "set",
     "pieces": [
-      "KeyRing",
-      "Map"
+      "Jack",
+      "Clipboard"
     ],
-    "title": "Inspection before sale",
+    "title": "missing count beside the car jack",
     "where": [
       {
         "lean": "containment",

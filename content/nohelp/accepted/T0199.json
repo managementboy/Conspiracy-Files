@@ -3,14 +3,14 @@
     "anchor": {
       "print": "RedOakApartments"
     },
-    "body": "The apartment key is packed with a water bottle and a move-in card; the card says the furnished room is ready, while the test line remains blank.",
+    "body": "the garden hoe and seed sack are packed with treated seed. every kernel has the same cracked green coating.",
     "id": "t0199-01",
     "kind": "set",
     "pieces": [
-      "KeyRing",
-      "WaterBottle"
+      "GardenHoe",
+      "SeedBag"
     ],
-    "title": "Furnished room, pending test",
+    "title": "field residue on the garden hoe",
     "where": [
       {
         "lean": "agricultural",

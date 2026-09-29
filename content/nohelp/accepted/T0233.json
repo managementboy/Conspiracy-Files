@@ -3,14 +3,14 @@
     "anchor": {
       "print": "EPToolsLV"
     },
-    "body": "The store tally closes before the last customer’s tool is returned. The line for items borrowed by the repair crew is blank.",
+    "body": "four notches on the leather strips match four marks on the bath towel; a fifth mark was sanded flat on both.",
     "id": "t0233-01",
     "kind": "set",
     "pieces": [
-      "Screwdriver",
-      "KeyRing"
+      "LeatherStrips",
+      "BathTowel"
     ],
-    "title": "The extra item",
+    "title": "missing count beside the leather strips",
     "where": [
       {
         "lean": "containment",

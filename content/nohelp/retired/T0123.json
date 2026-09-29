@@ -1,0 +1,50 @@
+[
+  {
+    "recall": "R1",
+    "row": {
+      "anchor": {
+        "map": "WorldStashMap14",
+        "mark": 1
+      },
+      "body": "A family photograph is clipped to a key transfer card; the pickup line is marked completed, but the recipient box is blank.",
+      "id": "t0123-01",
+      "kind": "set",
+      "pieces": [
+        "Photo",
+        "KeyRing"
+      ],
+      "title": "Names on the family key",
+      "where": [
+        {
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "grandma",
+        "source": "map:WorldStashMap14"
+      },
+      "gloss": "A family key is transferred without a named recipient.",
+      "prov": {
+        "batch": "T0123",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A field team could have borrowed a household key for a visit; the empty recipient box does not prove anyone was evacuated."
+    }
+  }
+]

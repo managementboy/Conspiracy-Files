@@ -1,0 +1,51 @@
+[
+  {
+    "recall": "R1",
+    "row": {
+      "anchor": {
+        "map": "BBurgStashMap5",
+        "mark": 1
+      },
+      "body": "The cold-room key is tied to a delivery slip marked received before the road closure. The sealed box is still listed as waiting at the storage units.",
+      "id": "t0030-02",
+      "kind": "set",
+      "pieces": [
+        "TinOpener",
+        "SheetPaper2",
+        "KeyRing"
+      ],
+      "title": "Kept from the drawer",
+      "where": [
+        {
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "catfish restaurant",
+        "source": "map:BBurgStashMap5"
+      },
+      "gloss": "A delivery record marks goods received before access closed, while the box remains uncollected.",
+      "prov": {
+        "batch": "T0030",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A shipment of field supplies could have been delayed or misrouted; the paperwork does not identify the cargo."
+    }
+  }
+]

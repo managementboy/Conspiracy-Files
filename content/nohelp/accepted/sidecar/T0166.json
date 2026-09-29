@@ -3,23 +3,20 @@
     "axioms": {
       "agricultural": [
         "a-program",
+        "a-malfunction",
         "a-pathway"
       ],
       "containment": [
-        "c-orders",
-        "c-failure"
+        "c-warning",
+        "c-orders"
       ]
     },
-    "cites": {
-      "quote": "Fossoil (South Louisville)",
-      "source": "print:Fossoil8"
-    },
-    "gloss": "A fuel delivery follows a key return and a request to keep the drum sealed.",
+    "gloss": "A rare everyday object carries residue tied to field work before restriction.",
     "prov": {
       "batch": "T0166",
-      "handoff": "2026-09-28",
+      "handoff": "2026-09-27",
       "writer": "ChatGPT"
     },
-    "rival_reading": "A response team could seal fuel during an emergency; the note does not say what the test was meant to find."
+    "rival_reading": "Emergency workers crossing treated land could have picked up the same residue; the objects do not prove the farm program began the emergency."
   }
 }

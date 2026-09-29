@@ -1,0 +1,49 @@
+[
+  {
+    "recall": "R1",
+    "row": {
+      "anchor": {
+        "print": "PremiseswithApartmentsforLeaselistingno891"
+      },
+      "body": "The lease key is issued before the building inspection; a test note says the rear water line is not ready for tenant use.",
+      "id": "t0217-01",
+      "kind": "set",
+      "pieces": [
+        "KeyRing",
+        "Notebook"
+      ],
+      "title": "Lease before inspection",
+      "where": [
+        {
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "Premises with Apartments for Lease (listing no. 891)",
+        "source": "print:PremiseswithApartmentsforLeaselistingno891"
+      },
+      "gloss": "A tenant key is issued while a water line remains unapproved.",
+      "prov": {
+        "batch": "T0217",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "An emergency inspection could delay move-in after a building problem; the note does not identify the source."
+    }
+  }
+]

@@ -6,17 +6,17 @@
         "a-pathway"
       ],
       "containment": [
-        "c-orders",
-        "c-failure"
+        "c-warning",
+        "c-orders"
       ]
     },
-    "gloss": "A county access key and a closure record contradict each other.",
+    "gloss": "Farm residue and response markings share one deliberately ambiguous bundle.",
     "prov": {
       "batch": "T0003",
       "handoff": "2026-09-27",
       "writer": "ChatGPT"
     },
-    "rival_reading": "A farm worker could mark a temporary gate closure and reclaim a county key after a shift; a crossed-out route does not prove an official evacuation failure."
+    "rival_reading": "The farm program and the emergency response each explain one layer of the bundle, and the shared knot does not establish which purpose came first."
   },
   "t0003-02": {
     "axioms": {

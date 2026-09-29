@@ -4,14 +4,14 @@
       "map": "WpStashMap15",
       "mark": 1
     },
-    "body": "The shelter key is packed with a note promising it will stay hidden; the entry sheet says the gate was opened for a scheduled pickup that never arrived.",
+    "body": "road dust coats the comb and hand torch, but their ties are clean and newly cut. the bundle was repacked after travel.",
     "id": "t0147-01",
     "kind": "set",
     "pieces": [
-      "Bag_ALICEpack",
-      "KeyRing"
+      "Comb",
+      "HandTorch"
     ],
-    "title": "A shelter kept secret",
+    "title": "missing count beside the comb",
     "where": [
       {
         "lean": "containment",

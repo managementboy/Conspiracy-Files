@@ -3,14 +3,14 @@
     "anchor": {
       "print": "MeadshireEstate"
     },
-    "body": "The gate key is tied to a resident roster that marks the community empty before the final visitor signed out.",
+    "body": "the red pen and camera are wrapped in a child's raincoat. one stayed dry while the other was left in road mud.",
     "id": "t0214-01",
     "kind": "set",
     "pieces": [
-      "KeyRing",
-      "Map"
+      "RedPen",
+      "Camera"
     ],
-    "title": "Gated community access",
+    "title": "missing count beside the red pen",
     "where": [
       {
         "lean": "containment",

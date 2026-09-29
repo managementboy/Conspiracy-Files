@@ -3,14 +3,14 @@
     "anchor": {
       "print": "WPTownHall"
     },
-    "body": "The town meeting agenda lists a field update after the public session; the room key is logged returned before residents signed out.",
+    "body": "field dust covers one side of the candle and animal-feed sack; torn warning tape covers the other. the bundle was opened from both ends.",
     "id": "t0247-01",
     "kind": "set",
     "pieces": [
-      "SheetPaper2",
-      "KeyRing"
+      "Candle",
+      "AnimalFeedBag"
     ],
-    "title": "Town hall agenda",
+    "title": "two traces on the candle",
     "where": [
       {
         "lean": "agricultural",

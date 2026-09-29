@@ -3,14 +3,14 @@
     "anchor": {
       "print": "WellingtonHeightsGolfClub"
     },
-    "body": "The clubhouse key is signed out for a pickup, while a grounds note says the water cart was already sent away. The passenger line is blank.",
+    "body": "farm mud fills one crease of the black umbrella and camera; clean warning tape seals the opposite crease.",
     "id": "t0179-01",
     "kind": "set",
     "pieces": [
-      "WaterBottle",
-      "KeyRing"
+      "UmbrellaBlack",
+      "Camera"
     ],
-    "title": "The clubhouse pickup",
+    "title": "two traces on the black umbrella",
     "where": [
       {
         "lean": "containment",

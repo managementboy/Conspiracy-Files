@@ -3,14 +3,14 @@
     "anchor": {
       "print": "HouseforSale845"
     },
-    "body": "The house key is attached to a property map; the viewing sheet says the rooms were clear before the owner’s final walk-through.",
+    "body": "the bar of soap and briefcase are tied with cut warning tape. six tally cuts mark the bar of soap; only four are crossed through.",
     "id": "t0240-01",
     "kind": "set",
     "pieces": [
-      "Map",
-      "KeyRing"
+      "Soap2",
+      "Briefcase"
     ],
-    "title": "The well-kept property",
+    "title": "missing count beside the bar of soap",
     "where": [
       {
         "lean": "containment",

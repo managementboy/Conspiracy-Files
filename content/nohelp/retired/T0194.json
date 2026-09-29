@@ -1,0 +1,49 @@
+[
+  {
+    "recall": "R1",
+    "row": {
+      "anchor": {
+        "print": "HouseforSale895"
+      },
+      "body": "The listing key is checked out for inspection, but the house is recorded clear before the inspector’s arrival. The price card stays on the door.",
+      "id": "t0194-01",
+      "kind": "set",
+      "pieces": [
+        "KeyRing",
+        "Map"
+      ],
+      "title": "Inspection before sale",
+      "where": [
+        {
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "House for Sale (no. 895)",
+        "source": "print:HouseforSale895"
+      },
+      "gloss": "A house is marked clear before its inspection.",
+      "prov": {
+        "batch": "T0194",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A routine sale inspection could be rescheduled without updating the card; the log does not show who closed the house."
+    }
+  }
+]

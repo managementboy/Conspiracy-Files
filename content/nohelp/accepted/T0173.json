@@ -3,14 +3,14 @@
     "anchor": {
       "print": "SunstarMotel"
     },
-    "body": "The motel room card grants a discount, but the checkout slip says the room was cleared before the guest’s key was returned.",
+    "body": "chalk numbers run across the wax crayons and bath towel. the count skips one place, then resumes in a different hand.",
     "id": "t0173-01",
     "kind": "set",
     "pieces": [
-      "KeyRing",
-      "SheetPaper2"
+      "Crayons",
+      "BathTowel"
     ],
-    "title": "The room discount",
+    "title": "missing count beside the wax crayons",
     "where": [
       {
         "lean": "containment",

@@ -3,14 +3,14 @@
     "anchor": {
       "print": "DuCaseApartments"
     },
-    "body": "The apartment ledger records a tenant moved in before the river-facing rooms were released. The spare key is still logged with the prior renter.",
+    "body": "the empty sandbag and briefcase are tied with cut warning tape. six tally cuts mark the empty sandbag; only four are crossed through.",
     "id": "t0200-01",
     "kind": "set",
     "pieces": [
-      "KeyRing",
-      "SheetPaper2"
+      "EmptySandbag",
+      "Briefcase"
     ],
-    "title": "River-view handover",
+    "title": "missing count beside the empty sandbag",
     "where": [
       {
         "lean": "containment",

@@ -1,0 +1,49 @@
+[
+  {
+    "recall": "R1",
+    "row": {
+      "anchor": {
+        "print": "Coalfield"
+      },
+      "body": "The town map is folded around a gate key; the population sheet says the district was cleared before the last road check.",
+      "id": "t0258-01",
+      "kind": "set",
+      "pieces": [
+        "Map",
+        "KeyRing"
+      ],
+      "title": "Town boundary map",
+      "where": [
+        {
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "Coalfield",
+        "source": "print:Coalfield"
+      },
+      "gloss": "A district is marked clear before its last road check.",
+      "prov": {
+        "batch": "T0258",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A field survey could clear a district for routine work; the sheet does not say who made the call."
+    }
+  }
+]

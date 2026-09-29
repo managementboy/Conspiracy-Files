@@ -4,14 +4,14 @@
       "map": "WorldStashMap18",
       "mark": 1
     },
-    "body": "The map is folded around a return key, but the departure sheet omits the way back. A pencilled note asks the next driver to call before opening the gate.",
+    "body": "the alcohol wipes and briefcase are wrapped in a child's raincoat. one stayed dry while the other was left in road mud.",
     "id": "t0127-01",
     "kind": "set",
     "pieces": [
-      "Map",
-      "KeyRing"
+      "AlcoholWipes",
+      "Briefcase"
     ],
-    "title": "Return route withheld",
+    "title": "missing count beside the alcohol wipes",
     "where": [
       {
         "lean": "containment",

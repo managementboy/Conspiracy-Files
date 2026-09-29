@@ -4,14 +4,14 @@
       "map": "RiversideStashMap10",
       "mark": 1
     },
-    "body": "A bank key and market receipt are clipped to a westbound travel slip; the departure is signed, but the receiving station is blank.",
+    "body": "the sponge and folded road map are tied with cut warning tape. six tally cuts mark the sponge; only four are crossed through.",
     "id": "t0103-01",
     "kind": "set",
     "pieces": [
-      "KeyRing",
-      "SheetPaper2"
+      "Sponge",
+      "Map"
     ],
-    "title": "The westbound schedule",
+    "title": "missing count beside the sponge",
     "where": [
       {
         "lean": "containment",

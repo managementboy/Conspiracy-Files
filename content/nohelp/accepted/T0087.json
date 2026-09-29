@@ -4,14 +4,14 @@
       "map": "MulStashMap10",
       "mark": 1
     },
-    "body": "A door key is kept with a cleaning bottle and a checklist that says the rooms were clear. The back asks for one more walk-through before reopening.",
+    "body": "the leather strips and bath towel are wedged beneath unused warning tape. footprints pass around the bundle rather than toward it.",
     "id": "t0087-01",
     "kind": "set",
     "pieces": [
-      "Disinfectant",
-      "KeyRing"
+      "LeatherStrips",
+      "BathTowel"
     ],
-    "title": "Clear on the first pass",
+    "title": "missing count beside the leather strips",
     "where": [
       {
         "lean": "containment",

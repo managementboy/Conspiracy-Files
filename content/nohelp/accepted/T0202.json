@@ -3,14 +3,14 @@
     "anchor": {
       "print": "LowryCourt"
     },
-    "body": "The apartment plan marks the unit occupied, while the key log says the building was empty at the same time. A tenant’s route note ends at the stairwell.",
+    "body": "opposite route arrows are painted on the dish cloth and folded road map. the older arrow was scraped away beneath fresh road grit.",
     "id": "t0202-01",
     "kind": "set",
     "pieces": [
-      "KeyRing",
+      "DishCloth",
       "Map"
     ],
-    "title": "Cozy unit, no exit note",
+    "title": "missing count beside the dish cloth",
     "where": [
       {
         "lean": "containment",

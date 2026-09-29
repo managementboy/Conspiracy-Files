@@ -3,14 +3,14 @@
     "anchor": {
       "print": "PremiseswithApartmentsforLeaselistingno891"
     },
-    "body": "The lease key is issued before the building inspection; a test note says the rear water line is not ready for tenant use.",
+    "body": "field dust covers one side of the blue pen and animal-feed sack; torn warning tape covers the other. the bundle was opened from both ends.",
     "id": "t0217-01",
     "kind": "set",
     "pieces": [
-      "KeyRing",
-      "Notebook"
+      "BluePen",
+      "AnimalFeedBag"
     ],
-    "title": "Lease before inspection",
+    "title": "two traces on the blue pen",
     "where": [
       {
         "lean": "agricultural",

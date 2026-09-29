@@ -4,14 +4,14 @@
       "map": "IrvingtonStashMap10",
       "mark": 1
     },
-    "body": "A radio is packed with the house key and a note promising someone will remain at the marked address. The battery receipt is dated after the promised check-in.",
+    "body": "chalk numbers run across the red pen and camera. the count skips one place, then resumes in a different hand.",
     "id": "t0049-01",
     "kind": "set",
     "pieces": [
-      "RadioBlack",
-      "KeyRing"
+      "RedPen",
+      "Camera"
     ],
-    "title": "We will stay reachable",
+    "title": "missing count beside the red pen",
     "where": [
       {
         "lean": "containment",

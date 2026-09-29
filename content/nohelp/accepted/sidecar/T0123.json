@@ -6,20 +6,17 @@
         "a-pathway"
       ],
       "containment": [
+        "c-warning",
         "c-orders",
         "c-failure"
       ]
     },
-    "cites": {
-      "quote": "grandma",
-      "source": "map:WorldStashMap14"
-    },
-    "gloss": "A family key is transferred without a named recipient.",
+    "gloss": "A response bundle preserves a missing count, changed route, or erased identity.",
     "prov": {
       "batch": "T0123",
-      "handoff": "2026-09-28",
+      "handoff": "2026-09-27",
       "writer": "ChatGPT"
     },
-    "rival_reading": "A field team could have borrowed a household key for a visit; the empty recipient box does not prove anyone was evacuated."
+    "rival_reading": "A farm-program crew could have counted routes, repacked tools, or removed ownership marks during hurried field work; the objects do not prove a concealed public response."
   }
 }

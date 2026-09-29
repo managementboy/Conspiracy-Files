@@ -4,15 +4,14 @@
       "map": "MarchRidgeStashMap1",
       "mark": 1
     },
-    "body": "The shell box is signed out at 6:10, the marked route is closed at 5:40, and a spare key is still tied to the map. The return box is blank.",
+    "body": "road dust coats the lug wrench and hand torch, but their ties are clean and newly cut. the bundle was repacked after travel.",
     "id": "t0022-01",
     "kind": "set",
     "pieces": [
-      "ShotgunShells",
-      "Map",
-      "KeyRing"
+      "LugWrench",
+      "HandTorch"
     ],
-    "title": "Inventory closed before the gate",
+    "title": "missing count beside the lug wrench",
     "where": [
       {
         "lean": "containment",

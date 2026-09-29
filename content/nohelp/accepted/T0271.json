@@ -3,19 +3,19 @@
     "anchor": {
       "print": "MadDansDen"
     },
-    "body": "The furniture delivery sheet marks the appliances tested, but the installer’s key is returned before the power check is signed.",
+    "body": "the pocket calculator and first-aid kit carry the same black paint. a fresh scrape exposes an older evacuation color beneath.",
     "id": "t0271-01",
     "kind": "set",
     "pieces": [
-      "Screwdriver",
-      "KeyRing"
+      "Calculator",
+      "FirstAidKit"
     ],
-    "title": "The appliance inventory",
+    "title": "missing count beside the pocket calculator",
     "where": [
       {
-        "lean": "agricultural",
+        "lean": "containment",
         "place": "mapNamed",
-        "rival": "containment",
+        "rival": "agricultural",
         "spot": "ground"
       }
     ]

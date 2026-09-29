@@ -1,0 +1,51 @@
+[
+  {
+    "recall": "R1",
+    "row": {
+      "anchor": {
+        "map": "MarchRidgeStashMap1",
+        "mark": 1
+      },
+      "body": "The shell box is signed out at 6:10, the marked route is closed at 5:40, and a spare key is still tied to the map. The return box is blank.",
+      "id": "t0022-01",
+      "kind": "set",
+      "pieces": [
+        "ShotgunShells",
+        "Map",
+        "KeyRing"
+      ],
+      "title": "Inventory closed before the gate",
+      "where": [
+        {
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "Gun here",
+        "source": "map:MarchRidgeStashMap1"
+      },
+      "gloss": "A collection record places a route closure before the return of its equipment.",
+      "prov": {
+        "batch": "T0022",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A test crew could have recorded a temporary site closure before retrieving equipment; the blank line does not say who set the schedule."
+    }
+  }
+]

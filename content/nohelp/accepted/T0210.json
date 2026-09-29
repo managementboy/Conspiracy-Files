@@ -3,14 +3,14 @@
     "anchor": {
       "print": "KnoxPackKitchens"
     },
-    "body": "The cabinet key is attached to a delivery slip marked complete before the kitchen passed inspection. The installer’s meal receipt is still unpaid.",
+    "body": "the hole punch and clipboard smell sharply of bleach. mud outlines between them show that a third object was removed.",
     "id": "t0210-01",
     "kind": "set",
     "pieces": [
-      "Screwdriver",
-      "KeyRing"
+      "HolePuncher",
+      "Clipboard"
     ],
-    "title": "Cabinet delivery before clearance",
+    "title": "missing count beside the hole punch",
     "where": [
       {
         "lean": "containment",

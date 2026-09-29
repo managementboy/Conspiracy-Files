@@ -6,20 +6,16 @@
         "a-pathway"
       ],
       "containment": [
-        "c-orders",
-        "c-failure"
+        "c-warning",
+        "c-orders"
       ]
     },
-    "cites": {
-      "quote": "Premises with Apartments for Lease (listing no. 891)",
-      "source": "print:PremiseswithApartmentsforLeaselistingno891"
-    },
-    "gloss": "A tenant key is issued while a water line remains unapproved.",
+    "gloss": "Farm residue and response markings share one deliberately ambiguous bundle.",
     "prov": {
       "batch": "T0217",
-      "handoff": "2026-09-28",
+      "handoff": "2026-09-27",
       "writer": "ChatGPT"
     },
-    "rival_reading": "An emergency inspection could delay move-in after a building problem; the note does not identify the source."
+    "rival_reading": "The farm program and the emergency response each explain one layer of the bundle, and the shared knot does not establish which purpose came first."
   }
 }

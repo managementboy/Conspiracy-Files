@@ -1,0 +1,51 @@
+[
+  {
+    "recall": "R1",
+    "row": {
+      "anchor": {
+        "map": "LouisvilleStashMap1",
+        "mark": 1
+      },
+      "body": "The pencilled route to the house ends at an ammunition collection point; the key ring is tagged 'back before supper,' but no return time is entered.",
+      "id": "t0021-01",
+      "kind": "set",
+      "pieces": [
+        "Map",
+        "KeyRing",
+        "Pencil"
+      ],
+      "title": "No return time",
+      "where": [
+        {
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-malfunction"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "gun guy's house",
+        "source": "map:LouisvilleStashMap1"
+      },
+      "gloss": "A household collection route has a departure and no recorded return.",
+      "prov": {
+        "batch": "T0021",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A field team could have logged a temporary equipment pickup and left its key behind; the note gives no reason for the route being blocked."
+    }
+  }
+]

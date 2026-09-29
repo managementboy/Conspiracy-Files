@@ -4,15 +4,14 @@
       "map": "BBurgStashMap7",
       "mark": 1
     },
-    "body": "The gate key is pinned under a closure notice dated after the guard shift ended. Someone wedged a bat across the latch from the inside.",
+    "body": "the dish cloth and folded road map are tied with cut warning tape. six tally cuts mark the dish cloth; only four are crossed through.",
     "id": "t0032-01",
     "kind": "set",
     "pieces": [
-      "BaseballBat",
-      "KeyRing",
-      "SheetPaper2"
+      "DishCloth",
+      "Map"
     ],
-    "title": "The unfinished handoff",
+    "title": "missing count beside the dish cloth",
     "where": [
       {
         "lean": "containment",

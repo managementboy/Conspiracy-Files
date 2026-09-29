@@ -6,21 +6,18 @@
         "a-pathway"
       ],
       "containment": [
+        "c-warning",
         "c-orders",
         "c-failure"
       ]
     },
-    "cites": {
-      "quote": "fucks wouldn't let me in",
-      "source": "map:BBurgStashMap7"
-    },
-    "gloss": "A gate closure appears after the listed shift, with the inside latch still blocked.",
+    "gloss": "A response bundle preserves a missing count, changed route, or erased identity.",
     "prov": {
       "batch": "T0032",
-      "handoff": "2026-09-28",
+      "handoff": "2026-09-27",
       "writer": "ChatGPT"
     },
-    "rival_reading": "A program site could also have been closed to visitors; the late notice and blocked gate do not identify who ordered it."
+    "rival_reading": "A farm-program crew could have counted routes, repacked tools, or removed ownership marks during hurried field work; the objects do not prove a concealed public response."
   },
   "t0032-02": {
     "axioms": {

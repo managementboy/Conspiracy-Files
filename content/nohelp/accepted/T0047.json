@@ -4,14 +4,14 @@
       "map": "IrvingtonStashMap8",
       "mark": 1
     },
-    "body": "A laundry token is tied to the restaurant key, but the posted pickup list ends before the names marked “still here.”",
+    "body": "red and blue cord join the black pen to the bath towel. the red route is cut; the blue route ends in a sealed knot.",
     "id": "t0047-01",
     "kind": "set",
     "pieces": [
-      "BathTowel",
-      "KeyRing"
+      "Pen",
+      "BathTowel"
     ],
-    "title": "The last clean towel",
+    "title": "missing count beside the black pen",
     "where": [
       {
         "lean": "containment",

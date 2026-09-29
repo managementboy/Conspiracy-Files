@@ -1,0 +1,49 @@
+[
+  {
+    "recall": "R1",
+    "row": {
+      "anchor": {
+        "print": "KnoxBankJobAdRosewood"
+      },
+      "body": "A bank hiring form is attached to a field-use roster; the teller’s start date is written before the training room was cleared.",
+      "id": "t0189-01",
+      "kind": "set",
+      "pieces": [
+        "Notebook",
+        "KeyRing"
+      ],
+      "title": "The teller position",
+      "where": [
+        {
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "Knox Bank Job Ad (Rosewood)",
+        "source": "print:KnoxBankJobAdRosewood"
+      },
+      "gloss": "A teller start date precedes the room clearance.",
+      "prov": {
+        "batch": "T0189",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "An emergency office could train staff before reopening; the roster does not identify the field use."
+    }
+  }
+]

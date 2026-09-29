@@ -4,15 +4,14 @@
       "map": "BBurgStashMap1",
       "mark": 1
     },
-    "body": "Lesson dates stop at the county road closure; the house key is tied to the page beside a note to keep the fee for the missed lessons. No return date is written.",
+    "body": "the tire pump is tied to the first-aid kit by a clipped lanyard. an empty loop shows where an identifying tag was cut off.",
     "id": "t0020-01",
     "kind": "set",
     "pieces": [
-      "SheetPaper2",
-      "Pencil",
-      "KeyRing"
+      "TirePump",
+      "FirstAidKit"
     ],
-    "title": "Road closure practice",
+    "title": "missing count beside the tire pump",
     "where": [
       {
         "lean": "containment",

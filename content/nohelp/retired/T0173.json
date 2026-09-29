@@ -1,0 +1,49 @@
+[
+  {
+    "recall": "R1",
+    "row": {
+      "anchor": {
+        "print": "SunstarMotel"
+      },
+      "body": "The motel room card grants a discount, but the checkout slip says the room was cleared before the guest’s key was returned.",
+      "id": "t0173-01",
+      "kind": "set",
+      "pieces": [
+        "KeyRing",
+        "SheetPaper2"
+      ],
+      "title": "The room discount",
+      "where": [
+        {
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "Sunstar Motel",
+        "source": "print:SunstarMotel"
+      },
+      "gloss": "A room is marked clear while its key remains out.",
+      "prov": {
+        "batch": "T0173",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A work crew could receive the same discount and leave early; the slip does not say who last occupied the room."
+    }
+  }
+]

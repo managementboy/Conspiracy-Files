@@ -1,0 +1,49 @@
+[
+  {
+    "recall": "R1",
+    "row": {
+      "anchor": {
+        "print": "DuCaseApartments"
+      },
+      "body": "The apartment ledger records a tenant moved in before the river-facing rooms were released. The spare key is still logged with the prior renter.",
+      "id": "t0200-01",
+      "kind": "set",
+      "pieces": [
+        "KeyRing",
+        "SheetPaper2"
+      ],
+      "title": "River-view handover",
+      "where": [
+        {
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "Du Case Apartments",
+        "source": "print:DuCaseApartments"
+      },
+      "gloss": "A move-in predates the release of the rooms and key.",
+      "prov": {
+        "batch": "T0200",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A landlord could stage keys during a routine turnover; the ledger does not show who was actually in the rooms."
+    }
+  }
+]

@@ -3,14 +3,14 @@
     "anchor": {
       "print": "HouseforSale818"
     },
-    "body": "The sale form marks the property quiet and empty, but the key log records a room opened after the inspector left.",
+    "body": "the animal-feed sack is tied to the hand radio by a clipped lanyard. an empty loop shows where an identifying tag was cut off.",
     "id": "t0268-01",
     "kind": "set",
     "pieces": [
-      "KeyRing",
-      "SheetPaper2"
+      "AnimalFeedBag",
+      "WalkieTalkie1"
     ],
-    "title": "Quiet home inspection",
+    "title": "missing count beside the animal-feed sack",
     "where": [
       {
         "lean": "containment",

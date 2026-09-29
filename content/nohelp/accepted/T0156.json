@@ -3,19 +3,19 @@
     "anchor": {
       "print": "UStoreItRiverside"
     },
-    "body": "The lock-up key is packed with a field bag; the rental card says the unit was opened before the listed test equipment was delivered.",
+    "body": "four notches on the toothpaste match four marks on the camera; a fifth mark was sanded flat on both.",
     "id": "t0156-01",
     "kind": "set",
     "pieces": [
-      "KeyRing",
-      "Bag_ALICEpack"
+      "Toothpaste",
+      "Camera"
     ],
-    "title": "Storage unit opened early",
+    "title": "missing count beside the toothpaste",
     "where": [
       {
-        "lean": "agricultural",
+        "lean": "containment",
         "place": "mapNamed",
-        "rival": "containment",
+        "rival": "agricultural",
         "spot": "ground"
       }
     ]

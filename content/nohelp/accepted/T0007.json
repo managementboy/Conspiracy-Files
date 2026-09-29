@@ -1,13 +1,13 @@
 [
   {
-    "body": "The clipboard is closed around a keyring. One key leaves a clean outline in the dust, while the page beneath the clip has torn away at the holes.",
+    "body": "the warning whistle and first-aid kit were sealed together but never opened. soot darkens the bundle; clean outlines show it was packed before the fire.",
     "id": "t0007-01",
     "kind": "set",
     "pieces": [
-      "Clipboard",
-      "KeyRing"
+      "Whistle",
+      "FirstAidKit"
     ],
-    "title": "The keyring clipped over the empty page",
+    "title": "missing count beside the warning whistle",
     "where": [
       {
         "lean": "containment",

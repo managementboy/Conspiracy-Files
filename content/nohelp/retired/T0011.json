@@ -1,0 +1,43 @@
+[
+  {
+    "recall": "R1",
+    "row": {
+      "body": "A keyring is fastened beneath the clipboard clip. Its tag is worn smooth; the page above it has two pencil holes and no writing.",
+      "id": "t0011-02",
+      "kind": "set",
+      "person": "person-b",
+      "pieces": [
+        "Clipboard",
+        "KeyRing"
+      ],
+      "title": "The clipboard held the only spare",
+      "where": [
+        {
+          "lean": "containment",
+          "place": "office",
+          "rival": "agricultural",
+          "spot": "mailbox"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "gloss": "An access key is attached to a page that was never filled in.",
+      "prov": {
+        "batch": "T0011",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A field courier could secure a site key to a blank clipboard before a handoff; the empty page does not prove anyone was left without instructions."
+    }
+  }
+]

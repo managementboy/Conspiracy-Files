@@ -6,21 +6,18 @@
         "a-pathway"
       ],
       "containment": [
+        "c-warning",
         "c-orders",
         "c-failure"
       ]
     },
-    "cites": {
-      "quote": "community center",
-      "source": "map:BBurgStashMap2"
-    },
-    "gloss": "A hall key and departure record disagree about whether the building was secured before transport left.",
+    "gloss": "A response bundle preserves a missing count, changed route, or erased identity.",
     "prov": {
       "batch": "T0027",
-      "handoff": "2026-09-28",
+      "handoff": "2026-09-27",
       "writer": "ChatGPT"
     },
-    "rival_reading": "A program crew could have used the hall and its transport during ordinary field work; the contradictory door note does not say why the bus left."
+    "rival_reading": "A farm-program crew could have counted routes, repacked tools, or removed ownership marks during hurried field work; the objects do not prove a concealed public response."
   },
   "t0027-02": {
     "axioms": {

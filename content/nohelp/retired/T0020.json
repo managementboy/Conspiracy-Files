@@ -1,0 +1,51 @@
+[
+  {
+    "recall": "R1",
+    "row": {
+      "anchor": {
+        "map": "BBurgStashMap1",
+        "mark": 1
+      },
+      "body": "Lesson dates stop at the county road closure; the house key is tied to the page beside a note to keep the fee for the missed lessons. No return date is written.",
+      "id": "t0020-01",
+      "kind": "set",
+      "pieces": [
+        "SheetPaper2",
+        "Pencil",
+        "KeyRing"
+      ],
+      "title": "Road closure practice",
+      "where": [
+        {
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "Piano teacher's house",
+        "source": "map:BBurgStashMap1"
+      },
+      "gloss": "A lesson page and key preserve the dates and household cost of a road closure.",
+      "prov": {
+        "batch": "T0020",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A field crew could have closed the road for work nearby and left the key with a lesson note; nothing here says what forced the closure."
+    }
+  }
+]

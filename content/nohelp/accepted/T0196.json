@@ -3,14 +3,14 @@
     "anchor": {
       "print": "HouseforSale922"
     },
-    "body": "The listing key is returned to the office before the viewing ends. The property sheet says the house was empty, but a visitor left a meal receipt inside.",
+    "body": "the lug wrench and hand torch are wedged beneath unused warning tape. footprints pass around the bundle rather than toward it.",
     "id": "t0196-01",
     "kind": "set",
     "pieces": [
-      "KeyRing",
-      "SheetPaper2"
+      "LugWrench",
+      "HandTorch"
     ],
-    "title": "The low-price key",
+    "title": "missing count beside the lug wrench",
     "where": [
       {
         "lean": "containment",

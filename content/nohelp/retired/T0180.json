@@ -1,0 +1,49 @@
+[
+  {
+    "recall": "R1",
+    "row": {
+      "anchor": {
+        "print": "LSU"
+      },
+      "body": "The classroom key is attached to an attendance page that marks a lecture complete before the instructor’s arrival time.",
+      "id": "t0180-01",
+      "kind": "set",
+      "pieces": [
+        "Book",
+        "KeyRing"
+      ],
+      "title": "The classroom key",
+      "where": [
+        {
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "Louisville State University",
+        "source": "print:LSU"
+      },
+      "gloss": "A lecture is recorded complete before the instructor arrives.",
+      "prov": {
+        "batch": "T0180",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A research meeting could have been rescheduled around a field visit; the page does not explain who closed the room."
+    }
+  }
+]

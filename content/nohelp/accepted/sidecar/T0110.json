@@ -3,23 +3,20 @@
     "axioms": {
       "agricultural": [
         "a-program",
+        "a-malfunction",
         "a-pathway"
       ],
       "containment": [
-        "c-orders",
-        "c-failure"
+        "c-warning",
+        "c-orders"
       ]
     },
-    "cites": {
-      "quote": "Cara will help",
-      "source": "map:WorldStashMap1"
-    },
-    "gloss": "A driver is warned near a work area while the route record skips ahead.",
+    "gloss": "A rare everyday object carries residue tied to field work before restriction.",
     "prov": {
       "batch": "T0110",
-      "handoff": "2026-09-28",
+      "handoff": "2026-09-27",
       "writer": "ChatGPT"
     },
-    "rival_reading": "An emergency detour could explain both the slow route and early arrival entry; the note does not identify the plots."
+    "rival_reading": "Emergency workers crossing treated land could have picked up the same residue; the objects do not prove the farm program began the emergency."
   }
 }

@@ -22,19 +22,20 @@
     "axioms": {
       "agricultural": [
         "a-program",
+        "a-malfunction",
         "a-pathway"
       ],
       "containment": [
-        "c-orders",
-        "c-failure"
+        "c-warning",
+        "c-orders"
       ]
     },
-    "gloss": "A spray route and a crop-damage note share the same marked key.",
+    "gloss": "A rare everyday object carries residue tied to field work before restriction.",
     "prov": {
       "batch": "T0012",
       "handoff": "2026-09-27",
       "writer": "ChatGPT"
     },
-    "rival_reading": "A response crew could reroute through farm roads during a closure; wind damage might be ordinary field loss rather than a program failure."
+    "rival_reading": "Emergency workers crossing treated land could have picked up the same residue; the objects do not prove the farm program began the emergency."
   }
 }

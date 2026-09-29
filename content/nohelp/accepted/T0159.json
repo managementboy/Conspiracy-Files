@@ -3,14 +3,14 @@
     "anchor": {
       "print": "Fossoil1"
     },
-    "body": "The fuel receipt shows the pump opened for a fleet pickup, but the key ring is logged back before the driver signed out.",
+    "body": "opposite route arrows are painted on the loose badge and folded road map. the older arrow was scraped away beneath fresh road grit.",
     "id": "t0159-01",
     "kind": "set",
     "pieces": [
-      "PetrolCan",
-      "KeyRing"
+      "Badge",
+      "Map"
     ],
-    "title": "The fuel receipt",
+    "title": "missing count beside the loose badge",
     "where": [
       {
         "lean": "containment",

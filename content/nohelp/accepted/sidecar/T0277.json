@@ -6,20 +6,17 @@
         "a-pathway"
       ],
       "containment": [
+        "c-warning",
         "c-orders",
         "c-failure"
       ]
     },
-    "cites": {
-      "quote": "Sammie's (Brandenburg)",
-      "source": "print:Sammies"
-    },
-    "gloss": "A sale closes before stock and room checks are complete.",
+    "gloss": "A response bundle preserves a missing count, changed route, or erased identity.",
     "prov": {
       "batch": "T0277",
-      "handoff": "2026-09-28",
+      "handoff": "2026-09-27",
       "writer": "ChatGPT"
     },
-    "rival_reading": "A sales clerk could complete a transaction before the stock count; the sheet does not prove a customer was left inside."
+    "rival_reading": "A farm-program crew could have counted routes, repacked tools, or removed ownership marks during hurried field work; the objects do not prove a concealed public response."
   }
 }

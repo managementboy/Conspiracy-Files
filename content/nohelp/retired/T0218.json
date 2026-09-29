@@ -1,0 +1,49 @@
+[
+  {
+    "recall": "R1",
+    "row": {
+      "anchor": {
+        "print": "HouseforSale907"
+      },
+      "body": "The viewing card says the house is empty; a room checklist says a family meal was removed after the viewing began.",
+      "id": "t0218-01",
+      "kind": "set",
+      "pieces": [
+        "KeyRing",
+        "SheetPaper2"
+      ],
+      "title": "The cozy house inventory",
+      "where": [
+        {
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "House for Sale (no. 907)",
+        "source": "print:HouseforSale907"
+      },
+      "gloss": "The house is advertised empty while a meal is cleared during a viewing.",
+      "prov": {
+        "batch": "T0218",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A seller could clear a meal during a routine showing; the record does not show who was present."
+    }
+  }
+]

@@ -1,0 +1,50 @@
+[
+  {
+    "recall": "R1",
+    "row": {
+      "anchor": {
+        "map": "RiversideStashMap2",
+        "mark": 1
+      },
+      "body": "A private note is tied to a key and asks the recipient not to leave before the next transport arrives. The pickup time has been crossed out.",
+      "id": "t0095-01",
+      "kind": "set",
+      "pieces": [
+        "LetterHandwritten",
+        "KeyRing"
+      ],
+      "title": "Waiting at the old meeting point",
+      "where": [
+        {
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "208. Waiting for you",
+        "source": "map:RiversideStashMap2"
+      },
+      "gloss": "A personal message waits on a transport time that was removed.",
+      "prov": {
+        "batch": "T0095",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A field crew could have used the same meeting point and key; the crossed-out time does not show who cancelled it."
+    }
+  }
+]

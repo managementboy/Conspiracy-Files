@@ -1,0 +1,49 @@
+[
+  {
+    "recall": "R1",
+    "row": {
+      "anchor": {
+        "print": "LennysCarRepair"
+      },
+      "body": "The repair key is signed out for an engine test; the customer’s road receipt says the vehicle was cleared before the test ended.",
+      "id": "t0227-01",
+      "kind": "set",
+      "pieces": [
+        "Screwdriver",
+        "KeyRing"
+      ],
+      "title": "Suspension repair and route",
+      "where": [
+        {
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "Lenny's Car Repair",
+        "source": "print:LennysCarRepair"
+      },
+      "gloss": "A vehicle is cleared before its engine test ends.",
+      "prov": {
+        "batch": "T0227",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A response vehicle could be repaired and cleared during a rushed evacuation; the record does not identify the engine issue."
+    }
+  }
+]

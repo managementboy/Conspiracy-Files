@@ -1,0 +1,49 @@
+[
+  {
+    "recall": "R1",
+    "row": {
+      "anchor": {
+        "print": "Airport"
+      },
+      "body": "The airport map marks a flight route open, while the gate list says the passengers were transferred before boarding began.",
+      "id": "t0253-01",
+      "kind": "set",
+      "pieces": [
+        "Map",
+        "KeyRing"
+      ],
+      "title": "Airport route update",
+      "where": [
+        {
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "Louisville International Airport",
+        "source": "print:Airport"
+      },
+      "gloss": "Passenger transfer is recorded before boarding.",
+      "prov": {
+        "batch": "T0253",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A response team could transfer passengers during a delay; the list does not identify why the route changed."
+    }
+  }
+]

@@ -3,14 +3,14 @@
     "anchor": {
       "print": "UStoreItLouisville"
     },
-    "body": "A locker key is attached to a rental ledger that marks the unit cleared; the renter’s return signature is absent.",
+    "body": "the hand mirror and briefcase are bound with a torn sleeve. the fabric is smoke-stained outside and spotless beneath the knot.",
     "id": "t0157-01",
     "kind": "set",
     "pieces": [
-      "Notebook",
-      "KeyRing"
+      "Mirror",
+      "Briefcase"
     ],
-    "title": "The missing locker handoff",
+    "title": "missing count beside the hand mirror",
     "where": [
       {
         "lean": "containment",

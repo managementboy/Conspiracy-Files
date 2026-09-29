@@ -6,21 +6,17 @@
         "a-pathway"
       ],
       "containment": [
-        "c-orders",
-        "c-failure"
+        "c-warning",
+        "c-orders"
       ]
     },
-    "cites": {
-      "quote": "Wellington Heights Golf Club",
-      "source": "print:WellingtonHeightsGolfClub"
-    },
-    "gloss": "A pickup is scheduled after its water cart has left.",
+    "gloss": "Farm residue and response markings share one deliberately ambiguous bundle.",
     "prov": {
       "batch": "T0179",
-      "handoff": "2026-09-28",
+      "handoff": "2026-09-27",
       "writer": "ChatGPT"
     },
-    "rival_reading": "A field crew could take the cart for a work visit; the missing passenger line does not show who was expected."
+    "rival_reading": "The farm program and the emergency response each explain one layer of the bundle, and the shared knot does not establish which purpose came first."
   },
   "t0179-02": {
     "axioms": {

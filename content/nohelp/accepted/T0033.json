@@ -4,15 +4,14 @@
       "map": "BBurgStashMap8",
       "mark": 1
     },
-    "body": "Two keys are taped to separate collection times. A bottle marked for the passenger has no return mark, though the driver’s sheet says every seat was cleared.",
+    "body": "opposite route arrows are painted on the paperclip box and hand radio. the older arrow was scraped away beneath fresh road grit.",
     "id": "t0033-01",
     "kind": "set",
     "pieces": [
-      "Notebook",
-      "KeyRing",
-      "WaterBottle"
+      "PaperclipBox",
+      "WalkieTalkie1"
     ],
-    "title": "The unfinished handoff",
+    "title": "missing count beside the paperclip box",
     "where": [
       {
         "lean": "containment",

@@ -1,0 +1,49 @@
+[
+  {
+    "recall": "R1",
+    "row": {
+      "anchor": {
+        "print": "MeadshireEstate"
+      },
+      "body": "The gate key is tied to a resident roster that marks the community empty before the final visitor signed out.",
+      "id": "t0214-01",
+      "kind": "set",
+      "pieces": [
+        "KeyRing",
+        "Map"
+      ],
+      "title": "Gated community access",
+      "where": [
+        {
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "Meadshire Estate",
+        "source": "print:MeadshireEstate"
+      },
+      "gloss": "The community is logged empty while a visitor remains checked in.",
+      "prov": {
+        "batch": "T0214",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A planned maintenance closure could produce the same gap; the roster does not explain who remained."
+    }
+  }
+]

@@ -1,0 +1,50 @@
+[
+  {
+    "recall": "R1",
+    "row": {
+      "anchor": {
+        "map": "EkronStashMap8",
+        "mark": 1
+      },
+      "body": "The map is folded toward its road line; the keyring lies beyond the fold, its tag turned face down. A short length of thread joins them but does not reach the road.",
+      "id": "t0015-01",
+      "kind": "set",
+      "pieces": [
+        "Map",
+        "KeyRing"
+      ],
+      "title": "The key points past the marked road",
+      "where": [
+        {
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "road to Ekron",
+        "source": "map:EkronStashMap8"
+      },
+      "gloss": "A key and route remain connected only by a short thread.",
+      "prov": {
+        "batch": "T0015",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A delayed farm delivery could leave a key and map where someone stopped; the route alone does not show a failed evacuation."
+    }
+  }
+]

@@ -3,14 +3,14 @@
     "anchor": {
       "print": "Fossoil5"
     },
-    "body": "The pump key is clipped to an opening sheet that counts the pumps but not the vehicles still waiting outside.",
+    "body": "matching white stripes cross the warning whistle and first-aid kit. a name-sized patch on the warning whistle has been scrubbed bare.",
     "id": "t0163-01",
     "kind": "set",
     "pieces": [
-      "KeyRing",
-      "SheetPaper2"
+      "Whistle",
+      "FirstAidKit"
     ],
-    "title": "The station count",
+    "title": "missing count beside the warning whistle",
     "where": [
       {
         "lean": "containment",

@@ -4,19 +4,19 @@
       "map": "WpStashMap12",
       "mark": 1
     },
-    "body": "A key to the office is tied to a fever list; the room is marked sealed, and the supply line says the crew took the food to the gun counter.",
+    "body": "the measuring tape and clipboard carry the same black paint. a fresh scrape exposes an older evacuation color beneath.",
     "id": "t0144-01",
     "kind": "set",
     "pieces": [
-      "Bandage",
-      "KeyRing"
+      "MeasuringTape",
+      "Clipboard"
     ],
-    "title": "The room behind the barricade",
+    "title": "missing count beside the measuring tape",
     "where": [
       {
-        "lean": "agricultural",
+        "lean": "containment",
         "place": "mapNamed",
-        "rival": "containment",
+        "rival": "agricultural",
         "spot": "ground"
       }
     ]

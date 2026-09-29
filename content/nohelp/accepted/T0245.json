@@ -3,14 +3,14 @@
     "anchor": {
       "print": "HouseforSale867"
     },
-    "body": "The key packet includes a water bottle tag from the field crew; the property note asks the new owner not to use the garden tap yet.",
+    "body": "the packet of tissues and first-aid kit were wiped on one face and left dusty on the other. field twine and warning tape cross at the handle.",
     "id": "t0245-01",
     "kind": "set",
     "pieces": [
-      "KeyRing",
-      "WaterBottle"
+      "Tissue",
+      "FirstAidKit"
     ],
-    "title": "The ideally placed home",
+    "title": "two traces on the packet of tissues",
     "where": [
       {
         "lean": "agricultural",

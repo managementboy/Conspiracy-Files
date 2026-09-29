@@ -3,14 +3,14 @@
     "anchor": {
       "print": "HouseforSale912"
     },
-    "body": "The key handover is marked complete before the moving truck arrived; the listing still says the small house is occupied.",
+    "body": "the sewing kit is tied to the hand radio by a clipped lanyard. an empty loop shows where an identifying tag was cut off.",
     "id": "t0220-01",
     "kind": "set",
     "pieces": [
-      "KeyRing",
-      "Map"
+      "SewingKit",
+      "WalkieTalkie1"
     ],
-    "title": "Compact home pickup",
+    "title": "missing count beside the sewing kit",
     "where": [
       {
         "lean": "containment",

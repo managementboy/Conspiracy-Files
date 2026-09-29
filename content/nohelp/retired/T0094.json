@@ -1,0 +1,50 @@
+[
+  {
+    "recall": "R1",
+    "row": {
+      "anchor": {
+        "map": "RiversideStashMap1",
+        "mark": 1
+      },
+      "body": "The route map is folded around a key marked for the next shift; a note says the crew will return after checking the water line.",
+      "id": "t0094-01",
+      "kind": "set",
+      "pieces": [
+        "Map",
+        "KeyRing"
+      ],
+      "title": "Here for the next shift",
+      "where": [
+        {
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "we're here now",
+        "source": "map:RiversideStashMap1"
+      },
+      "gloss": "A planned return follows a water-line check, but no arrival is recorded.",
+      "prov": {
+        "batch": "T0094",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A response crew could have held the key during a utility inspection; the note does not identify what the crew expected to find."
+    }
+  }
+]

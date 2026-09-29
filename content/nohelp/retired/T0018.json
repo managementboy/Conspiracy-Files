@@ -1,0 +1,46 @@
+[
+  {
+    "recall": "R1",
+    "row": {
+      "anchor": {
+        "scene": "RBJackieJaye",
+        "version": "A"
+      },
+      "body": "The keyring is clipped to a blank page in the studio desk. The only pencilled line says “doors locked”; the box for who checked them is empty.",
+      "id": "t0018-01",
+      "kind": "set",
+      "pieces": [
+        "Clipboard",
+        "KeyRing"
+      ],
+      "title": "The studio key clipped to a blank rundown",
+      "where": [
+        {
+          "lean": "containment",
+          "place": "office",
+          "rival": "agricultural",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-obscured"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "gloss": "A locked studio and an unsigned check remain on the same page.",
+      "prov": {
+        "batch": "T0018",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A broadcast worker could secure the studio before any emergency and leave the checklist unfinished; the blank box does not prove a failed containment order."
+    }
+  }
+]

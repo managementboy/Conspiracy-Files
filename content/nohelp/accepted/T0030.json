@@ -25,15 +25,14 @@
       "map": "BBurgStashMap5",
       "mark": 1
     },
-    "body": "The cold-room key is tied to a delivery slip marked received before the road closure. The sealed box is still listed as waiting at the storage units.",
+    "body": "green crop residue marks the empty sandbag; a scraped warning stripe marks the water bottle. both are tied with the same cord.",
     "id": "t0030-02",
     "kind": "set",
     "pieces": [
-      "TinOpener",
-      "SheetPaper2",
-      "KeyRing"
+      "EmptySandbag",
+      "WaterBottle"
     ],
-    "title": "Kept from the drawer",
+    "title": "two traces on the empty sandbag",
     "where": [
       {
         "lean": "containment",

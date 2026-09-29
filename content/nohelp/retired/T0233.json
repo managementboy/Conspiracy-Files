@@ -1,0 +1,49 @@
+[
+  {
+    "recall": "R1",
+    "row": {
+      "anchor": {
+        "print": "EPToolsLV"
+      },
+      "body": "The store tally closes before the last customer’s tool is returned. The line for items borrowed by the repair crew is blank.",
+      "id": "t0233-01",
+      "kind": "set",
+      "pieces": [
+        "Screwdriver",
+        "KeyRing"
+      ],
+      "title": "The extra item",
+      "where": [
+        {
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "E.P. Tools (Louisville)",
+        "source": "print:EPToolsLV"
+      },
+      "gloss": "The tally closes before a borrowed tool returns.",
+      "prov": {
+        "batch": "T0233",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A field crew could borrow a tool during ordinary work; the blank line does not prove the store was closed by an order."
+    }
+  }
+]

@@ -4,14 +4,14 @@
       "scene": "RBJackieJaye",
       "version": "A"
     },
-    "body": "The keyring is clipped to a blank page in the studio desk. The only pencilled line says “doors locked”; the box for who checked them is empty.",
+    "body": "three pickup dots mark the open wrench and hand radio. two were scratched away without wear around them.",
     "id": "t0018-01",
     "kind": "set",
     "pieces": [
-      "Clipboard",
-      "KeyRing"
+      "Wrench",
+      "WalkieTalkie1"
     ],
-    "title": "The studio key clipped to a blank rundown",
+    "title": "missing count beside the open wrench",
     "where": [
       {
         "lean": "containment",

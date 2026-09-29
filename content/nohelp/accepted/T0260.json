@@ -3,14 +3,14 @@
     "anchor": {
       "print": "DarkwallowGuestHouse"
     },
-    "body": "The guest-house key rack is marked full before the room inspection is signed. One water bottle is tagged for a room without a guest name.",
+    "body": "a broken barrier board crushed the alcohol wipes against the briefcase. clean undersides show both were there before the road was blocked.",
     "id": "t0260-01",
     "kind": "set",
     "pieces": [
-      "KeyRing",
-      "WaterBottle"
+      "AlcoholWipes",
+      "Briefcase"
     ],
-    "title": "Guest rooms before inspection",
+    "title": "missing count beside the alcohol wipes",
     "where": [
       {
         "lean": "containment",

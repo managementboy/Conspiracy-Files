@@ -3,23 +3,20 @@
     "axioms": {
       "agricultural": [
         "a-program",
+        "a-malfunction",
         "a-pathway"
       ],
       "containment": [
-        "c-orders",
-        "c-failure"
+        "c-warning",
+        "c-orders"
       ]
     },
-    "cites": {
-      "quote": "Brandenburg Fire Department",
-      "source": "print:BrandenburgFD"
-    },
-    "gloss": "A storage room is sealed during a public safety check.",
+    "gloss": "A rare everyday object carries residue tied to field work before restriction.",
     "prov": {
       "batch": "T0235",
-      "handoff": "2026-09-28",
+      "handoff": "2026-09-27",
       "writer": "ChatGPT"
     },
-    "rival_reading": "A field team could seal a room during a routine safety inspection; the card does not say who ordered it."
+    "rival_reading": "Emergency workers crossing treated land could have picked up the same residue; the objects do not prove the farm program began the emergency."
   }
 }

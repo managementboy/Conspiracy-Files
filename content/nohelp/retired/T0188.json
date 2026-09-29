@@ -1,0 +1,49 @@
+[
+  {
+    "recall": "R1",
+    "row": {
+      "anchor": {
+        "print": "MarchRidgeSchoolJobAd"
+      },
+      "body": "The janitor’s key is tied to a cleaning checklist marked complete before the rooms were unlocked. One classroom remains on the supply list.",
+      "id": "t0188-01",
+      "kind": "set",
+      "pieces": [
+        "Mop",
+        "KeyRing"
+      ],
+      "title": "The school cleaning shift",
+      "where": [
+        {
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "March Ridge School Job Ad",
+        "source": "print:MarchRidgeSchoolJobAd"
+      },
+      "gloss": "A school cleaning round is complete before the rooms are opened.",
+      "prov": {
+        "batch": "T0188",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A field crew could clean before an ordinary school opening; the unchecked classroom does not say who delayed access."
+    }
+  }
+]

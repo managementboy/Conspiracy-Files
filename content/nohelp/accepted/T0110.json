@@ -4,14 +4,14 @@
       "map": "WorldStashMap1",
       "mark": 1
     },
-    "body": "The route key is tied to a note asking the driver to slow down near the test plots. The arrival box is checked before the fuel stop.",
+    "body": "the toilet roll and water bottle are packed with treated seed. every kernel has the same cracked green coating.",
     "id": "t0110-01",
     "kind": "set",
     "pieces": [
-      "KeyRing",
-      "Map"
+      "ToiletPaper",
+      "WaterBottle"
     ],
-    "title": "Slow road instruction",
+    "title": "field residue on the toilet roll",
     "where": [
       {
         "lean": "agricultural",

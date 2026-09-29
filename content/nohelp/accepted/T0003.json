@@ -1,13 +1,13 @@
 [
   {
-    "body": "The map shows a farm track ending at a thick road-closure bar. The keyring lies beyond it, tied to a tag stamped “county return.” Beside the bar, “all clear” is checked although the road is still crossed out.",
+    "body": "seed husks cling to the duct tape, while bleach marks the empty garden sprayer. road mud joins the two in one tied bundle.",
     "id": "t0003-01",
     "kind": "set",
     "pieces": [
-      "Map",
-      "KeyRing"
+      "DuctTape",
+      "GardeningSprayEmpty"
     ],
-    "title": "The key past the closure bar",
+    "title": "two traces on the duct tape",
     "where": [
       {
         "lean": "containment",

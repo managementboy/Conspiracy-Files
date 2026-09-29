@@ -3,14 +3,14 @@
     "anchor": {
       "print": "OnyxDriveinTheater"
     },
-    "body": "The ticket count is closed before the last car’s entry time. A key tag for the projection booth is left with the vehicle list.",
+    "body": "four notches on the folded tarp match four marks on the bath towel; a fifth mark was sanded flat on both.",
     "id": "t0198-01",
     "kind": "set",
     "pieces": [
-      "VHS_Retail",
-      "KeyRing"
+      "Tarp",
+      "BathTowel"
     ],
-    "title": "The drive-in count",
+    "title": "missing count beside the folded tarp",
     "where": [
       {
         "lean": "containment",

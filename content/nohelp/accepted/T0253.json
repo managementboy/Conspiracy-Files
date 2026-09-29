@@ -3,19 +3,19 @@
     "anchor": {
       "print": "Airport"
     },
-    "body": "The airport map marks a flight route open, while the gate list says the passengers were transferred before boarding began.",
+    "body": "red and blue cord join the box of matches to the hand torch. the red route is cut; the blue route ends in a sealed knot.",
     "id": "t0253-01",
     "kind": "set",
     "pieces": [
-      "Map",
-      "KeyRing"
+      "Matches",
+      "HandTorch"
     ],
-    "title": "Airport route update",
+    "title": "missing count beside the box of matches",
     "where": [
       {
-        "lean": "agricultural",
+        "lean": "containment",
         "place": "mapNamed",
-        "rival": "containment",
+        "rival": "agricultural",
         "spot": "ground"
       }
     ]

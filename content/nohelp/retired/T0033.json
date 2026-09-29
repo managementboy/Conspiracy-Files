@@ -1,0 +1,51 @@
+[
+  {
+    "recall": "R1",
+    "row": {
+      "anchor": {
+        "map": "BBurgStashMap8",
+        "mark": 1
+      },
+      "body": "Two keys are taped to separate collection times. A bottle marked for the passenger has no return mark, though the driver’s sheet says every seat was cleared.",
+      "id": "t0033-01",
+      "kind": "set",
+      "pieces": [
+        "Notebook",
+        "KeyRing",
+        "WaterBottle"
+      ],
+      "title": "The unfinished handoff",
+      "where": [
+        {
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "Mom was sick",
+        "source": "map:BBurgStashMap8"
+      },
+      "gloss": "A passenger’s bottle is left behind despite a completed seat record.",
+      "prov": {
+        "batch": "T0033",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A household move or field visit could explain the keys and bottle; the completed seat sheet does not prove an evacuation failed."
+    }
+  }
+]

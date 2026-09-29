@@ -1,0 +1,49 @@
+[
+  {
+    "recall": "R1",
+    "row": {
+      "anchor": {
+        "print": "HouseforSale930"
+      },
+      "body": "The home inspection marks every room clear, but the key return sheet leaves one bedroom assigned to a visitor.",
+      "id": "t0222-01",
+      "kind": "set",
+      "pieces": [
+        "KeyRing",
+        "SheetPaper2"
+      ],
+      "title": "The charming address",
+      "where": [
+        {
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "House for Sale (no. 930)",
+        "source": "print:HouseforSale930"
+      },
+      "gloss": "A room is listed for a visitor after the home is marked clear.",
+      "prov": {
+        "batch": "T0222",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A contractor could have used the room during inspection; the sheet does not establish who was inside."
+    }
+  }
+]

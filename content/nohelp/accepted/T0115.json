@@ -4,14 +4,14 @@
       "map": "WorldStashMap6",
       "mark": 1
     },
-    "body": "The storage key is clipped to an inventory that lists the load as too large to secure; a second hand has marked the location cleared.",
+    "body": "matching white stripes cross the candle and clipboard. a name-sized patch on the candle has been scrubbed bare.",
     "id": "t0115-01",
     "kind": "set",
     "pieces": [
-      "SheetPaper2",
-      "KeyRing"
+      "Candle",
+      "Clipboard"
     ],
-    "title": "Too large to secure",
+    "title": "missing count beside the candle",
     "where": [
       {
         "lean": "containment",

@@ -1,0 +1,49 @@
+[
+  {
+    "recall": "R1",
+    "row": {
+      "anchor": {
+        "print": "HouseforSale818"
+      },
+      "body": "The sale form marks the property quiet and empty, but the key log records a room opened after the inspector left.",
+      "id": "t0268-01",
+      "kind": "set",
+      "pieces": [
+        "KeyRing",
+        "SheetPaper2"
+      ],
+      "title": "Quiet home inspection",
+      "where": [
+        {
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "House for Sale (no. 818)",
+        "source": "print:HouseforSale818"
+      },
+      "gloss": "A room is opened after the property is marked empty.",
+      "prov": {
+        "batch": "T0268",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A contractor could enter after an inspection for routine work; the form does not say who had the key."
+    }
+  }
+]

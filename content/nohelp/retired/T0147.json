@@ -1,0 +1,50 @@
+[
+  {
+    "recall": "R1",
+    "row": {
+      "anchor": {
+        "map": "WpStashMap15",
+        "mark": 1
+      },
+      "body": "The shelter key is packed with a note promising it will stay hidden; the entry sheet says the gate was opened for a scheduled pickup that never arrived.",
+      "id": "t0147-01",
+      "kind": "set",
+      "pieces": [
+        "Bag_ALICEpack",
+        "KeyRing"
+      ],
+      "title": "A shelter kept secret",
+      "where": [
+        {
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "They'll never find us here, trust me",
+        "source": "map:WpStashMap15"
+      },
+      "gloss": "A hidden shelter is opened for a pickup that does not arrive.",
+      "prov": {
+        "batch": "T0147",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A field crew could use a private shelter and schedule a supply run; the missed pickup does not identify who ordered it."
+    }
+  }
+]

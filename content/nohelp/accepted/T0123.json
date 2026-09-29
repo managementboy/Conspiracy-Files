@@ -4,14 +4,14 @@
       "map": "WorldStashMap14",
       "mark": 1
     },
-    "body": "A family photograph is clipped to a key transfer card; the pickup line is marked completed, but the recipient box is blank.",
+    "body": "red and blue cord join the lighter to the bath towel. the red route is cut; the blue route ends in a sealed knot.",
     "id": "t0123-01",
     "kind": "set",
     "pieces": [
-      "Photo",
-      "KeyRing"
+      "Lighter",
+      "BathTowel"
     ],
-    "title": "Names on the family key",
+    "title": "missing count beside the lighter",
     "where": [
       {
         "lean": "containment",

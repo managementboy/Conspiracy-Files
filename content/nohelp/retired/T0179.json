@@ -1,0 +1,49 @@
+[
+  {
+    "recall": "R1",
+    "row": {
+      "anchor": {
+        "print": "WellingtonHeightsGolfClub"
+      },
+      "body": "The clubhouse key is signed out for a pickup, while a grounds note says the water cart was already sent away. The passenger line is blank.",
+      "id": "t0179-01",
+      "kind": "set",
+      "pieces": [
+        "WaterBottle",
+        "KeyRing"
+      ],
+      "title": "The clubhouse pickup",
+      "where": [
+        {
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "Wellington Heights Golf Club",
+        "source": "print:WellingtonHeightsGolfClub"
+      },
+      "gloss": "A pickup is scheduled after its water cart has left.",
+      "prov": {
+        "batch": "T0179",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A field crew could take the cart for a work visit; the missing passenger line does not show who was expected."
+    }
+  }
+]

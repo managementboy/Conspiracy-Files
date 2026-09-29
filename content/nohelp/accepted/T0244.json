@@ -3,14 +3,14 @@
     "anchor": {
       "print": "PremisesforLease863"
     },
-    "body": "The office key is issued for the leased suite before the building check is signed. The rent card marks the space occupied that morning.",
+    "body": "the toilet roll and hand radio were sealed together but never opened. soot darkens the bundle; clean outlines show it was packed before the fire.",
     "id": "t0244-01",
     "kind": "set",
     "pieces": [
-      "KeyRing",
-      "SheetPaper2"
+      "ToiletPaper",
+      "WalkieTalkie1"
     ],
-    "title": "Office lease before clearance",
+    "title": "missing count beside the toilet roll",
     "where": [
       {
         "lean": "containment",

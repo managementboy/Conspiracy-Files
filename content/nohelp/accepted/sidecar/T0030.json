@@ -29,20 +29,16 @@
         "a-pathway"
       ],
       "containment": [
-        "c-orders",
-        "c-failure"
+        "c-warning",
+        "c-orders"
       ]
     },
-    "cites": {
-      "quote": "catfish restaurant",
-      "source": "map:BBurgStashMap5"
-    },
-    "gloss": "A delivery record marks goods received before access closed, while the box remains uncollected.",
+    "gloss": "Farm residue and response markings share one deliberately ambiguous bundle.",
     "prov": {
       "batch": "T0030",
-      "handoff": "2026-09-28",
+      "handoff": "2026-09-27",
       "writer": "ChatGPT"
     },
-    "rival_reading": "A shipment of field supplies could have been delayed or misrouted; the paperwork does not identify the cargo."
+    "rival_reading": "The farm program and the emergency response each explain one layer of the bundle, and the shared knot does not establish which purpose came first."
   }
 }

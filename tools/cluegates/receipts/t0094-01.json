@@ -1,8 +1,8 @@
 {
   "clue": "t0094-01",
-  "sha256": "cd34ef34f2d67c9f3db8a0045e26ab366bb1729232756d84511a5cd523b65c69",
+  "sha256": "691b90b1e12d4acd0d15e37954885b1e11cd4b7ff69320ea2985cb893d3c1348",
   "model": "claude-haiku-4-5 (no repo access, no tools, fresh context per read)",
-  "date": "2026-09-28",
+  "date": "2026-09-29",
   "votes": {
     "A": 0,
     "B": 0,

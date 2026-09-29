@@ -1,0 +1,50 @@
+[
+  {
+    "recall": "R1",
+    "row": {
+      "anchor": {
+        "map": "MulStashMap8",
+        "mark": 1
+      },
+      "body": "The key to the gathering place is wrapped in a burial request; a second note says the crowd count has not changed since the last check.",
+      "id": "t0085-01",
+      "kind": "set",
+      "pieces": [
+        "SheetPaper2",
+        "KeyRing"
+      ],
+      "title": "A burial request",
+      "where": [
+        {
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "Bury me - God bless",
+        "source": "map:MulStashMap8"
+      },
+      "gloss": "A burial request and an unchanged crowd count remain together.",
+      "prov": {
+        "batch": "T0085",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A program team could have used the same site and key; an unchanged count does not show who was gathered there."
+    }
+  }
+]

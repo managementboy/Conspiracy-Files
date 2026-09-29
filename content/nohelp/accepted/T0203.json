@@ -3,19 +3,19 @@
     "anchor": {
       "print": "UpscaleMobility"
     },
-    "body": "The mobility service card lists a vehicle test before delivery; the battery check is marked complete before the technician signed in.",
+    "body": "the paperclip box and hand radio were sealed together but never opened. soot darkens the bundle; clean outlines show it was packed before the fire.",
     "id": "t0203-01",
     "kind": "set",
     "pieces": [
-      "CarBattery1",
-      "KeyRing"
+      "PaperclipBox",
+      "WalkieTalkie1"
     ],
-    "title": "Luxury vehicle setup",
+    "title": "missing count beside the paperclip box",
     "where": [
       {
-        "lean": "agricultural",
+        "lean": "containment",
         "place": "mapNamed",
-        "rival": "containment",
+        "rival": "agricultural",
         "spot": "ground"
       }
     ]

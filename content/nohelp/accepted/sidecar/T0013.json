@@ -3,24 +3,20 @@
     "axioms": {
       "agricultural": [
         "a-program",
-        "a-timing"
+        "a-pathway"
       ],
       "containment": [
-        "c-orders",
-        "c-failure"
+        "c-warning",
+        "c-orders"
       ]
     },
-    "cites": {
-      "quote": "Cossette - 56.34 seconds",
-      "source": "map:IrvingtonStashMap1"
-    },
-    "gloss": "A route stops before its return and a key has no destination.",
+    "gloss": "Farm residue and response markings share one deliberately ambiguous bundle.",
     "prov": {
       "batch": "T0013",
       "handoff": "2026-09-27",
       "writer": "ChatGPT"
     },
-    "rival_reading": "A field crew could mark a temporary route and leave its gate key there; a missing place name does not prove an evacuation failed."
+    "rival_reading": "The farm program and the emergency response each explain one layer of the bundle, and the shared knot does not establish which purpose came first."
   },
   "t0013-02": {
     "axioms": {

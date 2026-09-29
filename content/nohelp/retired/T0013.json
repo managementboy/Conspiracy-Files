@@ -1,0 +1,50 @@
+[
+  {
+    "recall": "R1",
+    "row": {
+      "anchor": {
+        "map": "IrvingtonStashMap1",
+        "mark": 1
+      },
+      "body": "The map's route ends at a chalk line. A keyring rests across the fold back toward the starting point; its tag has no place name.",
+      "id": "t0013-01",
+      "kind": "set",
+      "pieces": [
+        "Map",
+        "KeyRing"
+      ],
+      "title": "The lap with no return mark",
+      "where": [
+        {
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-timing"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "Cossette - 56.34 seconds",
+        "source": "map:IrvingtonStashMap1"
+      },
+      "gloss": "A route stops before its return and a key has no destination.",
+      "prov": {
+        "batch": "T0013",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A field crew could mark a temporary route and leave its gate key there; a missing place name does not prove an evacuation failed."
+    }
+  }
+]

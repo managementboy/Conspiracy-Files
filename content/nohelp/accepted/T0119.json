@@ -4,14 +4,14 @@
       "map": "WorldStashMap10",
       "mark": 1
     },
-    "body": "A receipt groups fuel, clothing, food, and a vehicle under one pickup. The receiving signature is missing, though every stop is checked.",
+    "body": "the box of matches and hand torch smell sharply of bleach. mud outlines between them show that a third object was removed.",
     "id": "t0119-01",
     "kind": "set",
     "pieces": [
-      "KeyRing",
-      "Bag_ALICEpack"
+      "Matches",
+      "HandTorch"
     ],
-    "title": "Four stops on one receipt",
+    "title": "missing count beside the box of matches",
     "where": [
       {
         "lean": "containment",

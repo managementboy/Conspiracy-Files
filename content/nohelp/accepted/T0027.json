@@ -4,15 +4,14 @@
       "map": "BBurgStashMap2",
       "mark": 1
     },
-    "body": "A master key lies across a folded departure notice; the hall door was logged locked before the bus left, though a margin says it stood open. The custodian has underlined “return key” twice.",
+    "body": "the folded tarp and bath towel are wedged beneath unused warning tape. footprints pass around the bundle rather than toward it.",
     "id": "t0027-01",
     "kind": "set",
     "pieces": [
-      "SheetPaper2",
-      "Pencil",
-      "KeyRing"
+      "Tarp",
+      "BathTowel"
     ],
-    "title": "The key return",
+    "title": "missing count beside the folded tarp",
     "where": [
       {
         "lean": "containment",

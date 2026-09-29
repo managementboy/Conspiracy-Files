@@ -1,0 +1,43 @@
+[
+  {
+    "recall": "R1",
+    "row": {
+      "body": "The clipboard is closed around a keyring. One key leaves a clean outline in the dust, while the page beneath the clip has torn away at the holes.",
+      "id": "t0007-01",
+      "kind": "set",
+      "pieces": [
+        "Clipboard",
+        "KeyRing"
+      ],
+      "title": "The keyring clipped over the empty page",
+      "where": [
+        {
+          "lean": "containment",
+          "place": "transmission",
+          "rival": "agricultural",
+          "spot": "vehicle"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-timing"
+        ],
+        "containment": [
+          "c-warning",
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "gloss": "Keys remain where a page was torn from a clipboard.",
+      "prov": {
+        "batch": "T0007",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A field crew could move its notes and keys in a hurry when a test site closed; the torn page does not prove a warning was ignored."
+    }
+  }
+]

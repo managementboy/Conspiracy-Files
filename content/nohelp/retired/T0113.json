@@ -1,0 +1,50 @@
+[
+  {
+    "recall": "R1",
+    "row": {
+      "anchor": {
+        "map": "WorldStashMap4",
+        "mark": 1
+      },
+      "body": "A key is wrapped in a request for help; the dispatch copy says the occupant was contacted before the caller’s time is recorded.",
+      "id": "t0113-01",
+      "kind": "set",
+      "pieces": [
+        "LetterHandwritten",
+        "KeyRing"
+      ],
+      "title": "Help at the address",
+      "where": [
+        {
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "Where Yana said",
+        "source": "map:WorldStashMap4"
+      },
+      "gloss": "A contact is marked complete before the caller’s entry.",
+      "prov": {
+        "batch": "T0113",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A field office might have logged an ordinary visit early; the copy does not establish whether anyone received help."
+    }
+  }
+]

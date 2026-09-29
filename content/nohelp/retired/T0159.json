@@ -1,0 +1,49 @@
+[
+  {
+    "recall": "R1",
+    "row": {
+      "anchor": {
+        "print": "Fossoil1"
+      },
+      "body": "The fuel receipt shows the pump opened for a fleet pickup, but the key ring is logged back before the driver signed out.",
+      "id": "t0159-01",
+      "kind": "set",
+      "pieces": [
+        "PetrolCan",
+        "KeyRing"
+      ],
+      "title": "The fuel receipt",
+      "where": [
+        {
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "Fossoil (Muldraugh)",
+        "source": "print:Fossoil1"
+      },
+      "gloss": "The vehicle key returns before its driver checks out.",
+      "prov": {
+        "batch": "T0159",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A field crew could refuel a vehicle and return its key early; the log does not explain why the driver was delayed."
+    }
+  }
+]

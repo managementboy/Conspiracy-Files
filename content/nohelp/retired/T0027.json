@@ -1,0 +1,51 @@
+[
+  {
+    "recall": "R1",
+    "row": {
+      "anchor": {
+        "map": "BBurgStashMap2",
+        "mark": 1
+      },
+      "body": "A master key lies across a folded departure notice; the hall door was logged locked before the bus left, though a margin says it stood open. The custodian has underlined “return key” twice.",
+      "id": "t0027-01",
+      "kind": "set",
+      "pieces": [
+        "SheetPaper2",
+        "Pencil",
+        "KeyRing"
+      ],
+      "title": "The key return",
+      "where": [
+        {
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "community center",
+        "source": "map:BBurgStashMap2"
+      },
+      "gloss": "A hall key and departure record disagree about whether the building was secured before transport left.",
+      "prov": {
+        "batch": "T0027",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A program crew could have used the hall and its transport during ordinary field work; the contradictory door note does not say why the bus left."
+    }
+  }
+]

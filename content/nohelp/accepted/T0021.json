@@ -4,15 +4,14 @@
       "map": "LouisvilleStashMap1",
       "mark": 1
     },
-    "body": "The pencilled route to the house ends at an ammunition collection point; the key ring is tagged 'back before supper,' but no return time is entered.",
+    "body": "the car jack and clipboard carry the same black paint. a fresh scrape exposes an older evacuation color beneath.",
     "id": "t0021-01",
     "kind": "set",
     "pieces": [
-      "Map",
-      "KeyRing",
-      "Pencil"
+      "Jack",
+      "Clipboard"
     ],
-    "title": "No return time",
+    "title": "missing count beside the car jack",
     "where": [
       {
         "lean": "containment",

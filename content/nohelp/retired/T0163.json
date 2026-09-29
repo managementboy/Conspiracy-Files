@@ -1,0 +1,49 @@
+[
+  {
+    "recall": "R1",
+    "row": {
+      "anchor": {
+        "print": "Fossoil5"
+      },
+      "body": "The pump key is clipped to an opening sheet that counts the pumps but not the vehicles still waiting outside.",
+      "id": "t0163-01",
+      "kind": "set",
+      "pieces": [
+        "KeyRing",
+        "SheetPaper2"
+      ],
+      "title": "The station count",
+      "where": [
+        {
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "Fossoil (Riverside)",
+        "source": "print:Fossoil5"
+      },
+      "gloss": "An opening checklist omits the waiting vehicles.",
+      "prov": {
+        "batch": "T0163",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A field crew could have left vehicles queued for ordinary work; the sheet does not say why the count stopped."
+    }
+  }
+]

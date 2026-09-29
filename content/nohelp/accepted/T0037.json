@@ -4,14 +4,14 @@
       "map": "EkronStashMap4",
       "mark": 1
     },
-    "body": "The spare key is tagged for the address but the transfer sheet has no receiving signature. Someone has checked the box marked “delivered.”",
+    "body": "the stapler and first-aid kit were sealed together but never opened. soot darkens the bundle; clean outlines show it was packed before the fire.",
     "id": "t0037-01",
     "kind": "set",
     "pieces": [
-      "KeyRing",
-      "SheetPaper2"
+      "Stapler",
+      "FirstAidKit"
     ],
-    "title": "Empty address line",
+    "title": "missing count beside the stapler",
     "where": [
       {
         "lean": "containment",

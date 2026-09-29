@@ -18,15 +18,15 @@
     ]
   },
   {
-    "body": "The map routes past a checkpoint to the trial plots. A key tag says “sprayer pump.” In the margin, “wind turned at ten; east beans scorched by noon” is underlined twice.",
+    "body": "yellow fertilizer crystals fill the seam between the wax crayons and animal-feed sack. the crystals are damp beneath a dry outer layer.",
     "id": "t0012-02",
     "kind": "set",
     "person": "person-c",
     "pieces": [
-      "Map",
-      "KeyRing"
+      "Crayons",
+      "AnimalFeedBag"
     ],
-    "title": "The key marked for the last spray run",
+    "title": "field residue on the wax crayons",
     "where": [
       {
         "lean": "agricultural",

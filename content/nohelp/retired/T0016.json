@@ -1,0 +1,45 @@
+[
+  {
+    "recall": "R1",
+    "row": {
+      "anchor": {
+        "scene": "RVSPlonkies"
+      },
+      "body": "The route on the map ends at a closed road. A keyring is tucked beneath the last stop, its tag stamped “return”; the return line has been crossed out.",
+      "id": "t0016-01",
+      "kind": "set",
+      "pieces": [
+        "Map",
+        "KeyRing"
+      ],
+      "title": "The last stop crossed off the van route",
+      "where": [
+        {
+          "lean": "containment",
+          "place": "transmission",
+          "rival": "agricultural",
+          "spot": "vehicle"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "gloss": "A delivery key remains with a route whose return was cancelled.",
+      "prov": {
+        "batch": "T0016",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A field van could change its route when access changed and leave the key with an old map; the crossed line need not be an order to abandon anyone."
+    }
+  }
+]

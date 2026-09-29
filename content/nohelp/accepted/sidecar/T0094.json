@@ -6,20 +6,16 @@
         "a-pathway"
       ],
       "containment": [
-        "c-orders",
-        "c-failure"
+        "c-warning",
+        "c-orders"
       ]
     },
-    "cites": {
-      "quote": "we're here now",
-      "source": "map:RiversideStashMap1"
-    },
-    "gloss": "A planned return follows a water-line check, but no arrival is recorded.",
+    "gloss": "Farm residue and response markings share one deliberately ambiguous bundle.",
     "prov": {
       "batch": "T0094",
-      "handoff": "2026-09-28",
+      "handoff": "2026-09-27",
       "writer": "ChatGPT"
     },
-    "rival_reading": "A response crew could have held the key during a utility inspection; the note does not identify what the crew expected to find."
+    "rival_reading": "The farm program and the emergency response each explain one layer of the bundle, and the shared knot does not establish which purpose came first."
   }
 }
