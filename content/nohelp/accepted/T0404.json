@@ -1,0 +1,22 @@
+[
+  {
+    "anchor": {
+      "scene": "RZSTrapperCamp"
+    },
+    "body": "On the back: “No animals after the pasture trial sprayed. The sharp smell reached camp before the noon siren.”",
+    "id": "t0404-01",
+    "kind": "written",
+    "pieces": [
+      "photograph"
+    ],
+    "title": "photograph of an empty trap line",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  }
+]

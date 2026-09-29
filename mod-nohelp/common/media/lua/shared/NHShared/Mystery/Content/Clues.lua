@@ -814,4 +814,18 @@ return {clues={
 {id="t0399-01",kind="set",pieces={"Battery","RadioBlack"},where={{place="mapNamed",spot="ground",lean="agricultural",rival="containment"}},title="field radio wrapped in warning tape",body="A fresh battery and field radio are wrapped together. Red field grit fills the speaker; county warning tape covers the tuning dial.",anchor={scene="RZSRockerParty"}},
 -- T0400
 {id="t0400-01",kind="written",pieces={"letter"},where={{place="mapNamed",spot="ground",lean="agricultural",rival="containment"}},title="letter folded beneath the bedroll",body="I kept the gloves with blue powder from the seed trial. Our dog stopped drinking before the road patrol turned us back toward camp.",anchor={scene="RZSSadCamp"}},
+-- T0401
+{id="t0401-01",kind="set",pieces={"Garbagebag","Gloves_LeatherGloves"},where={{place="mapNamed",spot="ground",lean="agricultural",rival="containment"}},title="work gloves tied inside a trash sack",body="Leather gloves sit inside a knotted trash sack. Mustard-colored crop dust coats the cuffs, while the outside remains clean.",anchor={scene="RZSSexyTime"}},
+-- T0402
+{id="t0402-01",kind="written",pieces={"notebook"},where={{place="mapNamed",spot="ground",lean="agricultural",rival="containment"}},title="camp notebook, page torn short",body="My entry says the orchard crew rinsed its sprayer upstream. The water turned milky, and my hands blistered before the bridge was blocked.",anchor={scene="RZSSurvivalistCamp"}},
+-- T0403
+{id="t0403-01",kind="set",pieces={"Bread","CannedCorn"},where={{place="mapNamed",spot="ground",lean="agricultural",rival="containment"}},title="picnic food under pale field dust",body="A wrapped loaf and can of corn carry the same pale field dust. The loaf is tied shut with twine cut from a treated seed sack.",anchor={scene="RZSTragicPicnic"}},
+-- T0404
+{id="t0404-01",kind="written",pieces={"photograph"},where={{place="mapNamed",spot="ground",lean="agricultural",rival="containment"}},title="photograph of an empty trap line",body="On the back: “No animals after the pasture trial sprayed. The sharp smell reached camp before the noon siren.”",anchor={scene="RZSTrapperCamp"}},
+-- T0405
+{id="t0405-01",kind="set",pieces={"KeyRing","FirstAidKit"},where={{place="mapNamed",spot="vehicle",lean="agricultural",rival="containment"}},title="van keys tied to a first-aid kit",body="The van keys and first-aid kit share one cord. Green field flecks mark the keys; a strip of road tape seals the kit.",anchor={scene="RZSVanCamp"}},
+-- T0406
+{id="t0406-01",kind="written",pieces={"receipt"},where={{place="mapNamed",spot="ground",lean="agricultural",rival="containment"}},title="feed-store receipt under the drums",body="Soap, work gloves, and two sample jars, paid cash. My note says the fertilizer crew left oily residue here before the road was closed.",anchor={scene="RZSWasteDump"}},
+-- T0407
+{id="t0407-01",kind="set",pieces={"Bucket","WaterBottle"},where={{place="mapNamed",spot="ground",lean="agricultural",rival="containment"}},title="bitter water saved beside the pump",body="A bucket and capped water bottle hold the same gray foam. Yellow spray dust circles both rims, above the waterline.",anchor={scene="RZSWaterPump"}},
 }}

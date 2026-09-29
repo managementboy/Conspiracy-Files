@@ -14,7 +14,7 @@ EXPANSION
 T0407
 
 ## NEXT
-Review T0170, T0283-T0312, T0314-T0320 and T0322-T0407; T0354 and T0395 are summary tickets awaiting sign-off
+Reviewed to T0407; recipe round complete (T0354 and T0395 signed off). Next round waits on the owner
 
 ## OPEN RETURNS
 none
@@ -26,4 +26,4 @@ none
 2026-09-28 T0001
 
 ## PROGRESS
-NOT DONE: maps 115/125, flyers 132/133, scenes 4/125, adhd 272 @b7a15c73
+NOT DONE: maps 115/125, balance 62%, adhd 387 @c46a93a

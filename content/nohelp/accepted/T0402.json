@@ -1,0 +1,22 @@
+[
+  {
+    "anchor": {
+      "scene": "RZSSurvivalistCamp"
+    },
+    "body": "My entry says the orchard crew rinsed its sprayer upstream. The water turned milky, and my hands blistered before the bridge was blocked.",
+    "id": "t0402-01",
+    "kind": "written",
+    "pieces": [
+      "notebook"
+    ],
+    "title": "camp notebook, page torn short",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  }
+]
