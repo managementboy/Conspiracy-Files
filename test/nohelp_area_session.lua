@@ -38,11 +38,15 @@ local targets={
     ground={x=b.x1+1,y=b.y1+1,z=0,objectIndex=0,containerIndex=0,containerType="floor",sprite="yard",ground=true},
     corpse={x=b.x1+2,y=b.y1,z=0,objectIndex=0,containerIndex=0,containerType=S.CARRIER_CONTAINER,sprite="body",carrierKind="corpse",carrierMark="m1"},
 }
+-- A ground or body clue takes only its own kind; a furniture or mailbox clue
+-- falls back to any container, a body, then the floor (E2, owner 2026-09-29).
+local fallsBack={furniture=true,mailbox=true}
 for spot,t in pairs(targets) do
     for other in pairs(targets) do
         local doc={spot=spot}
-        assert(S.intentMatches(doc,targets[other])==(spot==other),
-            spot.." clue "..(spot==other and "fits" or "does not fit").." a "..other.." spot")
+        local want=spot==other or fallsBack[spot]==true
+        assert(S.intentMatches(doc,targets[other])==want,
+            spot.." clue "..(want and "fits" or "does not fit").." a "..other.." spot")
     end
 end
 

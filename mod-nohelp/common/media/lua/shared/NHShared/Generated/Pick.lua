@@ -158,7 +158,8 @@ function P.choose(args)
         else
             taken[choice.clue.id]=true
             picks[#picks+1]={clue=choice.clue.id,copy=choice.copy,kind=choice.clue.kind,
-                lean=lean,rival=choice.where.rival,spot=choice.where.spot,outfit=choice.where.outfit}
+                lean=lean,rival=choice.where.rival,spot=choice.where.spot,outfit=choice.where.outfit,
+                containers=choice.where.containers}
             here[lean]=count(here,lean)+1
             world[lean]=count(world,lean)+1
             world[choice.clue.kind]=count(world,choice.clue.kind)+1

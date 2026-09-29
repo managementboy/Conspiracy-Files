@@ -140,9 +140,15 @@ function S.intentMatches(doc,target)
         if doc.spot=="ground" then return groundTarget(t) end
         if doc.spot=="corpse" then return carrierTarget(t) and t.carrierKind=="corpse" end
         if doc.spot=="vehicle" then return vehicleTarget(t) end
-        if doc.spot=="mailbox" then return type(t)=="table" and outdoorKind(t.containerType) and not S.isMobile(t) and not groundTarget(t) end
-        if doc.spot=="furniture" then
-            return type(t)=="table" and not S.isMobile(t) and not groundTarget(t) and not outdoorKind(t.containerType)
+        -- A furniture or mailbox clue is never lost for want of its kind
+        -- (E2, owner 2026-09-29): its named containers first, then any
+        -- container there, then a body nearby, then the floor. All of these
+        -- are its spot; the runtime tries them in that order.
+        if doc.spot=="mailbox" or doc.spot=="furniture" then
+            if type(t)~="table" then return false end
+            if groundTarget(t) then return true end
+            if carrierTarget(t) then return t.carrierKind=="corpse" end
+            return not S.isMobile(t)
         end
         return false
     end

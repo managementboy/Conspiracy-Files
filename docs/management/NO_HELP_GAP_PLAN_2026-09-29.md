@@ -10,7 +10,7 @@ MapMediaRuntime's R.subject, not GeneratedRuntime's); the rest hold.
 - [x] **E1 Spoken captions.** (2026-09-29: code and test/nohelp_voice_clue.lua; every Inspect, all clues, title in the bubble - owner answers; native check pending) On the first Inspect the survivor says the
   clue's text (PlayerVoice, the vanilla speech line); a long text is split
   into several lines said in turn. Paper clues are still read from pages.
-- [ ] **E2 Real container choice.** A clue may name a container kind from the
+- [x] **E2 Real container choice.** (2026-09-29: where.containers = exact kind + up to 5 fallbacks, owner; then any container, body, floor; Generated/ContainerKinds.lua, test/nohelp_containers.lua; native check pending) A clue may name a container kind from the
   game's own list (fridge, wardrobe, crate, locker, bin, dumpster, toolbox...),
   not only furniture/vehicle/corpse/mailbox. Missing kind: fall back to a
   similar kind, then any container, then a body, then the floor; never

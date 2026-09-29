@@ -78,7 +78,7 @@ M.SIDECAR_FIELDS={"rival_reading","gloss","axioms","cites","prov"}
 M.REQUIRED={id="string",kind="string",pieces="table",where="table",rival_reading="string",
     gloss="string",axioms="table",prov="table"}
 M.OPTIONAL={person="string",title="string",body="string",anchor="table",cites="table"}
-M.WHERE_FIELDS={place=true,spot=true,lean=true,rival=true,outfit=true}
+M.WHERE_FIELDS={place=true,spot=true,lean=true,rival=true,outfit=true,containers=true}
 -- Draft-table anchors as spots. "carried" (a bag someone grabbed) is on a
 -- body or on the ground.
 M.DRAFT_SPOTS={["room-container"]={furniture=true},body={corpse=true},vehicle={vehicle=true},

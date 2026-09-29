@@ -1270,7 +1270,9 @@ end
 -- then the rest of the area (MarkedArea.window). The cost per step is the
 -- same as anywhere; the attempt count is session-only, like the ground cursor.
 local windowCursor={}
-local function boundsScan(site,done,accept,salt,searchedOk)
+-- `prefer` (optional, E2): container kinds in order of preference; the
+-- first one present wins, then any container the scan accepts.
+local function boundsScan(site,done,accept,salt,searchedOk,prefer)
     local b=site.bounds
     local kinds={}; for _,kind in ipairs(site.containerTypes) do kinds[kind]=true end
     -- A place decided from afar (a map's mark) observed nothing: any fixed
@@ -1287,13 +1289,15 @@ local function boundsScan(site,done,accept,salt,searchedOk)
     end
     local x1,y1,x2,y2=walk.x1-margin,walk.y1-margin,walk.x2+margin,walk.y2+margin
     local x,y,objects,oi,ci=x1,y1,nil,0,0
-    local pool=StorageChoices.new()
+    local pool=StorageChoices.new(prefer)
+    local rankOf={}
+    for r,kind in ipairs(prefer or {}) do rankOf[kind]=rankOf[kind] or r end
     return function()
         if y>=y2 then
             local list=StorageChoices.finish(pool)
             local i=StorageChoices.choose(list,salt or site.id,function(n)
                 return not accept or accept(list[n])
-            end)
+            end,prefer and function(n) return rankOf[list[n].containerType] or #prefer+1 end)
             done(i and list[i]); return true
         end
         if objects==nil then
@@ -1827,6 +1831,9 @@ end
 -- trigger's attempt, run the moment the survivor enters the area's ring.
 local function filler(api,onlyArea)
     local id,site,scan,target,bodyScan,carrier,indexed,doc,distance,groundWhy,areaClue
+    -- E2: a furniture or mailbox clue with nothing of its kind free falls back
+    -- to a body nearby, then the floor (`floorTried` once the floor was scanned).
+    local spentKeys,takenKeys,floorTried
     -- A clue that could not be placed this attempt, said with where it is
     -- and how far the survivor is from its area.
     local function miss(why)
@@ -1883,6 +1890,7 @@ local function filler(api,onlyArea)
             end
             if not indexed then
                 local taken=usedPhysicalKeys()
+                spentKeys,takenKeys=type(root.spent)=="table" and root.spent or {},taken
                 -- Within a place the spots are the world's seeded choice, in
                 -- no layout order (owner, 2026-09-27).
                 local accept=function(candidate)
@@ -1909,11 +1917,12 @@ local function filler(api,onlyArea)
                     -- furniture); Session.assign refuses anything else, so a
                     -- container of the wrong kind is never even chosen.
                     -- A drawer searched earlier may take a No Help clue.
+                    local prefer=doc and (doc.containers or (doc.spot=="mailbox" and {Storage.MAILBOX}))
                     scan=boundsScan(site,function(t) target=t end,
                         function(candidate)
                             return not taken[Session.physicalKey(candidate)] and Session.intentMatches(doc,candidate)
                                 and not holdsProps(candidate,site.avoidProps)
-                        end,id,areaClue)
+                        end,id,areaClue,prefer or nil)
                 end
             end
         end
@@ -1958,9 +1967,16 @@ local function filler(api,onlyArea)
                 miss("no-confirmed-vehicle")
                 return true
             end
+            local fallback=doc and (doc.spot=="furniture" or doc.spot=="mailbox")
+            if fallback and floorTried then
+                declinePlacement("no container, body or floor free at the area for "..tostring(id))
+                miss("no-"..tostring(doc.spot).."-no-fallback")
+                return true
+            end
             -- A No Help clue that names a spot other than a body waits for a
-            -- spot of its own kind, and a body is never its fallback.
-            if doc and doc.spot~=nil and doc.spot~="corpse" then
+            -- spot of its own kind; a furniture or mailbox clue falls back to a
+            -- body and then the floor (E2) instead.
+            if doc and doc.spot~=nil and doc.spot~="corpse" and not fallback then
                 declinePlacement("no free "..tostring(doc.spot).." spot at the area for "..tostring(id))
                 if doc.spot=="ground" and groundWhy and groundWhy~="" then
                     CFLog.write("d","skip",{doc=id,area=site.id,distance=distance,refused=groundWhy,why="no-ground"})
@@ -1969,7 +1985,7 @@ local function filler(api,onlyArea)
             end
             -- A body clue of the world record is not held to the one-mobile-
             -- clue-per-case cap: the whole world is one record.
-            if not (doc and doc.spot=="corpse") and not Session.mobileAllowed(api.snapshot(),id) then
+            if not (doc and (doc.spot=="corpse" or fallback)) and not Session.mobileAllowed(api.snapshot(),id) then
                 -- Debug, not info: this is the ordinary state of an open order
                 -- and would otherwise be a line every two seconds. Named all
                 -- the same (Log.declines), so a check standing at the site can
@@ -1980,6 +1996,14 @@ local function filler(api,onlyArea)
             if not bodyScan then bodyScan=carrierScanFor(site,function(entry) carrier=entry end,doc and doc.outfit) end
             if not carrier then
                 if bodyScan() then
+                    if not carrier and fallback then
+                        -- No body either: the floor, scanned from the next step.
+                        floorTried=true
+                        scan=groundScan(site,function(t) target=t end,function(candidate)
+                            return not takenKeys[Session.physicalKey(candidate)] and Session.intentMatches(doc,candidate)
+                        end,id,{spent=spentKeys or {},used=takenKeys or {}})
+                        return false
+                    end
                     if not carrier then
                         declinePlacement("no free container at the site for "..tostring(id).." and no body nearby to carry it")
                         CFLog.write("d","skip",{doc=id,why="no-containers"}); return true

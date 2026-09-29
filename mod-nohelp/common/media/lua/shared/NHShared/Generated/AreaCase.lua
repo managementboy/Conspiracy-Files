@@ -67,7 +67,8 @@ end
 -- has it; a placeholder clue gets a neutral placeholder, never invented story.
 function M.docFrom(pick,clue,areaId)
     local doc={id=M.docId(areaId,pick.clue,pick.copy),locationId=areaId,clue=pick.clue,copy=pick.copy,
-        lean=pick.lean,rival=pick.rival,spot=pick.spot,person=clue.person,outfit=pick.outfit,anchor=copy(clue.anchor)}
+        lean=pick.lean,rival=pick.rival,spot=pick.spot,person=clue.person,outfit=pick.outfit,anchor=copy(clue.anchor),
+        containers=copy(pick.containers)}
     if clue.kind=="set" then
         doc.kind=clue.pieces[1]
         doc.members=membersOf(clue.pieces)
@@ -474,6 +475,14 @@ function M.validate(case)
         if d.person~=nil and (type(d.person)~="string" or #d.person==0 or #d.person>40) then return false,"invalid person" end
         if d.outfit~=nil and (d.spot~="corpse" or not Outfits.isClass(d.outfit)) then return false,"invalid outfit hint" end
         if d.mark~=nil and (not integer(d.mark) or d.mark<1) then return false,"invalid own mark" end
+        -- Container kinds by preference (E2). Shape only, like the anchor: a
+        -- later game update must not make a saved world unreadable.
+        if d.containers~=nil then
+            if d.spot~="furniture" or type(d.containers)~="table" or #d.containers<1 or #d.containers>6 then return false,"invalid containers" end
+            for k,v in pairs(d.containers) do
+                if type(k)~="number" or type(v)~="string" or v=="" or #v>80 then return false,"invalid containers" end
+            end
+        end
         -- The anchor a clue was written for, as the clue list gave it. Only
         -- its shape is checked: a later MapSites must not break a save.
         if d.anchor~=nil then
@@ -512,7 +521,7 @@ function M.validate(case)
             if k and not Kinds.fits(d.kind,d.body) then return false,"a clue's text does not fit its carrier" end
         end
         for k in pairs(d) do
-            if not ({id=1,locationId=1,clue=1,copy=1,lean=1,rival=1,spot=1,kind=1,members=1,quantity=1,title=1,body=1,person=1,outfit=1,mark=1,anchor=1})[k] then
+            if not ({id=1,locationId=1,clue=1,copy=1,lean=1,rival=1,spot=1,kind=1,members=1,quantity=1,title=1,body=1,person=1,outfit=1,mark=1,anchor=1,containers=1})[k] then
                 return false,"unknown clue field "..tostring(k)
             end
         end

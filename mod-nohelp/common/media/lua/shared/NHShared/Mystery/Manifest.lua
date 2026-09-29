@@ -13,6 +13,7 @@
 local Catalogue=require("NHShared/Generated/ObjectCatalogue")
 local Kinds=require("NHShared/Generated/EvidenceKinds")
 local Outfits=require("NHShared/BodyOutfitObservations")
+local ContainerKinds=require("NHShared/Generated/ContainerKinds")
 local Gates=require("NHShared/Mystery/ClueGates")
 local M={}
 
@@ -217,6 +218,15 @@ function M.validClue(c)
         if w.outfit~=nil then
             if w.spot~="corpse" then return false,c.id..": only a body spot takes an outfit hint","SCHEMA" end
             if not Outfits.isClass(w.outfit) then return false,c.id..": unknown outfit class "..tostring(w.outfit),"SCHEMA" end
+        end
+        -- The container kinds it would be found in, in order (E2, owner
+        -- 2026-09-29): the exact one, then up to five fallbacks; a furniture
+        -- spot only.
+        if w.containers~=nil then
+            if w.spot~="furniture" then return false,c.id..": only a furniture spot names containers","SCHEMA" end
+            if not ContainerKinds.valid(w.containers) then
+                return false,c.id..": containers are 1-"..ContainerKinds.MAX.." known container kinds, no repeats","BAD_CONTAINER"
+            end
         end
     end
     if c.anchor~=nil then
