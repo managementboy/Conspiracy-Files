@@ -1,0 +1,41 @@
+[
+  {
+    "anchor": {
+      "print": "Fossoil8"
+    },
+    "body": "oily field residue links the short rope and water bottle. a clean waterline shows both were rinsed before the road closed.",
+    "id": "t0166-01",
+    "kind": "set",
+    "pieces": [
+      "Rope",
+      "WaterBottle"
+    ],
+    "title": "field residue on the short rope",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ],
+    "rival_reading": "Emergency workers crossing treated land could have picked up the same residue; the objects do not prove the farm program began the emergency.",
+    "gloss": "A rare everyday object carries residue tied to field work before restriction.",
+    "axioms": {
+      "containment": [
+        "c-warning",
+        "c-orders"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-malfunction",
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0166"
+    }
+  }
+]
