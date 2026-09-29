@@ -94,6 +94,22 @@ scene or map to the owner). What each serial means is in
 `docs/writer-only/nohelp-tickets.tsv` (writer-only). **Take the lowest open
 serial**, and only one at a time. Row ids are `t####-NN`.
 
+**Recipes (owner, 2026-09-29).** Every remaining ticket has a recipe in
+`content/nohelp/recipes.json`: `side` (which believer the clue should mainly
+serve: A cover-up, B farm program, or both), `form` (written or set) and
+`keyRing` (whether a key ring may appear). Follow it. The converter check
+rejects a clue in the wrong form (`RECIPE_FORM`) or with a key ring the
+recipe does not allow (`RECIPE_KEY`), any clue whose text repeats another's
+(`TEXT_REPEAT`), and an empty ticket (`EMPTY`). The side is checked by the
+blind read and only reported, never returned.
+
+**Written clues are personal paper, never official documents.** A diary
+line, a grocery or feed-store receipt, a farm log, a note on the back of a
+photo, a shopping list, a torn or water-damaged page. No forms, orders,
+memos, letterheads, stamps or reports: those trip your safety filter. If a
+ticket still stops, deliver nothing for it, note it in STATE, and try that
+ticket alone later in a plainer form; never copy another ticket's text.
+
 **One go (owner, 2026-09-28):** when Claude opens the remaining tickets, deliver ALL of them (summary tickets and stories, in serial order) without waiting for sign-off or review in between; hand the baton to Claude once, at the end.
 
 **Rounds (owner, 2026-09-27: the relay was too slow).** Work in rounds of

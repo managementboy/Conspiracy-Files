@@ -42,7 +42,7 @@ local function row(ticket,kind,lean,extra)
     local r={id=ticket:lower().."-"..N,kind=kind,
         pieces=kind=="set" and {"Twine","Tarp"} or {"letter"},
         where={{place="farm",spot="furniture",lean=lean,rival=lean=="containment" and "agricultural" or "containment"}},
-        title="Placeholder title",body="Placeholder body token.",
+        title="Placeholder title "..N,body="Placeholder body token "..N..".",
         rival_reading="placeholder rival reading",gloss="placeholder gloss",
         axioms={containment={"ax-a1"},agricultural={"ax-b1"}},
         prov={writer="placeholder-model",handoff="2026-09-27",batch=ticket}}
@@ -197,5 +197,21 @@ assert(draft({scene="Zzleftalone"},"corpse")=="ANCHOR_UNKNOWN","draft: a scene l
 assert(draft({scene="Zznotascene"})=="ANCHOR_UNKNOWN","draft: not a scene kind")
 ctx.scenesShipped=true
 assert(draft({scene="Zzscene"})=="ok","with the table shipped the draft is not consulted")
+
+
+-- RECIPES AND REPEATS (owner, 2026-09-29): a ticket's recipe names its form
+-- and whether a key ring may appear; no clue repeats another's text; an empty
+-- ticket fails the check.
+do
+    local rctx={recipes={T9001={form="written",keyRing=false},T9002={form="set",keyRing=false},T9003={form="set",keyRing=true}}}
+    local set={id="t9002-01",kind="set",pieces={"KeyRing","Twine"},title="t",body="b"}
+    assert(Convert.recipeCheck({id="t9001-01",kind="set",pieces={"Twine"}},"T9001",rctx).code=="RECIPE_FORM","the recipe's form")
+    assert(Convert.recipeCheck(set,"T9002",rctx).code=="RECIPE_KEY","no key ring unless the recipe allows one")
+    assert(Convert.recipeCheck({id="t9003-01",kind="set",pieces={"KeyRing","Twine"}},"T9003",rctx)==nil,"a key ring where allowed")
+    assert(Convert.recipeCheck(set,"T9999",rctx)==nil,"no recipe, no recipe check")
+    assert(Convert.textKey({title="A  Title",body="Same, body!"})==Convert.textKey({title="a title",body="same body"}),"case, spaces and punctuation ignored")
+    local out=Convert.convertTicket("T9004",{},{},{registry={}},"CLASSIFIER_STOP")
+    assert(#out.rejected==1 and out.rejected[1].reasons[1].code=="EMPTY","an empty ticket is returned, not dropped silently")
+end
 
 print("nohelp_content_convert: ok")

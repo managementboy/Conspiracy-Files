@@ -124,6 +124,14 @@ end
 function M.context(opts)
     opts=opts or {}
     local ctx={root=opts.root or M.ROOT}
+    -- Recipes (owner, 2026-09-29): per ticket, the form (written or set) and
+    -- whether a key ring may appear. content/nohelp/recipes.json; a ticket
+    -- without a recipe is not checked for these.
+    ctx.recipes=opts.recipes
+    if ctx.recipes==nil then
+        local text=readFile((opts.root or M.ROOT).."/recipes.json")
+        ctx.recipes=text and J.decode(text) or {}
+    end
     local retired=opts.retired
     if retired==nil then
         local ok,r=pcall(dofile,opts.retiredPath or M.RETIRED)
@@ -244,11 +252,34 @@ local function sidecarFields(row)
     return out
 end
 
+-- THE RECIPE: the form it names, and no key ring unless it allows one.
+function M.recipeCheck(row,ticket,ctx)
+    local r=ctx.recipes and ctx.recipes[ticket]
+    if type(r)~="table" then return nil end
+    if r.form and row.kind~=r.form then return reason("RECIPE_FORM","the recipe asks for a "..tostring(r.form).." clue") end
+    if not r.keyRing then
+        for _,p in ipairs(row.pieces or {}) do
+            if p=="KeyRing" or p=="Key1" or p=="KeyRing_Hotel" then return reason("RECIPE_KEY","the recipe allows no key ring here") end
+        end
+    end
+    return nil
+end
+-- THE SAME TEXT TWICE: a clue whose title and body repeat another clue's,
+-- accepted or delivered (letters and digits compared, case ignored).
+function M.textKey(row)
+    local t=(tostring(row.title or "").." "..tostring(row.body or "")):lower():gsub("[^%w]","")
+    return t
+end
+
 -- One ticket. accepted: {ticket = {game rows}} of every ticket accepted so
 -- far. Returns {accepted = game rows, sidecar = {id = fields}, rejected =
 -- {{row, reasons}}, unverified = {ids}}.
 function M.convertTicket(ticket,rows,accepted,ctx,status)
     local out={accepted={},sidecar={},rejected={},unverified={}}
+    if #rows==0 then
+        out.rejected[1]={row=J.null,reasons={reason("EMPTY","the ticket has no clue"..(status and " ("..status..")" or ""))}}
+        return out
+    end
     if status=="CLASSIFIER_STOP" then
         for _,row in ipairs(rows) do
             out.rejected[#out.rejected+1]={row=row,reasons={reason("CLASSIFIER_STOP","generation stopped; ticket comes back smaller")}}
@@ -265,6 +296,12 @@ function M.convertTicket(ticket,rows,accepted,ctx,status)
             if not ok then r=reason(code or "SCHEMA",why) end
         end
         if not r then r=M.sceneCheck(row,ctx) end
+        if not r then r=M.recipeCheck(row,ticket,ctx) end
+        if not r and type(row)=="table" then
+            local k=M.textKey(row)
+            if ctx.texts and ctx.texts[k] and ctx.texts[k]~=row.id then r=reason("TEXT_REPEAT","the same text as "..ctx.texts[k]) end
+            if ctx.texts and not r then ctx.texts[k]=row.id end
+        end
         if r then out.rejected[#out.rejected+1]={row=row,reasons={r}}
         else good[#good+1]=row end
     end
@@ -371,6 +408,8 @@ function M.run(opts)
         stale=readFile(opts.out or M.OUT)~=M.renderClues(accepted)
     end
     local nTickets,nAccepted,nReturned,nStage0=0,0,0,0
+    ctx.texts={}
+    for _,rows in pairs(accepted) do for _,c in ipairs(rows) do ctx.texts[M.textKey(c)]=c.id end end
     if not opts.rebuild then
         for _,ticket in ipairs(listJson(root.."/incoming")) do
           if M.ticketType(ticket,ctx.registry)=="STAGE0" then

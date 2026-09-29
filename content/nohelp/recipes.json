@@ -1,0 +1,613 @@
+{
+ "_about": "Recipes (owner, 2026-09-29). Per ticket: side = which believer the clue should mainly serve (A cover-up, B farm program, both); form = written or set; keyRing = whether a key ring may appear. The converter check enforces form and keyRing; side is checked by the blind read and only reported.",
+ "T0170": {
+  "side": "B",
+  "form": "written",
+  "keyRing": false
+ },
+ "T0283": {
+  "side": "B",
+  "form": "set",
+  "keyRing": false
+ },
+ "T0284": {
+  "side": "B",
+  "form": "written",
+  "keyRing": false
+ },
+ "T0285": {
+  "side": "B",
+  "form": "set",
+  "keyRing": false
+ },
+ "T0286": {
+  "side": "B",
+  "form": "written",
+  "keyRing": false
+ },
+ "T0287": {
+  "side": "both",
+  "form": "set",
+  "keyRing": false
+ },
+ "T0288": {
+  "side": "B",
+  "form": "written",
+  "keyRing": false
+ },
+ "T0289": {
+  "side": "B",
+  "form": "set",
+  "keyRing": false
+ },
+ "T0290": {
+  "side": "B",
+  "form": "written",
+  "keyRing": false
+ },
+ "T0291": {
+  "side": "B",
+  "form": "set",
+  "keyRing": false
+ },
+ "T0292": {
+  "side": "B",
+  "form": "written",
+  "keyRing": false
+ },
+ "T0293": {
+  "side": "both",
+  "form": "set",
+  "keyRing": false
+ },
+ "T0294": {
+  "side": "B",
+  "form": "written",
+  "keyRing": false
+ },
+ "T0295": {
+  "side": "B",
+  "form": "set",
+  "keyRing": false
+ },
+ "T0296": {
+  "side": "B",
+  "form": "written",
+  "keyRing": false
+ },
+ "T0297": {
+  "side": "B",
+  "form": "set",
+  "keyRing": false
+ },
+ "T0298": {
+  "side": "B",
+  "form": "written",
+  "keyRing": false
+ },
+ "T0299": {
+  "side": "both",
+  "form": "set",
+  "keyRing": false
+ },
+ "T0300": {
+  "side": "B",
+  "form": "written",
+  "keyRing": false
+ },
+ "T0301": {
+  "side": "B",
+  "form": "set",
+  "keyRing": true
+ },
+ "T0302": {
+  "side": "B",
+  "form": "written",
+  "keyRing": false
+ },
+ "T0303": {
+  "side": "B",
+  "form": "set",
+  "keyRing": false
+ },
+ "T0304": {
+  "side": "B",
+  "form": "written",
+  "keyRing": false
+ },
+ "T0305": {
+  "side": "both",
+  "form": "set",
+  "keyRing": false
+ },
+ "T0306": {
+  "side": "B",
+  "form": "written",
+  "keyRing": false
+ },
+ "T0307": {
+  "side": "B",
+  "form": "set",
+  "keyRing": false
+ },
+ "T0308": {
+  "side": "B",
+  "form": "written",
+  "keyRing": false
+ },
+ "T0309": {
+  "side": "B",
+  "form": "set",
+  "keyRing": false
+ },
+ "T0310": {
+  "side": "B",
+  "form": "written",
+  "keyRing": false
+ },
+ "T0311": {
+  "side": "both",
+  "form": "set",
+  "keyRing": false
+ },
+ "T0312": {
+  "side": "B",
+  "form": "written",
+  "keyRing": false
+ },
+ "T0314": {
+  "side": "B",
+  "form": "set",
+  "keyRing": false
+ },
+ "T0315": {
+  "side": "B",
+  "form": "written",
+  "keyRing": false
+ },
+ "T0316": {
+  "side": "B",
+  "form": "set",
+  "keyRing": false
+ },
+ "T0317": {
+  "side": "B",
+  "form": "written",
+  "keyRing": false
+ },
+ "T0318": {
+  "side": "both",
+  "form": "set",
+  "keyRing": false
+ },
+ "T0319": {
+  "side": "B",
+  "form": "written",
+  "keyRing": false
+ },
+ "T0320": {
+  "side": "B",
+  "form": "set",
+  "keyRing": false
+ },
+ "T0322": {
+  "side": "B",
+  "form": "written",
+  "keyRing": false
+ },
+ "T0323": {
+  "side": "B",
+  "form": "set",
+  "keyRing": true
+ },
+ "T0324": {
+  "side": "B",
+  "form": "written",
+  "keyRing": false
+ },
+ "T0325": {
+  "side": "both",
+  "form": "set",
+  "keyRing": false
+ },
+ "T0326": {
+  "side": "B",
+  "form": "written",
+  "keyRing": false
+ },
+ "T0327": {
+  "side": "B",
+  "form": "set",
+  "keyRing": false
+ },
+ "T0328": {
+  "side": "B",
+  "form": "written",
+  "keyRing": false
+ },
+ "T0329": {
+  "side": "B",
+  "form": "set",
+  "keyRing": false
+ },
+ "T0330": {
+  "side": "B",
+  "form": "written",
+  "keyRing": false
+ },
+ "T0331": {
+  "side": "both",
+  "form": "set",
+  "keyRing": false
+ },
+ "T0332": {
+  "side": "B",
+  "form": "written",
+  "keyRing": false
+ },
+ "T0333": {
+  "side": "B",
+  "form": "set",
+  "keyRing": false
+ },
+ "T0334": {
+  "side": "B",
+  "form": "written",
+  "keyRing": false
+ },
+ "T0335": {
+  "side": "B",
+  "form": "set",
+  "keyRing": false
+ },
+ "T0336": {
+  "side": "B",
+  "form": "written",
+  "keyRing": false
+ },
+ "T0337": {
+  "side": "both",
+  "form": "set",
+  "keyRing": false
+ },
+ "T0338": {
+  "side": "B",
+  "form": "written",
+  "keyRing": false
+ },
+ "T0339": {
+  "side": "B",
+  "form": "set",
+  "keyRing": false
+ },
+ "T0340": {
+  "side": "B",
+  "form": "written",
+  "keyRing": false
+ },
+ "T0341": {
+  "side": "B",
+  "form": "set",
+  "keyRing": false
+ },
+ "T0342": {
+  "side": "B",
+  "form": "written",
+  "keyRing": false
+ },
+ "T0343": {
+  "side": "both",
+  "form": "set",
+  "keyRing": true
+ },
+ "T0344": {
+  "side": "B",
+  "form": "written",
+  "keyRing": false
+ },
+ "T0345": {
+  "side": "B",
+  "form": "set",
+  "keyRing": false
+ },
+ "T0346": {
+  "side": "B",
+  "form": "written",
+  "keyRing": false
+ },
+ "T0347": {
+  "side": "B",
+  "form": "set",
+  "keyRing": false
+ },
+ "T0348": {
+  "side": "B",
+  "form": "written",
+  "keyRing": false
+ },
+ "T0349": {
+  "side": "both",
+  "form": "set",
+  "keyRing": false
+ },
+ "T0350": {
+  "side": "B",
+  "form": "written",
+  "keyRing": false
+ },
+ "T0351": {
+  "side": "B",
+  "form": "set",
+  "keyRing": false
+ },
+ "T0352": {
+  "side": "B",
+  "form": "written",
+  "keyRing": false
+ },
+ "T0353": {
+  "side": "B",
+  "form": "set",
+  "keyRing": false
+ },
+ "T0355": {
+  "side": "B",
+  "form": "written",
+  "keyRing": false
+ },
+ "T0356": {
+  "side": "both",
+  "form": "set",
+  "keyRing": false
+ },
+ "T0357": {
+  "side": "B",
+  "form": "written",
+  "keyRing": false
+ },
+ "T0358": {
+  "side": "B",
+  "form": "set",
+  "keyRing": false
+ },
+ "T0359": {
+  "side": "B",
+  "form": "written",
+  "keyRing": false
+ },
+ "T0360": {
+  "side": "B",
+  "form": "set",
+  "keyRing": false
+ },
+ "T0361": {
+  "side": "B",
+  "form": "written",
+  "keyRing": false
+ },
+ "T0362": {
+  "side": "both",
+  "form": "set",
+  "keyRing": false
+ },
+ "T0363": {
+  "side": "B",
+  "form": "written",
+  "keyRing": false
+ },
+ "T0364": {
+  "side": "B",
+  "form": "set",
+  "keyRing": true
+ },
+ "T0365": {
+  "side": "B",
+  "form": "written",
+  "keyRing": false
+ },
+ "T0366": {
+  "side": "B",
+  "form": "set",
+  "keyRing": false
+ },
+ "T0367": {
+  "side": "B",
+  "form": "written",
+  "keyRing": false
+ },
+ "T0368": {
+  "side": "both",
+  "form": "set",
+  "keyRing": false
+ },
+ "T0369": {
+  "side": "B",
+  "form": "written",
+  "keyRing": false
+ },
+ "T0370": {
+  "side": "B",
+  "form": "set",
+  "keyRing": false
+ },
+ "T0371": {
+  "side": "B",
+  "form": "written",
+  "keyRing": false
+ },
+ "T0372": {
+  "side": "B",
+  "form": "set",
+  "keyRing": false
+ },
+ "T0373": {
+  "side": "B",
+  "form": "written",
+  "keyRing": false
+ },
+ "T0374": {
+  "side": "both",
+  "form": "set",
+  "keyRing": false
+ },
+ "T0375": {
+  "side": "B",
+  "form": "written",
+  "keyRing": false
+ },
+ "T0376": {
+  "side": "B",
+  "form": "set",
+  "keyRing": false
+ },
+ "T0377": {
+  "side": "B",
+  "form": "written",
+  "keyRing": false
+ },
+ "T0378": {
+  "side": "B",
+  "form": "set",
+  "keyRing": false
+ },
+ "T0379": {
+  "side": "B",
+  "form": "written",
+  "keyRing": false
+ },
+ "T0380": {
+  "side": "both",
+  "form": "set",
+  "keyRing": false
+ },
+ "T0381": {
+  "side": "B",
+  "form": "written",
+  "keyRing": false
+ },
+ "T0382": {
+  "side": "B",
+  "form": "set",
+  "keyRing": false
+ },
+ "T0383": {
+  "side": "B",
+  "form": "written",
+  "keyRing": false
+ },
+ "T0384": {
+  "side": "B",
+  "form": "set",
+  "keyRing": true
+ },
+ "T0385": {
+  "side": "B",
+  "form": "written",
+  "keyRing": false
+ },
+ "T0386": {
+  "side": "both",
+  "form": "set",
+  "keyRing": false
+ },
+ "T0387": {
+  "side": "B",
+  "form": "written",
+  "keyRing": false
+ },
+ "T0388": {
+  "side": "B",
+  "form": "set",
+  "keyRing": false
+ },
+ "T0389": {
+  "side": "B",
+  "form": "written",
+  "keyRing": false
+ },
+ "T0390": {
+  "side": "B",
+  "form": "set",
+  "keyRing": false
+ },
+ "T0391": {
+  "side": "B",
+  "form": "written",
+  "keyRing": false
+ },
+ "T0392": {
+  "side": "both",
+  "form": "set",
+  "keyRing": false
+ },
+ "T0393": {
+  "side": "B",
+  "form": "written",
+  "keyRing": false
+ },
+ "T0394": {
+  "side": "B",
+  "form": "set",
+  "keyRing": false
+ },
+ "T0396": {
+  "side": "B",
+  "form": "written",
+  "keyRing": false
+ },
+ "T0397": {
+  "side": "B",
+  "form": "set",
+  "keyRing": false
+ },
+ "T0398": {
+  "side": "B",
+  "form": "written",
+  "keyRing": false
+ },
+ "T0399": {
+  "side": "both",
+  "form": "set",
+  "keyRing": false
+ },
+ "T0400": {
+  "side": "B",
+  "form": "written",
+  "keyRing": false
+ },
+ "T0401": {
+  "side": "B",
+  "form": "set",
+  "keyRing": false
+ },
+ "T0402": {
+  "side": "B",
+  "form": "written",
+  "keyRing": false
+ },
+ "T0403": {
+  "side": "B",
+  "form": "set",
+  "keyRing": false
+ },
+ "T0404": {
+  "side": "B",
+  "form": "written",
+  "keyRing": false
+ },
+ "T0405": {
+  "side": "both",
+  "form": "set",
+  "keyRing": true
+ },
+ "T0406": {
+  "side": "B",
+  "form": "written",
+  "keyRing": false
+ },
+ "T0407": {
+  "side": "B",
+  "form": "set",
+  "keyRing": false
+ }
+}
