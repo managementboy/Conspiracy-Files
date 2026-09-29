@@ -1,0 +1,39 @@
+[
+  {
+    "anchor": {
+      "scene": "RDSPrisonEscapeWithPolice"
+    },
+    "body": "Tuesday at dusk: two workers from the pest-control test carried black specks. the garden browned before the checkpoint appeared.\n\nI thought the date would settle it. When I asked, the person at the barrier looked at the seal instead and handed it back.\n\nThe person who was supposed to collect it had no time to stop. I did not put it back with the rest of the ordinary papers.",
+    "id": "t0342-01",
+    "kind": "written",
+    "pieces": [
+      "diary"
+    ],
+    "title": "Tuesday at dusk — black specks",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "corpse"
+      }
+    ],
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-warning",
+        "c-orders"
+      ]
+    },
+    "gloss": "A personal trace connects a farm trial to symptoms before a later restriction.",
+    "prov": {
+      "batch": "T0342",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "Emergency workers could have picked up the same black specks while responding near a field; this personal trace does not prove the trial caused the emergency."
+  }
+]
