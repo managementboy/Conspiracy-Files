@@ -1,0 +1,84 @@
+[
+  {
+    "anchor": {
+      "scene": "RDSResourceGarage"
+    },
+    "body": "I saved the cloth with milky water for you. The crop plot crew passed Saturday near lunch; two hens went still, and afterward the lane was closed.",
+    "id": "t0346-01",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "title": "Saturday near lunch \u2014 milky water",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ],
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-warning",
+        "c-orders"
+      ]
+    },
+    "gloss": "A personal trace connects a farm trial to symptoms before a later restriction.",
+    "prov": {
+      "batch": "T0346",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "Emergency workers could have picked up the same milky water while responding near a field; this personal trace does not prove the trial caused the emergency."
+  },
+  {
+    "anchor": {
+      "scene": "RDSResourceGarage"
+    },
+    "body": "I told them which shelves had fuel and which held tools. They asked for the names of people who had filled containers the night before.\n\nI could remember the man who paid in coins because I had counted them twice. His number was already on their sheet. They did not ask me about the fuel after that.\n\nI put the coins away separately. The drawer still has the gap where the sheet had been kept.",
+    "id": "t0346-02",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "The garage inventory",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture",
+        "containers": [
+          "toolcabinet",
+          "desk",
+          "counter",
+          "crate",
+          "locker",
+          "shelves"
+        ]
+      }
+    ],
+    "axioms": {
+      "containment": [
+        "c-warning",
+        "c-accounting"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "gloss": "An altered count or retained object was left at the scene.",
+    "prov": {
+      "batch": "T0346",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A response to an agricultural exposure could explain the same record or object."
+  }
+]
