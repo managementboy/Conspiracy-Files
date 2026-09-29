@@ -1,0 +1,39 @@
+[
+  {
+    "id": "t0286-01",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "corpse",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "anchor": {
+      "scene": "RBBurntCorpse"
+    },
+    "title": "Near midnight: sealed seed packet",
+    "body": "I kept the sealed seed packet you asked about. The trial crew passed near midnight; my brother started coughing, and only later a patrol turned everyone back.",
+    "rival_reading": "A response team could have carried farm supplies while checking exposure; the objects and timing do not establish that the trial caused it.",
+    "gloss": "A personal trace links trial residue to illness before a later restriction.",
+    "axioms": {
+      "containment": [
+        "c-warning",
+        "c-orders"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0286"
+    }
+  }
+]
