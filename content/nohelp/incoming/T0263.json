@@ -1,0 +1,52 @@
+[
+  {
+    "anchor": {
+      "print": "GoldenSunset"
+    },
+    "body": "The care log lists a routine delivery, while the field sample box is marked outside the room before the resident’s check-in.",
+    "id": "t0263-01",
+    "kind": "set",
+    "pieces": [
+      "Bandage",
+      "Notebook"
+    ],
+    "title": "Elder-care delivery",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture",
+        "containers": [
+          "crate",
+          "shelves",
+          "desk",
+          "counter",
+          "cardboardbox",
+          "bin"
+        ]
+      }
+    ],
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "Golden Sunset Nursing Home",
+      "source": "print:GoldenSunset"
+    },
+    "gloss": "A care visit and field sample share a room handoff.",
+    "prov": {
+      "batch": "T0263",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A response team could sample a room after a medical visit; the log does not say what the sample was."
+  }
+]
