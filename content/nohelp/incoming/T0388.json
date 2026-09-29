@@ -1,0 +1,40 @@
+[
+  {
+    "id": "t0388-01",
+    "kind": "set",
+    "pieces": [
+      "Potato",
+      "EmptyJar"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "agricultural",
+        "rival": "containment"
+      }
+    ],
+    "anchor": {
+      "scene": "RZSHunterCamp"
+    },
+    "title": "cut potato with a soil jar at after monday supper",
+    "body": "the cut potato with a soil jar carry an acrid film from the well-water study. they were packed before the nurse stopped taking calls.",
+    "rival_reading": "Responders could have collected the an acrid film while crossing treated land; the note or objects do not prove the program began the emergency.",
+    "gloss": "A personal field trace precedes the visible emergency response.",
+    "axioms": {
+      "containment": [
+        "c-warning",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0388"
+    }
+  }
+]
