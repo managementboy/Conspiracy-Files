@@ -1,0 +1,41 @@
+[
+  {
+    "anchor": {
+      "print": "MadDansDen"
+    },
+    "body": "the pocket calculator and first-aid kit carry the same black paint. a fresh scrape exposes an older evacuation color beneath.",
+    "id": "t0271-01",
+    "kind": "set",
+    "pieces": [
+      "Calculator",
+      "FirstAidKit"
+    ],
+    "title": "missing count beside the pocket calculator",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ],
+    "rival_reading": "A farm-program crew could have counted routes, repacked tools, or removed ownership marks during hurried field work; the objects do not prove a concealed public response.",
+    "gloss": "A response bundle preserves a missing count, changed route, or erased identity.",
+    "axioms": {
+      "containment": [
+        "c-warning",
+        "c-orders",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0271"
+    }
+  }
+]
