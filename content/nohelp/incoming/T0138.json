@@ -1,0 +1,53 @@
+[
+  {
+    "anchor": {
+      "map": "WpStashMap5",
+      "mark": 1
+    },
+    "body": "The tool list is paired with a personal note; a line asks the next crew to wipe the handles after work and leave the back door open.",
+    "id": "t0138-01",
+    "kind": "set",
+    "pieces": [
+      "Screwdriver",
+      "Notebook"
+    ],
+    "title": "Tools for a difficult visit",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture",
+        "containers": [
+          "toolcabinet",
+          "crate",
+          "shelves",
+          "desk",
+          "counter",
+          "cardboardbox"
+        ]
+      }
+    ],
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "tools",
+      "source": "map:WpStashMap5"
+    },
+    "gloss": "Shared tools are cleaned after a visit whose purpose is not named.",
+    "prov": {
+      "batch": "T0138",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A response crew could have cleaned shared tools after a hazardous visit; the note does not say what the work involved."
+  }
+]
