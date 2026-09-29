@@ -1,0 +1,74 @@
+[
+  {
+    "anchor": {
+      "scene": "RZSTrapperCamp"
+    },
+    "body": "On the back: “No animals after the pasture trial sprayed. The sharp smell reached camp before the noon siren.”",
+    "id": "t0404-01",
+    "kind": "written",
+    "pieces": [
+      "photograph"
+    ],
+    "title": "photograph of an empty trap line",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ],
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-warning",
+        "c-orders"
+      ]
+    },
+    "gloss": "A personal trace links farm-program residue to symptoms before a restriction.",
+    "prov": {
+      "batch": "T0404",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "Emergency workers could have encountered the same residue while crossing treated land; the personal trace does not by itself prove the farm program caused the emergency."
+  },
+  {
+    "id": "t0404-02",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ],
+    "title": "Trap line closure",
+    "body": "The trapper was asked to clear the path for evacuation and left his traps open as instructed. The promised vehicles never used it. He went back at dusk to close the traps so no one walking in the dark would be hurt.",
+    "anchor": {
+      "scene": "RZSTrapperCamp"
+    },
+    "rival_reading": "The agricultural trial may have caused the disorder that forced improvised decisions.",
+    "gloss": "A witness records a failed evacuation count or route.",
+    "axioms": {
+      "containment": [
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0404"
+    }
+  }
+]
