@@ -1,0 +1,41 @@
+[
+  {
+    "anchor": {
+      "map": "BBurgStashMap5",
+      "mark": 1
+    },
+    "body": "green crop residue marks the empty sandbag; a scraped warning stripe marks the water bottle. both are tied with the same cord.",
+    "id": "t0030-02",
+    "kind": "set",
+    "pieces": [
+      "EmptySandbag",
+      "WaterBottle"
+    ],
+    "title": "two traces on the empty sandbag",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ],
+    "rival_reading": "The farm program and the emergency response each explain one layer of the bundle, and the shared knot does not establish which purpose came first.",
+    "gloss": "Farm residue and response markings share one deliberately ambiguous bundle.",
+    "axioms": {
+      "containment": [
+        "c-warning",
+        "c-orders"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0030"
+    }
+  }
+]
