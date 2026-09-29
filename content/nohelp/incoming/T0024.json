@@ -1,0 +1,102 @@
+[
+  {
+    "anchor": {
+      "print": "IrvingtonSpeedway"
+    },
+    "body": "The speeding citation is stamped after the access lane's closure; the beer at the gate is still sealed, and the appeal line says its driver was taking a child home.",
+    "id": "t0024-01",
+    "kind": "set",
+    "pieces": [
+      "SpeedingTicket",
+      "BeerBottle",
+      "Pencil"
+    ],
+    "title": "A citation after closing",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture",
+        "containers": [
+          "crate",
+          "shelves",
+          "desk",
+          "counter",
+          "cardboardbox",
+          "bin"
+        ]
+      }
+    ],
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-timing"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "take your beer out to the track!",
+      "source": "print:IrvingtonSpeedway"
+    },
+    "gloss": "A traffic citation follows a venue access closure while a race-day purchase goes unused.",
+    "prov": {
+      "batch": "T0024",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "The venue could have closed that lane after an ordinary race incident, with a patrol citing a late driver afterward; the appeal cannot establish a wider order."
+  },
+  {
+    "anchor": {
+      "print": "IrvingtonSpeedway"
+    },
+    "body": "Keep the infield closed until the pesticide trial dries. The first heat remains on the board, so the groundskeeper has to refund a child's ticket from his own coffee jar.\n\nOur copy stayed on the kitchen table. The official account came later and asked us to remember a much shorter day.\n\nWhen I returned, the window was closed and the board was blank. I kept the page because it was the only one with our address.",
+    "id": "t0024-02",
+    "kind": "written",
+    "pieces": [
+      "memo"
+    ],
+    "title": "The infield stays closed",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture",
+        "containers": [
+          "crate",
+          "shelves",
+          "desk",
+          "counter",
+          "cardboardbox",
+          "bin"
+        ]
+      }
+    ],
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-malfunction"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "See SPECIAL GUEST STAR",
+      "source": "print:IrvingtonSpeedway"
+    },
+    "gloss": "A trial-related closure conflicts with an event that remains advertised.",
+    "prov": {
+      "batch": "T0024",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A response crew may have ordered routine grounds treatment while the event remained on the board; the refund says nothing about why access was restricted."
+  }
+]
