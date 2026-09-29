@@ -45,5 +45,60 @@
       },
       "rival_reading": "A field crew could collect a training kit early; the sheets do not say why the room was held."
     }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "print": "LVPDHQ"
+      },
+      "body": "The seminar roster is complete, but the supply sheet says the demonstration kit was removed before the room was opened.",
+      "id": "t0238-01",
+      "kind": "set",
+      "pieces": [
+        "Pills",
+        "Notebook"
+      ],
+      "title": "Seminar attendance",
+      "where": [
+        {
+          "containers": [
+            "crate",
+            "shelves",
+            "desk",
+            "counter",
+            "cardboardbox",
+            "bin"
+          ],
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "Louisville Police Headquarters",
+        "source": "print:LVPDHQ"
+      },
+      "gloss": "The seminar room opens after its demonstration kit leaves.",
+      "prov": {
+        "batch": "T0238",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A field crew could collect a training kit early; the sheets do not say why the room was held."
+    }
   }
 ]

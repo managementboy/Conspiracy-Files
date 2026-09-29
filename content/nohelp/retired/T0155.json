@@ -45,5 +45,60 @@
       },
       "rival_reading": "A promotional crew could have cleared the meeting point for ordinary closing; the receipt does not say who waited for the bus."
     }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "print": "CrossRoadsMall"
+      },
+      "body": "The directory is folded into a lost-property wallet; its receipt says the meeting point was cleared before the last bus reached the entrance.",
+      "id": "t0155-01",
+      "kind": "set",
+      "pieces": [
+        "Wallet",
+        "Map"
+      ],
+      "title": "A mall meeting point",
+      "where": [
+        {
+          "containers": [
+            "crate",
+            "shelves",
+            "desk",
+            "counter",
+            "cardboardbox",
+            "bin"
+          ],
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "Crossroads Mall",
+        "source": "print:CrossRoadsMall"
+      },
+      "gloss": "The meeting point is cleared before its last bus arrives.",
+      "prov": {
+        "batch": "T0155",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A promotional crew could have cleared the meeting point for ordinary closing; the receipt does not say who waited for the bus."
+    }
   }
 ]

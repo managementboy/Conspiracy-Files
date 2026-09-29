@@ -16,11 +16,11 @@
       {
         "containers": [
           "fridge",
-          "crate",
-          "shelves",
           "desk",
           "counter",
-          "cardboardbox"
+          "filingcabinet",
+          "overhead",
+          "sidetable"
         ],
         "lean": "agricultural",
         "place": "mapNamed",

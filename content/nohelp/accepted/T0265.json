@@ -15,11 +15,11 @@
       {
         "containers": [
           "toolcabinet",
+          "metal_shelves",
           "crate",
-          "shelves",
-          "desk",
-          "counter",
-          "cardboardbox"
+          "smallbox",
+          "smallcrate",
+          "militarycrate"
         ],
         "lean": "agricultural",
         "place": "mapNamed",

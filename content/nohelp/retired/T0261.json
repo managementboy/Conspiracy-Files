@@ -45,5 +45,60 @@
       },
       "rival_reading": "An emergency response seminar could use the same room; the record does not show why the key was returned early."
     }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "print": "EkronCollege"
+      },
+      "body": "The college resource list includes a field-study room, but its access key is returned before the class roster is collected.",
+      "id": "t0261-01",
+      "kind": "set",
+      "pieces": [
+        "Book",
+        "Notebook"
+      ],
+      "title": "Classroom resource list",
+      "where": [
+        {
+          "containers": [
+            "crate",
+            "shelves",
+            "desk",
+            "counter",
+            "cardboardbox",
+            "bin"
+          ],
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "Ekron Community College",
+        "source": "print:EkronCollege"
+      },
+      "gloss": "A field-study room closes before its class roster is gathered.",
+      "prov": {
+        "batch": "T0261",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "An emergency response seminar could use the same room; the record does not show why the key was returned early."
+    }
   }
 ]

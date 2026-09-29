@@ -88,5 +88,56 @@
       },
       "rival_reading": "The farm program and the emergency response each explain one layer of the bundle, and the shared knot does not establish which purpose came first."
     }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "print": "PremiseswithApartmentsforLeaselistingno891"
+      },
+      "body": "field dust covers one side of the blue pen and animal-feed sack; torn warning tape covers the other. the bundle was opened from both ends.",
+      "id": "t0217-01",
+      "kind": "set",
+      "pieces": [
+        "BluePen",
+        "AnimalFeedBag"
+      ],
+      "title": "Blue pen with the second residue",
+      "where": [
+        {
+          "containers": [
+            "crate",
+            "shelves",
+            "desk",
+            "counter",
+            "cardboardbox",
+            "bin"
+          ],
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-warning",
+          "c-orders"
+        ]
+      },
+      "gloss": "Farm residue and response markings share one deliberately ambiguous bundle.",
+      "prov": {
+        "batch": "T0217",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "The farm program and the emergency response each explain one layer of the bundle, and the shared knot does not establish which purpose came first."
+    }
   }
 ]

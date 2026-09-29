@@ -46,5 +46,61 @@
       },
       "rival_reading": "A garden volunteer could have kept the same incomplete notes; the seed packet does not prove an experimental program."
     }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "map": "IrvingtonStashMap7",
+        "mark": 1
+      },
+      "body": "A seed packet rests in a notebook whose first page is missing; the only surviving line asks whether the plots were watered before the crew arrived.",
+      "id": "t0046-01",
+      "kind": "set",
+      "pieces": [
+        "Notebook",
+        "SeedBag"
+      ],
+      "title": "Field notes without a heading",
+      "where": [
+        {
+          "containers": [
+            "desk",
+            "crate",
+            "shelves",
+            "counter",
+            "cardboardbox",
+            "bin"
+          ],
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "marked address in Irvington",
+        "source": "map:IrvingtonStashMap7"
+      },
+      "gloss": "An incomplete garden record leaves the timing of a crew visit unresolved.",
+      "prov": {
+        "batch": "T0046",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A garden volunteer could have kept the same incomplete notes; the seed packet does not prove an experimental program."
+    }
   }
 ]

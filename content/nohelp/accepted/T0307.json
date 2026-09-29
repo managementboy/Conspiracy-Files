@@ -13,6 +13,14 @@
     "title": "Two jars from the school garden",
     "where": [
       {
+        "containers": [
+          "fridge",
+          "dishescabinet",
+          "counter",
+          "overhead",
+          "sidetable",
+          "freezer"
+        ],
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",
@@ -35,12 +43,12 @@
     "where": [
       {
         "containers": [
+          "displaycase",
           "desk",
-          "counter",
-          "crate",
-          "locker",
+          "shelvesmag",
+          "filingcabinet",
           "shelves",
-          "bin"
+          "sidetable"
         ],
         "lean": "containment",
         "place": "mapNamed",

@@ -16,11 +16,11 @@
       {
         "containers": [
           "dresser",
-          "crate",
-          "shelves",
           "desk",
-          "counter",
-          "cardboardbox"
+          "sidetable",
+          "shelves",
+          "toolcabinet",
+          "smallbox"
         ],
         "lean": "containment",
         "place": "mapNamed",

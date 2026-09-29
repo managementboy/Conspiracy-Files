@@ -15,12 +15,12 @@
     "where": [
       {
         "containers": [
-          "filingcabinet",
+          "metal_shelves",
+          "toolcabinet",
           "crate",
-          "shelves",
-          "desk",
-          "counter",
-          "cardboardbox"
+          "smallcrate",
+          "doghouse",
+          "smallbox"
         ],
         "lean": "agricultural",
         "place": "mapNamed",
@@ -44,12 +44,12 @@
     "where": [
       {
         "containers": [
-          "toolcabinet",
-          "crate",
-          "shelves",
+          "sidetable",
           "desk",
-          "counter",
-          "cardboardbox"
+          "dresser",
+          "filingcabinet",
+          "shelves",
+          "smallbox"
         ],
         "lean": "agricultural",
         "place": "mapNamed",
@@ -73,12 +73,12 @@
     "where": [
       {
         "containers": [
-          "filingcabinet",
-          "crate",
-          "shelves",
+          "sidetable",
+          "smallbox",
           "desk",
-          "counter",
-          "cardboardbox"
+          "filingcabinet",
+          "shelves",
+          "cashregister"
         ],
         "lean": "agricultural",
         "place": "mapNamed",
@@ -102,12 +102,12 @@
     "where": [
       {
         "containers": [
-          "filingcabinet",
-          "crate",
-          "shelves",
+          "cashregister",
+          "smallbox",
           "desk",
-          "counter",
-          "cardboardbox"
+          "filingcabinet",
+          "sidetable",
+          "shelves"
         ],
         "lean": "agricultural",
         "place": "mapNamed",
@@ -131,12 +131,12 @@
     "where": [
       {
         "containers": [
-          "toolcabinet",
-          "crate",
-          "shelves",
-          "desk",
-          "counter",
-          "cardboardbox"
+          "filingcabinet",
+          "bin",
+          "cardboardbox",
+          "smallbox",
+          "locker",
+          "desk"
         ],
         "lean": "agricultural",
         "place": "mapNamed",
@@ -160,12 +160,12 @@
     "where": [
       {
         "containers": [
-          "desk",
+          "locker",
           "crate",
-          "shelves",
-          "counter",
           "cardboardbox",
-          "bin"
+          "smallbox",
+          "bin",
+          "desk"
         ],
         "lean": "agricultural",
         "place": "mapNamed",

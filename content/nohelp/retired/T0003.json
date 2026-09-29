@@ -118,5 +118,101 @@
       },
       "rival_reading": "A response crew could move seed stock and tools while clearing a farm; the clean grip could come from ordinary handling."
     }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "body": "seed husks cling to the duct tape, while bleach marks the empty garden sprayer. road mud joins the two in one tied bundle.",
+      "id": "t0003-01",
+      "kind": "set",
+      "pieces": [
+        "DuctTape",
+        "GardeningSprayEmpty"
+      ],
+      "title": "Duct tape with the second residue",
+      "where": [
+        {
+          "containers": [
+            "crate",
+            "shelves",
+            "desk",
+            "counter",
+            "cardboardbox",
+            "bin"
+          ],
+          "lean": "containment",
+          "place": "farm",
+          "rival": "agricultural",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-warning",
+          "c-orders"
+        ]
+      },
+      "gloss": "Farm residue and response markings share one deliberately ambiguous bundle.",
+      "prov": {
+        "batch": "T0003",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "The farm program and the emergency response each explain one layer of the bundle, and the shared knot does not establish which purpose came first."
+    }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "body": "The seed bag is folded shut around the shovel handle. A straight line of dark soil runs from the blade to the bag's seam, but the shovel has no soil on its grip.",
+      "id": "t0003-02",
+      "kind": "set",
+      "pieces": [
+        "SeedBag",
+        "HandShovel"
+      ],
+      "title": "The seed bag holds a narrow trench",
+      "where": [
+        {
+          "containers": [
+            "crate",
+            "shelves",
+            "desk",
+            "counter",
+            "cardboardbox",
+            "bin"
+          ],
+          "lean": "agricultural",
+          "place": "farm",
+          "rival": "containment",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-malfunction"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "gloss": "Seed stock and a freshly used tool were wrapped together.",
+      "prov": {
+        "batch": "T0003",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A response crew could move seed stock and tools while clearing a farm; the clean grip could come from ordinary handling."
+    }
   }
 ]

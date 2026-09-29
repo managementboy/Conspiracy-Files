@@ -14,10 +14,10 @@
     "where": [
       {
         "containers": [
+          "freezer",
+          "dishescabinet",
           "fridge",
-          "crate",
-          "shelves",
-          "desk",
+          "overhead",
           "counter",
           "cardboardbox"
         ],

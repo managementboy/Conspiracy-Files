@@ -15,11 +15,11 @@
     "where": [
       {
         "containers": [
+          "metal_shelves",
+          "toolcabinet",
           "crate",
+          "smallcrate",
           "shelves",
-          "desk",
-          "counter",
-          "cardboardbox",
           "bin"
         ],
         "lean": "agricultural",

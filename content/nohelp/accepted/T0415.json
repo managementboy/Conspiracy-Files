@@ -11,12 +11,12 @@
     "where": [
       {
         "containers": [
+          "smallcrate",
+          "bin",
           "crate",
-          "shelves",
-          "desk",
-          "counter",
-          "cardboardbox",
-          "bin"
+          "trough",
+          "composter",
+          "doghouse"
         ],
         "lean": "agricultural",
         "place": "mapNamed",
@@ -37,12 +37,12 @@
     "where": [
       {
         "containers": [
+          "dumpster",
+          "bin",
+          "smallcrate",
           "crate",
-          "shelves",
-          "desk",
-          "counter",
           "cardboardbox",
-          "bin"
+          "smallbox"
         ],
         "lean": "agricultural",
         "place": "mapNamed",
@@ -63,12 +63,12 @@
     "where": [
       {
         "containers": [
-          "toolcabinet",
+          "smallcrate",
+          "dumpster",
+          "bin",
           "crate",
-          "shelves",
-          "desk",
-          "counter",
-          "cardboardbox"
+          "cardboardbox",
+          "smallbox"
         ],
         "lean": "agricultural",
         "place": "mapNamed",
@@ -89,12 +89,12 @@
     "where": [
       {
         "containers": [
+          "smallcrate",
+          "dumpster",
+          "bin",
           "crate",
-          "shelves",
-          "desk",
-          "counter",
-          "cardboardbox",
-          "bin"
+          "trough",
+          "composter"
         ],
         "lean": "agricultural",
         "place": "mapNamed",
@@ -117,10 +117,10 @@
         "containers": [
           "crate",
           "shelves",
-          "desk",
-          "counter",
+          "toolcabinet",
+          "metal_shelves",
           "cardboardbox",
-          "bin"
+          "smallbox"
         ],
         "lean": "agricultural",
         "place": "mapNamed",
@@ -141,12 +141,12 @@
     "where": [
       {
         "containers": [
-          "crate",
-          "shelves",
+          "dishescabinet",
           "desk",
+          "overhead",
+          "filingcabinet",
           "counter",
-          "cardboardbox",
-          "bin"
+          "shelves"
         ],
         "lean": "agricultural",
         "place": "mapNamed",
@@ -167,12 +167,12 @@
     "where": [
       {
         "containers": [
-          "crate",
-          "shelves",
-          "desk",
           "counter",
+          "dishescabinet",
+          "overhead",
+          "fridge",
           "cardboardbox",
-          "bin"
+          "clothingrack"
         ],
         "lean": "agricultural",
         "place": "mapNamed",
@@ -193,12 +193,12 @@
     "where": [
       {
         "containers": [
-          "crate",
-          "shelves",
-          "desk",
+          "medicine",
+          "dishescabinet",
           "counter",
-          "cardboardbox",
-          "bin"
+          "clothingwasher",
+          "sidetable",
+          "cardboardbox"
         ],
         "lean": "agricultural",
         "place": "mapNamed",
@@ -219,12 +219,12 @@
     "where": [
       {
         "containers": [
-          "toolcabinet",
+          "smallcrate",
+          "dumpster",
+          "bin",
           "crate",
-          "shelves",
-          "desk",
-          "counter",
-          "cardboardbox"
+          "cardboardbox",
+          "smallbox"
         ],
         "lean": "agricultural",
         "place": "mapNamed",
@@ -245,12 +245,12 @@
     "where": [
       {
         "containers": [
+          "smallcrate",
+          "dumpster",
+          "bin",
           "crate",
-          "shelves",
-          "desk",
-          "counter",
           "cardboardbox",
-          "bin"
+          "smallbox"
         ],
         "lean": "agricultural",
         "place": "mapNamed",

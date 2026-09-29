@@ -46,5 +46,61 @@
       },
       "rival_reading": "A response team could check out the same equipment for cleanup; the empty location line does not identify the task."
     }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "map": "WpStashMap7",
+        "mark": 1
+      },
+      "body": "The field notebook is open to a blank location line; the equipment has been checked out, but no one signed for its return.",
+      "id": "t0140-01",
+      "kind": "set",
+      "pieces": [
+        "Notebook",
+        "Pencil"
+      ],
+      "title": "A missing field direction",
+      "where": [
+        {
+          "containers": [
+            "desk",
+            "crate",
+            "shelves",
+            "counter",
+            "cardboardbox",
+            "bin"
+          ],
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "marked address in West Point",
+        "source": "map:WpStashMap7"
+      },
+      "gloss": "Equipment leaves without a recorded field location or return.",
+      "prov": {
+        "batch": "T0140",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A response team could check out the same equipment for cleanup; the empty location line does not identify the task."
+    }
   }
 ]

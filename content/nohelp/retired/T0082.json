@@ -46,5 +46,61 @@
       },
       "rival_reading": "A response convoy could have abandoned supplies after gunfire; the card does not identify the crew or its work."
     }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "map": "MulStashMap13",
+        "mark": 1
+      },
+      "body": "The packed bag contains field gloves and a route card crossed out at the supply stop. A separate line records that the crew heard shots and left the load.",
+      "id": "t0082-01",
+      "kind": "set",
+      "pieces": [
+        "Bag_ALICEpack",
+        "Pistol"
+      ],
+      "title": "Too heavy to carry",
+      "where": [
+        {
+          "containers": [
+            "filingcabinet",
+            "crate",
+            "shelves",
+            "desk",
+            "counter",
+            "cardboardbox"
+          ],
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "got halfway but had to leave it all - too heavy",
+        "source": "map:MulStashMap13"
+      },
+      "gloss": "A field load was left behind after a route was interrupted.",
+      "prov": {
+        "batch": "T0082",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A response convoy could have abandoned supplies after gunfire; the card does not identify the crew or its work."
+    }
   }
 ]

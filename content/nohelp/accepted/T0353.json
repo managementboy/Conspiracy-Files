@@ -13,6 +13,14 @@
     "title": "Fertilizer sack and empty sprayer, tuesday at dusk",
     "where": [
       {
+        "containers": [
+          "toolcabinet",
+          "metal_shelves",
+          "crate",
+          "smallcrate",
+          "shelves",
+          "bin"
+        ],
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",
@@ -35,12 +43,12 @@
     "where": [
       {
         "containers": [
-          "sidetable",
           "desk",
-          "counter",
-          "crate",
-          "locker",
-          "shelves"
+          "filingcabinet",
+          "sidetable",
+          "shelves",
+          "smallbox",
+          "cashregister"
         ],
         "lean": "containment",
         "place": "mapNamed",

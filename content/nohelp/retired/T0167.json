@@ -45,5 +45,60 @@
       },
       "rival_reading": "A scheduled tour could close its passenger list before docking; the map does not say whether anyone was left behind."
     }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "print": "Delilah"
+      },
+      "body": "The dock map is marked for arrival, but the passenger list is signed complete before the boat’s final location was entered.",
+      "id": "t0167-01",
+      "kind": "set",
+      "pieces": [
+        "Map",
+        "WaterBottle"
+      ],
+      "title": "The boat’s last location",
+      "where": [
+        {
+          "containers": [
+            "crate",
+            "shelves",
+            "desk",
+            "counter",
+            "cardboardbox",
+            "bin"
+          ],
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "PS Delilah",
+        "source": "print:Delilah"
+      },
+      "gloss": "A passenger count closes before the boat’s arrival is recorded.",
+      "prov": {
+        "batch": "T0167",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A scheduled tour could close its passenger list before docking; the map does not say whether anyone was left behind."
+    }
   }
 ]

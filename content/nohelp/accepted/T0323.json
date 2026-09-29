@@ -13,6 +13,14 @@
     "title": "Hand shovel and wash pail, friday before dawn",
     "where": [
       {
+        "containers": [
+          "dresser",
+          "metal_shelves",
+          "desk",
+          "toolcabinet",
+          "sidetable",
+          "crate"
+        ],
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",
@@ -34,12 +42,12 @@
     "where": [
       {
         "containers": [
+          "cardboardbox",
           "desk",
-          "dresser",
+          "sidetable",
+          "filingcabinet",
           "shelves",
-          "counter",
-          "crate",
-          "bin"
+          "cashregister"
         ],
         "lean": "containment",
         "place": "mapNamed",

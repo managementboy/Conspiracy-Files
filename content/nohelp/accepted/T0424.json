@@ -10,12 +10,12 @@
     "where": [
       {
         "containers": [
-          "desk",
+          "bin",
           "crate",
-          "shelves",
-          "counter",
           "cardboardbox",
-          "bin"
+          "smallbox",
+          "locker",
+          "desk"
         ],
         "lean": "containment",
         "place": "mapNamed",
@@ -35,12 +35,12 @@
     "where": [
       {
         "containers": [
-          "desk",
+          "bin",
           "crate",
-          "shelves",
-          "counter",
           "cardboardbox",
-          "bin"
+          "smallbox",
+          "locker",
+          "desk"
         ],
         "lean": "containment",
         "place": "mapNamed",
@@ -60,12 +60,12 @@
     "where": [
       {
         "containers": [
+          "cashregister",
           "desk",
-          "crate",
+          "filingcabinet",
+          "sidetable",
           "shelves",
-          "counter",
-          "cardboardbox",
-          "bin"
+          "smallbox"
         ],
         "lean": "containment",
         "place": "mapNamed",
@@ -85,12 +85,12 @@
     "where": [
       {
         "containers": [
-          "desk",
-          "crate",
-          "shelves",
           "counter",
-          "cardboardbox",
-          "bin"
+          "desk",
+          "sidetable",
+          "filingcabinet",
+          "shelves",
+          "cashregister"
         ],
         "lean": "containment",
         "place": "mapNamed",
@@ -110,12 +110,12 @@
     "where": [
       {
         "containers": [
+          "bin",
           "desk",
-          "crate",
-          "shelves",
-          "counter",
-          "cardboardbox",
-          "bin"
+          "sidetable",
+          "dresser",
+          "filingcabinet",
+          "shelves"
         ],
         "lean": "containment",
         "place": "mapNamed",
@@ -135,12 +135,12 @@
     "where": [
       {
         "containers": [
+          "shelvesmag",
           "desk",
-          "crate",
           "shelves",
-          "counter",
-          "cardboardbox",
-          "bin"
+          "sidetable",
+          "filingcabinet",
+          "smallbox"
         ],
         "lean": "containment",
         "place": "mapNamed",
@@ -160,12 +160,12 @@
     "where": [
       {
         "containers": [
-          "desk",
+          "bin",
           "crate",
-          "shelves",
-          "counter",
           "cardboardbox",
-          "bin"
+          "smallbox",
+          "locker",
+          "desk"
         ],
         "lean": "containment",
         "place": "mapNamed",
@@ -185,12 +185,12 @@
     "where": [
       {
         "containers": [
-          "desk",
+          "bin",
           "crate",
-          "shelves",
-          "counter",
           "cardboardbox",
-          "bin"
+          "smallbox",
+          "locker",
+          "desk"
         ],
         "lean": "containment",
         "place": "mapNamed",
@@ -210,12 +210,12 @@
     "where": [
       {
         "containers": [
-          "desk",
+          "bin",
           "crate",
-          "shelves",
-          "counter",
           "cardboardbox",
-          "bin"
+          "smallbox",
+          "locker",
+          "desk"
         ],
         "lean": "containment",
         "place": "mapNamed",
@@ -235,12 +235,12 @@
     "where": [
       {
         "containers": [
-          "desk",
+          "bin",
           "crate",
-          "shelves",
-          "counter",
           "cardboardbox",
-          "bin"
+          "smallbox",
+          "locker",
+          "desk"
         ],
         "lean": "containment",
         "place": "mapNamed",

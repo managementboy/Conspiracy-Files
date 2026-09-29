@@ -45,5 +45,60 @@
       },
       "rival_reading": "Emergency maintenance could require the same operator and test; the list does not identify what the machine was testing."
     }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "print": "LectromaxManufacturingJobAd"
+      },
+      "body": "The job sheet asks an operator to report before the factory test; the work gloves are counted as returned before the shift starts.",
+      "id": "t0181-01",
+      "kind": "set",
+      "pieces": [
+        "Screwdriver",
+        "Notebook"
+      ],
+      "title": "The operator’s shift",
+      "where": [
+        {
+          "containers": [
+            "crate",
+            "shelves",
+            "desk",
+            "counter",
+            "cardboardbox",
+            "bin"
+          ],
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "Lectromax Manufacturing Job Ad",
+        "source": "print:LectromaxManufacturingJobAd"
+      },
+      "gloss": "A factory test and tool return are recorded before the operator’s shift.",
+      "prov": {
+        "batch": "T0181",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "Emergency maintenance could require the same operator and test; the list does not identify what the machine was testing."
+    }
   }
 ]

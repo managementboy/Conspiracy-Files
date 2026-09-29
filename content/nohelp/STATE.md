@@ -14,7 +14,7 @@ EXPANSION
 none
 
 ## NEXT
-Round after the deep review reviewed and added: 748 rows (51 scene sides, R2 446/446, stock 200). T0127 salvaged (34 intact, 4 rewritten by Claude); t0234-01 rewritten by Claude (read none). T0364 T0384 T0405 recipes allow their key ring again. Claude now spreads the container kinds; next round waits on the owner
+Round added (840 clues, every place and scene side covered, floor 12%). Claude wrote the 3 key-ring scene sides and spread the containers (recall R3, 686 clues, no kind first for more than 5.8%; the game also draws the order per world). Open: balance by read is A 69% - next round waits on the owner
 
 ## OPEN RETURNS
 none
@@ -26,4 +26,4 @@ none
 2026-09-28 T0001
 
 ## PROGRESS
-NOT DONE: scene sides 122/125, balance 69% @75971b78
+NOT DONE: balance 69% @9fdbdc90

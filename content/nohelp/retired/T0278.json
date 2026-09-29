@@ -45,5 +45,60 @@
       },
       "rival_reading": "A response inspector could restrict a room during a safety check; the note does not say what was measured."
     }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "print": "Sanatorium"
+      },
+      "body": "The tour map marks the basement route open; the guide’s note asks visitors to stay away from the ventilation room until the next reading.",
+      "id": "t0278-01",
+      "kind": "set",
+      "pieces": [
+        "HandTorch",
+        "Map"
+      ],
+      "title": "The weekly ghost route",
+      "where": [
+        {
+          "containers": [
+            "desk",
+            "crate",
+            "shelves",
+            "counter",
+            "cardboardbox",
+            "bin"
+          ],
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "Sunderland Hills Sanatorium",
+        "source": "print:Sanatorium"
+      },
+      "gloss": "A public tour route avoids a room awaiting a reading.",
+      "prov": {
+        "batch": "T0278",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A response inspector could restrict a room during a safety check; the note does not say what was measured."
+    }
   }
 ]

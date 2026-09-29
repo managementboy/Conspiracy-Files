@@ -306,5 +306,313 @@
       },
       "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work."
     }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "map": "WorldStashMap6",
+        "mark": 1
+      },
+      "body": "matching white stripes cross the candle and clipboard. a name-sized patch on the candle has been scrubbed bare.",
+      "id": "t0115-01",
+      "kind": "set",
+      "pieces": [
+        "Candle",
+        "Clipboard"
+      ],
+      "title": "Candle beside the spare mark",
+      "where": [
+        {
+          "containers": [
+            "dresser",
+            "crate",
+            "shelves",
+            "desk",
+            "counter",
+            "cardboardbox"
+          ],
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-warning",
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "gloss": "A response bundle preserves a missing count, changed route, or erased identity.",
+      "prov": {
+        "batch": "T0115",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A farm-program crew could have counted routes, repacked tools, or removed ownership marks during hurried field work; the objects do not prove a concealed public response."
+    }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "map": "WorldStashMap6",
+        "mark": 2
+      },
+      "body": "Photograph back: the cross marks the store used by the crop trial. One sample crate was removed before the inventory and left a blue outline on the floor.\n\nI saved it from the bag of rubbish because there was a name on the reverse. The name was not on the list they posted.\n\nIt could be a mistake in the copying. The things stacked beside the page were real enough, and still waiting to be moved.",
+      "id": "t0115-02",
+      "kind": "written",
+      "pieces": [
+        "diary"
+      ],
+      "title": "Cross beside the trial store",
+      "where": [
+        {
+          "containers": [
+            "crate",
+            "shelves",
+            "desk",
+            "counter",
+            "cardboardbox",
+            "bin"
+          ],
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "gloss": "Cross beside the trial store",
+      "prov": {
+        "batch": "T0115",
+        "handoff": "2026-09-29",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work."
+    }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "map": "WorldStashMap6",
+        "note": 1
+      },
+      "body": "Torn page: there should be sampling jars and boot covers here. The crop crew left them when two workers developed rashes and the planned collection was cancelled.\n\nThe first person who saw it called it routine. The second asked me to stop using the well until another visit could be arranged.\n\nIt could be a mistake in the copying. The things stacked beside the page were real enough, and still waiting to be moved.",
+      "id": "t0115-03",
+      "kind": "written",
+      "pieces": [
+        "notepad"
+      ],
+      "title": "Supplies at the first written mark",
+      "where": [
+        {
+          "containers": [
+            "crate",
+            "shelves",
+            "desk",
+            "counter",
+            "cardboardbox",
+            "bin"
+          ],
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "gloss": "Supplies at the first written mark",
+      "prov": {
+        "batch": "T0115",
+        "handoff": "2026-09-29",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work."
+    }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "map": "WorldStashMap6",
+        "note": 2
+      },
+      "body": "Personal farm log: “too big to secure” was the old packing floor. The trial team used only one bay, yet fresh powder reached the locked bays overnight.\n\nWe tried to finish the ordinary work around it. The notice changed faster than the deliveries, and no one came to collect what was left.\n\nIt could be a mistake in the copying. The things stacked beside the page were real enough, and still waiting to be moved.",
+      "id": "t0115-04",
+      "kind": "written",
+      "pieces": [
+        "receipt"
+      ],
+      "title": "Too large for one field crew",
+      "where": [
+        {
+          "containers": [
+            "crate",
+            "shelves",
+            "desk",
+            "counter",
+            "cardboardbox",
+            "bin"
+          ],
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "gloss": "Too large for one field crew",
+      "prov": {
+        "batch": "T0115",
+        "handoff": "2026-09-29",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work."
+    }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "map": "WorldStashMap6",
+        "note": 3
+      },
+      "body": "Receipt margin: count the sealed seed sacks again at the cross. The driver signed for twelve, while only eleven appear on the field tally.\n\nNobody agreed on whose list this belonged to. I left it where the next person would look for the things we still owed each other.\n\nI could have mistaken the order in which those things happened. I could not mistake the empty place left for the person we had been waiting for.",
+      "id": "t0115-05",
+      "kind": "written",
+      "pieces": [
+        "photograph"
+      ],
+      "title": "Cross checked after the seed delivery",
+      "where": [
+        {
+          "containers": [
+            "crate",
+            "shelves",
+            "desk",
+            "counter",
+            "cardboardbox",
+            "bin"
+          ],
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "gloss": "Cross checked after the seed delivery",
+      "prov": {
+        "batch": "T0115",
+        "handoff": "2026-09-29",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work."
+    }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "map": "WorldStashMap6",
+        "note": 4
+      },
+      "body": "On a faded photograph: the handwritten name by the cross belonged to the man counting treated rows. His tally ends one row before the plants turned black.\n\nI meant to ask about it in the morning. By then the person who could answer had gone with the last vehicle, and this was all that remained.\n\nI could have mistaken the order in which those things happened. I could not mistake the empty place left for the person we had been waiting for.",
+      "id": "t0115-06",
+      "kind": "written",
+      "pieces": [
+        "notebook"
+      ],
+      "title": "Initials beside the plot count",
+      "where": [
+        {
+          "containers": [
+            "crate",
+            "shelves",
+            "desk",
+            "counter",
+            "cardboardbox",
+            "bin"
+          ],
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "gloss": "Initials beside the plot count",
+      "prov": {
+        "batch": "T0115",
+        "handoff": "2026-09-29",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work."
+    }
   }
 ]

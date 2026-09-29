@@ -13,12 +13,12 @@
     "where": [
       {
         "containers": [
-          "crate",
-          "shelves",
+          "sidetable",
           "desk",
-          "counter",
-          "cardboardbox",
-          "bin"
+          "dresser",
+          "filingcabinet",
+          "shelves",
+          "smallbox"
         ],
         "lean": "agricultural",
         "place": "mapNamed",
@@ -41,12 +41,12 @@
     "where": [
       {
         "containers": [
-          "counter",
+          "filingcabinet",
           "desk",
-          "crate",
-          "locker",
+          "sidetable",
           "shelves",
-          "bin"
+          "cashregister",
+          "smallbox"
         ],
         "lean": "containment",
         "place": "mapNamed",

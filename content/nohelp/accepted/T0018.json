@@ -16,11 +16,11 @@
       {
         "containers": [
           "toolcabinet",
+          "metal_shelves",
           "crate",
-          "shelves",
-          "desk",
-          "counter",
-          "cardboardbox"
+          "locker",
+          "smallcrate",
+          "smallbox"
         ],
         "lean": "containment",
         "place": "office",
@@ -44,6 +44,14 @@
     "title": "The field sketch under the studio glass",
     "where": [
       {
+        "containers": [
+          "desk",
+          "fridge",
+          "shelves",
+          "counter",
+          "filingcabinet",
+          "cardboardbox"
+        ],
         "lean": "agricultural",
         "place": "office",
         "rival": "containment",

@@ -45,5 +45,60 @@
       },
       "rival_reading": "A field order could account for factory stock without naming recipients; the missing count does not show an official failure."
     }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "print": "LouisvilleBruiser"
+      },
+      "body": "A bat is paired with a production sheet; the final count lists units made but not those sent to the distribution truck.",
+      "id": "t0175-01",
+      "kind": "set",
+      "pieces": [
+        "BaseballBat",
+        "SheetPaper2"
+      ],
+      "title": "The factory count",
+      "where": [
+        {
+          "containers": [
+            "crate",
+            "shelves",
+            "desk",
+            "counter",
+            "cardboardbox",
+            "bin"
+          ],
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "Louisville Bruiser Factory",
+        "source": "print:LouisvilleBruiser"
+      },
+      "gloss": "Production is counted without recording the outgoing shipment.",
+      "prov": {
+        "batch": "T0175",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A field order could account for factory stock without naming recipients; the missing count does not show an official failure."
+    }
   }
 ]

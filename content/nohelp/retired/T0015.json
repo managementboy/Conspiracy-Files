@@ -139,5 +139,114 @@
       },
       "rival_reading": "An emergency crew could tell someone to reach a farm before irrigation resumed; the urgency could follow a road closure rather than a program failure."
     }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "map": "EkronStashMap8",
+        "mark": 1
+      },
+      "body": "the crowbar and briefcase are wrapped in a child's raincoat. one stayed dry while the other was left in road mud.",
+      "id": "t0015-01",
+      "kind": "set",
+      "pieces": [
+        "Crowbar",
+        "Briefcase"
+      ],
+      "title": "Crowbar beside the spare mark",
+      "where": [
+        {
+          "containers": [
+            "dresser",
+            "crate",
+            "shelves",
+            "desk",
+            "counter",
+            "cardboardbox"
+          ],
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-warning",
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "gloss": "A response bundle preserves a missing count, changed route, or erased identity.",
+      "prov": {
+        "batch": "T0015",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A farm-program crew could have counted routes, repacked tools, or removed ownership marks during hurried field work; the objects do not prove a concealed public response."
+    }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "map": "EkronStashMap8",
+        "mark": 1
+      },
+      "body": "“Forget the box. Just get here before the rows are watered.” The lower half is torn away; a muddy thumb has blurred the place where a name would go.\n\nI had promised to bring this home for supper. Its date and the empty chair at the table now belong to the same evening.\n\nPerhaps the new instructions were meant to help us. They arrived after we had already followed the old ones.",
+      "id": "t0015-02",
+      "kind": "written",
+      "pieces": [
+        "letter"
+      ],
+      "title": "The note that asks someone to come back",
+      "where": [
+        {
+          "containers": [
+            "desk",
+            "crate",
+            "shelves",
+            "counter",
+            "cardboardbox",
+            "bin"
+          ],
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway",
+          "a-timing"
+        ],
+        "containment": [
+          "c-warning",
+          "c-orders"
+        ]
+      },
+      "cites": {
+        "quote": "forget them! Just get here",
+        "source": "map:EkronStashMap8"
+      },
+      "gloss": "A hurried request links an unnamed person to watered rows.",
+      "prov": {
+        "batch": "T0015",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "An emergency crew could tell someone to reach a farm before irrigation resumed; the urgency could follow a road closure rather than a program failure."
+    }
   }
 ]

@@ -11,11 +11,11 @@
     "where": [
       {
         "containers": [
+          "metal_shelves",
+          "toolcabinet",
           "crate",
+          "smallcrate",
           "shelves",
-          "desk",
-          "counter",
-          "cardboardbox",
           "bin"
         ],
         "lean": "containment",
@@ -37,11 +37,11 @@
     "where": [
       {
         "containers": [
-          "desk",
+          "metal_shelves",
+          "toolcabinet",
           "crate",
+          "smallcrate",
           "shelves",
-          "counter",
-          "cardboardbox",
           "bin"
         ],
         "lean": "agricultural",

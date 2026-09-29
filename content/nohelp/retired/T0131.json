@@ -46,5 +46,61 @@
       },
       "rival_reading": "A field crew could have secured a work base after arrival; the order of the entries does not identify an evacuation."
     }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "map": "WorldStashMap22",
+        "mark": 1
+      },
+      "body": "A repair kit is set beside a base plan; the entry marked secure is dated before the door brace was installed.",
+      "id": "t0131-01",
+      "kind": "set",
+      "pieces": [
+        "Hammer",
+        "Nails"
+      ],
+      "title": "Base camp repairs",
+      "where": [
+        {
+          "containers": [
+            "crate",
+            "shelves",
+            "desk",
+            "counter",
+            "cardboardbox",
+            "bin"
+          ],
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "great base!",
+        "source": "map:WorldStashMap22"
+      },
+      "gloss": "A base is marked secure before its door was reinforced.",
+      "prov": {
+        "batch": "T0131",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A field crew could have secured a work base after arrival; the order of the entries does not identify an evacuation."
+    }
   }
 ]

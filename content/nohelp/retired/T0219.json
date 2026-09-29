@@ -45,5 +45,60 @@
       },
       "rival_reading": "A response shelter could hold water pending a safety check; the note does not identify what was measured."
     }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "print": "YourLocalShelterBrandenburg"
+      },
+      "body": "The shelter pack is marked ready, but its water bottle carries a note to wait for a field reading before opening the supply.",
+      "id": "t0219-01",
+      "kind": "set",
+      "pieces": [
+        "Bag_ALICEpack",
+        "WaterBottle"
+      ],
+      "title": "Shelter readiness list",
+      "where": [
+        {
+          "containers": [
+            "desk",
+            "crate",
+            "shelves",
+            "counter",
+            "cardboardbox",
+            "bin"
+          ],
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "Your Local Shelter (Brandenburg)",
+        "source": "print:YourLocalShelterBrandenburg"
+      },
+      "gloss": "A ready shelter’s water supply remains sealed for a reading.",
+      "prov": {
+        "batch": "T0219",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A response shelter could hold water pending a safety check; the note does not identify what was measured."
+    }
   }
 ]

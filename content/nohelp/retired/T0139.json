@@ -46,5 +46,61 @@
       },
       "rival_reading": "A field crew could abandon a pack when work ended; the note does not say whether anyone received the supplies."
     }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "map": "WpStashMap6",
+        "mark": 1
+      },
+      "body": "The travel pack is still tied shut beside a note that says the supplies are no longer needed. The departure time was entered but never initialled.",
+      "id": "t0139-01",
+      "kind": "set",
+      "pieces": [
+        "WaterBottle",
+        "Bag_ALICEpack"
+      ],
+      "title": "Packed but no longer needed",
+      "where": [
+        {
+          "containers": [
+            "desk",
+            "crate",
+            "shelves",
+            "counter",
+            "cardboardbox",
+            "bin"
+          ],
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "I wont need all this now",
+        "source": "map:WpStashMap6"
+      },
+      "gloss": "A packed departure is left without a signed start.",
+      "prov": {
+        "batch": "T0139",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A field crew could abandon a pack when work ended; the note does not say whether anyone received the supplies."
+    }
   }
 ]

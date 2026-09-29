@@ -13,6 +13,14 @@
     "title": "The first-aid kit under the kitchen shelf",
     "where": [
       {
+        "containers": [
+          "medicine",
+          "locker",
+          "smallbox",
+          "sidetable",
+          "dresser",
+          "filingcabinet"
+        ],
         "lean": "containment",
         "place": "police",
         "rival": "agricultural",
@@ -34,6 +42,14 @@
     "title": "The spray bottle with a page stuck to it",
     "where": [
       {
+        "containers": [
+          "metal_shelves",
+          "desk",
+          "shelves",
+          "cardboardbox",
+          "filingcabinet",
+          "crate"
+        ],
         "lean": "agricultural",
         "place": "farm",
         "rival": "containment",

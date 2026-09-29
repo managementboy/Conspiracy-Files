@@ -46,5 +46,61 @@
       },
       "rival_reading": "A field crew could have isolated an ill worker and secured the room; the missing signature does not prove an official failure."
     }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "map": "RiversideStashMap6",
+        "mark": 1
+      },
+      "body": "The weapon is tied to a sick-room list; the last entry says the room was handed over, but no one signs for the key.",
+      "id": "t0099-01",
+      "kind": "set",
+      "pieces": [
+        "Pistol",
+        "Notebook"
+      ],
+      "title": "A private security cache",
+      "where": [
+        {
+          "containers": [
+            "crate",
+            "shelves",
+            "desk",
+            "counter",
+            "cardboardbox",
+            "bin"
+          ],
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "Eddie guns hidden here",
+        "source": "map:RiversideStashMap6"
+      },
+      "gloss": "A sick-room handoff is recorded without a key recipient.",
+      "prov": {
+        "batch": "T0099",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A field crew could have isolated an ill worker and secured the room; the missing signature does not prove an official failure."
+    }
   }
 ]

@@ -89,5 +89,57 @@
       },
       "rival_reading": "Emergency workers crossing treated land could have picked up the same residue; the objects do not prove the farm program began the emergency."
     }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "print": "BrandenburgFD"
+      },
+      "body": "the broom and fertilizer sack share a sweet pesticide smell. dead moths are stuck only where the two objects touched.",
+      "id": "t0235-01",
+      "kind": "set",
+      "pieces": [
+        "Broom",
+        "Fertilizer"
+      ],
+      "title": "After on the broom, the first copy",
+      "where": [
+        {
+          "containers": [
+            "crate",
+            "shelves",
+            "desk",
+            "counter",
+            "cardboardbox",
+            "bin"
+          ],
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-malfunction",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-warning",
+          "c-orders"
+        ]
+      },
+      "gloss": "A rare everyday object carries residue tied to field work before restriction.",
+      "prov": {
+        "batch": "T0235",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "Emergency workers crossing treated land could have picked up the same residue; the objects do not prove the farm program began the emergency."
+    }
   }
 ]

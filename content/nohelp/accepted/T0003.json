@@ -11,12 +11,12 @@
     "where": [
       {
         "containers": [
-          "crate",
+          "toolcabinet",
+          "metal_shelves",
           "shelves",
-          "desk",
-          "counter",
+          "crate",
           "cardboardbox",
-          "bin"
+          "smallbox"
         ],
         "lean": "containment",
         "place": "farm",
@@ -37,12 +37,12 @@
     "where": [
       {
         "containers": [
-          "crate",
           "shelves",
-          "desk",
-          "counter",
+          "metal_shelves",
+          "toolcabinet",
           "cardboardbox",
-          "bin"
+          "crate",
+          "doghouse"
         ],
         "lean": "agricultural",
         "place": "farm",

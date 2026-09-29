@@ -13,6 +13,14 @@
     "title": "Cloudy water beside the soup",
     "where": [
       {
+        "containers": [
+          "fridge",
+          "dishescabinet",
+          "counter",
+          "overhead",
+          "sidetable",
+          "freezer"
+        ],
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",
@@ -36,11 +44,11 @@
       {
         "containers": [
           "dishescabinet",
-          "desk",
+          "overhead",
           "counter",
-          "crate",
-          "locker",
-          "shelves"
+          "sidetable",
+          "shelves",
+          "smallbox"
         ],
         "lean": "containment",
         "place": "mapNamed",

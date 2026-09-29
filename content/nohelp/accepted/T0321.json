@@ -13,6 +13,14 @@
     "title": "A repair set aside",
     "where": [
       {
+        "containers": [
+          "toolcabinet",
+          "metal_shelves",
+          "crate",
+          "smallcrate",
+          "shelves",
+          "bin"
+        ],
         "lean": "containment",
         "place": "mapNamed",
         "rival": "agricultural",
@@ -36,11 +44,11 @@
       {
         "containers": [
           "toolcabinet",
-          "desk",
-          "counter",
+          "metal_shelves",
           "crate",
-          "locker",
-          "shelves"
+          "smallcrate",
+          "shelves",
+          "bin"
         ],
         "lean": "agricultural",
         "place": "mapNamed",

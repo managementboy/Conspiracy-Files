@@ -139,5 +139,113 @@
       },
       "rival_reading": "An emergency crew could have stored ordinary pest-control samples there while clearing the house; bad labels do not show a program malfunction."
     }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "map": "LouisvilleStashMap1",
+        "mark": 1
+      },
+      "body": "the car jack and clipboard carry the same black paint. a fresh scrape exposes an older evacuation color beneath.",
+      "id": "t0021-01",
+      "kind": "set",
+      "pieces": [
+        "Jack",
+        "Clipboard"
+      ],
+      "title": "Car jack beside the spare mark",
+      "where": [
+        {
+          "containers": [
+            "crate",
+            "shelves",
+            "desk",
+            "counter",
+            "cardboardbox",
+            "bin"
+          ],
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-warning",
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "gloss": "A response bundle preserves a missing count, changed route, or erased identity.",
+      "prov": {
+        "batch": "T0021",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A farm-program crew could have counted routes, repacked tools, or removed ownership marks during hurried field work; the objects do not prove a concealed public response."
+    }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "map": "LouisvilleStashMap1",
+        "mark": 1
+      },
+      "body": "The test-plot sample jars lost their labels in the rain. Don't put pesticide samples in the rifle-cleaning tin again; the household still keeps its loose screws there.\n\nWe tried to finish the ordinary work around it. The notice changed faster than the deliveries, and no one came to collect what was left.\n\nThe amount mattered to the office more than the people waiting outside. We stayed until dark because the last line still said to wait.",
+      "id": "t0021-02",
+      "kind": "written",
+      "pieces": [
+        "letter"
+      ],
+      "title": "The tin is for screws",
+      "where": [
+        {
+          "containers": [
+            "crate",
+            "shelves",
+            "desk",
+            "counter",
+            "cardboardbox",
+            "bin"
+          ],
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-obscured"
+        ],
+        "containment": [
+          "c-orders",
+          "c-accounting"
+        ]
+      },
+      "cites": {
+        "quote": "gun guy's house",
+        "source": "map:LouisvilleStashMap1"
+      },
+      "gloss": "Unmarked test-plot samples are stored beside household supplies.",
+      "prov": {
+        "batch": "T0021",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "An emergency crew could have stored ordinary pest-control samples there while clearing the house; bad labels do not show a program malfunction."
+    }
   }
 ]

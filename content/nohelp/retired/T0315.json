@@ -40,5 +40,105 @@
       },
       "rival_reading": "Emergency workers could have encountered the same residue while responding; the personal trace does not by itself prove the field program caused the emergency."
     }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "scene": "RBTSDrink"
+      },
+      "body": "I saved the bottle for you because it smelled like the trial orchard after spraying. I poured out the glasses before the roadblock appeared.\n\nWe waited for a correction that never came. Every passing driver had a different instruction and no room for one more passenger.\n\nI could have mistaken the order in which those things happened. I could not mistake the empty place left for the person we had been waiting for.",
+      "id": "t0315-01",
+      "kind": "written",
+      "pieces": [
+        "letter"
+      ],
+      "title": "The drink I poured away",
+      "where": [
+        {
+          "containers": [
+            "crate",
+            "shelves",
+            "desk",
+            "counter",
+            "cardboardbox",
+            "bin"
+          ],
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-warning",
+          "c-orders"
+        ]
+      },
+      "gloss": "A personal trace places field-program residue before a later restriction.",
+      "prov": {
+        "batch": "T0315",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "Emergency workers could have encountered the same residue while responding; the personal trace does not by itself prove the field program caused the emergency."
+    }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "scene": "RBTSDrink"
+      },
+      "body": "I put aside four glasses after the men came in. They said the others would be back for them and asked me to write the names on a napkin.\n\nI watched them pour the drinks away when they thought I had gone. The glasses were washed and returned to the shelf, but they kept the napkin.\n\nOne of the four had borrowed my coat. I still have the claim ticket for it, and no one will tell me where to take it.",
+      "id": "t0315-02",
+      "kind": "written",
+      "pieces": [
+        "letter"
+      ],
+      "title": "The drinks still owed",
+      "where": [
+        {
+          "containers": [
+            "counter",
+            "desk",
+            "crate",
+            "locker",
+            "shelves",
+            "bin"
+          ],
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-warning",
+          "c-accounting"
+        ]
+      },
+      "gloss": "An altered count or retained object was left at the scene.",
+      "prov": {
+        "batch": "T0315",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A response to an agricultural exposure could explain the same record or object."
+    }
   }
 ]

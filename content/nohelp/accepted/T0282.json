@@ -15,11 +15,11 @@
       {
         "containers": [
           "crate",
-          "shelves",
-          "desk",
-          "counter",
           "cardboardbox",
-          "bin"
+          "smallcrate",
+          "smallbox",
+          "grocerstand",
+          "fridge"
         ],
         "lean": "agricultural",
         "place": "mapNamed",

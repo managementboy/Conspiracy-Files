@@ -45,5 +45,60 @@
       },
       "rival_reading": "A delivery assistant could hold the key during a routine appointment; the card does not show why the pickup shifted."
     }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "print": "LoveDuet"
+      },
+      "body": "The fitting card is marked complete before the bride’s pickup time; the shop key remains checked out to an unnamed assistant.",
+      "id": "t0270-01",
+      "kind": "set",
+      "pieces": [
+        "Scissors",
+        "SheetPaper2"
+      ],
+      "title": "The dress appointment",
+      "where": [
+        {
+          "containers": [
+            "crate",
+            "shelves",
+            "desk",
+            "counter",
+            "cardboardbox",
+            "bin"
+          ],
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "Love Duet Bride and Groom Boutique",
+        "source": "print:LoveDuet"
+      },
+      "gloss": "A fitting is complete while its key holder remains unnamed.",
+      "prov": {
+        "batch": "T0270",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A delivery assistant could hold the key during a routine appointment; the card does not show why the pickup shifted."
+    }
   }
 ]

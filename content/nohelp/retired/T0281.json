@@ -45,5 +45,60 @@
       },
       "rival_reading": "A staged tour could clear a room ahead of a visitor; the log does not identify who was responsible."
     }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "print": "TheWizardsKeep"
+      },
+      "body": "The store map is folded into a book with a handwritten translation; the entry log says the room was empty before the last visitor signed out.",
+      "id": "t0281-01",
+      "kind": "set",
+      "pieces": [
+        "Book",
+        "Map"
+      ],
+      "title": "A shop tour in two languages",
+      "where": [
+        {
+          "containers": [
+            "crate",
+            "shelves",
+            "desk",
+            "counter",
+            "cardboardbox",
+            "bin"
+          ],
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "The Wizard's Keep",
+        "source": "print:TheWizardsKeep"
+      },
+      "gloss": "An empty-room mark precedes the last visitor’s sign-out.",
+      "prov": {
+        "batch": "T0281",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A staged tour could clear a room ahead of a visitor; the log does not identify who was responsible."
+    }
   }
 ]

@@ -13,6 +13,14 @@
     "title": "Field radio with a fresh battery",
     "where": [
       {
+        "containers": [
+          "desk",
+          "shelves",
+          "toolcabinet",
+          "metal_shelves",
+          "smallbox",
+          "locker"
+        ],
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",
@@ -35,12 +43,12 @@
     "where": [
       {
         "containers": [
-          "toolcabinet",
+          "cashregister",
           "desk",
-          "counter",
-          "crate",
-          "locker",
-          "shelves"
+          "toolcabinet",
+          "metal_shelves",
+          "smallbox",
+          "locker"
         ],
         "lean": "containment",
         "place": "mapNamed",

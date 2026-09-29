@@ -478,5 +478,517 @@
       },
       "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work."
     }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "map": "WorldStashMap10",
+        "mark": 1
+      },
+      "body": "the box of matches and hand torch smell sharply of bleach. mud outlines between them show that a third object was removed.",
+      "id": "t0119-01",
+      "kind": "set",
+      "pieces": [
+        "Matches",
+        "HandTorch"
+      ],
+      "title": "Box of matches beside the spare mark",
+      "where": [
+        {
+          "containers": [
+            "crate",
+            "shelves",
+            "desk",
+            "counter",
+            "cardboardbox",
+            "bin"
+          ],
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-warning",
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "gloss": "A response bundle preserves a missing count, changed route, or erased identity.",
+      "prov": {
+        "batch": "T0119",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A farm-program crew could have counted routes, repacked tools, or removed ownership marks during hurried field work; the objects do not prove a concealed public response."
+    }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "map": "WorldStashMap10",
+        "mark": 2
+      },
+      "body": "Laundry receipt: coveralls from the second circle carried orange pollen from the test rows. The clerk noted numb fingers before patrol cars reached the highway.\n\nI thought the date would settle it. When I asked, the person at the barrier looked at the seal instead and handed it back.\n\nI wrote the time before I went back for the others. The clock may have been slow; the second vehicle was already gone.",
+      "id": "t0119-02",
+      "kind": "written",
+      "pieces": [
+        "diary"
+      ],
+      "title": "Clothes bag from the test rows",
+      "where": [
+        {
+          "containers": [
+            "desk",
+            "crate",
+            "shelves",
+            "counter",
+            "cardboardbox",
+            "bin"
+          ],
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "gloss": "Clothes bag from the test rows",
+      "prov": {
+        "batch": "T0119",
+        "handoff": "2026-09-29",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work."
+    }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "map": "WorldStashMap10",
+        "mark": 3
+      },
+      "body": "Meal receipt back: six lunches went to the greenhouse crew at the third circle. Two were untouched; beside them someone wrote, “metal taste after noon spray.”\n\nNo one wanted to keep the wet copy. It dried unevenly, and the ink from the first entry stayed visible beneath the second.\n\nI wrote the time before I went back for the others. The clock may have been slow; the second vehicle was already gone.",
+      "id": "t0119-03",
+      "kind": "written",
+      "pieces": [
+        "notepad"
+      ],
+      "title": "Lunch stop for the field crew",
+      "where": [
+        {
+          "containers": [
+            "crate",
+            "shelves",
+            "desk",
+            "counter",
+            "cardboardbox",
+            "bin"
+          ],
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "gloss": "Lunch stop for the field crew",
+      "prov": {
+        "batch": "T0119",
+        "handoff": "2026-09-29",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work."
+    }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "map": "WorldStashMap10",
+        "mark": 4
+      },
+      "body": "Photograph note: the fourth circle shows where three field cars were hosed down. Pale foam ran toward the ditch while the garage was still open to families.\n\nI saved it from the bag of rubbish because there was a name on the reverse. The name was not on the list they posted.\n\nThere may be a simple reason for the change. Nobody at the next stop could tell us what to do with the first version.",
+      "id": "t0119-04",
+      "kind": "written",
+      "pieces": [
+        "receipt"
+      ],
+      "title": "Cars rinsed behind the garage",
+      "where": [
+        {
+          "containers": [
+            "desk",
+            "crate",
+            "shelves",
+            "counter",
+            "cardboardbox",
+            "bin"
+          ],
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "gloss": "Cars rinsed behind the garage",
+      "prov": {
+        "batch": "T0119",
+        "handoff": "2026-09-29",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work."
+    }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "map": "WorldStashMap10",
+        "note": 1
+      },
+      "body": "Pocket ledger: gas at this circle was charged to the orchard rig, not the relief trucks. The return mileage exceeds the marked field route by forty miles.\n\nThe first person who saw it called it routine. The second asked me to stop using the well until another visit could be arranged.\n\nThere may be a simple reason for the change. Nobody at the next stop could tell us what to do with the first version.",
+      "id": "t0119-05",
+      "kind": "written",
+      "pieces": [
+        "photograph"
+      ],
+      "title": "Fuel for the orchard rig",
+      "where": [
+        {
+          "containers": [
+            "crate",
+            "shelves",
+            "desk",
+            "counter",
+            "cardboardbox",
+            "bin"
+          ],
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "gloss": "Fuel for the orchard rig",
+      "prov": {
+        "batch": "T0119",
+        "handoff": "2026-09-29",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work."
+    }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "map": "WorldStashMap10",
+        "note": 2
+      },
+      "body": "Torn note under the clothes label: bag the trial coveralls separately and leave them off the laundry invoice. My wrists blistered while tying the second bag.\n\nWe tried to finish the ordinary work around it. The notice changed faster than the deliveries, and no one came to collect what was left.\n\nThere may be a simple reason for the change. Nobody at the next stop could tell us what to do with the first version.",
+      "id": "t0119-06",
+      "kind": "written",
+      "pieces": [
+        "notebook"
+      ],
+      "title": "Coveralls kept off the invoice",
+      "where": [
+        {
+          "containers": [
+            "desk",
+            "crate",
+            "shelves",
+            "counter",
+            "cardboardbox",
+            "bin"
+          ],
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "gloss": "Coveralls kept off the invoice",
+      "prov": {
+        "batch": "T0119",
+        "handoff": "2026-09-29",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work."
+    }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "map": "WorldStashMap10",
+        "note": 3
+      },
+      "body": "Receipt from the marked restaurant: lunches for the crop crew, plus soap and bottled water. A handwritten line says the tap smelled sharp before closing.\n\nNobody agreed on whose list this belonged to. I left it where the next person would look for the things we still owed each other.\n\nI thought someone would ask for this at the gate. They asked instead how many were in the car, and let the paper stay in my hand.",
+      "id": "t0119-07",
+      "kind": "written",
+      "pieces": [
+        "letter"
+      ],
+      "title": "Field lunches at the restaurant",
+      "where": [
+        {
+          "containers": [
+            "crate",
+            "shelves",
+            "desk",
+            "counter",
+            "cardboardbox",
+            "bin"
+          ],
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "gloss": "Field lunches at the restaurant",
+      "prov": {
+        "batch": "T0119",
+        "handoff": "2026-09-29",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work."
+    }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "map": "WorldStashMap10",
+        "note": 4
+      },
+      "body": "Farm-program mileage page: four cars left for the plots, three returned for washing. The blank driver line is dated before the county barricade went up.\n\nI meant to ask about it in the morning. By then the person who could answer had gone with the last vehicle, and this was all that remained.\n\nI thought someone would ask for this at the gate. They asked instead how many were in the car, and let the paper stay in my hand.",
+      "id": "t0119-08",
+      "kind": "written",
+      "pieces": [
+        "diary"
+      ],
+      "title": "Fleet note with one car missing",
+      "where": [
+        {
+          "containers": [
+            "desk",
+            "crate",
+            "shelves",
+            "counter",
+            "cardboardbox",
+            "bin"
+          ],
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "gloss": "Fleet note with one car missing",
+      "prov": {
+        "batch": "T0119",
+        "handoff": "2026-09-29",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work."
+    }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "map": "WorldStashMap10",
+        "note": 5
+      },
+      "body": "Garage receipt at the car label: rinse three crop-study vehicles and keep the fourth outside. The fourth plate is the only one copied into the county log.\n\nThe small ordinary expense was the part I could still account for. I could not make the other figure on this page match what I had seen.\n\nI thought someone would ask for this at the gate. They asked instead how many were in the car, and let the paper stay in my hand.",
+      "id": "t0119-09",
+      "kind": "written",
+      "pieces": [
+        "notepad"
+      ],
+      "title": "Car label beside a field rinse bill",
+      "where": [
+        {
+          "containers": [
+            "crate",
+            "shelves",
+            "desk",
+            "counter",
+            "cardboardbox",
+            "bin"
+          ],
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "gloss": "Car label beside a field rinse bill",
+      "prov": {
+        "batch": "T0119",
+        "handoff": "2026-09-29",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work."
+    }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "map": "WorldStashMap10",
+        "note": 6
+      },
+      "body": "Notebook line at the final circle: one trial car returned after the others had gone. Its seats were dusted white and its mileage page had been removed.\n\nI folded the corner so I could find the entry again. Someone wanted the book put away before I had even finished copying it.\n\nWhen I returned, the window was closed and the board was blank. I kept the page because it was the only one with our address.",
+      "id": "t0119-10",
+      "kind": "written",
+      "pieces": [
+        "receipt"
+      ],
+      "title": "Final circle after the convoy left",
+      "where": [
+        {
+          "containers": [
+            "desk",
+            "crate",
+            "shelves",
+            "counter",
+            "cardboardbox",
+            "bin"
+          ],
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "gloss": "Final circle after the convoy left",
+      "prov": {
+        "batch": "T0119",
+        "handoff": "2026-09-29",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work."
+    }
   }
 ]

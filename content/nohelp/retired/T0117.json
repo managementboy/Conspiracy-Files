@@ -46,5 +46,61 @@
       },
       "rival_reading": "A field trip could also await a revised destination; the note does not say who issued the order."
     }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "map": "WorldStashMap8",
+        "mark": 1
+      },
+      "body": "The route page is complete except for its destination. The departure box is checked, and a margin asks the driver to wait for an updated order.",
+      "id": "t0117-01",
+      "kind": "set",
+      "pieces": [
+        "Notebook",
+        "Pencil"
+      ],
+      "title": "A destination without a name",
+      "where": [
+        {
+          "containers": [
+            "crate",
+            "shelves",
+            "desk",
+            "counter",
+            "cardboardbox",
+            "bin"
+          ],
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "marked address in World / countryside",
+        "source": "map:WorldStashMap8"
+      },
+      "gloss": "A completed departure entry waits on a destination update.",
+      "prov": {
+        "batch": "T0117",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A field trip could also await a revised destination; the note does not say who issued the order."
+    }
   }
 ]

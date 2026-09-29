@@ -13,6 +13,14 @@
     "title": "Cut potato and sample jar, wednesday before rain",
     "where": [
       {
+        "containers": [
+          "desk",
+          "dishescabinet",
+          "filingcabinet",
+          "overhead",
+          "sidetable",
+          "counter"
+        ],
         "lean": "agricultural",
         "place": "mapNamed",
         "rival": "containment",
@@ -35,11 +43,11 @@
       {
         "containers": [
           "desk",
-          "dresser",
+          "filingcabinet",
+          "sidetable",
           "shelves",
-          "counter",
-          "crate",
-          "bin"
+          "smallbox",
+          "cashregister"
         ],
         "lean": "containment",
         "place": "mapNamed",

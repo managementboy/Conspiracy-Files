@@ -16,10 +16,10 @@
       {
         "containers": [
           "medicine",
-          "crate",
-          "shelves",
-          "desk",
+          "fridge",
+          "smallbox",
           "counter",
+          "sidetable",
           "cardboardbox"
         ],
         "lean": "agricultural",

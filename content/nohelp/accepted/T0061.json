@@ -15,12 +15,12 @@
     "where": [
       {
         "containers": [
+          "toolcabinet",
           "desk",
+          "metal_shelves",
+          "filingcabinet",
           "crate",
-          "shelves",
-          "counter",
-          "cardboardbox",
-          "bin"
+          "sidetable"
         ],
         "lean": "containment",
         "place": "mapNamed",

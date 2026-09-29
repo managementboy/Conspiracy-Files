@@ -45,5 +45,60 @@
       },
       "rival_reading": "A responder could test soil after a spill or fire; the note does not identify the source of concern."
     }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "print": "HouseforSale851"
+      },
+      "body": "The garden seed packet is stored with a water bottle; the property note says the next owner should wait for a soil test before planting.",
+      "id": "t0241-01",
+      "kind": "set",
+      "pieces": [
+        "SeedBag",
+        "WaterBottle"
+      ],
+      "title": "Self-sustaining garden notes",
+      "where": [
+        {
+          "containers": [
+            "desk",
+            "crate",
+            "shelves",
+            "counter",
+            "cardboardbox",
+            "bin"
+          ],
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "House for Sale (no. 851)",
+        "source": "print:HouseforSale851"
+      },
+      "gloss": "A self-sustaining garden is paused pending a soil test.",
+      "prov": {
+        "batch": "T0241",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A responder could test soil after a spill or fire; the note does not identify the source of concern."
+    }
   }
 ]

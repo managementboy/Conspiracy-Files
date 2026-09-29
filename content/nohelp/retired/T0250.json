@@ -45,5 +45,60 @@
       },
       "rival_reading": "A routine government survey could precede a demolition review; the notice does not show who changed the schedule."
     }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "print": "OldCGECorpBuilding"
+      },
+      "body": "The preservation notice is attached to a demolition schedule; the building survey is signed complete before the listed heritage review.",
+      "id": "t0250-01",
+      "kind": "set",
+      "pieces": [
+        "Book",
+        "SheetPaper2"
+      ],
+      "title": "A preservation request",
+      "where": [
+        {
+          "containers": [
+            "crate",
+            "shelves",
+            "desk",
+            "counter",
+            "cardboardbox",
+            "bin"
+          ],
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "Old CGE Corp Building",
+        "source": "print:OldCGECorpBuilding"
+      },
+      "gloss": "A demolition schedule advances before its heritage review.",
+      "prov": {
+        "batch": "T0250",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A routine government survey could precede a demolition review; the notice does not show who changed the schedule."
+    }
   }
 ]

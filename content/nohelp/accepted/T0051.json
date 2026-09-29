@@ -16,10 +16,10 @@
       {
         "containers": [
           "toolcabinet",
+          "metal_shelves",
           "crate",
-          "shelves",
-          "desk",
-          "counter",
+          "smallcrate",
+          "smallbox",
           "cardboardbox"
         ],
         "lean": "containment",

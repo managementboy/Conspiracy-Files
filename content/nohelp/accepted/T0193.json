@@ -14,12 +14,12 @@
     "where": [
       {
         "containers": [
-          "filingcabinet",
-          "crate",
-          "shelves",
+          "militarylocker",
           "desk",
-          "counter",
-          "cardboardbox"
+          "locker",
+          "shelves",
+          "militarycrate",
+          "filingcabinet"
         ],
         "lean": "agricultural",
         "place": "mapNamed",

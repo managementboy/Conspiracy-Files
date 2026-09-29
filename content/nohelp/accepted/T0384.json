@@ -19,5 +19,27 @@
         "spot": "ground"
       }
     ]
+  },
+  {
+    "anchor": {
+      "scene": "RZSForestCamp"
+    },
+    "body": "A small receiver still set to an emergency band, a folded road map with the county roads crossed out in the same neat hand, and a strip of pills. The campers left before anyone announced a closure.",
+    "id": "t0384-02",
+    "kind": "set",
+    "pieces": [
+      "RadioReceiver",
+      "Map",
+      "Pills"
+    ],
+    "title": "Receiver and map left at the cold camp",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
   }
 ]

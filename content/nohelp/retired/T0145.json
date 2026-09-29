@@ -46,5 +46,61 @@
       },
       "rival_reading": "A field crew could record equipment incidents rather than an official response; the repeated tally does not identify who was lost."
     }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "map": "WpStashMap13",
+        "mark": 1
+      },
+      "body": "A tally sheet groups losses by weapon and vehicle, but the line for who was brought back is empty. One tally has been copied twice.",
+      "id": "t0145-01",
+      "kind": "set",
+      "pieces": [
+        "BaseballBat",
+        "SheetPaper2"
+      ],
+      "title": "Three tallies, no names",
+      "where": [
+        {
+          "containers": [
+            "crate",
+            "shelves",
+            "desk",
+            "counter",
+            "cardboardbox",
+            "bin"
+          ],
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "shotgun kills: 12",
+        "source": "map:WpStashMap13"
+      },
+      "gloss": "An incident tally counts equipment outcomes but leaves returns blank.",
+      "prov": {
+        "batch": "T0145",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A field crew could record equipment incidents rather than an official response; the repeated tally does not identify who was lost."
+    }
   }
 ]

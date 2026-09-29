@@ -15,12 +15,12 @@
     "where": [
       {
         "containers": [
-          "desk",
-          "crate",
-          "shelves",
-          "counter",
+          "metal_shelves",
           "cardboardbox",
-          "bin"
+          "crate",
+          "composter",
+          "smallcrate",
+          "grocerstand"
         ],
         "lean": "agricultural",
         "place": "mapNamed",
@@ -44,12 +44,12 @@
     "where": [
       {
         "containers": [
+          "sidetable",
           "desk",
-          "crate",
+          "dresser",
+          "filingcabinet",
           "shelves",
-          "counter",
-          "cardboardbox",
-          "bin"
+          "smallbox"
         ],
         "lean": "agricultural",
         "place": "mapNamed",
@@ -73,12 +73,12 @@
     "where": [
       {
         "containers": [
-          "toolcabinet",
-          "crate",
-          "shelves",
+          "sidetable",
           "desk",
-          "counter",
-          "cardboardbox"
+          "filingcabinet",
+          "shelves",
+          "cashregister",
+          "smallbox"
         ],
         "lean": "agricultural",
         "place": "mapNamed",
@@ -103,11 +103,11 @@
       {
         "containers": [
           "filingcabinet",
-          "crate",
-          "shelves",
-          "desk",
-          "counter",
-          "cardboardbox"
+          "bin",
+          "cardboardbox",
+          "smallbox",
+          "locker",
+          "desk"
         ],
         "lean": "agricultural",
         "place": "mapNamed",
@@ -131,12 +131,12 @@
     "where": [
       {
         "containers": [
+          "locker",
           "crate",
-          "shelves",
-          "desk",
-          "counter",
           "cardboardbox",
-          "bin"
+          "smallbox",
+          "bin",
+          "desk"
         ],
         "lean": "agricultural",
         "place": "mapNamed",
@@ -160,12 +160,12 @@
     "where": [
       {
         "containers": [
-          "toolcabinet",
-          "crate",
-          "shelves",
-          "desk",
-          "counter",
-          "cardboardbox"
+          "sidetable",
+          "bin",
+          "cardboardbox",
+          "smallbox",
+          "locker",
+          "desk"
         ],
         "lean": "agricultural",
         "place": "mapNamed",

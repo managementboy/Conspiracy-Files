@@ -45,5 +45,60 @@
       },
       "rival_reading": "A supply crew could have used the same return van and fitting room; the card does not show why the schedule changed."
     }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "print": "FashionaBelle"
+      },
+      "body": "The tailor’s fitting card is stamped complete before the customer’s pickup time; a note asks staff to leave the back door open for the return van.",
+      "id": "t0153-01",
+      "kind": "set",
+      "pieces": [
+        "Scissors",
+        "SheetPaper2"
+      ],
+      "title": "A fitting appointment moved",
+      "where": [
+        {
+          "containers": [
+            "desk",
+            "crate",
+            "shelves",
+            "counter",
+            "cardboardbox",
+            "bin"
+          ],
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "FashionaBelle",
+        "source": "print:FashionaBelle"
+      },
+      "gloss": "A fitting is closed before its pickup and the return van arrives.",
+      "prov": {
+        "batch": "T0153",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A supply crew could have used the same return van and fitting room; the card does not show why the schedule changed."
+    }
   }
 ]

@@ -94,5 +94,117 @@
       },
       "rival_reading": "A response team could have logged a sample during cleanup and kept records separate; the arrangement does not identify the test."
     }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "map": "BBurgStashMap6",
+        "mark": 1
+      },
+      "body": "I left the spare key where you asked. The bus went past the property, but the office says our address was never on its pickup list. I thought you would come back for me.\n\nMy mother put it with the household bills so it would not be thrown away. It was the only part of the week that still had a date.\n\nSomeone had to finish the household list even though the office had closed. I wrote the names in the space left for expenses.",
+      "id": "t0031-01",
+      "kind": "written",
+      "pieces": [
+        "letter"
+      ],
+      "title": "The unfinished handoff",
+      "where": [
+        {
+          "containers": [
+            "filingcabinet",
+            "crate",
+            "shelves",
+            "desk",
+            "counter",
+            "cardboardbox"
+          ],
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "I had an affair with Derek",
+        "source": "map:BBurgStashMap6"
+      },
+      "gloss": "A private apology is interrupted by a missing address on a pickup list.",
+      "prov": {
+        "batch": "T0031",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A work crew could have used the route and kept its own address list; the letter cannot say why the bus passed."
+    }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "map": "BBurgStashMap6",
+        "mark": 1
+      },
+      "body": "Two cups are set beside a test-day notebook. The only signed line is for the room key; a note asks that the sample page stay out of the household drawer.",
+      "id": "t0031-02",
+      "kind": "set",
+      "pieces": [
+        "Notebook",
+        "Pencil",
+        "Teacup"
+      ],
+      "title": "Ink through the paper",
+      "where": [
+        {
+          "containers": [
+            "desk",
+            "crate",
+            "shelves",
+            "counter",
+            "cardboardbox",
+            "bin"
+          ],
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "I had an affair with Derek",
+        "source": "map:BBurgStashMap6"
+      },
+      "gloss": "A private room key is signed out beside an unsigned test record.",
+      "prov": {
+        "batch": "T0031",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A response team could have logged a sample during cleanup and kept records separate; the arrangement does not identify the test."
+    }
   }
 ]
