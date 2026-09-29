@@ -1,0 +1,40 @@
+[
+  {
+    "id": "t0392-01",
+    "kind": "set",
+    "pieces": [
+      "Battery",
+      "RadioBlack"
+    ],
+    "where": [
+      {
+        "place": "mapNamed",
+        "spot": "ground",
+        "lean": "containment",
+        "rival": "agricultural"
+      }
+    ],
+    "anchor": {
+      "scene": "RZSNastyMattress"
+    },
+    "title": "battery with a field radio at friday at closing",
+    "body": "the battery with a field radio are tied in one bundle. rust-colored grit marks the field side; torn warning tape marks the other.",
+    "rival_reading": "The bundle could belong to field workers caught in a response or responders crossing a work site; it preserves both readings.",
+    "gloss": "A mixed bundle keeps field activity and emergency response equally plausible.",
+    "axioms": {
+      "containment": [
+        "c-warning",
+        "c-failure"
+      ],
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ]
+    },
+    "prov": {
+      "writer": "ChatGPT",
+      "handoff": "2026-09-27",
+      "batch": "T0392"
+    }
+  }
+]
