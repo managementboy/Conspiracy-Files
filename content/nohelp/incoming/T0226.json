@@ -1,0 +1,52 @@
+[
+  {
+    "anchor": {
+      "print": "FarmingAndRuralSupplyDoeValley"
+    },
+    "body": "The supply receipt groups seeds, tools, and firearms in one pickup; the return sheet records the vehicle before the delivery was signed.",
+    "id": "t0226-01",
+    "kind": "set",
+    "pieces": [
+      "SeedBag",
+      "Pistol"
+    ],
+    "title": "Supply order for the rural stop",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture",
+        "containers": [
+          "toolcabinet",
+          "crate",
+          "shelves",
+          "desk",
+          "counter",
+          "cardboardbox"
+        ]
+      }
+    ],
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "Farming & Rural Supply (Doe Valley)",
+      "source": "print:FarmingAndRuralSupplyDoeValley"
+    },
+    "gloss": "A mixed supply order is logged returned before delivery acceptance.",
+    "prov": {
+      "batch": "T0226",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A program team could transport tools and security gear together; the early vehicle entry does not show who received them."
+  }
+]
