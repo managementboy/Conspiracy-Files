@@ -50,11 +50,16 @@ function M.trigger()
 end
 
 -- Register context menu handler via EngineEvents
--- Handler receives (context, worldObject) and adds options via context:addOption()
-local function fillContextMenu(context, worldObject)
-    if not allowed() then return end
-    context:addOption("Dump State", worldObject, M.trigger)
+-- Vanilla fires OnFillWorldObjectContextMenu(playerNum, context, worldObjects, test).
+-- Taking (context, worldObject) made every right-click on the world throw
+-- "tried to call nil" on the player number (owner playtest, 2026-09-30).
+-- A test pass only asks whether an option would exist; it adds nothing.
+local function fillContextMenu(playerNum, context, worldObjects, test)
+    if test or not allowed() then return end
+    if type(context)~="table" or type(context.addOption)~="function" then return end
+    context:addOption("Dump State", worldObjects, M.trigger)
 end
+M.fillContextMenu = fillContextMenu
 
 pcall(function()
     local EngineEvents = require("NHShared/Events/EngineEvents")
