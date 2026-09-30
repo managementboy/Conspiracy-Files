@@ -150,3 +150,23 @@ leads, and room-aware placement. Unlisted is the right setting until
 The fresh-save requirement must stay prominent in
 `tools/workshop/description.txt`. A tester whose save is refused with
 "unsupported generated case revision" and no warning writes the first review.
+
+## Conspiracy Files: No Help (separate item)
+
+Added 2026-09-30. No Help is its own Workshop item with its own id file
+(`tools/workshop-nohelp/published_file_id`, created by the first upload - commit
+it), page text (`tools/workshop-nohelp/description.txt`) and build directory
+(`dist/workshop-nohelp/`). Publishing one mod never touches the other.
+
+    tools/publish_workshop.sh --mod nohelp --dry-run
+    tools/publish_workshop.sh --mod nohelp \
+        --owner-override-boot-check "booted on Windows, owner accepted" \
+        --changenote "Build 42.20 and later"
+
+`CF_MOD=nohelp tools/package.sh` builds the same require-checked tree as a zip.
+The stamped version is mod.info's `modversion` plus the commit.
+
+The Linux boot check only knows Dead Air, so a No Help upload always needs the
+owner override: boot it yourself first. After the first upload, on the item's
+Workshop page add **ZombieBuddy (3619862853)** under Required Items - steamcmd
+cannot set that - and optionally a preview image.
