@@ -1,6 +1,7 @@
 local Core=require("NHShared/Generated/AddressIndex")
 local Roads=require("NHShared/Generated/AddressRoads")
 local V=require("NHShared/Validator")
+local GameBuild=require("NHShared/GameBuild")
 NHShared=NHShared or {}
 if NHShared.AddressMap and NHShared.AddressMap.stop then NHShared.AddressMap.stop() end
 local M={}; NHShared.AddressMap=M
@@ -332,7 +333,7 @@ function M.start(options)
     if job then return false,"address index already building" end
     local world=getWorld(); if not world then return false,"load a game first" end
     local map=tostring(world:getMap()); local build=tostring(getGameVersion())
-    if build~="42.20" and build~="42.20.4" then return false,"unverified game build" end
+    if not GameBuild.supported(build) then return false,"unsupported game build (needs 42.20 or later)" end
     if not map:find("Muldraugh, KY",1,true) then return false,"unsupported map" end
     hook()
     local existing=ModData.get(TAG)
@@ -352,7 +353,8 @@ function M.start(options)
     end
     local frozen
     if existing and existing.canonical then
-        if not valid(existing.canonical) or existing.canonical.map~=map or existing.canonical.build~=build then return false,"saved address book refused; no renumbering" end
+        if not valid(existing.canonical) or existing.canonical.map~=map
+            or (existing.canonical.build~=build and not GameBuild.supported(existing.canonical.build)) then return false,"saved address book refused; no renumbering" end
         use(existing.canonical)
         if book.coverage==3 then log("Restored "..#book.records.." fixed addresses. Zoom in on the world map.");return true end
         frozen=book.records
