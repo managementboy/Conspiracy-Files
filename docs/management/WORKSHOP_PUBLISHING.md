@@ -170,3 +170,34 @@ The Linux boot check only knows Dead Air, so a No Help upload always needs the
 owner override: boot it yourself first. After the first upload, on the item's
 Workshop page add **ZombieBuddy (3619862853)** under Required Items - steamcmd
 cannot set that - and optionally a preview image.
+
+### Publishing No Help from Windows (learned 2026-09-30)
+
+The item exists: **3810750865** (unlisted). Its ID is committed in
+`tools/workshop-nohelp/published_file_id`, so every publish updates it.
+
+1. Commit what you want to ship. The stamped version is
+   `modversion+<commit>`, so the in-game mod list shows which build Steam
+   delivered.
+2. Boot No Help in the game yourself. There is no automated No Help boot
+   check.
+3. In PowerShell, from the worktree. The script is bash; a bare `bash` in
+   PowerShell is WSL, so call Git Bash by its full path:
+
+       Set-Location "<repo>\Conspiracy-Files-nohelp"
+       & "C:\Program Files\Git\bin\bash.exe" tools/publish_workshop.sh --mod nohelp --dry-run
+       & "C:\Program Files\Git\bin\bash.exe" tools/publish_workshop.sh --mod nohelp `
+           --owner-override-boot-check "booted on Windows, owner accepted" `
+           --changenote "what changed"
+
+4. If it asks for a login: run
+   `& "$env:LOCALAPPDATA\Programs\SteamCMD\steamcmd.exe" +login managementboy`
+   once, type the password and the Steam Guard code yourself, then `quit`,
+   and publish again.
+5. On the first upload only: commit the new `published_file_id`, add
+   ZombieBuddy (3619862853) under Required Items on the Workshop page, and
+   optionally add a preview image.
+6. Subscribers get the update when Steam next syncs. On **42.21**, until
+   ZombieBuddy ships a fix, they also need a ZombieBuddy agent with PR #56
+   (see NO_HELP_PLAYTEST_2026-09-30_B42.21.md), or the scene listener stays
+   off.
