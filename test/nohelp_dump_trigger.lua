@@ -130,7 +130,7 @@ local function test_context_menu_handler()
     NHShared.T11Mode = nil
     NHShared.T12Mode = nil
     for _, handler in ipairs(handlers) do
-        handler(fakeContext, nil)
+        handler(0, fakeContext, {}, false)
     end
 
     -- Should have added exactly one option
