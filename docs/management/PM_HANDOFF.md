@@ -53,6 +53,8 @@ Phase 4 is broadcast anchoring against the game's 1.16 MB radio corpus.
 
 ### Owner request, queued 2026-09-15: house numbers for the whole map (AD-10)
 
+**Status 2026-10-02: built (see docs/design/WHOLE_MAP_ADDRESSES.md section 9). Left: owner checks docs/design/WHOLE_MAP_ADDRESS_BASELINES.md; attended Windows check of a found Riverside paper map.**
+
 Raised during the Windows playtest of DEV-0.36.0: a found Riverside map showed
 no house numbers. **Not to be built during a playtest.** The owner's position,
 first agreed around 2026-09-14 and not started: compute addresses for the whole
