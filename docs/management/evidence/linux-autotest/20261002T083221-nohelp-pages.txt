@@ -1,0 +1,5 @@
+Linux nohelp-pages check 20261002T083221: PASS
+source: c8db7f60
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+before: Base.Diary1|5|NoHelp|true|nil ; Base.LetterHandwritten|5|NoHelp|true|nil ; Base.Newspaper|5|NoHelp|true|nil ; Base.Notebook|5|NoHelp|true|nil ; Base.Notepad|5|NoHelp|true|nil ; Base.Note|5|NoHelp|true|nil ; Base.Photo|5|NoHelp|true|nil ; Base.Receipt|5|NoHelp|true|nil
+after:  Base.Diary1|5|NoHelp|true|nil ; Base.LetterHandwritten|5|NoHelp|true|nil ; Base.Newspaper|5|NoHelp|true|nil ; Base.Notebook|5|NoHelp|true|nil ; Base.Notepad|5|NoHelp|true|nil ; Base.Note|5|NoHelp|true|nil ; Base.Photo|5|NoHelp|true|nil ; Base.Receipt|5|NoHelp|true|nil
