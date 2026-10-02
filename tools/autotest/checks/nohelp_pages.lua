@@ -33,7 +33,7 @@ function K.make()
 end
 
 -- type|pages|lockedBy|canBeWrite for every probe item in the inventory
-function K.read()
+function K.state()
     local inv = getPlayer():getInventory():getItems()
     local out = {}
     for i = 0, inv:size() - 1 do
@@ -50,4 +50,34 @@ function K.read()
     end
     table.sort(out)
     return table.concat(out, " ; ")
+end
+
+-- What the player sees. The vanilla inventory menu offers "Read <name>" on a
+-- locked, page-bearing paper; choosing it opens the native journal read-only.
+local function probe(t)
+    local inv = getPlayer():getInventory():getItems()
+    for i = 0, inv:size() - 1 do
+        local it = inv:get(i)
+        if it:getModData().cfPagesProbe == t then return it end
+    end
+end
+
+function K.menu(t)
+    local it = probe(t)
+    if not it then return "noitem" end
+    local list = ArrayList.new(); list:add(it)
+    local ctx = ISInventoryPaneContextMenu.createMenu(0, true, {it}, 400, 400)
+    if not ctx then return "nomenu" end
+    local names = {}
+    for _, o in ipairs(ctx.options or {}) do names[#names + 1] = tostring(o.name) end
+    ctx:setVisible(false)
+    return table.concat(names, "; ")
+end
+
+-- Choose the Read entry exactly as a click would.
+function K.read(t)
+    local it = probe(t)
+    if not it then return "noitem" end
+    ISInventoryPaneContextMenu.onWriteSomething(it, false, 0)
+    return "opened"
 end

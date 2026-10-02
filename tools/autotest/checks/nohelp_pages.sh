@@ -29,7 +29,7 @@ wait_true 60 'NHShared.GeneratedRuntime~=nil and NHShared.GeneratedRuntime.write
 
 made="$(ev 'return CFNHPages.make()' | cut -f1)"
 say "made: $made"
-before="$(ev 'return CFNHPages.read()' | cut -f1)"
+before="$(ev 'return CFNHPages.state()' | cut -f1)"
 
 judge_rows() { local label="$1" rows="$2" row t n lock cw ok
     while IFS= read -r row; do
@@ -50,7 +50,7 @@ sleep 2
 "$PZ" start --continue "$world" >/dev/null 2>&1 || fail "reload failed"
 sleep 5
 ev -f "$H" >/dev/null || fail "harness reload failed"
-after="$(ev 'return CFNHPages.read()' | cut -f1)"
+after="$(ev 'return CFNHPages.state()' | cut -f1)"
 judge_rows "after reload" "$after"
 
 result=PASS; [ ${#fails[@]} -eq 0 ] || result=FAIL
