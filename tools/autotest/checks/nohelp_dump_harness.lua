@@ -43,43 +43,47 @@ function C.ready(line)
     return assigned > 0 and "true" or "false"
 end
 
--- Pure comparison: extract and compare placement-related counts.
--- Returns "true" if identical, "false" if different.
+-- Pure comparison across save/reload. Returns "true" if the placement state is
+-- consistent, "false" if not.
+--
+-- Must be identical: case totals (areas decided, clues per lean, short), every
+-- status other than deferred/placed (pending, placing, indexed, conflict,
+-- dropped, unknown, statusOther) and lost.
+-- May change, one way only: deferred clues becoming placed. That is by design
+-- ("decide early, create on arrival", NO_HELP_TASK3 plan): the arrival ring is
+-- forgotten on reload, so a survivor standing in a waiting clue's ring
+-- "arrives" again and the clue is created. So placed may rise by k only if
+-- deferred falls by exactly k; placed never falls, deferred never rises, and
+-- the total of all statuses never changes (a clue placed twice, or made from
+-- nothing, would break that).
+-- Step counts (carrier, tracking, relocation, filler, ...) are scheduler
+-- counters since load, in memory only; they restart at reload, not compared.
 function C.sameAcrossReload(lineA, lineB)
-    if not lineA or not lineB then return "false" end
-
-    -- Fields from StateDump.FIELDS that must be identical across reload:
-    -- All status counts + case totals; exclude peakMs, bytes, step/queued counts, foundBy*, wait_* counts
-    local placementFields = {
-        -- Status counts
-        pending=true, placing=true, placed=true, unknown=true,
-        conflict=true, deferred=true, indexed=true, dropped=true, statusOther=true, lost=true,
-        -- Case totals
-        areasDecided=true, cluesContainment=true, cluesAgricultural=true, short=true,
-    }
+    if not lineA or not lineB or lineA == "" or lineB == "" then return "false" end
 
     local function extract(line)
         local counts = {}
         for pair in line:gmatch("%S+") do
             local k, v = pair:match("^([^=]+)=(.*)$")
-            if k and v and placementFields[k] then
-                counts[k] = v
-            end
+            if k and v then counts[k] = tonumber(v) end
         end
         return counts
     end
+    local A, B = extract(lineA), extract(lineB)
+    local function n(t, k) return t[k] or 0 end
 
-    local countsA = extract(lineA)
-    local countsB = extract(lineB)
-
-    -- Compare: same keys, same values
-    for k, v in pairs(countsA) do
-        if countsB[k] ~= v then return "false" end
+    local fixed = {
+        "areasDecided", "cluesContainment", "cluesAgricultural", "short",
+        "pending", "placing", "unknown", "conflict", "indexed", "dropped",
+        "statusOther", "lost",
+    }
+    for _, k in ipairs(fixed) do
+        if n(A, k) ~= n(B, k) then return "false" end
     end
-    for k, v in pairs(countsB) do
-        if countsA[k] ~= v then return "false" end
-    end
 
+    local moved = n(B, "placed") - n(A, "placed")
+    if moved < 0 then return "false" end
+    if n(A, "deferred") - n(B, "deferred") ~= moved then return "false" end
     return "true"
 end
 

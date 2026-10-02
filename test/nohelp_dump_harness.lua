@@ -93,7 +93,34 @@ local function test_ready()
     assert(CFNHDump.sameAcrossReload(early, later) == "false")
 end
 
+-- TEST 11: a deferred clue becoming placed after reload (arrival) is allowed;
+-- step counters that restart at reload are ignored
+local function test_arrival_move()
+    local a = "areasDecided=4 cluesAgricultural=15 cluesContainment=14 deferred=33 lost=0 carrier=8 tracking=8 relocation=8"
+    local b = "areasDecided=4 cluesAgricultural=15 cluesContainment=14 deferred=32 placed=1 lost=0 carrier=2 tracking=2 relocation=2"
+    assert(CFNHDump.sameAcrossReload(a, b) == "true", "arrival move + reset step counts must pass")
+end
+
+-- TEST 12: negative cases must still fail
+local function test_negative_cases()
+    local a = "areasDecided=4 cluesAgricultural=15 cluesContainment=14 deferred=33 lost=0"
+    local lost = "areasDecided=4 cluesAgricultural=15 cluesContainment=14 deferred=32 dropped=1 lost=1"
+    local dup = "areasDecided=4 cluesAgricultural=15 cluesContainment=14 deferred=33 placed=1 lost=0"
+    local short = "areasDecided=4 cluesAgricultural=15 cluesContainment=14 deferred=30 placed=2 lost=0"
+    local back = "areasDecided=4 cluesAgricultural=15 cluesContainment=14 deferred=34 lost=0"
+    local lean = "areasDecided=4 cluesAgricultural=16 cluesContainment=13 deferred=33 lost=0"
+    local p1 = "areasDecided=4 cluesAgricultural=15 cluesContainment=14 deferred=32 placed=1 lost=0"
+    assert(CFNHDump.sameAcrossReload(a, lost) == "false", "lost clue must fail")
+    assert(CFNHDump.sameAcrossReload(a, dup) == "false", "placed without deferred drop (duplicate) must fail")
+    assert(CFNHDump.sameAcrossReload(a, short) == "false", "total changed must fail")
+    assert(CFNHDump.sameAcrossReload(a, back) == "false", "deferred rising must fail")
+    assert(CFNHDump.sameAcrossReload(a, lean) == "false", "lean change must fail")
+    assert(CFNHDump.sameAcrossReload(p1, a) == "false", "placed clue going back to deferred must fail")
+end
+
 local tests = {
+    { "ARRIVAL MOVE ALLOWED", test_arrival_move },
+    { "NEGATIVE CASES FAIL", test_negative_cases },
     { "READY GATE", test_ready },
     { "EQUAL DUMPS", test_equal_dumps },
     { "DIFFERENT CONFLICT", test_different_conflict },

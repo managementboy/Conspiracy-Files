@@ -3,8 +3,10 @@
 #
 #   tools/autotest/checks/nohelp_dump.sh
 #
-# PASS needs: two consecutive StateDump.run() calls (before and after
-# save/quit/reload) produce identical placement counts across all fields.
+# PASS needs: two StateDump.run() calls (before and after save/quit/reload)
+# whose case totals, leans and every status except deferred/placed are identical,
+# lost=0, nothing placed twice (total unchanged); deferred->placed on arrival
+# after reload is allowed (by design). Step counters restart at load, not compared.
 # The comparison logic is in a plain-Lua function, unit-tested separately.
 # The first dump waits until the case is decided and the counts hold still
 # (a too-early dump caused the 2026-09-29 false FAIL). Exit 0 pass, 1 fail, 2 could not run.
@@ -62,6 +64,7 @@ dump2="$(settled_dump 240)" || fail "no settled second dump within 240s after re
 # Compare using Lua function via environment variables (avoids quote/escape issues)
 same="$(DUMP1="$dump1" DUMP2="$dump2" lua_c 'print(C.sameAcrossReload(os.getenv("DUMP1"), os.getenv("DUMP2")))')" || fail "comparison failed"
 [ "$same" = "true" ] || fail "placement counts differ"
+case " $dump2 " in *" lost=0 "*) ;; *) fail "clues lost after reload";; esac
 
 result=PASS; [ ${#fails[@]} -eq 0 ] || result=FAIL
 out="$REPO/docs/management/evidence/linux-autotest/$id-nohelp-dump.txt"
