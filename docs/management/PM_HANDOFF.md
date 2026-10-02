@@ -251,4 +251,4 @@ Useful facts found while trying a debug-console workaround:
 
 Owner decisions (same session): the hotkey is a **debug-only tool**, not shipped to players, and it prints to the **log only**, not to the screen.
 
-**Status:** queued; not built. Recorded during play as instructed (playtests queue ideas, they do not build them).
+**Status:** built 2026-10-02 (NHShared/ClueWhere.lua, log event clue_where); offline-tested only.

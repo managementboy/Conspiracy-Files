@@ -55,6 +55,8 @@ local EVENTS={
     probe=true,scan=true,
     -- content-blind state dump for playtests and bug reports
     dump=true,dump_trigger=true,
+    -- debug-only Shift+L: where the nearest clue is (ClueWhere)
+    clue_where=true,
 }
 
 -- Field order. Fixed so lines column-align to the eye and so a grep for a
