@@ -12,7 +12,7 @@ is still open.
   Upstream issue zed-0xff/ZombieBuddy#53: 42.21 changed
   `ZomboidFileSystem.loadMods(ArrayList<String>)` to `loadMods(List<String>)`,
   so ZombieBuddy's hook matches nothing. Fix: PR #56 (unmerged).
-- **Workaround in use on the owner's machine:** ZombieBuddy tag `v2.3.3` with
+- **Workaround in use on the owner's machine** (recipe and patch: `tools/zombiebuddy-42.21/`): ZombieBuddy tag `v2.3.3` with
   PR #56 ported by hand (5 signatures `ArrayList<String>` -> `List<String>`),
   built with Gradle 9.3.1 + Zulu JDK 25, `shadowJar`, copied over
   `ProjectZomboid\ZombieBuddy.jar` (original kept as
