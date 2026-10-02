@@ -1,0 +1,235 @@
+[Skip navigation links](#skip-navbar-top "Skip navigation links")
+
+* [Overview](../../../index.html)
+* Class
+* [Tree](package-tree.html)
+* [Deprecated](../../../deprecated-list.html)
+* [Index](../../../index-files/index-1.html)
+* [Search](../../../search.html)
+* [Help](../../../help-doc.html#class)
+
+1. [zombie.randomizedWorld.randomizedVehicleStory](package-summary.html)
+2. [RVSAnimalTrailerOnRoad](RVSAnimalTrailerOnRoad.html)
+
+Contents
+
+1. [Description](#)
+2. [Nested Class Summary](#nested-class-summary)
+3. [Field Summary](#field-summary)
+4. [Constructor Summary](#constructor-summary)
+5. [Method Summary](#method-summary)
+6. [Constructor Details](#constructor-detail)
+   1. [RVSAnimalTrailerOnRoad()](#%3Cinit%3E())
+7. [Method Details](#method-detail)
+   1. [getAnimalType()](#getAnimalType())
+   2. [getFoodType()](#getFoodType())
+   3. [randomizeVehicleStory(Zone, IsoChunk)](#randomizeVehicleStory(zombie.iso.zones.Zone,zombie.iso.IsoChunk))
+   4. [initVehicleStorySpawner(Zone, IsoChunk, boolean)](#initVehicleStorySpawner(zombie.iso.zones.Zone,zombie.iso.IsoChunk,boolean))
+   5. [spawnElement(VehicleStorySpawner, VehicleStorySpawner.Element)](#spawnElement(zombie.randomizedWorld.randomizedVehicleStory.VehicleStorySpawner,zombie.randomizedWorld.randomizedVehicleStory.VehicleStorySpawner.Element))
+   6. [spawnAnimals(VehicleStorySpawner, IsoGridSquare)](#spawnAnimals(zombie.randomizedWorld.randomizedVehicleStory.VehicleStorySpawner,zombie.iso.IsoGridSquare))
+   7. [spawnEggs(BaseVehicle, IsoAnimal, ArrayList)](#spawnEggs(zombie.vehicles.BaseVehicle,zombie.characters.animals.IsoAnimal,java.util.ArrayList))
+   8. [spawnFood(BaseVehicle)](#spawnFood(zombie.vehicles.BaseVehicle))
+   9. [getRandomSquare(int, int, int)](#getRandomSquare(int,int,int))
+   10. [randomizeAnimal(IsoAnimal, IsoAnimal)](#randomizeAnimal(zombie.characters.animals.IsoAnimal,zombie.characters.animals.IsoAnimal))
+
+Hide sidebar ![Hide sidebar](../../../resource-files/left.svg)![Show sidebar](../../../resource-files/right.svg) Show sidebar
+
+Class RVSAnimalTrailerOnRoad
+============================
+
+[java.lang.Object](https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Object.html "class or interface in java.lang")
+
+[zombie.randomizedWorld.RandomizedWorldBase](../RandomizedWorldBase.html "class in zombie.randomizedWorld")
+
+[zombie.randomizedWorld.randomizedVehicleStory.RandomizedVehicleStoryBase](RandomizedVehicleStoryBase.html "class in zombie.randomizedWorld.randomizedVehicleStory")
+
+zombie.randomizedWorld.randomizedVehicleStory.RVSAnimalTrailerOnRoad
+
+---
+
+public final class RVSAnimalTrailerOnRoad
+extends [RandomizedVehicleStoryBase](RandomizedVehicleStoryBase.html "class in zombie.randomizedWorld.randomizedVehicleStory")
+
+* Nested Class Summary
+  --------------------
+
+  Nested Classes
+
+  Modifier and Type
+
+  Class
+
+  Description
+
+  `private static final class`
+
+  `RVSAnimalTrailerOnRoad.AnimalSpawn`
+
+  `private static final class`
+
+  `RVSAnimalTrailerOnRoad.FoodSpawn`
+* Field Summary
+  -------------
+
+  ### Fields inherited from class [RandomizedVehicleStoryBase](RandomizedVehicleStoryBase.html#field-summary "class in zombie.randomizedWorld.randomizedVehicleStory")
+
+  `baseChance, horizontalZone, maxX, maxY, minX, minY, minZoneHeight, minZoneWidth, needsDirt, needsFarmland, needsPavement, needsRegion, needsRuralVegetation, notTown, zoneWidth`
+
+  ### Fields inherited from class [RandomizedWorldBase](../RandomizedWorldBase.html#field-summary "class in zombie.randomizedWorld")
+
+  `debugLine, isRat, maximumDays, minimumDays, minimumRooms, name, reallyAlwaysForce, unique`
+* Constructor Summary
+  -------------------
+
+  Constructors
+
+  Constructor
+
+  Description
+
+  `RVSAnimalTrailerOnRoad()`
+* Method Summary
+  --------------
+
+  All MethodsStatic MethodsInstance MethodsConcrete Methods
+
+  Modifier and Type
+
+  Method
+
+  Description
+
+  `private static ArrayList<RVSAnimalTrailerOnRoad.AnimalSpawn>`
+
+  `getAnimalType()`
+
+  Map containing all the animal type and their max numbers we need to spawn
+
+  `private static ArrayList<RVSAnimalTrailerOnRoad.FoodSpawn>`
+
+  `getFoodType()`
+
+  `private IsoGridSquare`
+
+  `getRandomSquare(int x,
+  int y,
+  int z)`
+
+  Get a random square near the trailer to spawn our animals
+
+  `boolean`
+
+  `initVehicleStorySpawner(Zone zone,
+  IsoChunk chunk,
+  boolean debug)`
+
+  `private void`
+
+  `randomizeAnimal(IsoAnimal animal,
+  IsoAnimal male)`
+
+  `void`
+
+  `randomizeVehicleStory(Zone zone,
+  IsoChunk chunk)`
+
+  `private void`
+
+  `spawnAnimals(zombie.randomizedWorld.randomizedVehicleStory.VehicleStorySpawner spawner,
+  IsoGridSquare square)`
+
+  `private void`
+
+  `spawnEggs(BaseVehicle trailer,
+  IsoAnimal male,
+  ArrayList<IsoAnimal> femaleList)`
+
+  Spawn some eggs if the animals in the trailer can do them
+  Might fertilize them sometime
+
+  `void`
+
+  `spawnElement(zombie.randomizedWorld.randomizedVehicleStory.VehicleStorySpawner spawner,
+  zombie.randomizedWorld.randomizedVehicleStory.VehicleStorySpawner.Element element)`
+
+  `private void`
+
+  `spawnFood(BaseVehicle trailer)`
+
+  ### Methods inherited from class [RandomizedVehicleStoryBase](RandomizedVehicleStoryBase.html#method-summary "class in zombie.randomizedWorld.randomizedVehicleStory")
+
+  `addSmashedOverlay, callVehicleStorySpawner, doRandomStory, getCenterOfChunk, getChance, getMinimumDays, getMinZoneHeight, getMinZoneWidth, getPolylineSpawnPoint, getRandomFreeUnoccupiedSquare, getRectangleSpawnPoint, getSpawnPoint, initAllRVSMapChance, initSpawnDataForChunk, isChunkLoaded, isFullyStreamedIn, isValid, registerCustomOutfits, setChance, setMinimumDays`
+
+  ### Methods inherited from class [RandomizedWorldBase](../RandomizedWorldBase.html#method-summary "class in zombie.randomizedWorld")
+
+  `addBloodSplat, addBrazier, addCampfire, addCampfireOrPit, addCharcoalBurner, addCookingPit, addItemOnGround, addItemOnGround, addItemOnGround, addItemOnGroundNoLoot, addItemOnGroundNoLoot, addItemOnGroundStatic, addItemOnGroundStatic, addItemToObjectSurface, addMattressNorthSouth, addMattressWestEast, addRandomFirepit, addRandomItemOnGround, addRandomItemsOnGround, addRandomItemsOnGround, addRandomShelterNorthSouth, addRandomShelterWestEast, addRandomTentNorthSouth, addRandomTentWestEast, addShelterNorthSouth, addShelterWestEast, addSimpleCookingPit, addSimpleFire, addSleepingBagNorthSouth, addSleepingBagOrTentNorthSouth, addSleepingBagOrTentWestEast, addSleepingBagWestEast, addTentNorthSouth, addTentNorthSouthNew, addTentWestEast, addTentWestEastNew, addTileObject, addTileObject, addTileObject, addTileObject, addTileObject, addTileObject, addTrailer, addTrailOfBlood, addTraitOfBlood, addVehicle, addVehicle, addVehicle, addVehicle, addVehicle, addVehicle, addVehicle, addVehicle, addVehicleFlipped, addVehicleFlipped, addWeapon, addWorkstationEntity, addWorkstationEntity, addZombiesOnSquare, addZombiesOnVehicle, alignCorpseToSquare, checkAreaForCarsSpawn, checkRadiusForCarSpawn, cleanSquareAndNeighbors, createBodyFromZombie, createCorpse, createCorpse, createCorpse, createCorpse, createRandomDeadBody, createRandomDeadBody, createRandomDeadBody, createRandomDeadBody, createRandomDeadBody, createRandomDeadBody, createRandomZombie, createRandomZombie, createRandomZombieForCorpse, createSkeletonCorpse, createSkeletonCorpse, dirtBomb, getBarnClutter, getBarnClutterItem, getBathroomSinkClutter, getBathroomSinkClutterItem, getBBQClutter, getBBQClutterItem, getBeachPartyClutter, getBeachPartyClutterItem, getBedClutter, getBedClutterItem, getCafeClutter, getCafeClutterItem, getCarpentryToolClutter, getCarpentryToolClutterItem, getClutterCopy, getClutterCopy, getClutterItem, getDeadEndClutter, getDeadEndClutterItem, getDebugLine, getDormClutter, getDormClutterItem, getFarmStorageClutter, getFarmStorageClutterItem, getFootballNightDrinkItem, getFootballNightDrinks, getFootballNightSnackItem, getFootballNightSnacks, getGarageStorageClutter, getGarageStorageClutterItem, getGigamartClutter, getGigamartClutterItem, getGroceryClutter, getGroceryClutterItem, getHairSalonClutter, getHairSalonClutterItem, getHallClutter, getHallClutterItem, getHenDoDrinkItem, getHenDoDrinks, getHenDoSnackItem, getHenDoSnacks, getHoedownClutter, getHoedownClutterItem, getHousePartyClutter, getHousePartyClutterItem, getJudgeClutter, getJudgeClutterItem, getKidClutter, getKidClutterItem, getKitchenCounterClutter, getKitchenCounterClutterItem, getKitchenSinkClutter, getKitchenSinkClutterItem, getKitchenStoveClutter, getKitchenStoveClutterItem, getLaundryRoomClutter, getLaundryRoomClutterItem, getLivingroomClutter, getLivingroomClutterItem, getLivingRoomOrKitchen, getMaximumDays, getMedicalClutter, getMedicallutterItem, getMurderSceneClutter, getMurderSceneClutterItem, getName, getNastyMattressClutter, getNastyMattressClutterItem, getOfficeCarDealerClutter, getOfficeCarDealerClutterItem, getOfficeOtherClutter, getOfficeOtherClutterItem, getOfficePaperworkClutter, getOfficePaperworkClutterItem, getOfficePenClutter, getOfficePenClutterItem, getOfficeTreatClutter, getOfficeTreatClutterItem, getOldShelterClutter, getOldShelterClutterItem, getOvenFoodClutter, getOvenFoodClutterItem, getPillowClutter, getPillowClutterItem, getPokerNightClutter, getPokerNightClutterItem, getRandomRoom, getRandomRoomNoKids, getRandomSpawnSquare, getRandomSquareForCorpse, getRichJerkClutter, getRichJerkClutterItem, getRoom, getRoomNoKids, getSadCampsiteClutter, getSadCampsiteClutterItem, getSidetableClutter, getSidetableClutterItem, getSq, getSurvivalistCampsiteClutter, getSurvivalistCampsiteClutterItem, getTwiggyClutter, getTwiggyClutterItem, getUtilityToolClutter, getUtilityToolClutterItem, getVanCampClutter, getVanCampClutterItem, getWatchClutter, getWatchClutterItem, getWoodcraftClutter, getWoodcraftClutterItem, graffSquare, graffSquare, is1x1AreaClear, is1x2AreaClear, is2x1AreaClear, is2x1or1x2AreaClear, is2x2AreaClear, isRat, isTimeValid, isUnique, isValidGraffSquare, removeAllVehiclesOnZone, setAttachedItem, setDebugLine, setMaximumDays, setUnique, spawnCarOnNearestNav, spawnCarOnNearestNav, trashSquare, trySpawnStoryItem, trySpawnStoryItem, trySpawnStoryItem, trySpawnStoryItem, trySpawnStoryItem`
+
+  ### Methods inherited from class [Object](https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Object.html#method-summary "class or interface in java.lang")
+
+  `clone, equals, finalize, getClass, hashCode, notify, notifyAll, toString, wait, wait, wait`
+
+* Constructor Details
+  -------------------
+
+  + ### RVSAnimalTrailerOnRoad
+
+    public RVSAnimalTrailerOnRoad()
+* Method Details
+  --------------
+
+  + ### getAnimalType
+
+    private static [ArrayList](https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/ArrayList.html "class or interface in java.util")<[RVSAnimalTrailerOnRoad.AnimalSpawn](RVSAnimalTrailerOnRoad.AnimalSpawn.html "class in zombie.randomizedWorld.randomizedVehicleStory")> getAnimalType()
+
+    Map containing all the animal type and their max numbers we need to spawn
+  + ### getFoodType
+
+    private static [ArrayList](https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/ArrayList.html "class or interface in java.util")<[RVSAnimalTrailerOnRoad.FoodSpawn](RVSAnimalTrailerOnRoad.FoodSpawn.html "class in zombie.randomizedWorld.randomizedVehicleStory")> getFoodType()
+  + ### randomizeVehicleStory
+
+    public void randomizeVehicleStory([Zone](../../iso/zones/Zone.html "class in zombie.iso.zones") zone,
+    [IsoChunk](../../iso/IsoChunk.html "class in zombie.iso") chunk)
+
+    Overrides:
+    :   `randomizeVehicleStory` in class `RandomizedVehicleStoryBase`
+  + ### initVehicleStorySpawner
+
+    public boolean initVehicleStorySpawner([Zone](../../iso/zones/Zone.html "class in zombie.iso.zones") zone,
+    [IsoChunk](../../iso/IsoChunk.html "class in zombie.iso") chunk,
+    boolean debug)
+
+    Overrides:
+    :   `initVehicleStorySpawner` in class `RandomizedVehicleStoryBase`
+  + ### spawnElement
+
+    public void spawnElement(zombie.randomizedWorld.randomizedVehicleStory.VehicleStorySpawner spawner,
+    zombie.randomizedWorld.randomizedVehicleStory.VehicleStorySpawner.Element element)
+
+    Overrides:
+    :   `spawnElement` in class `RandomizedVehicleStoryBase`
+  + ### spawnAnimals
+
+    private void spawnAnimals(zombie.randomizedWorld.randomizedVehicleStory.VehicleStorySpawner spawner,
+    [IsoGridSquare](../../iso/IsoGridSquare.html "class in zombie.iso") square)
+  + ### spawnEggs
+
+    private void spawnEggs([BaseVehicle](../../vehicles/BaseVehicle.html "class in zombie.vehicles") trailer,
+    [IsoAnimal](../../characters/animals/IsoAnimal.html "class in zombie.characters.animals") male,
+    [ArrayList](https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/ArrayList.html "class or interface in java.util")<[IsoAnimal](../../characters/animals/IsoAnimal.html "class in zombie.characters.animals")> femaleList)
+
+    Spawn some eggs if the animals in the trailer can do them
+    Might fertilize them sometime
+  + ### spawnFood
+
+    private void spawnFood([BaseVehicle](../../vehicles/BaseVehicle.html "class in zombie.vehicles") trailer)
+  + ### getRandomSquare
+
+    private [IsoGridSquare](../../iso/IsoGridSquare.html "class in zombie.iso") getRandomSquare(int x,
+    int y,
+    int z)
+
+    Get a random square near the trailer to spawn our animals
+  + ### randomizeAnimal
+
+    private void randomizeAnimal([IsoAnimal](../../characters/animals/IsoAnimal.html "class in zombie.characters.animals") animal,
+    [IsoAnimal](../../characters/animals/IsoAnimal.html "class in zombie.characters.animals") male)
