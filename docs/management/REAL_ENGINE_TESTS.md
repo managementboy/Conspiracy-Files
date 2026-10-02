@@ -37,6 +37,15 @@ tests: `test/address_book_matches_export.lua` (every shipped house number names 
 - Not yet confirmed: that a normal single-player new world varies the same way as the background server's worlds. The
   in-game export (`tools/autotest/checks/address_export.sh`) run twice on 42.21 would settle it.
 
+## The ground-truth walk-through (real game window) — `tools/autotest/checks/ground_truth.sh`
+
+Built, parses in the game's own Lua, **not yet run in the game** (it opens the game on the real display; waiting for the
+owner's go-ahead). In a fresh world the survivor is teleported to eight real buildings near Muldraugh. At each one the
+mod's own readers are asked about squares whose truth is read independently from the world (a door object is there or it
+is not; a square is outside or it is not), and every answer is compared. It writes the comparison to
+`dev/answers/ground_truth_<game>.tsv`, so a later game update can be compared with it. This is the only check that proves
+the readers' ANSWERS (door / indoor floor / open ground), not just that their calls are valid.
+
 ## What is NOT done by these checks
 
 They check that a call is *valid* (the function exists, takes that many things, of that
