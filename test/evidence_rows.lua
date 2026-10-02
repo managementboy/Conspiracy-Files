@@ -81,7 +81,7 @@ local connected=Rows.build("evidence",runtimeWith({
      connections={{target="d2",kind="corroborates"}}},
     {id="d2",title="Receiving receipt / X-9",body="in a till",kind="receipt"},
 }))
-assert(connected[1].detailText:find("Agrees with: Receiving receipt / X%-9"),
+assert(connected[1].detailText:find("I think it agrees with Receiving receipt / X%-9"),
     "a found link names the document it agrees with: "..connected[1].detailText)
 assert(not connected[1].detailText:find("Probably refers",1,true),
     "a found document is not wondered about")
@@ -120,7 +120,7 @@ local unknown=Rows.build("evidence",runtimeWith({
      connections={{target="d2",kind="something-new"}}},
     {id="d2",title="Receiving receipt / X-9",body="in a till",kind="receipt"},
 }))
-assert(unknown[1].detailText:find("Connected to: Receiving receipt / X%-9"),
+assert(unknown[1].detailText:find("I think it connects to Receiving receipt / X%-9"),
     "an unrecognised link kind falls back to a plain phrase: "..unknown[1].detailText)
 
 print("PASS evidence rows: empty runtime, object vs document carrier, the unfound-document question with article and 'another', found connections, and global ordinals, connection verbs that fit any story, and an unknown link kind")

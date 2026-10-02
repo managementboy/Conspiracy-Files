@@ -219,7 +219,7 @@ names...") where the survivor can only read, not confirm. Keep the observation
 rules: never infer identity or ownership; two readings stay live. Tests hold
 every heading to first person and to no certainty words.
 
-**Status:** queued; not built during play.
+**Status:** built. Headings: DR-20260925-RECORD-VOICE. 2026-10-02 finished the rest in both mods: link words ("I think it agrees with ...") and where-a-file-is-now sentences are first person with doubt (Headings.LINKS, EvidenceRows.WHEREABOUTS); test/nohelp_record_voice.lua. Not done: the device's narrow field labels (FOUND, WHEN, WHERE, MAP) are 34px wide in OrganiserScreen and were left; the row subtitle "Object found - Discovery N". Offline only.
 
 ## Owner question, 2026-09-25 (asked mid-build; for after the occupation openings ship)
 
