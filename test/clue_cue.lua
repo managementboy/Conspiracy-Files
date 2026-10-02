@@ -124,18 +124,50 @@ walk(59)
 assert(#says==3 and says[3]=="Hm?","another case's first place: Hm?")
 walk(63)
 assert(#says==3,"the global cooldown holds")
--- Dark: the roll fails, and it is not re-rolled while still near.
+-- Dark: a failed roll is tried again while the survivor stays near.
 Cue.debugReset(); walk(90); clock=clock+Rules.COOLDOWN_MS
 light=0.2; roll=0.5
 walk(63); tick(); tick()
 assert(#says==3,"too little light for this roll")
 light=1; tick()
-assert(#says==3,"one roll per approach")
--- Rain likewise, on a fresh approach.
-walk(90); weather=0.3; walk(63)
-assert(#says==3,"rain lowers the chance")
-weather=1; walk(90); walk(63)
-assert(#says==4 and says[4]=="...again?","clear again, a fresh approach: "..tostring(says[4]))
+assert(#says==3,"not re-rolled before the re-roll time")
+clock=clock+Rules.REROLL_MS; tick()
+assert(#says==4 and says[4]=="...again?","a failed roll is followed by a cue while still near: "..tostring(says[4]))
+-- Still near, nothing more (the place is cued).
+clock=clock+Rules.REROLL_MS; tick(); tick()
+assert(#says==4,"no repeat for a cued place")
+-- Failing can still happen: every roll fails, or the spot is out of view, or far.
+rows[#rows+1]={id="f1",case="c3",place="80:0:0:0:0",x=80,y=0,z=0,status="placed",recognised=false,target={x=80}}
+present[80]=true
+Cue.debugReset(); clock=clock+Rules.COOLDOWN_MS
+roll=0.99; walk(79)
+for _=1,5 do clock=clock+Rules.REROLL_MS; tick() end
+assert(#says==4,"rolls that keep failing give no cue")
+visible=false; roll=0.0
+for _=1,3 do clock=clock+Rules.REROLL_MS; tick() end
+assert(#says==4,"never when the spot is not visible")
+visible=true; walk(95); clock=clock+Rules.REROLL_MS; tick()
+assert(#says==4,"never when far away")
+walk(79); roll=0.0; clock=clock+Rules.REROLL_MS; tick()
+assert(#says==5,"near and visible with a passing roll: a cue")
+-- Cooldown still spaces cues: a second place soon after waits, then cues.
+rows[#rows+1]={id="f2",case="c3",place="82:0:0:0:0",x=82,y=0,z=0,status="placed",recognised=false,target={x=82}}
+present[82]=true
+walk(81); tick()
+assert(#says==5,"cooldown holds between cues")
+clock=clock+Rules.COOLDOWN_MS; tick()
+assert(#says==6,"after the cooldown the nearby spot cues")
+-- Rain likewise delays, then the repeated rolls get through.
+weather=0.1; Cue.debugReset(); walk(120)
+rows[#rows+1]={id="g1",case="c4",place="130:0:0:0:0",x=130,y=0,z=0,status="placed",recognised=false,target={x=130}}
+present[130]=true
+clock=clock+Rules.COOLDOWN_MS
+roll=0.5; walk(129)
+local n0=#says
+roll=0.01
+clock=clock+Rules.REROLL_MS; tick()
+assert(#says==n0+1,"clear roll later in the rain: a cue")
+weather=1
 -- The saved state is small: places and cases, nothing else.
 local keys={}
 for k in pairs(saved[Cue.TAG]) do keys[#keys+1]=k end
@@ -143,4 +175,4 @@ table.sort(keys)
 assert(table.concat(keys,",")=="cases,first,places","saved: "..table.concat(keys,","))
 -- The bubble only, never a name, direction or distance.
 for _,s in ipairs(says) do assert(s==Rules.FIRST or s=="Hm?" or s=="...again?","only the three lines: "..s) end
-print("PASS clue cue: in view and present only, first cue teaches and is saved, once per place, ...again? for the same case, cooldown, one roll per approach in the dark and the rain, never for a recognised clue, only the three lines")
+print("PASS clue cue: in view and present only, first cue teaches and is saved, once per place, ...again? for the same case, cooldown, a failed roll is re-rolled while near (dark, rain) but never when far or out of view, never for a recognised clue, only the three lines")

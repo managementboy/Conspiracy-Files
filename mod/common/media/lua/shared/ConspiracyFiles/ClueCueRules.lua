@@ -20,6 +20,10 @@ S.AGAIN="...again?"
 -- standing at the edge from rolling the chance on every step.
 S.RADIUS=3
 S.FORGET_RADIUS=5
+-- While the survivor stays near, a failed roll is tried again this often, so
+-- staying close brings the cue almost for certain (a failed roll never means
+-- "no cue until they walk away").
+S.REROLL_MS=3000
 -- No cue within this long of the last one, wherever it was.
 S.COOLDOWN_MS=60000
 -- The chance in good light and clear weather. It falls with the game's own
