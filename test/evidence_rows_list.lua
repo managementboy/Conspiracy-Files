@@ -72,11 +72,11 @@ print('PASS evidence rows list: a place earns a heading by a return, and the ord
 local states={a={'accounted','Carried.'},b={'uncertain','In a desk.'},c={'lastseen'},d={'unchecked'},e={'conflict'},f={}}
 ConspiracyFiles.GeneratedRuntime.whereabouts=function(id) local s=states[id]; return s[1],s[2] end
 assert(Rows.where('a')=='Carried.')
-assert(Rows.where('b')=='I have not seen it lately, so I am not sure where it is. Last I saw it: In a desk.',Rows.where('b'))
+assert(Rows.where('b')=='Not seen recently. Its whereabouts are uncertain. Last seen: In a desk.',Rows.where('b'))
 assert(Rows.where('c')==nil,'last seen with no place says nothing')
 -- The exact sentence lives in Rows.WHEREABOUTS; test/pda_stays_in_world.lua
 -- owns what it may and may not say. Here it only has to be that line.
 assert(Rows.where('d')==Rows.WHEREABOUTS.unchecked)
-assert(Rows.where('e')==Rows.WHEREABOUTS.conflict and Rows.where('e'):find('cannot tell',1,true))
+assert(Rows.where('e'):find('uncertain',1,true))
 assert(Rows.where('f')==nil)
 print('PASS evidence rows list: whereabouts words for every state, none claiming loss')

@@ -39,7 +39,7 @@ end
 -- "destroyed" is not, because the scan only sees a small area.
 local uncertain = words:match('uncertain="([^"]+)"')
 assert(uncertain, 'the uncertain state must have wording')
-assert(uncertain:lower():find('not sure'), 'the uncertain wording must express uncertainty')
+assert(uncertain:lower():find('uncertain'), 'the uncertain wording must express uncertainty')
 assert(not uncertain:lower():find('destroy'), 'the mod cannot know a document was destroyed')
 assert(not uncertain:lower():find('lost'), 'the mod cannot know a document is lost')
 
@@ -87,7 +87,7 @@ print('PASS document whereabouts: no double possessive on a named container')
 -- was last seen - and still never that it is lost.
 assert(runtime:find('return "lastseen",row.lastSeen', 1, true), 'a retired document reports where it was last seen')
 local lastseen = words:match('lastseen="([^"]+)"')
-assert(lastseen and lastseen:find('Last I saw it', 1, true), 'there is wording for a finished case')
+assert(lastseen and lastseen:find('Last seen', 1, true), 'there is wording for a finished case')
 assert(not lastseen:lower():find('lost') and not lastseen:lower():find('destroy'), 'the last-seen wording claims nothing')
 assert(runtime:find('LAST_SEEN_WRITE_MS=60000', 1, true), 'a last-seen write happens at most once a minute per document')
 assert(runtime:find('LAST_SEEN_EVERY_MS=10000', 1, true), 'the last-seen scan is throttled to every ten seconds')
@@ -156,8 +156,8 @@ for _, row in ipairs(A.files.list()) do
     for _, field in ipairs(row.fields) do if field.label == "WHERE" then listed[row.id] = field.value end end
 end
 assert(listed.a == "Carried.", tostring(listed.a))
-assert(listed.b == "I have not seen it lately, so I am not sure where it is. Last I saw it: In a desk.", tostring(listed.b))
-assert(listed.c == "Last I saw it: Carried, in Una's Evidence.", tostring(listed.c))
+assert(listed.b == "Not seen recently. Its whereabouts are uncertain. Last seen: In a desk.", tostring(listed.b))
+assert(listed.c == "Last seen: Carried, in Una's Evidence.", tostring(listed.c))
 -- The wording is owned by Rows.WHEREABOUTS and policed by
 -- test/pda_stays_in_world.lua; here it only has to be that line, taken from
 -- the source this test already read rather than transcribed a second time.
@@ -166,7 +166,7 @@ assert(uncheckedLine, 'EvidenceRows no longer declares an unchecked whereabouts 
 assert(listed.d == uncheckedLine, tostring(listed.d))
 assert(listed.e == nil, 'no WHERE line where nothing is known')
 assert(listed.f == "On a body at 102 Dewey St.", tostring(listed.f))
-assert(listed.g == "I have not seen it lately, so I am not sure where it is. Last I saw it: On a zombie near 102 Dewey St.",
+assert(listed.g == "Not seen recently. Its whereabouts are uncertain. Last seen: On a zombie near 102 Dewey St.",
     tostring(listed.g))
 for _, v in pairs(listed) do
     assert(not v:lower():find('lost') and not v:lower():find('destroy'), v)

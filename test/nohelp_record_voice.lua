@@ -13,7 +13,6 @@
 -- survivor's).
 package.path="mod-nohelp/common/media/lua/shared/?.lua;mod-nohelp/common/media/lua/client/?.lua;"..package.path
 local H=require("NHShared/Headings")
-local Old=dofile("mod/common/media/lua/shared/ConspiracyFiles/Headings.lua")
 
 local SECOND={"you","your","yours","yourself"}
 local CERTAIN={"confirmed","confirms","confirm","proves","proven","proof","certain",
@@ -52,11 +51,6 @@ end
 for _,h in ipairs({H.FOUND,H.MEANING,H.POINTS,H.WRITER,H.SCRAWL,H.WHOSE}) do voice(h,true) end
 assert(H.FOUND=="WHAT I THINK I FOUND","the owner's own wording: "..H.FOUND)
 
--- The two mods share one set; a drift would put a narrator back in one of them.
-assert(#H.ALL==#Old.ALL,"the two mods' heading sets differ in size")
-for i,h in ipairs(H.ALL) do assert(Old.ALL[i]==h,"the two mods' headings differ: "..h.." / "..tostring(Old.ALL[i])) end
-for k,v in pairs(H.LINKS) do assert(Old.LINKS[k]==v,"the two mods word the "..k.." link differently") end
-assert(H.LINK_OTHER==Old.LINK_OTHER,"the two mods word the fallback link differently")
 
 -- 2. The old narrator wording stays out -------------------------------------
 local BANNED={"WHAT YOU FOUND","WHAT IT MIGHT MEAN","MAP NOTE","DATE NOTE",

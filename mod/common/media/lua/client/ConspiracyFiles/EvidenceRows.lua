@@ -60,7 +60,7 @@ function Rows.build(section,runtime)
     end
     -- "Disputes delivery in" was left over from when every case was about a
     -- delivery. Plain verbs that fit any of the twenty stories.
-    local meanings=Headings.LINKS
+    local meanings={corroborates="Agrees with",['disputes-delivery']="Does not match",recontextualises="Adds context to"}
     for i,r in ipairs(known) do
         local root=Cases and Cases.find(wrapper,r.id)
         -- Retired evidence keeps its original places and reference. Resolving
@@ -95,7 +95,7 @@ function Rows.build(section,runtime)
             if ok and note then detail=detail.."\n\n"..Headings.MARKED.."\n"..note end
         end
         for _,link in ipairs(r.connections or {}) do
-            if titles[link.target] then detail=detail.."\n\n"..(meanings[link.kind] or Headings.LINK_OTHER).." "..titles[link.target] end
+            if titles[link.target] then detail=detail.."\n\n"..(meanings[link.kind] or "Connected to")..": "..titles[link.target] end
         end
         -- Unknown source titles cannot become hints through a backend link.
         -- Authored questions already live in the discovered source's own note.
@@ -140,9 +140,9 @@ end
 Rows.WHEREABOUTS={
     -- The fallback stays deliberately plain for the rare case where the item
     -- was seen but its surroundings could not be read.
-    accounted="I last saw it close by.",
-    uncertain="I have not seen it lately, so I am not sure where it is.",
-    conflict="I have seen more than one copy and cannot tell which is the original.",
+    accounted="Last accounted for close by.",
+    uncertain="Not seen recently. Its whereabouts are uncertain.",
+    conflict="More than one copy has been seen. Which is the original is uncertain.",
     -- THE PDA IS AN IN-WORLD TOOL. Owner, 2026-09-24: "Why are we talking to
     -- the player about saves? The PDA is an immersive tool." This state means
     -- there has been no sighting since the session began, which the survivor
@@ -152,7 +152,7 @@ Rows.WHEREABOUTS={
     -- A finished case: where its evidence was last seen, kept in the save
     -- (P4-R104; owner, 2026-09-14: "I lost my files somewhere?"). Only shown
     -- with a place; never a claim of loss.
-    lastseen="Last I saw it: ",
+    lastseen="Last seen: ",
 }
 function Rows.where(id)
     local rt=ConspiracyFiles and ConspiracyFiles.GeneratedRuntime
@@ -163,7 +163,7 @@ function Rows.where(id)
     -- Say where it is when we saw it, rather than describing everywhere it
     -- might be. Vagueness is for what we cannot know.
     if state=="accounted" then return place or Rows.WHEREABOUTS.accounted end
-    if state=="uncertain" then return Rows.WHEREABOUTS.uncertain..(place and (" Last I saw it: "..place) or "") end
+    if state=="uncertain" then return Rows.WHEREABOUTS.uncertain..(place and (" Last seen: "..place) or "") end
     if state=="lastseen" then return place and (Rows.WHEREABOUTS.lastseen..place) or nil end
     return Rows.WHEREABOUTS[state]
 end

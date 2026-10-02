@@ -48,15 +48,6 @@ M.SOUGHT="WHAT I WAS LOOKING FOR"
 M.ARRIVED="WHAT I SAW WHEN I GOT THERE"
 M.WORTH="WHAT I MAKE OF THAT"
 
--- How the survivor words a link the projection draws between two findings.
--- These sit in the writing (not ALLCAPS), so they are not in M.ALL, but the
--- same rule holds: first person, hedged, no verdict. `test/record_voice_is_mine.lua`
--- and `test/nohelp_record_voice.lua` hold them to it.
-M.LINKS={corroborates="I think it agrees with",
-         ["disputes-delivery"]="I think it does not match",
-         recontextualises="I think it adds context to"}
-M.LINK_OTHER="I think it connects to"
-
 -- Every heading above, so a sweep cannot miss one that was added later.
 M.ALL={M.FOUND,M.MEANING,M.DATE,M.MARKED,M.MAP_READS,M.SCRAWL,M.POINTS,
        M.WRITER,M.ACTED,M.CAME,M.WHOSE,M.FLYER,M.FLYER_WHERE,M.KEPT,

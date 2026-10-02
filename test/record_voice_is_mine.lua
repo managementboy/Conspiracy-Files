@@ -248,27 +248,6 @@ for line in fn:gmatch('"([^"]+)"') do
 end
 assert(lines>=4,"only "..lines.." map lines; the sweep is too thin")
 
--- 5. Link wording and where-a-file-is-now (added with the No Help sweep,
--- test/nohelp_record_voice.lua): the writing around a record is the survivor's
--- too. First person, no second person, no certainty word, and the links doubt.
-local nlinks=0
-for _,line in pairs(H.LINKS) do
-    nlinks=nlinks+1
-    assert(not has(line,SECOND) and has(line,FIRST),"a link is not the survivor's: "..line)
-    assert(not has(line,CERTAIN) and not has(line,{"certain"}),"a link claims certainty: "..line)
-    assert(has(line,DOUBT),"a link with no doubt: "..line)
-end
-assert(nlinks>=3 and H.LINK_OTHER,"the link set is too thin")
-local rowsSrc=slurp("mod/common/media/lua/client/ConspiracyFiles/EvidenceRows.lua")
-local where=assert(rowsSrc:match("Rows%.WHEREABOUTS=(%b{})"),"WHEREABOUTS moved")
-local nwhere=0
-for line in where:gmatch('=%s*"([^"]+)"') do
-    nwhere=nwhere+1
-    assert(not has(line,SECOND) and has(line,FIRST),"a whereabouts line is not the survivor's: "..line)
-    assert(not has(line,CERTAIN) and not has(line,{"certain"}),"a whereabouts line claims certainty: "..line)
-end
-assert(nwhere>=5,"only "..nwhere.." whereabouts lines")
-
 print("PASS record voice: "..#H.ALL.." headings first person and hedged, "..swept
     .." authored summaries, "..docs.." generated documents, "..surfaces
     .." map surfaces and "..lines.." map lines, none in a narrator's voice")

@@ -25,7 +25,7 @@ local function log(s) CFLog.message("hint","hint",s) end
 local function now() return getTimeInMillis and getTimeInMillis() or 0 end
 
 -- This session only: the last cue's time, and the clues weighed on this
--- approach (id -> {x,y,z}), so a failed roll is tried again every REROLL_MS while near, and logged once.
+-- approach (id -> {x,y,z}), so each approach rolls and logs once.
 local lastAt
 local weighed={}
 local unseen={}
@@ -102,7 +102,7 @@ function Q.step()
     end
     local store
     for _,clue in ipairs(clues) do
-        if not clue.recognised and clue.status=="placed" and (not weighed[clue.id] or t>=weighed[clue.id].at)
+        if not clue.recognised and clue.status=="placed" and not weighed[clue.id]
             and (Q.debugOnly==nil or Q.debugOnly==clue.id)
             and Rules.near(px,py,pz,clue.x,clue.y,clue.z,Rules.RADIUS) then
             local square=getCell():getGridSquare(clue.x,clue.y,clue.z)
@@ -117,8 +117,7 @@ function Q.step()
                 log("cue not possible at "..tostring(clue.place).." doc="..tostring(clue.id)..": "..tostring(why))
             end
             if here then
-                local first=weighed[clue.id]==nil
-                weighed[clue.id]={x=clue.x,y=clue.y,z=clue.z,at=t+Rules.REROLL_MS}
+                weighed[clue.id]={x=clue.x,y=clue.y,z=clue.z}
                 store=store or Q.store()
                 if not store then return end
                 local light,weather=conditions(player,square)
@@ -135,8 +134,8 @@ function Q.step()
                     return
                 end
                 Q.counters.suppressed=Q.counters.suppressed+1
-                if first then log(string.format("cue suppressed at %s doc=%s: %s (light=%.2f weather=%.2f)",
-                    tostring(clue.place),tostring(clue.id),tostring(why),light,weather)) end
+                log(string.format("cue suppressed at %s doc=%s: %s (light=%.2f weather=%.2f)",
+                    tostring(clue.place),tostring(clue.id),tostring(why),light,weather))
             end
         end
     end
