@@ -1333,7 +1333,7 @@ end
 --   IsoCell:getGridSquare, IsoCell:getZombieList (the original mod's CasePerson)
 --   IsoGridSquare:TreatAsSolidFloor/isSolid/isSolidTrans (ISTransferAction
 --     :canDropOnFloor, docs/research/B42_RUNTIME_PASSABILITY.md)
---   IsoGridSquare:isOutside (ISPlowAction), :getDoor(north) (ISMoveableSpriteProps)
+--   IsoGridSquare:isOutside (ISPlowAction), :getDoor(GridSquareEdgeFacingDirection.NORTH_SOUTH/EAST_WEST) (build 42.20.4; the old boolean overload is gone, same enum as ISMoveableSpriteProps:getWindow)
 --   IsoGridSquare:isCouldSee(int)/isCanSee(int) (javap: public boolean,
 --     playerIndex; vanilla ISDestroyCursor, ISBaseIcon foraging), and
 --     IsoPlayer:getPlayerNum (ISScytheGrassCursor)
@@ -1364,7 +1364,7 @@ local function groundFacts(x,y,z,key,keys,zombies,survivor)
         floor=function() return ask(function(s) return s:TreatAsSolidFloor() end)==true end,
         solid=function() return ask(function(s) return s:isSolid() or s:isSolidTrans() end)~=false end,
         outside=function() return ask(function(s) return s:isOutside() end)==true end,
-        door=function() return ask(function(s) return s:getDoor(true)~=nil or s:getDoor(false)~=nil end)==true end,
+        door=function() return ask(function(s) return s:getDoor(GridSquareEdgeFacingDirection.NORTH_SOUTH)~=nil or s:getDoor(GridSquareEdgeFacingDirection.EAST_WEST)~=nil end)==true end,
         -- The survivor could be looking at it: same floor, within the guard
         -- radius, and the square visible to them. An unreadable answer
         -- counts as visible (StaleClue.outOfSight).
