@@ -3,13 +3,16 @@
 #   tools/realengine/run.sh                 canaries, then real-engine tests
 #   tools/realengine/run.sh canary          only the canaries (prove the harness can fail)
 #   tools/realengine/run.sh tests           only the real-engine tests
+#   --shuffle   also run everything twice in two seeded random orders and require identical results
+#   --relock    record this game build as the verified one (only after a clean run; never lowers the minimum)
 # Exit: 0 all good | 1 a test or canary was wrong | 20 no game here (never a pass)
 #       21 the game is a different build than the lock | 22 fewer real tests ran than the lock demands
 cd "$(dirname "${BASH_SOURCE[0]}")/../.." || exit 2
 REPO="$PWD"
 . tools/env.sh
 RE_DIR="$REPO/tools/realengine"
-mode="${1:-all}"
+mode=all; shuffle=0; relock=0
+for a in "$@"; do case "$a" in canary|tests|all) mode="$a" ;; --shuffle) shuffle=1 ;; --relock) relock=1 ;; esac; done
 
 if [ -z "${PZ_HOME:-}" ] || [ ! -f "$PZ_HOME/projectzomboid.jar" ] || [ ! -x "${JAVA_HOME:-/nonexistent}/bin/javac" ]; then
     echo "real-engine: NOT EXERCISED - no game and JDK 25 here. This is not a pass."
@@ -37,12 +40,12 @@ run_one() { # file -> prints the harness lines; sets RE_RESULT RE_TOUCHED RE_MS
     RE_OUT="$out"
 }
 
-bad=0; real=0; skipped=0
+bad=0; real=0; skipped=0; starts=""
 if [ "$mode" = all ] || [ "$mode" = canary ]; then
     ncanary=0
     for f in "$RE_DIR"/canary/*.lua; do
         [ -f "$f" ] || continue
-        ncanary=$((ncanary + 1)); run_one "$f"
+        ncanary=$((ncanary + 1)); run_one "$f"; starts="$starts,$RE_MS"
         expect="$(sed -n 's/^-- EXPECT_FAIL: *//p' "$f" | head -1)"
         if [ -n "$expect" ]; then
             if [[ "$RE_RESULT" == FAIL* ]] && [[ "$RE_RESULT" == *"$expect"* ]]; then
@@ -67,12 +70,33 @@ fi
 if [ "$mode" = all ] || [ "$mode" = tests ]; then
     for f in "$RE_DIR"/tests/*.lua; do
         [ -f "$f" ] || continue
-        run_one "$f"
+        if [ -n "${RE_FORCE_SKIP:-}" ]; then skipped=$((skipped + 1)); continue; fi   # for proving an all-skip run fails
+        run_one "$f"; starts="$starts,$RE_MS"
         if [ "$RE_RESULT" = PASS ]; then
             if [ "${RE_TOUCHED:-0}" -gt 0 ]; then real=$((real + 1)); echo "real  ok   $(basename "$f")  (touched $RE_TOUCHED real objects)"
             else skipped=$((skipped + 1)); echo "real  BAD  $(basename "$f")  passed but never touched a real game object - it proves nothing here"; bad=$((bad + 1)); fi
         else echo "real  FAIL $(basename "$f")  ${RE_RESULT:0:300}"; bad=$((bad + 1)); fi
     done
 fi
+
+# Same files, shuffled twice: one JVM per file means no test can leak into the next, and this proves it.
+if [ "$shuffle" = 1 ]; then
+    outcome_set() { # seed -> sorted "file=result,real?" lines, files run in a seeded random order
+        for f in $(ls "$RE_DIR"/canary/*.lua "$RE_DIR"/tests/*.lua 2>/dev/null | shuf --random-source=<(yes "$1")); do
+            run_one "$f"; echo "$(basename "$f")=${RE_RESULT:0:60}/$([ "${RE_TOUCHED:-0}" -gt 0 ] && echo real || echo pure)"
+        done | sort
+    }
+    A="$(outcome_set 1)"; B="$(outcome_set 2)"
+    if [ "$A" = "$B" ]; then echo "shuffle: two random orders gave identical results"
+    else echo "shuffle BAD: results depend on order (seeds 1 and 2)"; diff <(echo "$A") <(echo "$B") | head -6; bad=$((bad + 1)); fi
+fi
+
+# The run contract: build, fingerprint, counts, lock. A run may never be silent, partial or stale.
+build_id="$(sed -n 's/.*"buildid"[[:space:]]*"\([0-9]*\)".*/\1/p' "$PZ_HOME/../../../appmanifest_108600.acf" 2>/dev/null | head -1)"
+python3 tools/realengine/contract.py --real "$real" --skipped "$skipped" --failed "$bad" \
+    --jar-sha "$(sha256sum "$JAR" | cut -d' ' -f1)" --build "${build_id:-unknown}" \
+    --jdk "$jdk_major" --startup-ms "${starts#,}" --lock tools/realengine/kahlua.lock \
+    --out tools/realengine/out/contract.json $([ "$relock" = 1 ] && echo --relock)
+code=$?
 echo "real-engine: $real real test(s) passed, $bad problem(s)"
-[ "$bad" -eq 0 ]
+exit $code

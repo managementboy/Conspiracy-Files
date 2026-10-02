@@ -10,6 +10,14 @@ stopped noticing doors.
 This work adds checks that use the game's own engine instead of pretend objects, and makes
 sure those checks cannot pass by accident or fall silent.
 
+## How to run them
+
+- `tools/realengine/run.sh` — the real-engine checks (add `--shuffle` for the order test, `--relock` after a clean run on a new game build)
+- `python3 tools/enginecalls/enginecalls.py` — scan every engine call in the mod
+
+Exit codes of the real-engine run: **0** all good, **1** something failed, **20** no game here (never a pass),
+**21** the game is a different build than the one we verified, **22** fewer real tests ran than required.
+
 ## What is NOT done by these checks
 
 They check that a call is *valid* (the function exists, takes that many things, of that
@@ -51,12 +59,12 @@ Whether a door is detected on a real door is still the in-game playtest's job.
 - [x] Prints a summary and saves a dated result in `docs/management/evidence/`
 
 ### Phase 3 — a run that can never be silent
-- [ ] Every run records the game build, the game file's fingerprint, the Java version and how many real/skipped/failed
-- [ ] Different exit codes for: all good / a failure / no game / wrong game build / too few real tests
-- [ ] A lock file says which game build and minimum real-test count were verified; only an explicit command can change it
-- [ ] Each test file runs in its own fresh Java process; start-up time is measured
-- [ ] Running in shuffled order gives identical results (catches tests that leak into each other)
-- [ ] A test only counts as "real" if it actually built a real game object
+- [x] Every run records the game build, the game file's fingerprint, the Java version and how many real/skipped/failed
+- [x] Different exit codes for: all good / a failure / no game / wrong game build / too few real tests
+- [x] A lock file says which game build and minimum real-test count were verified; only an explicit command can change it
+- [x] Each test file runs in its own fresh Java process; start-up time is measured
+- [x] Running in shuffled order gives identical results (catches tests that leak into each other)
+- [x] A test only counts as "real" if it actually built a real game object
 
 ### Phase 4 — real objects and moving tests over
 - [ ] Shared start-up script lists every engine set-up step done by hand and why
