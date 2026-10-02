@@ -66,7 +66,9 @@ local M=require('ConspiracyFiles/AddressMap');assert(M.start())
 for i=1,100 do if callbacks.tick then callbacks.tick() end end
 assert(saves['ConspiracyFiles.AddressBook.Muldraugh'].canonical)
 UIFont={Small=1};getTextManager=function() return {MeasureStringX=function(_,_,t) return #t*6 end,getFontHeight=function() return 12 end} end
-WorldMapVisited={getInstance=function() return {isKnown=function() return known end} end}
+-- FAKE-OF zombie.worldMap.WorldMapVisited: isKnown
+-- FAKE-OF zombie.worldMap.UIWorldMapV3: getZoomF uiToWorldX uiToWorldY worldToUIX worldToUIY
+WorldMapVisited={getInstance=function() return {isKnown=function(_,x,y) return known end} end}
 local ui={width=1000,height=1000,drawRect=function() error('number labels must not draw a background') end,drawText=function(_,text) assert(text:match('^%d+$'),'map label is number only');drawn=drawn+1 end,mapAPI={getZoomF=function() return 18 end,
  uiToWorldX=function(_,x,y) return 10900+x/10 end,uiToWorldY=function(_,x,y) return 9650+y/10 end,
  worldToUIX=function(_,x,y) return (x-10900)*10 end,worldToUIY=function(_,x,y) return (y-9650)*10 end}}

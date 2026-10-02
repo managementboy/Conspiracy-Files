@@ -81,17 +81,18 @@ local function list(t) return {size=function() return #t end,get=function(_,i) r
 local function square(x,y,z)
     local k=kind(x,y)
     if k=="none" then return nil end
+    -- FAKE-OF zombie.iso.IsoGridSquare: getZ TreatAsSolidFloor isSolid isSolidTrans isOutside getDoor isCouldSee isCanSee
     local s={}
     function s:getZ() return z end
     function s:TreatAsSolidFloor() return k~="hole" end
     function s:isSolid() return k=="wall" end
     function s:isSolidTrans() return false end
     function s:isOutside() return k=="yard" end
-    function s:getDoor() return nil end
+    function s:getDoor(edge) return nil end
     -- What the survivor can see: `seen(x,y)`, or unreadable when nil.
     if seen then
-        function s:isCouldSee() return seen(x,y) end
-        function s:isCanSee() return seen(x,y) end
+        function s:isCouldSee(player) return seen(x,y) end
+        function s:isCanSee(player) return seen(x,y) end
     end
     return s
 end

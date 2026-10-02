@@ -28,6 +28,20 @@ else
     parse="$(tools/kahlua/run.sh --parse-all 2>&1 | tail -1)"; echo "$parse"
     grep -q ", 0 failed" <<<"$parse" || fail=$((fail + 1))
 fi
+# THE REAL ENGINE. The checks below run Lua through the game's own Kahlua with its real classes
+# (tools/realengine), scan every engine call in the mod against the installed game
+# (tools/enginecalls), and compare the remaining hand-made fakes with the real classes.
+# Exit 20 = no game here: shown plainly, never counted as a pass, and only tolerated when
+# CF_SKIP_KAHLUA=1 (CI). 21 = the game is a different build than the one verified; 22 = too few
+# real tests ran. Both fail the suite on any machine.
+for gate in "tools/realengine/run.sh" "python3 tools/enginecalls/enginecalls.py" "python3 tools/realengine/fake_parity.py"; do
+    gout="$($gate 2>&1)"; gcode=$?
+    echo "$gout" | grep -E "^(contract:|real-engine:|enginecalls:|fake parity:)" | sed "s|^|  |"
+    if [ "$gcode" = 20 ]; then
+        echo "  $gate: NOT EXERCISED - no game on this machine. This is not a pass."
+        [ "${CF_SKIP_KAHLUA:-0}" = 1 ] || fail=$((fail + 1))
+    elif [ "$gcode" != 0 ]; then echo "$gout" | tail -12; fail=$((fail + 1)); fi
+done
 if ! out="$(timeout 300 lua5.1 test/run.lua 2>&1)"; then echo "$out" | tail -20; fail=$((fail + 1)); fi
 echo "specs: $(tail -1 <<<"$out")"
 for t in test/*.lua; do

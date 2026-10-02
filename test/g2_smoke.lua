@@ -173,7 +173,8 @@ assert(stableStore.campaign==stableCampaign and #R.known()==2,'failed write pres
 saved=stableStore;assert(R.inspect(late));assert(R.known()[2].id==newItem:getModData().cfGeneratedId and R.known()[3].id==late:getModData().cfGeneratedId)
 Markers.update()
 UIFont={Small=1};getTextManager=function() return {getFontHeight=function() return 12 end,MeasureStringX=function(_,_,v) return #v end} end
-local texts={};local map={width=1000,height=800,mapAPI={getZoomF=function() return 18 end,worldToUIX=function(_,x) return x+100 end,worldToUIY=function(_,x,y) return y+100 end},drawText=function(_,text) texts[#texts+1]=text end}
+-- FAKE-OF zombie.worldMap.UIWorldMapV3: getZoomF worldToUIX worldToUIY
+local texts={};local map={width=1000,height=800,mapAPI={getZoomF=function() return 18 end,worldToUIX=function(_,x,y) return x+100 end,worldToUIY=function(_,x,y) return y+100 end},drawText=function(_,text) texts[#texts+1]=text end}
 Markers.draw(map);local all=table.concat(texts,'|');assert(all:find('#2 ',1,true) and all:find('#3 ',1,true),'global marker numbering matches interleaved evidence projection')
 texts={};Markers.drawRecords(map,{known={'fixture'},case={documents={{id='fixture',title='Isolated fixture'}}}},{records={fixture={x=0,y=0,z=0,map='mock',written=true,ink='BluePen'}}})
 assert(table.concat(texts,'|'):find('Isolated fixture',1,true),'fixture renderer uses supplied context')

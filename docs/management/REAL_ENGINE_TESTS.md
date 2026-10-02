@@ -14,6 +14,8 @@ sure those checks cannot pass by accident or fall silent.
 
 - `tools/realengine/run.sh` — the real-engine checks (add `--shuffle` for the order test, `--relock` after a clean run on a new game build)
 - `python3 tools/enginecalls/enginecalls.py` — scan every engine call in the mod
+- `python3 tools/realengine/fake_parity.py` — check the remaining pretend objects against the real ones
+- `tools/realengine/leak_gate.sh` — make sure nothing from the game is tracked by git
 
 Exit codes of the real-engine run: **0** all good, **1** something failed, **20** no game here (never a pass),
 **21** the game is a different build than the one we verified, **22** fewer real tests ran than required.
@@ -95,9 +97,9 @@ count, right kind, return types line up) but not the *answer*. The in-game playt
 - [x] Pretend versions: the old tests of these readers only exercised rule logic over plain facts, not engine calls. The pretend squares that remain (for scenario logic) are policed in Phase 5
 
 ### Phase 5 — policing and wiring in
-- [ ] A check that every function a remaining pretend object offers really exists on the real one
-- [ ] A check that nothing from the game gets staged into git
-- [ ] Wired into the normal test run, after three clean runs
+- [x] A check that every function a remaining pretend object offers really exists on the real one, with the same number of arguments (`tools/realengine/fake_parity.py`). It found 8 pretend functions that ignored arguments the game requires; all fixed
+- [x] A check that nothing from the game gets staged into git (`tools/realengine/leak_gate.sh`; a local pre-commit hook is installed; a test also checks every tracked file)
+- [x] Wired into the normal test run (`tools/autotest/unit.sh`) after three clean shuffled runs. Result: 275 run, 0 failed
 
 ## Bugs found along the way
 - Nothing wrong with the mod was found by the real-engine tests themselves; the ground readers, address map and map markers are all valid against game build 25485521.

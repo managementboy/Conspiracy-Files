@@ -129,13 +129,14 @@ package.loaded["NHShared/T3Nearby"]={start=function() return true end}
 package.loaded["NHShared/ReachabilityAdapter"]={basementSites=function() return {} end}
 local asked,loaded={},nil
 local function yard(x,y,z)
+    -- FAKE-OF zombie.iso.IsoGridSquare: getZ TreatAsSolidFloor isSolid isSolidTrans isOutside getDoor getObjects
     local s={}
     function s:getZ() return z end
     function s:TreatAsSolidFloor() return true end
     function s:isSolid() return false end
     function s:isSolidTrans() return false end
     function s:isOutside() return true end
-    function s:getDoor() return nil end
+    function s:getDoor(edge) return nil end
     function s:getObjects() return {size=function() return 0 end} end
     return s
 end

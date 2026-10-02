@@ -53,7 +53,8 @@ package.loaded['ConspiracyFiles/ClueMarkers']=nil
 M=require('ConspiracyFiles/ClueMarkers');assert(M.start());assert(starts==1)
 assert(data['ConspiracyFiles.ClueMarkers']==stable)
 local texts={};UIFont={Small=1};getTextManager=function() return {getFontHeight=function() return 12 end,MeasureStringX=function(_,_,text) return #text end} end
-local ui={width=1000,height=800,mapAPI={getZoomF=function() return 18 end,worldToUIX=function(_,x) return x end,worldToUIY=function(_,x,y) return y end},drawText=function(_,text,x,y,r,g,b) texts[#texts+1]={text=text,x=x,y=y,r=r,g=g,b=b} end}
+-- FAKE-OF zombie.worldMap.UIWorldMapV3: getZoomF worldToUIX worldToUIY
+local ui={width=1000,height=800,mapAPI={getZoomF=function() return 18 end,worldToUIX=function(_,x,y) return x end,worldToUIY=function(_,x,y) return y end},drawText=function(_,text,x,y,r,g,b) texts[#texts+1]={text=text,x=x,y=y,r=r,g=g,b=b} end}
 ISWorldMap.render(ui);assert(renders==1 and #texts==3,'one source mark, two individually identified clues, original render retained')
 assert(texts[1].text=='?' and texts[2].text=='#1 Dispatch' and texts[3].text=='#2 Receipt')
 assert(texts[1].x==116.5 and texts[1].y==222.5,'actual source retained on map')
