@@ -336,16 +336,79 @@ function World.count(container,token,done,limit)
     local originalSize=items:size()
     local ceiling=(type(limit)=="number" and limit>=1) and limit or 1
     local index,count,seen=0,0,{}
+    -- A clue may sit one bag deep: a paper inside a wallet inside the container.
+    -- The top-level items are counted first, then each bag's own items, one item
+    -- a step like everything else here. Without this a clue placed in a wallet
+    -- counts as zero, and placement would create it a second time.
+    local bags,bagIndex,inner,innerIndex={},0,nil,0
+    local function check(item)
+        local md=item and item:getModData()
+        if md and md.cfPhysicalToken==token and not seen[item] then seen[item]=true; count=count+1 end
+    end
     return function()
         if items:size()~=originalSize then done(nil,"inventory-changed"); return true end
         if count>ceiling then done(ceiling+1); return true end
-        if index>=originalSize then done(count); return true end
-        local item=items:get(index); index=index+1
-        local md=item and item:getModData()
-        if md and md.cfPhysicalToken==token and not seen[item] then seen[item]=true; count=count+1 end
-        return false
+        if index<originalSize then
+            local item=items:get(index); index=index+1
+            check(item)
+            if item and instanceof and instanceof(item,"InventoryContainer") then bags[#bags+1]=item end
+            return false
+        end
+        while true do
+            if not inner then
+                bagIndex=bagIndex+1
+                local bag=bags[bagIndex]
+                if not bag then done(count); return true end
+                local ok,bagItems=pcall(function() return bag:getInventory():getItems() end)
+                if ok and bagItems then inner=bagItems; innerIndex=0 end
+            end
+            if inner then
+                if innerIndex>=inner:size() then inner=nil
+                else
+                    local item=inner:get(innerIndex); innerIndex=innerIndex+1
+                    check(item)
+                    return false
+                end
+            end
+        end
     end
 end
+
+-- A wallet is a bag that holds papers (Capacity 1 in the game's script). The
+-- inventory of the first wallet in `container`, or nil. Wallet, Wallet2.. are
+-- the vanilla types; nothing else counts, so a backpack is never used.
+function World.walletOf(container)
+    local ok,found=pcall(function()
+        local items=container:getItems()
+        for i=0,items:size()-1 do
+            local item=items:get(i)
+            if item and instanceof and instanceof(item,"InventoryContainer") then
+                local kind=tostring(item:getType() or "")
+                if kind:match("^Wallet") then return item:getInventory() end
+            end
+        end
+        return nil
+    end)
+    if ok then return found end
+    return nil
+end
+
+-- Put a clue into its container - a paper into the wallet there when there is
+-- one (owner, 2026-10-02: "wallets can contain papers"), otherwise loose. A
+-- wallet that refuses the item never loses it: it goes in the container.
+function World.addEvidence(container,item)
+    local paper=false
+    pcall(function() paper=item.IsLiterature~=nil and item:IsLiterature()==true end)
+    if paper then
+        local wallet=World.walletOf(container)
+        if wallet then
+            local ok,added=pcall(function() return wallet:AddItem(item) end)
+            if ok and added then return added,"wallet" end
+        end
+    end
+    return container:AddItem(item),"container"
+end
+
 -- Searches player inventory (including bags), nearby floor/corpse/container
 -- contents and the currently occupied vehicle. Coverage is explicitly partial:
 -- zero observations NEVER proves destruction or triggers fallback.

@@ -83,3 +83,39 @@ function K.read(t)
     ISInventoryPaneContextMenu.onWriteSomething(it, false, 0)
     return "opened"
 end
+
+-- A paper clue inside a wallet: put there by the mod's own addEvidence, found
+-- by its own count, and still there after a reload.
+local World = require("NHShared/WorldAccess")
+local TOKEN = "wallet-probe-token"
+
+function K.wallet()
+    local inv = getPlayer():getInventory()
+    local wallet = instanceItem("Base.Wallet")
+    if not wallet then return "nowallet" end
+    inv:AddItem(wallet)
+    local paper = instanceItem("Base.Note")
+    paper:getModData().cfPhysicalToken = TOKEN
+    paper:getModData().cfPagesProbe = "wallet-paper"
+    NHShared.GeneratedRuntime.writePages(paper, {body = H.FOUND .. "\nA synthetic object.\n\n" .. lines(10)}, {locations = {}})
+    local _, where = World.addEvidence(inv, paper)
+    return where
+end
+
+function K.walletCount()
+    local n, done
+    local step = World.count(getPlayer():getInventory(), TOKEN, function(v) n = v; done = true end, 1)
+    local guard = 0
+    while not step() do guard = guard + 1; if guard > 5000 then return "stuck" end end
+    -- and where it really is
+    local inside = false
+    local items = getPlayer():getInventory():getItems()
+    for i = 0, items:size() - 1 do
+        local it = items:get(i)
+        if it:getType() == "Wallet" and it:getInventory():getItems():size() > 0 then
+            local inner = it:getInventory():getItems():get(0)
+            inside = inner:getModData().cfPhysicalToken == TOKEN
+        end
+    end
+    return tostring(n) .. "|inside=" .. tostring(inside)
+end

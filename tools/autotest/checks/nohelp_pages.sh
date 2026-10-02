@@ -34,6 +34,11 @@ wait_true 60 'NHShared.GeneratedRuntime~=nil and NHShared.GeneratedRuntime.write
 made="$(ev 'return CFNHPages.make()' | cut -f1)"
 say "made: $made"
 before="$(ev 'return CFNHPages.state()' | cut -f1)"
+wallet_where="$(ev 'return CFNHPages.wallet()' | cut -f1)"
+[ "$wallet_where" = "wallet" ] || fail "paper clue did not go into the wallet (got: $wallet_where)"
+wallet_before="$(ev 'return CFNHPages.walletCount()' | cut -f1)"
+[ "$wallet_before" = "1|inside=true" ] || fail "wallet clue count before reload: $wallet_before"
+say "wallet clue before reload: $wallet_before"
 
 judge_rows() { local label="$1" rows="$2" row t n lock cw ok
     while IFS= read -r row; do
@@ -55,6 +60,9 @@ sleep 2
 sleep 5
 ev -f "$H" >/dev/null || fail "harness reload failed"
 after="$(ev 'return CFNHPages.state()' | cut -f1)"
+wallet_after="$(ev 'return CFNHPages.walletCount()' | cut -f1)"
+[ "$wallet_after" = "1|inside=true" ] || fail "wallet clue count after reload: $wallet_after"
+say "wallet clue after reload: $wallet_after"
 judge_rows "after reload" "$after"
 
 result=PASS; [ ${#fails[@]} -eq 0 ] || result=FAIL
@@ -62,7 +70,7 @@ out="$REPO/docs/management/evidence/linux-autotest/$id-nohelp-pages.txt"
 {
     echo "Linux nohelp-pages check $id: $result"
     source_line
-    echo "before: $before"; echo "after:  $after"
+    echo "before: $before"; echo "after:  $after"; echo "wallet before: $wallet_before"; echo "wallet after:  $wallet_after"
     for f in "${findings[@]}"; do echo "FINDING: $f"; done
     for f in "${fails[@]}"; do echo "FAIL: $f"; done
 } > "$out.part"

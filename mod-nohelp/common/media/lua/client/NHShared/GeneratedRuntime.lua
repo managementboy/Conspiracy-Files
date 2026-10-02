@@ -348,7 +348,7 @@ local function placement(api,id)
           end
         end
         for _,item in ipairs(createdItems) do
-            assert(current:AddItem(item),"could not add evidence")
+            assert(World.addEvidence(current,item),"could not add evidence")
         end
         -- Claim the part, once the items are actually in it.
         World.markVehiclePart(current,a.physicalToken)
