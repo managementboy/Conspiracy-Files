@@ -20,6 +20,11 @@ Q.Rules=Rules
 Q.TAG="NHShared.ClueCue"
 Q.POLL_MS=500
 local SOUND="UIObjectMenuEnter"
+local HALO_DURATION=900 -- as PlayerVoice
+local Lines=require("NHShared/ClueCueLines")
+local recentSpoken={}
+-- Injectable for tests; in game the game's own random.
+Q.rand=function(n) return (ZombRand and ZombRand(n) or math.random(0,n-1))+1 end
 
 local function log(s) CFLog.message("hint","hint",s) end
 local function now() return getTimeInMillis and getTimeInMillis() or 0 end
@@ -73,8 +78,16 @@ local function conditions(player,square)
     return light,weather
 end
 
+-- The survivor's words go in the white halo (as PlayerVoice does for E1); the
+-- bubble keeps the short cue ("Hm?"). With no halo the words go in the bubble.
 local function say(player,line)
-    local spoke=pcall(function() player:Say(line) end)
+    local spoken=Rules.pickLine(Lines,recentSpoken,function(n) return Q.rand(n) end)
+    Q.lastSpoken=spoken
+    local halo=false
+    if spoken and player.setHaloNote then
+        halo=pcall(function() player:setHaloNote(spoken,255,255,255,HALO_DURATION) end)
+    end
+    local spoke=pcall(function() player:Say((spoken and not halo) and spoken or line) end)
     local audible=false
     if getSoundManager then
         local ok,manager=pcall(getSoundManager)
@@ -132,7 +145,7 @@ function Q.step()
                     Q.counters.said=Q.counters.said+1
                     Q.last={id=clue.id,line=line,place=clue.place}
                     log(string.format("cue said \"%s\" at %s doc=%s light=%.2f weather=%.2f bubble=%s sound=%s",
-                        line,tostring(clue.place),tostring(clue.id),light,weather,tostring(spoke),tostring(audible)))
+                        line..(Q.lastSpoken and " / "..Q.lastSpoken or ""),tostring(clue.place),tostring(clue.id),light,weather,tostring(spoke),tostring(audible)))
                     return
                 end
                 Q.counters.suppressed=Q.counters.suppressed+1
