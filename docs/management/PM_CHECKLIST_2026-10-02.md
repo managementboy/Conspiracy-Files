@@ -15,3 +15,4 @@ Tick when done AND pushed. Counts only; no clue text (owner plays blind).
 - OWNER DECIDED 2026-10-02: NO further clue round to ChatGPT for balance now (balance stays 56%, target under 55%). Do not request one unless the owner reopens it.
 - OWNER DECIDED 2026-10-02: keep the "Hm?" bubble and "...again?" as they are; the spoken line is added beside them.
 - OWNER CONFIRMED 2026-10-02: No Help has no device (no FILES/PLACES/THREADS). Thread tracker for No Help: CLOSED, nothing to build. The older mod's THREADS stays as is. The first-person heading work (step 9) only affects the older mod's device.
+- PUBLISHED 2026-10-02 (owner: "Build and post to workshop"): No Help 0.1.0-dev+342f72c1 to item 3810750865 (unlisted), boot-check override used, offline-verified only. Needs the Windows playtest.
