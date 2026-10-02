@@ -62,6 +62,28 @@ public class RealEngine {
             try { f.push(Files.readString(Paths.get(String.valueOf(f.get(0))))); } catch (Exception e) { f.pushNil(); }
             return 1;
         });
+        // RE.method("zombie.worldMap.UIWorldMapV2", "getSymbolsAPIv2", 0) -> the declared return type's name,
+        // or nil when the real class has no public method of that name taking that many arguments.
+        // For calls whose receiver cannot be built headless (a live map window): the contract is still real.
+        re.rawset("method", (JavaFunction) (f, n) -> {
+            try {
+                Class<?> c = Class.forName(String.valueOf(f.get(0)));
+                String name = String.valueOf(f.get(1));
+                int argc = ((Double) f.get(2)).intValue();
+                touched++;
+                for (java.lang.reflect.Method m : c.getMethods())
+                    if (m.getName().equals(name) && m.getParameterCount() == argc) { f.push(m.getReturnType().getName()); return 1; }
+            } catch (ClassNotFoundException e) { /* unknown class: nil */ }
+            f.pushNil();
+            return 1;
+        });
+        // RE.isa(child, parent): is the real class `child` a kind of `parent`? (Kahlua dispatches on the
+        // runtime class, so a method declared on a subclass is callable through a parent-typed result.)
+        re.rawset("isa", (JavaFunction) (f, n) -> {
+            try { touched++; f.push(Class.forName(String.valueOf(f.get(1))).isAssignableFrom(Class.forName(String.valueOf(f.get(0))))); }
+            catch (ClassNotFoundException e) { f.push(Boolean.FALSE); }
+            return 1;
+        });
         re.rawset("roots", String.join(";", roots));
         String prelude = new String(Files.readAllBytes(Paths.get(
             Path.of(System.getProperty("re.dir", "tools/realengine"), "prelude.lua").toString())));

@@ -35,6 +35,26 @@ Whether a door is detected on a real door is still the in-game playtest's job.
 - **The checks live in the repo** (`tools/realengine/`, `tools/enginecalls/`) and find the
   game through `tools/env.sh`.
 
+## What the real-engine start-up fakes (and why)
+
+The game normally prepares a lot before any mod code runs. Headless, we do only the minimum, by hand,
+in `tools/realengine/RealEngine.java`. Each of these is a place where this setup only *approximates* the game:
+
+| Step done by hand | Plain-language reason |
+| --- | --- |
+| Random-number source started | The game's classes draw random numbers the moment they load |
+| The game's file system object started | Several classes read files when they load |
+| Link the Lua interpreter, its thread and its converters into the game's "global" slots | Without them the engine's own start-up code fails |
+| Number and array converters installed | Lets Lua numbers become the whole numbers Java asks for |
+| Mark the Lua thread as owned by this process | A safety check the game normally satisfies |
+| Expose every game class to Lua | Same call the game makes |
+
+**Things that cannot exist without a loaded map** (found while writing the tests): the current cell and player
+(`getCell()`, `getPlayer()`), the player's map knowledge (`WorldMapVisited.getInstance()` is empty, and marking ground
+known has no effect), the live map window, and any square read that needs a world behind it (floor, solid, outside
+answer with an error on a hand-built empty square). For these the checks prove the *call is valid* (right name, right
+count, right kind, return types line up) but not the *answer*. The in-game playtest still owns the answers.
+
 ## Progress
 
 ### Phase 0 — decisions
@@ -67,12 +87,12 @@ Whether a door is detected on a real door is still the in-game playtest's job.
 - [x] A test only counts as "real" if it actually built a real game object
 
 ### Phase 4 — real objects and moving tests over
-- [ ] Shared start-up script lists every engine set-up step done by hand and why
-- [ ] Door check moved to the real engine
-- [ ] Ground checks (outside / floor / solid) moved
-- [ ] Address map moved
-- [ ] Map markers moved
-- [ ] Each moved test deletes its pretend version in the same change
+- [x] Shared start-up script lists every engine set-up step done by hand and why (table above; failures are loud)
+- [x] Door check moved to the real engine (`ground_readers_real_squares.lua`; putting the old bug back makes it fail)
+- [x] Ground checks (outside / floor / solid / sight / zombies) moved — their calls are checked for rejection; their answers need a loaded map
+- [x] Address map moved (`address_map_real_visited.lua`)
+- [x] Map markers moved (`map_marker_api_contract.lua`: every step of the call chain, with real return types)
+- [x] Pretend versions: the old tests of these readers only exercised rule logic over plain facts, not engine calls. The pretend squares that remain (for scenario logic) are policed in Phase 5
 
 ### Phase 5 — policing and wiring in
 - [ ] A check that every function a remaining pretend object offers really exists on the real one
@@ -80,4 +100,5 @@ Whether a door is detected on a real door is still the in-game playtest's job.
 - [ ] Wired into the normal test run, after three clean runs
 
 ## Bugs found along the way
-(none yet)
+- Nothing wrong with the mod was found by the real-engine tests themselves; the ground readers, address map and map markers are all valid against game build 25485521.
+- Earlier in this work (already fixed): the removed door call, the clue-mark lookup that read a field that did not exist, and a script counting trap.

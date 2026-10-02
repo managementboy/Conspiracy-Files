@@ -1460,6 +1460,7 @@ local function groundScan(site,done,accept,salt,keys)
     end
 end
 R.groundScan=groundScan
+R.groundFacts=groundFacts   -- seam: tools/realengine/tests drives the readers with real squares
 -- Stale-clue relocation (docs/management/STALE_CLUE_RELOCATION.md). One job
 -- per session (like `identity`, not per document) keeps the job count
 -- bounded regardless of case/document count; it considers a single stale
