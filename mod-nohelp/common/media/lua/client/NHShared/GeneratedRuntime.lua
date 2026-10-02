@@ -140,10 +140,19 @@ local function writePages(item,doc,case)
     local ok,pages=pcall(Pages.pages,doc.body,context,map and map.describe)
     if not ok or type(pages)~="table" or #pages==0 then return end
     pcall(function()
+        -- The recipe T7 proved on Note, Notebook, LetterHandwritten and Photo:
+        -- enable pages on the item, write them, then lock it to a foreign owner
+        -- so the vanilla journal opens it READ-ONLY. Without the lock the paper
+        -- opens as something the player can write over; without canBeWrite a
+        -- Note or Photo has no pages to open at all.
+        if item.setCanBeWrite then item:setCanBeWrite(true) end
+        if item.setPageToWrite then item:setPageToWrite(#pages) end
         if item.setNumberOfPages then item:setNumberOfPages(math.max(#pages,1)) end
         for index,text in ipairs(pages) do item:addPage(index,text) end
+        if item.setLockedBy then item:setLockedBy("NoHelp") end
     end)
 end
+R.writePages=writePages
 -- Object evidence is found in the state its story implies. Condition is a core
 -- saved field, so this survives a reload; blood is deliberately NOT applied,
 -- because setBloodLevel exists on the installed jar but nothing has proven it
@@ -339,7 +348,7 @@ local function placement(api,id)
           end
         end
         for _,item in ipairs(createdItems) do
-            assert(current:AddItem(item),"could not add evidence")
+            assert(World.addEvidence(current,item),"could not add evidence")
         end
         -- Claim the part, once the items are actually in it.
         World.markVehiclePart(current,a.physicalToken)

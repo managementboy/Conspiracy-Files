@@ -15,6 +15,7 @@
 # Report: docs/management/evidence/linux-autotest/<session>-nohelp-boot.txt.
 # Exit 0 pass, 1 fail, 2 could not run. Counts only (the owner plays blind).
 set -uo pipefail
+export PZ_NOHELP_ONLY=1
 . "$(dirname "${BASH_SOURCE[0]}")/../lib.sh"
 soak=60
 while [ $# -gt 0 ]; do

@@ -313,10 +313,11 @@ local roads={
     {"Hop Lane",10821.5,9774.5,10826.5,9771.5},
     {"Hop Lane",10826.5,9771.5,10923.0,9772.0},
 }
+local GameBuild=require("NHShared/GameBuild")
 local P={}
 local function center(site) local b=site.bounds; return (b.x1+b.x2-1)/2,(b.y1+b.y2-1)/2 end
 function P.street(site)
-    if site.buildLine~="42.20" and site.buildLine~="42.20.4" then return nil end
+    if not GameBuild.supported(site.buildLine) then return nil end
     if type(site.mapId)~="string" or not site.mapId:find("Muldraugh, KY",1,true) then return nil end
     local x,y=center(site)
     if x<10000 or x>11500 or y<9000 or y>11000 then return nil end

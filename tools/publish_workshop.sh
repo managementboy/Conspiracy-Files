@@ -6,6 +6,8 @@
 #   tools/publish_workshop.sh --visibility 0     ... and make it public
 #   tools/publish_workshop.sh --owner-override-boot-check "reason"
 #                                                deliberately waive Linux boot
+#   tools/publish_workshop.sh --mod nohelp ...   "Conspiracy Files: No Help", a
+#                                                separate item (tools/workshop-nohelp/)
 #
 # Two machines, one account: this machine develops and publishes, the other
 # subscribes and plays. Steam pushes the update to the play machine; nothing is
@@ -32,13 +34,6 @@ APPID=108600
 # password is, and nothing here ever touches one. Override with STEAM_USER=...
 STEAM_USER_DEFAULT=managementboy
 : "${STEAM_USER:=$STEAM_USER_DEFAULT}"
-ITEM_DIR="$REPO/tools/workshop"
-ID_FILE="$ITEM_DIR/published_file_id"
-PREVIEW="$ITEM_DIR/preview.png"
-BUILD="$REPO/dist/workshop"
-CONTENT="$BUILD/content"
-VDF="$BUILD/item.vdf"
-OVERRIDE_AUDIT="$BUILD/owner-boot-check-override.txt"
 
 # 0 public, 1 friends-only, 2 private, 3 unlisted.
 # Unlisted is the default on purpose: it does not appear in search, but anyone
@@ -48,10 +43,12 @@ visibility="${CF_WORKSHOP_VISIBILITY:-3}"
 dry_run=0
 changenote="${CF_CHANGENOTE:-}"
 boot_override_reason=""
+mod=deadair
 
 while [ $# -gt 0 ]; do
     case "$1" in
         --dry-run)    dry_run=1; shift ;;
+        --mod)        mod="${2:-}"; shift 2 ;;
         --visibility) visibility="${2:-}"; shift 2 ;;
         --changenote) changenote="${2:-}"; shift 2 ;;
         --owner-override-boot-check)
@@ -77,28 +74,55 @@ case "$visibility" in
     *) echo "--visibility must be 0 public, 1 friends, 2 private or 3 unlisted" >&2; exit 2 ;;
 esac
 
-version="$(grep -o 'ConspiracyFiles.VERSION = "[^"]*"' "$REPO/mod/common/media/lua/shared/ConspiracyFiles/Version.lua" | head -1 | sed 's/.*= "//;s/"//')"
-[ -n "$version" ] || { echo "could not read ConspiracyFiles.VERSION from Version.lua" >&2; exit 1; }
-[ -n "$changenote" ] || changenote="$version"
+# Each mod is its own Workshop item with its own id file, page text and build
+# directory, so publishing one can never update or overwrite the other.
+case "$mod" in
+    deadair)
+        NAME=ConspiracyFiles; TITLE="Conspiracy-Files: Dead Air"
+        ITEM_DIR="$REPO/tools/workshop"; BUILD="$REPO/dist/workshop" ;;
+    nohelp)
+        NAME=ConspiracyFilesNoHelp; TITLE="Conspiracy Files: No Help"
+        ITEM_DIR="$REPO/tools/workshop-nohelp"; BUILD="$REPO/dist/workshop-nohelp" ;;
+    *) echo "--mod must be deadair or nohelp" >&2; exit 2 ;;
+esac
+ID_FILE="$ITEM_DIR/published_file_id"
+PREVIEW="$ITEM_DIR/preview.png"
+CONTENT="$BUILD/content"
+VDF="$BUILD/item.vdf"
+OVERRIDE_AUDIT="$BUILD/owner-boot-check-override.txt"
 
 # Build through package.sh so the Workshop payload is the same require-checked
 # tree as the zip and the local install. A Workshop item that cannot generate a
 # case is worse than no Workshop item.
 rm -rf "$BUILD"
 mkdir -p "$CONTENT/mods"
-"$REPO/tools/package.sh" --stage "$CONTENT/mods/ConspiracyFiles" >/dev/null
+CF_MOD="$mod" "$REPO/tools/package.sh" --stage "$CONTENT/mods/$NAME" >/dev/null
 
 # Steam strips nothing and adds nothing: whatever is in contentfolder becomes
 # the item root, and the game expects to find mods/<id>/ there. This mirrors the
 # layout an installed Workshop item actually has on disk.
-[ -f "$CONTENT/mods/ConspiracyFiles/42/mod.info" ] || {
+[ -f "$CONTENT/mods/$NAME/42/mod.info" ] || {
     echo "staged tree has no 42/mod.info; refusing to upload" >&2; exit 1; }
+
+# package.sh stamped the version it built into the staged mod.info.
+version="$(sed -n 's/^modversion=//p' "$CONTENT/mods/$NAME/42/mod.info" | tr -d '\r' | head -1)"
+[ -n "$version" ] || { echo "staged mod.info has no modversion" >&2; exit 1; }
+[ -n "$changenote" ] || changenote="$version"
+
+# The Linux boot check (tools/autotest/boot_check.sh) checks Dead Air's files
+# and evidence album. No Help has no automated boot check yet, so its uploads
+# are always an attended owner decision.
+if [ "$mod" = nohelp ] && [ -z "$boot_override_reason" ] && [ "$dry_run" -eq 0 ]; then
+    echo "No Help has no automated boot check. Boot it yourself, then publish with" >&2
+    echo "  --owner-override-boot-check \"reason\"" >&2
+    exit 1
+fi
 
 published_id="0"
 [ -f "$ID_FILE" ] && published_id="$(tr -d ' \n\r' < "$ID_FILE")"
 [ -n "$published_id" ] || published_id="0"
 
-description="$(cat "$ITEM_DIR/description.txt" 2>/dev/null || echo "Conspiracy-Files: Dead Air")"
+description="$(cat "$ITEM_DIR/description.txt" 2>/dev/null || echo "$TITLE")"
 
 # Git Bash paths such as /c/Users/... are valid to its own tools but are not
 # valid inside a VDF read directly by the native Windows steamcmd.exe. Use the
@@ -139,7 +163,7 @@ vdf_escape() {
     echo "    \"contentfolder\"   \"$content_vdf\""
     [ -f "$PREVIEW" ] && echo "    \"previewfile\"     \"$preview_vdf\""
     echo "    \"visibility\"      \"$visibility\""
-    echo "    \"title\"           \"Conspiracy-Files: Dead Air\""
+    echo "    \"title\"           \"$TITLE\""
     echo "    \"description\"     \"$(vdf_escape "$description")\""
     echo "    \"changenote\"      \"$(vdf_escape "$changenote")\""
     echo '}'
@@ -168,7 +192,7 @@ bad_line="$(awk 'NR > 2 && /^ / { n = gsub(/"/, "\""); if (n != 4) { print NR": 
 lua_files="$(find "$CONTENT" -name '*.lua' | wc -l | tr -d ' ')"
 vis_name=$(case "$visibility" in 0) echo public;; 1) echo friends-only;; 2) echo private;; 3) echo unlisted;; esac)
 
-echo "workshop payload"
+echo "workshop payload: $TITLE"
 echo "  version     $version"
 echo "  lua files   $lua_files"
 echo "  visibility  $vis_name ($visibility)"
@@ -180,7 +204,11 @@ echo "  vdf         $VDF"
 if [ -n "$boot_override_reason" ]; then
     echo "  boot gate   OWNER OVERRIDE: $boot_override_reason"
 else
-    echo "  boot gate   Linux native boot check required before upload"
+    if [ "$mod" = nohelp ]; then
+        echo "  boot gate   none automated for No Help: --owner-override-boot-check required"
+    else
+        echo "  boot gate   Linux native boot check required before upload"
+    fi
 fi
 
 if [ "$dry_run" -eq 1 ]; then

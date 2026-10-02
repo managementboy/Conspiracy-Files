@@ -115,7 +115,11 @@ PY
 
 setup() {
     mkdir -p "$LOCAL/inbox" "$LOCAL/log" "$ZOMBOID/Lua" "$ZOMBOID/mods"
-    sync_mod "$REPO/mod" ConspiracyFiles
+    # PZ_NOHELP_ONLY=1: a No Help session loads No Help, ZombieBuddy and the
+    # helper only - not the old Dead Air mod (owner, 2026-10-02: "we are
+    # currently only working on No Help and ZombieBuddy"). The command channel
+    # (DevEval) comes with the helper, so nothing here needs the old mod.
+    if [ "${PZ_NOHELP_ONLY:-0}" != 1 ]; then sync_mod "$REPO/mod" ConspiracyFiles; fi
     sync_mod "$REPO/mod-nohelp" ConspiracyFilesNoHelp
     [ -d "$ZB_WORKSHOP" ] && sync_mod "$ZB_WORKSHOP" ZombieBuddy
     approve_nohelp_jar
@@ -132,7 +136,12 @@ setup() {
     # New worlds take their mod list from default.txt.
     local d="$ZOMBOID/mods/default.txt"
     sed -i '/^ *mod = FieldnoteTest,$/d' "$d"
-    for m in ConspiracyFiles CFAutoTest ConspiracyFilesNoHelp ZombieBuddy; do
+    local wanted="ConspiracyFiles CFAutoTest ConspiracyFilesNoHelp ZombieBuddy"
+    if [ "${PZ_NOHELP_ONLY:-0}" = 1 ]; then
+        wanted="CFAutoTest ConspiracyFilesNoHelp ZombieBuddy"
+        sed -i '/^ *mod = ConspiracyFiles,$/d' "$d"
+    fi
+    for m in $wanted; do
         grep -qE "mod = $m," "$d" || sed -i "/^mods$/,/^}/ s/^{$/{\n    mod = $m,/" "$d"
     done
 }

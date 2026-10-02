@@ -1,0 +1,7 @@
+Conspiracy Files: No Help generates small investigations in Project Zomboid Build 42.20 and later.
+
+Clues are real items in real containers in real buildings, tied to the scenes the game itself generates. Nothing points at them, nothing tracks them and nothing tells you what they mean: you find them, inspect them and work it out. No PDA, no organiser, no objective marker.
+
+[b]Requires ZombieBuddy.[/b] Subscribe to it and set its Steam launch option (see the ZombieBuddy page). No Help ships a small signed Java listener (NoHelpScenes.jar) that hears the game's own scene generation; ZombieBuddy asks once whether to allow it.
+
+[b]This is a development build.[/b] Start a new game. Single-player. Vanilla map (Muldraugh, KY). No network access, no runtime AI.

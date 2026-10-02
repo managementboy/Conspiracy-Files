@@ -3,6 +3,8 @@
 #
 #   tools/package.sh              -> dist/ConspiracyFiles-<version>.zip
 #   tools/package.sh --install    -> also install it into this machine's mods folder
+#   CF_MOD=nohelp tools/package.sh -> the same for "Conspiracy Files: No Help"
+#                                     (mod-nohelp/ -> dist/ConspiracyFilesNoHelp-<version>.zip)
 #
 # The archive contains a single ConspiracyFiles/ folder in exactly the layout
 # Project Zomboid expects, so a tester unzips it into their Zomboid/mods folder
@@ -11,17 +13,33 @@ set -euo pipefail
 REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 . "$REPO/tools/env.sh"
 
-version="$(grep -o 'ConspiracyFiles.VERSION = "[^"]*"' "$REPO/mod/common/media/lua/shared/ConspiracyFiles/Version.lua" | head -1 | sed 's/.*= "//;s/"//')"
-[ -n "$version" ] || { echo "could not read ConspiracyFiles.VERSION from Version.lua" >&2; exit 1; }
+# Which mod: Dead Air (mod/, the default) or No Help (mod-nohelp/). NAME is the
+# folder under mods/, PREFIX the require() namespace the check below resolves.
+case "${CF_MOD:-deadair}" in
+    deadair)
+        SRC="$REPO/mod"; NAME=ConspiracyFiles; PREFIX=ConspiracyFiles
+        version="$(grep -o 'ConspiracyFiles.VERSION = "[^"]*"' "$REPO/mod/common/media/lua/shared/ConspiracyFiles/Version.lua" | head -1 | sed 's/.*= "//;s/"//')"
+        [ -n "$version" ] || { echo "could not read ConspiracyFiles.VERSION from Version.lua" >&2; exit 1; }
+        ;;
+    nohelp)
+        # No Help has no Version.lua. Its mod.info modversion plus the commit
+        # tells two uploads apart in the in-game mod list.
+        SRC="$REPO/mod-nohelp"; NAME=ConspiracyFilesNoHelp; PREFIX=NHShared
+        version="$(sed -n 's/^modversion=//p' "$SRC/42/mod.info" | tr -d '\r' | head -1)"
+        [ -n "$version" ] || { echo "could not read modversion from mod-nohelp/42/mod.info" >&2; exit 1; }
+        version="$version+$(git -C "$REPO" rev-parse --short HEAD 2>/dev/null || echo nogit)"
+        ;;
+    *) echo "CF_MOD must be deadair or nohelp" >&2; exit 2 ;;
+esac
 
 staging="$(mktemp -d)"; trap 'rm -rf "$staging"' EXIT
 out="$REPO/dist"; mkdir -p "$out"
-archive="$out/ConspiracyFiles-$version.zip"
+archive="$out/$NAME-$version.zip"
 
 # Ship exactly what the game loads: the version folder holding mod.info, and
 # the shared media tree. Nothing from dev/, test/, docs/ or tools/.
-mkdir -p "$staging/ConspiracyFiles"
-cp -r "$REPO/mod/42" "$staging/ConspiracyFiles/42"
+mkdir -p "$staging/$NAME"
+cp -r "$SRC/42" "$staging/$NAME/42"
 
 # Stamp the build into mod.info so the in-game mod list names the build it is
 # actually about to load. A static "0.1.0-dev" there cost three restarts on
@@ -29,11 +47,11 @@ cp -r "$REPO/mod/42" "$staging/ConspiracyFiles/42"
 # tell was to load a save and read the old evidence window's title bar. The version stays
 # single-sourced in Version.lua; this is a copy made at package time, which is
 # why the repo's mod.info keeps a placeholder.
-info="$staging/ConspiracyFiles/42/mod.info"
+info="$staging/$NAME/42/mod.info"
 sed -i "s/^modversion=.*/modversion=$version/" "$info"
 grep -q "^modversion=$version$" "$info" || {
     echo "failed to stamp modversion into mod.info" >&2; exit 1; }
-cp -r "$REPO/mod/common" "$staging/ConspiracyFiles/common"
+cp -r "$SRC/common" "$staging/$NAME/common"
 
 # A package that cannot generate a case is worse than no package. Every
 # require() in the shipped tree must resolve inside the shipped tree - this is
@@ -52,26 +70,26 @@ cp -r "$REPO/mod/common" "$staging/ConspiracyFiles/common"
 missing=0
 while read -r module; do
     [ -n "$module" ] || continue
-    [ -f "$staging/ConspiracyFiles/common/media/lua/shared/$module.lua" ] && continue
-    [ -f "$staging/ConspiracyFiles/common/media/lua/client/$module.lua" ] && continue
-    [ -f "$staging/ConspiracyFiles/common/media/lua/shared/$module/init.lua" ] && continue
-    [ -f "$staging/ConspiracyFiles/common/media/lua/client/$module/init.lua" ] && continue
+    [ -f "$staging/$NAME/common/media/lua/shared/$module.lua" ] && continue
+    [ -f "$staging/$NAME/common/media/lua/client/$module.lua" ] && continue
+    [ -f "$staging/$NAME/common/media/lua/shared/$module/init.lua" ] && continue
+    [ -f "$staging/$NAME/common/media/lua/client/$module/init.lua" ] && continue
     echo "MISSING from package: $module" >&2; missing=$((missing + 1))
-done < <(find "$staging/ConspiracyFiles" -name '*.lua' -print0 \
+done < <(find "$staging/$NAME" -name '*.lua' -print0 \
          | xargs -0 -r sed -E 's/--.*$//' \
-         | grep -oE 'require\("(ConspiracyFiles[^"]*)"\)' \
+         | grep -oE "require\\(\"($PREFIX[^\"]*)\"\\)" \
          | sed -E 's/require\("//; s/"\)//' | sort -u)
 [ "$missing" -eq 0 ] || { echo "refusing to package: $missing unresolved require(s)" >&2; exit 1; }
-[ -f "$staging/ConspiracyFiles/42/mod.info" ] || { echo "refusing to package: no mod.info" >&2; exit 1; }
+[ -f "$staging/$NAME/42/mod.info" ] || { echo "refusing to package: no mod.info" >&2; exit 1; }
 
 rm -f "$archive"
 if command -v zip >/dev/null 2>&1; then
-    ( cd "$staging" && zip -qr "$archive" ConspiracyFiles )
+    ( cd "$staging" && zip -qr "$archive" "$NAME" )
 else
     python -c "import shutil,sys; shutil.make_archive(sys.argv[1][:-4],'zip',sys.argv[2])" "$archive" "$staging"
 fi
 
-files="$(find "$staging/ConspiracyFiles" -name '*.lua' | wc -l | tr -d ' ')"
+files="$(find "$staging/$NAME" -name '*.lua' | wc -l | tr -d ' ')"
 echo "packaged $archive"
 echo "  version   $version"
 echo "  lua files $files"
@@ -81,10 +99,12 @@ fi
 
 if [ "${1:-}" = "--install" ]; then
     [ -n "${CF_INSTALL:-}" ] || { echo "CF_INSTALL not resolved; set ZOMBOID_HOME" >&2; exit 1; }
-    rm -rf "$CF_INSTALL"
-    mkdir -p "$(dirname "$CF_INSTALL")"
-    cp -r "$staging/ConspiracyFiles" "$CF_INSTALL"
-    echo "installed to $CF_INSTALL"
+    install="$CF_INSTALL"
+    [ "$NAME" = ConspiracyFiles ] || install="$(dirname "$CF_INSTALL")/$NAME"
+    rm -rf "$install"
+    mkdir -p "$(dirname "$install")"
+    cp -r "$staging/$NAME" "$install"
+    echo "installed to $install"
 fi
 
 # --stage <dir>: leave the verified tree at <dir> instead of installing it, so
@@ -95,6 +115,6 @@ if [ "${1:-}" = "--stage" ]; then
     [ -n "$dest" ] || { echo "--stage needs a destination directory" >&2; exit 1; }
     rm -rf "$dest"
     mkdir -p "$(dirname "$dest")"
-    cp -r "$staging/ConspiracyFiles" "$dest"
+    cp -r "$staging/$NAME" "$dest"
     echo "staged to $dest"
 fi

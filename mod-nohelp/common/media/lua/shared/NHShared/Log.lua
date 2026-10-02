@@ -159,7 +159,12 @@ end
 -- is one table read and one boolean test, which is what IdentityObserver's
 -- bail() already pays in a render path and what Kahlua can afford there.
 NHShared=NHShared or {}
-if NHShared.BlindLog==nil then NHShared.BlindLog=true end
+-- Owner, 2026-10-01: while the GAME is in debug mode the log shows locations
+-- (areas, coordinates, clue ids) so placement can be checked; a normal game is
+-- still blind. Debug-only, log-only: nothing is drawn and no key is bound.
+if NHShared.BlindLog==nil then
+    NHShared.BlindLog=not (getDebug and getDebug() and true or false)
+end
 NHShared.verbose=NHShared.verbose or {}
 local lastDecline={}
 
