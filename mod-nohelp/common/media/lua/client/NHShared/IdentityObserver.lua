@@ -203,7 +203,8 @@ end
 I.sawRender=false
 function I.afterRender(pane)
  if not I.sawRender then I.sawRender=true; CFLog.message("identity","person","afterRender reached for the first time") end
- if not supported() then return gate("observer unsupported (debug/MP/runtime gate)") end
+ -- Unsupported (not debug, or MP) is the normal state of a played game: 269 lines per session when logged. Verbose only.
+ if not supported() then return bail("observer unsupported (debug/MP/runtime gate)") end
  if #queue>=16 then return gate("queue full") end
  if pane.mode~="details" then return gate("pane mode is "..tostring(pane.mode)..", expected details") end
  -- dragStarted does NOT mean "a drag is happening". ISInventoryPane sets it
