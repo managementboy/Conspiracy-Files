@@ -10,6 +10,7 @@
 # Types T7 did not prove (Diary, Notepad, Receipt, Newspaper) are reported as
 # findings, not failures. Real display only. Exit 0 pass, 1 fail, 2 could not run.
 set -uo pipefail
+export PZ_NOHELP_ONLY=1
 . "$(dirname "${BASH_SOURCE[0]}")/../lib.sh"
 say() { echo "nohelp-pages: $*" >&2; }
 abort() { say "$*"; "$PZ" stop >/dev/null 2>&1; exit 2; }

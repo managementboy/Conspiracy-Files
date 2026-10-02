@@ -8,6 +8,7 @@
 # The comparison logic is in a plain-Lua function, unit-tested separately.
 # Exit 0 pass, 1 fail, 2 could not run.
 set -uo pipefail
+export PZ_NOHELP_ONLY=1
 . "$(dirname "${BASH_SOURCE[0]}")/../lib.sh"
 say() { echo "nohelp-dump: $*" >&2; }
 abort() { say "$*"; "$PZ" stop; exit 2; }
