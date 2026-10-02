@@ -85,10 +85,13 @@ function M.fits(kind,body)
  local v=M.get(kind); if not v or type(body)~="string" then return false end
  if v.capacity=="short" then return #body<=M.SHORT_MAX_CHARS end
  -- An object carries no readable text at all: nothing is written on a hammer.
- -- Its body is the record's own sentence about having found it, so the cap
- -- is about what belongs in a row of noted evidence, not what fits on the item - a
+ -- Its record is the sight and what the survivor made of it, so the cap is
+ -- about what belongs in a row of noted evidence, not what fits on the item - a
  -- page of prose about an object would be the mod explaining the object,
- -- which is the one thing it must not do.
+ -- which is the one thing it must not do. The source
+ -- sentence (what is visibly true of the object) does not count against the
+ -- cap (owner decision 2026-10-02): the Mystery linter counts only the
+ -- observation and the note, so `body` here is that rest.
  if v.capacity=="object" then return #body<=M.OBJECT_MAX_CHARS end
  return true
 end

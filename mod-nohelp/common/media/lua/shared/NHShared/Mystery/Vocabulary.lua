@@ -68,7 +68,9 @@ M.CLOSE_KIND={completed=true,carried=true,retracted=true}
 -- limit, so it is no longer one global ceiling). An object stays terse
 -- because a thing has no sentences on it; a heard finding is reported
 -- speech and may run longer. A mystery may declare its own per-kind cap no
--- larger than these; the linter refuses one that does not.
+-- larger than these; the linter refuses one that does not. The object cap
+-- counts the observation and the note only; the source sentence is exempt
+-- (owner, 2026-10-02).
 M.MAX_CHARS={object=240,short=280,prose=1400,heard=360}
 
 -- One declared MUTATE transition: `from` and `to` must both be states the

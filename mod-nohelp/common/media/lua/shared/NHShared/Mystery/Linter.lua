@@ -51,10 +51,10 @@ end
 -- digit in a finding's own text is refused outright.
 local function hasCount(text) return tostring(text):find("%d")~=nil end
 
-local function textOf(finding)
+local function textOf(finding,skipSource)
     local parts={}
     if type(finding.observation)=="string" then parts[#parts+1]=finding.observation end
-    if type(finding.source)=="string" then parts[#parts+1]=finding.source end
+    if not skipSource and type(finding.source)=="string" then parts[#parts+1]=finding.source end
     if type(finding.note)=="string" then parts[#parts+1]=finding.note end
     if type(finding.body)=="string" then parts[#parts+1]=finding.body end
     return table.concat(parts," ")
@@ -80,7 +80,12 @@ local function lintFinding(id,finding,catalogue)
     if type(maxChars)~="number" or maxChars>Vocab.MAX_CHARS[cap] then
         return false,id..": declares a cap larger than its kind allows"
     end
-    if #text>maxChars then return false,id..": text exceeds its kind's cap ("..#text.."/"..maxChars..")" end
+    -- An object's cap counts the observation and the note (and any body), not
+    -- its source sentence (owner, 2026-10-02): nothing is written on an object,
+    -- so the cap keeps the record to a sight and a reading, while the source
+    -- line (what is visibly true of it) may run as long as it needs.
+    local capped=cap=="object" and textOf(finding,true) or text
+    if #capped>maxChars then return false,id..": text exceeds its kind's cap ("..#capped.."/"..maxChars..")" end
     if text=="" then return false,id..": no text at all" end
     local word=foreignWord(text)
     if word then return false,id..": speaks as an investigator ('"..word.."')" end

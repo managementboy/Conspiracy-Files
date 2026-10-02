@@ -239,7 +239,9 @@ width - the PDA wraps). While authoring the 24 occupation families today, five
 object records ran over it by 3-28 characters and had to be trimmed; the cap
 did its job as a style limit, but whether 240 is the right figure, and whether
 the *source* sentence of an object should count against it at all, is the
-owner's question to settle. Not changed.
+owner's question to settle.
+
+**Status:** decided 2026-10-02 and built. The source sentence no longer counts: `OBJECT_MAX_CHARS=240` now caps only the observation plus the note (No Help only, per the owner's rule to keep the two mods separate: `NHShared/Mystery/Linter.lua`; the older mod is untouched). Paper is unchanged. The save budget (SaveBudget, a total encoded-bytes check) is independent of the cap and its tests were rerun green; the locked-pages journal-safe page size (d2fb3bde) applies to readable paper, not object records. Test: `test/nohelp_object_cap.lua`.
 
 ## Owner request, Windows playtest 2026-10-01 (game 42.21) — a hotkey that shows where the nearest clue will be placed
 
