@@ -238,3 +238,17 @@ object records ran over it by 3-28 characters and had to be trimmed; the cap
 did its job as a style limit, but whether 240 is the right figure, and whether
 the *source* sentence of an object should count against it at all, is the
 owner's question to settle. Not changed.
+
+## Owner request, Windows playtest 2026-10-01 (game 42.21) — a hotkey that shows where the nearest clue will be placed
+
+The owner asked for a hotkey, **Shift+L**, that asks the game where the closest clue will be placed. It is wanted as a testing aid for checking clue placement and the "a clue is nearby" information to the player.
+
+Useful facts found while trying a debug-console workaround:
+- The live list of clues (id, status placed/pending, x/y/z, place, vehicle, part) comes from `GeneratedRuntime.clueTargets()` (`mod/common/media/lua/client/ConspiracyFiles/GeneratedRuntime.lua`).
+- In a running game it is reached with `require("ConspiracyFiles/EngineAPI").GeneratedRuntime`. `ConspiracyFiles.GeneratedRuntime` is nil in a live game; it only works in the autotest harness.
+- `tools/log.sh -e` filters `[CF]` lines only, so it misses engine and other-mod errors; the raw log must be checked for `ERROR`.
+- The `[CF]` log fields for place and position are written as `-`, so the log cannot say where a clue went.
+
+Owner decisions (same session): the hotkey is a **debug-only tool**, not shipped to players, and it prints to the **log only**, not to the screen.
+
+**Status:** queued; not built. Recorded during play as instructed (playtests queue ideas, they do not build them).

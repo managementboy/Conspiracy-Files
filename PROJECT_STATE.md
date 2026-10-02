@@ -167,7 +167,7 @@ Start with the [Linux handover](docs/management/LINUX_HANDOVER_2026-09-19.md). T
 
 
 Status: **generated G2 playable loop and core found-clue map markers have owner-observed live passes (2026-09-06)**. Dynamic generation and automatic location selection remain the destination (P4-R53); the installed development runtime is still one case per save. Offline expansion work is not yet live acceptance or a production release.
-Target: Project Zomboid Build 42; T1/T2/T3/T4/T5/T7/T8/T9/T10 verified stable Build **42.20.4**, revision **b0bbce05d5**, Steam build ID **24909800**, with the limitations recorded in their reports. Other capability claims remain subject to their named spikes/research.
+Target: Project Zomboid Build 42; T1/T2/T3/T4/T5/T7/T8/T9/T10 verified stable Build **42.20.4**, revision **b0bbce05d5**, Steam build ID **24909800**, with the limitations recorded in their reports. Other capability claims remain subject to their named spikes/research. The local game was updated by Steam to Build **42.21** (Steam build ID 25485521) on 2026-10-01; the owner confirmed the mod runs on it, and `tools/verify_api.sh` found all 31 engine methods the mod uses in the installed jar. The T-series reports stay as recorded on 42.20.4, and the offline `docs/reference/pz-api/` snapshot is still 42.20.4.
 
 ## MILESTONE — person/key/place connection proven live, 2026-09-07
 
