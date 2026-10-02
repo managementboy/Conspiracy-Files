@@ -15,10 +15,27 @@ sure those checks cannot pass by accident or fall silent.
 - `tools/realengine/run.sh` — the real-engine checks (add `--shuffle` for the order test, `--relock` after a clean run on a new game build)
 - `python3 tools/enginecalls/enginecalls.py` — scan every engine call in the mod
 - `python3 tools/realengine/fake_parity.py` — check the remaining pretend objects against the real ones
+- `tools/realmap/check.sh` — real-map check described below (needs the game, ~2 minutes, no window)
 - `tools/realengine/leak_gate.sh` — make sure nothing from the game is tracked by git
 
 Exit codes of the real-engine run: **0** all good, **1** something failed, **20** no game here (never a pass),
 **21** the game is a different build than the one we verified, **22** fewer real tests ran than required.
+
+## The real-map check (no window, no player) — `tools/realmap/check.sh`
+
+The game's own background server loads the real map. The check asks it for every building (about a minute per world),
+does that in two separate new worlds, and compares with `dev/addresses/world1.tsv`, the export our shipped data was built
+from. It reports which shipped data files refer to buildings that changed. It also has an always-on part in the normal
+tests: `test/address_book_matches_export.lua` (every shipped house number names a building in the reference export).
+
+**Result on 2026-10-02, installed game 42.21 (reference made on 42.20):**
+- The game update changed **46** buildings (same in both new worlds). About **350** buildings (3.5% of the map) come out
+  *differently in each new world* (shape and room kinds), which did not happen in the two 42.20 reference worlds.
+- Shipped **house numbers: 0 affected. Map sites: 0 affected.**
+- The shipped **fixed-container index** (which furniture/containers sit in which building) refers to 26 updated and 215
+  world-varying buildings. Whether that matters depends on whether placement re-checks containers at run time; open question for the owner/PM.
+- Not yet confirmed: that a normal single-player new world varies the same way as the background server's worlds. The
+  in-game export (`tools/autotest/checks/address_export.sh`) run twice on 42.21 would settle it.
 
 ## What is NOT done by these checks
 
