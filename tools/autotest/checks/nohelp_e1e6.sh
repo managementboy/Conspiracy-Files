@@ -17,7 +17,8 @@ for i in {1..60}; do
 done
 
 say "E1: Spoken clue text — verify speech event captured..."
-speech=$(grep -c "\[CF\].*ev=voice\|ev=note.*evidence" ~/Zomboid/console.txt || echo 0)
+speech=$( { grep -c "\[CF\].*ev=voice\|ev=note.*evidence" ~/Zomboid/console.txt 2>/dev/null || true; } | head -1 )
+is_number "$speech" || speech=0
 if [ "$speech" -gt 0 ]; then
   pass "E1: speech events captured ($speech events)"
 else
@@ -25,7 +26,8 @@ else
 fi
 
 say "E2/E3: Container placement — count clues in locations..."
-placed=$(grep -c "ev=placed.*kind=" ~/Zomboid/console.txt || echo 0)
+placed=$( { grep -c "ev=placed.*kind=" ~/Zomboid/console.txt 2>/dev/null || true; } | head -1 )
+is_number "$placed" || placed=0
 if [ "$placed" -gt 3 ]; then
   pass "E2/E3: $placed clues placed in specific containers"
 else
