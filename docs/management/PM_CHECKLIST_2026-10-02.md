@@ -11,3 +11,4 @@ Tick when done AND pushed. Counts only; no clue text (owner plays blind).
 - [ ] 7. OWNER DECIDED 2026-10-02: a clue in a container of the car you sit in counts as found when you open it (vanilla turns Investigate Area off in a car; that was never a design choice)
 - [x] 8. DONE, engine already does it (object sets are reused as extra copies when fresh ones run out; written clues are never reused; a short place is reported, not refused). OWNER DECIDED 2026-10-02: a marked place prefers clues not seen elsewhere, but may reuse a set seen elsewhere if it must. 8a: check what the engine does now when unused clues run short
 - [ ] 9. Queued, not scheduled (owner to prioritise): first-person record headings, PDA thread tracker, whole-map house numbers, 240-char cap question
+- OWNER DECIDED 2026-10-02: NO further clue round to ChatGPT for balance now (balance stays 56%, target under 55%). Do not request one unless the owner reopens it.
