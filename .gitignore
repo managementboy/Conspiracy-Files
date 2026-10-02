@@ -42,3 +42,4 @@ dev/eval/
 
 # graphify knowledge graph (derived, LINUX dev machine only)
 graphify-out/
+docs/reference/pz-modding/vanilla-lua/
