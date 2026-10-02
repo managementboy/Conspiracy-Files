@@ -44,3 +44,4 @@ dev/eval/
 graphify-out/
 docs/reference/pz-modding/vanilla-lua/
 tools/realengine/*.class
+tools/enginecalls/.cache/

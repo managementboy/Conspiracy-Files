@@ -41,14 +41,14 @@ Whether a door is detected on a real door is still the in-game playtest's job.
 - [x] With no game installed it says "NOT EXERCISED" and never says "pass"
 
 ### Phase 2 — scan every engine call in the mod (`tools/enginecalls/`)
-- [ ] Ignores comments and plain text strings
-- [ ] Reproduces the earlier hand audit
-- [ ] Catches the old door bug when pointed at the code from before the fix
-- [ ] Reads the game only at run time, saves nothing from it
-- [ ] Handles functions with optional/variable arguments
-- [ ] Known false alarms live in a short list with a reason each; a dead entry fails the run
-- [ ] Runs in seconds with only the game and Java present
-- [ ] Prints a summary and saves a dated result in `docs/management/evidence/`
+- [x] Ignores comments and plain text strings
+- [x] Reproduces the earlier hand audit (it now checks 664 calls after skipping names the mod or vanilla Lua defines itself; same one real bug, no unexplained findings)
+- [x] Catches the old door bug when pointed at the code from before the fix
+- [x] Reads the game only at run time, saves nothing from it
+- [x] Handles functions with optional/variable arguments
+- [x] Known false alarms live in a short list with a reason each; a dead entry fails the run
+- [x] Runs in seconds with only the game and Java present
+- [x] Prints a summary and saves a dated result in `docs/management/evidence/`
 
 ### Phase 3 — a run that can never be silent
 - [ ] Every run records the game build, the game file's fingerprint, the Java version and how many real/skipped/failed
