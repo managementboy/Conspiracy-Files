@@ -13,3 +13,4 @@ Tick when done AND pushed. Counts only; no clue text (owner plays blind).
 - [ ] 9. Queued, not scheduled (owner to prioritise): first-person record headings, PDA thread tracker, whole-map house numbers, 240-char cap question
 - [x] 10. DONE 2026-10-02: test/nohelp_dump_trigger.lua was stale (called the menu handler with the old two-argument order; now passes the real playerNum, context, worldObjects, test) - mod was right, assertion unchanged. test/nohelp_playthrough.lua passes on clean HEAD and with the working tree (3 runs, 18.8s of its 30s CPU limit; only fails under Kahlua, which it never was meant for) - could not reproduce a failure; full unit gate green (283 run, 0 failed)
 - OWNER DECIDED 2026-10-02: NO further clue round to ChatGPT for balance now (balance stays 56%, target under 55%). Do not request one unless the owner reopens it.
+- OWNER DECIDED 2026-10-02: keep the "Hm?" bubble and "...again?" as they are; the spoken line is added beside them.
