@@ -2,7 +2,7 @@
 
 Tick when done AND pushed. Counts only; no clue text (owner plays blind).
 
-- [ ] 1. Review ChatGPT batch T0428-T0441 (checks, blind reads, fix returns, merge, balance report)
+- [x] 1. Review ChatGPT batch T0428-T0441 (checks, blind reads, fix returns, merge, balance report) - done 2026-10-02: 140 B-only 118, both 22, A 0, none 0; balance 56%, goal not met
 - [ ] 2. Diagnose the failed state-dump autotest (real bug or bad timing?) and fix
 - [ ] 3. Delete or rewrite the throwaway autotest scripts that print PASS regardless
 - [ ] 4. Debug-only Shift+L hotkey: log where the nearest clue is (owner decided: debug only, log only)

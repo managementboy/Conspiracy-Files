@@ -26,4 +26,4 @@ none
 2026-09-28 T0001
 
 ## PROGRESS
-NOT DONE: balance 69% @03b0a3ba
+NOT DONE: balance 56% @b1c8d9b2

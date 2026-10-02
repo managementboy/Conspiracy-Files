@@ -1,0 +1,256 @@
+[
+  {
+    "body": "A tied sack is full of pale pellets. The opened sack beside it has dark pellets and a chewed edge where something fed.",
+    "id": "t0430-01",
+    "kind": "set",
+    "pieces": [
+      "SeedBag",
+      "Rope"
+    ],
+    "title": "The feed left untouched",
+    "where": [
+      {
+        "containers": [
+          "fridge",
+          "counter",
+          "shelves",
+          "smallbox",
+          "bin",
+          "cardboardbox"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "The bottle of milk is curdled, though the sealed carton stayed cold beside it. A feed scoop is crusted at one end.",
+    "id": "t0430-02",
+    "kind": "set",
+    "pieces": [
+      "Milk",
+      "Spoon"
+    ],
+    "title": "The milk before morning",
+    "where": [
+      {
+        "containers": [
+          "toolcabinet",
+          "locker",
+          "crate",
+          "shelves",
+          "cardboardbox",
+          "desk"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "Eggshells from the inside nest are clean. The ones near the spilled feed have flecks of the same green grit.",
+    "id": "t0430-03",
+    "kind": "set",
+    "pieces": [
+      "Egg",
+      "CornSeed"
+    ],
+    "title": "The coop threshold",
+    "where": [
+      {
+        "containers": [
+          "dresser",
+          "wardrobe",
+          "sidetable",
+          "desk",
+          "locker",
+          "smallbox"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "The clean bucket is hung above reach; the one on the ground has hoof marks in its rim and residue at the bottom.",
+    "id": "t0430-04",
+    "kind": "set",
+    "pieces": [
+      "Bucket",
+      "Wire"
+    ],
+    "title": "The unused pail",
+    "where": [
+      {
+        "containers": [
+          "postbox",
+          "shelves",
+          "counter",
+          "smallbox",
+          "cardboardbox",
+          "desk"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "Seed caught in the mesh has gone gray. The spare packet beneath it is dry and yellow.",
+    "id": "t0430-05",
+    "kind": "set",
+    "pieces": [
+      "FishingNet",
+      "SeedBag"
+    ],
+    "title": "The bird feeder",
+    "where": [
+      {
+        "containers": [
+          "shelves",
+          "grocerstand",
+          "counter",
+          "smallcrate",
+          "cardboardbox",
+          "crate"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "One end is polished by an animal's neck, the other stiff with dark feed dust. A small feed bowl is still tied beside it.",
+    "id": "t0430-06",
+    "kind": "set",
+    "pieces": [
+      "Rope",
+      "Bowl"
+    ],
+    "title": "The pen rope",
+    "where": [
+      {
+        "containers": [
+          "filingcabinet",
+          "desk",
+          "shelves",
+          "crate",
+          "locker",
+          "cardboardbox"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "Two apples are bruised but clean. The corn in the same crate has a powder along its seam that was not there on the fruit.",
+    "id": "t0430-07",
+    "kind": "set",
+    "pieces": [
+      "Apple",
+      "Corn"
+    ],
+    "title": "The untouched crate",
+    "where": [
+      {
+        "containers": [
+          "medicine",
+          "sidetable",
+          "dresser",
+          "desk",
+          "smallbox",
+          "locker"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "The broom has dark grain caught in its bristles. The swept pile was bagged separately from the clean straw.",
+    "id": "t0430-08",
+    "kind": "set",
+    "pieces": [
+      "Broom",
+      "SeedBag"
+    ],
+    "title": "The barn sweep",
+    "where": [
+      {
+        "containers": [
+          "smallbox",
+          "cardboardbox",
+          "shelves",
+          "desk",
+          "counter",
+          "crate"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "A spoon holds pale feed beneath darker grains. Its handle is wrapped with twine as if someone meant to find it again.",
+    "id": "t0430-09",
+    "kind": "set",
+    "pieces": [
+      "Spoon",
+      "Twine",
+      "Corn"
+    ],
+    "title": "The borrowed scoop",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "vehicle"
+      }
+    ]
+  },
+  {
+    "body": "The water bowl on this side is clean. Feed scattered across the hinge has the same dark flecks as the animal's collar.",
+    "id": "t0430-10",
+    "kind": "set",
+    "pieces": [
+      "Bowl",
+      "Rope",
+      "CornSeed"
+    ],
+    "title": "The closed side of the gate",
+    "where": [
+      {
+        "containers": [
+          "wardrobe",
+          "dresser",
+          "desk",
+          "filingcabinet",
+          "smallbox",
+          "shelves"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

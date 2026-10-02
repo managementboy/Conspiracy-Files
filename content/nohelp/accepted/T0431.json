@@ -1,0 +1,183 @@
+[
+  {
+    "body": "Green dust sits in the tire pump's nozzle. The tarp wrapped around it is streaked where a wheel crossed from one field to another.",
+    "id": "t0431-01",
+    "kind": "set",
+    "pieces": [
+      "TirePump",
+      "Tarp"
+    ],
+    "title": "The wheel's other field",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "vehicle"
+      }
+    ]
+  },
+  {
+    "body": "This shovel carries two soils: red clay under a fresh layer of pale dust. The bucket has only the pale stuff.",
+    "id": "t0431-02",
+    "kind": "set",
+    "pieces": [
+      "Shovel",
+      "Bucket"
+    ],
+    "title": "The spare shovel",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "vehicle"
+      }
+    ]
+  },
+  {
+    "body": "The bottom rung is crusted with fertilizer. The clean top rung still has flakes from a different barn's paint.",
+    "id": "t0431-03",
+    "kind": "set",
+    "pieces": [
+      "Shovel",
+      "Fertilizer"
+    ],
+    "title": "The borrowed ladder",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "vehicle"
+      }
+    ]
+  },
+  {
+    "body": "The duct tape holds a split hose together. Its inner edge is green; the water bottle beneath the patch is flecked the same way.",
+    "id": "t0431-04",
+    "kind": "set",
+    "pieces": [
+      "DuctTape",
+      "RubberHose",
+      "WaterBottle"
+    ],
+    "title": "The patched hose",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "vehicle"
+      }
+    ]
+  },
+  {
+    "body": "One corner was folded inward while still wet. Under the crease the field grit is green, but the exposed side is rain-washed.",
+    "id": "t0431-05",
+    "kind": "set",
+    "pieces": [
+      "Tarp",
+      "Rope"
+    ],
+    "title": "The return tarp",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "vehicle"
+      }
+    ]
+  },
+  {
+    "body": "The seed bag is torn across the bottom. The loose grain in the floor mat has the same black dust as the tear.",
+    "id": "t0431-06",
+    "kind": "set",
+    "pieces": [
+      "SeedBag",
+      "Tarp"
+    ],
+    "title": "The load under the seat",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "vehicle"
+      }
+    ]
+  },
+  {
+    "body": "Someone tied this broom to the outside of a load. Its bristles hold straw from one pen and dark pellets from another.",
+    "id": "t0431-07",
+    "kind": "set",
+    "pieces": [
+      "Broom",
+      "Twine"
+    ],
+    "title": "The tied broom",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "vehicle"
+      }
+    ]
+  },
+  {
+    "body": "The hose is coiled around the wheel; the water from washing it has pooled green in the bucket. The other wheel stayed dry.",
+    "id": "t0431-08",
+    "kind": "set",
+    "pieces": [
+      "RubberHose",
+      "Bucket"
+    ],
+    "title": "The washed wheel",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "vehicle"
+      }
+    ]
+  },
+  {
+    "body": "A knot still carries pale dust, but the free end has a dark crust. This rope has been tied around more than one load.",
+    "id": "t0431-09",
+    "kind": "set",
+    "pieces": [
+      "Rope",
+      "SeedBag"
+    ],
+    "title": "The handoff rope",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "vehicle"
+      }
+    ]
+  },
+  {
+    "body": "The spade blade was rinsed, leaving a strip of green soil in the socket where the water could not reach.",
+    "id": "t0431-10",
+    "kind": "set",
+    "pieces": [
+      "HandShovel",
+      "WaterBottle"
+    ],
+    "title": "The clean blade",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "vehicle"
+      }
+    ]
+  }
+]

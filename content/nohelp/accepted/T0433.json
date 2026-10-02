@@ -1,0 +1,183 @@
+[
+  {
+    "body": "A seed packet leaked into this mailbox. The paper at the bottom is gritty, while the letters above it stayed clean.",
+    "id": "t0433-01",
+    "kind": "set",
+    "pieces": [
+      "SeedBag",
+      "Newspaper"
+    ],
+    "title": "The parcel under the letters",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "mailbox"
+      }
+    ]
+  },
+  {
+    "body": "The opened packet is bound with a rubber band. A few dark kernels remain; a second unopened packet is tucked behind it.",
+    "id": "t0433-02",
+    "kind": "set",
+    "pieces": [
+      "CornSeed",
+      "SeedBag"
+    ],
+    "title": "The returned packet",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "mailbox"
+      }
+    ]
+  },
+  {
+    "body": "A sack strip and a feed scoop were pushed in here together. The scoop still carries the same dark grains stuck to the strip.",
+    "id": "t0433-03",
+    "kind": "set",
+    "pieces": [
+      "SeedBag",
+      "Spoon"
+    ],
+    "title": "The porch delivery",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "mailbox"
+      }
+    ]
+  },
+  {
+    "body": "These seeds came back with blackened tips. The packet mailed out beside them is still sealed.",
+    "id": "t0433-04",
+    "kind": "set",
+    "pieces": [
+      "CarrotSeed",
+      "CornSeed"
+    ],
+    "title": "The garden club exchange",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "mailbox"
+      }
+    ]
+  },
+  {
+    "body": "A bundle of grain is tied to a map with two pencil circles, one crossed out. The twine is damp with field mud.",
+    "id": "t0433-05",
+    "kind": "set",
+    "pieces": [
+      "Map",
+      "Twine",
+      "Corn"
+    ],
+    "title": "The wrong doorstep",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "mailbox"
+      }
+    ]
+  },
+  {
+    "body": "A little jar holds green sediment and a dry seed packet has been folded over its lid. The parcel was too thick for the slot.",
+    "id": "t0433-06",
+    "kind": "set",
+    "pieces": [
+      "EmptyJar",
+      "CarrotSeed"
+    ],
+    "title": "The sample in a jar",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "mailbox"
+      }
+    ]
+  },
+  {
+    "body": "A newspaper is wrapped around a withered tomato vine. Its leaves are freckled where field dust collected.",
+    "id": "t0433-07",
+    "kind": "set",
+    "pieces": [
+      "Newspaper",
+      "Tomato"
+    ],
+    "title": "The quiet subscription",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "mailbox"
+      }
+    ]
+  },
+  {
+    "body": "A scrap of duct tape sticks to a sack corner. Two hand drawn arrows show where it was meant to go next.",
+    "id": "t0433-08",
+    "kind": "set",
+    "pieces": [
+      "DuctTape",
+      "SeedBag"
+    ],
+    "title": "The spare label",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "mailbox"
+      }
+    ]
+  },
+  {
+    "body": "A sealed sack has been tied to a torn corner from an open sack. Their stitching matches, but only the open one has black dust.",
+    "id": "t0433-09",
+    "kind": "set",
+    "pieces": [
+      "SeedBag",
+      "Rope"
+    ],
+    "title": "The closed loop",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "mailbox"
+      }
+    ]
+  },
+  {
+    "body": "One packet of corn is damp and swollen; another was packed dry beside it. Someone left both here for collection.",
+    "id": "t0433-10",
+    "kind": "set",
+    "pieces": [
+      "CornSeed",
+      "EmptyJar"
+    ],
+    "title": "The requested replacement",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "mailbox"
+      }
+    ]
+  }
+]

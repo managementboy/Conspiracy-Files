@@ -1,0 +1,184 @@
+[
+  {
+    "body": "The vehicle map has pencil ticks at three stops. Grain caught in its fold matches the dark grain in the half empty bag.",
+    "id": "t0435-01",
+    "kind": "set",
+    "pieces": [
+      "Map",
+      "SeedBag",
+      "Pencil"
+    ],
+    "title": "The last feed run",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "vehicle"
+      }
+    ]
+  },
+  {
+    "body": "Soap floats in green wash water. Two different work gloves are jammed into the same bucket after a field shift.",
+    "id": "t0435-02",
+    "kind": "set",
+    "pieces": [
+      "Bucket",
+      "Soap2",
+      "Gloves_Dish"
+    ],
+    "title": "The shared wash bucket",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "vehicle"
+      }
+    ]
+  },
+  {
+    "body": "This map bends along a farm road. The opened packet in its crease leaked only after the route crosses the fields.",
+    "id": "t0435-03",
+    "kind": "set",
+    "pieces": [
+      "Map",
+      "CarrotSeed"
+    ],
+    "title": "The change of route",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "vehicle"
+      }
+    ]
+  },
+  {
+    "body": "The tarp has a rectangle of untouched cloth where a crate stood. All around it lies the pale dust from the load.",
+    "id": "t0435-04",
+    "kind": "set",
+    "pieces": [
+      "Tarp",
+      "SeedBag"
+    ],
+    "title": "The clean truck bed",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "vehicle"
+      }
+    ]
+  },
+  {
+    "body": "The spoon is wrapped in newspaper dated before the road closures. Dark feed dust has settled inside the fold.",
+    "id": "t0435-05",
+    "kind": "set",
+    "pieces": [
+      "Spoon",
+      "Newspaper"
+    ],
+    "title": "The spare feed scoop",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "vehicle"
+      }
+    ]
+  },
+  {
+    "body": "A knotted rope divides the bags. The sack on one side has a green dust mark; those on the other are clean.",
+    "id": "t0435-06",
+    "kind": "set",
+    "pieces": [
+      "Rope",
+      "SeedBag"
+    ],
+    "title": "The split load",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "vehicle"
+      }
+    ]
+  },
+  {
+    "body": "A bottle has dripped across the map where farm roads meet. Its cap is stained green and the map dries with the same halo.",
+    "id": "t0435-07",
+    "kind": "set",
+    "pieces": [
+      "WaterBottle",
+      "Map"
+    ],
+    "title": "The leaking water can",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "vehicle"
+      }
+    ]
+  },
+  {
+    "body": "The shovel's handle has two different colored clays. The tarp wrapped around it has fresh tears shaped by a narrow truck bed.",
+    "id": "t0435-08",
+    "kind": "set",
+    "pieces": [
+      "Shovel",
+      "Tarp"
+    ],
+    "title": "The shifted field kit",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "vehicle"
+      }
+    ]
+  },
+  {
+    "body": "A lunch pot is packed with feed dust instead of food. The clean fork inside it is still tied in paper.",
+    "id": "t0435-09",
+    "kind": "set",
+    "pieces": [
+      "Pot",
+      "Fork"
+    ],
+    "title": "The load carried home",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "vehicle"
+      }
+    ]
+  },
+  {
+    "body": "This tire pump is streaked with the same pale dust as the sack cord. The clean tool roll beside them stayed shut.",
+    "id": "t0435-10",
+    "kind": "set",
+    "pieces": [
+      "TirePump",
+      "SeedBag"
+    ],
+    "title": "The residue on the spare wheel",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "vehicle"
+      }
+    ]
+  }
+]

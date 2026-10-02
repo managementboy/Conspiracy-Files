@@ -1,0 +1,249 @@
+[
+  {
+    "body": "The bucket has a white tide mark above a green one. The little bowl filled from it has the green line too.",
+    "id": "t0429-01",
+    "kind": "set",
+    "pieces": [
+      "Bucket",
+      "Bowl"
+    ],
+    "title": "The shared trough",
+    "where": [
+      {
+        "containers": [
+          "crate",
+          "metal_shelves",
+          "counter",
+          "shelves",
+          "cardboardbox",
+          "locker"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "Two bottles are tied to opposite ends of this cord. The one marked upstream is clear; the other holds a green sediment.",
+    "id": "t0429-02",
+    "kind": "set",
+    "pieces": [
+      "WaterBottle",
+      "Twine"
+    ],
+    "title": "The upstream bottle",
+    "where": [
+      {
+        "containers": [
+          "fridge",
+          "counter",
+          "shelves",
+          "smallbox",
+          "bin",
+          "cardboardbox"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "The kettle holds clean water. The bucket beside it is stained where it caught the first rain running off the field tarp.",
+    "id": "t0429-03",
+    "kind": "set",
+    "pieces": [
+      "Kettle",
+      "Bucket",
+      "Tarp"
+    ],
+    "title": "The dry tap",
+    "where": [
+      {
+        "containers": [
+          "toolcabinet",
+          "locker",
+          "crate",
+          "shelves",
+          "cardboardbox",
+          "desk"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "The untouched bowl has the same green ring as the watering can. An overturned water bottle near it is clear.",
+    "id": "t0429-04",
+    "kind": "set",
+    "pieces": [
+      "Bowl",
+      "Bucket",
+      "WaterBottle"
+    ],
+    "title": "The dog that refused",
+    "where": [
+      {
+        "containers": [
+          "dresser",
+          "wardrobe",
+          "sidetable",
+          "desk",
+          "locker",
+          "smallbox"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "A net catches grass and pale granules where the runoff narrowed. There are none in the dry mud above the waterline.",
+    "id": "t0429-05",
+    "kind": "set",
+    "pieces": [
+      "FishingNet",
+      "Bucket"
+    ],
+    "title": "The lower ditch",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "vehicle"
+      }
+    ]
+  },
+  {
+    "body": "One jar is filled with rainwater and sealed. The other has flakes from a trough stuck inside the lid; only that one smells sour.",
+    "id": "t0429-06",
+    "kind": "set",
+    "pieces": [
+      "EmptyJar",
+      "JarLid"
+    ],
+    "title": "The two jars",
+    "where": [
+      {
+        "containers": [
+          "shelves",
+          "grocerstand",
+          "counter",
+          "smallcrate",
+          "cardboardbox",
+          "crate"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "The old hose end is brown with well water. A newer clamp is green inside, beside an empty sack of field additive.",
+    "id": "t0429-07",
+    "kind": "set",
+    "pieces": [
+      "RubberHose",
+      "Wrench",
+      "Fertilizer"
+    ],
+    "title": "The moved hose",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "vehicle"
+      }
+    ]
+  },
+  {
+    "body": "The spoon comes up green from the bottom of the bucket. At the surface the water looks clear enough to drink.",
+    "id": "t0429-08",
+    "kind": "set",
+    "pieces": [
+      "Bucket",
+      "Spoon"
+    ],
+    "title": "The settled bucket",
+    "where": [
+      {
+        "containers": [
+          "medicine",
+          "sidetable",
+          "dresser",
+          "desk",
+          "smallbox",
+          "locker"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "One boot still has residue in its tread; its mate was scrubbed. A bucket of gray wash water sits beside them.",
+    "id": "t0429-09",
+    "kind": "set",
+    "pieces": [
+      "Shoes_WorkBoots",
+      "Bucket"
+    ],
+    "title": "The washed boots",
+    "where": [
+      {
+        "containers": [
+          "smallbox",
+          "cardboardbox",
+          "shelves",
+          "desk",
+          "counter",
+          "crate"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "The wrench has fresh scrape marks, and the bucket beyond the pipe is clear. The bucket on the field side still holds a green rim.",
+    "id": "t0429-10",
+    "kind": "set",
+    "pieces": [
+      "Wrench",
+      "Bucket"
+    ],
+    "title": "The closed valve",
+    "where": [
+      {
+        "containers": [
+          "dishescabinet",
+          "counter",
+          "shelves",
+          "sidetable",
+          "smallbox",
+          "bin"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

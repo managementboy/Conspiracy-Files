@@ -1,0 +1,236 @@
+[
+  {
+    "body": "We had two packets of the same seed. The packet kept sealed in the kitchen sprouted in a damp cloth. The open packet used beside the treated field did not; its kernels stained the cloth gray.\n\nI left both cloths on the windowsill. My mother kept asking when I would clear the mess away.",
+    "id": "t0441-01",
+    "kind": "written",
+    "pieces": [
+      "diary"
+    ],
+    "title": "The unopened batch",
+    "where": [
+      {
+        "containers": [
+          "locker",
+          "filingcabinet",
+          "desk",
+          "shelves",
+          "cardboardbox",
+          "crate"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "The lower beds received the runoff from the new fields. The hill beds got the same rain but no runoff. Only the lower leaves curled and only the family tending them complained of a bitter taste at the tap.\n\nI marked the beds in my own sketch because I had promised to bring them seedlings. I still had healthy ones from the hill.",
+    "id": "t0441-02",
+    "kind": "written",
+    "pieces": [
+      "notebook"
+    ],
+    "title": "The hill garden",
+    "where": [
+      {
+        "containers": [
+          "desk",
+          "filingcabinet",
+          "shelves",
+          "cardboardbox",
+          "smallbox",
+          "crate"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "We mixed half a sack from the new delivery with the old feed for one pen. Another pen stayed on the old feed alone. Both had the same keeper; only the mixed pen went quiet overnight.\n\nThe keeper was my uncle. He had insisted the new grain smelled better. I wrote down the scoops before we argued about memory.",
+    "id": "t0441-03",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "The old and new feed",
+    "where": [
+      {
+        "containers": [
+          "crate",
+          "metal_shelves",
+          "counter",
+          "shelves",
+          "cardboardbox",
+          "locker"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "The trial crew stopped their work where the fence collapsed. Plants behind the broken fence stayed green; those along the completed rows carried small white spots the next day.\n\nI repaired the fence with my neighbor. We left the corner open on purpose once we saw how different the rows looked.",
+    "id": "t0441-04",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "title": "The unsprayed corner",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "mailbox"
+      }
+    ]
+  },
+  {
+    "body": "The crates under canvas went to one shop; the uncovered crates from the same field went to another. The uncovered leaves had a fine gritty edge and spoiled first.\n\nI bought a bunch from each shop so I could compare them in my kitchen. The shopkeepers both thought I was bargaining over pennies.",
+    "id": "t0441-05",
+    "kind": "written",
+    "pieces": [
+      "receipt"
+    ],
+    "title": "The covered produce",
+    "where": [
+      {
+        "containers": [
+          "toolcabinet",
+          "locker",
+          "crate",
+          "shelves",
+          "cardboardbox",
+          "desk"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "Nothing fell from the sky for six days. The upper field stayed sound while the trial plot wilted after its second application. The nearest laborers started missing meals before the rain came.\n\nI had written the dry days down because I hoped they would end. Now I keep turning back to that part of the calendar.",
+    "id": "t0441-06",
+    "kind": "written",
+    "pieces": [
+      "diary"
+    ],
+    "title": "The dry weather week",
+    "where": [
+      {
+        "containers": [
+          "dresser",
+          "wardrobe",
+          "sidetable",
+          "desk",
+          "locker",
+          "smallbox"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "Both gardens shared a well. Only the beds beside the treated field received drifting dust; the wall sheltered the others. The exposed beans yellowed first.\n\nI thought the wall was stealing light from the sheltered beans. They grew taller anyway. My sister wanted to pull them up for supper.",
+    "id": "t0441-07",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "The garden behind the wall",
+    "where": [
+      {
+        "containers": [
+          "postbox",
+          "shelves",
+          "counter",
+          "smallbox",
+          "cardboardbox",
+          "desk"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "Birds kept pecking at the old grain spilled by the shed. They avoided the new spill from the sacks, even when the old pile was nearly gone.\n\nI swept neither pile because I wanted to see if they would change their minds. The owner complained that I was leaving a mess beside his door.",
+    "id": "t0441-08",
+    "kind": "written",
+    "pieces": [
+      "diary"
+    ],
+    "title": "The returning birds",
+    "where": [
+      {
+        "containers": [
+          "shelves",
+          "grocerstand",
+          "counter",
+          "smallcrate",
+          "cardboardbox",
+          "crate"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "Both baskets held vegetables from the same planting. One came from the sprayed edge and softened by morning; the other, picked beyond the ditch, stayed crisp.\n\nI marked the handles with string. They were borrowed baskets and I knew I would have to return them even if I could no longer sell what was inside.",
+    "id": "t0441-09",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "title": "The two harvest baskets",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "mailbox"
+      }
+    ]
+  },
+  {
+    "body": "The near trough was topped up from the runoff ditch and the far trough from a closed tank. The animals walked past the near trough without drinking; their keeper, who filled it, was already feverish.\n\nI made a sketch of the pipe before anyone moved the hose. I had offered to take his shift and did not know which valve he had used.",
+    "id": "t0441-10",
+    "kind": "written",
+    "pieces": [
+      "notebook"
+    ],
+    "title": "The farther trough",
+    "where": [
+      {
+        "containers": [
+          "medicine",
+          "sidetable",
+          "dresser",
+          "desk",
+          "smallbox",
+          "locker"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]
