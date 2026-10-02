@@ -264,6 +264,9 @@ local clock5 = 0; getTimeInMillis = function() clock5 = clock5 + 5000; return cl
 local F5 = dofile('mod/common/media/lua/client/ConspiracyFiles/CaseFile.lua')
 assert(F5.held(carrier) == album, 'the album is found inside a backpack')
 assert(F5.give(carrier) == album, 'and a second album is not issued because of the bag')
+-- Only RECOGNISED evidence is filed (P4-R132); the real runtime here knows no
+-- "doc-1", so say it is recognised, or the album correctly stays empty.
+Engine.double("GeneratedRuntime", { isRecognised = function() return true end })
 assert(F5.fileEvidence() == 1 and albumInv.items[1] == doc and #top.items == 3,
     'paper filing still works with the album in a bag')
 local rootKeys={}

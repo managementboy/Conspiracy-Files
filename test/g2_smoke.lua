@@ -2,7 +2,11 @@ package.preload["ConspiracyFiles/ClueCue"]=function() return {} end
 next=nil -- PZ Kahlua: fresh-save setup must not depend on the next global.
 package.path="mod/common/media/lua/shared/?.lua;mod/common/media/lua/client/?.lua;"..package.path
 local events={}
-Events={OnTick={Add=function(f) events.tick=f end},OnGameStart={Add=function(f) events.start=f end}}
+-- Only the handlers registered by loading the runtime are captured. R.start requires
+-- InteractionAPI lazily, whose modules register their own OnTick/OnGameStart AFTER the
+-- runtime's; a one-slot stub kept the last and silently dropped the runtime's.
+local frozen=false
+Events={OnTick={Add=function(f) if not frozen then events.tick=f end end},OnGameStart={Add=function(f) if not frozen then events.start=f end end}}
 local function list(t) return {size=function() return #t end,get=function(_,i) return t[i+1] end} end
 local function record(t) local o={} for k,v in pairs(t) do local val=v; o[k]=function() return val end end return o end
 local containers={}
@@ -61,6 +65,7 @@ local probe={start=function() return true end,result=result}
 package.preload["ConspiracyFiles/T3Nearby"]=function() return probe end
 package.preload["ConspiracyFiles/GeneratedMenu"]=function() return {} end
 local R=require("ConspiracyFiles/GeneratedRuntime")
+frozen=true
 local originalStore=saved
 saved=setmetatable({},{__newindex=function() error('injected initial campaign write failure') end})
 -- Four hundred ticks, not eighty: a storage scan now walks a mailbox band

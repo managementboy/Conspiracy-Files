@@ -1,5 +1,7 @@
 local Content=require("ConspiracyFiles/Content")
 local runtimePath=TEST_ROOT..TEST_SEPARATOR.."mod/common/media/lua/shared/ConspiracyFiles/Runtime.lua"
+-- ContextMenu.lua requires client-side modules (InteractionEvents); run.lua only puts shared/ on the path.
+package.path=TEST_ROOT..TEST_SEPARATOR.."mod/common/media/lua/client/?.lua;"..package.path
 local menuPath=TEST_ROOT..TEST_SEPARATOR.."mod/common/media/lua/client/ConspiracyFiles/ContextMenu.lua"
 local function investigationAction(menu)
     for _, option in ipairs(menu.options) do

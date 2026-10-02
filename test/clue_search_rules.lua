@@ -115,10 +115,10 @@ local window={searchFocusCategory="None"}
 ISSearchWindow={players={[player]=window}}
 local clues={{id="d1",x=10,y=10,z=0,status="placed",recognised=false},{id="d2",x=80,y=80,z=0,status="placed",recognised=false}}
 local recognisedCalls={}
-ConspiracyFiles={GeneratedRuntime={
+Engine.double("GeneratedRuntime",{
     clueTargets=function() return clues end,
     recognise=function(id,how) recognisedCalls[#recognisedCalls+1]=id..":"..how; clues[1].recognised=true; return true,true end,
-}}
+})
 local C=require("ConspiracyFiles/ClueSearch")
 assert(C.registered=="listed" and forageSystem.categoryDefinitions.Clues,"registered as the file loads")
 
