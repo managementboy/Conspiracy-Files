@@ -53,6 +53,8 @@ NOT proven, despite commits 3f55f0ab and 3f0bfce1 saying "PASS":
   exists; `nohelp_full.sh` and `nohelp_e1e6.sh` print PASS lines regardless
   of the result. The report `20260929T192818-nohelp-e1e6.txt` was edited by
   hand afterwards. Treat all of them as throwaway. Delete or rewrite them.
+  (2026-10-02: the five scripts and the hand-edited report are deleted; the
+  real checks are `ground_truth.sh`, `realengine` and `nohelp_dump.sh`.)
 - `nohelp_dump.sh` (test 8) FAILED: "placement counts differ" (first dump
   taken before any clue was placed). Not yet diagnosed — may be the check's
   timing, may be real.
