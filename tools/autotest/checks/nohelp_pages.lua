@@ -6,7 +6,9 @@ local K = CFNHPages
 local H = require("NHShared/Headings")
 
 K.TYPES = {"Base.Note","Base.Notebook","Base.LetterHandwritten","Base.Photo",
-           "Base.Diary1","Base.Notepad","Base.Receipt","Base.Newspaper"}
+           "Base.Diary1","Base.Notepad","Base.Receipt","Base.Newspaper",
+           "Base.ParkingTicket","Base.SpeedingTicket","Base.ScratchTicket",
+           "Base.IDcard","Base.BusinessCard","Base.CreditCard"}
 
 local function lines(n)
     local t = {}

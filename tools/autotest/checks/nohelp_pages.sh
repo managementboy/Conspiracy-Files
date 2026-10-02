@@ -16,7 +16,10 @@ say() { echo "nohelp-pages: $*" >&2; }
 abort() { say "$*"; "$PZ" stop >/dev/null 2>&1; exit 2; }
 fails=(); fail() { fails+=("$*"); say "FAIL: $*"; }
 findings=(); note() { findings+=("$*"); say "$*"; }
-PROVEN=" Base.Note Base.Notebook Base.LetterHandwritten Base.Photo "
+# Types that must carry pages: T7's four, then the ones the game defines as paper
+# (ItemType base:literature) - tickets, ID card, business card, receipt, diary...
+# Base.CreditCard is a plain item (base:normal): it is reported, not required.
+PROVEN=" Base.Note Base.Notebook Base.LetterHandwritten Base.Photo Base.Diary1 Base.Notepad Base.Receipt Base.Newspaper Base.ParkingTicket Base.SpeedingTicket Base.ScratchTicket Base.IDcard Base.BusinessCard "
 
 claim_game || exit 2
 start_cold || abort "the game did not reach a playable world"
