@@ -1226,7 +1226,7 @@ function R.reshuffle(mode)
     local inventory=player and player:getInventory()
     local carried=inventory and inventory.getItems and inventory:getItems()
     if carried and carried.size then for i=0,carried:size()-1 do pcall(unmark,carried:get(i)) end end
-    local markers=require("ConspiracyFiles/InteractionAPI").ClueMarkers
+    local markers=require("ConspiracyFiles/InteractionAPI").clueMarkers()
     local forgotten=0
     if markers and markers.forget then
         local ok,n=pcall(markers.forget,manifest.documentIds); forgotten=(ok and type(n)=="number") and n or 0
@@ -1367,7 +1367,7 @@ function R.inspect(item,inPlace)
     -- Taken here, from the clue's own square, and before the discovery is
     -- committed: ClueMarkers refuses a location for a clue already known.
     if inPlace then
-        local markers=require("ConspiracyFiles/InteractionAPI").ClueMarkers
+        local markers=require("ConspiracyFiles/InteractionAPI").clueMarkers()
         if markers and markers.foundHere then pcall(markers.foundHere,item) end
     end
     checked(api.status(md.cfGeneratedId,"placed",worldHours())); checked(api.inspect(md.cfGeneratedId))

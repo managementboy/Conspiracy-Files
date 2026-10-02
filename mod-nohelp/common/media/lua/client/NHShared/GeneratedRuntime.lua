@@ -959,7 +959,7 @@ function R.inspect(item,inPlace)
     -- Taken here, from the clue's own square, and before the discovery is
     -- committed: ClueMarkers refuses a location for a clue already known.
     if inPlace then
-        local markers=require("NHShared/InteractionAPI").ClueMarkers
+        local markers=require("NHShared/InteractionAPI").clueMarkers()
         if markers and markers.foundHere then pcall(markers.foundHere,item) end
     end
     checked(api.status(md.cfGeneratedId,"placed",worldHours())); checked(api.inspect(md.cfGeneratedId))
