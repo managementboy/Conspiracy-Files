@@ -39,12 +39,22 @@ tests: `test/address_book_matches_export.lua` (every shipped house number names 
 
 ## The ground-truth walk-through (real game window) — `tools/autotest/checks/ground_truth.sh`
 
-Built, parses in the game's own Lua, **not yet run in the game** (it opens the game on the real display; waiting for the
-owner's go-ahead). In a fresh world the survivor is teleported to eight real buildings near Muldraugh. At each one the
+**Run on 2026-10-02 on game 42.21: 65 answers compared, 0 wrong** (7 real door squares read as doors, 14 indoor floors
+read as indoor floor with no door, 8 open-ground spots read as outside). Proof it can fail: with the old removed door call
+put back, the same run reports **7 wrong** (every real door read as "no door"). It opens the game on the real display (never hidden). In a fresh world the survivor is teleported to eight real buildings near Muldraugh. At each one the
 mod's own readers are asked about squares whose truth is read independently from the world (a door object is there or it
 is not; a square is outside or it is not), and every answer is compared. It writes the comparison to
-`dev/answers/ground_truth_<game>.tsv`, so a later game update can be compared with it. This is the only check that proves
+`dev/answers/ground_truth_<game>.tsv` (only a clean run is saved as the reference; a failing run is kept beside it as `.FAILED.tsv`), so a later game update can be compared with it. This is the only check that proves
 the readers' ANSWERS (door / indoor floor / open ground), not just that their calls are valid.
+
+## Does the mod cope with a stale container index? (answered by reading the code, 2026-10-02)
+
+Yes. `FixedContainerRuntime.resolve` re-checks the live world before any clue goes into an indexed container: the square
+must be loaded, the building id must be exactly the one in the index (otherwise "building-changed"), the furniture sprite
+and the container type must match (otherwise "target-changed"), and the container must not be searched or open. A stale row
+is therefore refused, never silently wrong; the cost is that some indexed spots are unusable in the roughly 3.5% of buildings
+that vary, and the caller then uses its fallback scan of the modified building. Not measured: how often that fallback
+fires, or whether it finds as many places as the index would have.
 
 ## What is NOT done by these checks
 

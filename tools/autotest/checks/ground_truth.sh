@@ -32,8 +32,11 @@ done
 checked="$(cut -f3 <<<"$s")"; wrong="$(cut -f4 <<<"$s")"
 src="${PZ_ZOMBOID:-$HOME/Zomboid}/Lua/$file"
 [ -s "$src" ] || abort "no result file at $src"
-mkdir -p "$REPO/dev/answers"; cp "$src" "$REPO/dev/answers/ground_truth_$(sed -n 's/^# game //p' "$src").tsv"
 say "$checked answers compared, $wrong wrong"
+# Only a clean run is saved as the reference for the next game update; a failing run is kept beside it.
+mkdir -p "$REPO/dev/answers"
+dest="$REPO/dev/answers/ground_truth_$(sed -n 's/^# game //p' "$src").tsv"
+if [ "$wrong" = 0 ] && [ "$checked" -gt 0 ]; then cp "$src" "$dest"; else cp "$src" "${dest%.tsv}.FAILED.tsv"; fi
 errs="$(mod_errors | wc -l)"; [ "$errs" = 0 ] || say "note: $errs error(s) inside the mod during the run"
 "$PZ" stop >/dev/null 2>&1
 if [ "$wrong" = 0 ] && [ "$checked" -gt 0 ]; then say "PASS"; exit 0; fi
