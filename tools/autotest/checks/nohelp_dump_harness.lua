@@ -26,6 +26,23 @@ function C.lastDump()
     return C.lastDumpLine or ""
 end
 
+-- Forget the last dump (so a stale line from before a reload is never compared).
+function C.reset() C.lastDumpLine = nil end
+
+-- Pure: has the case been decided and clues assigned? A dump taken before this
+-- (areasDecided absent or 0, nothing assigned) proves nothing, so the check
+-- waits for it. Returns "true" or "false".
+function C.ready(line)
+    if not line or line == "" then return "false" end
+    local decided = tonumber(line:match("areasDecided=(%d+)")) or 0
+    if decided <= 0 then return "false" end
+    local assigned = 0
+    for _, k in ipairs({"pending","placing","placed","deferred","indexed","conflict","dropped","unknown"}) do
+        assigned = assigned + (tonumber(line:match("%f[%w]"..k.."=(%d+)")) or 0)
+    end
+    return assigned > 0 and "true" or "false"
+end
+
 -- Pure comparison: extract and compare placement-related counts.
 -- Returns "true" if identical, "false" if different.
 function C.sameAcrossReload(lineA, lineB)

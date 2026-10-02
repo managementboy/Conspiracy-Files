@@ -1,0 +1,3 @@
+Linux nohelp-dump check 20261002T201840: PASS
+source: f7b6383c + uncommitted mod changes
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0

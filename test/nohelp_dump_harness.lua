@@ -81,7 +81,20 @@ local function test_shell_produced_different()
     assert(result == "false", "shell-produced strings with different pending should return 'false', got '"..result.."'")
 end
 
+-- TEST 10: ready() refuses the too-early dump that caused the 2026-09-29 false FAIL
+local function test_ready()
+    local early = "areasDecided=0 bytes=3515 cluesAgricultural=0 cluesContainment=0 foundByLook=0 foundBySearch=0 lost=0 peakMs=0 scenes=4"
+    local later = "areasDecided=4 cluesAgricultural=8 cluesContainment=12 deferred=24 lost=0"
+    assert(CFNHDump.ready(early) == "false", "pre-placement dump must not be ready")
+    assert(CFNHDump.ready("areasDecided=4 lost=0") == "false", "decided but nothing assigned is not ready")
+    assert(CFNHDump.ready(later) == "true", "decided and assigned is ready")
+    assert(CFNHDump.ready("") == "false" and CFNHDump.ready(nil) == "false")
+    -- and the comparison does fail between the two, so the check can fail for real
+    assert(CFNHDump.sameAcrossReload(early, later) == "false")
+end
+
 local tests = {
+    { "READY GATE", test_ready },
     { "EQUAL DUMPS", test_equal_dumps },
     { "DIFFERENT CONFLICT", test_different_conflict },
     { "DIFFERENT STATUSOTHER", test_different_statusother },
