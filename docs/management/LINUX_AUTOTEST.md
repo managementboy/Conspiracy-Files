@@ -151,3 +151,14 @@ First run 20260929T122851: PASS (144 story advices, listener heard 9 scenes,
 Found by the first native run: the state dump had never worked in the game
 (it called `next()`, which Kahlua lacks); fixed, and `test/nohelp_kahlua_globals.lua`
 now refuses `next()` in shipped No Help files.
+
+### No Help features in the real game (2026-10-02)
+
+    tools/autotest/checks/nohelp_features.sh     # ~5 minutes, visible display
+
+Proves, with real game state and a negative control each: the "you are close" cue (silent 8 tiles away, fires within
+3 tiles with bubble and halo words, rolls again after a failed roll), a clue in the seated car's container recognised
+through the real loot panel, debug Shift+L (real key press) logging `ev=clue_where`, and the quiet "observer unsupported"
+line. Proven able to fail: with four temporary breaks in `mod-nohelp` it failed all four features
+(`20261002T230916-nohelp-features-MUTANT-expected-FAIL.txt`). The autotest always runs `-debug`, so (d) closes the debug
+gate for a few seconds to reproduce a played game's state. The object-record 240-character cap is an offline linter only.

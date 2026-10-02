@@ -1,0 +1,29 @@
+Linux ground-truth check (No Help only, PZ_NOHELP_ONLY=1) run 2026-10-02 22:43-22:45, source b1fdad36: PASS
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0 (visible, never hidden)
+ground-truth: checking 8 buildings
+ground-truth: going to building 1
+ground-truth: waiting for the area to load
+ground-truth: building 1: 0 door squares, 6 indoor squares
+ground-truth: going to building 2
+ground-truth: waiting for the area to load
+ground-truth: building 2: 0 door squares, 0 indoor squares
+ground-truth: going to building 3
+ground-truth: waiting for the area to load
+ground-truth: building 3: 0 door squares, 3 indoor squares
+ground-truth: going to building 4
+ground-truth: waiting for the area to load
+ground-truth: building 4: 0 door squares, 6 indoor squares
+ground-truth: going to building 5
+ground-truth: waiting for the area to load
+ground-truth: building 5: 1 door squares, 3 indoor squares
+ground-truth: going to building 6
+ground-truth: waiting for the area to load
+ground-truth: building 6: 5 door squares, 42 indoor squares
+ground-truth: going to building 7
+ground-truth: waiting for the area to load
+ground-truth: building 7: 6 door squares, 66 indoor squares
+ground-truth: going to building 8
+ground-truth: waiting for the area to load
+ground-truth: building 8: 4 door squares, 57 indoor squares
+ground-truth: 65 answers compared, 0 wrong
+ground-truth: PASS
