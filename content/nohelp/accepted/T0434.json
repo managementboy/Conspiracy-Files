@@ -104,14 +104,14 @@
     ]
   },
   {
-    "body": "The bucket has a numbered tag. The tarp has orders written on it. I think it marked a closed road.",
+    "body": "Patrol tag 9 hangs from the bucket. Orders on the tarp read 'Road closed, turn back'. A checkpoint list on the tarp counts 40 people.",
     "id": "t0434-05",
     "kind": "set",
     "pieces": [
       "Bucket",
       "Tarp"
     ],
-    "title": "Two buckets and a tarp",
+    "title": "Bucket and tarp",
     "where": [
       {
         "containers": [

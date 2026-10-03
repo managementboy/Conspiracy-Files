@@ -130,7 +130,7 @@
     ]
   },
   {
-    "body": "The jar's paper label names a trial row. A thumbprint in its residue lands on another roadside mark on the map.",
+    "body": "The empty jar has checkpoint tape and tag 5 on it. The map has the evacuation route marked with a thick line. A scribbled order on the map says to stay quiet.",
     "id": "t0411-06",
     "kind": "set",
     "pieces": [
@@ -148,9 +148,9 @@
           "counter",
           "shelves"
         ],
-        "lean": "agricultural",
+        "lean": "containment",
         "place": "mapNamed",
-        "rival": "containment",
+        "rival": "agricultural",
         "spot": "furniture"
       }
     ]

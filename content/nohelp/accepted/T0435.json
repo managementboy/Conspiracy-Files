@@ -19,7 +19,7 @@
     ]
   },
   {
-    "body": "Soap floats in green wash water. Two different work gloves are jammed into the same bucket. They were put there after a field shift, I think.",
+    "body": "The bucket, soap and dish gloves share patrol tag 18. Tape on the bucket reads 'Hold for the convoy'. I think the guards ordered everyone to leave them.",
     "id": "t0435-02",
     "kind": "set",
     "pieces": [
@@ -30,9 +30,9 @@
     "title": "Bucket, soap and dish gloves",
     "where": [
       {
-        "lean": "agricultural",
+        "lean": "containment",
         "place": "mapNamed",
-        "rival": "containment",
+        "rival": "agricultural",
         "spot": "vehicle"
       }
     ]

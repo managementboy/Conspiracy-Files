@@ -182,7 +182,7 @@
     ]
   },
   {
-    "body": "The sponge is stained green through the middle. The soap is worn on one edge. They're in a mesh bag with a measuring cup marked in milliliters.",
+    "body": "The soap and sponge hang from a guard's numbered tag. Tape on the shelf reads 'Zone 2, closed, do not enter'. A list beside them counts 14 names, all crossed off.",
     "id": "t0417-08",
     "kind": "set",
     "pieces": [
@@ -200,9 +200,9 @@
           "wardrobe",
           "dishescabinet"
         ],
-        "lean": "agricultural",
+        "lean": "containment",
         "place": "mapNamed",
-        "rival": "containment",
+        "rival": "agricultural",
         "spot": "furniture"
       }
     ]

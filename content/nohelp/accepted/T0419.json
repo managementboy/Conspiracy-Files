@@ -130,7 +130,7 @@
     ]
   },
   {
-    "body": "The jar's label names a trial row. The residue inside seems to match a plot marked on the map.",
+    "body": "The empty jar holds a folded list of 20 names. The map has roadblocks and checkpoints circled in pen. An order on the map says tell no one the route.",
     "id": "t0419-06",
     "kind": "set",
     "pieces": [
@@ -148,9 +148,9 @@
           "counter",
           "shelves"
         ],
-        "lean": "agricultural",
+        "lean": "containment",
         "place": "mapNamed",
-        "rival": "containment",
+        "rival": "agricultural",
         "spot": "furniture"
       }
     ]
