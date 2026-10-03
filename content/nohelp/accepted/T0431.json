@@ -1,6 +1,6 @@
 [
   {
-    "body": "Green dust sits in the tire pump's nozzle. The tarp around it is streaked. Maybe a wheel crossed from one field to another.",
+    "body": "A tire pump is wrapped in a tarp and tagged with a number. Tape on the tarp reads held for inspection. I think a patrol took the car and left this.",
     "id": "t0431-01",
     "kind": "set",
     "pieces": [
@@ -10,9 +10,9 @@
     "title": "Tire pump and tarp",
     "where": [
       {
-        "lean": "agricultural",
+        "lean": "containment",
         "place": "mapNamed",
-        "rival": "containment",
+        "rival": "agricultural",
         "spot": "vehicle"
       }
     ]
@@ -109,7 +109,7 @@
     ]
   },
   {
-    "body": "Someone tied this broom to the outside of a load. Its bristles hold straw from one pen and dark treated-seed pellets. A few scorched crop leaves are caught in the twine.",
+    "body": "Someone tied this broom to a gate post with twine. A tag on the twine lists times of patrol passes. The last time is a day after the closure.",
     "id": "t0431-07",
     "kind": "set",
     "pieces": [
@@ -119,9 +119,9 @@
     "title": "Broom and twine",
     "where": [
       {
-        "lean": "agricultural",
+        "lean": "containment",
         "place": "mapNamed",
-        "rival": "containment",
+        "rival": "agricultural",
         "spot": "vehicle"
       }
     ]

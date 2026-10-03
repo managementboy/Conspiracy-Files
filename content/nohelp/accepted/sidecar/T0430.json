@@ -27,13 +27,13 @@
         "c-failure"
       ]
     },
-    "gloss": "An ordinary trace links a farm exposure to a distinct observed outcome: the milk before morning.",
+    "gloss": "Numbered milk samples: officials improvised contamination tracking with inadequate resources.",
     "prov": {
       "batch": "T0430",
       "handoff": "2026-09-27",
       "writer": "ChatGPT"
     },
-    "rival_reading": "A failure of the later response could still have left this exposure unaddressed."
+    "rival_reading": "None: one-sided on purpose"
   },
   "t0430-03": {
     "axioms": {
@@ -63,13 +63,13 @@
         "c-failure"
       ]
     },
-    "gloss": "An ordinary trace links a farm exposure to a distinct observed outcome: the unused pail.",
+    "gloss": "Tagged posts trace official perimeter control: evidence of containment protocol.",
     "prov": {
       "batch": "T0430",
       "handoff": "2026-09-27",
       "writer": "ChatGPT"
     },
-    "rival_reading": "A failure of the later response could still have left this exposure unaddressed."
+    "rival_reading": "None: one-sided on purpose"
   },
   "t0430-05": {
     "axioms": {
@@ -99,13 +99,13 @@
         "c-failure"
       ]
     },
-    "gloss": "An ordinary trace links a farm exposure to a distinct observed outcome: the pen rope.",
+    "gloss": "Improvised perimeter marking shows hasty containment: the barrier rope.",
     "prov": {
       "batch": "T0430",
       "handoff": "2026-09-27",
       "writer": "ChatGPT"
     },
-    "rival_reading": "A failure of the later response could still have left this exposure unaddressed."
+    "rival_reading": "None: one-sided on purpose"
   },
   "t0430-07": {
     "axioms": {

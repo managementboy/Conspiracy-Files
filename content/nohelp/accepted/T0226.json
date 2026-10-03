@@ -3,7 +3,7 @@
     "anchor": {
       "print": "FarmingAndRuralSupplyDoeValley"
     },
-    "body": "This seed bag and pistol both have the same checkpoint tag. The manifest lists them as evacuation kit for one person. That person's entry has been completely blacked out.",
+    "body": "The seed bag and pistol carry the same checkpoint tag. The evacuation manifest lists both as one person's kit. That person's entry has been completely blacked out.",
     "id": "t0226-01",
     "kind": "set",
     "pieces": [

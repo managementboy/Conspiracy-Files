@@ -70,7 +70,7 @@
     ]
   },
   {
-    "body": "This folded bag has loose feed at the bottom. A tied-off strip from another bag is with it. It looks marked for a different delivery day.",
+    "body": "This folded seed bag has loose feed at the bottom. A rope holds it to a tied-off strip from another bag. It looks marked for a different delivery day.",
     "id": "t0428-04",
     "kind": "set",
     "pieces": [
@@ -96,7 +96,7 @@
     ]
   },
   {
-    "body": "There is a sticky green rim inside the jar. The bottle beside it holds clean water. Only the jar's contents have gone cloudy.",
+    "body": "The jar is taped shut with a numbered strip. The water bottle beside it has an identical strip. I think they were counted at a checkpoint and left.",
     "id": "t0428-05",
     "kind": "set",
     "pieces": [
@@ -114,9 +114,9 @@
           "locker",
           "smallbox"
         ],
-        "lean": "agricultural",
+        "lean": "containment",
         "place": "mapNamed",
-        "rival": "containment",
+        "rival": "agricultural",
         "spot": "furniture"
       }
     ]

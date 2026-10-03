@@ -26,7 +26,7 @@
     ]
   },
   {
-    "body": "A clean bottle and a cloudy bucket share a chalk mark. The bucket looks filled far from the rows, after the sprayer passed. A strip of cloth keeps the pair together.",
+    "body": "A water bottle and a bucket share a chalk mark. The bucket holds numbered tags with tape on each. I think a patrol marked them before the road closed.",
     "id": "t0409-02",
     "kind": "set",
     "pieces": [
@@ -44,9 +44,9 @@
           "cardboardbox",
           "crate"
         ],
-        "lean": "agricultural",
+        "lean": "containment",
         "place": "mapNamed",
-        "rival": "containment",
+        "rival": "agricultural",
         "spot": "furniture"
       }
     ]
@@ -130,7 +130,7 @@
     ]
   },
   {
-    "body": "The jar's paper label names a trial row. The residue inside seems to match a plot marked on the map. The string has been retied since morning.",
+    "body": "The empty jar has a tape label with a number. The map shows the same number at a checkpoint. Someone drew a closure line through that road.",
     "id": "t0409-06",
     "kind": "set",
     "pieces": [
@@ -148,15 +148,15 @@
           "dishescabinet",
           "desk"
         ],
-        "lean": "agricultural",
+        "lean": "containment",
         "place": "mapNamed",
-        "rival": "containment",
+        "rival": "agricultural",
         "spot": "furniture"
       }
     ]
   },
   {
-    "body": "The loaf is wrapped in a clean cloth, the knot still tied. There's yellow powder between the cloth and the crust.",
+    "body": "The loaf is wrapped in a dish cloth, the knot still tied. A tag on the cloth carries a ration number. It matches the ration lists they read out at the checkpoint.",
     "id": "t0409-07",
     "kind": "set",
     "pieces": [
@@ -174,15 +174,15 @@
           "counter",
           "overhead"
         ],
-        "lean": "agricultural",
+        "lean": "containment",
         "place": "mapNamed",
-        "rival": "containment",
+        "rival": "agricultural",
         "spot": "furniture"
       }
     ]
   },
   {
-    "body": "The soap has a chemical smell that won't wash off my hands. The sponge is stiff with dried spray from the fields. Someone tried to clean up after work.",
+    "body": "The soap and sponge are in a bag with a numbered tag. A handwritten order says to hand out only one per person. The count on the tag is crossed out twice.",
     "id": "t0409-08",
     "kind": "set",
     "pieces": [
@@ -200,9 +200,9 @@
           "wardrobe",
           "dishescabinet"
         ],
-        "lean": "agricultural",
+        "lean": "containment",
         "place": "mapNamed",
-        "rival": "containment",
+        "rival": "agricultural",
         "spot": "furniture"
       }
     ]

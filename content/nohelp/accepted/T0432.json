@@ -20,7 +20,7 @@
     ]
   },
   {
-    "body": "One work boot has damp field clay in its seams. Its mate is still packed with clean newspaper. Maybe the owner went out in one borrowed boot.",
+    "body": "One work boot is stuffed with newspaper from the closure day. A numbered tag is laced to the other boot. The tag matches a list I saw at the checkpoint.",
     "id": "t0432-02",
     "kind": "set",
     "pieces": [
@@ -30,10 +30,10 @@
     "title": "Work boots and newspaper",
     "where": [
       {
-        "lean": "agricultural",
+        "lean": "containment",
         "outfit": "farm",
         "place": "mapNamed",
-        "rival": "containment",
+        "rival": "agricultural",
         "spot": "corpse"
       }
     ]
@@ -133,7 +133,7 @@
     ]
   },
   {
-    "body": "A pinch of dark pellets has collected in the crease of this purse. The spoon beside it is bent, like it was used to open a feed sack.",
+    "body": "A numbered tag is clipped inside this purse. The spoon beside it has tape marked with a count. I think they were taken at a checkpoint and dropped.",
     "id": "t0432-08",
     "kind": "set",
     "pieces": [
@@ -143,10 +143,10 @@
     "title": "Purse and spoon",
     "where": [
       {
-        "lean": "agricultural",
+        "lean": "containment",
         "outfit": "farm",
         "place": "mapNamed",
-        "rival": "containment",
+        "rival": "agricultural",
         "spot": "corpse"
       }
     ]

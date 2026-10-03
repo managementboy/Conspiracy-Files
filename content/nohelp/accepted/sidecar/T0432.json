@@ -27,13 +27,13 @@
         "c-failure"
       ]
     },
-    "gloss": "An ordinary trace links a farm exposure to a distinct observed outcome: the unworn pair.",
+    "gloss": "A numbered tag links checkpoint records to managed removal: the unworn boots.",
     "prov": {
       "batch": "T0432",
       "handoff": "2026-09-27",
       "writer": "ChatGPT"
     },
-    "rival_reading": "A failure of the later response could still have left this exposure unaddressed."
+    "rival_reading": "None: one-sided on purpose"
   },
   "t0432-03": {
     "axioms": {
@@ -135,13 +135,13 @@
         "c-failure"
       ]
     },
-    "gloss": "An ordinary trace links a farm exposure to a distinct observed outcome: the feed clerk's pocket.",
+    "gloss": "Checkpoint seizures logged then abandoned: the containment protocol collapsed mid-operation.",
     "prov": {
       "batch": "T0432",
       "handoff": "2026-09-27",
       "writer": "ChatGPT"
     },
-    "rival_reading": "A failure of the later response could still have left this exposure unaddressed."
+    "rival_reading": "None: one-sided on purpose"
   },
   "t0432-09": {
     "axioms": {

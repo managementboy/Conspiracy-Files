@@ -25,13 +25,13 @@
         "c-failure"
       ]
     },
-    "gloss": "A trace of trial material appears beyond a field boundary.",
+    "gloss": "Patrol inventory marks left behind during evacuation closure.",
     "prov": {
       "batch": "T0409",
       "handoff": "2026-09-27",
       "writer": "ChatGPT"
     },
-    "rival_reading": "The emergency response could have moved or contaminated these things."
+    "rival_reading": "None: one-sided on purpose"
   },
   "t0409-03": {
     "axioms": {
@@ -93,7 +93,7 @@
         "c-failure"
       ]
     },
-    "gloss": "One-sided on purpose.",
+    "gloss": "Sample collected, checkpoint closed - covering their tracks.",
     "prov": {
       "batch": "T0409",
       "handoff": "2026-09-27",
@@ -110,13 +110,13 @@
         "c-failure"
       ]
     },
-    "gloss": "A trace of trial material appears beyond a field boundary.",
+    "gloss": "Unclaimed ration suggests evacuation breakdown at official checkpoint.",
     "prov": {
       "batch": "T0409",
       "handoff": "2026-09-27",
       "writer": "ChatGPT"
     },
-    "rival_reading": "The emergency response could have moved or contaminated these things."
+    "rival_reading": "None: one-sided on purpose"
   },
   "t0409-08": {
     "axioms": {
@@ -127,7 +127,7 @@
         "c-failure"
       ]
     },
-    "gloss": "One-sided on purpose.",
+    "gloss": "Supply count altered twice - cover-up.",
     "prov": {
       "batch": "T0409",
       "handoff": "2026-09-27",

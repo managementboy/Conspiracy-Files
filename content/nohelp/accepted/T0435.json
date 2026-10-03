@@ -56,7 +56,7 @@
     ]
   },
   {
-    "body": "The tarp has a rectangle of untouched cloth where a crate stood. All around it lies the pale dust from the load.",
+    "body": "The tarp has a clean rectangle where a crate stood. The seed bag beside it is dusted with the same pale powder. Maybe the load spilled before the crate was taken.",
     "id": "t0435-04",
     "kind": "set",
     "pieces": [
@@ -74,7 +74,7 @@
     ]
   },
   {
-    "body": "The spoon is wrapped in newspaper from before harvest. The dark feed dust settled inside smells oddly metallic.",
+    "body": "The spoon is wrapped in newspaper from the day of the order. The paper lists road closures in a numbered column. Someone circled the closures nearest this stop.",
     "id": "t0435-05",
     "kind": "set",
     "pieces": [
@@ -84,9 +84,9 @@
     "title": "Spoon wrapped in newspaper",
     "where": [
       {
-        "lean": "agricultural",
+        "lean": "containment",
         "place": "mapNamed",
-        "rival": "containment",
+        "rival": "agricultural",
         "spot": "vehicle"
       }
     ]
@@ -110,7 +110,7 @@
     ]
   },
   {
-    "body": "A bottle has dripped across the map where farm roads meet. Its cap is stained green. The map dries with the same halo.",
+    "body": "A water bottle sits on the map where two roads meet. The map has a checkpoint mark in tape at that spot. A patrol schedule is penciled in the margin.",
     "id": "t0435-07",
     "kind": "set",
     "pieces": [
@@ -120,9 +120,9 @@
     "title": "Water bottle and map",
     "where": [
       {
-        "lean": "agricultural",
+        "lean": "containment",
         "place": "mapNamed",
-        "rival": "containment",
+        "rival": "agricultural",
         "spot": "vehicle"
       }
     ]
@@ -146,7 +146,7 @@
     ]
   },
   {
-    "body": "A lunch pot is packed with feed dust instead of food. The fork inside it is clean and still tied in paper.",
+    "body": "A lunch pot is packed with a stack of numbered tags. The fork inside is taped to a list of names. Half the names are crossed out in the same hand.",
     "id": "t0435-09",
     "kind": "set",
     "pieces": [
@@ -156,9 +156,9 @@
     "title": "Pot and fork",
     "where": [
       {
-        "lean": "agricultural",
+        "lean": "containment",
         "place": "mapNamed",
-        "rival": "containment",
+        "rival": "agricultural",
         "spot": "vehicle"
       }
     ]

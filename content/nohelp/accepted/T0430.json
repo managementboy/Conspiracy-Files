@@ -26,7 +26,7 @@
     ]
   },
   {
-    "body": "The milk spoiled before morning. The spoon in it has yellow dust. Same stuff that's all over the barn.",
+    "body": "The milk carton has a tape strip across the cap. A spoon taped to it carries a number. A note says nobody is to open them before the count.",
     "id": "t0430-02",
     "kind": "set",
     "pieces": [
@@ -44,9 +44,9 @@
           "cardboardbox",
           "desk"
         ],
-        "lean": "agricultural",
+        "lean": "containment",
         "place": "mapNamed",
-        "rival": "containment",
+        "rival": "agricultural",
         "spot": "furniture"
       }
     ]
@@ -78,7 +78,7 @@
     ]
   },
   {
-    "body": "Wire runs along the fence posts. Brown residue dried on every inch. The bucket hung on it is clean. Was there before it started.",
+    "body": "Wire runs along the fence posts to a checkpoint gate. The bucket hung on it holds numbered tags. A patrol seems to have counted each post.",
     "id": "t0430-04",
     "kind": "set",
     "pieces": [
@@ -96,9 +96,9 @@
           "cardboardbox",
           "desk"
         ],
-        "lean": "agricultural",
+        "lean": "containment",
         "place": "mapNamed",
-        "rival": "containment",
+        "rival": "agricultural",
         "spot": "furniture"
       }
     ]
@@ -130,7 +130,7 @@
     ]
   },
   {
-    "body": "One end of this rope is polished by an animal's neck. The other is stiff with dark feed dust. A small feed bowl is still tied beside it.",
+    "body": "The rope is knotted at intervals, each knot with a tag. The bowl at one end holds a list of numbers. I think it marked a line people were told not to cross.",
     "id": "t0430-06",
     "kind": "set",
     "pieces": [
@@ -148,9 +148,9 @@
           "locker",
           "cardboardbox"
         ],
-        "lean": "agricultural",
+        "lean": "containment",
         "place": "mapNamed",
-        "rival": "containment",
+        "rival": "agricultural",
         "spot": "furniture"
       }
     ]

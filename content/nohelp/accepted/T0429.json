@@ -1,6 +1,6 @@
 [
   {
-    "body": "The bucket has green chemical crust dried on the inside. I used the bowl to dilute the pesticide concentrate.",
+    "body": "The bucket has a closure notice taped inside the rim. The bowl holds a list of names, half of them struck out.",
     "id": "t0429-01",
     "kind": "set",
     "pieces": [
@@ -18,15 +18,15 @@
           "cardboardbox",
           "locker"
         ],
-        "lean": "agricultural",
+        "lean": "containment",
         "place": "mapNamed",
-        "rival": "containment",
+        "rival": "agricultural",
         "spot": "furniture"
       }
     ]
   },
   {
-    "body": "Two bottles are tied to opposite ends of this cord. The one marked upstream is clear. The other holds a green sediment.",
+    "body": "Two water bottles are tied together with twine. Each has a numbered tag and a strip of tape. A patrol must have left them as a marker.",
     "id": "t0429-02",
     "kind": "set",
     "pieces": [
@@ -44,15 +44,15 @@
           "bin",
           "cardboardbox"
         ],
-        "lean": "agricultural",
+        "lean": "containment",
         "place": "mapNamed",
-        "rival": "containment",
+        "rival": "agricultural",
         "spot": "furniture"
       }
     ]
   },
   {
-    "body": "The tarp still reeks from whatever they sprayed. Green runoff filled the bucket underneath. The kettle's full of it too, and whatever they planted died.",
+    "body": "A tarp covers a kettle and a bucket stacked together. Tape across the tarp says do not move until cleared. Someone wrote a checkpoint number on the kettle.",
     "id": "t0429-03",
     "kind": "set",
     "pieces": [
@@ -71,9 +71,9 @@
           "cardboardbox",
           "desk"
         ],
-        "lean": "agricultural",
+        "lean": "containment",
         "place": "mapNamed",
-        "rival": "containment",
+        "rival": "agricultural",
         "spot": "furniture"
       }
     ]
@@ -106,7 +106,7 @@
     ]
   },
   {
-    "body": "A net catches grass and pale granules where the runoff narrowed. I can't find any in the dry mud above the waterline.",
+    "body": "My fishing net caught pale granules where the runoff narrowed. The bucket of dry mud from above the waterline has none.",
     "id": "t0429-05",
     "kind": "set",
     "pieces": [
@@ -124,7 +124,7 @@
     ]
   },
   {
-    "body": "One jar is filled with rainwater and sealed. The other has flakes from a trough stuck inside the lid. Only that one smells sour.",
+    "body": "One jar is sealed with its lid and a numbered tape strip. The other jar has no lid and no tag. I think someone was told to count and seal them all.",
     "id": "t0429-06",
     "kind": "set",
     "pieces": [
@@ -142,9 +142,9 @@
           "cardboardbox",
           "crate"
         ],
-        "lean": "agricultural",
+        "lean": "containment",
         "place": "mapNamed",
-        "rival": "containment",
+        "rival": "agricultural",
         "spot": "furniture"
       }
     ]
@@ -169,7 +169,7 @@
     ]
   },
   {
-    "body": "The spoon comes up green from the bottom of the bucket. At the surface the water looks clear enough to drink.",
+    "body": "A spoon hangs from the bucket by a tagged string. The tag lists a count of people and a closure date. The count is written over twice.",
     "id": "t0429-08",
     "kind": "set",
     "pieces": [
@@ -187,9 +187,9 @@
           "smallbox",
           "locker"
         ],
-        "lean": "agricultural",
+        "lean": "containment",
         "place": "mapNamed",
-        "rival": "containment",
+        "rival": "agricultural",
         "spot": "furniture"
       }
     ]
@@ -221,7 +221,7 @@
     ]
   },
   {
-    "body": "The wrench has fresh scrape marks. The bucket beyond the pipe is clear. The bucket on the field side still has a green rim.",
+    "body": "The wrench has a numbered tag wired to the handle. A bucket beyond it holds a sheet of orders to stay silent.",
     "id": "t0429-10",
     "kind": "set",
     "pieces": [
@@ -239,9 +239,9 @@
           "smallbox",
           "bin"
         ],
-        "lean": "agricultural",
+        "lean": "containment",
         "place": "mapNamed",
-        "rival": "containment",
+        "rival": "agricultural",
         "spot": "furniture"
       }
     ]
