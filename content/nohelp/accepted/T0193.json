@@ -3,14 +3,14 @@
     "anchor": {
       "print": "KnoxGunOwnersClubGetTogether"
     },
-    "body": "The range sheet records a safety check and a field briefing in the same time slot; one attendee signed both lines from the same station.",
+    "body": "The notebook tracks pesticide applications. One name at two sites, same hour. The pistol was standard issue for field staff.",
     "id": "t0193-01",
     "kind": "set",
     "pieces": [
       "Pistol",
       "Notebook"
     ],
-    "title": "Meeting range sheet",
+    "title": "Pistol and notebook",
     "where": [
       {
         "containers": [

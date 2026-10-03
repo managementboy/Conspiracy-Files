@@ -3,14 +3,14 @@
     "anchor": {
       "print": "WPTownHall"
     },
-    "body": "field dust covers one side of the candle and animal-feed sack; torn warning tape covers the other. the bundle was opened from both ends.",
+    "body": "Field dust covers one side of the candle and feed sack. Torn warning tape covers the other side. It looks like the bundle was opened from both ends.",
     "id": "t0247-01",
     "kind": "set",
     "pieces": [
       "Candle",
       "AnimalFeedBag"
     ],
-    "title": "Candle with the second residue",
+    "title": "Candle and feed sack",
     "where": [
       {
         "containers": [

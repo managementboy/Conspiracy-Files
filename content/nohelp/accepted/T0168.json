@@ -3,14 +3,14 @@
     "anchor": {
       "print": "BensCabin"
     },
-    "body": "A fishing rod and water bottle sit beside a cabin rental card; the host asks guests not to drink from the stream until the next crop-runoff test, since the upstream field was sprayed.",
+    "body": "A fishing rod and hand torch left by the water. They said not to fish until the runoff test clears. The upstream field was sprayed yesterday.",
     "id": "t0168-01",
     "kind": "set",
     "pieces": [
       "FishingRod",
       "HandTorch"
     ],
-    "title": "Cabin water note",
+    "title": "Fishing rod and hand torch",
     "where": [
       {
         "containers": [

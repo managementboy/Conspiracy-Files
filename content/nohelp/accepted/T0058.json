@@ -4,14 +4,14 @@
       "map": "LouisvilleStashMap10",
       "mark": 1
     },
-    "body": "A bread receipt is tucked inside a note. The back lists garden rows sprayed on a given day and a delivery of produce from them that never reached the house.",
+    "body": "A bread receipt is tucked inside a note. The back lists garden rows sprayed on a given day. It also lists produce from them that never reached the house.",
     "id": "t0058-01",
     "kind": "set",
     "pieces": [
       "Bread",
       "SheetPaper2"
     ],
-    "title": "Food from the sprayed rows",
+    "title": "Bread and sheet of paper",
     "where": [
       {
         "containers": [

@@ -3,14 +3,14 @@
     "anchor": {
       "print": "BrandenburgFD"
     },
-    "body": "the broom and fertilizer sack share a sweet pesticide smell. dead moths are stuck only where the two objects touched.",
+    "body": "The broom and fertilizer sack share a sweet pesticide smell. Dead moths are stuck only where the two touched.",
     "id": "t0235-01",
     "kind": "set",
     "pieces": [
       "Broom",
       "Fertilizer"
     ],
-    "title": "After on the broom, the first copy",
+    "title": "Broom and fertilizer sack",
     "where": [
       {
         "containers": [

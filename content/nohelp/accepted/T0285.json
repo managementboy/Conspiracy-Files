@@ -3,14 +3,14 @@
     "anchor": {
       "scene": "RBBurnt"
     },
-    "body": "The pair is streaked with clouded residue from the treated rows. It was set aside after the flies vanished from the barn and the cattle began to cough.",
+    "body": "Clouded residue from the treated rows streaks the kit and bottle. It was set aside after the flies vanished from the barn. The cattle began to cough.",
     "id": "t0285-01",
     "kind": "set",
     "pieces": [
       "FirstAidKit",
       "WaterBottle"
     ],
-    "title": "The jar with its clouded rim",
+    "title": "First-aid kit and water bottle",
     "where": [
       {
         "containers": [
@@ -32,14 +32,14 @@
     "anchor": {
       "scene": "RBBurnt"
     },
-    "body": "The kit is unopened. The water bottle has a black line drawn halfway down it and the same line repeated on the charred wall. A stencilled cordon number is on the kit lid. Whoever marked it was measuring what survived the fire, not treating a burn.",
+    "body": "The kit is unopened, with a stenciled cordon number on the lid. The bottle has a black line halfway down, repeated on the burnt wall. Looks like measuring what survived the fire, not treating a burn.",
     "id": "t0285-02",
     "kind": "set",
     "pieces": [
       "FirstAidKit",
       "WaterBottle"
     ],
-    "title": "A waterline after the fire",
+    "title": "First-aid kit and water bottle",
     "where": [
       {
         "containers": [

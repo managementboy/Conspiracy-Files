@@ -3,14 +3,14 @@
     "anchor": {
       "scene": "RZSBurntWreck"
     },
-    "body": "the hand axe with a seed sack carry saltlike grains from the sprayer trial. they were packed before the shelter message aired.",
+    "body": "The axe and seed sack have saltlike grains on them. I think they came from the sprayer trial. They were packed before the shelter message aired.",
     "id": "t0378-01",
     "kind": "set",
     "pieces": [
       "Axe",
       "SeedBag"
     ],
-    "title": "hand axe with a seed sack at at tuesday dawn",
+    "title": "Axe and seed sack",
     "where": [
       {
         "lean": "agricultural",
@@ -30,7 +30,7 @@
     "pieces": [
       "notebook"
     ],
-    "title": "The wrecked permit",
+    "title": "Notebook page",
     "where": [
       {
         "lean": "containment",

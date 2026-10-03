@@ -4,14 +4,14 @@
       "map": "LouisvilleStashMap9",
       "mark": 1
     },
-    "body": "A food tin is tied to a stable key with a route note warning the next driver not to take the tree road. The return time is crossed out.",
+    "body": "A hunting rifle tied to a corn can with wire. Both tagged for checkpoint supply run. I can't read the return time - someone burned it off the tags.",
     "id": "t0057-01",
     "kind": "set",
     "pieces": [
       "HuntingRifle",
       "CannedCorn"
     ],
-    "title": "Stable stores",
+    "title": "Hunting rifle and canned corn",
     "where": [
       {
         "containers": [

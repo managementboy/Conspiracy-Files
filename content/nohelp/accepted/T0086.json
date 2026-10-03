@@ -4,14 +4,14 @@
       "map": "MulStashMap9",
       "mark": 1
     },
-    "body": "A field notebook is closed under a torch; the last page lists soil and leaf samples from sprayed plots and asks whether the sample was taken before or after the second spray.",
+    "body": "A field notebook is closed under a torch. Its last page lists soil and leaf samples from sprayed plots. It asks whether the sample was taken before or after the second spray.",
     "id": "t0086-01",
     "kind": "set",
     "pieces": [
       "HandTorch",
       "Notebook"
     ],
-    "title": "The unread page",
+    "title": "Hand torch and notebook",
     "where": [
       {
         "containers": [

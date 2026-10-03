@@ -4,14 +4,14 @@
       "map": "IrvingtonStashMap5",
       "mark": 1
     },
-    "body": "the eraser and hand torch are both dusted with sweet yellow-green field residue, thick under the torch's grip and rubbed into the eraser's edge.",
+    "body": "The eraser and torch are dusted with sweet yellow-green field residue. It's thick under the torch's grip and rubbed into the eraser's edge.",
     "id": "t0044-01",
     "kind": "set",
     "pieces": [
       "Eraser",
       "HandTorch"
     ],
-    "title": "Eraser dusted with field residue",
+    "title": "Eraser and hand torch",
     "where": [
       {
         "containers": [

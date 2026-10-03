@@ -4,14 +4,14 @@
       "map": "WorldStashMap15",
       "mark": 1
     },
-    "body": "A water bottle rests on a garden record whose test result is missing. The last instruction says not to water until the next visit.",
+    "body": "A water bottle rests on a notebook. Last entry warns not to water until test results return. Something about checking the treatment program first.",
     "id": "t0124-01",
     "kind": "set",
     "pieces": [
       "Notebook",
       "WaterBottle"
     ],
-    "title": "The garden page",
+    "title": "Notebook and water bottle",
     "where": [
       {
         "containers": [

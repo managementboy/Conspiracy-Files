@@ -10,7 +10,7 @@
       "Mop",
       "Bucket"
     ],
-    "title": "The bucket with the bitter rinse",
+    "title": "Mop and bucket",
     "where": [
       {
         "containers": [
@@ -32,14 +32,14 @@
     "anchor": {
       "scene": "RBSpiffo"
     },
-    "body": "A fresh dish cloth lies under the register beside the empty spool where the morning receipts should be. Someone cleaned the counter after the rush, then removed only the record of it.",
+    "body": "A dish cloth by a paperclip, bent open now. It held papers once, I think. They wiped clean and took only what was clipped here.",
     "id": "t0309-02",
     "kind": "set",
     "pieces": [
       "DishCloth",
       "Paperclip"
     ],
-    "title": "A clean counter and a missing roll",
+    "title": "Dish cloth and paperclip",
     "where": [
       {
         "containers": [

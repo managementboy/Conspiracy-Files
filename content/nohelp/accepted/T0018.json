@@ -4,14 +4,14 @@
       "scene": "RBJackieJaye",
       "version": "A"
     },
-    "body": "three pickup dots mark the open wrench and hand radio. two were scratched away without wear around them.",
+    "body": "Three pickup dots mark the open wrench and the hand radio. Two were scratched away, with no wear around them.",
     "id": "t0018-01",
     "kind": "set",
     "pieces": [
       "Wrench",
       "WalkieTalkie1"
     ],
-    "title": "Open wrench with the unclosed tally",
+    "title": "Wrench and walkie-talkie",
     "where": [
       {
         "containers": [
@@ -34,14 +34,14 @@
       "scene": "RBJackieJaye",
       "version": "B"
     },
-    "body": "The notebook is trapped beneath a glass desk cover. A crop-row sketch has a water stain across its center; the bottle beside it is dry and capped.",
+    "body": "The notebook is trapped under a glass desk cover. Its crop-row sketch has a water stain across the center. The bottle beside it is dry and capped.",
     "id": "t0018-02",
     "kind": "set",
     "pieces": [
       "Notebook",
       "WaterBottle"
     ],
-    "title": "The field sketch under the studio glass",
+    "title": "Notebook and water bottle",
     "where": [
       {
         "containers": [

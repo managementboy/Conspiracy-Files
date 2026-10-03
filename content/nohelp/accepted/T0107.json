@@ -4,14 +4,14 @@
       "map": "RosewoodStashMap4",
       "mark": 1
     },
-    "body": "The packed bag is tied to a departure card that says to take what fits; the final line sends the group away before the promised pickup.",
+    "body": "The pack's mostly empty, just a water bottle left inside. The card says pack light and leave before dawn. They promised pickup at sunrise but nobody ever came.",
     "id": "t0107-01",
     "kind": "set",
     "pieces": [
       "Bag_ALICEpack",
       "WaterBottle"
     ],
-    "title": "Take what fits",
+    "title": "Backpack and water bottle",
     "where": [
       {
         "containers": [

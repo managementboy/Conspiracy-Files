@@ -3,14 +3,14 @@
     "anchor": {
       "scene": "RBOffice"
     },
-    "body": "The two items are bundled beside a marked feed sack; field dust lies beneath them and has worked into the weave of the coat hem.",
+    "body": "Bread and canned corn are bundled beside a marked feed sack. Field dust lies under them and has worked into the coat hem.",
     "id": "t0299-01",
     "kind": "set",
     "pieces": [
       "Bread",
       "CannedCorn"
     ],
-    "title": "Feed sack beneath the coat hem",
+    "title": "Bread and canned corn",
     "where": [
       {
         "containers": [
@@ -32,14 +32,14 @@
     "anchor": {
       "scene": "RBOffice"
     },
-    "body": "A sheet of paper has been pressed over a handwritten count. The marks beneath still show a larger number than the typed line above it. Someone saved the carbon but discarded the original.",
+    "body": "Someone used the pencil to change the count on the sheet. I can still see the original number beneath the marks. The new one is lower.",
     "id": "t0299-02",
     "kind": "set",
     "pieces": [
       "Sheet",
       "Pencil"
     ],
-    "title": "Carbon under the blotter",
+    "title": "Sheet of paper and pencil",
     "where": [
       {
         "containers": [

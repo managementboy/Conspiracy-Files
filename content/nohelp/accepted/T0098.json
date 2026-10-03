@@ -4,14 +4,14 @@
       "map": "RiversideStashMap5",
       "mark": 1
     },
-    "body": "The warning is folded around a repair tag for a broken gate. The tag says the damage happened before the crew was cleared to leave.",
+    "body": "The paper warns to avoid the sprayed fields.\nIt's dated before the clearance to evacuate.\nA bat's left beside it.",
     "id": "t0098-01",
     "kind": "set",
     "pieces": [
       "BaseballBat",
       "SheetPaper2"
     ],
-    "title": "Do not return to the street",
+    "title": "Baseball bat and sheet of paper",
     "where": [
       {
         "containers": [

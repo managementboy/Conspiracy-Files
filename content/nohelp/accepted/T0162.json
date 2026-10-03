@@ -3,14 +3,14 @@
     "anchor": {
       "print": "Fossoil4"
     },
-    "body": "A sample bottle is paired with a fuel ledger; the entry says the test was routine, then asks the next shift not to use the same hose.",
+    "body": "A petrol can sits with a notebook. The entry says the spray test was routine. Then it tells the next shift not to use this can again.",
     "id": "t0162-01",
     "kind": "set",
     "pieces": [
       "PetrolCan",
       "Notebook"
     ],
-    "title": "The second fuel sample",
+    "title": "Petrol can and notebook",
     "where": [
       {
         "containers": [

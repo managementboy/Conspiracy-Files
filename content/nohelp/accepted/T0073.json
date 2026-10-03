@@ -4,14 +4,14 @@
       "map": "MarchRidgeStashMap9",
       "mark": 1
     },
-    "body": "The food bundle is tied to a route note for new arrivals; the last line says the group left before the next watch could bring the promised supplies.",
+    "body": "A pistol and bread, standard issue both. Left behind before the next supply run. Looks like they got pulled out in a hurry.",
     "id": "t0073-01",
     "kind": "set",
     "pieces": [
       "Pistol",
       "Bread"
     ],
-    "title": "A place at the table",
+    "title": "Pistol and bread",
     "where": [
       {
         "containers": [

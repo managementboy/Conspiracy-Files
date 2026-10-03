@@ -3,14 +3,14 @@
     "anchor": {
       "print": "Fossoil6"
     },
-    "body": "The fuel can carries a tag for a field run; the receipt says the driver paid for a full tank, though the return check found it nearly empty.",
+    "body": "The petrol can has a tag for the sprayer route. Someone penciled in the fuel level at full. The can's barely a quarter now.",
     "id": "t0164-01",
     "kind": "set",
     "pieces": [
       "PetrolCan",
       "Pencil"
     ],
-    "title": "Fuel for the field run",
+    "title": "Petrol can and pencil",
     "where": [
       {
         "containers": [

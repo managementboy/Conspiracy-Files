@@ -3,14 +3,14 @@
     "anchor": {
       "print": "HouseforSale867"
     },
-    "body": "the packet of tissues and first-aid kit are streaked with pale spray residue on one face and field dust on the other. field twine is knotted at the handle, a few seed husks caught in it.",
+    "body": "Pale spray residue streaks one face of the tissues and first-aid kit. Field dust is on the other face. Field twine is knotted at the handle with a few seed husks.",
     "id": "t0245-01",
     "kind": "set",
     "pieces": [
       "Tissue",
       "FirstAidKit"
     ],
-    "title": "Packet of tissues with the second residue",
+    "title": "Tissues and first-aid kit",
     "where": [
       {
         "containers": [

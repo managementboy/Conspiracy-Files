@@ -1,13 +1,13 @@
 [
   {
-    "body": "A road is rubbed out on the map, while six small figures remain beside it. The pencil has worn through the paper at the place where they waited. The date is on the wrapper, not on the object.",
+    "body": "I see a road rubbed out on the map, with six small figures beside it. The pencil has worn through the paper where I think they waited. The date is on the wrapper, not the map.",
     "id": "t0408-01",
     "kind": "set",
     "pieces": [
       "Map",
       "Pencil"
     ],
-    "title": "The count beneath the route at first light",
+    "title": "Map and pencil",
     "where": [
       {
         "containers": [
@@ -26,14 +26,14 @@
     ]
   },
   {
-    "body": "The board lists four vehicle numbers and no names. An erased fifth line still bears the pressure of a child’s small handwriting. A strip of cloth keeps the pair together.",
+    "body": "I found a clipboard listing four vehicles and departure times. The eraser sits next to where a fifth line was removed. Small handwriting is still pressed into the paper there.",
     "id": "t0408-02",
     "kind": "set",
     "pieces": [
       "Clipboard",
       "Eraser"
     ],
-    "title": "A tally without passengers at first light",
+    "title": "Clipboard and eraser",
     "where": [
       {
         "containers": [
@@ -52,14 +52,14 @@
     ]
   },
   {
-    "body": "The sealed kit is tied to a towel marked for a passenger. The seat allocation has been crossed off, though the towel is still damp. The corner still bears a hurried thumbprint.",
+    "body": "The sealed kit is tied to a towel marked for a passenger. The seat is crossed off, though the towel is still damp. There's a hurried thumbprint on the corner.",
     "id": "t0408-03",
     "kind": "set",
     "pieces": [
       "FirstAidKit",
       "BathTowel"
     ],
-    "title": "Supplies for an empty seat at first light",
+    "title": "First-aid kit and towel",
     "where": [
       {
         "containers": [
@@ -78,14 +78,14 @@
     ]
   },
   {
-    "body": "The loose page gives a route at odds with the one inked on the map. Someone has traced both with a finger stained from a lunch wrapper. One edge was kept dry beneath a coat.",
+    "body": "The loose page shows a different route than the map. Someone traced both with a finger stained from a lunch wrapper. One edge was kept dry beneath a coat.",
     "id": "t0408-04",
     "kind": "set",
     "pieces": [
       "Map",
       "SheetPaper2"
     ],
-    "title": "Two directions in one fold at first light",
+    "title": "Map and loose page",
     "where": [
       {
         "containers": [
@@ -104,14 +104,14 @@
     ]
   },
   {
-    "body": "The battery is taped to a torch beside a handwritten departure time. Its owner waited long enough to use up the spare. A short tally was added after the bundle was tied.",
+    "body": "The battery is taped to a torch beside a handwritten departure time. I think the owner waited long enough to use up the spare. A short tally was added after the bundle was tied.",
     "id": "t0408-05",
     "kind": "set",
     "pieces": [
       "HandTorch",
       "Battery"
     ],
-    "title": "The lamp after closing at first light",
+    "title": "Torch and battery",
     "where": [
       {
         "containers": [
@@ -130,14 +130,14 @@
     ]
   },
   {
-    "body": "A badge and a band for counting arrivals are tied together. The band has an extra notch that never made it onto the badge. The string has been retied since morning.",
+    "body": "A badge and a band for counting arrivals are tied together. The band has an extra notch that isn't on the badge. The string has been retied since morning.",
     "id": "t0408-06",
     "kind": "set",
     "pieces": [
       "Badge",
       "RubberBand"
     ],
-    "title": "An unissued place in line at first light",
+    "title": "Badge and rubber band",
     "where": [
       {
         "containers": [
@@ -156,14 +156,14 @@
     ]
   },
   {
-    "body": "The jack bears fresh road grit and the wrench a strip of warning tape. The repair was abandoned beside a penciled clearance time. The date is on the wrapper, not on the object.",
+    "body": "The jack has fresh road grit and the wrench a strip of warning tape. The repair looks abandoned beside a penciled clearance time. The date is on the wrapper, not on the tools.",
     "id": "t0408-07",
     "kind": "set",
     "pieces": [
       "Jack",
       "LugWrench"
     ],
-    "title": "Repair before the barrier at first light",
+    "title": "Jack and lug wrench",
     "where": [
       {
         "containers": [
@@ -182,14 +182,14 @@
     ]
   },
   {
-    "body": "A frequency is scratched into the pencil’s paint. The radio’s own label names another channel, and the paper wrapped around it says to wait. A strip of cloth keeps the pair together.",
+    "body": "A frequency is scratched into the pencil's paint. The radio's label names another channel, and its paper says to wait. A strip of cloth keeps the pair together.",
     "id": "t0408-08",
     "kind": "set",
     "pieces": [
       "WalkieTalkie1",
       "Pencil"
     ],
-    "title": "The second signal at first light",
+    "title": "Radio and pencil",
     "where": [
       {
         "containers": [
@@ -208,14 +208,14 @@
     ]
   },
   {
-    "body": "A penciled household count ends at six. A red pen adds one name in the margin and then runs out before the line for a seat. The corner still bears a hurried thumbprint.",
+    "body": "Six names in the notebook, listed for pickup. The red pen adds one more but runs out before finishing. There's a thumbprint smudged in the margin.",
     "id": "t0408-09",
     "kind": "set",
     "pieces": [
       "Notebook",
       "RedPen"
     ],
-    "title": "One more household at first light",
+    "title": "Notebook and red pen",
     "where": [
       {
         "containers": [
@@ -234,14 +234,14 @@
     ]
   },
   {
-    "body": "The bag contains an unused lunch wrapper; the map is folded to a stop crossed out twice. A child wrote the original time on the strap. One edge was kept dry beneath a coat.",
+    "body": "The bag holds an unused lunch wrapper. The map is folded to a stop crossed out twice. A child wrote the original time on the strap.",
     "id": "t0408-10",
     "kind": "set",
     "pieces": [
       "Bag_Schoolbag",
       "Map"
     ],
-    "title": "Packed for the wrong stop at first light",
+    "title": "Schoolbag and map",
     "where": [
       {
         "containers": [

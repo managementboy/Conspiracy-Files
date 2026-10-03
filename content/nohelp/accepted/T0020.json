@@ -4,14 +4,14 @@
       "map": "BBurgStashMap1",
       "mark": 1
     },
-    "body": "the tire pump is tied to the first-aid kit by a clipped lanyard. an empty loop shows where an identifying tag was cut off.",
+    "body": "The tire pump is tied to the first aid kit by a clipped lanyard. An empty loop shows where an identifying tag was cut off.",
     "id": "t0020-01",
     "kind": "set",
     "pieces": [
       "TirePump",
       "FirstAidKit"
     ],
-    "title": "Tire pump with the unclosed tally",
+    "title": "Tire pump and first aid kit",
     "where": [
       {
         "containers": [
@@ -40,7 +40,7 @@
     "pieces": [
       "letter"
     ],
-    "title": "Closed windows",
+    "title": "Letter",
     "where": [
       {
         "containers": [

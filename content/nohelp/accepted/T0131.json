@@ -4,14 +4,14 @@
       "map": "WorldStashMap22",
       "mark": 1
     },
-    "body": "A repair kit is set beside a base plan; the entry marked secure is dated before the door brace was installed.",
+    "body": "Hammer and nails from a late supply run. Base marked secure days before these even arrived. They signed off on safety before we could board a window.",
     "id": "t0131-01",
     "kind": "set",
     "pieces": [
       "Hammer",
       "Nails"
     ],
-    "title": "Base camp repairs",
+    "title": "Hammer and nails",
     "where": [
       {
         "containers": [

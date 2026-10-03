@@ -3,14 +3,14 @@
     "anchor": {
       "scene": "RVSRoadKill"
     },
-    "body": "the cut potato with a soil jar carry chalky water from the orchard treatment. they were packed before the crossing was barricaded.",
+    "body": "Chalky water from the orchard treatment is on the potato and soil jar. I think they were packed before the crossing was barricaded.",
     "id": "t0372-01",
     "kind": "set",
     "pieces": [
       "Potato",
       "EmptyJar"
     ],
-    "title": "cut potato with a soil jar at during the hot afternoon",
+    "title": "Potato and empty jar",
     "where": [
       {
         "lean": "agricultural",
@@ -30,7 +30,7 @@
     "pieces": [
       "notebook"
     ],
-    "title": "Counting the shoulder",
+    "title": "Notebook page",
     "where": [
       {
         "lean": "containment",

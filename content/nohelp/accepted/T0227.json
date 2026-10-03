@@ -3,14 +3,14 @@
     "anchor": {
       "print": "LennysCarRepair"
     },
-    "body": "the ball of yarn and hand torch are wedged beneath unused warning tape. footprints pass around the bundle rather than toward it.",
+    "body": "The yarn and torch are wedged beneath unused warning tape. Footprints pass around the bundle rather than toward it.",
     "id": "t0227-01",
     "kind": "set",
     "pieces": [
       "Yarn",
       "HandTorch"
     ],
-    "title": "Ball of yarn beside the spare mark",
+    "title": "Ball of yarn and torch",
     "where": [
       {
         "containers": [

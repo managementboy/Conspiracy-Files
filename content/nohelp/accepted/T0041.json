@@ -4,14 +4,14 @@
       "map": "IrvingtonStashMap2",
       "mark": 1
     },
-    "body": "matching white stripes cross the hole punch and clipboard. a name-sized patch on the hole punch has been scrubbed bare.",
+    "body": "Matching white stripes cross the hole punch and the clipboard. A name-sized patch on the hole punch has been scrubbed bare.",
     "id": "t0041-01",
     "kind": "set",
     "pieces": [
       "HolePuncher",
       "Clipboard"
     ],
-    "title": "Hole punch beside the spare mark",
+    "title": "Hole punch and clipboard",
     "where": [
       {
         "containers": [

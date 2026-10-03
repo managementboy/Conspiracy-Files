@@ -4,14 +4,14 @@
       "map": "WorldStashMap10",
       "mark": 1
     },
-    "body": "the box of matches and hand torch smell sharply of bleach. mud outlines between them show that a third object was removed.",
+    "body": "The matches and hand torch smell sharply of bleach. Mud outlines between them look like something was taken.",
     "id": "t0119-01",
     "kind": "set",
     "pieces": [
       "Matches",
       "HandTorch"
     ],
-    "title": "Box of matches beside the spare mark",
+    "title": "Matches and hand torch",
     "where": [
       {
         "containers": [
@@ -40,7 +40,7 @@
     "pieces": [
       "diary"
     ],
-    "title": "Clothes bag from the test rows",
+    "title": "Diary page",
     "where": [
       {
         "containers": [
@@ -69,7 +69,7 @@
     "pieces": [
       "notepad"
     ],
-    "title": "Lunch stop for the field crew",
+    "title": "Notepad page",
     "where": [
       {
         "containers": [
@@ -98,7 +98,7 @@
     "pieces": [
       "receipt"
     ],
-    "title": "Cars stopped behind the garage",
+    "title": "Receipt",
     "where": [
       {
         "containers": [
@@ -127,7 +127,7 @@
     "pieces": [
       "photograph"
     ],
-    "title": "Fuel for the orchard rig",
+    "title": "Photograph",
     "where": [
       {
         "containers": [
@@ -156,7 +156,7 @@
     "pieces": [
       "notebook"
     ],
-    "title": "Coveralls bagged apart",
+    "title": "Notebook page",
     "where": [
       {
         "containers": [
@@ -185,7 +185,7 @@
     "pieces": [
       "letter"
     ],
-    "title": "Field lunches at the restaurant",
+    "title": "Handwritten letter",
     "where": [
       {
         "containers": [
@@ -214,7 +214,7 @@
     "pieces": [
       "diary"
     ],
-    "title": "Fleet note with one car missing",
+    "title": "Diary page",
     "where": [
       {
         "containers": [
@@ -243,7 +243,7 @@
     "pieces": [
       "notepad"
     ],
-    "title": "Car label beside a field rinse bill",
+    "title": "Notepad page",
     "where": [
       {
         "containers": [
@@ -272,7 +272,7 @@
     "pieces": [
       "receipt"
     ],
-    "title": "Final circle, the last trial car",
+    "title": "Receipt",
     "where": [
       {
         "containers": [

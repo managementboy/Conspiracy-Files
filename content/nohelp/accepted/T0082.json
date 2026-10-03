@@ -4,14 +4,14 @@
       "map": "MulStashMap13",
       "mark": 1
     },
-    "body": "The packed bag contains field gloves and a route card crossed out at the supply stop. A separate line records that the crew heard shots and left the load.",
+    "body": "The backpack reeks of chemicals from the fields. A pistol lies on top. Looks like they bailed when the route got cut.",
     "id": "t0082-01",
     "kind": "set",
     "pieces": [
       "Bag_ALICEpack",
       "Pistol"
     ],
-    "title": "Too heavy to carry",
+    "title": "Backpack and pistol",
     "where": [
       {
         "containers": [

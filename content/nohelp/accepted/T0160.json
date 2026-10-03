@@ -3,14 +3,14 @@
     "anchor": {
       "print": "Fossoil2"
     },
-    "body": "A fuel sheet records a sample taken before the pump was opened to customers; the cashier’s shift begins after the sample is marked cleared.",
+    "body": "A fuel sheet logs a sample taken before the pump opened to customers. The cashier's shift starts after the sample is marked cleared.",
     "id": "t0160-01",
     "kind": "set",
     "pieces": [
       "PetrolCan",
       "SheetPaper2"
     ],
-    "title": "The low-cost fuel test",
+    "title": "Petrol can and paper sheet",
     "where": [
       {
         "containers": [

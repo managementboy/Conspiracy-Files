@@ -1,13 +1,13 @@
 [
   {
-    "body": "A road is rubbed out on the map, while six small figures remain beside it. The pencil has worn through the paper at the place where they waited. The corner still bears a hurried thumbprint.",
+    "body": "Pencil marks on the map show where checkpoints should have been. Half are crossed out. They changed the plan but never told anyone.",
     "id": "t0412-01",
     "kind": "set",
     "pieces": [
       "Map",
       "Pencil"
     ],
-    "title": "The count beneath the route beside the road",
+    "title": "Map and pencil",
     "where": [
       {
         "containers": [
@@ -26,14 +26,14 @@
     ]
   },
   {
-    "body": "The board lists four vehicle numbers and no names. An erased fifth line still bears the pressure of a child’s small handwriting. One edge was kept dry beneath a coat.",
+    "body": "The clipboard lists four buses with times but no passenger counts. The eraser sits beside a smudged fifth line. I can still see where a child wrote their name.",
     "id": "t0412-02",
     "kind": "set",
     "pieces": [
       "Clipboard",
       "Eraser"
     ],
-    "title": "A tally without passengers beside the road",
+    "title": "Clipboard and eraser",
     "where": [
       {
         "containers": [
@@ -52,14 +52,14 @@
     ]
   },
   {
-    "body": "The sealed kit is tied to a towel marked for a passenger. The seat allocation has been crossed off, though the towel is still damp. A short tally was added after the bundle was tied.",
+    "body": "The sealed kit is tied to a towel marked for a passenger. The seat is crossed off, though the towel is still damp.",
     "id": "t0412-03",
     "kind": "set",
     "pieces": [
       "FirstAidKit",
       "BathTowel"
     ],
-    "title": "Supplies for an empty seat beside the road",
+    "title": "First aid kit and towel",
     "where": [
       {
         "containers": [
@@ -78,14 +78,14 @@
     ]
   },
   {
-    "body": "The loose page gives a route at odds with the one inked on the map. Someone has traced both with a finger stained from a lunch wrapper. The string has been retied since morning.",
+    "body": "The map shows safe zones circled. The loose page updates it—most crossed out. Greasy fingerprints on both.",
     "id": "t0412-04",
     "kind": "set",
     "pieces": [
       "Map",
       "SheetPaper2"
     ],
-    "title": "Two directions in one fold beside the road",
+    "title": "Map and loose page",
     "where": [
       {
         "containers": [
@@ -104,14 +104,14 @@
     ]
   },
   {
-    "body": "The battery is taped to a torch beside a handwritten departure time. Its owner waited long enough to use up the spare. The date is on the wrapper, not on the object.",
+    "body": "The battery has someone's shift time written on it. The torch is still in the wrapper. They packed them but never made it to distribution.",
     "id": "t0412-05",
     "kind": "set",
     "pieces": [
       "HandTorch",
       "Battery"
     ],
-    "title": "The lamp after closing beside the road",
+    "title": "Torch and battery",
     "where": [
       {
         "containers": [
@@ -130,14 +130,14 @@
     ]
   },
   {
-    "body": "A badge and a band for counting arrivals are tied together. The band has an extra notch that never made it onto the badge. A strip of cloth keeps the pair together.",
+    "body": "The badge clip is gone. Someone used a rubber band to wear it. It's stretched thin with marks from fingers that kept adjusting it.",
     "id": "t0412-06",
     "kind": "set",
     "pieces": [
       "Badge",
       "RubberBand"
     ],
-    "title": "An unissued place in line beside the road",
+    "title": "Badge and rubber band",
     "where": [
       {
         "containers": [
@@ -156,14 +156,14 @@
     ]
   },
   {
-    "body": "The jack bears fresh road grit and the wrench a strip of warning tape. The repair was abandoned beside a penciled clearance time. The corner still bears a hurried thumbprint.",
+    "body": "The lug wrench has a zone tag still zip-tied to it. The jack sits on a clipboard with routes crossed out in red. Someone dropped their gear mid-shift.",
     "id": "t0412-07",
     "kind": "set",
     "pieces": [
       "Jack",
       "LugWrench"
     ],
-    "title": "Repair before the barrier beside the road",
+    "title": "Jack and lug wrench",
     "where": [
       {
         "containers": [
@@ -182,14 +182,14 @@
     ]
   },
   {
-    "body": "A frequency is scratched into the pencil’s paint. The radio’s own label names another channel, and the paper wrapped around it says to wait. One edge was kept dry beneath a coat.",
+    "body": "A name is worn off the pencil's paint. The walkie talkie died on channel two. They kept logging zones after it went silent.",
     "id": "t0412-08",
     "kind": "set",
     "pieces": [
       "WalkieTalkie1",
       "Pencil"
     ],
-    "title": "The second signal beside the road",
+    "title": "Radio and pencil",
     "where": [
       {
         "containers": [
@@ -208,14 +208,14 @@
     ]
   },
   {
-    "body": "A penciled household count ends at six. A red pen adds one name in the margin and then runs out before the line for a seat. A short tally was added after the bundle was tied.",
+    "body": "The notebook lists families by bus route, tally ending at six. The red pen adds one more name. It ran dry before writing the seat.",
     "id": "t0412-09",
     "kind": "set",
     "pieces": [
       "Notebook",
       "RedPen"
     ],
-    "title": "One more household beside the road",
+    "title": "Notebook and red pen",
     "where": [
       {
         "containers": [
@@ -234,14 +234,14 @@
     ]
   },
   {
-    "body": "The bag contains an unused lunch wrapper; the map is folded to a stop crossed out twice. A child wrote the original time on the strap. The string has been retied since morning.",
+    "body": "Official zones are circled on the map in red marker. The schoolbag has checkpoint times written inside in a child's hand. Three of those zones were already gone by the last entry.",
     "id": "t0412-10",
     "kind": "set",
     "pieces": [
       "Bag_Schoolbag",
       "Map"
     ],
-    "title": "Packed for the wrong stop beside the road",
+    "title": "Schoolbag and map",
     "where": [
       {
         "containers": [

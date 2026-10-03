@@ -3,14 +3,14 @@
     "anchor": {
       "scene": "RDSGrouchos"
     },
-    "body": "The hand axe and seed sack share milky water from the water-treatment trial. The seed in the sack has sprouted pale and then rotted where the water touched it.",
+    "body": "Milky water from the water-treatment trial is on the axe and sack. The seed has sprouted pale, then rotted where the water touched.",
     "id": "t0333-01",
     "kind": "set",
     "pieces": [
       "Axe",
       "SeedBag"
     ],
-    "title": "Hand axe and seed sack, thursday after closing",
+    "title": "Hand axe and seed sack",
     "where": [
       {
         "containers": [
@@ -32,14 +32,14 @@
     "anchor": {
       "scene": "RDSGrouchos"
     },
-    "body": "A dish cloth is knotted around a water bottle. Inside it is a penciled count of people seen that afternoon, with one line altered after the cloth had been washed.",
+    "body": "A dish cloth is knotted around a water bottle. Inside is a penciled count of people seen that afternoon. One line looks altered after the cloth was washed.",
     "id": "t0333-02",
     "kind": "set",
     "pieces": [
       "DishCloth",
       "WaterBottle"
     ],
-    "title": "A cleaned pair of spectacles",
+    "title": "Dish cloth and water bottle",
     "where": [
       {
         "containers": [

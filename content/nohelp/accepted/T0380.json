@@ -3,14 +3,14 @@
     "anchor": {
       "scene": "RZSCampsite"
     },
-    "body": "Wrapped bread and canned corn tied together with torn yellow-black tape. A numbered tag hangs from the knot—same number marked on the tape in permanent marker. Handed out in the queue before they closed off the route.",
+    "body": "Wrapped bread and canned corn are tied with torn yellow-black tape. A numbered tag hangs from the knot, same number as on the tape. I think they were handed out before they closed off the route.",
     "id": "t0380-01",
     "kind": "set",
     "pieces": [
       "Bread",
       "CannedCorn"
     ],
-    "title": "Food ration, Thursday morning",
+    "title": "Bread and canned corn",
     "where": [
       {
         "lean": "containment",
@@ -30,7 +30,7 @@
     "pieces": [
       "notepad"
     ],
-    "title": "Bitter rain at camp",
+    "title": "Notepad page",
     "where": [
       {
         "lean": "agricultural",

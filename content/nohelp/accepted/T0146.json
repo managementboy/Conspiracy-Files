@@ -4,14 +4,14 @@
       "map": "WpStashMap14",
       "mark": 1
     },
-    "body": "A meal list says the group has enough food to wait for a boat; its water line is labelled for the field crew and left unopened, its seal still showing a spray-trial stamp.",
+    "body": "The bread was rationed for the wait. The map shows the spray zones marked in red. Someone drew a boat route avoiding those fields.",
     "id": "t0146-01",
     "kind": "set",
     "pieces": [
       "Bread",
       "Map"
     ],
-    "title": "Enough food for the crossing",
+    "title": "Bread and map",
     "where": [
       {
         "containers": [

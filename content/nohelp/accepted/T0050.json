@@ -4,14 +4,14 @@
       "map": "LouisvilleStashMap2",
       "mark": 1
     },
-    "body": "A book is wrapped in a note asking someone to bring it on a family visit; the back lists the spray dates for the bean rows beside the garden hose, with a warning to keep the hose off the marked ground.",
+    "body": "The book is wrapped in a note about a family visit. The back lists spray dates for the bean rows by the garden hose. It warns to keep the hose off the marked ground.",
     "id": "t0050-01",
     "kind": "set",
     "pieces": [
       "Book",
       "LetterHandwritten"
     ],
-    "title": "A gift for the visit",
+    "title": "Book and handwritten letter",
     "where": [
       {
         "containers": [

@@ -3,14 +3,14 @@
     "anchor": {
       "scene": "RBGunstoreSiege"
     },
-    "body": "The pair is streaked with marked feed sack from treated rows. It was set aside after the flies vanished, before anyone marked the toolbox unsafe.",
+    "body": "The rod and bottle both smell like the creek below the test fields. I think someone dropped them when the headaches started. That was before they drained the whole reservoir.",
     "id": "t0291-01",
     "kind": "set",
     "pieces": [
       "FishingRod",
       "WaterBottle"
     ],
-    "title": "After sack by the toolbox, the first copy",
+    "title": "Fishing rod and water bottle",
     "where": [
       {
         "containers": [
@@ -32,14 +32,14 @@
     "anchor": {
       "scene": "RBGunstoreSiege"
     },
-    "body": "A battery sits beside a radio whose tuning knob has been removed. The barricade can hear a single station, but no one inside can change it.",
+    "body": "A battery sits by a radio with no tuning knob. It looks like the barricade could hear only one station. I think nobody inside could change it.",
     "id": "t0291-02",
     "kind": "set",
     "pieces": [
       "Battery",
       "RadioBlack"
     ],
-    "title": "The spare receiver",
+    "title": "Battery and radio",
     "where": [
       {
         "containers": [

@@ -4,14 +4,14 @@
       "map": "BBurgStashMap8",
       "mark": 1
     },
-    "body": "opposite route arrows are painted on the paperclip box and hand radio. the older arrow was scraped away beneath fresh road grit.",
+    "body": "Opposite route arrows are painted on the paperclip box and radio. The older arrow was scraped away beneath fresh road grit.",
     "id": "t0033-01",
     "kind": "set",
     "pieces": [
       "PaperclipBox",
       "WalkieTalkie1"
     ],
-    "title": "Paperclip box beside the spare mark",
+    "title": "Paperclip box and walkie-talkie",
     "where": [
       {
         "containers": [
@@ -40,7 +40,7 @@
     "pieces": [
       "letter"
     ],
-    "title": "One page put aside",
+    "title": "Letter",
     "where": [
       {
         "containers": [

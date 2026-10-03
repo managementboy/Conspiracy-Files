@@ -4,14 +4,14 @@
       "map": "RiversideStashMap3",
       "mark": 1
     },
-    "body": "The bottle, its neck crusted with sweet residue, is beside a delivery note that asks the next shift to keep the back room ventilated after the pesticide test. The food order is still unpaid.",
+    "body": "The bottle's neck is crusted with sweet residue. A note says keep the back room aired after the pesticide test. The food order is still unpaid.",
     "id": "t0096-01",
     "kind": "set",
     "pieces": [
       "Wine",
       "SheetPaper2"
     ],
-    "title": "The bottle left open",
+    "title": "Wine and sheet of paper",
     "where": [
       {
         "containers": [

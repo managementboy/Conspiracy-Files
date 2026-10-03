@@ -1,13 +1,13 @@
 [
   {
-    "body": "Under this tarp the leaves are still firm. Beyond its edge, the same plants are speckled along the side facing the field.",
+    "body": "Under this tarp the cabbage stayed fresh. Past the edge, every head has those brown spots.",
     "id": "t0434-01",
     "kind": "set",
     "pieces": [
       "Tarp",
       "Cabbage"
     ],
-    "title": "The untouched patch",
+    "title": "Tarp and cabbage",
     "where": [
       {
         "containers": [
@@ -26,14 +26,14 @@
     ]
   },
   {
-    "body": "The left jar holds brown soil from a dry bed. The right is gray and has root threads that broke at the slightest touch.",
+    "body": "The empty jar held brown soil from the fields. Gray dirt cakes the hand shovel now. All the roots died.",
     "id": "t0434-02",
     "kind": "set",
     "pieces": [
       "EmptyJar",
       "HandShovel"
     ],
-    "title": "The two soils",
+    "title": "Empty jar and hand shovel",
     "where": [
       {
         "containers": [
@@ -52,14 +52,14 @@
     ]
   },
   {
-    "body": "One seed packet is marked for a later sowing. Those plants are still green; the earlier plants beside them have collapsed.",
+    "body": "This seed bag and pencil were marked for late sowing. Those beds are still green. The earlier ones collapsed.",
     "id": "t0434-03",
     "kind": "set",
     "pieces": [
       "SeedBag",
       "Pencil"
     ],
-    "title": "The late bed",
+    "title": "Seed bag and pencil",
     "where": [
       {
         "containers": [
@@ -78,14 +78,14 @@
     ]
   },
   {
-    "body": "Roots wrapped in newspaper are white. Roots from the exposed bed are dark where the field spray settled.",
+    "body": "I unwrapped potatoes from newspaper and they're still clean. The ones left out in the field are rotted black. Something settled on them.",
     "id": "t0434-04",
     "kind": "set",
     "pieces": [
       "Newspaper",
       "Potato"
     ],
-    "title": "The sheltered tray",
+    "title": "Potatoes in newspaper",
     "where": [
       {
         "containers": [
@@ -104,14 +104,14 @@
     ]
   },
   {
-    "body": "Two buckets were left out, one under the roof and one beyond it. Only the open one has a powder ring from the field spray after the rain, and the seedling in it has wilted.",
+    "body": "I found two buckets, one under the roof and one beyond it. Only the open one has a powder ring from the field spray. The seedling in it has wilted.",
     "id": "t0434-05",
     "kind": "set",
     "pieces": [
       "Bucket",
       "Tarp"
     ],
-    "title": "The different rain",
+    "title": "Two buckets and a tarp",
     "where": [
       {
         "containers": [
@@ -130,14 +130,14 @@
     ]
   },
   {
-    "body": "Twine on this side of the fence is clean. The strand facing the tilled field carries tiny pale granules.",
+    "body": "The twine here is caked in dried fertilizer. One side's crusted thick, facing the field. Someone left this during spraying season.",
     "id": "t0434-06",
     "kind": "set",
     "pieces": [
       "Twine",
       "Fertilizer"
     ],
-    "title": "The fenced edge",
+    "title": "Twine and fertilizer",
     "where": [
       {
         "containers": [
@@ -156,14 +156,14 @@
     ]
   },
   {
-    "body": "Potatoes from under the shed are firm. The ones from the near bed have soft spots beneath a film of field dust.",
+    "body": "The potato under the seed bag is firm and clean. The ones from the rows all have soft spots now. Timing mattered here.",
     "id": "t0434-07",
     "kind": "set",
     "pieces": [
       "Potato",
       "SeedBag"
     ],
-    "title": "The spared tubers",
+    "title": "Potatoes and seed bag",
     "where": [
       {
         "containers": [
@@ -182,14 +182,14 @@
     ]
   },
   {
-    "body": "The clean cloth was hung indoors. The cloth from the outside line catches green spray grit in its weave, and a crop seedling pinned in the fold has yellowed.",
+    "body": "The cloth hung indoors is clean. The cloth from the outside line has green spray grit in its weave. A crop seedling pinned in the fold has yellowed.",
     "id": "t0434-08",
     "kind": "set",
     "pieces": [
       "RippedSheets",
       "Rope"
     ],
-    "title": "The cloth on the line",
+    "title": "Torn sheets and rope",
     "where": [
       {
         "containers": [
@@ -208,7 +208,7 @@
     ]
   },
   {
-    "body": "This kettle's water is clear. A dish left in the yard has the same pale flecks as the soil in the shovel.",
+    "body": "The water in this kettle is clear. A dish left in the yard has pale flecks like the soil in the shovel.",
     "id": "t0434-09",
     "kind": "set",
     "pieces": [
@@ -216,7 +216,7 @@
       "Bowl",
       "HandShovel"
     ],
-    "title": "The covered water",
+    "title": "Kettle, bowl and hand shovel",
     "where": [
       {
         "containers": [
@@ -235,14 +235,14 @@
     ]
   },
   {
-    "body": "The hand shovel is brown on one edge and gray on the other. The gray soil holds dead seedlings; the brown side has live roots.",
+    "body": "The shovel is brown on one edge and gray on the other. The gray soil holds dead seedlings. The brown side has live roots.",
     "id": "t0434-10",
     "kind": "set",
     "pieces": [
       "HandShovel",
       "CarrotSeed"
     ],
-    "title": "The dry side of the furrow",
+    "title": "Hand shovel and carrot seed",
     "where": [
       {
         "containers": [

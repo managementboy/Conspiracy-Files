@@ -3,14 +3,14 @@
     "anchor": {
       "print": "NailsAndNuts"
     },
-    "body": "The hardware receipt lists nails and tools for pickup, but the access sheet says the shop closed before the order was collected.",
+    "body": "Brand new hammer and a box of nails, still in the checkout area. Someone was supposed to pick these up before they shut down. Guess the evacuation didn't go as smoothly as they said.",
     "id": "t0230-01",
     "kind": "set",
     "pieces": [
       "Hammer",
       "Nails"
     ],
-    "title": "The hardware order",
+    "title": "Hammer and nails",
     "where": [
       {
         "containers": [

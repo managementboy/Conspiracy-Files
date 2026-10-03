@@ -1,13 +1,13 @@
 [
   {
-    "body": "A seed packet leaked into this mailbox. The paper at the bottom is gritty, while the letters above it stayed clean.",
+    "body": "A seed packet leaked into this mailbox. The paper at the bottom is gritty. The letters above it stayed clean.",
     "id": "t0433-01",
     "kind": "set",
     "pieces": [
       "SeedBag",
       "Newspaper"
     ],
-    "title": "The parcel under the letters",
+    "title": "Seed bag and newspaper",
     "where": [
       {
         "lean": "agricultural",
@@ -18,14 +18,14 @@
     ]
   },
   {
-    "body": "The opened packet is bound with a rubber band. A few dark kernels remain; a second unopened packet is tucked behind it.",
+    "body": "The opened packet is bound with a rubber band. A few dark kernels remain. A second unopened packet is tucked behind it.",
     "id": "t0433-02",
     "kind": "set",
     "pieces": [
       "CornSeed",
       "SeedBag"
     ],
-    "title": "The returned packet",
+    "title": "Corn seed and seed bag",
     "where": [
       {
         "lean": "agricultural",
@@ -36,14 +36,14 @@
     ]
   },
   {
-    "body": "A sack strip and a feed scoop were pushed in here together. The scoop still carries the same dark grains stuck to the strip.",
+    "body": "A sack strip and a feed scoop were pushed in here together. The scoop still has the same dark grains that are stuck to the strip.",
     "id": "t0433-03",
     "kind": "set",
     "pieces": [
       "SeedBag",
       "Spoon"
     ],
-    "title": "The porch delivery",
+    "title": "Seed bag and spoon",
     "where": [
       {
         "lean": "agricultural",
@@ -61,7 +61,7 @@
       "CarrotSeed",
       "CornSeed"
     ],
-    "title": "The garden club exchange",
+    "title": "Carrot seed and corn seed",
     "where": [
       {
         "lean": "agricultural",
@@ -72,7 +72,7 @@
     ]
   },
   {
-    "body": "A bundle of grain is tied to a map with two pencil circles, one crossed out. The twine is damp with field mud.",
+    "body": "Corn tied to the map with twine. Two circles in pencil, one crossed. The twine still smells like field chemicals.",
     "id": "t0433-05",
     "kind": "set",
     "pieces": [
@@ -80,7 +80,7 @@
       "Twine",
       "Corn"
     ],
-    "title": "The wrong doorstep",
+    "title": "Map, twine and corn",
     "where": [
       {
         "lean": "agricultural",
@@ -91,14 +91,14 @@
     ]
   },
   {
-    "body": "A little jar holds green sediment and a dry seed packet has been folded over its lid. The parcel was too thick for the slot.",
+    "body": "A little jar holds green sediment. A dry seed packet has been folded over its lid. The parcel was too thick for the slot.",
     "id": "t0433-06",
     "kind": "set",
     "pieces": [
       "EmptyJar",
       "CarrotSeed"
     ],
-    "title": "The sample in a jar",
+    "title": "Empty jar and carrot seed",
     "where": [
       {
         "lean": "agricultural",
@@ -116,7 +116,7 @@
       "Newspaper",
       "Tomato"
     ],
-    "title": "The quiet subscription",
+    "title": "Newspaper and tomato",
     "where": [
       {
         "lean": "agricultural",
@@ -127,14 +127,14 @@
     ]
   },
   {
-    "body": "A scrap of duct tape sticks to a sack corner. Two hand drawn arrows show where it was meant to go next.",
+    "body": "Duct tape stuck to the seed bag corner. Two arrows drawn on it pointed somewhere else. Someone was tracking something through the fields.",
     "id": "t0433-08",
     "kind": "set",
     "pieces": [
       "DuctTape",
       "SeedBag"
     ],
-    "title": "The spare label",
+    "title": "Duct tape and seed bag",
     "where": [
       {
         "lean": "agricultural",
@@ -145,14 +145,14 @@
     ]
   },
   {
-    "body": "A sealed sack has been tied to a torn corner from an open sack. Their stitching matches, but only the open one has black dust.",
+    "body": "The seed bag is tied shut with rope. The knot looks professional. Dark residue stains the outside. Nothing grew where it spilled.",
     "id": "t0433-09",
     "kind": "set",
     "pieces": [
       "SeedBag",
       "Rope"
     ],
-    "title": "The closed loop",
+    "title": "Seed bag and rope",
     "where": [
       {
         "lean": "agricultural",
@@ -163,14 +163,14 @@
     ]
   },
   {
-    "body": "One packet of corn is damp and swollen; another was packed dry beside it. Someone left both here for collection.",
+    "body": "One packet of corn is damp and swollen. Another was packed dry beside it. Someone left both here for collection.",
     "id": "t0433-10",
     "kind": "set",
     "pieces": [
       "CornSeed",
       "EmptyJar"
     ],
-    "title": "The requested replacement",
+    "title": "Corn seed and empty jar",
     "where": [
       {
         "lean": "agricultural",

@@ -3,14 +3,14 @@
     "anchor": {
       "print": "StuartandLogScrapyard"
     },
-    "body": "The repair event receipt lists a vehicle prize, but the inspection sheet marks its fuel test complete before the scrapyard opened.",
+    "body": "I found a sheet saying the sprayer passed its test early.\nThe screwdriver sits right on top.\nThey cleared equipment before the day even started.",
     "id": "t0280-01",
     "kind": "set",
     "pieces": [
       "Screwdriver",
       "SheetPaper2"
     ],
-    "title": "Scrapyard repair event",
+    "title": "Screwdriver and sheet of paper",
     "where": [
       {
         "containers": [

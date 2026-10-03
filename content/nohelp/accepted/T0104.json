@@ -4,14 +4,14 @@
       "map": "RosewoodStashMap1",
       "mark": 1
     },
-    "body": "The garden notebook has a removed page of spray instructions for the bean rows and a note asking whether the unopened chemical sample should go with the next supply run.",
+    "body": "A page of spray instructions for the bean rows is gone. A note asks if the unopened chemical sample goes on the next run.",
     "id": "t0104-01",
     "kind": "set",
     "pieces": [
       "Notebook",
       "Pencil"
     ],
-    "title": "The missing instruction",
+    "title": "Notebook and pencil",
     "where": [
       {
         "containers": [

@@ -1,13 +1,13 @@
 [
   {
-    "body": "Yellow grains crust the jar's rim and spill from the torn seed sack tied to it. The sack's label names a test plot. The string has been retied since morning.",
+    "body": "Yellow grains crust the jar's rim and a torn seed sack tied to it. The sack's label names a test plot. The string has been retied since morning.",
     "id": "t0409-01",
     "kind": "set",
     "pieces": [
       "EmptyJar",
       "SeedBag"
     ],
-    "title": "A jar beyond the rows at first light",
+    "title": "Jar and seed sack",
     "where": [
       {
         "containers": [
@@ -26,14 +26,14 @@
     ]
   },
   {
-    "body": "A clean bottle and a cloudy bucket share a chalk mark. The bucket was filled far from the rows after the sprayer passed. A strip of cloth keeps the pair together.",
+    "body": "A clean bottle and a cloudy bucket share a chalk mark. The bucket looks filled far from the rows, after the sprayer passed. A strip of cloth keeps the pair together.",
     "id": "t0409-02",
     "kind": "set",
     "pieces": [
       "WaterBottle",
       "Bucket"
     ],
-    "title": "Water kept for comparison at first light",
+    "title": "Water bottle and bucket",
     "where": [
       {
         "containers": [
@@ -52,14 +52,14 @@
     ]
   },
   {
-    "body": "One cuff of the gloves is caked with field dust; the other is stained with kitchen soap. The empty sprayer tied to them still smells of orchard rows. The corner still bears a hurried thumbprint.",
+    "body": "The leather gloves still reek of whatever was in the spray. Empty now, but the label mentions crop treatment trials. Whoever wore these left in a panic.",
     "id": "t0409-03",
     "kind": "set",
     "pieces": [
       "Gloves_LeatherGloves",
       "GardeningSprayEmpty"
     ],
-    "title": "The gloves used twice at first light",
+    "title": "Gloves and sprayer",
     "where": [
       {
         "containers": [
@@ -85,7 +85,7 @@
       "AnimalFeedBag",
       "Bucket"
     ],
-    "title": "Feed beside a rinse pail at first light",
+    "title": "Feed sack and bucket",
     "where": [
       {
         "containers": [
@@ -104,14 +104,14 @@
     ]
   },
   {
-    "body": "Tape seals a slit in the seed sack, but the pale dust beneath it is caught on the outside. A child’s height is marked on the tape. A short tally was added after the bundle was tied.",
+    "body": "Tape seals a slit in the seed sack, but pale dust sits on the outside. A child's height is marked on the tape. A short tally was added after the bundle was tied.",
     "id": "t0409-05",
     "kind": "set",
     "pieces": [
       "SeedBag",
       "DuctTape"
     ],
-    "title": "The unopened seed allotment at first light",
+    "title": "Seed sack and tape",
     "where": [
       {
         "containers": [
@@ -130,14 +130,14 @@
     ]
   },
   {
-    "body": "The jar's paper label names a trial row, and the residue inside matches a plot marked on the map. The string has been retied since morning.",
+    "body": "The jar's paper label names a trial row. The residue inside seems to match a plot marked on the map. The string has been retied since morning.",
     "id": "t0409-06",
     "kind": "set",
     "pieces": [
       "EmptyJar",
       "Map"
     ],
-    "title": "A sample without its field at first light",
+    "title": "Jar and map",
     "where": [
       {
         "containers": [
@@ -156,14 +156,14 @@
     ]
   },
   {
-    "body": "The loaf was wrapped in a clean cloth. Yellow powder lies between the cloth and the crust, though the knot was never opened. The date is on the wrapper, not on the object.",
+    "body": "The loaf is wrapped in a clean cloth, the knot still tied. There's yellow powder between the cloth and the crust.",
     "id": "t0409-07",
     "kind": "set",
     "pieces": [
       "Bread",
       "DishCloth"
     ],
-    "title": "Bread under field dust at first light",
+    "title": "Bread and dish cloth",
     "where": [
       {
         "containers": [
@@ -182,14 +182,14 @@
     ]
   },
   {
-    "body": "The sponge is green at the center and the soap is worn only on one edge, both dusted with fine field grains. They were wrapped in a bag beside a small cup stained with spray residue. A strip of cloth keeps the pair together.",
+    "body": "The soap has a chemical smell that won't wash off my hands. The sponge is stiff with dried spray from the fields. Someone tried to clean up after work.",
     "id": "t0409-08",
     "kind": "set",
     "pieces": [
       "Soap2",
       "Sponge"
     ],
-    "title": "The wash that failed at first light",
+    "title": "Soap and sponge",
     "where": [
       {
         "containers": [
@@ -208,14 +208,14 @@
     ]
   },
   {
-    "body": "The card asks for supper to be kept warm. A ring from the sprayer crosses the writing, and fine pale grains lie in the fold. The corner still bears a hurried thumbprint.",
+    "body": "The card asks for supper to be kept warm. A ring from a sprayer runs across the writing. There are fine pale grains in the fold.",
     "id": "t0409-09",
     "kind": "set",
     "pieces": [
       "GardeningSprayEmpty",
       "Postcard"
     ],
-    "title": "Pale grains on a postcard at first light",
+    "title": "Empty sprayer and postcard",
     "where": [
       {
         "containers": [
@@ -234,14 +234,14 @@
     ]
   },
   {
-    "body": "Fine grains cling to the rim of a drinking glass. The fertilizer sack beside it was sealed with household thread. One edge was kept dry beneath a coat.",
+    "body": "There are fine grains on the rim of the glass. The fertilizer sack beside it is sealed with household thread.",
     "id": "t0409-10",
     "kind": "set",
     "pieces": [
       "Fertilizer",
       "GlassTumbler"
     ],
-    "title": "Fertilizer and a dry cup at first light",
+    "title": "Fertilizer and drinking glass",
     "where": [
       {
         "containers": [

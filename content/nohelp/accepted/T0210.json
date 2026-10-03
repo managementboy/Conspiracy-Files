@@ -3,14 +3,14 @@
     "anchor": {
       "print": "KnoxPackKitchens"
     },
-    "body": "the hole punch and clipboard sit together. the clipboard's tally is crossed out line by line, and a dust outline between them shows a third object was taken. a strip of barrier tape is stuck across the clip, a checkpoint number marked on it.",
+    "body": "The clipboard's tally is crossed out line by line. A dust outline between it and the hole punch shows something is gone. Barrier tape with a checkpoint number is stuck across the clip.",
     "id": "t0210-01",
     "kind": "set",
     "pieces": [
       "HolePuncher",
       "Clipboard"
     ],
-    "title": "Hole punch with the unclosed tally",
+    "title": "Hole punch and clipboard",
     "where": [
       {
         "containers": [

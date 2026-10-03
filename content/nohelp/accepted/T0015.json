@@ -4,14 +4,14 @@
       "map": "EkronStashMap8",
       "mark": 1
     },
-    "body": "the crowbar and briefcase are wrapped in a child's raincoat. one stayed dry while the other was left in road mud.",
+    "body": "The crowbar and briefcase are wrapped in a child's raincoat. One stayed dry, but the other was left in road mud.",
     "id": "t0015-01",
     "kind": "set",
     "pieces": [
       "Crowbar",
       "Briefcase"
     ],
-    "title": "Crowbar beside the spare mark",
+    "title": "Crowbar and briefcase",
     "where": [
       {
         "containers": [
@@ -40,7 +40,7 @@
     "pieces": [
       "letter"
     ],
-    "title": "The note that asks someone to come back",
+    "title": "Letter",
     "where": [
       {
         "containers": [

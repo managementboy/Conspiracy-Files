@@ -3,14 +3,14 @@
     "anchor": {
       "scene": "RDSBedroomZed"
     },
-    "body": "The cut potato and sample jar share red grit from the fertilizer test. They were bundled before the buses quit running.",
+    "body": "A cut potato and a sample jar share red grit from the fertilizer test. They were bundled before the buses quit running.",
     "id": "t0327-01",
     "kind": "set",
     "pieces": [
       "Potato",
       "EmptyJar"
     ],
-    "title": "Cut potato and sample jar, the early shift",
+    "title": "Potato and empty jar",
     "where": [
       {
         "containers": [
@@ -32,14 +32,14 @@
     "anchor": {
       "scene": "RDSBedroomZed"
     },
-    "body": "A bottle of water and a strip of bandage have matching pencil marks. The marks are dates, not doses; someone was checking this bed before its occupant woke.",
+    "body": "A bottle of water and a strip of bandage have matching pencil marks. They look like dates, not doses. I think someone checked this bed before its occupant woke.",
     "id": "t0327-02",
     "kind": "set",
     "pieces": [
       "WaterBottle",
       "Bandage"
     ],
-    "title": "A label under the pillow",
+    "title": "Water bottle and bandage",
     "where": [
       {
         "containers": [

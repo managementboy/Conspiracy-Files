@@ -3,14 +3,14 @@
     "anchor": {
       "scene": "RVSUtilityVehicle"
     },
-    "body": "The stiff mop and the rinse bucket are tied in one bundle with torn warning tape. A paper tag with only a number on it hangs from the knot, and a stamp is smudged on the bucket.",
+    "body": "The mop and bucket are tied together with torn warning tape. A paper tag with just a number hangs from the knot. I think there's a stamp smudged on the bucket.",
     "id": "t0374-01",
     "kind": "set",
     "pieces": [
       "Mop",
       "Bucket"
     ],
-    "title": "Mop and rinse bucket, the first morning",
+    "title": "Mop and bucket",
     "where": [
       {
         "lean": "containment",
@@ -30,7 +30,7 @@
     "pieces": [
       "notepad"
     ],
-    "title": "The roadside sprayer",
+    "title": "Notepad page",
     "where": [
       {
         "lean": "agricultural",

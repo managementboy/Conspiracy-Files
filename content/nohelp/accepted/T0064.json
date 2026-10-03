@@ -4,14 +4,14 @@
       "map": "LouisvilleStashMap16",
       "mark": 1
     },
-    "body": "A child's bag is packed with a route note directing the family south; the same page marks the sprayed fields beside the east road with a pencilled warning to keep off the wet rows.",
+    "body": "A schoolbag holds a map with a route south marked out. The same map shows sprayed fields beside the eastern road. A warning pencilled in says to avoid the wet crops.",
     "id": "t0064-01",
     "kind": "set",
     "pieces": [
       "Bag_Schoolbag",
       "Map"
     ],
-    "title": "Safe route south",
+    "title": "School bag and map",
     "where": [
       {
         "containers": [

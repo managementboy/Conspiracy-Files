@@ -3,14 +3,14 @@
     "anchor": {
       "scene": "RBTSElectronics"
     },
-    "body": "A fresh battery is taped to a field radio. Green spray flecks fill the speaker grille, and the last tuning mark is below the county warning channel.",
+    "body": "A fresh battery is taped to a field radio. Green spray flecks fill the speaker grille. The last tuning mark is below the county warning channel.",
     "id": "t0316-01",
     "kind": "set",
     "pieces": [
       "Battery",
       "RadioBlack"
     ],
-    "title": "Field radio with a fresh battery",
+    "title": "Battery and radio",
     "where": [
       {
         "containers": [
@@ -32,14 +32,14 @@
     "anchor": {
       "scene": "RBTSElectronics"
     },
-    "body": "A radio sits beside a loose battery. A pencil mark on the dial matches one on the workbench; every other frequency has been scratched away, and a strip of tape over the dial reads only a time.",
+    "body": "A radio sits beside a loose battery. A pencil mark on the dial matches one on the workbench. Every other frequency is scratched away. Tape over the dial shows only a time.",
     "id": "t0316-02",
     "kind": "set",
     "pieces": [
       "RadioBlack",
       "Battery"
     ],
-    "title": "A receiver with a single mark",
+    "title": "Radio and battery",
     "where": [
       {
         "containers": [

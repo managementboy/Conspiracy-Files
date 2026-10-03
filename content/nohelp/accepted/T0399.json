@@ -3,14 +3,14 @@
     "anchor": {
       "scene": "RZSRockerParty"
     },
-    "body": "A fresh battery and field radio are wrapped together. Red field grit fills the speaker; a smear of dried spray coats the tuning dial.",
+    "body": "A fresh battery and radio are wrapped together. Red field grit fills the speaker. There's a smear of dried spray on the tuning dial.",
     "id": "t0399-01",
     "kind": "set",
     "pieces": [
       "Battery",
       "RadioBlack"
     ],
-    "title": "field radio caked in field grit",
+    "title": "Battery and radio",
     "where": [
       {
         "lean": "agricultural",
@@ -30,7 +30,7 @@
     "pieces": [
       "notebook"
     ],
-    "title": "Between two songs",
+    "title": "Notebook page",
     "where": [
       {
         "lean": "containment",

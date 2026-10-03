@@ -3,14 +3,14 @@
     "anchor": {
       "print": "RiversidePD"
     },
-    "body": "The range briefing sheet lists the duty roster for the checkpoint on the road behind the range, ticked complete before the range was inspected. A visitor's card asks who keeps count of those let through.",
+    "body": "The pistol lies on the paper. It lists checkpoint duty, ticked complete before inspection. Someone wrote 'how many through?' at the bottom, blank.",
     "id": "t0239-01",
     "kind": "set",
     "pieces": [
       "Pistol",
       "SheetPaper2"
     ],
-    "title": "Safety briefing copy",
+    "title": "Pistol and sheet of paper",
     "where": [
       {
         "containers": [

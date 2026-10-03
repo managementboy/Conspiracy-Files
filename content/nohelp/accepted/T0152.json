@@ -3,14 +3,14 @@
     "anchor": {
       "print": "WestMapleCountryClub"
     },
-    "body": "The grounds sheet closes one course entrance for a pickup, but the meal receipt at that entrance is dated after the vehicle left.",
+    "body": "The paper sheet closes this route before dawn for pickups. The water bottle here was issued hours after that deadline.",
     "id": "t0152-01",
     "kind": "set",
     "pieces": [
       "WaterBottle",
       "SheetPaper2"
     ],
-    "title": "The course notice",
+    "title": "Water bottle and paper sheet",
     "where": [
       {
         "containers": [
@@ -32,14 +32,14 @@
     "anchor": {
       "print": "WestMapleCountryClub"
     },
-    "body": "A tee sheet has two copies: one marks the grounds open, the other says to keep carts off the fairways until the sprayed test strip is dry.",
+    "body": "Pencil notes in the notebook, both from the same day. One marks the field clear after spraying. The other warns not to enter yet.",
     "id": "t0152-02",
     "kind": "set",
     "pieces": [
       "Pencil",
       "Notebook"
     ],
-    "title": "The second tee sheet",
+    "title": "Pencil and notebook",
     "where": [
       {
         "containers": [

@@ -4,14 +4,14 @@
       "map": "MulStashMap6",
       "mark": 1
     },
-    "body": "A fortification list pairs a brace for the door with a bandage request; the person assigned to carry both has no check-out time.",
+    "body": "A hammer and bandage on some checkpoint paperwork. No exit time logged. The person assigned to carry both never made it out.",
     "id": "t0083-01",
     "kind": "set",
     "pieces": [
       "Hammer",
       "Bandage"
     ],
-    "title": "Plan B in the margin",
+    "title": "Hammer and bandage",
     "where": [
       {
         "containers": [

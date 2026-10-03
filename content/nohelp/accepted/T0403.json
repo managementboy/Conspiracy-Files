@@ -3,14 +3,14 @@
     "anchor": {
       "scene": "RZSTragicPicnic"
     },
-    "body": "A wrapped loaf and can of corn carry the same pale field dust. The loaf is tied shut with twine cut from a treated seed sack.",
+    "body": "A wrapped loaf and a can of corn have the same pale field dust. The loaf is tied with twine, I think from a treated seed sack.",
     "id": "t0403-01",
     "kind": "set",
     "pieces": [
       "Bread",
       "CannedCorn"
     ],
-    "title": "picnic food under pale field dust",
+    "title": "Bread and canned corn",
     "where": [
       {
         "lean": "agricultural",
@@ -30,7 +30,7 @@
     "pieces": [
       "letter"
     ],
-    "title": "A family count on a napkin",
+    "title": "Letter",
     "where": [
       {
         "lean": "containment",

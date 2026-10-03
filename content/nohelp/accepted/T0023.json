@@ -3,7 +3,7 @@
     "anchor": {
       "print": "CircuitalHealing"
     },
-    "body": "The receiver sat on the repair bench during the evacuation alert, screwdriver beside its charged battery. Dispatch's log says it acknowledged the alert there. The owner signed for it next morning and lost lunch money for the missed shift.",
+    "body": "The radio receiver's open with the screwdriver beside it. Battery was pulled when the alert supposedly went out. Dispatch log says this unit confirmed the warning. Someone wrote what they needed to see.",
     "id": "t0023-01",
     "kind": "set",
     "pieces": [
@@ -11,7 +11,7 @@
       "Battery",
       "Screwdriver"
     ],
-    "title": "Acknowledged from the bench",
+    "title": "Radio receiver, battery and screwdriver",
     "where": [
       {
         "containers": [
@@ -39,7 +39,7 @@
     "pieces": [
       "receipt"
     ],
-    "title": "No fault at the plot",
+    "title": "Receipt",
     "where": [
       {
         "containers": [

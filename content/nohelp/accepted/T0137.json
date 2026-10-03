@@ -4,14 +4,14 @@
       "map": "WpStashMap11",
       "mark": 1
     },
-    "body": "The hardware list is complete, but the security transfer was signed before the building was inspected. The person who kept the key is not listed.",
+    "body": "The shotgun's logged on the paper sheet. Transfer was signed before they checked this place. Can't find who was supposed to hold it.",
     "id": "t0137-01",
     "kind": "set",
     "pieces": [
       "Shotgun",
       "SheetPaper2"
     ],
-    "title": "Untouched hardware list",
+    "title": "Shotgun and paper sheet",
     "where": [
       {
         "containers": [

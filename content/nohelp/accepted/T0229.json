@@ -3,14 +3,14 @@
     "anchor": {
       "print": "AlsAutoShop"
     },
-    "body": "The service card lists an oil change and brake check; the field-use tag says the vehicle left before either item was signed off.",
+    "body": "The screwdriver's here, work half-done. Petrol can's empty. They fueled up and left for the fields anyway.",
     "id": "t0229-01",
     "kind": "set",
     "pieces": [
       "Screwdriver",
       "PetrolCan"
     ],
-    "title": "Oil and brake check",
+    "title": "Screwdriver and petrol can",
     "where": [
       {
         "containers": [

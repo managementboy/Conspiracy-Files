@@ -3,14 +3,14 @@
     "anchor": {
       "print": "MuldraughBakeSale"
     },
-    "body": "The bake-sale list marks every box collected before the parking lot was cleared; one family’s unpaid loaf remains beside the pickup table.",
+    "body": "The sheet tracks who got pulled from this block. Someone's bread still here, their name checked off. They said everyone made it out.",
     "id": "t0192-01",
     "kind": "set",
     "pieces": [
       "Bread",
       "SheetPaper2"
     ],
-    "title": "Bake sale pickup",
+    "title": "Bread and paper sheet",
     "where": [
       {
         "containers": [

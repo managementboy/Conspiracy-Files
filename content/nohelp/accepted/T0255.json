@@ -3,14 +3,14 @@
     "anchor": {
       "print": "BeefChunk"
     },
-    "body": "The jerky bundle is packed with a field route note listing the trial rows to be sprayed; the receipt says the delivery was paid before the crew's departure time.",
+    "body": "The jerky bundle is packed with a note listing trial rows to spray. The receipt shows the delivery paid before the crew left.",
     "id": "t0255-01",
     "kind": "set",
     "pieces": [
       "Bread",
       "Bag_ALICEpack"
     ],
-    "title": "Jerky for the trip",
+    "title": "Bread and pack",
     "where": [
       {
         "containers": [

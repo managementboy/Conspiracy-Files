@@ -4,14 +4,14 @@
       "map": "WorldStashMap9",
       "mark": 1
     },
-    "body": "A crate tally includes the offices but lists no contents; the next page labels the same shipment for a field check.",
+    "body": "The notebook tallies outbound crates, contents never recorded. The sheet of paper marks them for field testing.",
     "id": "t0118-01",
     "kind": "set",
     "pieces": [
       "Notebook",
       "SheetPaper2"
     ],
-    "title": "Crates without contents",
+    "title": "Notebook and sheet of paper",
     "where": [
       {
         "containers": [
@@ -40,7 +40,7 @@
     "pieces": [
       "diary"
     ],
-    "title": "Crates reserved for field samples",
+    "title": "Diary page",
     "where": [
       {
         "containers": [
@@ -69,7 +69,7 @@
     "pieces": [
       "notepad"
     ],
-    "title": "Railyard pickup before dawn",
+    "title": "Notepad page",
     "where": [
       {
         "containers": [
@@ -98,7 +98,7 @@
     "pieces": [
       "receipt"
     ],
-    "title": "Muldraugh route crossed out",
+    "title": "Receipt",
     "where": [
       {
         "containers": [
@@ -127,7 +127,7 @@
     "pieces": [
       "photograph"
     ],
-    "title": "Muldraugh field route in the margin",
+    "title": "Photograph",
     "where": [
       {
         "containers": [
@@ -156,7 +156,7 @@
     "pieces": [
       "notebook"
     ],
-    "title": "Office ledger with no owner",
+    "title": "Notebook page",
     "where": [
       {
         "containers": [
@@ -185,7 +185,7 @@
     "pieces": [
       "letter"
     ],
-    "title": "Warehouse bay washed twice",
+    "title": "Handwritten letter",
     "where": [
       {
         "containers": [
@@ -214,7 +214,7 @@
     "pieces": [
       "diary"
     ],
-    "title": "Trains idle after the shipment",
+    "title": "Diary page",
     "where": [
       {
         "containers": [

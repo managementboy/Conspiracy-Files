@@ -4,14 +4,14 @@
       "map": "RosewoodStashMap2",
       "mark": 1
     },
-    "body": "The route map is folded around a weapon handover slip; the last stop is marked complete, but the return route has no driver.",
+    "body": "The map has the last stop marked complete. Pistol signed out there but never signed back in. They knew it was one-way.",
     "id": "t0105-01",
     "kind": "set",
     "pieces": [
       "Pistol",
       "Map"
     ],
-    "title": "The line ends here",
+    "title": "Pistol and map",
     "where": [
       {
         "containers": [

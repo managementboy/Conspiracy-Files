@@ -3,14 +3,14 @@
     "anchor": {
       "print": "CarFixation"
     },
-    "body": "The service appointment is stamped complete, but the customer’s copy says the car was still waiting when the shop closed.",
+    "body": "The notebook marks evacuation complete. The pencil tally ends halfway down the page. The rest is blank.",
     "id": "t0228-01",
     "kind": "set",
     "pieces": [
       "Notebook",
       "Pencil"
     ],
-    "title": "Appointment not on the calendar",
+    "title": "Notebook and pencil",
     "where": [
       {
         "containers": [

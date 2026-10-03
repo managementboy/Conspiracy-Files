@@ -3,13 +3,13 @@
     "anchor": {
       "scene": "RDSSpecificProfession"
     },
-    "body": "the night shift: two workers from the livestock-feed study carried a sweet chemical smell in on their boots.\n\nBy morning the creek below their plot smelled the same, and the minnows were floating.",
+    "body": "The night shift: two workers from the livestock-feed study carried a sweet chemical smell in on their boots.\n\nBy morning the creek below their plot smelled the same, and the minnows were floating.",
     "id": "t0348-01",
     "kind": "written",
     "pieces": [
       "diary"
     ],
-    "title": "the night shift — a sweet chemical smell",
+    "title": "Diary entry",
     "where": [
       {
         "lean": "agricultural",
@@ -29,7 +29,7 @@
     "pieces": [
       "letter"
     ],
-    "title": "The wrong occupation",
+    "title": "Handwritten letter",
     "where": [
       {
         "lean": "containment",

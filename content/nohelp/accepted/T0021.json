@@ -4,14 +4,14 @@
       "map": "LouisvilleStashMap1",
       "mark": 1
     },
-    "body": "the car jack and clipboard carry the same black paint. a fresh scrape exposes an older evacuation color beneath.",
+    "body": "The car jack and clipboard have the same black paint on them. A fresh scrape shows an older evacuation color underneath.",
     "id": "t0021-01",
     "kind": "set",
     "pieces": [
       "Jack",
       "Clipboard"
     ],
-    "title": "Car jack beside the spare mark",
+    "title": "Jack and clipboard",
     "where": [
       {
         "containers": [
@@ -40,7 +40,7 @@
     "pieces": [
       "letter"
     ],
-    "title": "The tin is for screws",
+    "title": "Letter",
     "where": [
       {
         "containers": [

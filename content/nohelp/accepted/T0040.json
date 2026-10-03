@@ -4,14 +4,14 @@
       "map": "EkronStashMap7",
       "mark": 1
     },
-    "body": "The marked route runs along the edge of the sprayed fields, with a pencilled return arrow and no destination name; a note beside it asks whether the field check on the wilted rows is still happening.",
+    "body": "The map shows a route along the sprayed fields. Someone pencilled a return arrow but left no destination. A note asks if the field check on the wilted rows still happens.",
     "id": "t0040-01",
     "kind": "set",
     "pieces": [
       "Map",
       "Pencil"
     ],
-    "title": "A route left open",
+    "title": "Map and pencil",
     "where": [
       {
         "containers": [

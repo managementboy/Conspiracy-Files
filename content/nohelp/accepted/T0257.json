@@ -3,14 +3,14 @@
     "anchor": {
       "print": "CatonaHotTinGrill"
     },
-    "body": "The fish order is paired with a pond sample slip dated after the kitchen served lunch. The cook’s note says the catch was fresh.",
+    "body": "I found the fish fillet cut and ready. The kitchen knife beside it is barely used. This was prepped before anyone tested the pond.",
     "id": "t0257-01",
     "kind": "set",
     "pieces": [
       "FishFillet",
       "KitchenKnife"
     ],
-    "title": "Catch and sample slip",
+    "title": "Fish fillet and kitchen knife",
     "where": [
       {
         "containers": [

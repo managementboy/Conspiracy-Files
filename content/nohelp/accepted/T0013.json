@@ -4,14 +4,14 @@
       "map": "IrvingtonStashMap1",
       "mark": 1
     },
-    "body": "the black umbrella bears a treated-seed stain and the camera a closure mark. one rope knot holds both objects together.",
+    "body": "The black umbrella has a treated-seed stain on it. The camera carries a closure mark. One rope knot holds the two together.",
     "id": "t0013-01",
     "kind": "set",
     "pieces": [
       "UmbrellaBlack",
       "Camera"
     ],
-    "title": "Black umbrella with the second residue",
+    "title": "Black umbrella and camera",
     "where": [
       {
         "containers": [
@@ -34,14 +34,14 @@
       "map": "IrvingtonStashMap1",
       "note": 1
     },
-    "body": "A clear ring dries across the notebook's crop-row drawing. The bottle cap is clean; the page beneath it is stained only where the drawn rows meet.",
+    "body": "A clear ring has dried across the notebook's crop-row drawing. The bottle cap is clean. The page is stained only where the drawn rows meet.",
     "id": "t0013-02",
     "kind": "set",
     "pieces": [
       "Notebook",
       "WaterBottle"
     ],
-    "title": "The bottle's ring crosses a row sketch",
+    "title": "Notebook and water bottle",
     "where": [
       {
         "containers": [
@@ -70,7 +70,7 @@
     "pieces": [
       "dispatch"
     ],
-    "title": "Dispatch copy with an unfinished return",
+    "title": "Dispatch slip",
     "where": [
       {
         "containers": [
@@ -99,7 +99,7 @@
     "pieces": [
       "notepad"
     ],
-    "title": "The row count continues past the page",
+    "title": "Notepad page",
     "where": [
       {
         "containers": [

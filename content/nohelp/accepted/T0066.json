@@ -4,14 +4,14 @@
       "map": "MarchRidgeStashMap3",
       "mark": 1
     },
-    "body": "A bakery receipt is tucked into a hunting route map; a note marks where dead deer were found, beside the date of a crop spray on the adjoining field.",
+    "body": "The bread is dated one day before a spray date marked on the map. Someone crossed out the spray date and drew a route away from town. The route passes right through the sprayed fields.",
     "id": "t0066-01",
     "kind": "set",
     "pieces": [
       "Bread",
       "Map"
     ],
-    "title": "Last place on the route",
+    "title": "Bread and map",
     "where": [
       {
         "containers": [

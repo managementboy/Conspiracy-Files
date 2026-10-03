@@ -1,6 +1,6 @@
 [
   {
-    "body": "The sandwich is untouched, but the cup is half empty and its lip is coated with spray dust from the field. A handkerchief beneath it has dried brown flecks, and a withered corn leaf is folded in it.",
+    "body": "The bread sits whole but the water bottle has pale dust settled in it. A tissue below has the same powder. Left at field's edge, lunch interrupted.",
     "id": "t0432-01",
     "kind": "set",
     "pieces": [
@@ -8,7 +8,7 @@
       "WaterBottle",
       "Tissue"
     ],
-    "title": "The field lunch",
+    "title": "Bread, water bottle and tissue",
     "where": [
       {
         "lean": "agricultural",
@@ -20,14 +20,14 @@
     ]
   },
   {
-    "body": "One work boot has damp field clay in its seams. Its mate is still packed with clean newspaper, as if its owner went out in one borrowed boot.",
+    "body": "One work boot has damp field clay in its seams. Its mate is still packed with clean newspaper. Maybe the owner went out in one borrowed boot.",
     "id": "t0432-02",
     "kind": "set",
     "pieces": [
       "Shoes_WorkBoots",
       "Newspaper"
     ],
-    "title": "The unworn pair",
+    "title": "Work boots and newspaper",
     "where": [
       {
         "lean": "agricultural",
@@ -46,7 +46,7 @@
       "RippedSheets",
       "Fertilizer"
     ],
-    "title": "The first cough at dawn",
+    "title": "Ripped sheets and fertilizer",
     "where": [
       {
         "lean": "agricultural",
@@ -58,14 +58,14 @@
     ]
   },
   {
-    "body": "A lunch bowl has grain husks stuck to its rim. The unopened bread beside it was packed for the same shift.",
+    "body": "A lunch bowl has grain husks stuck to its rim. The unopened bread beside it looks packed for the same shift.",
     "id": "t0432-04",
     "kind": "set",
     "pieces": [
       "Bowl",
       "Bread"
     ],
-    "title": "The supper carried home",
+    "title": "Bowl and bread",
     "where": [
       {
         "lean": "agricultural",
@@ -76,14 +76,14 @@
     ]
   },
   {
-    "body": "Dark treated-feed dust covers the outer sleeve of this jacket. The clean inside is pressed around a bottle with the same residue at its neck, and a scorched crop leaf is tucked in a pocket.",
+    "body": "Dark treated-feed dust covers the outer sleeve of this jacket. A bottle inside has the same residue at its neck. A scorched crop leaf is in a pocket.",
     "id": "t0432-05",
     "kind": "set",
     "pieces": [
       "Jacket_ArmyCamoGreen",
       "WaterBottle"
     ],
-    "title": "The borrowed coat",
+    "title": "Camo jacket and water bottle",
     "where": [
       {
         "lean": "agricultural",
@@ -95,14 +95,14 @@
     ]
   },
   {
-    "body": "A full bottle is knotted to a strip of cloth already marked with a brown stain. The second bottle has not been opened. A scorched leaf of seed corn lies beside them, with a dusting of sprayed powder on the cloth.",
+    "body": "A full bottle is knotted to a cloth strip with a brown stain. A scorched leaf of seed corn lies beside it. The cloth has a dusting of sprayed powder.",
     "id": "t0432-06",
     "kind": "set",
     "pieces": [
       "WaterBottle",
       "RippedSheets"
     ],
-    "title": "The offered water",
+    "title": "Water bottle and ripped sheets",
     "where": [
       {
         "lean": "agricultural",
@@ -114,14 +114,14 @@
     ]
   },
   {
-    "body": "The hand shovel has fresh field soil and a cloth wrapped tightly around its grip, stained green from the sprayer. A bandage has been laid out but never used.",
+    "body": "The hand shovel has fresh field soil. A cloth on its grip is stained green from the sprayer. A bandage was laid out but never used.",
     "id": "t0432-07",
     "kind": "set",
     "pieces": [
       "HandShovel",
       "Bandage"
     ],
-    "title": "The shift's last tool",
+    "title": "Hand shovel and bandage",
     "where": [
       {
         "lean": "agricultural",
@@ -133,14 +133,14 @@
     ]
   },
   {
-    "body": "A pinch of dark pellets has collected in the crease of this purse. The spoon beside it is bent from opening a feed sack.",
+    "body": "A pinch of dark pellets has collected in the crease of this purse. The spoon beside it is bent, like it was used to open a feed sack.",
     "id": "t0432-08",
     "kind": "set",
     "pieces": [
       "Purse",
       "Spoon"
     ],
-    "title": "The feed clerk's pocket",
+    "title": "Purse and spoon",
     "where": [
       {
         "lean": "agricultural",
@@ -152,14 +152,14 @@
     ]
   },
   {
-    "body": "The cuff is crusted with pale spray granules and crushed crop leaves. A clean tissue in the pocket was never taken out.",
+    "body": "The army jacket has pale spray dust caked on the cuff. Crop leaves are crushed into the olive drab fabric. The tissue in the pocket is clean, never used.",
     "id": "t0432-09",
     "kind": "set",
     "pieces": [
       "Jacket_ArmyOliveDrab",
       "Tissue"
     ],
-    "title": "The grass on the cuff",
+    "title": "Olive drab jacket and tissue",
     "where": [
       {
         "lean": "agricultural",
@@ -171,7 +171,7 @@
     ]
   },
   {
-    "body": "Soap is wet on one side and grain grit is still pressed into the glove fingers. The water bottle is nearly empty.",
+    "body": "The soap is wet on one side. Grain grit is still pressed into the glove fingers. The water bottle is nearly empty.",
     "id": "t0432-10",
     "kind": "set",
     "pieces": [
@@ -179,7 +179,7 @@
       "Gloves_Dish",
       "WaterBottle"
     ],
-    "title": "The unfinished washing",
+    "title": "Soap, dish gloves and water bottle",
     "where": [
       {
         "lean": "agricultural",

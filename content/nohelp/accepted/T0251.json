@@ -3,14 +3,14 @@
     "anchor": {
       "print": "RustyRifle"
     },
-    "body": "The band schedule lists an extra set after closing; a venue note asks staff to air out the room after the field crew leaves, since their boots tracked in spray-wet soil and a sweet chemical smell.",
+    "body": "The band schedule lists an extra set after closing. A venue note asks staff to air out the room after the field crew. Their boots tracked in spray-wet soil with a sweet chemical smell.",
     "id": "t0251-01",
     "kind": "set",
     "pieces": [
       "RadioBlack",
       "SheetPaper2"
     ],
-    "title": "Friday’s extra set",
+    "title": "Radio and sheet of paper",
     "where": [
       {
         "containers": [

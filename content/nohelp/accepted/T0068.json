@@ -4,14 +4,14 @@
       "map": "MarchRidgeStashMap4",
       "mark": 1
     },
-    "body": "The route sketch marks one aid bundle delivered before the families are listed. A child’s drawing of the return road is tucked behind the empty passenger line.",
+    "body": "The pack was logged in before this map shows evacuation routes. They delivered supplies before marking where people were stuck.",
     "id": "t0068-01",
     "kind": "set",
     "pieces": [
       "Bag_ALICEpack",
       "Map"
     ],
-    "title": "Help before the turn",
+    "title": "Backpack and map",
     "where": [
       {
         "containers": [

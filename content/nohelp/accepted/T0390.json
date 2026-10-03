@@ -3,14 +3,14 @@
     "anchor": {
       "scene": "RZSMusicFest"
     },
-    "body": "the stiff mop with a rinse bucket carry violet powder from the crop trial. they were packed before the back road closed.",
+    "body": "The mop and bucket carry violet powder, maybe from the crop trial. They were packed before the back road closed.",
     "id": "t0390-01",
     "kind": "set",
     "pieces": [
       "Mop",
       "Bucket"
     ],
-    "title": "stiff mop with a rinse bucket at late wednesday",
+    "title": "Mop and bucket",
     "where": [
       {
         "lean": "agricultural",
@@ -30,7 +30,7 @@
     "pieces": [
       "notebook"
     ],
-    "title": "Attendance at the stage",
+    "title": "Notebook page",
     "where": [
       {
         "lean": "containment",

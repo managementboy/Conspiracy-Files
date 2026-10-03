@@ -1,13 +1,13 @@
 [
   {
-    "body": "A numbered evacuation tag is knotted to the short rope, its name line scratched out. The water bottle has its label peeled off and the same number inked on the cap. Both are tied with one cord.",
+    "body": "The evacuation tag on the rope has its name scratched out. The bottle's label is peeled off; the same number is inked on the cap. Both are tied with one cord.",
     "id": "t0008-01",
     "kind": "set",
     "pieces": [
       "Rope",
       "WaterBottle"
     ],
-    "title": "Short rope and a scratched-out tag",
+    "title": "Rope and water bottle",
     "where": [
       {
         "containers": [
@@ -26,14 +26,14 @@
     ]
   },
   {
-    "body": "The notebook rests across the bucket. Its page labels two strips “control — standing” and “trial spray — curled by noon.” The next line reads “mix still active after valve shut.”",
+    "body": "The notebook is lying across the bucket. Page labels: “control — standing” and “trial spray — curled by noon.” It adds, “mix still active after valve shut.”",
     "id": "t0008-02",
     "kind": "set",
     "pieces": [
       "Bucket",
       "Notebook"
     ],
-    "title": "The trial strip curled after spraying",
+    "title": "Bucket and notebook",
     "where": [
       {
         "containers": [

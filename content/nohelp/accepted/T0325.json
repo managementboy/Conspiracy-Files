@@ -3,14 +3,14 @@
     "anchor": {
       "scene": "RDSBanditRaid"
     },
-    "body": "The first-aid kit and water bottle are tied together. Blue powder coats one side and has caked into the bottle's threads, and a few shriveled seedlings are stuck in it.",
+    "body": "A first aid kit and water bottle are tied together. Blue powder coats one side and has caked into the bottle's threads. A few shriveled seedlings are stuck in it.",
     "id": "t0325-01",
     "kind": "set",
     "pieces": [
       "FirstAidKit",
       "WaterBottle"
     ],
-    "title": "First-aid kit and water bottle, sunday after supper",
+    "title": "First aid kit and water bottle",
     "where": [
       {
         "lean": "agricultural",
@@ -24,14 +24,14 @@
     "anchor": {
       "scene": "RDSBanditRaid"
     },
-    "body": "A map and a pencil are kept together in a pocket. Three homes have been circled, but only one has been crossed off; the mark was made before the door was forced.",
+    "body": "A map and a pencil are kept together in a pocket. Three homes are circled, but only one is crossed off. I think the mark was made before the door was forced.",
     "id": "t0325-02",
     "kind": "set",
     "pieces": [
       "Map",
       "Pencil"
     ],
-    "title": "A folded address beside the raid",
+    "title": "Map and pencil",
     "where": [
       {
         "lean": "containment",

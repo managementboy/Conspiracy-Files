@@ -4,14 +4,14 @@
       "map": "WpStashMap4",
       "mark": 1
     },
-    "body": "A seed packet is wrapped in a loving note that asks the recipient to avoid the workroom until the next test is over. The return time is blank.",
+    "body": "A seed packet is wrapped in a loving note. It asks the reader to avoid the workroom until the next test is over. The return time is blank.",
     "id": "t0136-01",
     "kind": "set",
     "pieces": [
       "SeedBag",
       "LetterHandwritten"
     ],
-    "title": "A note between two warnings",
+    "title": "Seed bag and letter",
     "where": [
       {
         "containers": [

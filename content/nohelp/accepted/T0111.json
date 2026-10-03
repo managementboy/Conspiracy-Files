@@ -4,14 +4,14 @@
       "map": "WorldStashMap2",
       "mark": 1
     },
-    "body": "A barricade kit is packed beside a key marked for return; the inventory lists the weapons as hidden before the road restriction was posted.",
+    "body": "The hammer and nails were placed here before the cordon went up. Someone on the inside prepped them for barricading. They were staged days before the public evacuation order.",
     "id": "t0111-01",
     "kind": "set",
     "pieces": [
       "Hammer",
       "Nails"
     ],
-    "title": "Safe after the barricade",
+    "title": "Hammer and nails",
     "where": [
       {
         "containers": [

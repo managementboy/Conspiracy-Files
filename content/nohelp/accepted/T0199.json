@@ -3,14 +3,14 @@
     "anchor": {
       "print": "RedOakApartments"
     },
-    "body": "the garden hoe and seed sack are packed with treated seed. every kernel has the same cracked green coating.",
+    "body": "The garden hoe and seed sack are packed with treated seed. Every kernel has the same cracked green coating.",
     "id": "t0199-01",
     "kind": "set",
     "pieces": [
       "GardenHoe",
       "SeedBag"
     ],
-    "title": "After on the garden hoe, the first copy",
+    "title": "Garden hoe and seed bag",
     "where": [
       {
         "containers": [

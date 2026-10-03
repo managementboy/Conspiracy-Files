@@ -10,7 +10,7 @@
       "Potato",
       "EmptyJar"
     ],
-    "title": "Supper left with a soil jar",
+    "title": "Potato and empty jar",
     "where": [
       {
         "containers": [
@@ -32,14 +32,14 @@
     "anchor": {
       "scene": "RBTSDinner"
     },
-    "body": "A spoon is laid across a bowl with a penciled count on its underside. The number is two higher than the count entered beside the meal.",
+    "body": "A spoon lies across a bowl with a penciled count underneath. The number is two higher than the count entered beside the meal.",
     "id": "t0314-02",
     "kind": "set",
     "pieces": [
       "Spoon",
       "Bowl"
     ],
-    "title": "A cleared place setting",
+    "title": "Spoon and bowl",
     "where": [
       {
         "containers": [

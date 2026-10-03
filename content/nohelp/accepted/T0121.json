@@ -4,14 +4,14 @@
       "map": "WorldStashMap12",
       "mark": 1
     },
-    "body": "The camp list counts water and medicine but leaves one person’s pickup line blank. A note asks whether the missing dose is still at the main office.",
+    "body": "I find pills and a water bottle next to a camp roster.\nSomeone's name has no pickup mark.\nA note asks if their dose ever reached the main office.",
     "id": "t0121-01",
     "kind": "set",
     "pieces": [
       "Pills",
       "WaterBottle"
     ],
-    "title": "Camp supplies minus one person",
+    "title": "Pills and water bottle",
     "where": [
       {
         "containers": [

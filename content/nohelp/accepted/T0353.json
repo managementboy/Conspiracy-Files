@@ -3,14 +3,14 @@
     "anchor": {
       "scene": "RDSZombieLockedBathroom"
     },
-    "body": "The fertilizer sack and empty sprayer share red grit from the pest-control test. They were bundled before the checkpoint appeared.",
+    "body": "Red grit from the pest-control test is on the sack and sprayer. I think they were bundled before the checkpoint appeared.",
     "id": "t0353-01",
     "kind": "set",
     "pieces": [
       "Fertilizer",
       "GardeningSprayEmpty"
     ],
-    "title": "Fertilizer sack and empty sprayer, tuesday at dusk",
+    "title": "Fertilizer sack and empty sprayer",
     "where": [
       {
         "containers": [
@@ -32,14 +32,14 @@
     "anchor": {
       "scene": "RDSZombieLockedBathroom"
     },
-    "body": "A pencil and sheet are pushed beneath the door together. The sheet has an earlier head count, then a later number written over it without any sign the door was opened.",
+    "body": "A pencil and sheet are pushed beneath the door together. The sheet has an earlier head count with a later number over it. I can't see any sign the door was opened.",
     "id": "t0353-02",
     "kind": "set",
     "pieces": [
       "Pencil",
       "Sheet"
     ],
-    "title": "A count through a locked door",
+    "title": "Pencil and paper sheet",
     "where": [
       {
         "containers": [

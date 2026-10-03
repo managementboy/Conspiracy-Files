@@ -4,14 +4,14 @@
       "map": "MulStashMap19",
       "mark": 1
     },
-    "body": "The water bottle is tied to a packed list whose return column is filled in before the departure box. One ration is marked for a person not on the list.",
+    "body": "The notebook shows returns scheduled before departures. Dates don't add up. The water bottle is marked for someone not listed inside.",
     "id": "t0093-01",
     "kind": "set",
     "pieces": [
       "WaterBottle",
       "Notebook"
     ],
-    "title": "Everything for the trip",
+    "title": "Water bottle and notebook",
     "where": [
       {
         "containers": [

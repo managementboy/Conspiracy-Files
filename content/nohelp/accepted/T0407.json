@@ -3,14 +3,14 @@
     "anchor": {
       "scene": "RZSWaterPump"
     },
-    "body": "A bucket and capped water bottle hold the same gray foam. Yellow spray dust circles both rims, above the waterline.",
+    "body": "A bucket and a capped water bottle hold the same gray foam. Yellow spray dust circles both rims, above the waterline.",
     "id": "t0407-01",
     "kind": "set",
     "pieces": [
       "Bucket",
       "WaterBottle"
     ],
-    "title": "bitter water saved beside the pump",
+    "title": "Bucket and water bottle",
     "where": [
       {
         "lean": "agricultural",
@@ -30,7 +30,7 @@
     "pieces": [
       "notepad"
     ],
-    "title": "A queue for water",
+    "title": "Notepad page",
     "where": [
       {
         "lean": "containment",

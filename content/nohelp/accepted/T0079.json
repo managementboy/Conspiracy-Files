@@ -4,14 +4,14 @@
       "map": "MulStashMap4",
       "mark": 1
     },
-    "body": "The medical bag is left beside a route card that sends the occupants through the side exit; the building check says the main door was already cleared.",
+    "body": "A first aid kit and bandage by the side door. Orders routed people through here. The main entrance was already cleared.",
     "id": "t0079-01",
     "kind": "set",
     "pieces": [
       "Bandage",
       "FirstAidKit"
     ],
-    "title": "The easier exit",
+    "title": "Bandage and first aid kit",
     "where": [
       {
         "containers": [

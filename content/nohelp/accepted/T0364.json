@@ -3,14 +3,14 @@
     "anchor": {
       "scene": "RVSConstructionSite"
     },
-    "body": "The key ring and canned corn are packed together. Violet powder from the insecticide test coats both, with a clean print where a glove held them.",
+    "body": "Violet powder from the insecticide test coats the key ring and corn. There's a clean print where a glove held them.",
     "id": "t0364-01",
     "kind": "set",
     "pieces": [
       "KeyRing",
       "CannedCorn"
     ],
-    "title": "Wrapped bread with canned corn at the second evening",
+    "title": "Key ring and canned corn",
     "where": [
       {
         "lean": "agricultural",
@@ -24,7 +24,7 @@
     "anchor": {
       "scene": "RVSConstructionSite"
     },
-    "body": "A work radio with its dial taped down on one channel, spare batteries beside it. Someone told the crew to stay off the air and listen only, days before the road was closed.",
+    "body": "A work radio has its dial taped down on one channel. Spare batteries sit beside it. Someone told the crew to listen only, days before the road closed.",
     "id": "t0364-02",
     "kind": "set",
     "pieces": [
@@ -32,7 +32,7 @@
       "DuctTape",
       "Battery"
     ],
-    "title": "Taped radio in the site truck",
+    "title": "Walkie-talkie, tape and battery",
     "where": [
       {
         "lean": "containment",

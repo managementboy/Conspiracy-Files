@@ -3,14 +3,14 @@
     "anchor": {
       "scene": "RDSGunslinger"
     },
-    "body": "The wrapped loaf and canned corn share a sweet chemical smell from the crop plot. They were bundled before the lane was closed.",
+    "body": "The loaf and canned corn smell sweet and chemical, like the crop plot. I think they were bundled before the lane was closed.",
     "id": "t0335-01",
     "kind": "set",
     "pieces": [
       "Bread",
       "CannedCorn"
     ],
-    "title": "Wrapped loaf and canned corn, saturday near lunch",
+    "title": "Bread and canned corn",
     "where": [
       {
         "lean": "agricultural",
@@ -24,14 +24,14 @@
     "anchor": {
       "scene": "RDSGunslinger"
     },
-    "body": "The map is folded open to a road that has been erased in pencil. A strip of tape on the back carries the earlier route, preserved after the printed one was changed.",
+    "body": "The map is folded open to a road erased in pencil. A strip of tape on the back carries the earlier route. It looks like the printed one was changed.",
     "id": "t0335-02",
     "kind": "set",
     "pieces": [
       "Map",
       "DuctTape"
     ],
-    "title": "A second route in the pocket",
+    "title": "Map and duct tape",
     "where": [
       {
         "lean": "containment",

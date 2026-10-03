@@ -3,14 +3,14 @@
     "anchor": {
       "scene": "RBTrashed"
     },
-    "body": "The tools match a small repair, but the spare was prepared before anyone recorded a fault.",
+    "body": "Someone left this saw and plank ready for a repair. No record of what needed fixing, no orders I can find. They were prepared before anyone admitted there was a problem.",
     "id": "t0321-01",
     "kind": "set",
     "pieces": [
       "Saw",
       "Plank"
     ],
-    "title": "A repair set aside",
+    "title": "Saw and plank",
     "where": [
       {
         "containers": [
@@ -32,14 +32,14 @@
     "anchor": {
       "scene": "RBTrashed"
     },
-    "body": "A bucket bears a faded field lot mark beneath a newer cleaning label. A hand shovel still has the same fine yellow dust caught in its handle.",
+    "body": "A bucket has a faded field lot mark under a newer cleaning label. The hand shovel has the same fine yellow dust caught in its handle.",
     "id": "t0321-02",
     "kind": "set",
     "pieces": [
       "Bucket",
       "HandShovel"
     ],
-    "title": "The spoiled pail",
+    "title": "Bucket and hand shovel",
     "where": [
       {
         "containers": [

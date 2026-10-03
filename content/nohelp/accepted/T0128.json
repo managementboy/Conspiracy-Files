@@ -4,14 +4,14 @@
       "map": "WorldStashMap19",
       "mark": 1
     },
-    "body": "A seed bag and weapon are listed on the same storage slip; the note asks the visitor to take only what can be carried after the work is done.",
+    "body": "I found a pistol and a seed bag together on a shelf. Someone grouped them for a reason. The crops needed both protection and planting.",
     "id": "t0128-01",
     "kind": "set",
     "pieces": [
       "Pistol",
       "SeedBag"
     ],
-    "title": "Weapons beside the supply sack",
+    "title": "Pistol and seed bag",
     "where": [
       {
         "containers": [

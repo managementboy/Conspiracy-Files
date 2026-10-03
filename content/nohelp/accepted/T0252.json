@@ -3,14 +3,14 @@
     "anchor": {
       "print": "A1Hay"
     },
-    "body": "The feed receipt lists a delivery before the animals were counted; a note asks the driver to leave the water trough sealed until the next shift.",
+    "body": "The seed bag arrived first, before they counted who was left. The water bottle has a seal we were told not to break.",
     "id": "t0252-01",
     "kind": "set",
     "pieces": [
       "SeedBag",
       "WaterBottle"
     ],
-    "title": "Feed delivery record",
+    "title": "Seed bag and water bottle",
     "where": [
       {
         "containers": [

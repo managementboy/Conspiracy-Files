@@ -1,13 +1,13 @@
 [
   {
-    "body": "the warning whistle and first-aid kit were sealed together but never opened. soot darkens the bundle; clean outlines show it was packed before the fire.",
+    "body": "The whistle and first aid kit are sealed together, never opened. Soot darkens the bundle. The clean outlines suggest it was packed before the fire.",
     "id": "t0007-01",
     "kind": "set",
     "pieces": [
       "Whistle",
       "FirstAidKit"
     ],
-    "title": "Warning whistle beside the spare mark",
+    "title": "Whistle and first aid kit",
     "where": [
       {
         "lean": "containment",
@@ -18,14 +18,14 @@
     ]
   },
   {
-    "body": "The notebook shows rain crossing a set of crop rows. A water bottle rests on the open page; its dry ring circles the word “downhill,” written once and then erased.",
+    "body": "The notebook shows rain crossing a set of crop rows. A water bottle's dry ring circles the word “downhill” on the page. The word was written once, then erased.",
     "id": "t0007-02",
     "kind": "set",
     "pieces": [
       "Notebook",
       "WaterBottle"
     ],
-    "title": "The rain sketch runs into the bottle ring",
+    "title": "Notebook and water bottle",
     "where": [
       {
         "lean": "agricultural",

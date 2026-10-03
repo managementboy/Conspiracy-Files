@@ -3,14 +3,14 @@
     "anchor": {
       "print": "FarmersMarket"
     },
-    "body": "The market basket is tied to a produce sheet that marks the field lot sampled before the stall opened. The seller’s hand-drawn price sign is still inside.",
+    "body": "The tomato sits on an open notebook. Lot numbers and sample dates logged before the market opened. Someone was running tests on the crops.",
     "id": "t0191-01",
     "kind": "set",
     "pieces": [
       "Tomato",
       "Notebook"
     ],
-    "title": "Market produce log",
+    "title": "Tomato and notebook",
     "where": [
       {
         "containers": [

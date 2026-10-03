@@ -4,14 +4,14 @@
       "map": "EkronStashMap2",
       "mark": 1
     },
-    "body": "The potato crate has a delivery tag stamped by a checkpoint after the road was sealed. A pencilled note lists a turned-back driver and no destination.",
+    "body": "The potato still has a delivery tag stamped after the road was sealed. The notebook shows paid delivery with the driver's name scratched out. No return trip.",
     "id": "t0035-01",
     "kind": "set",
     "pieces": [
       "Potato",
       "Notebook"
     ],
-    "title": "The last crate",
+    "title": "Potato and notebook",
     "where": [
       {
         "containers": [

@@ -4,14 +4,14 @@
       "map": "WorldStashMap6",
       "mark": 1
     },
-    "body": "matching white stripes cross the candle and clipboard. a name-sized patch on the candle has been scrubbed bare.",
+    "body": "Matching white stripes cross the candle and the clipboard. A name-sized patch on the candle has been scrubbed bare.",
     "id": "t0115-01",
     "kind": "set",
     "pieces": [
       "Candle",
       "Clipboard"
     ],
-    "title": "Candle beside the spare mark",
+    "title": "Candle and clipboard",
     "where": [
       {
         "containers": [
@@ -40,7 +40,7 @@
     "pieces": [
       "diary"
     ],
-    "title": "Cross beside the trial store",
+    "title": "Diary page",
     "where": [
       {
         "containers": [
@@ -69,7 +69,7 @@
     "pieces": [
       "notepad"
     ],
-    "title": "Supplies at the first written mark",
+    "title": "Notepad page",
     "where": [
       {
         "containers": [
@@ -98,7 +98,7 @@
     "pieces": [
       "receipt"
     ],
-    "title": "Too large for one field crew",
+    "title": "Receipt",
     "where": [
       {
         "containers": [
@@ -127,7 +127,7 @@
     "pieces": [
       "photograph"
     ],
-    "title": "Cross checked after the seed delivery",
+    "title": "Photograph",
     "where": [
       {
         "containers": [
@@ -156,7 +156,7 @@
     "pieces": [
       "notebook"
     ],
-    "title": "Initials beside the plot count",
+    "title": "Notebook page",
     "where": [
       {
         "containers": [

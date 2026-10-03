@@ -3,14 +3,14 @@
     "anchor": {
       "print": "LeafhillHeights"
     },
-    "body": "The office lease marks every suite available, but the building notebook reserves one floor for a field test through the tenant move-in date.",
+    "body": "The notebook lists crop rotation schedules for every field. But pencil marks reserve one plot for a program test. That runs past the harvest date.",
     "id": "t0225-01",
     "kind": "set",
     "pieces": [
       "Notebook",
       "Pencil"
     ],
-    "title": "Office space and test room",
+    "title": "Notebook and pencil",
     "where": [
       {
         "containers": [

@@ -4,14 +4,14 @@
       "map": "WorldStashMap16",
       "mark": 1
     },
-    "body": "chalk numbers run across the fire extinguisher and camera. the count skips one place, then resumes in a different hand.",
+    "body": "Chalk numbers run across the extinguisher and the camera. The count skips one place, then goes on in a different hand.",
     "id": "t0125-01",
     "kind": "set",
     "pieces": [
       "Extinguisher",
       "Camera"
     ],
-    "title": "Fire extinguisher beside the spare mark",
+    "title": "Fire extinguisher and camera",
     "where": [
       {
         "containers": [
@@ -40,7 +40,7 @@
     "pieces": [
       "diary"
     ],
-    "title": "First trap held a torn numbered tag",
+    "title": "Diary page",
     "where": [
       {
         "containers": [
@@ -69,7 +69,7 @@
     "pieces": [
       "notepad"
     ],
-    "title": "Camp used by the pasture team",
+    "title": "Notepad page",
     "where": [
       {
         "containers": [
@@ -98,7 +98,7 @@
     "pieces": [
       "receipt"
     ],
-    "title": "North arrow past the wash drums",
+    "title": "Receipt",
     "where": [
       {
         "containers": [
@@ -127,7 +127,7 @@
     "pieces": [
       "photograph"
     ],
-    "title": "Second trap held a sample bag",
+    "title": "Photograph",
     "where": [
       {
         "containers": [
@@ -156,7 +156,7 @@
     "pieces": [
       "notebook"
     ],
-    "title": "Checkpoint checked field badges",
+    "title": "Notebook page",
     "where": [
       {
         "containers": [
@@ -185,7 +185,7 @@
     "pieces": [
       "letter"
     ],
-    "title": "Barriers moved after the closure",
+    "title": "Handwritten letter",
     "where": [
       {
         "containers": [
@@ -214,7 +214,7 @@
     "pieces": [
       "diary"
     ],
-    "title": "Upper arrow toward the trial gate",
+    "title": "Diary page",
     "where": [
       {
         "containers": [

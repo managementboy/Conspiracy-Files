@@ -6,7 +6,7 @@
     "pieces": [
       "receipt"
     ],
-    "title": "The route on the feed bill",
+    "title": "Receipt",
     "where": [
       {
         "lean": "agricultural",
@@ -23,7 +23,7 @@
     "pieces": [
       "diary"
     ],
-    "title": "The boots in the passenger seat",
+    "title": "Diary entry",
     "where": [
       {
         "lean": "agricultural",
@@ -40,7 +40,7 @@
     "pieces": [
       "notepad"
     ],
-    "title": "Two stops past the mill",
+    "title": "Notepad page",
     "where": [
       {
         "lean": "agricultural",
@@ -57,7 +57,7 @@
     "pieces": [
       "letter"
     ],
-    "title": "The load that crossed the bridge",
+    "title": "Letter",
     "where": [
       {
         "lean": "agricultural",
@@ -74,7 +74,7 @@
     "pieces": [
       "notepad"
     ],
-    "title": "The farmer who kept his old stock",
+    "title": "Notepad page",
     "where": [
       {
         "containers": [
@@ -99,7 +99,7 @@
     "pieces": [
       "diary"
     ],
-    "title": "The shared shovel",
+    "title": "Diary entry",
     "where": [
       {
         "containers": [
@@ -124,7 +124,7 @@
     "pieces": [
       "receipt"
     ],
-    "title": "The wet market boxes",
+    "title": "Receipt",
     "where": [
       {
         "containers": [
@@ -149,7 +149,7 @@
     "pieces": [
       "letter"
     ],
-    "title": "The trailer at dusk",
+    "title": "Letter",
     "where": [
       {
         "lean": "agricultural",
@@ -166,7 +166,7 @@
     "pieces": [
       "notebook"
     ],
-    "title": "The sacks under the canvas",
+    "title": "Notebook page",
     "where": [
       {
         "lean": "agricultural",
@@ -183,7 +183,7 @@
     "pieces": [
       "receipt"
     ],
-    "title": "The worker on the return trip",
+    "title": "Receipt",
     "where": [
       {
         "lean": "agricultural",

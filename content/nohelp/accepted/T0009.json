@@ -1,13 +1,13 @@
 [
   {
-    "body": "A rubber band keeps the newspaper open, but its fold covers the correction column. The headline is still visible; the folded page has split along the correction's first sentence.",
+    "body": "A rubber band holds the newspaper open. Its fold covers the correction column, and the headline still shows. The page has split along the correction's first sentence.",
     "id": "t0009-01",
     "kind": "set",
     "pieces": [
       "Newspaper",
       "RubberBand"
     ],
-    "title": "The headline held open over its correction",
+    "title": "Newspaper and rubber band",
     "where": [
       {
         "containers": [
@@ -26,14 +26,14 @@
     ]
   },
   {
-    "body": "The empty garden sprayer has left a clean circle on the notebook beneath it. A dried green line runs from the nozzle to a sketch of crop rows.",
+    "body": "The empty garden sprayer left a clean circle on the notebook. A dried green line runs from the nozzle to a sketch of crop rows.",
     "id": "t0009-02",
     "kind": "set",
     "pieces": [
       "GardeningSprayEmpty",
       "Notebook"
     ],
-    "title": "The sprayer left its outline on the page",
+    "title": "Garden sprayer and notebook",
     "where": [
       {
         "containers": [

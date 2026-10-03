@@ -3,14 +3,14 @@
     "anchor": {
       "scene": "RVSAmbulanceCrash"
     },
-    "body": "The child's shoe and the water bottle are tied in one bundle with torn red cordon tape, the quarantine kind. A paper tag with an evacuation sector code hangs from the knot, and a second tag with a struck-through sector code hangs beneath it—both bearing the same emergency authority stamp.",
+    "body": "A jar and potato bear torn evacuation supply tags. One tag has a sector code struck through and corrected. Both carry the same emergency authority stamp.",
     "id": "t0356-01",
     "kind": "set",
     "pieces": [
       "Potato",
       "EmptyJar"
     ],
-    "title": "Child's shoe and water bottle, Tuesday dawn",
+    "title": "Potato and empty jar",
     "where": [
       {
         "lean": "containment",
@@ -30,7 +30,7 @@
     "pieces": [
       "notepad"
     ],
-    "title": "Harvest at the stretcher",
+    "title": "Notepad page",
     "where": [
       {
         "lean": "agricultural",

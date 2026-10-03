@@ -10,7 +10,7 @@
     "pieces": [
       "receipt"
     ],
-    "title": "The unfinished handoff",
+    "title": "Receipt",
     "where": [
       {
         "containers": [
@@ -33,14 +33,14 @@
       "map": "BBurgStashMap5",
       "mark": 1
     },
-    "body": "a scraped warning stripe marks the empty sandbag; a quarantine seal is stuck over the water bottle's cap. both are tied with the same cord.",
+    "body": "A scraped warning stripe marks the empty sandbag. A quarantine seal is stuck over the cap of the water bottle. Both are tied with the same cord.",
     "id": "t0030-02",
     "kind": "set",
     "pieces": [
       "EmptySandbag",
       "WaterBottle"
     ],
-    "title": "Empty sandbag with the second seal",
+    "title": "Empty sandbag and water bottle",
     "where": [
       {
         "containers": [

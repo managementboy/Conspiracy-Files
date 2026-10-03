@@ -3,14 +3,14 @@
     "anchor": {
       "print": "HouseforSale860"
     },
-    "body": "The inspection note asks for a water sample because the tap runs with a faint sweet smell; the move-in receipt is already signed. a line below says the fields upstream were sprayed on Tuesday.",
+    "body": "The notebook shows a water test form and a signed rental agreement. Someone noted the upstream fields were sprayed tuesday. The bottle smells sweet when I open it.",
     "id": "t0243-01",
     "kind": "set",
     "pieces": [
       "WaterBottle",
       "Notebook"
     ],
-    "title": "The central address sample",
+    "title": "Water bottle and notebook",
     "where": [
       {
         "containers": [

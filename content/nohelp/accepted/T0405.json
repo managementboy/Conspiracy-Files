@@ -3,14 +3,14 @@
     "anchor": {
       "scene": "RZSVanCamp"
     },
-    "body": "The van keys and first-aid kit share one cord. Green field flecks mark the keys; a strip of road tape seals the kit.",
+    "body": "The van keys and first-aid kit share one cord. Green field flecks mark the keys. A strip of road tape seals the kit.",
     "id": "t0405-01",
     "kind": "set",
     "pieces": [
       "KeyRing",
       "FirstAidKit"
     ],
-    "title": "van keys tied to a first-aid kit",
+    "title": "Van keys and first-aid kit",
     "where": [
       {
         "lean": "agricultural",
@@ -24,7 +24,7 @@
     "anchor": {
       "scene": "RZSVanCamp"
     },
-    "body": "A coil of rope cut into equal lengths, work gloves, and a measuring tape stopped at the same mark each time. Somebody was measuring out a perimeter around the vans, not a camp.",
+    "body": "A coil of rope cut in equal lengths, work gloves, a measuring tape. The tape is stopped at the same mark each time. Looks like a perimeter around the vans, not a camp.",
     "id": "t0405-02",
     "kind": "set",
     "pieces": [
@@ -32,7 +32,7 @@
       "Gloves_LeatherGloves",
       "MeasuringTape"
     ],
-    "title": "Rope and gloves from a roadside perimeter",
+    "title": "Rope, gloves and measuring tape",
     "where": [
       {
         "lean": "containment",

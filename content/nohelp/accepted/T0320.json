@@ -3,14 +3,14 @@
     "anchor": {
       "scene": "RBTSSoup"
     },
-    "body": "A water bottle and tin opener sit tagged with numbered paper tied by string. A pen mark tracks the bottle's level, and barrier tape circles the opener's handle. Each tag lists an evacuation zone but leaves the recipient line unfilled.",
+    "body": "A water bottle and tin opener have numbered tags tied on with string. Each tag lists an evacuation zone, but the recipient line is blank. Barrier tape circles the opener's handle.",
     "id": "t0320-01",
     "kind": "set",
     "pieces": [
       "WaterBottle",
       "TinOpener"
     ],
-    "title": "Awaiting assignment",
+    "title": "Water bottle and tin opener",
     "where": [
       {
         "containers": [
@@ -32,14 +32,14 @@
     "anchor": {
       "scene": "RBTSSoup"
     },
-    "body": "One bowl is clean and tied to a second with string. The count scratched into the first was reduced in pencil on the other, though both were carried to the table.",
+    "body": "Twenty-three scratches inside the bowl. The spoon shows nineteen notches, one crossed out. Both were carried to the table and left.",
     "id": "t0320-02",
     "kind": "set",
     "pieces": [
       "Bowl",
       "Spoon"
     ],
-    "title": "The unserved bowl",
+    "title": "Bowl and spoon",
     "where": [
       {
         "containers": [

@@ -3,14 +3,14 @@
     "anchor": {
       "print": "FarmingAndRuralSupplyDoeValley"
     },
-    "body": "The supply receipt groups sandbags, bleach, ammunition and a few seed packets in one pickup under a checkpoint order; the return sheet logs the vehicle in before the delivery was signed, passenger count blanked.",
+    "body": "The seed bag has a checkpoint tag still tied to it. The pistol does too, same number. Supply manifest lists both. Someone blanked the passenger count.",
     "id": "t0226-01",
     "kind": "set",
     "pieces": [
       "SeedBag",
       "Pistol"
     ],
-    "title": "Supply order for the rural stop",
+    "title": "Seed bag and pistol",
     "where": [
       {
         "containers": [

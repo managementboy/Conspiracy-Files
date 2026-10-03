@@ -3,14 +3,14 @@
     "anchor": {
       "scene": "RDSRPGNight"
     },
-    "body": "The cut potato and sample jar are tied together. an oily film coats one side; a torn strip of road tape covers the other.",
+    "body": "The key ring's tied to the empty jar with wire. An amber residue lines the jar bottom. Both items feel oily, smell chemical.",
     "id": "t0343-01",
     "kind": "set",
     "pieces": [
       "KeyRing",
       "EmptyJar"
     ],
-    "title": "Cut potato and sample jar, wednesday before rain",
+    "title": "Key ring and empty jar",
     "where": [
       {
         "containers": [
@@ -38,7 +38,7 @@
     "pieces": [
       "letter"
     ],
-    "title": "Last game in the margin",
+    "title": "Handwritten letter",
     "where": [
       {
         "containers": [

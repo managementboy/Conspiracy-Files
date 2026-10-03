@@ -3,14 +3,14 @@
     "anchor": {
       "print": "SpiffosHiringWestPoint"
     },
-    "body": "the pipe wrench and seed sack are packed with treated seed. every kernel has the same cracked green coating.",
+    "body": "The pipe wrench and seed sack are packed with treated seed. Every kernel has the same cracked green coating.",
     "id": "t0184-01",
     "kind": "set",
     "pieces": [
       "PipeWrench",
       "SeedBag"
     ],
-    "title": "After on the pipe wrench, the first copy",
+    "title": "Pipe wrench and seed bag",
     "where": [
       {
         "containers": [

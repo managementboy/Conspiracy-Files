@@ -1,13 +1,13 @@
 [
   {
-    "body": "This seam has two colors of dust. The fertilizer reached the lower half; the dry seed at the top still comes away clean.",
+    "body": "This seam has two colors of dust. The fertilizer reached the lower half. The dry seed at the top still looks clean to me.",
     "id": "t0428-01",
     "kind": "set",
     "pieces": [
       "SeedBag",
       "Fertilizer"
     ],
-    "title": "The dry half of the sack",
+    "title": "Seed bag and fertilizer",
     "where": [
       {
         "containers": [
@@ -26,14 +26,14 @@
     ]
   },
   {
-    "body": "The soil on this shovel stops at a sharp pale band. Above it the blade is crusted with spray residue and field grit; the bucket beside it holds stunted seedlings.",
+    "body": "The soil on this shovel stops at a sharp pale band. Above it the blade is crusted with spray residue and field grit. The bucket holds stunted seedlings.",
     "id": "t0428-02",
     "kind": "set",
     "pieces": [
       "HandShovel",
       "Bucket"
     ],
-    "title": "The sprayed shovel",
+    "title": "Hand shovel and bucket",
     "where": [
       {
         "lean": "agricultural",
@@ -44,14 +44,14 @@
     ]
   },
   {
-    "body": "These seeds are separated with twine into two little piles. The damp ones have black tips; the dry ones have begun to sprout.",
+    "body": "Someone used twine to mark these corn seeds apart. Half are darker, almost rotted. The other half look ready to plant again.",
     "id": "t0428-03",
     "kind": "set",
     "pieces": [
       "CornSeed",
       "Twine"
     ],
-    "title": "The second planting",
+    "title": "Corn seed and twine",
     "where": [
       {
         "containers": [
@@ -70,14 +70,14 @@
     ]
   },
   {
-    "body": "This folded bag has loose feed at the bottom and a tied-off strip from another bag. The strip is marked for a different delivery day.",
+    "body": "This folded bag has loose feed at the bottom. A tied-off strip from another bag is with it. It looks marked for a different delivery day.",
     "id": "t0428-04",
     "kind": "set",
     "pieces": [
       "SeedBag",
       "Rope"
     ],
-    "title": "The empty return",
+    "title": "Seed bag and rope",
     "where": [
       {
         "containers": [
@@ -96,14 +96,14 @@
     ]
   },
   {
-    "body": "There is a sticky green rim inside the jar and clean water in the bottle beside it. Only the jar's contents have gone cloudy.",
+    "body": "There is a sticky green rim inside the jar. The bottle beside it holds clean water. Only the jar's contents have gone cloudy.",
     "id": "t0428-05",
     "kind": "set",
     "pieces": [
       "EmptyJar",
       "WaterBottle"
     ],
-    "title": "The patch beneath the lid",
+    "title": "Empty jar and water bottle",
     "where": [
       {
         "containers": [
@@ -129,7 +129,7 @@
       "SeedBag",
       "CompostBag"
     ],
-    "title": "The bottom of the stack",
+    "title": "Seed bag and compost bag",
     "where": [
       {
         "containers": [
@@ -148,14 +148,14 @@
     ]
   },
   {
-    "body": "A garden glove is folded around a seed packet; the fingertips have a dark crust that the packet's paper doesn't have.",
+    "body": "A garden glove is folded around a seed packet. The fingertips have a dark crust. The packet's paper doesn't.",
     "id": "t0428-07",
     "kind": "set",
     "pieces": [
       "Gloves_Dish",
       "CarrotSeed"
     ],
-    "title": "The hand at the fence",
+    "title": "Dish gloves and carrot seed",
     "where": [
       {
         "lean": "agricultural",
@@ -167,14 +167,14 @@
     ]
   },
   {
-    "body": "The tarp's underside is dotted with pale leaves. Outside its edge the same size stems have gone dark at their tips.",
+    "body": "Seedlings under the tarp stayed green. The shovel's from when I planted more - those went black by morning.",
     "id": "t0428-08",
     "kind": "set",
     "pieces": [
       "Tarp",
       "HandShovel"
     ],
-    "title": "The covered seedlings",
+    "title": "Tarp and hand shovel",
     "where": [
       {
         "containers": [
@@ -193,14 +193,14 @@
     ]
   },
   {
-    "body": "This packet is unopened, tucked into a pot of healthy starts. A matching empty packet is stuck to the soil of the wilted tray.",
+    "body": "This corn seed never got planted, still sitting in the pot. The others all went in during treatment week. Only these two made it through whatever happened out there.",
     "id": "t0428-09",
     "kind": "set",
     "pieces": [
       "CornSeed",
       "Pot"
     ],
-    "title": "The spared row",
+    "title": "Corn seed and pot",
     "where": [
       {
         "containers": [
@@ -227,7 +227,7 @@
       "Fork",
       "SeedBag"
     ],
-    "title": "The first return from the field",
+    "title": "Bowl, fork and seed bag",
     "where": [
       {
         "lean": "agricultural",

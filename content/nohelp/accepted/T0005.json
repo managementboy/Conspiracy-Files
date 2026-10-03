@@ -1,13 +1,13 @@
 [
   {
-    "body": "The screwdriver lies inside the open briefcase. Its lock is intact, but the metal around the keyhole is bright from repeated turning; a loose key sits in the lining.",
+    "body": "The screwdriver is inside the open briefcase. The lock is intact, but the keyhole's metal is bright from turning. A loose key sits in the lining.",
     "id": "t0005-01",
     "kind": "set",
     "pieces": [
       "Briefcase",
       "Screwdriver"
     ],
-    "title": "The briefcase with an intact lock",
+    "title": "Briefcase and screwdriver",
     "where": [
       {
         "containers": [
@@ -26,14 +26,14 @@
     ]
   },
   {
-    "body": "A seed packet is tucked into the fertilizer sack's stitched fold. Its planting diagram is intact; the small panel for mixing instructions has been cut out cleanly.",
+    "body": "A seed packet is tucked into the stitched fold of the fertilizer sack. The planting diagram is intact. The panel for mixing instructions has been cut out cleanly.",
     "id": "t0005-02",
     "kind": "set",
     "pieces": [
       "SeedBag",
       "Fertilizer"
     ],
-    "title": "The seed packet tucked in the fertilizer fold",
+    "title": "Seed bag and fertilizer",
     "where": [
       {
         "containers": [

@@ -3,14 +3,14 @@
     "anchor": {
       "print": "EkronCollege"
     },
-    "body": "The college resource list includes a field-study room, but its access key is returned before the class roster is collected.",
+    "body": "The book's about field trial procedures. The notebook ends in june. Someone shut down the program before collecting the final data.",
     "id": "t0261-01",
     "kind": "set",
     "pieces": [
       "Book",
       "Notebook"
     ],
-    "title": "Classroom resource list",
+    "title": "Book and notebook",
     "where": [
       {
         "containers": [

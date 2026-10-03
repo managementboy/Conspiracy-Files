@@ -3,14 +3,14 @@
     "anchor": {
       "scene": "RVSRegionalProfessionVehicle"
     },
-    "body": "the first-aid kit with a water bottle carry emerald flecks from the feed test. they were packed before the noon siren sounded.",
+    "body": "Emerald flecks from the feed test are on the kit and the bottle. I think they were packed before the noon siren sounded.",
     "id": "t0370-01",
     "kind": "set",
     "pieces": [
       "FirstAidKit",
       "WaterBottle"
     ],
-    "title": "first-aid kit with a water bottle at friday at closing",
+    "title": "First-aid kit and water bottle",
     "where": [
       {
         "lean": "agricultural",
@@ -30,7 +30,7 @@
     "pieces": [
       "letter"
     ],
-    "title": "The empty roster",
+    "title": "Handwritten letter",
     "where": [
       {
         "lean": "containment",

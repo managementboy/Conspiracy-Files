@@ -3,14 +3,14 @@
     "anchor": {
       "print": "WellingtonHeightsGolfClub"
     },
-    "body": "the black umbrella and camera are strapped together with barrier tape, a checkpoint sticker pressed over the knot. a numbered tag hangs from the strap, as if left by the exit.",
+    "body": "The black umbrella and camera are strapped with barrier tape. A checkpoint sticker is pressed over the knot. A numbered tag hangs from the strap, like it was left by the exit.",
     "id": "t0179-01",
     "kind": "set",
     "pieces": [
       "UmbrellaBlack",
       "Camera"
     ],
-    "title": "Black umbrella with the second tag",
+    "title": "Black umbrella and camera",
     "where": [
       {
         "containers": [
@@ -32,14 +32,14 @@
     "anchor": {
       "print": "WellingtonHeightsGolfClub"
     },
-    "body": "A grounds notebook marks a test strip along the course edge; a handwritten note asks players to keep their shoes out of the drainage ditch.",
+    "body": "The notebook marks test strips along the spraying pathway. The pencil underlines a warning to avoid the drainage ditch.",
     "id": "t0179-02",
     "kind": "set",
     "pieces": [
       "Notebook",
       "Pencil"
     ],
-    "title": "The second fairway note",
+    "title": "Notebook and pencil",
     "where": [
       {
         "containers": [

@@ -3,14 +3,14 @@
     "anchor": {
       "print": "CardinalPlaza"
     },
-    "body": "chalk numbers run across the black pen and bath towel. the count skips one place, then resumes in a different hand.",
+    "body": "Chalk numbers run across the pen and the bath towel. The count skips one place, then resumes in a different hand.",
     "id": "t0212-01",
     "kind": "set",
     "pieces": [
       "Pen",
       "BathTowel"
     ],
-    "title": "Black pen with the unclosed tally",
+    "title": "Black pen and bath towel",
     "where": [
       {
         "containers": [

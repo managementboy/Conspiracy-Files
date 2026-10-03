@@ -3,14 +3,14 @@
     "anchor": {
       "print": "DinerInTheWoods"
     },
-    "body": "The diner’s seasonal menu is clipped to a trail map; the supply receipt marks the kitchen closed before the last walking group returned.",
+    "body": "The bread's clipped to the map. Stamped before they closed the depot, left the last groups stranded.",
     "id": "t0248-01",
     "kind": "set",
     "pieces": [
       "Bread",
       "Map"
     ],
-    "title": "The seasonal trail stop",
+    "title": "Bread and map",
     "where": [
       {
         "containers": [

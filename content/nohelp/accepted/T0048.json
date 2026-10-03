@@ -4,14 +4,14 @@
       "map": "IrvingtonStashMap9",
       "mark": 1
     },
-    "body": "A hammer and unopened nails sit beside a note to brace the garden-side door before the next treatment. The note does not say who will return.",
+    "body": "A hammer and unopened nails sit beside a note. It says to brace the garden-side door before the next treatment. It doesn't say who will return.",
     "id": "t0048-01",
     "kind": "set",
     "pieces": [
       "Hammer",
       "Nails"
     ],
-    "title": "Fortification order",
+    "title": "Hammer and nails",
     "where": [
       {
         "containers": [
@@ -40,7 +40,7 @@
     "pieces": [
       "diary"
     ],
-    "title": "Fortify before the patrol",
+    "title": "Diary page",
     "where": [
       {
         "containers": [
@@ -69,7 +69,7 @@
     "pieces": [
       "notepad"
     ],
-    "title": "First heart, clean cot",
+    "title": "Notepad page",
     "where": [
       {
         "containers": [
@@ -98,7 +98,7 @@
     "pieces": [
       "receipt"
     ],
-    "title": "Second heart, rinsed blanket",
+    "title": "Receipt",
     "where": [
       {
         "containers": [
@@ -127,7 +127,7 @@
     "pieces": [
       "photograph"
     ],
-    "title": "Third heart, borrowed room",
+    "title": "Photograph",
     "where": [
       {
         "containers": [
@@ -156,7 +156,7 @@
     "pieces": [
       "notebook"
     ],
-    "title": "Fourth heart, sealed window",
+    "title": "Notebook page",
     "where": [
       {
         "containers": [
@@ -185,7 +185,7 @@
     "pieces": [
       "letter"
     ],
-    "title": "Fifth heart, empty cradle",
+    "title": "Handwritten letter",
     "where": [
       {
         "containers": [

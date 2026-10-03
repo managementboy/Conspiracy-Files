@@ -4,14 +4,14 @@
       "map": "MarchRidgeStashMap10",
       "mark": 1
     },
-    "body": "A small book is wrapped around a note asking that the lamp stay outside until the treated ground dries. The writer has left a space for a reply.",
+    "body": "A book rests with a hand torch. A note inside warns to avoid the treated ground until it dries. A blessing is written at the end.",
     "id": "t0074-01",
     "kind": "set",
     "pieces": [
       "Book",
       "HandTorch"
     ],
-    "title": "A blessing and a warning",
+    "title": "Book and hand torch",
     "where": [
       {
         "containers": [

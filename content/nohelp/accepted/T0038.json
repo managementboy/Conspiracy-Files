@@ -4,14 +4,14 @@
       "map": "EkronStashMap5",
       "mark": 1
     },
-    "body": "The school aid list pairs a bandage with a note about the seed-treatment plot behind the school: a rash on the children's arms after the rows were sprayed. The last line asks who will collect the used kit.",
+    "body": "The school aid list pairs a bandage with a seed-treatment plot note. Children got a rash on their arms after the rows were sprayed. The last line asks who will collect the used kit.",
     "id": "t0038-01",
     "kind": "set",
     "pieces": [
       "Bandage",
       "Notebook"
     ],
-    "title": "Aid for the school",
+    "title": "Bandage and notebook",
     "where": [
       {
         "containers": [

@@ -1,13 +1,13 @@
 [
   {
-    "body": "The bucket has a white tide mark above a green one. The little bowl filled from it has the green line too.",
+    "body": "The bucket has a white tide mark above a green one. The little bowl that was filled from it has the green line too.",
     "id": "t0429-01",
     "kind": "set",
     "pieces": [
       "Bucket",
       "Bowl"
     ],
-    "title": "The shared trough",
+    "title": "Bucket and bowl",
     "where": [
       {
         "containers": [
@@ -26,14 +26,14 @@
     ]
   },
   {
-    "body": "Two bottles are tied to opposite ends of this cord. The one marked upstream is clear; the other holds a green sediment.",
+    "body": "Two bottles are tied to opposite ends of this cord. The one marked upstream is clear. The other holds a green sediment.",
     "id": "t0429-02",
     "kind": "set",
     "pieces": [
       "WaterBottle",
       "Twine"
     ],
-    "title": "The upstream bottle",
+    "title": "Water bottle and twine",
     "where": [
       {
         "containers": [
@@ -52,7 +52,7 @@
     ]
   },
   {
-    "body": "The spray tarp over the field still drips. The bucket beneath it is stained green where the runoff pooled, and the seedlings someone tried to start there are brown and curled.",
+    "body": "The tarp still reeks from whatever they sprayed. Green runoff filled the bucket underneath. The kettle's full of it too, and whatever they planted died.",
     "id": "t0429-03",
     "kind": "set",
     "pieces": [
@@ -60,7 +60,7 @@
       "Bucket",
       "Tarp"
     ],
-    "title": "Runoff from the tarp",
+    "title": "Kettle, bucket and tarp",
     "where": [
       {
         "containers": [
@@ -87,7 +87,7 @@
       "Bucket",
       "WaterBottle"
     ],
-    "title": "The dog that refused",
+    "title": "Bowl, bucket and water bottle",
     "where": [
       {
         "containers": [
@@ -106,14 +106,14 @@
     ]
   },
   {
-    "body": "A net catches grass and pale granules where the runoff narrowed. There are none in the dry mud above the waterline.",
+    "body": "A net catches grass and pale granules where the runoff narrowed. I can't find any in the dry mud above the waterline.",
     "id": "t0429-05",
     "kind": "set",
     "pieces": [
       "FishingNet",
       "Bucket"
     ],
-    "title": "The lower ditch",
+    "title": "Fishing net and bucket",
     "where": [
       {
         "lean": "agricultural",
@@ -124,14 +124,14 @@
     ]
   },
   {
-    "body": "One jar is filled with rainwater and sealed. The other has flakes from a trough stuck inside the lid; only that one smells sour.",
+    "body": "One jar is filled with rainwater and sealed. The other has flakes from a trough stuck inside the lid. Only that one smells sour.",
     "id": "t0429-06",
     "kind": "set",
     "pieces": [
       "EmptyJar",
       "JarLid"
     ],
-    "title": "The two jars",
+    "title": "Empty jar and jar lid",
     "where": [
       {
         "containers": [
@@ -150,7 +150,7 @@
     ]
   },
   {
-    "body": "The old hose end is brown with well water. A newer clamp is green inside, beside an empty sack of field additive.",
+    "body": "The rubber hose still smells like well water. A wrench lies near it, handle stained greenish. The fertilizer bag is torn open and empty.",
     "id": "t0429-07",
     "kind": "set",
     "pieces": [
@@ -158,7 +158,7 @@
       "Wrench",
       "Fertilizer"
     ],
-    "title": "The moved hose",
+    "title": "Rubber hose, wrench and fertilizer",
     "where": [
       {
         "lean": "agricultural",
@@ -176,7 +176,7 @@
       "Bucket",
       "Spoon"
     ],
-    "title": "The settled bucket",
+    "title": "Bucket and spoon",
     "where": [
       {
         "containers": [
@@ -195,14 +195,14 @@
     ]
   },
   {
-    "body": "One boot has spray residue caked in its tread; a bucket of gray rinse water stands beside them, and the seedlings in the bucket have yellowed. The mate sits clean and dry.",
+    "body": "The boot has spray residue caked in its tread. A bucket of gray rinse water is beside it. The seedlings in it have yellowed, and the other boot is clean.",
     "id": "t0429-09",
     "kind": "set",
     "pieces": [
       "Shoes_WorkBoots",
       "Bucket"
     ],
-    "title": "The washed boots",
+    "title": "Work boots and bucket",
     "where": [
       {
         "containers": [
@@ -221,14 +221,14 @@
     ]
   },
   {
-    "body": "The wrench has fresh scrape marks, and the bucket beyond the pipe is clear. The bucket on the field side still holds a green rim.",
+    "body": "The wrench has fresh scrape marks. The bucket beyond the pipe is clear. The bucket on the field side still has a green rim.",
     "id": "t0429-10",
     "kind": "set",
     "pieces": [
       "Wrench",
       "Bucket"
     ],
-    "title": "The closed valve",
+    "title": "Wrench and bucket",
     "where": [
       {
         "containers": [

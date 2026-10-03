@@ -3,14 +3,14 @@
     "anchor": {
       "scene": "RVSCarCrash"
     },
-    "body": "The battery and field radio are packed together. Mustard-colored dust from the fertilizer trial is caked into the seams of both, as if carried in from the rows.",
+    "body": "Mustard-colored dust from the fertilizer trial is caked in the seams. It's on the battery and radio, like it was carried in from the rows.",
     "id": "t0360-01",
     "kind": "set",
     "pieces": [
       "Battery",
       "RadioBlack"
     ],
-    "title": "Battery with a field radio at Saturday before sunrise",
+    "title": "Battery and black radio",
     "where": [
       {
         "lean": "agricultural",
@@ -30,7 +30,7 @@
     "pieces": [
       "notebook"
     ],
-    "title": "A route after midnight",
+    "title": "Notebook page",
     "where": [
       {
         "lean": "containment",

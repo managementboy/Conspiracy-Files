@@ -4,14 +4,14 @@
       "map": "MulStashMap11",
       "mark": 1
     },
-    "body": "A security inventory lists one weapon behind the counter and a second transfer to an unnamed pickup crew. The signature box is blank.",
+    "body": "Found a pistol on a sheet of paper. The sheet lists a weapon transfer order. Receiving signature is blank. Nobody ever came to pick it up.",
     "id": "t0077-01",
     "kind": "set",
     "pieces": [
       "Pistol2",
       "SheetPaper2"
     ],
-    "title": "Trouble behind the counter",
+    "title": "Pistol and sheet of paper",
     "where": [
       {
         "containers": [

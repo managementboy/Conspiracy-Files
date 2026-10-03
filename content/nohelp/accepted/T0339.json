@@ -3,14 +3,14 @@
     "anchor": {
       "scene": "RDSPokerNight"
     },
-    "body": "The hand shovel and wash pail share white crystals from the orchard spray test. They were bundled before the bridge was blocked.",
+    "body": "White crystals from the orchard spray test coat the shovel and pail. I think they were bundled before the bridge was blocked.",
     "id": "t0339-01",
     "kind": "set",
     "pieces": [
       "HandShovel",
       "Bucket"
     ],
-    "title": "Hand shovel and wash pail, the late afternoon",
+    "title": "Hand shovel and bucket",
     "where": [
       {
         "containers": [
@@ -32,14 +32,14 @@
     "anchor": {
       "scene": "RDSPokerNight"
     },
-    "body": "A pencil lies through a ring of playing cards. The score sheet counts one more player than the chairs, and a later hand has rubbed the extra column thin.",
+    "body": "A pencil lies across an open book. The evacuation list counts one more name than beds in this shelter. Someone rubbed the last entry nearly clean, I think.",
     "id": "t0339-02",
     "kind": "set",
     "pieces": [
       "Pencil",
       "Book"
     ],
-    "title": "An empty seat at the table",
+    "title": "Pencil and book",
     "where": [
       {
         "containers": [

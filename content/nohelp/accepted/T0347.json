@@ -3,14 +3,14 @@
     "anchor": {
       "scene": "RDSSkeletonPsycho"
     },
-    "body": "The battery and field radio share yellow dust from the greenhouse trial. They were bundled before the phones went dead.",
+    "body": "Yellow dust from the greenhouse trial is on the battery and radio. I think they were bundled before the phones went dead.",
     "id": "t0347-01",
     "kind": "set",
     "pieces": [
       "Battery",
       "RadioBlack"
     ],
-    "title": "Battery and field radio, sunday after supper",
+    "title": "Battery and black radio",
     "where": [
       {
         "lean": "agricultural",
@@ -24,14 +24,14 @@
     "anchor": {
       "scene": "RDSSkeletonPsycho"
     },
-    "body": "The map is creased at the junction and tied with string. One destination has been erased so deeply that the paper nearly split; the route leading to it remains clear.",
+    "body": "The map shows collection points but one sector is scribbled over. The rope has counting knots along it but several are cut away. The numbers they reported can't be right.",
     "id": "t0347-02",
     "kind": "set",
     "pieces": [
       "Map",
       "Rope"
     ],
-    "title": "A route folded into a pocket",
+    "title": "Map and rope",
     "where": [
       {
         "lean": "containment",

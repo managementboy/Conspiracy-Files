@@ -3,14 +3,14 @@
     "anchor": {
       "scene": "RZSSexyTime"
     },
-    "body": "Leather gloves sit inside a knotted trash sack. Mustard-colored crop dust coats the cuffs, while the outside remains clean.",
+    "body": "Leather gloves sit inside a knotted trash sack. Mustard-colored crop dust coats the cuffs. The outside of the sack is clean.",
     "id": "t0401-01",
     "kind": "set",
     "pieces": [
       "Garbagebag",
       "Gloves_LeatherGloves"
     ],
-    "title": "work gloves tied inside a trash sack",
+    "title": "Gloves in a trash bag",
     "where": [
       {
         "lean": "agricultural",
@@ -30,7 +30,7 @@
     "pieces": [
       "notepad"
     ],
-    "title": "The folded coat label",
+    "title": "Notepad page",
     "where": [
       {
         "lean": "containment",

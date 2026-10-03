@@ -1,13 +1,13 @@
 [
   {
-    "body": "A tied sack is full of pale pellets. The opened sack beside it has dark pellets and a chewed edge where something fed.",
+    "body": "The seed bag is open, rope looped through the top eyelets. Seeds spilled across the ground but nothing's touched them. Not even ants.",
     "id": "t0430-01",
     "kind": "set",
     "pieces": [
       "SeedBag",
       "Rope"
     ],
-    "title": "The feed left untouched",
+    "title": "Seed bag and rope",
     "where": [
       {
         "containers": [
@@ -26,14 +26,14 @@
     ]
   },
   {
-    "body": "The bottle of milk is curdled, though the sealed carton stayed cold beside it. A feed scoop is crusted at one end.",
+    "body": "The milk spoiled before morning. The spoon in it has yellow dust. Same stuff that's all over the barn.",
     "id": "t0430-02",
     "kind": "set",
     "pieces": [
       "Milk",
       "Spoon"
     ],
-    "title": "The milk before morning",
+    "title": "Milk and spoon",
     "where": [
       {
         "containers": [
@@ -52,14 +52,14 @@
     ]
   },
   {
-    "body": "Eggshells from the inside nest are clean. The ones near the spilled feed have flecks of the same green grit.",
+    "body": "The egg smells wrong, sort of chemical. The corn seed nearby has a waxy green coating on it. They were both right at the coop door.",
     "id": "t0430-03",
     "kind": "set",
     "pieces": [
       "Egg",
       "CornSeed"
     ],
-    "title": "The coop threshold",
+    "title": "Egg and corn seed",
     "where": [
       {
         "containers": [
@@ -78,14 +78,14 @@
     ]
   },
   {
-    "body": "The clean bucket is hung above reach; the one on the ground has hoof marks in its rim and residue at the bottom.",
+    "body": "Wire runs along the fence posts. Brown residue dried on every inch. The bucket hung on it is clean. Was there before it started.",
     "id": "t0430-04",
     "kind": "set",
     "pieces": [
       "Bucket",
       "Wire"
     ],
-    "title": "The unused pail",
+    "title": "Bucket and wire",
     "where": [
       {
         "containers": [
@@ -104,14 +104,14 @@
     ]
   },
   {
-    "body": "Seed caught in the mesh has gone gray. The spare packet beneath it is dry and yellow.",
+    "body": "The fishing net holds a torn seed bag inside. Seeds touching the mesh turned gray and brittle. The ones that didn't touch stayed normal yellow. Someone hung this up as a bird feeder.",
     "id": "t0430-05",
     "kind": "set",
     "pieces": [
       "FishingNet",
       "SeedBag"
     ],
-    "title": "The bird feeder",
+    "title": "Fishing net and seed bag",
     "where": [
       {
         "containers": [
@@ -130,14 +130,14 @@
     ]
   },
   {
-    "body": "One end is polished by an animal's neck, the other stiff with dark feed dust. A small feed bowl is still tied beside it.",
+    "body": "One end of this rope is polished by an animal's neck. The other is stiff with dark feed dust. A small feed bowl is still tied beside it.",
     "id": "t0430-06",
     "kind": "set",
     "pieces": [
       "Rope",
       "Bowl"
     ],
-    "title": "The pen rope",
+    "title": "Rope and bowl",
     "where": [
       {
         "containers": [
@@ -156,14 +156,14 @@
     ]
   },
   {
-    "body": "Two apples are bruised but clean. The corn in the same crate has a powder along its seam that was not there on the fruit.",
+    "body": "Two apples are bruised but clean. The corn in the same crate has a powder along its seam. I don't see it on the fruit.",
     "id": "t0430-07",
     "kind": "set",
     "pieces": [
       "Apple",
       "Corn"
     ],
-    "title": "The untouched crate",
+    "title": "Apple and corn",
     "where": [
       {
         "containers": [
@@ -182,14 +182,14 @@
     ]
   },
   {
-    "body": "The broom has dark grain caught in its bristles. The swept pile was bagged separately from the clean straw.",
+    "body": "The broom has dark grain caught in its bristles. The swept pile was bagged apart from the clean straw.",
     "id": "t0430-08",
     "kind": "set",
     "pieces": [
       "Broom",
       "SeedBag"
     ],
-    "title": "The barn sweep",
+    "title": "Broom and seed bag",
     "where": [
       {
         "containers": [
@@ -208,7 +208,7 @@
     ]
   },
   {
-    "body": "A spoon holds pale feed beneath darker grains. Its handle is wrapped with twine as if someone meant to find it again.",
+    "body": "The spoon still has corn dust in the bowl. Twine wrapped tight around the handle, like someone marked it. I've seen what happens to people who worked those fields.",
     "id": "t0430-09",
     "kind": "set",
     "pieces": [
@@ -216,7 +216,7 @@
       "Twine",
       "Corn"
     ],
-    "title": "The borrowed scoop",
+    "title": "Spoon, twine and corn",
     "where": [
       {
         "lean": "agricultural",
@@ -227,7 +227,7 @@
     ]
   },
   {
-    "body": "The water bowl on this side is clean. Feed scattered across the hinge has the same dark flecks as the animal's collar, and the seed corn spilled with it has gone grey.",
+    "body": "The bowl has a dark residue dried to the bottom. Same stuff crusted on the rope they used for the sprayer. The corn seed in the bag turned grey after that week.",
     "id": "t0430-10",
     "kind": "set",
     "pieces": [
@@ -235,7 +235,7 @@
       "Rope",
       "CornSeed"
     ],
-    "title": "The feed by the gate",
+    "title": "Bowl, rope and corn seed",
     "where": [
       {
         "containers": [

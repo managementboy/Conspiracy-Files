@@ -3,14 +3,14 @@
     "anchor": {
       "print": "CabinforRentDixie"
     },
-    "body": "The cabin key is tied to a trail map and a note to leave no litter. The checkout sheet says the guests left before the caretaker reached the road.",
+    "body": "A fishing rod and hand torch by the dock, both left behind. The torch was still on when I got here this morning. They cleared out before the roadblock went up at dawn.",
     "id": "t0246-01",
     "kind": "set",
     "pieces": [
       "FishingRod",
       "HandTorch"
     ],
-    "title": "Cabin rules after dark",
+    "title": "Fishing rod and torch",
     "where": [
       {
         "containers": [

@@ -4,14 +4,14 @@
       "map": "WpStashMap16",
       "mark": 1
     },
-    "body": "The exit plan marks a fence and a southbound route; a note asks the crew to compare the likely attack path with the last field application.",
+    "body": "The exit plan marks a fence and a southbound route. The note sets the attack path against the last field application.",
     "id": "t0148-01",
     "kind": "set",
     "pieces": [
       "Map",
       "Pencil"
     ],
-    "title": "Safest egress plan",
+    "title": "Map and pencil",
     "where": [
       {
         "containers": [

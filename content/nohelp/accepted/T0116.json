@@ -4,14 +4,14 @@
       "map": "WorldStashMap7",
       "mark": 1
     },
-    "body": "The water bottle is tagged for the infected area, but the field note says to fill it before the next crew enters. A bandage wrapper is folded around the cap.",
+    "body": "The water bottle is tagged for the infected area. The field note says to fill it before the next crew enters. A bandage wrapper is folded around the cap.",
     "id": "t0116-01",
     "kind": "set",
     "pieces": [
       "Bandage",
       "WaterBottle"
     ],
-    "title": "Fill before the building empties",
+    "title": "Bandage and water bottle",
     "where": [
       {
         "containers": [

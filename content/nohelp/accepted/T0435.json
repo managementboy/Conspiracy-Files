@@ -1,6 +1,6 @@
 [
   {
-    "body": "The vehicle map has pencil ticks at three stops. Grain caught in its fold matches the dark grain in the half empty bag.",
+    "body": "The vehicle map has pencil ticks at three stops. Dark grain in its fold looks like that in the half empty bag.",
     "id": "t0435-01",
     "kind": "set",
     "pieces": [
@@ -8,7 +8,7 @@
       "SeedBag",
       "Pencil"
     ],
-    "title": "The last feed run",
+    "title": "Map, seed bag and pencil",
     "where": [
       {
         "lean": "agricultural",
@@ -19,7 +19,7 @@
     ]
   },
   {
-    "body": "Soap floats in green wash water. Two different work gloves are jammed into the same bucket after a field shift.",
+    "body": "Soap floats in green wash water. Two different work gloves are jammed into the same bucket. They were put there after a field shift, I think.",
     "id": "t0435-02",
     "kind": "set",
     "pieces": [
@@ -27,7 +27,7 @@
       "Soap2",
       "Gloves_Dish"
     ],
-    "title": "The shared wash bucket",
+    "title": "Bucket, soap and dish gloves",
     "where": [
       {
         "lean": "agricultural",
@@ -38,14 +38,14 @@
     ]
   },
   {
-    "body": "This map bends along a farm road. The opened packet in its crease leaked only after the route crosses the fields.",
+    "body": "This map bends along the farm road. The carrot seed in the crease is black and split. I avoided the fields.",
     "id": "t0435-03",
     "kind": "set",
     "pieces": [
       "Map",
       "CarrotSeed"
     ],
-    "title": "The change of route",
+    "title": "Map and carrot seed",
     "where": [
       {
         "lean": "agricultural",
@@ -63,7 +63,7 @@
       "Tarp",
       "SeedBag"
     ],
-    "title": "The clean truck bed",
+    "title": "Tarp and seed bag",
     "where": [
       {
         "lean": "agricultural",
@@ -81,7 +81,7 @@
       "Spoon",
       "Newspaper"
     ],
-    "title": "The spare feed scoop",
+    "title": "Spoon wrapped in newspaper",
     "where": [
       {
         "lean": "agricultural",
@@ -92,14 +92,14 @@
     ]
   },
   {
-    "body": "A knotted rope divides the bags. The sack on one side has a green dust mark; those on the other are clean.",
+    "body": "A knotted rope divides the bags. The sack on one side has a green dust mark. The ones on the other side are clean.",
     "id": "t0435-06",
     "kind": "set",
     "pieces": [
       "Rope",
       "SeedBag"
     ],
-    "title": "The split load",
+    "title": "Rope and seed bags",
     "where": [
       {
         "lean": "agricultural",
@@ -110,14 +110,14 @@
     ]
   },
   {
-    "body": "A bottle has dripped across the map where farm roads meet. Its cap is stained green and the map dries with the same halo.",
+    "body": "A bottle has dripped across the map where farm roads meet. Its cap is stained green. The map dries with the same halo.",
     "id": "t0435-07",
     "kind": "set",
     "pieces": [
       "WaterBottle",
       "Map"
     ],
-    "title": "The leaking water can",
+    "title": "Water bottle and map",
     "where": [
       {
         "lean": "agricultural",
@@ -128,14 +128,14 @@
     ]
   },
   {
-    "body": "The shovel's handle has two different colored clays. The tarp wrapped around it has fresh tears shaped by a narrow truck bed.",
+    "body": "The shovel's handle has two different colored clays. The tarp wrapped around it has fresh tears. They look shaped by a narrow truck bed.",
     "id": "t0435-08",
     "kind": "set",
     "pieces": [
       "Shovel",
       "Tarp"
     ],
-    "title": "The shifted field kit",
+    "title": "Shovel and tarp",
     "where": [
       {
         "lean": "agricultural",
@@ -146,14 +146,14 @@
     ]
   },
   {
-    "body": "A lunch pot is packed with feed dust instead of food. The clean fork inside it is still tied in paper.",
+    "body": "A lunch pot is packed with feed dust instead of food. The fork inside it is clean and still tied in paper.",
     "id": "t0435-09",
     "kind": "set",
     "pieces": [
       "Pot",
       "Fork"
     ],
-    "title": "The load carried home",
+    "title": "Pot and fork",
     "where": [
       {
         "lean": "agricultural",
@@ -164,14 +164,14 @@
     ]
   },
   {
-    "body": "This tire pump is streaked with the same pale dust as the sack cord. The clean tool roll beside them stayed shut.",
+    "body": "This tire pump is streaked with pale dust. The seed bag has it too. Both were handled together before.",
     "id": "t0435-10",
     "kind": "set",
     "pieces": [
       "TirePump",
       "SeedBag"
     ],
-    "title": "The residue on the spare wheel",
+    "title": "Tire pump and seed bag",
     "where": [
       {
         "lean": "agricultural",

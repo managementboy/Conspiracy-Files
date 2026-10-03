@@ -7,7 +7,7 @@
     "pieces": [
       "idcard"
     ],
-    "title": "County message runner card",
+    "title": "ID card",
     "where": [
       {
         "lean": "containment",
@@ -18,7 +18,7 @@
     ]
   },
   {
-    "body": "the baling twine and hand torch smell sharply of bleach. mud outlines between them show that a third object was removed.",
+    "body": "The baling twine and hand torch both smell sharply of bleach. Mud outlines between them show a third object was removed.",
     "id": "t0011-02",
     "kind": "set",
     "person": "person-b",
@@ -26,7 +26,7 @@
       "Twine",
       "HandTorch"
     ],
-    "title": "Baling twine with the unclosed tally",
+    "title": "Twine and hand torch",
     "where": [
       {
         "lean": "containment",

@@ -4,14 +4,14 @@
       "map": "RiversideStashMap8",
       "mark": 1
     },
-    "body": "A meal bundle is tied to a note asking the next person to eat before departure; the sighting entry on the reverse is dated after the route was closed.",
+    "body": "Bread and a water bottle tied to a note for whoever comes next. It says to eat before leaving. The back has a sighting dated after they closed this route.",
     "id": "t0101-01",
     "kind": "set",
     "pieces": [
       "Bread",
       "WaterBottle"
     ],
-    "title": "Eat before leaving",
+    "title": "Bread and water bottle",
     "where": [
       {
         "containers": [

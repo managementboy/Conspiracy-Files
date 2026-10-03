@@ -4,14 +4,14 @@
       "map": "LouisvilleStashMap13",
       "mark": 1
     },
-    "body": "The house list calls the yards secure, but a tied garbage bag contains the last gate latch and a note to check behind each fence.",
+    "body": "The sweep report calls this gate secure. A tied garbage bag holds the latch. There's a hammer and note to check what's inside.",
     "id": "t0061-01",
     "kind": "set",
     "pieces": [
       "Hammer",
       "Garbagebag"
     ],
-    "title": "Backyard clearing list",
+    "title": "Hammer and garbage bag",
     "where": [
       {
         "containers": [

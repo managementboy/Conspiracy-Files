@@ -4,14 +4,14 @@
       "map": "WorldStashMap14",
       "mark": 1
     },
-    "body": "red and blue cord join the lighter to the bath towel. the red route is cut; the blue route ends in a sealed knot.",
+    "body": "Red and blue cord joins the lighter to the bath towel. The red route is cut, and the blue route ends in a sealed knot.",
     "id": "t0123-01",
     "kind": "set",
     "pieces": [
       "Lighter",
       "BathTowel"
     ],
-    "title": "Lighter beside the spare mark",
+    "title": "Lighter and bath towel",
     "where": [
       {
         "containers": [

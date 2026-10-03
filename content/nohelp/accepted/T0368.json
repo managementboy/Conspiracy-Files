@@ -3,14 +3,14 @@
     "anchor": {
       "scene": "RVSPoliceBlockade"
     },
-    "body": "The hand shovel and the scrub bucket are tied in one bundle with torn warning tape. A yellow tag with only a number on it hangs from the knot, and a stamp is smudged on the bucket.",
+    "body": "The shovel and scrub bucket are tied together with torn warning tape. A yellow tag with only a number hangs from the knot. A stamp is smudged on the bucket.",
     "id": "t0368-01",
     "kind": "set",
     "pieces": [
       "HandShovel",
       "Bucket"
     ],
-    "title": "Hand shovel and scrub bucket, late Wednesday",
+    "title": "Hand shovel and bucket",
     "where": [
       {
         "lean": "containment",
@@ -30,7 +30,7 @@
     "pieces": [
       "notepad"
     ],
-    "title": "Sacks from the test plot",
+    "title": "Notepad page",
     "where": [
       {
         "lean": "agricultural",

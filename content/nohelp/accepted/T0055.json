@@ -4,14 +4,14 @@
       "map": "LouisvilleStashMap7",
       "mark": 1
     },
-    "body": "the blue pen and briefcase are wrapped in a child's raincoat. one stayed dry while the other was left in road mud.",
+    "body": "The blue pen and briefcase are wrapped in a child's raincoat. One stayed dry, but the other was left in road mud.",
     "id": "t0055-01",
     "kind": "set",
     "pieces": [
       "BluePen",
       "Briefcase"
     ],
-    "title": "Blue pen beside the spare mark",
+    "title": "Blue pen and briefcase",
     "where": [
       {
         "containers": [

@@ -3,14 +3,14 @@
     "anchor": {
       "scene": "RBSWATStation"
     },
-    "body": "A first-aid kit sits open beside a split seed sack. Yellow dust covers the gauze; black road tape is stuck to the sack.",
+    "body": "A first aid kit sits open beside a split seed sack. Yellow dust covers the gauze. Black road tape is stuck to the sack.",
     "id": "t0305-01",
     "kind": "set",
     "pieces": [
       "FirstAidKit",
       "SeedBag"
     ],
-    "title": "Seed dust under the bandages",
+    "title": "First aid kit and seed bag",
     "where": [
       {
         "containers": [
@@ -32,14 +32,14 @@
     "anchor": {
       "scene": "RBSWATStation"
     },
-    "body": "The battery is new; the radio has been wrapped in a shirt to muffle it. A narrow strip of tape fixes the dial at the channel used before the order to leave.",
+    "body": "The battery looks new, and the radio is wrapped in a shirt. Tape holds the dial on the channel used before the order to leave.",
     "id": "t0305-02",
     "kind": "set",
     "pieces": [
       "Battery",
       "RadioBlack"
     ],
-    "title": "A channel behind the lockers",
+    "title": "Battery and radio",
     "where": [
       {
         "containers": [

@@ -4,14 +4,14 @@
       "map": "WorldStashMap8",
       "mark": 1
     },
-    "body": "The route page is complete except for its destination. The departure box is checked, and a margin asks the driver to wait for an updated order.",
+    "body": "The notebook's departure time is filled in. The destination line stays blank. A margin note says to wait for the updated route. The pencil lies across the page.",
     "id": "t0117-01",
     "kind": "set",
     "pieces": [
       "Notebook",
       "Pencil"
     ],
-    "title": "A destination without a name",
+    "title": "Notebook and pencil",
     "where": [
       {
         "containers": [

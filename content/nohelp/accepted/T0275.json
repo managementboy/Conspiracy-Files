@@ -3,14 +3,14 @@
     "anchor": {
       "print": "Pondview"
     },
-    "body": "The garden supply receipt is paired with a meal order; the center's pickup log says the doors were cleared under an evacuation order before the last customer collected either.",
+    "body": "A seed bag sits with an unclaimed pizza. They cleared this place under evacuation orders. Nobody came back for either one.",
     "id": "t0275-01",
     "kind": "set",
     "pieces": [
       "SeedBag",
       "Pizza"
     ],
-    "title": "A shopping-center pickup",
+    "title": "Seed bag and pizza",
     "where": [
       {
         "containers": [

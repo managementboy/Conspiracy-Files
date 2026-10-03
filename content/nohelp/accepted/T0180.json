@@ -3,14 +3,14 @@
     "anchor": {
       "print": "LSU"
     },
-    "body": "a broken barrier board crushed the crowbar against the briefcase. clean undersides show both were there before the road was blocked.",
+    "body": "A broken barrier board crushed the crowbar against the briefcase. Clean undersides suggest both were there before the road was blocked.",
     "id": "t0180-01",
     "kind": "set",
     "pieces": [
       "Crowbar",
       "Briefcase"
     ],
-    "title": "Crowbar with the unclosed tally",
+    "title": "Crowbar and briefcase",
     "where": [
       {
         "containers": [

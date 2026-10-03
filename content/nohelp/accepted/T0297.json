@@ -3,14 +3,14 @@
     "anchor": {
       "scene": "RBMayorWestPoint"
     },
-    "body": "The pair is streaked with clouded sample jar from treated rows. It was set aside after the flies vanished, before anyone marked the kitchen chair unsafe.",
+    "body": "The walkie talkie and first aid kit are streaked with field runoff. I think they were set aside when the flies vanished. That was before anyone got seriously ill.",
     "id": "t0297-01",
     "kind": "set",
     "pieces": [
       "WalkieTalkie1",
       "FirstAidKit"
     ],
-    "title": "The jar with its clouded rim",
+    "title": "Walkie-talkie and first aid kit",
     "where": [
       {
         "containers": [
@@ -32,14 +32,14 @@
     "anchor": {
       "scene": "RBMayorWestPoint"
     },
-    "body": "A public notice and a pencil stub are folded together. The penciled time is earlier than the printed one, and someone has marked the first version to be collected before the doors opened.",
+    "body": "A newspaper and a pencil lie here. Someone penciled earlier times over the evacuation schedule. Makes it look like warnings went out sooner than they did.",
     "id": "t0297-02",
     "kind": "set",
     "pieces": [
       "Newspaper",
       "Pencil"
     ],
-    "title": "Two versions of the notice",
+    "title": "Newspaper and pencil",
     "where": [
       {
         "containers": [

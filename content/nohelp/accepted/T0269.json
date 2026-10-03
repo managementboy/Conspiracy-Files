@@ -3,14 +3,14 @@
     "anchor": {
       "print": "IrvingtonGunClub"
     },
-    "body": "The range log records a target inspection and a field briefing on the same page; the safety officer’s sign-off is missing.",
+    "body": "The pistol's with a notebook full of crop spray schedules. Whoever was checking the fields went armed. No safety clearance anywhere in those notes.",
     "id": "t0269-01",
     "kind": "set",
     "pieces": [
       "Pistol",
       "Notebook"
     ],
-    "title": "Range inspection record",
+    "title": "Pistol and notebook",
     "where": [
       {
         "containers": [

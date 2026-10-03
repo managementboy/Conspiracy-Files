@@ -3,14 +3,14 @@
     "anchor": {
       "print": "HouseforSale929"
     },
-    "body": "A seed packet is stored with the house plan; a note asks the inspector to leave the garden dry until the next field visit.",
+    "body": "A seed packet is stored with the house plan. A note asks the inspector to keep the garden dry till the field visit.",
     "id": "t0223-01",
     "kind": "set",
     "pieces": [
       "SeedBag",
       "Notebook"
     ],
-    "title": "A small garden behind the listing",
+    "title": "Seed bag and notebook",
     "where": [
       {
         "containers": [

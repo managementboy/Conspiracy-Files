@@ -3,14 +3,14 @@
     "anchor": {
       "print": "MailCarrierAdEkron"
     },
-    "body": "The carrier’s route bag contains a change notice that marks the route complete before the last neighborhood was delivered.",
+    "body": "A handwritten letter sits inside this military pack. Lists evacuation blocks, most crossed off, then nothing. Those last few streets never got the warning.",
     "id": "t0216-01",
     "kind": "set",
     "pieces": [
       "LetterHandwritten",
       "Bag_ALICEpack"
     ],
-    "title": "The mail route change",
+    "title": "Handwritten letter and pack",
     "where": [
       {
         "containers": [

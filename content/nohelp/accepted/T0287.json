@@ -3,14 +3,14 @@
     "anchor": {
       "scene": "RBBurntFireman"
     },
-    "body": "The two items are bundled beside marked feed sack; field dust lies beneath them, and sticky spray residue and seed husks cling to the bundle.",
+    "body": "The potato and jar sit beside a marked feed sack. Field dust lies beneath them. Sticky spray residue and seed husks cling to the bundle.",
     "id": "t0287-01",
     "kind": "set",
     "pieces": [
       "Potato",
       "EmptyJar"
     ],
-    "title": "After sack by the kitchen chair, the first copy",
+    "title": "Potato and empty jar",
     "where": [
       {
         "lean": "agricultural",
@@ -24,14 +24,14 @@
     "anchor": {
       "scene": "RBBurntFireman"
     },
-    "body": "The jar contains ash beneath its lid, sealed with quarantine tape, a numbered evacuation tag tied at its neck—447. A photo ID lies beside it, edges charred, bearing the number 531 on a second tag. Both were collected during the same evacuation, logged by the same officer, yet given different numbers. The jar was sealed for transport while the ID was set aside.",
+    "body": "Scratched on the jar's bottom: 447. Inked on the potato: 531. One family's stock, two different evacuation codes.",
     "id": "t0287-02",
     "kind": "set",
     "pieces": [
       "Potato",
       "EmptyJar"
     ],
-    "title": "Ash inside the sealed jar",
+    "title": "Potato and empty jar",
     "where": [
       {
         "lean": "containment",

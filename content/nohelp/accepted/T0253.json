@@ -3,14 +3,14 @@
     "anchor": {
       "print": "Airport"
     },
-    "body": "red and blue cord join the box of matches to the hand torch. the red route is cut; the blue route ends in a sealed knot.",
+    "body": "Red and blue cord join the box of matches to the torch. The red route is cut. The blue route ends in a sealed knot.",
     "id": "t0253-01",
     "kind": "set",
     "pieces": [
       "Matches",
       "HandTorch"
     ],
-    "title": "Box of matches beside the spare mark",
+    "title": "Matches and torch",
     "where": [
       {
         "containers": [

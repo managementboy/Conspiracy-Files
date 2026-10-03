@@ -4,14 +4,14 @@
       "map": "RiversideStashMap4",
       "mark": 1
     },
-    "body": "The medicine packet is attached to a transfer card; the patient’s departure is recorded, but the person assigned to collect them is blank.",
+    "body": "The pills sit with a bandage and a transfer document. Delivery is marked complete on the form. No one signed for them.",
     "id": "t0097-01",
     "kind": "set",
     "pieces": [
       "Pills",
       "Bandage"
     ],
-    "title": "No one signed the transfer",
+    "title": "Pills and bandage",
     "where": [
       {
         "containers": [

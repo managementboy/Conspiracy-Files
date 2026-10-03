@@ -4,14 +4,14 @@
       "map": "BBurgStashMap2",
       "mark": 1
     },
-    "body": "the folded tarp and bath towel are wedged beneath unused warning tape. footprints pass around the bundle rather than toward it.",
+    "body": "The folded tarp and bath towel are wedged under unused warning tape. Footprints pass around the bundle rather than toward it.",
     "id": "t0027-01",
     "kind": "set",
     "pieces": [
       "Tarp",
       "BathTowel"
     ],
-    "title": "Folded tarp beside the spare mark",
+    "title": "Tarp and bath towel",
     "where": [
       {
         "containers": [
@@ -40,7 +40,7 @@
     "pieces": [
       "letter"
     ],
-    "title": "Before the beds dry",
+    "title": "Letter",
     "where": [
       {
         "containers": [

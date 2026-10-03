@@ -3,7 +3,7 @@
     "anchor": {
       "print": "IrvingtonSpeedway"
     },
-    "body": "The speeding citation is stamped after the access lane's closure; the beer at the gate is still sealed, and the appeal line says its driver was taking a child home.",
+    "body": "The speeding ticket's dated after they shut down access. I see pencil marks changing the time. The beer bottle's still sealed, dropped at the gate.",
     "id": "t0024-01",
     "kind": "set",
     "pieces": [
@@ -11,7 +11,7 @@
       "BeerBottle",
       "Pencil"
     ],
-    "title": "A citation after closing",
+    "title": "Speeding ticket, beer bottle and pencil",
     "where": [
       {
         "containers": [
@@ -39,7 +39,7 @@
     "pieces": [
       "memo"
     ],
-    "title": "The infield stays closed",
+    "title": "Memo",
     "where": [
       {
         "containers": [

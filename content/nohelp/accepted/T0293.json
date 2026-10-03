@@ -3,14 +3,14 @@
     "anchor": {
       "scene": "RBHeatBreakAfternoon"
     },
-    "body": "The two items are bundled beside clouded sample jar; field dust lies beneath them, while a strip of road tape is caught around the bundle.",
+    "body": "An axe and a seed bag are bundled beside a clouded sample jar. Field dust lies under them, and road tape is caught around the bundle.",
     "id": "t0293-01",
     "kind": "set",
     "pieces": [
       "Axe",
       "SeedBag"
     ],
-    "title": "The jar with its clouded rim",
+    "title": "Axe and seed bag",
     "where": [
       {
         "lean": "agricultural",
@@ -24,14 +24,14 @@
     "anchor": {
       "scene": "RBHeatBreakAfternoon"
     },
-    "body": "The map is folded to hide three streets, and the water bottle has a fresh mark for each one. Whoever drove here was counting stops before anyone on the road knew there was a route.",
+    "body": "The map is folded to hide three streets. The bottle has a fresh mark for each one. I think whoever drove here was counting stops early.",
     "id": "t0293-02",
     "kind": "set",
     "pieces": [
       "Map",
       "WaterBottle"
     ],
-    "title": "A sealed morning route",
+    "title": "Map and water bottle",
     "where": [
       {
         "lean": "containment",

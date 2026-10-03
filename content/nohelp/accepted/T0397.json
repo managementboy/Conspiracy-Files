@@ -3,14 +3,14 @@
     "anchor": {
       "scene": "RZSOrphanedFawn"
     },
-    "body": "A cloudy bottle and sample jar share a waxy green film. A scrap of twine around both still holds treated pasture grass.",
+    "body": "A cloudy water bottle and a sample jar share a waxy green film. A scrap of twine around both still holds treated pasture grass.",
     "id": "t0397-01",
     "kind": "set",
     "pieces": [
       "WaterBottle",
       "EmptyJar"
     ],
-    "title": "cloudy water beside a sample jar",
+    "title": "Water bottle and jar",
     "where": [
       {
         "lean": "agricultural",
@@ -30,7 +30,7 @@
     "pieces": [
       "letter"
     ],
-    "title": "The fawn tally",
+    "title": "Letter",
     "where": [
       {
         "lean": "containment",

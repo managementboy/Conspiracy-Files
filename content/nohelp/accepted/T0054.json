@@ -4,14 +4,14 @@
       "map": "LouisvilleStashMap6",
       "mark": 1
     },
-    "body": "A seed bag is stored beside a water bottle labelled for the back plot; a note says to stop watering until the test results arrive.",
+    "body": "The seed bag sits beside a water bottle labelled for the back plot. A note says to stop watering until the test results arrive.",
     "id": "t0054-01",
     "kind": "set",
     "pieces": [
       "SeedBag",
       "WaterBottle"
     ],
-    "title": "Home plot notes",
+    "title": "Seed bag and water bottle",
     "where": [
       {
         "containers": [

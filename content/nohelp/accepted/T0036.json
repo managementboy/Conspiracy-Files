@@ -4,14 +4,14 @@
       "map": "EkronStashMap3",
       "mark": 1
     },
-    "body": "A fertilizer bag is tied shut inside a supply pack, its seams dusted yellow-green; the page tucked under it lists spray-plot rows and a delivery to a field with no recipient.",
+    "body": "A fertilizer bag is tied shut inside a supply pack. Its seams are dusted yellow-green. The page under it lists spray-plot rows and a delivery, no recipient.",
     "id": "t0036-01",
     "kind": "set",
     "pieces": [
       "Bag_ALICEpack",
       "Fertilizer"
     ],
-    "title": "Goods kept apart",
+    "title": "Backpack and fertilizer",
     "where": [
       {
         "containers": [

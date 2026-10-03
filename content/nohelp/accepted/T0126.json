@@ -4,14 +4,14 @@
       "map": "WorldStashMap17",
       "mark": 1
     },
-    "body": "A camera is packed with a field notebook that says to photograph the blind side of the fence; the sensor check is marked complete before the crew arrives.",
+    "body": "A camera is packed with a field notebook. The notebook says to photograph the blind side of the fence. The sensor check is marked complete before the crew arrives.",
     "id": "t0126-01",
     "kind": "set",
     "pieces": [
       "Camera",
       "Notebook"
     ],
-    "title": "Photographs from the blind spot",
+    "title": "Camera and notebook",
     "where": [
       {
         "containers": [

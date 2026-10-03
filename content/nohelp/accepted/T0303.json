@@ -3,14 +3,14 @@
     "anchor": {
       "scene": "RBPoliceSiege"
     },
-    "body": "A hand shovel rests across a wash pail, both striped with yellow dust. The pail smells of crop spray; road tape is knotted through its handle.",
+    "body": "A hand shovel rests across a bucket, both striped with yellow dust. The bucket smells of crop spray. Road tape is knotted through its handle.",
     "id": "t0303-01",
     "kind": "set",
     "pieces": [
       "HandShovel",
       "Bucket"
     ],
-    "title": "Field dust on the wash pail",
+    "title": "Hand shovel and bucket",
     "where": [
       {
         "containers": [
@@ -32,14 +32,14 @@
     "anchor": {
       "scene": "RBPoliceSiege"
     },
-    "body": "The radio dial is bound with a narrow strip of tape. Its battery has been replaced recently, although the callers barricaded here had no way to send a reply. Someone wanted them listening to one channel.",
+    "body": "The radio dial is bound with a narrow strip of tape. The battery looks recently replaced. I can't tell how anyone barricaded here could reply.",
     "id": "t0303-02",
     "kind": "set",
     "pieces": [
       "Battery",
       "RadioBlack"
     ],
-    "title": "Frequency held through the siege",
+    "title": "Battery and radio",
     "where": [
       {
         "containers": [

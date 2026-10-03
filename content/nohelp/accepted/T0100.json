@@ -4,14 +4,14 @@
       "map": "RiversideStashMap7",
       "mark": 1
     },
-    "body": "The grocery note says every item was collected before the westbound trip; a food tin remains beside the argument about who should be left in charge.",
+    "body": "The note says every item was collected before the westbound trip. A food tin is still here. It's beside an argument about who should be left in charge.",
     "id": "t0100-01",
     "kind": "set",
     "pieces": [
       "CannedCorn",
       "LetterHandwritten"
     ],
-    "title": "Food stop on the way out",
+    "title": "Canned corn and handwritten letter",
     "where": [
       {
         "containers": [

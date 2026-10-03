@@ -1,13 +1,13 @@
 [
   {
-    "body": "The jar is dusted with the same yellow grains as the torn sack. Its label names a test plot, but the string tying them together is wet with roadside mud. One edge was kept dry beneath a coat.",
+    "body": "The jar's label marks a test plot. The seed bag is dusted the same yellow. Both lay in roadside mud, far from any field.",
     "id": "t0415-01",
     "kind": "set",
     "pieces": [
       "EmptyJar",
       "SeedBag"
     ],
-    "title": "A jar beyond the rows before supper",
+    "title": "Empty jar and seed bag",
     "where": [
       {
         "containers": [
@@ -26,14 +26,14 @@
     ]
   },
   {
-    "body": "A clean bottle and a cloudy bucket share a chalk mark. The bucket was filled far from the rows after the sprayer passed. A short tally was added after the bundle was tied.",
+    "body": "The water bottle and bucket both have the same yellow dust. They sat beyond the last row where the sprayers never went.",
     "id": "t0415-02",
     "kind": "set",
     "pieces": [
       "WaterBottle",
       "Bucket"
     ],
-    "title": "Water kept for comparison before supper",
+    "title": "Water bottle and bucket",
     "where": [
       {
         "containers": [
@@ -52,14 +52,14 @@
     ]
   },
   {
-    "body": "One cuff holds field dust; the other is stained with kitchen soap. The empty sprayer was carried past a household door. The string has been retied since morning.",
+    "body": "The leather gloves show field dirt on one, soap on the other. The gardening spray is empty now. It went from the fields indoors.",
     "id": "t0415-03",
     "kind": "set",
     "pieces": [
       "Gloves_LeatherGloves",
       "GardeningSprayEmpty"
     ],
-    "title": "The gloves used twice before supper",
+    "title": "Leather gloves and empty sprayer",
     "where": [
       {
         "containers": [
@@ -78,14 +78,14 @@
     ]
   },
   {
-    "body": "The feed sack has an oily streak beneath its fold. A rinse pail carries the same mark above the waterline. The date is on the wrapper, not on the object.",
+    "body": "The feed bag was moved beyond the treatment zone. Found a bucket here too, same film on both. It traveled.",
     "id": "t0415-04",
     "kind": "set",
     "pieces": [
       "AnimalFeedBag",
       "Bucket"
     ],
-    "title": "Feed beside a rinse pail before supper",
+    "title": "Feed sack and bucket",
     "where": [
       {
         "containers": [
@@ -104,14 +104,14 @@
     ]
   },
   {
-    "body": "Tape seals a slit in the seed sack, but the pale treated-seed dust has caught on the outside of the tape. A child's height is marked on it. A strip of cloth keeps the pair together.",
+    "body": "Duct tape binds the seed bag in thick layers. I see warnings about treated contents beneath the wrap. Someone sealed this tight but the seeds made it to the ground.",
     "id": "t0415-05",
     "kind": "set",
     "pieces": [
       "SeedBag",
       "DuctTape"
     ],
-    "title": "The unopened seed allotment before supper",
+    "title": "Seed bag and duct tape",
     "where": [
       {
         "containers": [
@@ -130,14 +130,14 @@
     ]
   },
   {
-    "body": "The jar's paper label names a trial row, and the residue inside matches a plot marked on the map. The corner still bears a hurried thumbprint.",
+    "body": "The jar's paper label names a trial row. The residue inside seems to match a plot marked on the map.",
     "id": "t0415-06",
     "kind": "set",
     "pieces": [
       "EmptyJar",
       "Map"
     ],
-    "title": "A sample without its field before supper",
+    "title": "Empty jar and map",
     "where": [
       {
         "containers": [
@@ -156,14 +156,14 @@
     ]
   },
   {
-    "body": "The loaf was wrapped in a clean cloth. Yellow spray powder lies between the cloth and the crust, though the knot was never opened. One edge was kept dry beneath a coat.",
+    "body": "The cloth smells strongly of pesticide. The bread is wrapped in it anyway. Running out of options, clearly.",
     "id": "t0415-07",
     "kind": "set",
     "pieces": [
       "Bread",
       "DishCloth"
     ],
-    "title": "Bread under field dust before supper",
+    "title": "Bread and dish cloth",
     "where": [
       {
         "containers": [
@@ -182,14 +182,14 @@
     ]
   },
   {
-    "body": "The sponge is green at the center and the soap is worn only on one edge, both dusted with fine field grains. They were wrapped in a bag beside a small cup stained with spray residue. A short tally was added after the bundle was tied.",
+    "body": "The soap has a harsh chemical smell, not like regular soap. The sponge is stained yellow where someone scrubbed something. They were cleaning up after handling the wrong stuff.",
     "id": "t0415-08",
     "kind": "set",
     "pieces": [
       "Soap2",
       "Sponge"
     ],
-    "title": "The wash that failed before supper",
+    "title": "Soap and sponge",
     "where": [
       {
         "containers": [
@@ -208,14 +208,14 @@
     ]
   },
   {
-    "body": "The card asks for supper to be kept warm. A ring from the sprayer crosses the writing before the ink has dried. The string has been retied since morning.",
+    "body": "A postcard outlines field sections for pesticide trials. The sprayer's bone dry but reeks of chemicals. Found them way past the marked boundaries.",
     "id": "t0415-09",
     "kind": "set",
     "pieces": [
       "GardeningSprayEmpty",
       "Postcard"
     ],
-    "title": "A warning carried home before supper",
+    "title": "Empty sprayer and postcard",
     "where": [
       {
         "containers": [
@@ -234,14 +234,14 @@
     ]
   },
   {
-    "body": "Fine grains cling to the rim of a drinking glass. The fertilizer sack beside it was sealed with household thread. The date is on the wrapper, not on the object.",
+    "body": "The drinking glass has powder caked inside. A fertilizer bag sits next to it on the path. Nobody farms here.",
     "id": "t0415-10",
     "kind": "set",
     "pieces": [
       "Fertilizer",
       "GlassTumbler"
     ],
-    "title": "Fertilizer and a dry cup before supper",
+    "title": "Fertilizer and drinking glass",
     "where": [
       {
         "containers": [

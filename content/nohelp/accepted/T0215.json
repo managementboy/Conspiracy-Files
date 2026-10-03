@@ -3,14 +3,14 @@
     "anchor": {
       "print": "GreenesJobAdEkron"
     },
-    "body": "The job card asks the new worker to report for a field shift; the gloves are signed back before the person’s start date.",
+    "body": "The notebook logs spray shifts through the growing season. Someone checked these leather gloves back in on day one. They were already worn before that first shift started.",
     "id": "t0215-01",
     "kind": "set",
     "pieces": [
       "Gloves_LeatherGloves",
       "Notebook"
     ],
-    "title": "The worker’s first shift",
+    "title": "Gloves and notebook",
     "where": [
       {
         "containers": [

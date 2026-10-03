@@ -3,14 +3,14 @@
     "anchor": {
       "print": "Sanatorium"
     },
-    "body": "The tour map marks the basement route open, but a strip of barrier tape is stuck across the route and a number is penciled beside each stair, counting down to a closed door. The torch lens is taped down to a narrow slit.",
+    "body": "The tour map marks the basement route open. Barrier tape is across the route, with a number penciled by each step. They count down to a closed door, torch lens taped to a slit.",
     "id": "t0278-01",
     "kind": "set",
     "pieces": [
       "HandTorch",
       "Map"
     ],
-    "title": "The weekly ghost route",
+    "title": "Torch and map",
     "where": [
       {
         "containers": [

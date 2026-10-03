@@ -4,14 +4,14 @@
       "map": "LouisvilleStashMap3",
       "mark": 1
     },
-    "body": "The janitor’s tool list marks the rear door repaired, but the key return is dated before the repair was finished.",
+    "body": "The notebook logs repairs, key sign-out and return dates. Someone returned the basement key three days before the work ended. The screwdriver's still covered in rust from down there.",
     "id": "t0051-01",
     "kind": "set",
     "pieces": [
       "Screwdriver",
       "Notebook"
     ],
-    "title": "Tools left at school",
+    "title": "Screwdriver and notebook",
     "where": [
       {
         "containers": [

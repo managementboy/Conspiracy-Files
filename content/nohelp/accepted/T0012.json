@@ -7,7 +7,7 @@
     "pieces": [
       "businesscard"
     ],
-    "title": "Courier card with a late return",
+    "title": "Business card",
     "where": [
       {
         "lean": "containment",
@@ -18,7 +18,7 @@
     ]
   },
   {
-    "body": "yellow fertilizer crystals fill the seam between the wax crayons and animal-feed sack. the crystals are damp beneath a dry outer layer.",
+    "body": "Yellow fertilizer crystals fill the seam between crayons and sack. The crystals are damp beneath a dry outer layer.",
     "id": "t0012-02",
     "kind": "set",
     "person": "person-c",
@@ -26,7 +26,7 @@
       "Crayons",
       "AnimalFeedBag"
     ],
-    "title": "After on the wax crayons, the first copy",
+    "title": "Crayons and animal feed bag",
     "where": [
       {
         "lean": "agricultural",

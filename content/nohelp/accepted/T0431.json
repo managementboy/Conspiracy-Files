@@ -1,13 +1,13 @@
 [
   {
-    "body": "Green dust sits in the tire pump's nozzle. The tarp wrapped around it is streaked where a wheel crossed from one field to another.",
+    "body": "Green dust sits in the tire pump's nozzle. The tarp around it is streaked. Maybe a wheel crossed from one field to another.",
     "id": "t0431-01",
     "kind": "set",
     "pieces": [
       "TirePump",
       "Tarp"
     ],
-    "title": "The wheel's other field",
+    "title": "Tire pump and tarp",
     "where": [
       {
         "lean": "agricultural",
@@ -18,14 +18,14 @@
     ]
   },
   {
-    "body": "This shovel carries two soils: red clay under a fresh layer of pale spray dust. The bucket holds only the pale dust and a few yellowed seedlings.",
+    "body": "This shovel carries two soils. There's red clay under a fresh layer of pale spray dust. The bucket holds only the pale dust and a few yellowed seedlings.",
     "id": "t0431-02",
     "kind": "set",
     "pieces": [
       "Shovel",
       "Bucket"
     ],
-    "title": "The spare shovel",
+    "title": "Shovel and bucket",
     "where": [
       {
         "lean": "agricultural",
@@ -36,14 +36,14 @@
     ]
   },
   {
-    "body": "The bottom rung is crusted with fertilizer. The clean top rung still has flakes from a different barn's paint.",
+    "body": "This shovel's been in the fertilizer. The handle has paint from another barn.",
     "id": "t0431-03",
     "kind": "set",
     "pieces": [
       "Shovel",
       "Fertilizer"
     ],
-    "title": "The borrowed ladder",
+    "title": "Shovel and fertilizer",
     "where": [
       {
         "lean": "agricultural",
@@ -54,7 +54,7 @@
     ]
   },
   {
-    "body": "The duct tape holds a split spray hose together. Its inner edge is green; the water bottle beneath the patch is flecked the same way.",
+    "body": "The duct tape holds a split spray hose together. Its inner edge is green. The water bottle beneath the patch is flecked the same way.",
     "id": "t0431-04",
     "kind": "set",
     "pieces": [
@@ -62,7 +62,7 @@
       "RubberHose",
       "WaterBottle"
     ],
-    "title": "The patched spray hose",
+    "title": "Duct tape, hose and water bottle",
     "where": [
       {
         "lean": "agricultural",
@@ -73,14 +73,14 @@
     ]
   },
   {
-    "body": "One corner was folded inward while still wet. Under the crease the field grit is green with dried spray, and a withered crop seedling is pressed in the fold.",
+    "body": "The tarp's blue weave is stiff with dried yellow residue. Rope burns show where it was lashed down tight over something. Whatever was underneath left those streaks.",
     "id": "t0431-05",
     "kind": "set",
     "pieces": [
       "Tarp",
       "Rope"
     ],
-    "title": "The return tarp",
+    "title": "Tarp and rope",
     "where": [
       {
         "lean": "agricultural",
@@ -91,14 +91,14 @@
     ]
   },
   {
-    "body": "The seed bag is torn across the bottom. The loose grain in the floor mat has the same black dust as the tear.",
+    "body": "The seed bag is ripped open. Black dust coats the tarp underneath. Same dust I saw on those dead crops last week.",
     "id": "t0431-06",
     "kind": "set",
     "pieces": [
       "SeedBag",
       "Tarp"
     ],
-    "title": "The load under the seat",
+    "title": "Seed bag and tarp",
     "where": [
       {
         "lean": "agricultural",
@@ -109,14 +109,14 @@
     ]
   },
   {
-    "body": "Someone tied this broom to the outside of a load. Its bristles hold straw from one pen and dark treated-seed pellets from the field; a few scorched crop leaves are caught in the twine.",
+    "body": "Someone tied this broom to the outside of a load. Its bristles hold straw from one pen and dark treated-seed pellets. A few scorched crop leaves are caught in the twine.",
     "id": "t0431-07",
     "kind": "set",
     "pieces": [
       "Broom",
       "Twine"
     ],
-    "title": "The tied broom",
+    "title": "Broom and twine",
     "where": [
       {
         "lean": "agricultural",
@@ -127,14 +127,14 @@
     ]
   },
   {
-    "body": "Green chemical residue has dried in streaks down the tire treads and pooled in the wheel well. The attached hose still drips concentrate—the mixing valve was left half-open. Withered crop leaves stick to the rubber, their edges curled black where the spray touched them.",
+    "body": "The bucket's full of green chemical residue, still wet. The rubber hose drips concentrate onto withered leaves below. Someone left it running.",
     "id": "t0431-08",
     "kind": "set",
     "pieces": [
       "RubberHose",
       "Bucket"
     ],
-    "title": "The spray rig wheel",
+    "title": "Rubber hose and bucket",
     "where": [
       {
         "lean": "agricultural",
@@ -145,14 +145,14 @@
     ]
   },
   {
-    "body": "A knot still carries pale dust, but the free end has a dark crust. This rope has been tied around more than one load.",
+    "body": "The rope has chemical burns where it touched the seed bag. Both reek of something harsh. This got hauled from the field to town.",
     "id": "t0431-09",
     "kind": "set",
     "pieces": [
       "Rope",
       "SeedBag"
     ],
-    "title": "The handoff rope",
+    "title": "Rope and seed bag",
     "where": [
       {
         "lean": "agricultural",
@@ -163,14 +163,14 @@
     ]
   },
   {
-    "body": "The spade blade was rinsed, leaving a strip of green soil in the socket where the water could not reach.",
+    "body": "The spade blade was rinsed. Green soil is left in the socket where the water couldn't reach.",
     "id": "t0431-10",
     "kind": "set",
     "pieces": [
       "HandShovel",
       "WaterBottle"
     ],
-    "title": "The clean blade",
+    "title": "Hand shovel and water bottle",
     "where": [
       {
         "lean": "agricultural",

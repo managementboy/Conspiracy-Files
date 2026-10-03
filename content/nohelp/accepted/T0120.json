@@ -4,14 +4,14 @@
       "map": "WorldStashMap11",
       "mark": 1
     },
-    "body": "The radio test sheet says the signal dropped at the tower; the technician’s note asks the field crew to check power before changing equipment.",
+    "body": "The test sheet says the signal dropped during crop monitoring. A note asks to check field power before swapping the radio receiver. Nobody ever came back.",
     "id": "t0120-01",
     "kind": "set",
     "pieces": [
       "RadioReceiver",
       "SheetPaper2"
     ],
-    "title": "A signal sent for testing",
+    "title": "Radio receiver and test sheet",
     "where": [
       {
         "containers": [
@@ -40,7 +40,7 @@
     "pieces": [
       "diary"
     ],
-    "title": "Dish three carried plot readings",
+    "title": "Diary page",
     "where": [
       {
         "containers": [
@@ -69,7 +69,7 @@
     "pieces": [
       "notepad"
     ],
-    "title": "Power dip during the field pass",
+    "title": "Notepad page",
     "where": [
       {
         "containers": [
@@ -98,7 +98,7 @@
     "pieces": [
       "receipt"
     ],
-    "title": "Test request with samples attached",
+    "title": "Receipt",
     "where": [
       {
         "containers": [
@@ -127,7 +127,7 @@
     "pieces": [
       "photograph"
     ],
-    "title": "Sun mark over the crop receiver",
+    "title": "Photograph",
     "where": [
       {
         "containers": [
@@ -156,7 +156,7 @@
     "pieces": [
       "notebook"
     ],
-    "title": "Cross placed over the test receiver",
+    "title": "Notebook page",
     "where": [
       {
         "containers": [

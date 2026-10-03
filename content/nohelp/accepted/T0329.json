@@ -3,14 +3,14 @@
     "anchor": {
       "scene": "RDSCorpsePsycho"
     },
-    "body": "The mop and rinse bucket share black specks from the pasture study. They were bundled after the grass behind them turned to the same black speckling.",
+    "body": "A mop and a rinse bucket share black specks from the pasture study. They were bundled after the grass behind them got the same specks.",
     "id": "t0329-01",
     "kind": "set",
     "pieces": [
       "Mop",
       "Bucket"
     ],
-    "title": "Mop and rinse bucket, the first hot day",
+    "title": "Mop and bucket",
     "where": [
       {
         "lean": "agricultural",
@@ -24,14 +24,14 @@
     "anchor": {
       "scene": "RDSCorpsePsycho"
     },
-    "body": "A pencil and a torn sheet are folded together in a pocket. The sheet lists rooms by number, with the last two struck out in a different hand.",
+    "body": "A pencil and a torn sheet are folded together in a pocket. The sheet lists rooms by number. The last two are struck out in a different hand.",
     "id": "t0329-02",
     "kind": "set",
     "pieces": [
       "Pencil",
       "Sheet"
     ],
-    "title": "A folded list among the tools",
+    "title": "Pencil and sheet of paper",
     "where": [
       {
         "lean": "containment",

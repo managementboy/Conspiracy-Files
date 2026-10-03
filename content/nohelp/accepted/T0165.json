@@ -3,14 +3,14 @@
     "anchor": {
       "print": "Fossoil7"
     },
-    "body": "The route copy marks the vehicle fueled before the road closure, but the dispatch note says the driver was still waiting at the pump.",
+    "body": "The map shows this route already closed. The paper sheet orders a driver to wait at the fuel pump. The pickup never came.",
     "id": "t0165-01",
     "kind": "set",
     "pieces": [
       "Map",
       "SheetPaper2"
     ],
-    "title": "The route closed after fueling",
+    "title": "Map and paper sheet",
     "where": [
       {
         "containers": [

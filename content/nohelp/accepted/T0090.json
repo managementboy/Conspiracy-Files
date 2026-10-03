@@ -4,14 +4,14 @@
       "map": "MulStashMap16",
       "mark": 1
     },
-    "body": "The bank security kit is paired with a radio card for a shift that never checked in. A note asks whether the cold room still has power.",
+    "body": "A black radio and pistol left by the roadside gate. Someone was monitoring the crop program broadcasts here. The last transmission asked about backup generators at the silos.",
     "id": "t0090-01",
     "kind": "set",
     "pieces": [
       "RadioBlack",
       "Pistol"
     ],
-    "title": "Security and the missing shift",
+    "title": "Black radio and pistol",
     "where": [
       {
         "containers": [

@@ -3,14 +3,14 @@
     "anchor": {
       "scene": "RZSDean"
     },
-    "body": "The fertilizer sack and drained sprayer are packed together. A greasy sheen from the fertilizer trial crusts the nozzle and weeps from the sack seam.",
+    "body": "The fertilizer sack and empty sprayer are packed together. A greasy sheen crusts the nozzle and weeps from the sack seam. Looks like it's from a fertilizer trial.",
     "id": "t0382-01",
     "kind": "set",
     "pieces": [
       "Fertilizer",
       "GardeningSprayEmpty"
     ],
-    "title": "fertilizer sack with a drained sprayer at saturday before sunrise",
+    "title": "Fertilizer sack and sprayer",
     "where": [
       {
         "lean": "agricultural",
@@ -30,7 +30,7 @@
     "pieces": [
       "letter"
     ],
-    "title": "A head count by the fire",
+    "title": "Letter",
     "where": [
       {
         "lean": "containment",

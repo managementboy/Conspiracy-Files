@@ -3,14 +3,14 @@
     "anchor": {
       "print": "KnoxBankJobAdRosewood"
     },
-    "body": "the tire pump and first-aid kit are caked on both faces with pale field dust and sticky spray residue. field twine is knotted at the handle, a few seed husks caught in it.",
+    "body": "The tire pump and first-aid kit are caked with pale field dust. There's sticky spray residue on both. Field twine is knotted at the handle, with seed husks caught in it.",
     "id": "t0189-01",
     "kind": "set",
     "pieces": [
       "TirePump",
       "FirstAidKit"
     ],
-    "title": "Tire pump with the second residue",
+    "title": "Tire pump and first-aid kit",
     "where": [
       {
         "containers": [

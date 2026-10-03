@@ -3,14 +3,14 @@
     "anchor": {
       "print": "BrottAuction"
     },
-    "body": "the lighter and the empty canteen are bound with barrier tape, a numbered tag tied to the canteen's strap. a checkpoint sticker is pressed over the knot.",
+    "body": "The lighter and empty garden sprayer are bound with barrier tape. A numbered tag is tied to the sprayer nozzle. A checkpoint sticker is pressed over the knot.",
     "id": "t0256-01",
     "kind": "set",
     "pieces": [
       "Lighter",
       "GardeningSprayEmpty"
     ],
-    "title": "Lighter and canteen, taped",
+    "title": "Lighter and empty garden sprayer",
     "where": [
       {
         "containers": [

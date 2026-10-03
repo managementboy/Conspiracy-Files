@@ -3,14 +3,14 @@
     "anchor": {
       "print": "CrossRoadsMall"
     },
-    "body": "The directory is folded into a lost-property wallet; its receipt says the meeting point was cleared before the last bus reached the entrance.",
+    "body": "I found a map in the wallet with some official paperwork. Says the checkpoint was cleared at noon. The buses weren't scheduled until two.",
     "id": "t0155-01",
     "kind": "set",
     "pieces": [
       "Wallet",
       "Map"
     ],
-    "title": "A mall meeting point",
+    "title": "Wallet and map",
     "where": [
       {
         "containers": [

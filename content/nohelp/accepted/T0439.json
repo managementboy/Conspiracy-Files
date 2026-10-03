@@ -6,7 +6,7 @@
     "pieces": [
       "diary"
     ],
-    "title": "The grain from the upper bin",
+    "title": "Diary entry",
     "where": [
       {
         "containers": [
@@ -31,7 +31,7 @@
     "pieces": [
       "letter"
     ],
-    "title": "The stray animals",
+    "title": "Letter",
     "where": [
       {
         "lean": "agricultural",
@@ -48,7 +48,7 @@
     "pieces": [
       "notepad"
     ],
-    "title": "The sheep beyond the hedge",
+    "title": "Notepad page",
     "where": [
       {
         "containers": [
@@ -73,7 +73,7 @@
     "pieces": [
       "diary"
     ],
-    "title": "The eggs at the back of the shed",
+    "title": "Diary entry",
     "where": [
       {
         "containers": [
@@ -98,7 +98,7 @@
     "pieces": [
       "receipt"
     ],
-    "title": "The sack marked for the pigs",
+    "title": "Receipt",
     "where": [
       {
         "containers": [
@@ -123,7 +123,7 @@
     "pieces": [
       "notebook"
     ],
-    "title": "The pasture beside the ditch",
+    "title": "Notebook page",
     "where": [
       {
         "containers": [
@@ -148,7 +148,7 @@
     "pieces": [
       "notepad"
     ],
-    "title": "The seed on the windowsill",
+    "title": "Notepad page",
     "where": [
       {
         "containers": [
@@ -173,7 +173,7 @@
     "pieces": [
       "diary"
     ],
-    "title": "The cat at the mill",
+    "title": "Diary entry",
     "where": [
       {
         "containers": [
@@ -198,7 +198,7 @@
     "pieces": [
       "letter"
     ],
-    "title": "The separated feed pans",
+    "title": "Letter",
     "where": [
       {
         "lean": "agricultural",
@@ -215,7 +215,7 @@
     "pieces": [
       "diary"
     ],
-    "title": "The ducks and the dry yard",
+    "title": "Diary entry",
     "where": [
       {
         "containers": [

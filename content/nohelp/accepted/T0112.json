@@ -4,14 +4,14 @@
       "map": "WorldStashMap3",
       "mark": 1
     },
-    "body": "A fuel can is paired with a route slip for a field visit; the return line says “full” though the can is nearly empty.",
+    "body": "The petrol can has pencil marks on the side tracking fills. Last mark says full but it's bone dry. Someone was logging lies.",
     "id": "t0112-01",
     "kind": "set",
     "pieces": [
       "PetrolCan",
       "Pencil"
     ],
-    "title": "Fuel before the run",
+    "title": "Petrol can and pencil",
     "where": [
       {
         "containers": [
@@ -40,7 +40,7 @@
     "pieces": [
       "diary"
     ],
-    "title": "Wrench stop after the sprayer run",
+    "title": "Diary page",
     "where": [
       {
         "containers": [
@@ -69,7 +69,7 @@
     "pieces": [
       "notepad"
     ],
-    "title": "Gas charged to the trial plot",
+    "title": "Notepad page",
     "where": [
       {
         "containers": [
@@ -98,7 +98,7 @@
     "pieces": [
       "receipt"
     ],
-    "title": "Fuel needed for a second pass",
+    "title": "Receipt",
     "where": [
       {
         "containers": [

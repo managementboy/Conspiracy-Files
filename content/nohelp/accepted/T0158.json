@@ -3,14 +3,14 @@
     "anchor": {
       "print": "UStoreItMuldraugh"
     },
-    "body": "A seed bag is listed for a rented unit beside a note to keep the water container sealed until the field reading comes back.",
+    "body": "A seed bag is listed for a rented unit. The note says keep the water sealed until the field reading is back.",
     "id": "t0158-01",
     "kind": "set",
     "pieces": [
       "SeedBag",
       "WaterBottle"
     ],
-    "title": "The dry storage request",
+    "title": "Seed bag and water bottle",
     "where": [
       {
         "containers": [

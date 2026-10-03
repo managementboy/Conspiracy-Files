@@ -4,14 +4,14 @@
       "map": "WorldStashMap5",
       "mark": 1
     },
-    "body": "A pack of supplies is hidden with the seed bag; a note asks the next visitor to keep the trial inspectors from seeing the unopened soil test kit.",
+    "body": "A pack of supplies is hidden with the seed bag. A note asks the next visitor to keep inspectors from the soil kit.",
     "id": "t0114-01",
     "kind": "set",
     "pieces": [
       "Bag_ALICEpack",
       "SeedBag"
     ],
-    "title": "Supplies kept out of sight",
+    "title": "Backpack and seed bag",
     "where": [
       {
         "containers": [

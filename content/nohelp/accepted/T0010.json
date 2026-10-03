@@ -7,7 +7,7 @@
     "pieces": [
       "idcard"
     ],
-    "title": "Temporary field access card",
+    "title": "ID card",
     "where": [
       {
         "lean": "agricultural",
@@ -19,7 +19,7 @@
     ]
   },
   {
-    "body": "The map's crop row is circled twice, with a pencilled note: second pass, same mix. Soil fills the shovel socket and the blade is stained blue-green from the treated rows.",
+    "body": "The crop row on the map is circled twice: “second pass, same mix.” Soil fills the shovel socket. The blade is stained blue-green from the treated rows.",
     "id": "t0010-02",
     "kind": "set",
     "person": "person-a",
@@ -27,7 +27,7 @@
       "Map",
       "HandShovel"
     ],
-    "title": "The row sprayed twice",
+    "title": "Map and hand shovel",
     "where": [
       {
         "lean": "agricultural",

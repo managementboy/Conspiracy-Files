@@ -4,14 +4,14 @@
       "map": "WorldStashMap20",
       "mark": 1
     },
-    "body": "The access complaint has no names or dates, only a list of doors refused and a final mark that says the crew left.",
+    "body": "Found paper listing doors they were turned away from. No names, no dates, only refusals recorded. The pencil scrawled at the end: crew left.",
     "id": "t0129-01",
     "kind": "set",
     "pieces": [
       "SheetPaper2",
       "Pencil"
     ],
-    "title": "Names replaced by insults",
+    "title": "Sheet of paper and pencil",
     "where": [
       {
         "containers": [

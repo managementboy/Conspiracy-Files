@@ -3,14 +3,14 @@
     "anchor": {
       "print": "Delilah"
     },
-    "body": "The dock map is marked for arrival, but the passenger list is signed complete before the boat’s final location was entered.",
+    "body": "The map marks the area clear before they got anyone out. The water bottle's from a supply count closed too soon.",
     "id": "t0167-01",
     "kind": "set",
     "pieces": [
       "Map",
       "WaterBottle"
     ],
-    "title": "The boat’s last location",
+    "title": "Map and water bottle",
     "where": [
       {
         "containers": [

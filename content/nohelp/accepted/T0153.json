@@ -3,14 +3,14 @@
     "anchor": {
       "print": "FashionaBelle"
     },
-    "body": "The tailor’s fitting card is stamped complete before the customer’s pickup time; a note asks staff to leave the back door open for the return van.",
+    "body": "The paper sheet is stamped complete before the pickup time. It says leave the back door open for the return van. Scissors beside it, like they were rushing people through.",
     "id": "t0153-01",
     "kind": "set",
     "pieces": [
       "Scissors",
       "SheetPaper2"
     ],
-    "title": "A fitting appointment moved",
+    "title": "Scissors and paper sheet",
     "where": [
       {
         "containers": [

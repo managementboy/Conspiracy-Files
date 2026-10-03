@@ -3,14 +3,14 @@
     "anchor": {
       "print": "FossoilField"
     },
-    "body": "A sports bottle is set beside a grounds sheet ordering the crew to clear the stands and close the gates at dusk. The gate schedule still lists a public event.",
+    "body": "A water bottle lies beside a bat. The gate log says lock up early. The schedule still shows tonight's game open to fans.",
     "id": "t0172-01",
     "kind": "set",
     "pieces": [
       "BaseballBat",
       "WaterBottle"
     ],
-    "title": "A stadium closure",
+    "title": "Baseball bat and water bottle",
     "where": [
       {
         "containers": [

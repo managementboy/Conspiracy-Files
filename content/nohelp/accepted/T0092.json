@@ -4,14 +4,14 @@
       "map": "MulStashMap18",
       "mark": 1
     },
-    "body": "A fuel can is paired with a sprayer-trailer log of field-use entries for the seed-treatment rows, and a pistol listed as returned. The trailer's key line remains open after the owner's check-in ended.",
+    "body": "A fuel can is paired with a sprayer-trailer log. The entries are for the seed-treatment rows; a pistol is listed back. The trailer's key line is still open after check-in.",
     "id": "t0092-01",
     "kind": "set",
     "pieces": [
       "Pistol",
       "PetrolCan"
     ],
-    "title": "A trailer return",
+    "title": "Pistol and petrol can",
     "where": [
       {
         "containers": [

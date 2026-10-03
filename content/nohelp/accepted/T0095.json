@@ -4,14 +4,14 @@
       "map": "RiversideStashMap2",
       "mark": 1
     },
-    "body": "the bar of soap and briefcase are bound with a torn sleeve. the fabric is smoke-stained outside and spotless beneath the knot.",
+    "body": "The soap and briefcase are bound with a torn sleeve. The fabric is smoke-stained outside but spotless under the knot.",
     "id": "t0095-01",
     "kind": "set",
     "pieces": [
       "Soap2",
       "Briefcase"
     ],
-    "title": "Bar of soap beside the spare mark",
+    "title": "Bar of soap and briefcase",
     "where": [
       {
         "containers": [

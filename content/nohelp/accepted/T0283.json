@@ -3,14 +3,14 @@
     "anchor": {
       "scene": "RBBar"
     },
-    "body": "The pair is streaked with feed sack marking from the treated rows. Dead flies fill the bottom ring of the bucket, and the shovel blade has the same bitter green film.",
+    "body": "Feed sack marking from the treated rows streaks the shovel and bucket. Dead flies fill the bottom ring of the bucket. The shovel blade has a bitter green film.",
     "id": "t0283-01",
     "kind": "set",
     "pieces": [
       "HandShovel",
       "Bucket"
     ],
-    "title": "After sack by the counter, the first copy",
+    "title": "Hand shovel and bucket",
     "where": [
       {
         "containers": [
@@ -32,14 +32,14 @@
     "anchor": {
       "scene": "RBBar"
     },
-    "body": "The glass was rinsed but the strip of tape stays on it, marked to be kept after closing. The cloth is stiff with bleach. Someone expected the counter to be cleaned before the glass was taken away.",
+    "body": "The glass was rinsed, but the tape on it says keep after closing. The cloth is stiff with bleach. I think someone wanted the counter cleaned before the glass was taken.",
     "id": "t0283-02",
     "kind": "set",
     "pieces": [
       "GlassTumbler",
       "DishCloth"
     ],
-    "title": "The glass nobody collected",
+    "title": "Glass tumbler and dish cloth",
     "where": [
       {
         "containers": [

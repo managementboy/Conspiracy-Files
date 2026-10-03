@@ -4,14 +4,14 @@
       "map": "MulStashMap1",
       "mark": 1
     },
-    "body": "A repair sheet lists floorboards lifted for a crowd shelter, but the count of returned boards is higher than the count issued. One nail is still bent flat.",
+    "body": "The sheet lists tools returned after containment. This hammer's serial number isn't on it. Extra tools, no record.",
     "id": "t0075-01",
     "kind": "set",
     "pieces": [
       "Hammer",
       "SheetPaper2"
     ],
-    "title": "Under the boards",
+    "title": "Hammer and sheet of paper",
     "where": [
       {
         "containers": [

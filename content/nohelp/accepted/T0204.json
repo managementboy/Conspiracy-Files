@@ -3,14 +3,14 @@
     "anchor": {
       "print": "RoxysRollerRink"
     },
-    "body": "The session tally is closed before the last skater returned the rental pair. A note asks staff to keep the rear exit open for the next group.",
+    "body": "Black shoes next to a paper sheet with exit protocol. It says to keep the checkpoint open until all units return. They closed it early.",
     "id": "t0204-01",
     "kind": "set",
     "pieces": [
       "Shoes_Black",
       "SheetPaper2"
     ],
-    "title": "The rink’s last session",
+    "title": "Black shoes and paper sheet",
     "where": [
       {
         "containers": [

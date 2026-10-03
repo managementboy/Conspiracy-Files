@@ -4,14 +4,14 @@
       "map": "MulStashMap15",
       "mark": 1
     },
-    "body": "The bandage wrapper is tucked into a route book whose clinic stop is stamped complete before the patient’s return line is signed.",
+    "body": "The bandage wrapper is tucked into a route book. The clinic stop is stamped complete. But the patient's return line isn't signed yet.",
     "id": "t0089-01",
     "kind": "set",
     "pieces": [
       "Bandage",
       "Notebook"
     ],
-    "title": "Careful past the clinic",
+    "title": "Bandage and notebook",
     "where": [
       {
         "containers": [

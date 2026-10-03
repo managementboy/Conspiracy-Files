@@ -4,14 +4,14 @@
       "map": "WpStashMap6",
       "mark": 1
     },
-    "body": "The travel pack is still tied shut beside a note that says the supplies are no longer needed. The departure time was entered but never initialled.",
+    "body": "The alicepack is buckled shut, water bottle clipped on the side. A departure slip is tucked in the webbing. Time written in, but no signature on the authorization line.",
     "id": "t0139-01",
     "kind": "set",
     "pieces": [
       "WaterBottle",
       "Bag_ALICEpack"
     ],
-    "title": "Packed but no longer needed",
+    "title": "Water bottle and pack",
     "where": [
       {
         "containers": [

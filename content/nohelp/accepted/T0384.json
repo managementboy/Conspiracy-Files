@@ -3,14 +3,14 @@
     "anchor": {
       "scene": "RZSForestCamp"
     },
-    "body": "The key ring and scrub bucket are packed together. Brown foam from the pasture treatment has dried on both, with a high-water line of it inside the bucket.",
+    "body": "The key ring and bucket are packed together. Brown foam has dried on both, with a high-water line in the bucket. I think it's from a pasture treatment.",
     "id": "t0384-01",
     "kind": "set",
     "pieces": [
       "KeyRing",
       "Bucket"
     ],
-    "title": "hand shovel with a scrub bucket at on the cold night",
+    "title": "Key ring and bucket",
     "where": [
       {
         "lean": "agricultural",
@@ -24,7 +24,7 @@
     "anchor": {
       "scene": "RZSForestCamp"
     },
-    "body": "A small receiver still set to an emergency band, a folded road map with the county roads crossed out in the same neat hand, and a strip of pills. The campers left before anyone announced a closure.",
+    "body": "A receiver still set to an emergency band, and a strip of pills. The road map has the county roads crossed out in one neat hand. The campers seem to have left before any closure was announced.",
     "id": "t0384-02",
     "kind": "set",
     "pieces": [
@@ -32,7 +32,7 @@
       "Map",
       "Pills"
     ],
-    "title": "Receiver and map left at the cold camp",
+    "title": "Receiver, map and pills",
     "where": [
       {
         "lean": "containment",

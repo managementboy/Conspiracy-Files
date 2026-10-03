@@ -3,14 +3,14 @@
     "anchor": {
       "print": "GrandOhioMall"
     },
-    "body": "A mall directory is folded into a receipt for the last open shop; the security sheet says every entrance was clear before the shop’s closing time.",
+    "body": "The map shows downtown, every block marked evacuated. The wallet has a receipt from two hours after the sweep. Someone was still shopping when they called it clear.",
     "id": "t0169-01",
     "kind": "set",
     "pieces": [
       "Map",
       "Wallet"
     ],
-    "title": "The directory after closing",
+    "title": "Map and wallet",
     "where": [
       {
         "containers": [

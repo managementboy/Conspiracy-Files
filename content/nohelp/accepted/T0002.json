@@ -1,13 +1,13 @@
 [
   {
-    "body": "The kit's seal is unbroken. A bandage has been folded around its handle, still clean, with a patient wrist label tied through the fold and no name on it.",
+    "body": "The first aid kit is still sealed. A clean bandage is folded around its handle. A patient wrist label is tied through it, with no name on it.",
     "id": "t0002-01",
     "kind": "set",
     "pieces": [
       "FirstAidKit",
       "Bandage"
     ],
-    "title": "The sealed kit on the medical coat",
+    "title": "First aid kit and bandage",
     "where": [
       {
         "lean": "containment",
@@ -19,14 +19,14 @@
     ]
   },
   {
-    "body": "A brown tide line circles the bottle; the notebook beside it has one page stuck to the cap. When it lifts, a pressed leaf outline remains on the paper.",
+    "body": "A brown line circles the water bottle like a tide mark. A page in the notebook is stuck to the cap. When I lift it, a pressed leaf outline stays on the paper.",
     "id": "t0002-02",
     "kind": "set",
     "pieces": [
       "Notebook",
       "WaterBottle"
     ],
-    "title": "The bottle with a leaf-shaped tide",
+    "title": "Notebook and water bottle",
     "where": [
       {
         "lean": "agricultural",

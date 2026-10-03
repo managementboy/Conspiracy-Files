@@ -4,14 +4,14 @@
       "map": "MulStashMap17",
       "mark": 1
     },
-    "body": "The bakery bundle is tied to a household note asking the parents to stay inside until the next pickup. The driver marked the first delivery complete.",
+    "body": "I found bread next to a garbage bag marked for pickup. Someone wrote 'stay inside until collection' on the bag. The first run is checked off but they noted a second pass.",
     "id": "t0091-01",
     "kind": "set",
     "pieces": [
       "Garbagebag",
       "Bread"
     ],
-    "title": "The second delivery",
+    "title": "Garbage bag and bread",
     "where": [
       {
         "containers": [

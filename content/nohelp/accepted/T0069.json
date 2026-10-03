@@ -4,14 +4,14 @@
       "map": "MarchRidgeStashMap5",
       "mark": 1
     },
-    "body": "A bandage and a bat share a medical-center bag; the note on its tie says to leave the back room quiet until the wash is finished.",
+    "body": "A bandage and a bat share a medical-center bag. The note on its tie says to keep the back room quiet. That's until the wash is finished.",
     "id": "t0069-01",
     "kind": "set",
     "pieces": [
       "BaseballBat",
       "Bandage"
     ],
-    "title": "Quiet supplies",
+    "title": "Baseball bat and bandage",
     "where": [
       {
         "containers": [

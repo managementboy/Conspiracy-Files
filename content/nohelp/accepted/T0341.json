@@ -3,14 +3,14 @@
     "anchor": {
       "scene": "RDSPrisonEscape"
     },
-    "body": "The first-aid kit and water bottle share sticky pollen from the seed trial. They were bundled after the bottle's inside turned slimy with the same pollen.",
+    "body": "Sticky pollen from the seed trial is on the kit and the bottle. The inside of the bottle went slimy with the same pollen. I think they were bundled after that.",
     "id": "t0341-01",
     "kind": "set",
     "pieces": [
       "FirstAidKit",
       "WaterBottle"
     ],
-    "title": "First-aid kit and water bottle, monday morning",
+    "title": "First-aid kit and water bottle",
     "where": [
       {
         "lean": "agricultural",
@@ -24,14 +24,14 @@
     "anchor": {
       "scene": "RDSPrisonEscape"
     },
-    "body": "A pencil and map share the same pocket. One route is marked toward the road, then overwritten with a firm line back toward the building, and the second line has been traced twice as if copied from an instruction.",
+    "body": "The pencil and map share the same pocket. A route toward the road is overwritten with a line back inside. That line is traced twice, like it was copied.",
     "id": "t0341-02",
     "kind": "set",
     "pieces": [
       "Map",
       "Pencil"
     ],
-    "title": "An exit marked twice",
+    "title": "Map and pencil",
     "where": [
       {
         "lean": "containment",

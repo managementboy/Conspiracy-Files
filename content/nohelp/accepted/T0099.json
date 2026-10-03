@@ -4,14 +4,14 @@
       "map": "RiversideStashMap6",
       "mark": 1
     },
-    "body": "The weapon is tied to a sick-room list; the last entry says the room was handed over, but no one signs for the key.",
+    "body": "The pistol lies on a notebook of quarantine handoffs. Last entry records a room transfer. No recipient signed.",
     "id": "t0099-01",
     "kind": "set",
     "pieces": [
       "Pistol",
       "Notebook"
     ],
-    "title": "A private security cache",
+    "title": "Pistol and notebook",
     "where": [
       {
         "containers": [

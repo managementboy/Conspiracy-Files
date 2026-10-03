@@ -4,14 +4,14 @@
       "map": "RiversideStashMap1",
       "mark": 1
     },
-    "body": "the broom bears a treated-seed stain and the camera lens is smeared with the same pink seed coating. one rope knot holds both objects together.",
+    "body": "The broom has a treated-seed stain. The camera lens is smeared with the same pink seed coating. One rope knot holds both together.",
     "id": "t0094-01",
     "kind": "set",
     "pieces": [
       "Broom",
       "Camera"
     ],
-    "title": "Broom with treated-seed stain",
+    "title": "Broom and camera",
     "where": [
       {
         "containers": [

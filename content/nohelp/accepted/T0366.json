@@ -3,14 +3,14 @@
     "anchor": {
       "scene": "RVSDeadEnd"
     },
-    "body": "the fertilizer sack with a drained sprayer carry rust-colored grit from the well-water study. they were packed before the nurse stopped taking calls.",
+    "body": "Rust-colored grit from the well-water study is on sack and sprayer. I think they were packed before the nurse stopped taking calls.",
     "id": "t0366-01",
     "kind": "set",
     "pieces": [
       "Fertilizer",
       "GardeningSprayEmpty"
     ],
-    "title": "fertilizer sack with a drained sprayer at after monday supper",
+    "title": "Fertilizer sack and empty sprayer",
     "where": [
       {
         "lean": "agricultural",
@@ -30,7 +30,7 @@
     "pieces": [
       "notebook"
     ],
-    "title": "The road ends twice",
+    "title": "Notebook page",
     "where": [
       {
         "lean": "containment",

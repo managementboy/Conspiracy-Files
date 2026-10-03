@@ -3,14 +3,14 @@
     "anchor": {
       "scene": "RZSNastyMattress"
     },
-    "body": "The battery is bound to the field radio with torn warning tape, and the dial is taped fixed on one channel. A cut strap shows where a response tag was removed.",
+    "body": "The battery is bound to the radio with torn warning tape. The dial is taped fixed on one channel. A cut strap looks like where a response tag was removed.",
     "id": "t0392-01",
     "kind": "set",
     "pieces": [
       "Battery",
       "RadioBlack"
     ],
-    "title": "battery with a field radio at friday at closing",
+    "title": "Battery and radio",
     "where": [
       {
         "lean": "containment",
@@ -30,7 +30,7 @@
     "pieces": [
       "notepad"
     ],
-    "title": "A mattress by the ditch",
+    "title": "Notepad page",
     "where": [
       {
         "lean": "agricultural",

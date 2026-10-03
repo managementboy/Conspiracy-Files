@@ -3,14 +3,14 @@
     "anchor": {
       "print": "BrooksLibrary"
     },
-    "body": "The library room card reserves a table for a field briefing; the public sign says the room is closed for quiet study.",
+    "body": "The book covers pest management and application pathways. A paper sheet schedules a closed briefing on the program. Someone didn't want this information shared.",
     "id": "t0209-01",
     "kind": "set",
     "pieces": [
       "Book",
       "SheetPaper2"
     ],
-    "title": "Quiet study reservation",
+    "title": "Book and paper sheet",
     "where": [
       {
         "containers": [

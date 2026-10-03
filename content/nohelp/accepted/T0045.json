@@ -4,14 +4,14 @@
       "map": "IrvingtonStashMap6",
       "mark": 1
     },
-    "body": "The torch is set on a marked route beside a note to check each door before leaving. The last checked address has no time beside it.",
+    "body": "The hand torch rests on the map. Someone marked a route with times at each stop. The last address has no time beside it.",
     "id": "t0045-01",
     "kind": "set",
     "pieces": [
       "HandTorch",
       "Map"
     ],
-    "title": "Light for the careful",
+    "title": "Hand torch and map",
     "where": [
       {
         "containers": [

@@ -4,14 +4,14 @@
       "map": "LouisvilleStashMap12",
       "mark": 1
     },
-    "body": "The tent's drink list includes water from the garden hose; a note says the hose rinsed the spray tanks before the food shift, and the rinse water ran green into the bucket. A sprayer nozzle still hangs from the hose, crusted blue.",
+    "body": "The pizza sat by the field station tent. They filled the water bottle from a hose that rinses sprayers. Green residue still coats the connection.",
     "id": "t0060-01",
     "kind": "set",
     "pieces": [
       "Pizza",
       "WaterBottle"
     ],
-    "title": "Hose water for the food shift",
+    "title": "Pizza and water bottle",
     "where": [
       {
         "containers": [

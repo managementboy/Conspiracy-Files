@@ -4,14 +4,14 @@
       "map": "RiversideStashMap9",
       "mark": 1
     },
-    "body": "The fuel can is tagged for a medical pickup; the note says the driver stopped at the marked house after a field worker became ill.",
+    "body": "I found a petrol can marked for a medical run. Pills spilled nearby. A field worker got sick. They must have stopped here for help.",
     "id": "t0102-01",
     "kind": "set",
     "pieces": [
       "PetrolCan",
       "Pills"
     ],
-    "title": "Fuel and a medicine request",
+    "title": "Petrol can and pills",
     "where": [
       {
         "containers": [

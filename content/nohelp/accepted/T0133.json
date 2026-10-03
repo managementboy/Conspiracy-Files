@@ -4,14 +4,14 @@
       "map": "WpStashMap1",
       "mark": 1
     },
-    "body": "The route map points to a residence, but the weapon handover form says the occupant was already marked missing. The return route has no driver.",
+    "body": "The map shows a house marked with someone already missing. This pistol was issued days after. They knew but kept going.",
     "id": "t0133-01",
     "kind": "set",
     "pieces": [
       "Pistol",
       "Map"
     ],
-    "title": "Do not fire at the house",
+    "title": "Pistol and map",
     "where": [
       {
         "containers": [

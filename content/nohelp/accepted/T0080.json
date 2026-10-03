@@ -4,14 +4,14 @@
       "map": "MulStashMap12",
       "mark": 1
     },
-    "body": "A food tin and a supply tag are placed together; the tag asks that the kitchen water be held until the crowd has passed the back lot.",
+    "body": "The corn can has a program sticker. It says to keep clear of the field pathway till the trucks finish. Someone left a pistol beside it.",
     "id": "t0080-01",
     "kind": "set",
     "pieces": [
       "Pistol",
       "CannedCorn"
     ],
-    "title": "Kitchen stores",
+    "title": "Pistol and canned corn",
     "where": [
       {
         "containers": [

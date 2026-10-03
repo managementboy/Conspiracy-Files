@@ -1,13 +1,13 @@
 [
   {
-    "body": "The lunchbox is wedged beneath the map's fold. The route line passes the checkpoint and stops; a spoon has been laid across the road home.",
+    "body": "The lunchbox is wedged under the fold of the map. The route line passes the checkpoint and stops. A spoon is laid across the road home.",
     "id": "t0004-01",
     "kind": "set",
     "pieces": [
       "Map",
       "Lunchbox"
     ],
-    "title": "The lunch packed for the closed lane",
+    "title": "Map and lunchbox",
     "where": [
       {
         "lean": "containment",
@@ -18,14 +18,14 @@
     ]
   },
   {
-    "body": "Pale granules cling inside the bucket's rim. The fertilizer sack beside it is dry and carefully folded, with its open corner tucked under the seat.",
+    "body": "Pale granules cling inside the rim of the bucket. The fertilizer sack beside it is dry and carefully folded. Its open corner is tucked under the seat.",
     "id": "t0004-02",
     "kind": "set",
     "pieces": [
       "Bucket",
       "Fertilizer"
     ],
-    "title": "The powder gathered in the bucket seam",
+    "title": "Bucket and fertilizer",
     "where": [
       {
         "lean": "agricultural",

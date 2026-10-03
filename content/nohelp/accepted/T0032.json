@@ -4,14 +4,14 @@
       "map": "BBurgStashMap7",
       "mark": 1
     },
-    "body": "the dish cloth and folded road map are tied with cut warning tape. six tally cuts mark the dish cloth; only four are crossed through.",
+    "body": "The dish cloth and road map are tied with cut warning tape. Six tally cuts mark the dish cloth, but only four are crossed through.",
     "id": "t0032-01",
     "kind": "set",
     "pieces": [
       "DishCloth",
       "Map"
     ],
-    "title": "Dish cloth with the unclosed tally",
+    "title": "Dish cloth and map",
     "where": [
       {
         "containers": [
@@ -40,7 +40,7 @@
     "pieces": [
       "notepad"
     ],
-    "title": "The drawer copy survived",
+    "title": "Notepad page",
     "where": [
       {
         "containers": [

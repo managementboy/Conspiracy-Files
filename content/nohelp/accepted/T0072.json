@@ -4,14 +4,14 @@
       "map": "MarchRidgeStashMap8",
       "mark": 1
     },
-    "body": "the spool of thread and first-aid kit are caked with pale seed-treatment grit and feed dust, the kit's latch gummed with sweet residue.",
+    "body": "Pale seed-treatment grit and feed dust cake the thread and kit. The kit's latch is gummed with sweet residue.",
     "id": "t0072-01",
     "kind": "set",
     "pieces": [
       "Thread",
       "FirstAidKit"
     ],
-    "title": "Spool of thread dusted with grit",
+    "title": "Thread and first aid kit",
     "where": [
       {
         "containers": [

@@ -3,14 +3,14 @@
     "anchor": {
       "scene": "RDSRatWar"
     },
-    "body": "The mop and rinse bucket are bundled together. Gray foam from the field-sprayer test has dried on both, and a few dead beetles lie in the bottom of the bucket.",
+    "body": "Gray foam from the field-sprayer test has dried on the mop and bucket. A few dead beetles lie in the bottom of the bucket. They are bundled together.",
     "id": "t0345-01",
     "kind": "set",
     "pieces": [
       "Mop",
       "Bucket"
     ],
-    "title": "Mop and rinse bucket, friday before dawn",
+    "title": "Mop and bucket",
     "where": [
       {
         "containers": [
@@ -32,14 +32,14 @@
     "anchor": {
       "scene": "RDSRatWar"
     },
-    "body": "A water bottle is tied to a pencil with string. The scratched tally on the bottle differs from the number copied onto the sheet beside it.",
+    "body": "A bottle is tied to a pencil with string. The tally on the bottle differs from the number on the sheet.",
     "id": "t0345-02",
     "kind": "set",
     "pieces": [
       "WaterBottle",
       "Pencil"
     ],
-    "title": "A corrected tally by the wall",
+    "title": "Water bottle and pencil",
     "where": [
       {
         "containers": [

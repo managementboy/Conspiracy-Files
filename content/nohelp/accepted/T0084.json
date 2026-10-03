@@ -4,14 +4,14 @@
       "map": "MulStashMap7",
       "mark": 1
     },
-    "body": "A store receipt lists every shelf as stocked, while a typed order on the back tells staff to close the doors at dusk and keep the head count off the sheet. The checkpoint box is blank.",
+    "body": "These never made it out. Tin opener sealed, pills unopened. Tag says close at dusk, leave head count blank.",
     "id": "t0084-01",
     "kind": "set",
     "pieces": [
       "TinOpener",
       "Pills"
     ],
-    "title": "Full store, missing count",
+    "title": "Tin opener and pills",
     "where": [
       {
         "containers": [

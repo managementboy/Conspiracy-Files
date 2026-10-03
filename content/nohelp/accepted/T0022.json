@@ -4,14 +4,14 @@
       "map": "MarchRidgeStashMap1",
       "mark": 1
     },
-    "body": "road dust coats the lug wrench and hand torch, but their ties are clean and newly cut. the bundle was repacked after travel.",
+    "body": "Road dust coats the lug wrench and the hand torch. Their ties are clean and newly cut. I think the bundle was repacked after travel.",
     "id": "t0022-01",
     "kind": "set",
     "pieces": [
       "LugWrench",
       "HandTorch"
     ],
-    "title": "Lug wrench with the unclosed tally",
+    "title": "Lug wrench and hand torch",
     "where": [
       {
         "containers": [
@@ -40,7 +40,7 @@
     "pieces": [
       "notepad"
     ],
-    "title": "The jars stay sealed",
+    "title": "Notepad page",
     "where": [
       {
         "containers": [

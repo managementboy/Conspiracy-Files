@@ -4,14 +4,14 @@
       "map": "MarchRidgeStashMap2",
       "mark": 1
     },
-    "body": "A pistol is wrapped in a store receipt with a note to leave the remaining supplies for the next family. The collection time is earlier than the closure notice.",
+    "body": "A pistol is wrapped in a store receipt. A note says to leave the remaining supplies for the next family. The collection time is earlier than the closure notice.",
     "id": "t0065-01",
     "kind": "set",
     "pieces": [
       "Pistol",
       "SheetPaper2"
     ],
-    "title": "Supplies at the store",
+    "title": "Pistol and sheet of paper",
     "where": [
       {
         "containers": [

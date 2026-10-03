@@ -4,14 +4,14 @@
       "map": "WpStashMap2",
       "mark": 1
     },
-    "body": "A medical note records the patient found without a weapon, hands stained pale yellow to the wrist; the adjoining field entry says the treatment room was reserved for a crop sample review.",
+    "body": "The bandage smells like chemicals, not antiseptic. The notebook lists crop treatments alongside medical symptoms. Yellow residue stains both the pages and the wrapping.",
     "id": "t0134-01",
     "kind": "set",
     "pieces": [
       "Bandage",
       "Notebook"
     ],
-    "title": "The patient without a weapon",
+    "title": "Bandage and notebook",
     "where": [
       {
         "containers": [

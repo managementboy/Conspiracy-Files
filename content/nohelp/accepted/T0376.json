@@ -3,14 +3,14 @@
     "anchor": {
       "scene": "RZSBaseball"
     },
-    "body": "The battery and field radio are packed together. Both are tacky and carry a medicinal odor from the livestock supplement test.",
+    "body": "The battery and radio are packed together. Both are tacky and smell medicinal. It looks like something from a livestock supplement test.",
     "id": "t0376-01",
     "kind": "set",
     "pieces": [
       "Battery",
       "RadioBlack"
     ],
-    "title": "battery with a field radio at before sunday's rain",
+    "title": "Battery and radio",
     "where": [
       {
         "lean": "agricultural",
@@ -30,7 +30,7 @@
     "pieces": [
       "letter"
     ],
-    "title": "Scoreboard of arrivals",
+    "title": "Letter",
     "where": [
       {
         "lean": "containment",

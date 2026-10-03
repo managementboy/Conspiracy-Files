@@ -3,14 +3,14 @@
     "anchor": {
       "scene": "RDSSuicidePact"
     },
-    "body": "The wrapped loaf and canned corn are bundled together. Blue powder from the pasture study dusts both, and the loaf's wrapper has gone stiff with it.",
+    "body": "Blue powder from the pasture study dusts the loaf and the corn. The loaf's wrapper has gone stiff with it.",
     "id": "t0351-01",
     "kind": "set",
     "pieces": [
       "Bread",
       "CannedCorn"
     ],
-    "title": "Wrapped loaf and canned corn, the first hot day",
+    "title": "Bread and canned corn",
     "where": [
       {
         "lean": "agricultural",
@@ -24,14 +24,14 @@
     "anchor": {
       "scene": "RDSSuicidePact"
     },
-    "body": "A folded sheet and pencil are held beneath the same hand. Two names are boxed together, while a third is pressed into the paper hard enough to leave a mark without ink.",
+    "body": "A folded sheet and pencil are held beneath the same hand. Two names are boxed together. A third is pressed in hard enough to leave a mark without ink.",
     "id": "t0351-02",
     "kind": "set",
     "pieces": [
       "Sheet",
       "Pencil"
     ],
-    "title": "A third mark on the page",
+    "title": "Paper sheet and pencil",
     "where": [
       {
         "lean": "containment",

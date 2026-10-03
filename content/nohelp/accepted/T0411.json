@@ -1,13 +1,13 @@
 [
   {
-    "body": "The jar is dusted with the same yellow grains as the torn sack. Its label names a test plot, but the string tying them together is wet with roadside mud. A strip of cloth keeps the pair together.",
+    "body": "The jar's empty but dusty with whatever was in the seed bag. Both have the same faded label talking about some trial plot. Strange finding them this far from any field.",
     "id": "t0411-01",
     "kind": "set",
     "pieces": [
       "EmptyJar",
       "SeedBag"
     ],
-    "title": "A jar beyond the rows after the shift",
+    "title": "Empty jar and seed bag",
     "where": [
       {
         "containers": [
@@ -26,14 +26,14 @@
     ]
   },
   {
-    "body": "A clean bottle and a cloudy bucket share a chalk mark. The bucket was filled far from the rows after the sprayer passed. The corner still bears a hurried thumbprint.",
+    "body": "A clean bottle and a cloudy bucket share a chalk mark. The bucket was filled far from the rows after the sprayer passed.",
     "id": "t0411-02",
     "kind": "set",
     "pieces": [
       "WaterBottle",
       "Bucket"
     ],
-    "title": "Water kept for comparison after the shift",
+    "title": "Water bottle and bucket",
     "where": [
       {
         "containers": [
@@ -52,14 +52,14 @@
     ]
   },
   {
-    "body": "One cuff of the gloves is caked with field dust; the other is stained with kitchen soap. The empty sprayer tied to them still smells of orchard rows. One edge was kept dry beneath a coat.",
+    "body": "The leather gloves are stained yellow-brown around the fingers. The spray can is bone dry but reeks of chemicals. Someone was working fields when things went wrong.",
     "id": "t0411-03",
     "kind": "set",
     "pieces": [
       "Gloves_LeatherGloves",
       "GardeningSprayEmpty"
     ],
-    "title": "The gloves used twice after the shift",
+    "title": "Leather gloves and empty sprayer",
     "where": [
       {
         "containers": [
@@ -78,14 +78,14 @@
     ]
   },
   {
-    "body": "The feed sack has an oily streak beneath its fold. A rinse pail carries the same mark above the waterline. A short tally was added after the bundle was tied.",
+    "body": "The feed sack has an oily streak under its fold. A rinse pail has the same mark above the waterline.",
     "id": "t0411-04",
     "kind": "set",
     "pieces": [
       "AnimalFeedBag",
       "Bucket"
     ],
-    "title": "Feed beside a rinse pail after the shift",
+    "title": "Feed sack and bucket",
     "where": [
       {
         "containers": [
@@ -104,14 +104,14 @@
     ]
   },
   {
-    "body": "Tape seals a slit in the seed sack, but the pale dust beneath it is caught on the outside. A child’s height is marked on the tape. The string has been retied since morning.",
+    "body": "Tape seals a slit in the seed sack. The pale dust under it has caught on the outside. A child's height is marked on the tape.",
     "id": "t0411-05",
     "kind": "set",
     "pieces": [
       "SeedBag",
       "DuctTape"
     ],
-    "title": "The unopened seed allotment after the shift",
+    "title": "Seed bag and duct tape",
     "where": [
       {
         "containers": [
@@ -130,14 +130,14 @@
     ]
   },
   {
-    "body": "The jar’s paper label names a trial row. A thumbprint in its residue falls on a different roadside mark on the map. The date is on the wrapper, not on the object.",
+    "body": "The jar's paper label names a trial row. A thumbprint in its residue lands on another roadside mark on the map.",
     "id": "t0411-06",
     "kind": "set",
     "pieces": [
       "EmptyJar",
       "Map"
     ],
-    "title": "A sample without its field after the shift",
+    "title": "Empty jar and map",
     "where": [
       {
         "containers": [
@@ -156,14 +156,14 @@
     ]
   },
   {
-    "body": "The loaf is wrapped in clean cloth, the knot tied and sealed with barrier tape. A numbered paper tag beneath the tape shows a checkpoint designation and handwritten initials. Similar tags were used to mark processed belongings at the perimeter.",
+    "body": "The loaf is in clean cloth, tied and sealed with barrier tape. A numbered tag under the tape has a checkpoint code and initials. I think I've seen tags like this on belongings at the perimeter.",
     "id": "t0411-07",
     "kind": "set",
     "pieces": [
       "Bread",
       "DishCloth"
     ],
-    "title": "Loaf sealed at evacuation checkpoint",
+    "title": "Bread and dish cloth",
     "where": [
       {
         "containers": [
@@ -182,14 +182,14 @@
     ]
   },
   {
-    "body": "The sponge is dry and the soap worn only on one edge. Wrapped in barrier tape beside a small cup, with a numbered tag tied to the bag. The corner bears a hurried thumbprint from when they abandoned the post.",
+    "body": "The sponge is dry and the soap is worn on one edge. It's all wrapped in barrier tape with a small cup. There's a numbered tag tied to the bag.",
     "id": "t0411-08",
     "kind": "set",
     "pieces": [
       "Soap2",
       "Sponge"
     ],
-    "title": "Screening wash set, tagged",
+    "title": "Soap and sponge",
     "where": [
       {
         "containers": [
@@ -208,14 +208,14 @@
     ]
   },
   {
-    "body": "The card asks for supper to be kept warm. A ring from the sprayer crosses the writing before the ink has dried. One edge was kept dry beneath a coat.",
+    "body": "The card asks for supper to be kept warm. A ring from a sprayer runs across it, and the ink looks fresh.",
     "id": "t0411-09",
     "kind": "set",
     "pieces": [
       "GardeningSprayEmpty",
       "Postcard"
     ],
-    "title": "A warning carried home after the shift",
+    "title": "Empty sprayer and postcard",
     "where": [
       {
         "containers": [
@@ -234,14 +234,14 @@
     ]
   },
   {
-    "body": "Fine grains cling to the rim of a drinking glass. The fertilizer sack beside it was sealed with household thread. A short tally was added after the bundle was tied.",
+    "body": "There's powder residue inside the glass. The fertilizer bag is ripped open, half gone. Strange place to be spreading anything.",
     "id": "t0411-10",
     "kind": "set",
     "pieces": [
       "Fertilizer",
       "GlassTumbler"
     ],
-    "title": "Fertilizer and a dry cup after the shift",
+    "title": "Fertilizer and drinking glass",
     "where": [
       {
         "containers": [

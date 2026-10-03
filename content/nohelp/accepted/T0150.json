@@ -3,14 +3,14 @@
     "anchor": {
       "print": "McCoyLoggingCorp"
     },
-    "body": "The mill tool sheet records a saw crew sent home before its truck was cleared; the last sharpening charge is still billed to the next shift.",
+    "body": "The paper sheet says the crew was recalled early. Their axe lies here, job half-done. Someone still billed the next shift.",
     "id": "t0150-01",
     "kind": "set",
     "pieces": [
       "Axe",
       "SheetPaper2"
     ],
-    "title": "Tools on the unpaid shift",
+    "title": "Axe and paper sheet",
     "where": [
       {
         "containers": [

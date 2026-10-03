@@ -3,14 +3,14 @@
     "anchor": {
       "scene": "RZSOldFirepit"
     },
-    "body": "the hand axe with a seed sack carry silver specks from the orchard treatment. they were packed before the crossing was barricaded.",
+    "body": "The axe and seed sack have silver specks on them. I think they're from the orchard treatment. They were packed before the crossing was barricaded.",
     "id": "t0394-01",
     "kind": "set",
     "pieces": [
       "Axe",
       "SeedBag"
     ],
-    "title": "hand axe with a seed sack at during the hot afternoon",
+    "title": "Axe and seed sack",
     "where": [
       {
         "lean": "agricultural",
@@ -30,7 +30,7 @@
     "pieces": [
       "letter"
     ],
-    "title": "Firepit directions",
+    "title": "Letter",
     "where": [
       {
         "lean": "containment",

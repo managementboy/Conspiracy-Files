@@ -3,14 +3,14 @@
     "anchor": {
       "print": "HouseforSale799"
     },
-    "body": "The listing packet includes a water-test appointment after the move-in date. A note asks the owner to leave the kitchen tap unused: the well sits beside a sprayed field and the water has run cloudy.",
+    "body": "The listing packet has a water test booked after the move-in date. A note asks the owner to leave the kitchen tap unused. The well sits beside a sprayed field and the water has run cloudy.",
     "id": "t0267-01",
     "kind": "set",
     "pieces": [
       "WaterBottle",
       "Notebook"
     ],
-    "title": "Central listing sample",
+    "title": "Water bottle and notebook",
     "where": [
       {
         "containers": [

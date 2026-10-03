@@ -4,14 +4,14 @@
       "map": "EkronStashMap1",
       "mark": 1
     },
-    "body": "The factory tool sheet lists the sprayer nozzle as returned before the shift began; a grease thumbprint covers the signature.",
+    "body": "A screwdriver and paper sit together. The sheet logs equipment returns before the shift started. What were they spraying that early?",
     "id": "t0034-01",
     "kind": "set",
     "pieces": [
       "Screwdriver",
       "SheetPaper2"
     ],
-    "title": "Tool return",
+    "title": "Screwdriver and paper",
     "where": [
       {
         "containers": [

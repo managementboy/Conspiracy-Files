@@ -3,14 +3,14 @@
     "anchor": {
       "print": "HouseforSale818"
     },
-    "body": "the animal-feed sack is tied to the hand radio by a clipped lanyard that carries a roadblock pass. an empty loop shows where an identifying tag was cut off, and the headcount on the pass is blacked out. the radio's dial is held in place with barrier tape.",
+    "body": "The feed sack is tied to the radio by a clipped lanyard. It carries a roadblock pass with the headcount blacked out. An empty loop shows a tag was cut off; barrier tape holds the dial.",
     "id": "t0268-01",
     "kind": "set",
     "pieces": [
       "AnimalFeedBag",
       "WalkieTalkie1"
     ],
-    "title": "Roadblock pass on a feed sack",
+    "title": "Feed sack and radio",
     "where": [
       {
         "containers": [

@@ -3,14 +3,14 @@
     "anchor": {
       "print": "HighStreetApartments"
     },
-    "body": "The apartment service note asks for a water test because the tap water came up pale green; the rent card is stamped paid. A scrawled line says the neighbouring field was sprayed that week.",
+    "body": "The notebook logs chemical spray dates for nearby fields. The water bottle contains pale green water. A scrawled note mentions the tap color changed that week.",
     "id": "t0201-01",
     "kind": "set",
     "pieces": [
       "Notebook",
       "WaterBottle"
     ],
-    "title": "The luxury water check",
+    "title": "Notebook and water bottle",
     "where": [
       {
         "containers": [

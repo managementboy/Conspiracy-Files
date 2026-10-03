@@ -6,7 +6,7 @@
     "pieces": [
       "diary"
     ],
-    "title": "The first sick calf",
+    "title": "Diary entry",
     "where": [
       {
         "containers": [
@@ -31,7 +31,7 @@
     "pieces": [
       "notepad"
     ],
-    "title": "Sunday at the water trough",
+    "title": "Notepad page",
     "where": [
       {
         "containers": [
@@ -56,7 +56,7 @@
     "pieces": [
       "notebook"
     ],
-    "title": "The hay stayed clean",
+    "title": "Notebook page",
     "where": [
       {
         "containers": [
@@ -81,7 +81,7 @@
     "pieces": [
       "diary"
     ],
-    "title": "The feed before the fever",
+    "title": "Diary entry",
     "where": [
       {
         "containers": [
@@ -106,7 +106,7 @@
     "pieces": [
       "letter"
     ],
-    "title": "The open gate",
+    "title": "Letter",
     "where": [
       {
         "lean": "agricultural",
@@ -123,7 +123,7 @@
     "pieces": [
       "notepad"
     ],
-    "title": "The day the hens fell silent",
+    "title": "Notepad page",
     "where": [
       {
         "containers": [
@@ -148,7 +148,7 @@
     "pieces": [
       "diary"
     ],
-    "title": "The barn dust",
+    "title": "Diary entry",
     "where": [
       {
         "containers": [
@@ -173,7 +173,7 @@
     "pieces": [
       "notebook"
     ],
-    "title": "The second watering",
+    "title": "Notebook page",
     "where": [
       {
         "containers": [
@@ -198,7 +198,7 @@
     "pieces": [
       "receipt"
     ],
-    "title": "The morning after the delivery",
+    "title": "Receipt",
     "where": [
       {
         "containers": [
@@ -223,7 +223,7 @@
     "pieces": [
       "letter"
     ],
-    "title": "What the river did not reach",
+    "title": "Letter",
     "where": [
       {
         "lean": "agricultural",

@@ -3,14 +3,14 @@
     "anchor": {
       "print": "GnomeSweetGnome"
     },
-    "body": "The garden ornament receipt is attached to a grounds note: the display beds were sprayed with the trial mix, so staff should not water until the test strip dries. the leaves nearest the ornament are curling.",
+    "body": "A gnome receipt is attached to a grounds note. It says the beds were sprayed with a trial mix, so no watering. The leaves nearest the gnome are curling.",
     "id": "t0213-01",
     "kind": "set",
     "pieces": [
       "Mov_GardenGnome",
       "SheetPaper2"
     ],
-    "title": "The garden ornament order",
+    "title": "Garden gnome and paper",
     "where": [
       {
         "containers": [

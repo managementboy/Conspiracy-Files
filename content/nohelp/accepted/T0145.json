@@ -4,14 +4,14 @@
       "map": "WpStashMap13",
       "mark": 1
     },
-    "body": "A tally sheet groups losses by weapon and vehicle, but the line for who was brought back is empty. One tally has been copied twice.",
+    "body": "This paper lists weapons given out, including the bat. Column for who came back is empty. One entry repeats.",
     "id": "t0145-01",
     "kind": "set",
     "pieces": [
       "BaseballBat",
       "SheetPaper2"
     ],
-    "title": "Three tallies, no names",
+    "title": "Baseball bat and paper sheet",
     "where": [
       {
         "containers": [

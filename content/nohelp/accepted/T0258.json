@@ -3,14 +3,14 @@
     "anchor": {
       "print": "Coalfield"
     },
-    "body": "the fire extinguisher and camera are wrapped in a child's raincoat and sealed with barrier tape, a cordon sticker pressed over the seal. a number is inked on the sticker, and a second number is written under it, struck through.",
+    "body": "The extinguisher and camera are wrapped in a child's raincoat. They're sealed with barrier tape and a cordon sticker over the seal. The sticker has an inked number, and a struck-through one under it.",
     "id": "t0258-01",
     "kind": "set",
     "pieces": [
       "Extinguisher",
       "Camera"
     ],
-    "title": "Extinguisher and camera under a cordon sticker",
+    "title": "Fire extinguisher and camera",
     "where": [
       {
         "containers": [

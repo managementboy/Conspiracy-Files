@@ -4,14 +4,14 @@
       "map": "RosewoodStashMap3",
       "mark": 1
     },
-    "body": "The repair kit is left with a note to keep the school-side window closed until the sprayed ground dries, since the drift comes from the field beside the school. The family meeting time is written in the same hand.",
+    "body": "Someone left a hammer and nails by the window with a note. Keep it shut until the ground outside dries from the spraying. The meeting time for everyone is written in the same hand.",
     "id": "t0106-01",
     "kind": "set",
     "pieces": [
       "Hammer",
       "Nails"
     ],
-    "title": "Fortify while we wait",
+    "title": "Hammer and nails",
     "where": [
       {
         "containers": [

@@ -3,14 +3,14 @@
     "anchor": {
       "print": "ReadyPrep"
     },
-    "body": "A preparedness pack is tied to a route sheet marked with checkpoints; the list says the logs and seals are for the patrol only, and the pack is to be left at the first stop.",
+    "body": "I found a pack with a map showing checkpoint routes. Map notes say patrol use only, do not share with civilians. They left it behind at the first stop.",
     "id": "t0178-01",
     "kind": "set",
     "pieces": [
       "Bag_ALICEpack",
       "Map"
     ],
-    "title": "Pack tied to the route",
+    "title": "Pack and map",
     "where": [
       {
         "containers": [

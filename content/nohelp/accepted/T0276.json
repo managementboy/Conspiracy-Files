@@ -3,14 +3,14 @@
     "anchor": {
       "print": "QuillManor"
     },
-    "body": "the measuring tape and empty garden sprayer share a sticky pale-blue field residue from the same spray run. a few seed husks are stuck in the tape's housing.",
+    "body": "The tape and empty garden sprayer share a sticky pale-blue residue. I think it's from the same spray run. A few seed husks are stuck in the tape's housing.",
     "id": "t0276-01",
     "kind": "set",
     "pieces": [
       "MeasuringTape",
       "GardeningSprayEmpty"
     ],
-    "title": "Measuring tape carrying two traces",
+    "title": "Measuring tape and garden sprayer",
     "where": [
       {
         "containers": [

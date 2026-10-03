@@ -4,14 +4,14 @@
       "map": "MarchRidgeStashMap6",
       "mark": 1
     },
-    "body": "The hardware receipt is pinned to a building checklist marked secure; its final line asks who collected the key after the crew left.",
+    "body": "These nails are barely driven in, hammer lying right there. The barricade checklist is marked complete. Nobody came back to finish.",
     "id": "t0070-01",
     "kind": "set",
     "pieces": [
       "Hammer",
       "Nails"
     ],
-    "title": "The secured doorway",
+    "title": "Hammer and nails",
     "where": [
       {
         "containers": [

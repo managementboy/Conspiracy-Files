@@ -4,14 +4,14 @@
       "map": "LouisvilleStashMap8",
       "mark": 1
     },
-    "body": "A packet of pills is paired with a note to keep the third room ventilated after the field bottles are opened; the bottles' sweet smell gave the household headaches. The return line for the bottles is blank.",
+    "body": "A pills packet comes with a note: keep the third room aired. That's after the field bottles are opened; the smell gave headaches. The return line for the bottles is blank.",
     "id": "t0056-01",
     "kind": "set",
     "pieces": [
       "Pills",
       "Notebook"
     ],
-    "title": "Third door supply",
+    "title": "Pills and notebook",
     "where": [
       {
         "containers": [
