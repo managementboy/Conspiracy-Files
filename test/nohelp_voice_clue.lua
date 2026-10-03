@@ -15,28 +15,54 @@ Events=setmetatable({},{__index=function(t,k) local e={Add=function(f) ticks[#ti
 local V=require("NHShared/PlayerVoice")
 local function tick(ms) clock=clock+ms; V.drain() end
 
--- Pieces: sentences kept whole and joined up to PIECE_CHARS; an overlong
--- sentence is cut between words; nothing is lost.
+-- Lines: ONE sentence each, never joined (the halo never wraps, so a long line
+-- is one wide strip across the screen); an overlong sentence is cut between words.
 local s1="Placeholder sentence one is here."
-local long=string.rep("word ",60).."end."
-local text=s1.." Placeholder two. "..long
+local s2="Placeholder two."
+local long=string.rep("word ",40).."end."
+local two=V.pieces(s1.." "..s2)
+assert(#two==2 and two[1]==s1 and two[2]==s2,"two sentences are two lines, in order")
+local text=s1.." "..s2.." "..long
 local p=V.pieces(text)
-local joined=table.concat(p," ")
-assert(joined:gsub("%s+"," ")==text:gsub("%s+"," "),"every word is said, in order")
-for _,x in ipairs(p) do assert(#x<=V.PIECE_CHARS,"a piece fits: "..#x) end
-assert(p[1]==s1.." Placeholder two.","short sentences share a piece")
+assert(V.LINE_CHARS<=70 and V.LINE_CHARS>=60,"cap is about 60-70 characters")
+assert(table.concat(p," "):gsub("%s+"," ")==text:gsub("%s+"," "),"every word is said, in order")
+for _,x in ipairs(p) do
+    assert(#x<=V.LINE_CHARS,"a line fits the cap: "..#x)
+    assert(not x:find("^%s") and not x:find("%s$"),"no stray space at the ends")
+end
+assert(#p>=4 and p[1]==s1 and p[2]==s2,"short sentences stay whole and apart")
+for i=3,#p-1 do assert(p[i]:match("word$"),"a long sentence breaks at a word boundary, not inside one: "..p[i]) end
+assert(#V.pieces(string.rep("x",200))>=4,"an unbroken run is still cut to the cap")
+for _,x in ipairs(V.pieces(string.rep("x",200))) do assert(#x<=V.LINE_CHARS) end
 assert(#V.pieces("")==0 and #V.pieces(nil)==0,"no text, nothing said")
 
--- Said: the first piece at once, the rest each after the one before has had
--- its time; the halo carries the words, the bubble the title.
+-- Hold grows with length: 60 ms a character, never under 2.5 s.
+assert(V.readHold("Hi")==2500,"short lines hold the minimum")
+assert(V.readHold(string.rep("a",64))>V.readHold(string.rep("a",50)) and V.readHold(string.rep("a",64))==64*60,"hold scales with length")
+
+-- Said one at a time: never two lines before the first has had its hold.
 local n=V.sayClue("Placeholder Title",text)
-assert(n==#p and n>=3,"all pieces queued: "..n)
-assert(halos[1]==p[1] and says[1]=="Placeholder Title","first piece: words in the halo, title in the bubble")
-tick(100); assert(#halos==1,"the next piece waits while the first is read")
-for i=2,n do tick(20000); assert(halos[i]==p[i],"piece "..i.." follows in order") end
+assert(n==#p and n>=4,"all lines queued: "..n)
+assert(halos[1]==p[1] and says[1]=="Placeholder Title","first line: words in the halo, title in the bubble")
+for i=2,n do
+    local hold=V.readHold(p[i-1])
+    tick(hold-100); assert(#halos==i-1,"line "..i.." waits while line "..(i-1).." is read")
+    tick(100); assert(halos[i]==p[i] and #halos==i,"line "..i.." follows in order, alone")
+end
 assert(#says==n and says[n]=="Placeholder Title")
 
--- A diary is as long as it is: more pieces than the ordinary four-line bound.
+-- A cue goes through the same queue: it waits for the caption line showing.
+tick(20000); halos={}; says={}
+V.sayClue("T","Placeholder first line. Placeholder second line.")
+local ok1=V.sayCue("Placeholder cue words","Hm?")
+assert(#halos==1 and halos[1]=="Placeholder first line.","the cue does not land on the line being read")
+tick(20000); assert(halos[2]=="Placeholder second line." and #halos==2)
+tick(20000); assert(halos[3]=="Placeholder cue words" and says[3]=="Hm?" and #halos==3,"the cue is said in turn, bubble and halo together")
+tick(20000); assert(#halos==3)
+-- On its own a cue is said at once.
+tick(20000); V.sayCue("Alone","Hm?"); assert(halos[4]=="Alone")
+
+-- A diary is as long as it is: more lines than the ordinary four-line bound.
 local diary=string.rep("Placeholder diary line that goes on. ",40)
 local m=V.sayClue("Diary",diary)
 assert(m>4,"a long text is not cut to four lines: "..m)

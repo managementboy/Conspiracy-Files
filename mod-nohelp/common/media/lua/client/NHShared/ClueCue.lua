@@ -83,6 +83,13 @@ end
 local function say(player,line)
     local spoken=Rules.pickLine(Lines,recentSpoken,function(n) return Q.rand(n) end)
     Q.lastSpoken=spoken
+    -- Through PlayerVoice's queue when it is loaded, so a cue never lands on a
+    -- caption line being read (one line on screen at a time).
+    local okV,Voice=pcall(require,"NHShared/PlayerVoice")
+    if okV and type(Voice)=="table" and Voice.sayCue and spoken and spoken~=line then
+        local _,audible=Voice.sayCue(spoken,line)
+        return true,audible
+    end
     local halo=false
     if spoken and player.setHaloNote then
         halo=pcall(function() player:setHaloNote(spoken,255,255,255,HALO_DURATION) end)

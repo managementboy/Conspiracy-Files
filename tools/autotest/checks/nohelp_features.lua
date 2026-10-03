@@ -127,6 +127,20 @@ function K.spokenIsShipped()
     return false, "not a shipped line"
 end
 
+-- ---------------------------------------------------------------- spoken caption (E1)
+-- Placeholder words only. The same call R.inspect makes (voice.sayClue(title, body)); the lines it queues
+-- and the hold of each come back so the shell can time what the game really shows.
+function K.captionStart()
+    local V = require("NHShared/PlayerVoice")
+    local text = "Placeholder sentence one is said first. Placeholder sentence two is said second. "
+        .. string.rep("long ", 30) .. "end."
+    K.captionLines = V.pieces(text)
+    local holds = {}
+    for i, l in ipairs(K.captionLines) do holds[i] = V.readHold(l) end
+    local n = V.sayClue("Placeholder Title", text)
+    return n, table.concat(holds, ","), V.LINE_CHARS
+end
+
 -- ---------------------------------------------------------------- cars
 local function openGround(cx, cy, z)
     local cell = getCell()

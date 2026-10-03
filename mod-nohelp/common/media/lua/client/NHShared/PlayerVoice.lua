@@ -264,7 +264,7 @@ function V.drain()
     if t-lastSpokenAt<(V.HOLD_MS or lastHold) then return end
     local p=player(); if not p then return end
     local nextLine=table.remove(queue,1)
-    lastSpokenAt,lastHold=t,holdFor(nextLine.text)
+    lastSpokenAt,lastHold=t,nextLine.hold or holdFor(nextLine.text)
     deliver(p,nextLine.text,nextLine.label)
 end
 require("NHShared/Events/InteractionEvents").on("OnTick", V.drain)
@@ -377,28 +377,39 @@ end
 -- and the bubble its title. A long text is said a piece at a time, each piece
 -- held long enough to read; inspecting another clue drops what is left of the
 -- one before. Not bounded by QUEUE_MAX: a diary is as long as it is.
-V.PIECE_CHARS=140
+-- Why one sentence at a time, short: the white halo is TextDrawObject with
+-- maxCharsLine=-1 (IsoGameCharacter builds it with no wrap; checked in the
+-- game's own jar), so it NEVER wraps - a long text is one line across the
+-- whole screen (owner, 2026-10-03). The only fix is short lines. The bubble
+-- (ChatElement, 75 chars a line) does wrap; it carries the title.
+-- A line is one sentence; a longer one is cut between words.
+V.LINE_CHARS=64
+V.PIECE_CHARS=V.LINE_CHARS
+V.MS_PER_CHAR=60
+V.MIN_HOLD_MS=2500
+function V.readHold(text) return math.max(V.MIN_HOLD_MS,V.MS_PER_CHAR*#tostring(text)) end
 function V.pieces(text)
-    local out,cur={},""
-    local function push(s) if s~="" then out[#out+1]=s end end
-    local sentences={}
+    local out={}
+    local max=V.LINE_CHARS
     for sentence in tostring(text or ""):gsub("%s+"," "):gmatch("[^%.!?]+[%.!?]*%s*") do
         sentence=sentence:gsub("^%s+",""):gsub("%s+$","")
-        -- A sentence longer than a piece is cut between words.
-        while #sentence>V.PIECE_CHARS do
-            local cut=sentence:sub(1,V.PIECE_CHARS):match("^.*()%s") or V.PIECE_CHARS+1
-            sentences[#sentences+1]=sentence:sub(1,cut-1)
+        while #sentence>max do
+            local cut=sentence:sub(1,max+1):match("^.*()%s")
+            if not cut or cut<2 then cut=max+1 end
+            out[#out+1]=sentence:sub(1,cut-1)
             sentence=sentence:sub(cut):gsub("^%s+","")
         end
-        sentences[#sentences+1]=sentence
+        if sentence~="" then out[#out+1]=sentence end
     end
-    for _,sentence in ipairs(sentences) do
-        if cur=="" then cur=sentence
-        elseif #cur+1+#sentence<=V.PIECE_CHARS then cur=cur.." "..sentence
-        else push(cur); cur=sentence end
-    end
-    push(cur)
     return out
+end
+-- A short spoken cue ("Hm?" in the bubble, a varied line in the halo) goes
+-- through the same queue, so it never lands on a caption line being read.
+function V.sayCue(text,label)
+    local p=player(); if not p then return false,false end
+    text=tostring(text or "")
+    if text=="" or text==label then return false,false end
+    return speak(p,text,label)
 end
 function V.sayClue(title,text)
     local p=player(); if not p then return 0 end
@@ -408,7 +419,7 @@ function V.sayClue(title,text)
     queue=kept
     local list=V.pieces(text)
     for _,piece in ipairs(list) do
-        queue[#queue+1]={text=piece,label=(label~="" and label~=piece) and label or "...",reading=true}
+        queue[#queue+1]={text=piece,label=(label~="" and label~=piece) and label or "...",reading=true,hold=V.readHold(piece)}
     end
     log("clue text: "..#list.." piece(s) queued")
     V.drain()

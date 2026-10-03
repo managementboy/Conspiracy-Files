@@ -12,6 +12,8 @@
 #             findSeated stubbed out the same click recognises nothing.
 #   (c) KEY   debug Shift+L, a REAL key press on the game window, logs ev=clue_where naming the clue stood
 #             beside; plain L logs nothing; with the debug gate shut Shift+L logs nothing.
+#   (e) CAPTION a clue's spoken caption (PlayerVoice.sayClue) comes one short line at a time, each held as long
+#             as computed, never two together; screenshots of the first two lines kept.
 #   (d) QUIET the "observer unsupported" line: with the gate shut (a played game's normal state) and a loot
 #             panel rendering for 12 s there are 0 such lines; with IdentityObserver.verbose on there are
 #             some (control: proves the counter can see the line at all).
@@ -217,6 +219,38 @@ else
     verdict "(d) quiet observer line" NOT-EXERCISED "the control (verbose on) produced no line either, so 0 means nothing; no pane reached the observer"
 fi
 sleep 1
+
+# ------------------------------------------------------------------ (e) spoken caption, a line at a time
+CAP=NOT-EXERCISED; cap_why=""; e_fail0=${#fails[@]}
+cap_lines() { run_log | grep -c "ev=voice.*msg=.said 'Placeholder"; }
+ev 'return CFNH.teleport(1,1,0) and true' >/dev/null 2>&1 || true
+if [ -n "${SX:-}" ]; then ev "return CFNH.teleport($SX,$SY,$SZ)" >/dev/null; sleep 3; fi
+c0="$(cap_lines)"
+cs="$(ev 'return CFNH.captionStart()')"; ncap="$(cut -f1 <<<"$cs")"; holds="$(cut -f2 <<<"$cs")"; cap="$(cut -f3 <<<"$cs")"
+if is_number "$ncap" && [ "$ncap" -ge 4 ]; then
+    t0=$(date +%s.%N); last=$c0; prev_t=$t0; i=0; minratio=1
+    IFS=, read -ra H <<<"$holds"
+    while [ "$i" -lt "$ncap" ] && [ "$(echo "$(date +%s.%N) - $t0 < 60" | bc)" = 1 ]; do
+        cur="$(cap_lines)"
+        if [ "$cur" -gt "$last" ]; then
+            [ "$(( cur - last ))" = 1 ] || fail "caption: two lines appeared at once ($last -> $cur)"
+            tn=$(date +%s.%N); gap="$(echo "($tn - $prev_t) * 1000" | bc)"
+            if [ "$i" -gt 0 ]; then
+                need=$(( ${H[$((i-1))]} - 500 ))
+                [ "$(echo "$gap >= $need" | bc)" = 1 ] || fail "caption: line $((i+1)) came ${gap%.*} ms after line $i, hold is ${H[$((i-1))]}"
+            fi
+            if [ "$i" -le 1 ]; then "$PZ" shot "$RUNS/$id-nohelp-caption-$((i+1)).png" >/dev/null 2>&1 || true; fi
+            prev_t=$tn; last=$cur; i=$((i+1))
+        fi
+        sleep 0.15
+    done
+    [ "$i" = "$ncap" ] || fail "caption: only $i of $ncap lines were said in 60 s"
+    note "caption: $ncap lines (cap $cap chars) said one at a time, holds ms: $holds; screenshots $id-nohelp-caption-1.png, -2.png"
+else cap_why="could not start the caption ($(tr '\t' ' ' <<<"$cs"))"; note "caption: $cap_why"; fi
+if [ ${#fails[@]} -eq "$e_fail0" ] && [ -z "$cap_why" ]; then
+    verdict "(e) spoken caption" PROVEN-IN-GAME "$ncap short lines, one at a time, each held as long as computed"
+elif [ ${#fails[@]} -gt "$e_fail0" ]; then verdict "(e) spoken caption" FAILED "see FAIL lines"
+else verdict "(e) spoken caption" NOT-EXERCISED "$cap_why"; fi
 
 # ------------------------------------------------------------------ (b) clue in the seated car's container
 SEAT=NOT-EXERCISED; seat_why=""; seat_how=""
