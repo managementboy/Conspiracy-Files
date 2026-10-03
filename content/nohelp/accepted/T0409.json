@@ -1,6 +1,6 @@
 [
   {
-    "body": "The jar is dusted with the same yellow grains as the torn sack. Its label names a test plot, but the string tying them together is wet with roadside mud. The date is on the wrapper, not on the object.",
+    "body": "Yellow grains crust the jar's rim and spill from the torn seed sack tied to it. The sack's label names a test plot. The string has been retied since morning.",
     "id": "t0409-01",
     "kind": "set",
     "pieces": [
@@ -52,7 +52,7 @@
     ]
   },
   {
-    "body": "One cuff holds field dust; the other is stained with kitchen soap. The empty sprayer was carried past a household door. The corner still bears a hurried thumbprint.",
+    "body": "One cuff of the gloves is caked with field dust; the other is stained with kitchen soap. The empty sprayer tied to them still smells of orchard rows. The corner still bears a hurried thumbprint.",
     "id": "t0409-03",
     "kind": "set",
     "pieces": [
@@ -130,7 +130,7 @@
     ]
   },
   {
-    "body": "The jar’s paper label names a trial row. A thumbprint in its residue falls on a different roadside mark on the map. The string has been retied since morning.",
+    "body": "The jar's paper label names a trial row, and the residue inside matches a plot marked on the map. The string has been retied since morning.",
     "id": "t0409-06",
     "kind": "set",
     "pieces": [
@@ -182,7 +182,7 @@
     ]
   },
   {
-    "body": "The sponge is green at the center and the soap is worn only on one edge. Both were wrapped in a bag beside a small cup. A strip of cloth keeps the pair together.",
+    "body": "The sponge is green at the center and the soap is worn only on one edge, both dusted with fine field grains. They were wrapped in a bag beside a small cup stained with spray residue. A strip of cloth keeps the pair together.",
     "id": "t0409-08",
     "kind": "set",
     "pieces": [
@@ -208,14 +208,14 @@
     ]
   },
   {
-    "body": "The card asks for supper to be kept warm. A ring from the sprayer crosses the writing before the ink has dried. The corner still bears a hurried thumbprint.",
+    "body": "The card asks for supper to be kept warm. A ring from the sprayer crosses the writing, and fine pale grains lie in the fold. The corner still bears a hurried thumbprint.",
     "id": "t0409-09",
     "kind": "set",
     "pieces": [
       "GardeningSprayEmpty",
       "Postcard"
     ],
-    "title": "A warning carried home at first light",
+    "title": "Pale grains on a postcard at first light",
     "where": [
       {
         "containers": [

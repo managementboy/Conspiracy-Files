@@ -14,12 +14,12 @@
       "quote": "Taco del Pancho",
       "source": "print:TacodelPancho"
     },
-    "gloss": "A crew rinse interrupts a restaurant order but leaves the charge in place.",
+    "gloss": "A crew rinsing sprayer parts interrupts a restaurant order.",
     "prov": {
       "batch": "T0154",
       "handoff": "2026-09-28",
       "writer": "ChatGPT"
     },
-    "rival_reading": "An emergency team could have rinsed equipment after a closure; the jar and cancelled meal do not identify what was washed."
+    "rival_reading": "None: one-sided on purpose"
   }
 }

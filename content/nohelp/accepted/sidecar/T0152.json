@@ -37,12 +37,12 @@
       "quote": "West Maple Country Club",
       "source": "print:WestMapleCountryClub"
     },
-    "gloss": "Two course notices disagree about whether the grounds were ready.",
+    "gloss": "Two course notices disagree about whether a sprayed strip was dry.",
     "prov": {
       "batch": "T0152",
       "handoff": "2026-09-28",
       "writer": "ChatGPT"
     },
-    "rival_reading": "A response crew could have restricted the grounds while checking a spill; the sheet does not identify the substance."
+    "rival_reading": "None: one-sided on purpose"
   }
 }

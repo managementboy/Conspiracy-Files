@@ -3,14 +3,14 @@
     "anchor": {
       "scene": "RVSAmbulanceCrash"
     },
-    "body": "The cut potato with a soil jar are tied in one bundle. a greasy sheen marks the field side; torn warning tape marks the other.",
+    "body": "The cut potato and the empty jar are tied in one bundle with torn red warning tape, the cordon kind. A paper tag with only a number on it hangs from the knot.",
     "id": "t0356-01",
     "kind": "set",
     "pieces": [
       "Potato",
       "EmptyJar"
     ],
-    "title": "Cut potato with a soil jar at at Tuesday dawn",
+    "title": "Cut potato and empty jar, Tuesday dawn",
     "where": [
       {
         "lean": "containment",
@@ -24,7 +24,7 @@
     "anchor": {
       "scene": "RVSAmbulanceCrash"
     },
-    "body": "My sister was brought from the treated rows before anybody called the ambulance. The crew asked for her work clothes to be put in a separate sack. By the time they reached us, three neighbors who never entered the field had the same burning eyes.",
+    "body": "My sister came in from the treated rows with burning eyes and blistered hands. Her work clothes reeked of the spray. By evening three neighbors who never entered the field had the same burning eyes.",
     "id": "t0356-02",
     "kind": "written",
     "pieces": [

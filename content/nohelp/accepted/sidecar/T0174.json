@@ -14,12 +14,12 @@
       "quote": "Havisham Suites",
       "source": "print:HavishamSuites"
     },
-    "gloss": "A room charge closes while a water test remains pending.",
+    "gloss": "A room charge closes while a residue test remains pending.",
     "prov": {
       "batch": "T0174",
       "handoff": "2026-09-28",
       "writer": "ChatGPT"
     },
-    "rival_reading": "A response team could test water before reopening a room; the list does not identify what caused the check."
+    "rival_reading": "None: one-sided on purpose"
   }
 }

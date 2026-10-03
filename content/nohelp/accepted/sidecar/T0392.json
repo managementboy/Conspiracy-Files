@@ -10,13 +10,13 @@
         "c-failure"
       ]
     },
-    "gloss": "A mixed bundle keeps field activity and emergency response equally plausible.",
+    "gloss": "Response gear stripped of its tag.",
     "prov": {
       "batch": "T0392",
       "handoff": "2026-09-27",
       "writer": "ChatGPT"
     },
-    "rival_reading": "The bundle could belong to field workers caught in a response or responders crossing a work site; it preserves both readings."
+    "rival_reading": "None: one-sided on purpose"
   },
   "t0392-02": {
     "axioms": {

@@ -8,13 +8,13 @@
         "c-failure"
       ]
     },
-    "gloss": "A trace of trial material appears beyond a field boundary.",
+    "gloss": "One-sided on purpose.",
     "prov": {
       "batch": "T0423",
       "handoff": "2026-09-27",
       "writer": "ChatGPT"
     },
-    "rival_reading": "The emergency response could have moved or contaminated these things."
+    "rival_reading": "None: one-sided on purpose"
   },
   "t0423-02": {
     "axioms": {
@@ -25,13 +25,13 @@
         "c-failure"
       ]
     },
-    "gloss": "A trace of trial material appears beyond a field boundary.",
+    "gloss": "One-sided on purpose.",
     "prov": {
       "batch": "T0423",
       "handoff": "2026-09-27",
       "writer": "ChatGPT"
     },
-    "rival_reading": "The emergency response could have moved or contaminated these things."
+    "rival_reading": "None: one-sided on purpose"
   },
   "t0423-03": {
     "axioms": {
@@ -42,13 +42,13 @@
         "c-failure"
       ]
     },
-    "gloss": "A trace of trial material appears beyond a field boundary.",
+    "gloss": "One-sided on purpose.",
     "prov": {
       "batch": "T0423",
       "handoff": "2026-09-27",
       "writer": "ChatGPT"
     },
-    "rival_reading": "The emergency response could have moved or contaminated these things."
+    "rival_reading": "None: one-sided on purpose"
   },
   "t0423-04": {
     "axioms": {
@@ -82,7 +82,7 @@
       "handoff": "2026-09-27",
       "writer": "ChatGPT"
     },
-    "rival_reading": "The emergency response could have moved or contaminated these things."
+    "rival_reading": "None: one-sided on purpose"
   },
   "t0423-06": {
     "axioms": {
@@ -99,7 +99,7 @@
       "handoff": "2026-09-27",
       "writer": "ChatGPT"
     },
-    "rival_reading": "The emergency response could have moved or contaminated these things."
+    "rival_reading": "None: one-sided on purpose"
   },
   "t0423-07": {
     "axioms": {
@@ -116,7 +116,7 @@
       "handoff": "2026-09-27",
       "writer": "ChatGPT"
     },
-    "rival_reading": "The emergency response could have moved or contaminated these things."
+    "rival_reading": "None: one-sided on purpose"
   },
   "t0423-08": {
     "axioms": {
@@ -150,7 +150,7 @@
       "handoff": "2026-09-27",
       "writer": "ChatGPT"
     },
-    "rival_reading": "The emergency response could have moved or contaminated these things."
+    "rival_reading": "None: one-sided on purpose"
   },
   "t0423-10": {
     "axioms": {
@@ -167,6 +167,6 @@
       "handoff": "2026-09-27",
       "writer": "ChatGPT"
     },
-    "rival_reading": "The emergency response could have moved or contaminated these things."
+    "rival_reading": "None: one-sided on purpose"
   }
 }

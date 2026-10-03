@@ -10,13 +10,13 @@
         "c-orders"
       ]
     },
-    "gloss": "A personal trace connects a farm trial to symptoms before a later restriction.",
+    "gloss": "A personal trace connects a sprayer test to dizziness and scorched corn.",
     "prov": {
       "batch": "T0334",
       "handoff": "2026-09-27",
       "writer": "ChatGPT"
     },
-    "rival_reading": "Emergency workers could have picked up the same yellow dust while responding near a field; this personal trace does not prove the trial caused the emergency."
+    "rival_reading": "None: one-sided on purpose"
   },
   "t0334-02": {
     "axioms": {

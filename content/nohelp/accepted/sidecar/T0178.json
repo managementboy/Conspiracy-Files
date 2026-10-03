@@ -14,12 +14,12 @@
       "quote": "Ready Prep",
       "source": "print:ReadyPrep"
     },
-    "gloss": "A field briefing leaves protective gear optional.",
+    "gloss": "A spray-test briefing leaves protective gear optional.",
     "prov": {
       "batch": "T0178",
       "handoff": "2026-09-28",
       "writer": "ChatGPT"
     },
-    "rival_reading": "Containment officials could issue optional gear during a changing response; the checklist does not prove anyone knew the danger."
+    "rival_reading": "None: one-sided on purpose"
   }
 }

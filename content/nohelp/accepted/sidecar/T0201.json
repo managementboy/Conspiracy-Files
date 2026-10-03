@@ -14,12 +14,12 @@
       "quote": "High Street Apartments",
       "source": "print:HighStreetApartments"
     },
-    "gloss": "A prepaid apartment waits on a water test.",
+    "gloss": "A prepaid apartment has green tap water beside a sprayed field.",
     "prov": {
       "batch": "T0201",
       "handoff": "2026-09-28",
       "writer": "ChatGPT"
     },
-    "rival_reading": "A response inspection could test water before reopening a unit; the note does not say why the test was ordered."
+    "rival_reading": "None: one-sided on purpose"
   }
 }

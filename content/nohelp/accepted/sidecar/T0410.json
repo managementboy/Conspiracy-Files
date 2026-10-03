@@ -42,13 +42,13 @@
         "c-failure"
       ]
     },
-    "gloss": "A trace of route or evacuation accounting is kept with a personal detail.",
+    "gloss": "Supplies readied for a transport seat that went empty.",
     "prov": {
       "batch": "T0410",
       "handoff": "2026-09-27",
       "writer": "ChatGPT"
     },
-    "rival_reading": "The field program could have forced the response to improvise."
+    "rival_reading": "None: one-sided on purpose"
   },
   "t0410-04": {
     "axioms": {

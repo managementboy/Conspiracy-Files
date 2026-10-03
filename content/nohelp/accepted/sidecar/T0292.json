@@ -10,13 +10,13 @@
         "c-orders"
       ]
     },
-    "gloss": "A hairdresser records matching residue on field workers before a road closure.",
+    "gloss": "A hairdresser records matching residue on field workers after a crop trial spraying.",
     "prov": {
       "batch": "T0292",
       "handoff": "2026-09-27",
       "writer": "ChatGPT"
     },
-    "rival_reading": "The matching smell and road closure could mark exposure discovered during an emergency response rather than a farm program that caused it."
+    "rival_reading": "None: one-sided on purpose"
   },
   "t0292-02": {
     "axioms": {

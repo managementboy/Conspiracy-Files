@@ -3,14 +3,14 @@
     "anchor": {
       "scene": "RZSRockerParty"
     },
-    "body": "A fresh battery and field radio are wrapped together. Red field grit fills the speaker; county warning tape covers the tuning dial.",
+    "body": "A fresh battery and field radio are wrapped together. Red field grit fills the speaker; a smear of dried spray coats the tuning dial.",
     "id": "t0399-01",
     "kind": "set",
     "pieces": [
       "Battery",
       "RadioBlack"
     ],
-    "title": "field radio wrapped in warning tape",
+    "title": "field radio caked in field grit",
     "where": [
       {
         "lean": "agricultural",

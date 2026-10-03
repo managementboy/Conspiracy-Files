@@ -10,13 +10,13 @@
         "c-orders"
       ]
     },
-    "gloss": "A personal trace connects a farm trial to symptoms before a later restriction.",
+    "gloss": "Field residue from a farm trial sits on the belongings, before any restriction.",
     "prov": {
       "batch": "T0351",
       "handoff": "2026-09-27",
       "writer": "ChatGPT"
     },
-    "rival_reading": "Emergency workers could have picked up the same blue powder while responding near a field; this personal trace does not prove the trial caused the emergency."
+    "rival_reading": "None: one-sided on purpose"
   },
   "t0351-02": {
     "axioms": {

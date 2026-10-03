@@ -14,12 +14,12 @@
       "quote": "Louisville Police Headquarters",
       "source": "print:LVPDHQ"
     },
-    "gloss": "The seminar room opens after its demonstration kit leaves.",
+    "gloss": "A seminar room stamped quarantine after its kit was removed under orders.",
     "prov": {
       "batch": "T0238",
       "handoff": "2026-09-28",
       "writer": "ChatGPT"
     },
-    "rival_reading": "A field crew could collect a training kit early; the sheets do not say why the room was held."
+    "rival_reading": "None: one-sided on purpose"
   }
 }

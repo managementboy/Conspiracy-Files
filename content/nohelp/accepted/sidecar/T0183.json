@@ -14,12 +14,12 @@
       "quote": "Spiffo's Hiring! (Louisville)",
       "source": "print:SpiffosHiringLouisville"
     },
-    "gloss": "One employee is recorded at two simultaneous briefings.",
+    "gloss": "One employee is rostered for food service and a crop-spraying briefing at once.",
     "prov": {
       "batch": "T0183",
       "handoff": "2026-09-28",
       "writer": "ChatGPT"
     },
-    "rival_reading": "A response crew could hold overlapping training during an emergency; the roster does not explain the duplicate attendance."
+    "rival_reading": "None: one-sided on purpose"
   }
 }

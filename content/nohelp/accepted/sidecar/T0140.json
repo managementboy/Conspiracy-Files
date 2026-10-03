@@ -14,12 +14,12 @@
       "quote": "marked address in West Point",
       "source": "map:WpStashMap7"
     },
-    "gloss": "Equipment leaves without a recorded field location or return.",
+    "gloss": "Spray equipment leaves without a recorded plot or return.",
     "prov": {
       "batch": "T0140",
       "handoff": "2026-09-28",
       "writer": "ChatGPT"
     },
-    "rival_reading": "A response team could check out the same equipment for cleanup; the empty location line does not identify the task."
+    "rival_reading": "None: one-sided on purpose"
   }
 }

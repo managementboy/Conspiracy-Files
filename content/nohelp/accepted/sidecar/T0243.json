@@ -14,12 +14,12 @@
       "quote": "House for Sale (no. 860)",
       "source": "print:HouseforSale860"
     },
-    "gloss": "A tenant moves in before the water sample is checked.",
+    "gloss": "A tenant moves in beside sprayed fields and sweet-smelling water.",
     "prov": {
       "batch": "T0243",
       "handoff": "2026-09-28",
       "writer": "ChatGPT"
     },
-    "rival_reading": "A response crew could test water after a tenant moved in; the note does not say what raised concern."
+    "rival_reading": "None: one-sided on purpose"
   }
 }

@@ -3,7 +3,7 @@
     "anchor": {
       "print": "FarmingAndRuralSupplyDoeValley"
     },
-    "body": "The supply receipt groups seeds, tools, and firearms in one pickup; the return sheet records the vehicle before the delivery was signed.",
+    "body": "The supply receipt groups sandbags, bleach, ammunition and a few seed packets in one pickup under a checkpoint order; the return sheet logs the vehicle in before the delivery was signed, passenger count blanked.",
     "id": "t0226-01",
     "kind": "set",
     "pieces": [

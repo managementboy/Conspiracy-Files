@@ -104,7 +104,7 @@
     ]
   },
   {
-    "body": "Two buckets were left out, one under the roof and one beyond it. Only the open one has a powder ring after the rain.",
+    "body": "Two buckets were left out, one under the roof and one beyond it. Only the open one has a powder ring from the field spray after the rain, and the seedling in it has wilted.",
     "id": "t0434-05",
     "kind": "set",
     "pieces": [
@@ -182,14 +182,14 @@
     ]
   },
   {
-    "body": "The clean cloth was hung indoors. The cloth from the outside line catches green grit in its weave.",
+    "body": "The clean cloth was hung indoors. The cloth from the outside line catches green spray grit in its weave, and a crop seedling pinned in the fold has yellowed.",
     "id": "t0434-08",
     "kind": "set",
     "pieces": [
       "RippedSheets",
       "Rope"
     ],
-    "title": "The closed window",
+    "title": "The cloth on the line",
     "where": [
       {
         "containers": [

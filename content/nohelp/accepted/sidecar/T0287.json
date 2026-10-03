@@ -10,13 +10,13 @@
         "c-orders"
       ]
     },
-    "gloss": "Field residue and response material share one personal bundle.",
+    "gloss": "A personal bundle carrying field dust, spray residue and seed husks.",
     "prov": {
       "batch": "T0287",
       "handoff": "2026-09-27",
       "writer": "ChatGPT"
     },
-    "rival_reading": "Field work and a hurried emergency response could each explain the mixed residue and road tape; neither fixes which came first."
+    "rival_reading": "None: one-sided on purpose"
   },
   "t0287-02": {
     "axioms": {
@@ -29,12 +29,12 @@
         "c-accounting"
       ]
     },
-    "gloss": "A personal account or object records an intervention that left part of the account missing.",
+    "gloss": "A jar of ash packed for evacuation, tagged and sealed.",
     "prov": {
       "batch": "T0287",
       "handoff": "2026-09-27",
       "writer": "ChatGPT"
     },
-    "rival_reading": "A farmer might have saved a sample of ash from a failed field treatment."
+    "rival_reading": "None: one-sided on purpose"
   }
 }

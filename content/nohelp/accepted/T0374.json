@@ -3,14 +3,14 @@
     "anchor": {
       "scene": "RVSUtilityVehicle"
     },
-    "body": "the stiff mop with a rinse bucket are tied in one bundle. a cloying orchard smell marks the field side; torn warning tape marks the other.",
+    "body": "The stiff mop and the rinse bucket are tied in one bundle with torn warning tape. A paper tag with only a number on it hangs from the knot, and a stamp is smudged on the bucket.",
     "id": "t0374-01",
     "kind": "set",
     "pieces": [
       "Mop",
       "Bucket"
     ],
-    "title": "stiff mop with a rinse bucket at the first morning",
+    "title": "Mop and rinse bucket, the first morning",
     "where": [
       {
         "lean": "containment",
@@ -24,7 +24,7 @@
     "anchor": {
       "scene": "RVSUtilityVehicle"
     },
-    "body": "A maintenance crew carried a tank used on the trial rows, still damp around the valve. They were sent to wash the road before the line of vehicles passed. I saw a worker rinse his hands in a ditch that flowed toward the houses.",
+    "body": "A crew carried a tank used on the trial rows, still damp around the valve. I saw a worker rinse his hands in a ditch that flows toward the houses. The grass along that ditch was yellow.",
     "id": "t0374-02",
     "kind": "written",
     "pieces": [

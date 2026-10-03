@@ -10,13 +10,13 @@
         "c-failure"
       ]
     },
-    "gloss": "A mixed bundle keeps field activity and emergency response equally plausible.",
+    "gloss": "Warning tape and a numbered tag mark this bundle as handled under emergency orders.",
     "prov": {
       "batch": "T0374",
       "handoff": "2026-09-27",
       "writer": "ChatGPT"
     },
-    "rival_reading": "The bundle could belong to field workers caught in a response or responders crossing a work site; it preserves both readings."
+    "rival_reading": "None: one-sided on purpose"
   },
   "t0374-02": {
     "axioms": {
@@ -33,6 +33,6 @@
       "handoff": "2026-09-27",
       "writer": "ChatGPT"
     },
-    "rival_reading": "The containment response might explain a contaminated object or warning being displaced."
+    "rival_reading": "None: one-sided on purpose"
   }
 }

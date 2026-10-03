@@ -14,12 +14,12 @@
       "quote": "House for Sale (no. 943)",
       "source": "print:HouseforSale943"
     },
-    "gloss": "A property is signed off before its water sample is dated.",
+    "gloss": "A property survey ties a water color change to crop damage nearby.",
     "prov": {
       "batch": "T0221",
       "handoff": "2026-09-28",
       "writer": "ChatGPT"
     },
-    "rival_reading": "A response inspection could request water tests after viewing a property; the form does not identify what changed the color."
+    "rival_reading": "None: one-sided on purpose"
   }
 }

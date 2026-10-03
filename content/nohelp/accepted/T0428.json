@@ -26,14 +26,14 @@
     ]
   },
   {
-    "body": "The soil on this shovel stops at a sharp pale band. Someone rinsed one side and left the other coated in field grit.",
+    "body": "The soil on this shovel stops at a sharp pale band. Above it the blade is crusted with spray residue and field grit; the bucket beside it holds stunted seedlings.",
     "id": "t0428-02",
     "kind": "set",
     "pieces": [
       "HandShovel",
       "Bucket"
     ],
-    "title": "The washed border",
+    "title": "The sprayed shovel",
     "where": [
       {
         "lean": "agricultural",

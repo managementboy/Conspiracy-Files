@@ -10,13 +10,13 @@
         "c-orders"
       ]
     },
-    "gloss": "A personal trace places field-program residue before a later restriction.",
+    "gloss": "A personal trace places trial spray residue in a drink and on nearby trees.",
     "prov": {
       "batch": "T0315",
       "handoff": "2026-09-27",
       "writer": "ChatGPT"
     },
-    "rival_reading": "Emergency workers could have encountered the same residue while responding; the personal trace does not by itself prove the field program caused the emergency."
+    "rival_reading": "None: one-sided on purpose"
   },
   "t0315-02": {
     "axioms": {
@@ -29,12 +29,12 @@
         "c-accounting"
       ]
     },
-    "gloss": "An altered count or retained object was left at the scene.",
+    "gloss": "A list of names was taken and its owners were not to be told.",
     "prov": {
       "batch": "T0315",
       "handoff": "2026-09-27",
       "writer": "ChatGPT"
     },
-    "rival_reading": "A response to an agricultural exposure could explain the same record or object."
+    "rival_reading": "None: one-sided on purpose"
   }
 }

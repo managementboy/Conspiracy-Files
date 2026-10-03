@@ -4,7 +4,7 @@
       "map": "BBurgStashMap5",
       "mark": 1
     },
-    "body": "Do not sell the catch until the county finishes its water check. They called it routine, but the fish order is still in the icebox and the supplier wants payment.\n\nI meant to ask about it in the morning. By then the person who could answer had gone with the last vehicle, and this was all that remained.\n\nI thought someone would ask for this at the gate. They asked instead how many were in the car, and let the paper stay in my hand.",
+    "body": "Do not sell the catch until the county finishes its water check. They called it routine, but the fish order is still in the icebox and the supplier wants payment.\n\nThe pond below the sprayed field had gone cloudy and the fish were up at the surface. I meant to ask about the runoff in the morning, but the farm crew had already left, and this was all that remained.",
     "id": "t0030-01",
     "kind": "written",
     "pieces": [
@@ -33,14 +33,14 @@
       "map": "BBurgStashMap5",
       "mark": 1
     },
-    "body": "green crop residue marks the empty sandbag; a scraped warning stripe marks the water bottle. both are tied with the same cord.",
+    "body": "a scraped warning stripe marks the empty sandbag; a quarantine seal is stuck over the water bottle's cap. both are tied with the same cord.",
     "id": "t0030-02",
     "kind": "set",
     "pieces": [
       "EmptySandbag",
       "WaterBottle"
     ],
-    "title": "Empty sandbag with the second residue",
+    "title": "Empty sandbag with the second seal",
     "where": [
       {
         "containers": [

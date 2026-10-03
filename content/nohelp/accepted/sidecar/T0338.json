@@ -10,13 +10,13 @@
         "c-orders"
       ]
     },
-    "gloss": "A personal trace connects a farm trial to symptoms before a later restriction.",
+    "gloss": "A personal trace connects a fertilizer test to a sick dog and dying clover.",
     "prov": {
       "batch": "T0338",
       "handoff": "2026-09-27",
       "writer": "ChatGPT"
     },
-    "rival_reading": "Emergency workers could have picked up the same blue powder while responding near a field; this personal trace does not prove the trial caused the emergency."
+    "rival_reading": "None: one-sided on purpose"
   },
   "t0338-02": {
     "axioms": {

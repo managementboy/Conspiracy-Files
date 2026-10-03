@@ -3,14 +3,14 @@
     "anchor": {
       "scene": "RVSCarCrashDeer"
     },
-    "body": "The hand axe with a seed sack are tied in one bundle. an acrid film marks the field side; torn warning tape marks the other.",
+    "body": "The hand axe and the seed sack are tied in one bundle with torn warning tape, stamped along its length. A paper tag with only a number on it hangs from the knot.",
     "id": "t0362-01",
     "kind": "set",
     "pieces": [
       "Axe",
       "SeedBag"
     ],
-    "title": "Hand axe with a seed sack at on the cold night",
+    "title": "Hand axe and seed sack, the cold night",
     "where": [
       {
         "lean": "containment",
@@ -24,7 +24,7 @@
     "anchor": {
       "scene": "RVSCarCrashDeer"
     },
-    "body": "The deer came from a pasture that had been sprayed yesterday. Its mouth was wet with a bitter smell; the driver said the creek near the rows smelled the same. We had just crossed the county line and had not heard any warning about the fields.",
+    "body": "The deer came from a pasture that had been sprayed yesterday. Its mouth was wet with a bitter smell, and its legs shook. The driver said the creek near the rows smelled the same.",
     "id": "t0362-02",
     "kind": "written",
     "pieces": [

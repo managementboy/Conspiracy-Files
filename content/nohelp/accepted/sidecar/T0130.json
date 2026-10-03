@@ -10,13 +10,13 @@
         "c-failure"
       ]
     },
-    "gloss": "Garden supplies remain with their directions missing.",
+    "gloss": "Seed supplies with residue remain with their plot directions missing.",
     "prov": {
       "batch": "T0130",
       "handoff": "2026-09-28",
       "writer": "ChatGPT"
     },
-    "rival_reading": "A household garden could leave the same supplies together; the missing page does not identify the crop or its purpose."
+    "rival_reading": "None: one-sided on purpose"
   },
   "t0130-02": {
     "axioms": {
@@ -35,7 +35,7 @@
       "handoff": "2026-09-29",
       "writer": "ChatGPT"
     },
-    "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work."
+    "rival_reading": "None: one-sided on purpose"
   },
   "t0130-03": {
     "axioms": {
@@ -54,7 +54,7 @@
       "handoff": "2026-09-29",
       "writer": "ChatGPT"
     },
-    "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work."
+    "rival_reading": "None: one-sided on purpose"
   },
   "t0130-04": {
     "axioms": {
@@ -73,7 +73,7 @@
       "handoff": "2026-09-29",
       "writer": "ChatGPT"
     },
-    "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work."
+    "rival_reading": "None: one-sided on purpose"
   },
   "t0130-05": {
     "axioms": {
@@ -111,6 +111,6 @@
       "handoff": "2026-09-29",
       "writer": "ChatGPT"
     },
-    "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work."
+    "rival_reading": "None: one-sided on purpose"
   }
 }

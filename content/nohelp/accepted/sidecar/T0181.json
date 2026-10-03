@@ -14,12 +14,12 @@
       "quote": "Lectromax Manufacturing Job Ad",
       "source": "print:LectromaxManufacturingJobAd"
     },
-    "gloss": "A factory test and tool return are recorded before the operator’s shift.",
+    "gloss": "An operator's tools carry seed-coating from a test run logged before the shift.",
     "prov": {
       "batch": "T0181",
       "handoff": "2026-09-28",
       "writer": "ChatGPT"
     },
-    "rival_reading": "Emergency maintenance could require the same operator and test; the list does not identify what the machine was testing."
+    "rival_reading": "None: one-sided on purpose"
   }
 }

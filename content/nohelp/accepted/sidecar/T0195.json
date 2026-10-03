@@ -14,12 +14,12 @@
       "quote": "House for Sale (no. 903)",
       "source": "print:HouseforSale903"
     },
-    "gloss": "A water check is tied to a room before its next occupant.",
+    "gloss": "A tenant-room water sample is tied to cloudy water and crop-trial spray.",
     "prov": {
       "batch": "T0195",
       "handoff": "2026-09-28",
       "writer": "ChatGPT"
     },
-    "rival_reading": "A landlord could test water before any occupancy; the note does not say what prompted the sample."
+    "rival_reading": "None: one-sided on purpose"
   }
 }

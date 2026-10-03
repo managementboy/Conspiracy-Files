@@ -10,13 +10,13 @@
         "c-orders"
       ]
     },
-    "gloss": "Field residue and response material share one ambiguous bundle.",
+    "gloss": "One-sided on purpose.",
     "prov": {
       "batch": "T0399",
       "handoff": "2026-09-27",
       "writer": "ChatGPT"
     },
-    "rival_reading": "Field workers and emergency responders could each have made this mixed bundle; it does not settle which activity came first."
+    "rival_reading": "None: one-sided on purpose"
   },
   "t0399-02": {
     "axioms": {

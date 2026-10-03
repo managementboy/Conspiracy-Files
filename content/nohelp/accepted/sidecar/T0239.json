@@ -14,12 +14,12 @@
       "quote": "Riverside Police",
       "source": "print:RiversidePD"
     },
-    "gloss": "The safety briefing closes before the site inspection and sample check.",
+    "gloss": "Field samples behind a range are logged before inspection, with sprayed rows noted.",
     "prov": {
       "batch": "T0239",
       "handoff": "2026-09-28",
       "writer": "ChatGPT"
     },
-    "rival_reading": "A containment detail could inspect a range after a safety check; the card does not identify the samples."
+    "rival_reading": "None: one-sided on purpose"
   }
 }

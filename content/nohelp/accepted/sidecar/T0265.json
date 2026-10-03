@@ -14,12 +14,12 @@
       "quote": "Hobbs & Perkins Hardware (Irvington)",
       "source": "print:HobbsandPerkinsHardware"
     },
-    "gloss": "A repair shipment waits on a soil test.",
+    "gloss": "Repairs wait on a soil test after trial rows yellowed.",
     "prov": {
       "batch": "T0265",
       "handoff": "2026-09-28",
       "writer": "ChatGPT"
     },
-    "rival_reading": "A response crew could pause repairs while checking ground safety; the note does not identify what was tested."
+    "rival_reading": "None: one-sided on purpose"
   }
 }

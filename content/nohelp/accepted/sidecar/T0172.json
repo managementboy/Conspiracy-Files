@@ -14,12 +14,12 @@
       "quote": "Fossoil Field",
       "source": "print:FossoilField"
     },
-    "gloss": "A field rinse is scheduled while the public event remains on the calendar.",
+    "gloss": "A spray-test rinse is scheduled while the public event remains on the calendar.",
     "prov": {
       "batch": "T0172",
       "handoff": "2026-09-28",
       "writer": "ChatGPT"
     },
-    "rival_reading": "A response crew could clean a field after an emergency; the schedule does not identify the test."
+    "rival_reading": "None: one-sided on purpose"
   }
 }

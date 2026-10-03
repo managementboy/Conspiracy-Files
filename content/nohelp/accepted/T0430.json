@@ -227,7 +227,7 @@
     ]
   },
   {
-    "body": "The water bowl on this side is clean. Feed scattered across the hinge has the same dark flecks as the animal's collar.",
+    "body": "The water bowl on this side is clean. Feed scattered across the hinge has the same dark flecks as the animal's collar, and the seed corn spilled with it has gone grey.",
     "id": "t0430-10",
     "kind": "set",
     "pieces": [
@@ -235,7 +235,7 @@
       "Rope",
       "CornSeed"
     ],
-    "title": "The closed side of the gate",
+    "title": "The feed by the gate",
     "where": [
       {
         "containers": [

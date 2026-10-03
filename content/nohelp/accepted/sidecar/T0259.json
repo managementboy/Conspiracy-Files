@@ -14,12 +14,12 @@
       "quote": "March Ridge Cold War Bunker",
       "source": "print:ColdWarBunker"
     },
-    "gloss": "A public tour proceeds while a ventilation reading remains pending.",
+    "gloss": "A tour bunker's hatch is shut against fumes from seed treatment.",
     "prov": {
       "batch": "T0259",
       "handoff": "2026-09-28",
       "writer": "ChatGPT"
     },
-    "rival_reading": "Containment staff could close a hatch during a shelter inspection; the note does not say what was measured."
+    "rival_reading": "None: one-sided on purpose"
   }
 }

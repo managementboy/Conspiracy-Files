@@ -18,7 +18,7 @@
     ]
   },
   {
-    "body": "This shovel carries two soils: red clay under a fresh layer of pale dust. The bucket has only the pale stuff.",
+    "body": "This shovel carries two soils: red clay under a fresh layer of pale spray dust. The bucket holds only the pale dust and a few yellowed seedlings.",
     "id": "t0431-02",
     "kind": "set",
     "pieces": [
@@ -54,7 +54,7 @@
     ]
   },
   {
-    "body": "The duct tape holds a split hose together. Its inner edge is green; the water bottle beneath the patch is flecked the same way.",
+    "body": "The duct tape holds a split spray hose together. Its inner edge is green; the water bottle beneath the patch is flecked the same way.",
     "id": "t0431-04",
     "kind": "set",
     "pieces": [
@@ -62,7 +62,7 @@
       "RubberHose",
       "WaterBottle"
     ],
-    "title": "The patched hose",
+    "title": "The patched spray hose",
     "where": [
       {
         "lean": "agricultural",
@@ -73,7 +73,7 @@
     ]
   },
   {
-    "body": "One corner was folded inward while still wet. Under the crease the field grit is green, but the exposed side is rain-washed.",
+    "body": "One corner was folded inward while still wet. Under the crease the field grit is green with dried spray, and a withered crop seedling is pressed in the fold.",
     "id": "t0431-05",
     "kind": "set",
     "pieces": [
@@ -109,7 +109,7 @@
     ]
   },
   {
-    "body": "Someone tied this broom to the outside of a load. Its bristles hold straw from one pen and dark pellets from another.",
+    "body": "Someone tied this broom to the outside of a load. Its bristles hold straw from one pen and dark treated-seed pellets from the field; a few scorched crop leaves are caught in the twine.",
     "id": "t0431-07",
     "kind": "set",
     "pieces": [
@@ -127,7 +127,7 @@
     ]
   },
   {
-    "body": "The hose is coiled around the wheel; the water from washing it has pooled green in the bucket. The other wheel stayed dry.",
+    "body": "The spray hose is coiled around the wheel; the rinse from it has pooled green in the bucket. A sprig of blackened crop leaves floats on top, and the other wheel stayed dry.",
     "id": "t0431-08",
     "kind": "set",
     "pieces": [

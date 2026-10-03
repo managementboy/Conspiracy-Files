@@ -10,13 +10,13 @@
         "c-orders"
       ]
     },
-    "gloss": "Field residue and response material share one everyday bundle.",
+    "gloss": "Field residue clings to an everyday bundle.",
     "prov": {
       "batch": "T0311",
       "handoff": "2026-09-27",
       "writer": "ChatGPT"
     },
-    "rival_reading": "Field workers or an emergency crew could have bundled these supplies; dust and road tape leave the order of events unresolved."
+    "rival_reading": "None: one-sided on purpose"
   },
   "t0311-02": {
     "axioms": {

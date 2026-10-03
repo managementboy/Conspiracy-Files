@@ -14,12 +14,12 @@
       "quote": "Pondview Shopping Center",
       "source": "print:Pondview"
     },
-    "gloss": "The center is marked clear before its last pickup.",
+    "gloss": "A center is cleared under an evacuation order before its last pickup.",
     "prov": {
       "batch": "T0275",
       "handoff": "2026-09-28",
       "writer": "ChatGPT"
     },
-    "rival_reading": "A routine closing could clear the doors while orders remain; the log does not show who was waiting."
+    "rival_reading": "None: one-sided on purpose"
   }
 }

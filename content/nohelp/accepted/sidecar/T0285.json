@@ -10,13 +10,13 @@
         "c-orders"
       ]
     },
-    "gloss": "A personal trace links trial residue to illness before a later restriction.",
+    "gloss": "Residue from treated rows tied to vanished flies and coughing cattle.",
     "prov": {
       "batch": "T0285",
       "handoff": "2026-09-27",
       "writer": "ChatGPT"
     },
-    "rival_reading": "A response team could have carried farm supplies while checking exposure; the objects and timing do not establish that the trial caused it."
+    "rival_reading": "None: one-sided on purpose"
   },
   "t0285-02": {
     "axioms": {
@@ -29,12 +29,12 @@
         "c-accounting"
       ]
     },
-    "gloss": "A personal account or object records an intervention that left part of the account missing.",
+    "gloss": "A waterline recorded after a fire inside a cordon.",
     "prov": {
       "batch": "T0285",
       "handoff": "2026-09-27",
       "writer": "ChatGPT"
     },
-    "rival_reading": "The waterline could document the spread of a farm chemical washed into the building."
+    "rival_reading": "None: one-sided on purpose"
   }
 }

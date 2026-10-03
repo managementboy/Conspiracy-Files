@@ -10,13 +10,13 @@
         "c-orders"
       ]
     },
-    "gloss": "A personal trace links trial residue to illness before a later restriction.",
+    "gloss": "A diary ties trial-crew gloves and spray to curled leaves and a sick brother.",
     "prov": {
       "batch": "T0288",
       "handoff": "2026-09-27",
       "writer": "ChatGPT"
     },
-    "rival_reading": "A response team could have carried farm supplies while checking exposure; the objects and timing do not establish that the trial caused it."
+    "rival_reading": "None: one-sided on purpose"
   },
   "t0288-02": {
     "axioms": {
@@ -29,12 +29,12 @@
         "c-accounting"
       ]
     },
-    "gloss": "A personal account or object records an intervention that left part of the account missing.",
+    "gloss": "A diner's names are collected and taken away by a man in protective gear.",
     "prov": {
       "batch": "T0288",
       "handoff": "2026-09-27",
       "writer": "ChatGPT"
     },
-    "rival_reading": "The list may trace who ate food delivered from a contaminated farm."
+    "rival_reading": "None: one-sided on purpose"
   }
 }

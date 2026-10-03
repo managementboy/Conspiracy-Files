@@ -29,12 +29,12 @@
         "c-accounting"
       ]
     },
-    "gloss": "An altered count or retained object was left at the scene.",
+    "gloss": "A retained radio has been restricted to a single frequency and time.",
     "prov": {
       "batch": "T0316",
       "handoff": "2026-09-27",
       "writer": "ChatGPT"
     },
-    "rival_reading": "A response to an agricultural exposure could explain the same record or object."
+    "rival_reading": "None: one-sided on purpose"
   }
 }

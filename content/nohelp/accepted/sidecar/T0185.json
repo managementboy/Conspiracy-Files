@@ -14,12 +14,12 @@
       "quote": "Pizza Whirled (Rosewood)",
       "source": "print:PizzaWhirledJobAdRosewood"
     },
-    "gloss": "A mobile meal stop repeats at a field gate without a second payment.",
+    "gloss": "A mobile meal stop repeats beside spraying equipment at a field gate.",
     "prov": {
       "batch": "T0185",
       "handoff": "2026-09-28",
       "writer": "ChatGPT"
     },
-    "rival_reading": "An evacuation convoy could stop twice at a gate and leave an unpaid meal; the receipt does not identify the reason."
+    "rival_reading": "None: one-sided on purpose"
   }
 }

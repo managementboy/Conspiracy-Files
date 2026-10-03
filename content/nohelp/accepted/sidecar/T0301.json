@@ -10,13 +10,13 @@
         "c-orders"
       ]
     },
-    "gloss": "A personal trace links trial residue to illness before a later restriction.",
+    "gloss": "A personal trace links trial residue to dead insects and treated rows.",
     "prov": {
       "batch": "T0301",
       "handoff": "2026-09-27",
       "writer": "ChatGPT"
     },
-    "rival_reading": "A response team could have carried farm supplies while checking exposure; the objects and timing do not establish that the trial caused it."
+    "rival_reading": "None: one-sided on purpose"
   },
   "t0301-02": {
     "axioms": {
@@ -27,12 +27,12 @@
         "c-failure"
       ]
     },
-    "gloss": "A witness records a failed evacuation count or route.",
+    "gloss": "A witness records a failed evacuation count and an order not to correct it.",
     "prov": {
       "batch": "T0301",
       "handoff": "2026-09-27",
       "writer": "ChatGPT"
     },
-    "rival_reading": "The agricultural trial may have caused the disorder that forced improvised decisions."
+    "rival_reading": "None: one-sided on purpose"
   }
 }

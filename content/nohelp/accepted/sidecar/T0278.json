@@ -14,12 +14,12 @@
       "quote": "Sunderland Hills Sanatorium",
       "source": "print:Sanatorium"
     },
-    "gloss": "A public tour route avoids a room awaiting a reading.",
+    "gloss": "A tour avoids a room where treated seed gives off fumes.",
     "prov": {
       "batch": "T0278",
       "handoff": "2026-09-28",
       "writer": "ChatGPT"
     },
-    "rival_reading": "A response inspector could restrict a room during a safety check; the note does not say what was measured."
+    "rival_reading": "None: one-sided on purpose"
   }
 }

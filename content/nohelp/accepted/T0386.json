@@ -3,14 +3,14 @@
     "anchor": {
       "scene": "RZSHermitCamp"
     },
-    "body": "the first-aid kit with a water bottle are tied in one bundle. mustard-colored dust marks the field side; torn warning tape marks the other.",
+    "body": "The first-aid kit and the water bottle are tied in one bundle with torn warning tape. A numbered tag hangs from the kit's handle, and a sticker is pressed over the bottle cap.",
     "id": "t0386-01",
     "kind": "set",
     "pieces": [
       "FirstAidKit",
       "WaterBottle"
     ],
-    "title": "first-aid kit with a water bottle at the second evening",
+    "title": "First-aid kit and water bottle, the second evening",
     "where": [
       {
         "lean": "containment",

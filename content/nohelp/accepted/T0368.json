@@ -3,14 +3,14 @@
     "anchor": {
       "scene": "RVSPoliceBlockade"
     },
-    "body": "the hand shovel with a scrub bucket are tied in one bundle. silver specks marks the field side; torn warning tape marks the other.",
+    "body": "The hand shovel and the scrub bucket are tied in one bundle with torn warning tape. A yellow tag with only a number on it hangs from the knot, and a stamp is smudged on the bucket.",
     "id": "t0368-01",
     "kind": "set",
     "pieces": [
       "HandShovel",
       "Bucket"
     ],
-    "title": "hand shovel with a scrub bucket at late wednesday",
+    "title": "Hand shovel and scrub bucket, late Wednesday",
     "where": [
       {
         "lean": "containment",
@@ -24,13 +24,13 @@
     "anchor": {
       "scene": "RVSPoliceBlockade"
     },
-    "body": "The patrol truck carried sacks from the farm test, with yellow dust on the seams. The officer said the cargo was being taken for safekeeping. A torn sack had already left a stripe across the road where people queued for water.",
+    "body": "A farm truck carried sacks from the test plot, with yellow dust on the seams. A torn sack left a stripe across the dirt road, and the grass where it fell had withered by evening.",
     "id": "t0368-02",
     "kind": "written",
     "pieces": [
       "notepad"
     ],
-    "title": "Seed on the barricade",
+    "title": "Sacks from the test plot",
     "where": [
       {
         "lean": "agricultural",

@@ -14,12 +14,12 @@
       "quote": "Your Local Shelter (Brandenburg)",
       "source": "print:YourLocalShelterBrandenburg"
     },
-    "gloss": "A ready shelter’s water supply remains sealed for a reading.",
+    "gloss": "A ready pack's water is clouded and held for a field reading.",
     "prov": {
       "batch": "T0219",
       "handoff": "2026-09-28",
       "writer": "ChatGPT"
     },
-    "rival_reading": "A response shelter could hold water pending a safety check; the note does not identify what was measured."
+    "rival_reading": "None: one-sided on purpose"
   }
 }
