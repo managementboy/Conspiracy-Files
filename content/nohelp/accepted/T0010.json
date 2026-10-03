@@ -19,7 +19,7 @@
     ]
   },
   {
-    "body": "The map's crop row reaches the road and stops at a thumb-smudged mark. Soil fills the shovel socket but not the blade; its grip is clean.",
+    "body": "The map's crop row is circled twice, with a pencilled note: second pass, same mix. Soil fills the shovel socket and the blade is stained blue-green from the treated rows.",
     "id": "t0010-02",
     "kind": "set",
     "person": "person-a",
@@ -27,7 +27,7 @@
       "Map",
       "HandShovel"
     ],
-    "title": "The row that ends at the road",
+    "title": "The row sprayed twice",
     "where": [
       {
         "lean": "agricultural",

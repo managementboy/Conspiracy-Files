@@ -18,7 +18,14 @@ No lean, no rival reading, no gloss, no axioms, no anchor, no other clue.
    consistency across clues.
 3. One blind read per clue: could a believer of A use it? could a believer of
    B use it? The result is A, B, both or none.
-4. A, B or both: the clue goes into the game as written. None: drop it and
+4. A or B: the clue goes into the game as written. **Both is a return (owner,
+   2026-10-02):** every clue must read clearly for exactly one conspiracy, so a
+   clue whose receipt is "both" is rewritten in place (same id, slot, place,
+   kind, pieces and lean; only title, body, gloss and the rival-reading line,
+   which becomes "None: one-sided on purpose") until a fresh read says A or B.
+   Remove the rival hooks (closures and evacuations from a farm-side clue,
+   crops, spray and residue from an official-side clue) rather than adding a
+   statement of the side. None: drop it and
    the writer writes a new one (`FITS_NEITHER`). No second reads, no returns
    for "wrong side".
 
@@ -63,3 +70,13 @@ B: YES or NO - one sentence naming what they would point to, or why not
 <paste the rendered clue text here>
 ---
 ```
+
+## Rewriting "both" clues in place
+
+    # list them: ids whose receipt's top vote is "both"
+    python3 -c "import json,glob;[print(d['clue']) for d in map(lambda f:json.load(open(f)),sorted(glob.glob('tools/cluegates/receipts/*.json'))) if max(d['votes'],key=d['votes'].get)=='both']"
+    python3 tools/nohelp_content/redeliver.py edits.json   # edits.json = {id: {title, body, rival_reading, gloss}}
+    lua5.1 tools/nohelp_content/convert.lua --check && lua5.1 tools/nohelp_content/convert.lua
+    tools/cluegates/blind_reread.sh <ids>                  # the old receipt is stale by hash
+
+At most three rewrites per clue; the receipt must come back A or B.
