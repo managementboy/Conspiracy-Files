@@ -171,7 +171,7 @@
     ]
   },
   {
-    "body": "Grain dust and a slick residue coat the glove fingertips. The soap bar has a waxy film across one side. The water bottle lies on its side, mostly empty.",
+    "body": "The soap, dish gloves and water bottle share one numbered tag. The tape on the bottle reads 'Hold'. I think a patrol left them.",
     "id": "t0432-10",
     "kind": "set",
     "pieces": [
@@ -182,10 +182,10 @@
     "title": "soap, dish gloves and bottle",
     "where": [
       {
-        "lean": "agricultural",
+        "lean": "containment",
         "outfit": "farm",
         "place": "mapNamed",
-        "rival": "containment",
+        "rival": "agricultural",
         "spot": "corpse"
       }
     ]

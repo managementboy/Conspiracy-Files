@@ -3,7 +3,7 @@
     "anchor": {
       "scene": "RBTSSoup"
     },
-    "body": "A water bottle and tin opener have numbered tags tied on with string. Each tag lists an evacuation zone, but the recipient line is blank. Barrier tape circles the opener's handle.",
+    "body": "The water bottle has a yellow film inside. The tin opener has dried spray on its handle. I think both sat out near the sick corn.",
     "id": "t0320-01",
     "kind": "set",
     "pieces": [
@@ -21,9 +21,9 @@
           "sidetable",
           "freezer"
         ],
-        "lean": "containment",
+        "lean": "agricultural",
         "place": "mapNamed",
-        "rival": "agricultural",
+        "rival": "containment",
         "spot": "furniture"
       }
     ]

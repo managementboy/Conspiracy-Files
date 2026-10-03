@@ -10,7 +10,7 @@
         "c-orders"
       ]
     },
-    "gloss": "A receipt carries a note of a checkpoint count and an order to stay quiet.",
+    "gloss": "A receipt carries a note of crop damage after spraying.",
     "prov": {
       "batch": "T0308",
       "handoff": "2026-09-27",

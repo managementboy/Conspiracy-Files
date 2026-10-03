@@ -156,7 +156,7 @@
     ]
   },
   {
-    "body": "The cloth smells like the pesticide they sprayed last week. Someone used it to wrap bread. Can't escape the chemical smell anymore.",
+    "body": "The bread has a numbered tag pinned on. The dish cloth has tape marks and a name list stuck to it. It looks like a checkpoint handout.",
     "id": "t0415-07",
     "kind": "set",
     "pieces": [
@@ -174,15 +174,15 @@
           "cardboardbox",
           "clothingrack"
         ],
-        "lean": "agricultural",
+        "lean": "containment",
         "place": "mapNamed",
-        "rival": "containment",
+        "rival": "agricultural",
         "spot": "furniture"
       }
     ]
   },
   {
-    "body": "The soap has a harsh chemical smell, not like regular soap. The sponge is stained yellow where someone scrubbed something. They were cleaning up after handling the wrong stuff.",
+    "body": "The soap has a numbered tag taped on. The sponge has a count written on it. I think it was a patrol handout.",
     "id": "t0415-08",
     "kind": "set",
     "pieces": [
@@ -200,9 +200,9 @@
           "sidetable",
           "cardboardbox"
         ],
-        "lean": "agricultural",
+        "lean": "containment",
         "place": "mapNamed",
-        "rival": "containment",
+        "rival": "agricultural",
         "spot": "furniture"
       }
     ]

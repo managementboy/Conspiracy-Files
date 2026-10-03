@@ -104,7 +104,7 @@
     ]
   },
   {
-    "body": "I found two buckets, one under the tarp and one beyond it. Only the open one has a powder ring from the field spray. The seedling in it has wilted.",
+    "body": "The bucket has a numbered tag. The tarp has orders written on it. I think it marked a closed road.",
     "id": "t0434-05",
     "kind": "set",
     "pieces": [
@@ -122,9 +122,9 @@
           "smallbox",
           "bin"
         ],
-        "lean": "agricultural",
+        "lean": "containment",
         "place": "mapNamed",
-        "rival": "containment",
+        "rival": "agricultural",
         "spot": "furniture"
       }
     ]
@@ -182,7 +182,7 @@
     ]
   },
   {
-    "body": "The cloth hung indoors is clean. The cloth from the outside line has green spray grit in its weave. A crop seedling pinned in the fold has yellowed.",
+    "body": "The cloth hung indoors is tied with numbered tape. The rope is cut where a patrol sign hung. I counted three tags on it and none were mine.",
     "id": "t0434-08",
     "kind": "set",
     "pieces": [
@@ -200,9 +200,9 @@
           "cardboardbox",
           "crate"
         ],
-        "lean": "agricultural",
+        "lean": "containment",
         "place": "mapNamed",
-        "rival": "containment",
+        "rival": "agricultural",
         "spot": "furniture"
       }
     ]

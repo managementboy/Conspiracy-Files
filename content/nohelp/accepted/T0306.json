@@ -3,7 +3,7 @@
     "anchor": {
       "scene": "RBSafehouse"
     },
-    "body": "Thursday: they left a numbered tag on the spare room door and told us to keep it shut. A patrol came by twice before evening and took a count of the house.\n\nI wrote down the number they gave us. I was told not to repeat it.",
+    "body": "Thursday: spray residue was on the spare room window and the potted tomatoes had yellowed overnight. The dog would not touch its feed.\n\nI wrote down the name on the drum by the fence. I wondered what else got sprayed up the road.",
     "id": "t0306-01",
     "kind": "written",
     "pieces": [
@@ -20,9 +20,9 @@
           "shelves",
           "smallbox"
         ],
-        "lean": "containment",
+        "lean": "agricultural",
         "place": "mapNamed",
-        "rival": "agricultural",
+        "rival": "containment",
         "spot": "furniture"
       }
     ]

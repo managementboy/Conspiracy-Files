@@ -3,7 +3,7 @@
     "anchor": {
       "scene": "RBTSButcher"
     },
-    "body": "I wrote down the time a patrol truck stopped behind the shop and how many names they took off their list. The meat was still cold when they told us to close early.\n\nI wrote the time and the number on a strip of tape before I went back for the others. The clock may have been slow; the tape was across the back door by evening.",
+    "body": "I wrote down when the spray rig ran behind the shop and which rows it covered. The meat was still cold, but the flies were dying at the vents.\n\nI wrote the time and the field on a page before I went back for the others. The clock may have been slow; the yellow residue was on the back door by evening.",
     "id": "t0312-01",
     "kind": "written",
     "pieces": [
@@ -20,9 +20,9 @@
           "smallbox",
           "cashregister"
         ],
-        "lean": "containment",
+        "lean": "agricultural",
         "place": "mapNamed",
-        "rival": "agricultural",
+        "rival": "containment",
         "spot": "furniture"
       }
     ]

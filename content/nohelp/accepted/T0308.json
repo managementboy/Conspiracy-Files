@@ -3,7 +3,7 @@
     "anchor": {
       "scene": "RBShopLooted"
     },
-    "body": "Soap, gloves, and two water jugs, paid cash. On the back: \"Checkpoint counted the bags at dawn and wrote our names on their list. They told me to keep quiet about it.\"\n\nI saved it from the bag of rubbish because the note named the checkpoint. The things stacked beside the page were real enough, and still waiting to be moved.",
+    "body": "Soap, gloves, and two water jugs, paid cash. On the back: \"Bought spray for the north field and the seed corn came up curled. The cattle will not touch the new feed.\"\n\nI saved it from the bag of rubbish because the note named the spray. The things stacked beside the page were real enough, and still dusted yellow.",
     "id": "t0308-01",
     "kind": "written",
     "pieces": [
@@ -20,9 +20,9 @@
           "smallbox",
           "cashregister"
         ],
-        "lean": "containment",
+        "lean": "agricultural",
         "place": "mapNamed",
-        "rival": "agricultural",
+        "rival": "containment",
         "spot": "furniture"
       }
     ]

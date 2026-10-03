@@ -156,7 +156,7 @@
     ]
   },
   {
-    "body": "The loaf is wrapped in a clean cloth, the knot still tied. There's yellow spray powder between the cloth and the crust.",
+    "body": "The bread has a numbered tag pinned on. The dish cloth is marked with tape. I think it was handed out at a checkpoint.",
     "id": "t0413-07",
     "kind": "set",
     "pieces": [
@@ -174,15 +174,15 @@
           "counter",
           "overhead"
         ],
-        "lean": "agricultural",
+        "lean": "containment",
         "place": "mapNamed",
-        "rival": "containment",
+        "rival": "agricultural",
         "spot": "furniture"
       }
     ]
   },
   {
-    "body": "The sponge is green in the middle and the soap is worn on one edge. Both are dusted with fine field grains. They're in a bag with a small cup stained with spray residue.",
+    "body": "The soap and sponge are tied with a numbered tag. A strip of tape reads 'Zone 3, closed'. I think someone counted them at a checkpoint.",
     "id": "t0413-08",
     "kind": "set",
     "pieces": [
@@ -200,9 +200,9 @@
           "wardrobe",
           "dishescabinet"
         ],
-        "lean": "agricultural",
+        "lean": "containment",
         "place": "mapNamed",
-        "rival": "containment",
+        "rival": "agricultural",
         "spot": "furniture"
       }
     ]

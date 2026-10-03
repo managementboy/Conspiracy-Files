@@ -156,7 +156,7 @@
     ]
   },
   {
-    "body": "The bread's covered in yellow dust. I wiped it with the dish cloth. It's the same stuff they spray on the fields.",
+    "body": "The bread has a numbered tag pinned to it. I wiped the tape off with the dish cloth. It matches the tags on the closure notices.",
     "id": "t0417-07",
     "kind": "set",
     "pieces": [
@@ -174,9 +174,9 @@
           "counter",
           "overhead"
         ],
-        "lean": "agricultural",
+        "lean": "containment",
         "place": "mapNamed",
-        "rival": "containment",
+        "rival": "agricultural",
         "spot": "furniture"
       }
     ]

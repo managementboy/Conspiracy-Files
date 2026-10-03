@@ -3,7 +3,7 @@
     "anchor": {
       "scene": "RBTSBreakfast"
     },
-    "body": "A loaf and a first aid kit tied with barrier tape and twine. A paper tag with an evacuation number hangs from the bundle. The barrier tape has been cut and retied. The kit expired two months before the number's stamped date.",
+    "body": "The loaf has green spray grit on its crust. The first aid kit smells of weedkiller. Both were tied with twine near a wilted crop row.",
     "id": "t0311-01",
     "kind": "set",
     "pieces": [
@@ -21,9 +21,9 @@
           "overhead",
           "locker"
         ],
-        "lean": "containment",
+        "lean": "agricultural",
         "place": "mapNamed",
-        "rival": "agricultural",
+        "rival": "containment",
         "spot": "furniture"
       }
     ]
