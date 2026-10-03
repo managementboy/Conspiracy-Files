@@ -20,6 +20,7 @@ local Visited=require("NHShared/VisitedBuildingLog")
 local Reachability=require("NHShared/ReachabilityAdapter")
 local MapSites=require("NHShared/Generated/MapSites")
 local GroundSpots=require("NHShared/GroundSpots")
+local Holders=require("NHShared/SetHolders")
 local MarkedArea=require("NHShared/MarkedArea")
 require("NHShared/DiscoveryLog")
 NHShared=NHShared or {}
@@ -237,6 +238,33 @@ local function evidenceMembers(doc)
     return {{kind=doc.kind,quantity=doc.quantity or 1,wear=doc.wear}}
 end
 
+-- A set of 2+ pieces is found as ONE thing: a vanilla bag, box or case with the
+-- pieces inside (owner, 2026-10-03; docs/design/SET_HOLDERS.md). The pieces go
+-- into the holder first, and only the holder is then placed. If the holder
+-- cannot be made or refuses a piece, the pieces stay loose as they always were.
+-- The holder carries the clue's id and token and the cfHolder mark, so every
+-- id-keyed thing (recognition, inspect, relocation, hint) finds the clue from it
+-- while counting still counts pieces only (WorldAccess).
+local function wrapInHolder(pieces,id,token,fullType)
+    if type(fullType)~="string" or #pieces<Holders.MIN_PIECES then return pieces end
+    local holder=instanceItem(fullType)
+    if not holder then return pieces end
+    local okInv,inv=pcall(function() return holder:getInventory() end)
+    if not okInv or not inv then return pieces end
+    local landed={}
+    for _,piece in ipairs(pieces) do
+        local added=inv:AddItem(piece)
+        if not added then
+            for _,l in ipairs(landed) do pcall(function() inv:Remove(l) end) end
+            return pieces
+        end
+        landed[#landed+1]=piece
+    end
+    local md=holder:getModData()
+    md.cfGeneratedId=id; md.cfPhysicalToken=token; md.cfHolder=true
+    return {holder}
+end
+
 local function playerHouse(player)
     local square=player and player.getSquare and player:getSquare()
     local building=square and square.getBuilding and square:getBuilding()
@@ -347,6 +375,7 @@ local function placement(api,id)
             end
             local md=item:getModData()
             md.cfGeneratedId=id; md.cfPhysicalToken=a.physicalToken
+            if isSet(doc) then md.cfPiece=#createdItems+1 end
             -- Each copy of a pile counts itself. Eleven items all reading "one
             -- of eleven" told the player nothing about which one they were
             -- holding (owner, 2026-09-10).
@@ -358,6 +387,15 @@ local function placement(api,id)
             Kinds.nameAsVanillaCard(item,doc)
             createdItems[#createdItems+1]=item
           end
+        end
+        if isSet(doc) then
+            local pieces=Holders.pieces(doc)
+            local pick=Holders.pick(R.worldSeed(),id,pieces)
+            local wrapped=wrapInHolder(createdItems,id,a.physicalToken,pick and pick.fullType)
+            if wrapped~=createdItems then
+                CFLog.write("i","holder",{doc=id,holder=pick.id,n=#createdItems})
+                createdItems=wrapped
+            end
         end
         for _,item in ipairs(createdItems) do
             assert(World.addEvidence(current,item),"could not add evidence")
@@ -943,6 +981,7 @@ end
 -- Possession was required so that discovery stayed deliberate: a player must
 -- not be able to sweep a street by hovering over furniture. A right-click on a
 -- named menu option is just as deliberate, so the guarantee survives.
+local captioned={}
 function R.inspect(item,inPlace)
     if not allowed() or not sessions or not item then return false end
     if not inPlace and item:getOutermostContainer()~=getPlayer():getInventory() then return false end
@@ -1003,7 +1042,14 @@ function R.inspect(item,inPlace)
     if voice and voice.sayClue then
         for _,doc in ipairs(root.case.documents or {}) do
             if doc.id==md.cfGeneratedId then
-                if type(doc.body)=="string" and doc.body~="" then pcall(voice.sayClue,doc.title,doc.body) end
+                -- A set is ONE clue: its words play for the holder, and for a
+                -- piece inside the holder only if they have not played yet.
+                local speak=true
+                if isSet(doc) then
+                    speak=Holders.shouldSpeak(Holders.roleOf(item),captioned[doc.id]==true)
+                    captioned[doc.id]=true
+                end
+                if speak and type(doc.body)=="string" and doc.body~="" then pcall(voice.sayClue,doc.title,doc.body) end
                 break
             end
         end
@@ -1573,11 +1619,18 @@ local function relocation(api)
             tokenScan(); if not tokenDone then return false end
         end
         if not carryDone then
-            carryScan=carryScan or World.count(p:getInventory(),a.physicalToken,function(n) carryCount=n; carryDone=true end)
+            carryScan=carryScan or World.count(p:getInventory(),a.physicalToken,function(n) carryCount=n; carryDone=true end,1,true)
             carryScan(); if not carryDone then return false end
         end
         if not StaleClue.canRelocate(tokenCount,carryCount,expectedCount(api,id)) then
             log("[CF-G2-RELOCATE] "..id..": guard refused (original="..tostring(tokenCount)..", carried="..tostring(carryCount)..")")
+            return true
+        end
+        -- A set with a holder moves only while every piece is inside it and
+        -- none is loose; a set from an older save (no holder) keeps the plain rule.
+        local shape=Holders.shape(oldContainer,a.physicalToken)
+        if shape.holder and not Holders.movesWhole(shape,expectedCount(api,id)) then
+            log("[CF-G2-RELOCATE] "..id..": holder set not whole (inside="..shape.inside..", loose="..shape.loose.."); leaving in place")
             return true
         end
         if not newItem then
@@ -1593,6 +1646,7 @@ local function relocation(api)
                 local piece=assert(instanceItem(carrier.fullType),"could not create relocated evidence item")
                 local md=piece:getModData()
                 md.cfGeneratedId=id; md.cfPhysicalToken=a.physicalToken
+                if isSet(doc) then md.cfPiece=#newItem+1 end
                 -- Relocation RECREATES the item, and used to set the name here
                 -- and nothing else - so a relocated document reverted to its
                 -- script's own category and appeared as "Literature" in the middle
@@ -1607,6 +1661,13 @@ local function relocation(api)
                 writePages(piece,doc,root.case)
                 newItem[#newItem+1]=piece
               end
+            end
+            -- The same kind of holder again (read off the old one), pieces inside.
+            if shape.holder then
+                local okT,fullType=pcall(function() return shape.holder:getFullType() end)
+                local wrapped=wrapInHolder(newItem,id,a.physicalToken,okT and fullType or nil)
+                if wrapped~=newItem and R.isRecognisedId(id) then stampEvidence(wrapped[1],doc.title,doc) end
+                newItem=wrapped
             end
             newDestination=destination
         end
@@ -1625,6 +1686,18 @@ local function relocation(api)
             for _,piece in ipairs(newItem) do
                 local okW,w=pcall(function() return piece:getWeight() end)
                 weight=weight+((okW and tonumber(w)) or 0)
+                -- A holder's own weight may or may not include what is in it:
+                -- count the contents too, so the check errs toward refusing.
+                local okI,inner=false,nil
+                if instanceof and instanceof(piece,"InventoryContainer") then
+                    okI,inner=pcall(function() return piece:getInventory():getItems() end)
+                end
+                if okI and inner then
+                    for i=0,inner:size()-1 do
+                        local okP,pw=pcall(function() return inner:get(i):getWeight() end)
+                        weight=weight+((okP and tonumber(pw)) or 0)
+                    end
+                end
             end
             local okRoom,room=pcall(function() return newDestination:hasRoomFor(p,weight) end)
             if okRoom and room==false then

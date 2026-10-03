@@ -63,7 +63,7 @@ local function present(clue,player)
     end
     if not container then return false end
     local found
-    local scan=World.count(container,clue.token,function(n) found=n end,1)
+    local scan=World.count(container,clue.token,function(n) found=n end,1,true)
     for _=1,512 do if scan() then break end end
     return type(found)=="number" and found>=1
 end

@@ -331,7 +331,10 @@ end
 -- scan reported 2, placement saw fewer than it expected, created the pile
 -- again, and the document ended in the sticky "conflict" state - dead
 -- permanently. Caught by test/g2_smoke.lua's exact item count.
-function World.count(container,token,done,limit)
+-- A set's HOLDER (SetHolders) carries the clue's token like its pieces but is
+-- packaging, not a piece: it is not counted, unless `withHolders` asks whether
+-- ANYTHING of the clue is there (the hint, the carried-by-player guard).
+function World.count(container,token,done,limit,withHolders)
     local items=container:getItems()
     local originalSize=items:size()
     local ceiling=(type(limit)=="number" and limit>=1) and limit or 1
@@ -343,7 +346,7 @@ function World.count(container,token,done,limit)
     local bags,bagIndex,inner,innerIndex={},0,nil,0
     local function check(item)
         local md=item and item:getModData()
-        if md and md.cfPhysicalToken==token and not seen[item] then seen[item]=true; count=count+1 end
+        if md and md.cfPhysicalToken==token and not seen[item] and (withHolders or md.cfHolder~=true) then seen[item]=true; count=count+1 end
     end
     return function()
         if items:size()~=originalSize then done(nil,"inventory-changed"); return true end
@@ -435,7 +438,8 @@ function World.identityScan(player,assignments,done,expected)
     local function observe(item)
         if not item then return end
         local md=item:getModData(); local id=md and tokens[md.cfPhysicalToken]
-        if id and not seenItems[item] and #found[id]<ceiling[id] then
+        -- A set's holder is packaging: pieces are counted, it is not.
+        if id and md.cfHolder~=true and not seenItems[item] and #found[id]<ceiling[id] then
             seenItems[item]=true
             found[id][#found[id]+1]=item
         end
