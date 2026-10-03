@@ -21,6 +21,21 @@ function K.sets()
     K.list = list
     return #list
 end
+-- Sets with a spot that are not placed yet: standing there loads the square so placement can run.
+function K.waiting(n)
+    local list = {}
+    for _, c in ipairs(R().clueTargets()) do
+        local d = c.status ~= "placed" and not c.vehicle and not c.carrier and docOf(c.id)
+        if d and type(d.members) == "table" then list[#list + 1] = c end
+    end
+    table.sort(list, function(a, b) return a.id < b.id end)
+    if not n then return #list end
+    local t = list[((n - 1) % math.max(#list, 1)) + 1]
+    if not t then return false, "none waiting" end
+    K.target = t
+    getPlayer():teleportTo(t.x + 0.5, t.y + 0.5, t.z)
+    return true, t.id, t.status
+end
 function K.pick(n)
     local t = K.list and K.list[n]
     if not t then return false, "only " .. tostring(K.list and #K.list or 0) end

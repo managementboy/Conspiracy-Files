@@ -393,7 +393,7 @@ local function placement(api,id)
             local pick=Holders.pick(R.worldSeed(),id,pieces)
             local wrapped=wrapInHolder(createdItems,id,a.physicalToken,pick and pick.fullType)
             if wrapped~=createdItems then
-                CFLog.write("i","holder",{doc=id,holder=pick.id,n=#createdItems})
+                log("holder "..tostring(pick.id).." holds the "..#createdItems.." pieces of "..tostring(id))
                 createdItems=wrapped
             end
         end

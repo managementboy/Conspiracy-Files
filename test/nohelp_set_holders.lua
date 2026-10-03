@@ -160,6 +160,8 @@ assert(wrapRefuse(ps2,"s",T,"Base.Bag_Schoolbag")==ps2 and #made:getInventory().
 -- Wiring in the runtime, in order.
 local function has(needle,msg) assert(runtime:find(needle,1,true),msg or needle) end
 has("Holders.pick(R.worldSeed(),id,pieces)","placement picks the holder from world seed and clue id")
+assert(not runtime:find('CFLog.write("i","holder"',1,true),"CFLog.write only takes events the log knows; an unknown one throws mid-placement (seen in the first real run)")
+has('log("holder "..tostring(pick.id)',"the holder is noted in the case log")
 has("md.cfPiece=#createdItems+1","pieces are numbered on placement")
 has("md.cfPiece=#newItem+1","and on relocation")
 local mover=runtime:match("local id,site,scan,target,oldContainer.-\nend\n")

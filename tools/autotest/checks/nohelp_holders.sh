@@ -25,12 +25,14 @@ start_cold || abort "the game did not reach a playable world"
 id="$(session)"
 ev -f "$H" >/dev/null || abort "could not load the check's Lua"
 
-deadline=$(( $(date +%s) + 600 )); n=0
+deadline=$(( $(date +%s) + 420 )); n=0; w=0
 while :; do
     n="$(ev 'return CFHOLD.sets()' | cut -f1)"
     is_number "$n" && [ "$n" -ge 1 ] && break
-    [ "$(date +%s)" -lt "$deadline" ] || abort "no set placed after 600 s"
-    sleep 5
+    [ "$(date +%s)" -lt "$deadline" ] || abort "no set placed after 420 s"
+    # Waiting sets are placed once their square is loaded: stand at one.
+    w=$((w + 1)); ev "return CFHOLD.waiting($w)" >/dev/null
+    sleep 10
 done
 note "placed sets in containers or on the ground: $n"
 
