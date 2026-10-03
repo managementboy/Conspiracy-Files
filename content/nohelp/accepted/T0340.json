@@ -1,0 +1,42 @@
+[
+  {
+    "anchor": {
+      "scene": "RDSPoliceAtHouse"
+    },
+    "body": "I saved the cloth with red grit for you. The pasture study crew passed the first hot day; the flies vanished, and afterward a patrol turned us back.\n\nThe person beside me recognized the handwriting and went quiet. We had been told not to rely on yesterday’s directions.\n\nThe younger one wanted to throw it away. I promised we would ask in the morning, and put it where neither of us could forget.",
+    "id": "t0340-01",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "title": "the first hot day — red grit",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "corpse"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RDSPoliceAtHouse"
+    },
+    "body": "They asked me to count the people inside while they were still walking through the house. I gave the number I knew.\n\nOne of them looked at a folded sheet and said it was too high. He asked whether a visitor had already gone home. The visitor was asleep upstairs.\n\nI left the number on the back of this envelope. If someone asks later, I want to remember what I actually saw.",
+    "id": "t0340-02",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "title": "A number given at the door",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "corpse"
+      }
+    ]
+  }
+]

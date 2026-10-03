@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "TheWizardsKeep"
+    },
+    "body": "The store map is folded into a book with a handwritten translation; the entry log says the room was empty before the last visitor signed out.",
+    "id": "t0281-01",
+    "kind": "set",
+    "pieces": [
+      "Book",
+      "Map"
+    ],
+    "title": "A shop tour in two languages",
+    "where": [
+      {
+        "containers": [
+          "shelves",
+          "desk",
+          "shelvesmag",
+          "filingcabinet",
+          "sidetable",
+          "dresser"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

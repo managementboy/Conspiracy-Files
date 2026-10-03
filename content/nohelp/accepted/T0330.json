@@ -1,0 +1,58 @@
+[
+  {
+    "anchor": {
+      "scene": "RDSDeadDrunk"
+    },
+    "body": "Monday morning: two workers from the seed trial carried an oily film. my eyes began burning before the county van arrived.\n\nI meant to ask about it in the morning. By then the person who could answer had gone with the last vehicle, and this was all that remained.\n\nPerhaps the new instructions were meant to help us. They arrived after we had already followed the old ones.",
+    "id": "t0330-01",
+    "kind": "written",
+    "pieces": [
+      "diary"
+    ],
+    "title": "Monday morning — an oily film",
+    "where": [
+      {
+        "containers": [
+          "dresser",
+          "desk",
+          "sidetable",
+          "filingcabinet",
+          "shelves",
+          "smallbox"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RDSDeadDrunk"
+    },
+    "body": "We thought he had fallen asleep and left him on the couch. A man at the door asked us to write down when we had last spoken to him.\n\nHe wanted one time for all of us. We disagreed because some of us had left the room. He wrote down his own time and asked us to sign below it.\n\nI still have the bottle cap he put beside the paper to hold it flat. I do not know whose account that paper is supposed to be.",
+    "id": "t0330-02",
+    "kind": "written",
+    "pieces": [
+      "diary"
+    ],
+    "title": "After the music stopped",
+    "where": [
+      {
+        "containers": [
+          "dresser",
+          "desk",
+          "sidetable",
+          "filingcabinet",
+          "shelves",
+          "smallbox"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

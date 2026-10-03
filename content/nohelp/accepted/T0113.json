@@ -1,0 +1,32 @@
+[
+  {
+    "anchor": {
+      "map": "WorldStashMap4",
+      "mark": 1
+    },
+    "body": "the packet of tissues and first-aid kit were sealed together but never opened. soot darkens the bundle; clean outlines show it was packed before the fire.",
+    "id": "t0113-01",
+    "kind": "set",
+    "pieces": [
+      "Tissue",
+      "FirstAidKit"
+    ],
+    "title": "Packet of tissues beside the spare mark",
+    "where": [
+      {
+        "containers": [
+          "locker",
+          "smallbox",
+          "medicine",
+          "sidetable",
+          "dresser",
+          "wardrobe"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

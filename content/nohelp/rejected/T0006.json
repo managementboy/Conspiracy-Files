@@ -1,0 +1,98 @@
+{
+  "ticket": "T0006",
+  "returned_by": "Claude blind re-read and batch read, 2026-09-28",
+  "drift": "Batch drift report (T0001-T0013, read together): the rows have converged on one template. About 20 of 28 say 'X was recorded before/after Y', add a child's drawing or sticker, and end with 'the only completed count is <returned objects>, not people'. Each row is fine on its own, but a player who finds three of them has found the same clue three times, and the world sounds like one clerk. The containment rows are all timestamp-and-form jokes and the agricultural rows are all 'water total before source'; a blind reader sorts them by that alone. Keep the tone (one human detail beside one institutional one), but vary it: different human stakes (not always a child), different institutional blind spots (not always a count), clues that are mostly an arrangement of objects with a short note or none, and other spots where both sides can use them (ground, vehicle, mailbox, corpse), not only furniture.",
+  "rows": [
+    {
+      "id": "t0006-01",
+      "codes": [
+        "NEVER_RIVAL",
+        "DRIFT"
+      ],
+      "note": "A blind re-read (5 independent reads, a different model, told nothing) never named the rival, so the row is one-sided. The lean should come from where the clue is placed and from one detail; the rest must leave the rival reading genuinely live. Rework title, body and if needed pieces; keep place, spot, lean and axioms. See the drift report at the top of this file.",
+      "votes": "A 5, B 0, neither 0 (clue lean A)",
+      "row": {
+        "body": "The field road on the map is struck through beside a date earlier than the public notice. A postcard home remains unsent; the shop tally counts returned copies, not customers who left.",
+        "id": "t0006-01",
+        "kind": "set",
+        "pieces": [
+          "Map",
+          "Postcard"
+        ],
+        "title": "Road notice follows the route change",
+        "where": [
+          {
+            "lean": "containment",
+            "place": "bookstore",
+            "rival": "agricultural",
+            "spot": "furniture"
+          }
+        ],
+        "axioms": {
+          "agricultural": [
+            "a-program",
+            "a-timing"
+          ],
+          "containment": [
+            "c-warning",
+            "c-orders",
+            "c-failure"
+          ]
+        },
+        "gloss": "A route change and a later public notice remain beside an unsent personal message.",
+        "prov": {
+          "adhd_run": "docs/writer-only/adhd/2026-09-27-T0006/",
+          "batch": "T0006",
+          "handoff": "2026-09-27",
+          "writer": "ChatGPT"
+        },
+        "rival_reading": "The field road may reflect routine farm access, and the notice may describe a later closure; an unsent card and stock tally do not establish a failed response."
+      }
+    },
+    {
+      "id": "t0006-02",
+      "codes": [
+        "DRIFT"
+      ],
+      "note": "Passed the blind re-read; returned only because its ticket is returned. Redeliver it unchanged if it still fits after the drift fix (its receipt stays valid only while title, body, pieces and places are unchanged). See the drift report at the top of this file.",
+      "votes": "A 3, B 2, neither 0 (clue lean B)",
+      "row": {
+        "body": "A field note is dated before the local warning appeared. Someone underlined the weather column for a child; the shop tally records paper counts, not who needed warning.",
+        "id": "t0006-02",
+        "kind": "set",
+        "pieces": [
+          "Newspaper",
+          "Notebook"
+        ],
+        "title": "Field note predates the notice",
+        "where": [
+          {
+            "lean": "agricultural",
+            "place": "bookstore",
+            "rival": "containment",
+            "spot": "furniture"
+          }
+        ],
+        "axioms": {
+          "agricultural": [
+            "a-program",
+            "a-timing",
+            "a-obscured"
+          ],
+          "containment": [
+            "c-warning",
+            "c-accounting"
+          ]
+        },
+        "gloss": "A field note predates a local warning while the shop records copies rather than readers.",
+        "prov": {
+          "adhd_run": "docs/writer-only/adhd/2026-09-27-T0006/",
+          "batch": "T0006",
+          "handoff": "2026-09-27",
+          "writer": "ChatGPT"
+        },
+        "rival_reading": "An early field note could be routine planning, while a later warning could be part of a containment response; the date alone does not settle the cause."
+      }
+    }
+  ]
+}

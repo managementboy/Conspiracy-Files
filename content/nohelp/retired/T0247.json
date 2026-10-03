@@ -1,0 +1,143 @@
+[
+  {
+    "recall": "R1",
+    "row": {
+      "anchor": {
+        "print": "WPTownHall"
+      },
+      "body": "The town meeting agenda lists a field update after the public session; the room key is logged returned before residents signed out.",
+      "id": "t0247-01",
+      "kind": "set",
+      "pieces": [
+        "SheetPaper2",
+        "KeyRing"
+      ],
+      "title": "Town hall agenda",
+      "where": [
+        {
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "West Point Town Hall",
+        "source": "print:WPTownHall"
+      },
+      "gloss": "A room is handed back before the public meeting finishes.",
+      "prov": {
+        "batch": "T0247",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "An ordinary civic meeting could end early and hand off the room to staff; the key log does not identify the field update."
+    }
+  },
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "print": "WPTownHall"
+      },
+      "body": "field dust covers one side of the candle and animal-feed sack; torn warning tape covers the other. the bundle was opened from both ends.",
+      "id": "t0247-01",
+      "kind": "set",
+      "pieces": [
+        "Candle",
+        "AnimalFeedBag"
+      ],
+      "title": "two traces on the candle",
+      "where": [
+        {
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-warning",
+          "c-orders"
+        ]
+      },
+      "gloss": "Farm residue and response markings share one deliberately ambiguous bundle.",
+      "prov": {
+        "batch": "T0247",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "The farm program and the emergency response each explain one layer of the bundle, and the shared knot does not establish which purpose came first."
+    }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "print": "WPTownHall"
+      },
+      "body": "field dust covers one side of the candle and animal-feed sack; torn warning tape covers the other. the bundle was opened from both ends.",
+      "id": "t0247-01",
+      "kind": "set",
+      "pieces": [
+        "Candle",
+        "AnimalFeedBag"
+      ],
+      "title": "Candle with the second residue",
+      "where": [
+        {
+          "containers": [
+            "crate",
+            "shelves",
+            "desk",
+            "counter",
+            "cardboardbox",
+            "bin"
+          ],
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-warning",
+          "c-orders"
+        ]
+      },
+      "gloss": "Farm residue and response markings share one deliberately ambiguous bundle.",
+      "prov": {
+        "batch": "T0247",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "The farm program and the emergency response each explain one layer of the bundle, and the shared knot does not establish which purpose came first."
+    }
+  }
+]

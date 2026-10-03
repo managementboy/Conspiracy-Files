@@ -1,0 +1,42 @@
+{
+  "t0006-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-timing"
+      ],
+      "containment": [
+        "c-warning",
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "gloss": "A message and its map both stop short of a destination.",
+    "prov": {
+      "batch": "T0006",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A field delivery could be delayed by a road restriction and leave an unfinished message; the card does not say who issued the instruction."
+  },
+  "t0006-02": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-timing",
+        "a-obscured"
+      ],
+      "containment": [
+        "c-warning",
+        "c-accounting"
+      ]
+    },
+    "gloss": "A crop sketch and an out-of-season guide sit together.",
+    "prov": {
+      "batch": "T0006",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "Someone tracking seasonal conditions during an emergency could keep an old gardening column with field notes; the mismatch does not identify an experimental program."
+  }
+}

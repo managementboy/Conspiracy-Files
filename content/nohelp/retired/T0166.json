@@ -1,0 +1,145 @@
+[
+  {
+    "recall": "R1",
+    "row": {
+      "anchor": {
+        "print": "Fossoil8"
+      },
+      "body": "The pump key is signed back before the last fuel delivery, and a note asks the crew to keep the drum sealed until the next test.",
+      "id": "t0166-01",
+      "kind": "set",
+      "pieces": [
+        "PetrolCan",
+        "KeyRing"
+      ],
+      "title": "The pump key was returned",
+      "where": [
+        {
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "Fossoil (South Louisville)",
+        "source": "print:Fossoil8"
+      },
+      "gloss": "A fuel delivery follows a key return and a request to keep the drum sealed.",
+      "prov": {
+        "batch": "T0166",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A response team could seal fuel during an emergency; the note does not say what the test was meant to find."
+    }
+  },
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "print": "Fossoil8"
+      },
+      "body": "oily field residue links the short rope and water bottle. a clean waterline shows both were rinsed before the road closed.",
+      "id": "t0166-01",
+      "kind": "set",
+      "pieces": [
+        "Rope",
+        "WaterBottle"
+      ],
+      "title": "field residue on the short rope",
+      "where": [
+        {
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-malfunction",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-warning",
+          "c-orders"
+        ]
+      },
+      "gloss": "A rare everyday object carries residue tied to field work before restriction.",
+      "prov": {
+        "batch": "T0166",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "Emergency workers crossing treated land could have picked up the same residue; the objects do not prove the farm program began the emergency."
+    }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "print": "Fossoil8"
+      },
+      "body": "oily field residue links the short rope and water bottle. a clean waterline shows both were rinsed before the road closed.",
+      "id": "t0166-01",
+      "kind": "set",
+      "pieces": [
+        "Rope",
+        "WaterBottle"
+      ],
+      "title": "After on the short rope, the first copy",
+      "where": [
+        {
+          "containers": [
+            "crate",
+            "shelves",
+            "desk",
+            "counter",
+            "cardboardbox",
+            "bin"
+          ],
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-malfunction",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-warning",
+          "c-orders"
+        ]
+      },
+      "gloss": "A rare everyday object carries residue tied to field work before restriction.",
+      "prov": {
+        "batch": "T0166",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "Emergency workers crossing treated land could have picked up the same residue; the objects do not prove the farm program began the emergency."
+    }
+  }
+]

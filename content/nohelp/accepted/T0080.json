@@ -1,0 +1,32 @@
+[
+  {
+    "anchor": {
+      "map": "MulStashMap12",
+      "mark": 1
+    },
+    "body": "A food tin and a supply tag are placed together; the tag asks that the kitchen water be held until the crowd has passed the back lot.",
+    "id": "t0080-01",
+    "kind": "set",
+    "pieces": [
+      "Pistol",
+      "CannedCorn"
+    ],
+    "title": "Kitchen stores",
+    "where": [
+      {
+        "containers": [
+          "locker",
+          "fridge",
+          "dresser",
+          "counter",
+          "wardrobe",
+          "overhead"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

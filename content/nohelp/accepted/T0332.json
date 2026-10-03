@@ -1,0 +1,58 @@
+[
+  {
+    "anchor": {
+      "scene": "RDSFootballNight"
+    },
+    "body": "Personal note — Wednesday before rain: wash off the gray foam left by the feed additive trial crew. my brother started coughing, and I had not yet heard that a deputy taped off the road.\n\nI did not know where to put it after the shelves were cleared. There was still someone coming back for the answer written on it.\n\nI thought someone would ask for this at the gate. They asked instead how many were in the car, and let the paper stay in my hand.",
+    "id": "t0332-01",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "Wednesday before rain — gray foam",
+    "where": [
+      {
+        "containers": [
+          "desk",
+          "filingcabinet",
+          "sidetable",
+          "shelves",
+          "smallbox",
+          "cashregister"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RDSFootballNight"
+    },
+    "body": "At halftime we heard the street announcement through the open window. The others kept watching the game and I wrote the names of the roads on the back of the score sheet.\n\nSomeone came by after dark and asked me for it. He already knew the score and said he only wanted to check my spelling.\n\nI gave him the front half. The names are still here because I tore the page across the fold first.",
+    "id": "t0332-02",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "The score at halftime",
+    "where": [
+      {
+        "containers": [
+          "desk",
+          "filingcabinet",
+          "sidetable",
+          "shelves",
+          "smallbox",
+          "cashregister"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

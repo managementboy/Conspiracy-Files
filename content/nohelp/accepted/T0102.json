@@ -1,0 +1,32 @@
+[
+  {
+    "anchor": {
+      "map": "RiversideStashMap9",
+      "mark": 1
+    },
+    "body": "The fuel can is tagged for a medical pickup; the note says the driver stopped at the marked house after a field worker became ill.",
+    "id": "t0102-01",
+    "kind": "set",
+    "pieces": [
+      "PetrolCan",
+      "Pills"
+    ],
+    "title": "Fuel and a medicine request",
+    "where": [
+      {
+        "containers": [
+          "toolcabinet",
+          "medicine",
+          "metal_shelves",
+          "sidetable",
+          "crate",
+          "locker"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

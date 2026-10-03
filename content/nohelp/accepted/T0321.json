@@ -1,0 +1,60 @@
+[
+  {
+    "anchor": {
+      "scene": "RBTrashed"
+    },
+    "body": "The tools match a small repair, but the spare was prepared before anyone recorded a fault.",
+    "id": "t0321-01",
+    "kind": "set",
+    "pieces": [
+      "Saw",
+      "Plank"
+    ],
+    "title": "A repair set aside",
+    "where": [
+      {
+        "containers": [
+          "toolcabinet",
+          "metal_shelves",
+          "crate",
+          "smallcrate",
+          "shelves",
+          "bin"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RBTrashed"
+    },
+    "body": "A bucket bears a faded field lot mark beneath a newer cleaning label. A hand shovel still has the same fine yellow dust caught in its handle.",
+    "id": "t0321-02",
+    "kind": "set",
+    "pieces": [
+      "Bucket",
+      "HandShovel"
+    ],
+    "title": "The spoiled pail",
+    "where": [
+      {
+        "containers": [
+          "toolcabinet",
+          "metal_shelves",
+          "crate",
+          "smallcrate",
+          "shelves",
+          "bin"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

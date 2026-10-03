@@ -1,0 +1,143 @@
+[
+  {
+    "recall": "R1",
+    "row": {
+      "anchor": {
+        "print": "BrottAuction"
+      },
+      "body": "The cattle auction ledger lists every lot sold, but the gate key is returned before the buyers’ vehicles are counted.",
+      "id": "t0256-01",
+      "kind": "set",
+      "pieces": [
+        "Notebook",
+        "KeyRing"
+      ],
+      "title": "Auction lot count",
+      "where": [
+        {
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "Brott Cattle Farm Auction",
+        "source": "print:BrottAuction"
+      },
+      "gloss": "The gate closes before the buyer vehicles are counted.",
+      "prov": {
+        "batch": "T0256",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A farm office could close the gate before vehicles left for ordinary reasons; the ledger does not show who remained."
+    }
+  },
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "print": "BrottAuction"
+      },
+      "body": "the lighter and empty garden sprayer carry animal-feed grit under a strip of barrier tape. neither layer fully covers the other.",
+      "id": "t0256-01",
+      "kind": "set",
+      "pieces": [
+        "Lighter",
+        "GardeningSprayEmpty"
+      ],
+      "title": "two traces on the lighter",
+      "where": [
+        {
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-warning",
+          "c-orders"
+        ]
+      },
+      "gloss": "Farm residue and response markings share one deliberately ambiguous bundle.",
+      "prov": {
+        "batch": "T0256",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "The farm program and the emergency response each explain one layer of the bundle, and the shared knot does not establish which purpose came first."
+    }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "print": "BrottAuction"
+      },
+      "body": "the lighter and empty garden sprayer carry animal-feed grit under a strip of barrier tape. neither layer fully covers the other.",
+      "id": "t0256-01",
+      "kind": "set",
+      "pieces": [
+        "Lighter",
+        "GardeningSprayEmpty"
+      ],
+      "title": "Lighter carrying two traces",
+      "where": [
+        {
+          "containers": [
+            "crate",
+            "shelves",
+            "desk",
+            "counter",
+            "cardboardbox",
+            "bin"
+          ],
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-warning",
+          "c-orders"
+        ]
+      },
+      "gloss": "Farm residue and response markings share one deliberately ambiguous bundle.",
+      "prov": {
+        "batch": "T0256",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "The farm program and the emergency response each explain one layer of the bundle, and the shared knot does not establish which purpose came first."
+    }
+  }
+]

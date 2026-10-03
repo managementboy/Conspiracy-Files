@@ -1,0 +1,32 @@
+[
+  {
+    "anchor": {
+      "map": "LouisvilleStashMap11",
+      "mark": 1
+    },
+    "body": "a broken barrier board crushed the magnifying glass against the folded road map. clean undersides show both were there before the road was blocked.",
+    "id": "t0059-01",
+    "kind": "set",
+    "pieces": [
+      "MagnifyingGlass",
+      "Map"
+    ],
+    "title": "Magnifying glass beside the spare mark",
+    "where": [
+      {
+        "containers": [
+          "desk",
+          "sidetable",
+          "filingcabinet",
+          "dresser",
+          "shelves",
+          "smallbox"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

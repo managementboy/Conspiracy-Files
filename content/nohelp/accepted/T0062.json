@@ -1,0 +1,32 @@
+[
+  {
+    "anchor": {
+      "map": "LouisvilleStashMap14",
+      "mark": 1
+    },
+    "body": "The plank receipt is stapled to a note asking everyone to stay outside until the treated boards dry. A radio call time is written beside “half hour.”",
+    "id": "t0062-01",
+    "kind": "set",
+    "pieces": [
+      "Nails",
+      "SheetPaper2"
+    ],
+    "title": "Half-hour repair",
+    "where": [
+      {
+        "containers": [
+          "filingcabinet",
+          "desk",
+          "sidetable",
+          "shelves",
+          "smallbox",
+          "cashregister"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

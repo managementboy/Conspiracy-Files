@@ -1,0 +1,25 @@
+{
+  "t0154-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "Taco del Pancho",
+      "source": "print:TacodelPancho"
+    },
+    "gloss": "A crew rinse interrupts a restaurant order but leaves the charge in place.",
+    "prov": {
+      "batch": "T0154",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "An emergency team could have rinsed equipment after a closure; the jar and cancelled meal do not identify what was washed."
+  }
+}

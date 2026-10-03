@@ -1,0 +1,32 @@
+[
+  {
+    "anchor": {
+      "map": "WpStashMap10",
+      "mark": 1
+    },
+    "body": "the pocket calculator is tied to the first-aid kit by a clipped lanyard. an empty loop shows where an identifying tag was cut off.",
+    "id": "t0143-01",
+    "kind": "set",
+    "pieces": [
+      "Calculator",
+      "FirstAidKit"
+    ],
+    "title": "Pocket calculator beside the spare mark",
+    "where": [
+      {
+        "containers": [
+          "filingcabinet",
+          "desk",
+          "medicine",
+          "locker",
+          "cashregister",
+          "smallbox"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

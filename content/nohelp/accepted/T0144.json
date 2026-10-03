@@ -1,0 +1,32 @@
+[
+  {
+    "anchor": {
+      "map": "WpStashMap12",
+      "mark": 1
+    },
+    "body": "the measuring tape and clipboard carry the same black paint. a fresh scrape exposes an older evacuation color beneath.",
+    "id": "t0144-01",
+    "kind": "set",
+    "pieces": [
+      "MeasuringTape",
+      "Clipboard"
+    ],
+    "title": "Measuring tape with the unclosed tally",
+    "where": [
+      {
+        "containers": [
+          "toolcabinet",
+          "desk",
+          "metal_shelves",
+          "filingcabinet",
+          "sidetable",
+          "smallbox"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "CabinforRentDixie"
+    },
+    "body": "The cabin key is tied to a trail map and a note to leave no litter. The checkout sheet says the guests left before the caretaker reached the road.",
+    "id": "t0246-01",
+    "kind": "set",
+    "pieces": [
+      "FishingRod",
+      "HandTorch"
+    ],
+    "title": "Cabin rules after dark",
+    "where": [
+      {
+        "containers": [
+          "smallcrate",
+          "bin",
+          "crate",
+          "tent",
+          "cardboardbox",
+          "smallbox"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

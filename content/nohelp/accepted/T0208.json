@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "SureFitnessBoxingClub"
+    },
+    "body": "The gym closing list says every member left; a pair of gloves and towel remain beside a note to keep the side door unlocked until pickup.",
+    "id": "t0208-01",
+    "kind": "set",
+    "pieces": [
+      "Gloves_BoxingBlue",
+      "BathTowel"
+    ],
+    "title": "Club closing routine",
+    "where": [
+      {
+        "containers": [
+          "wardrobe",
+          "dresser",
+          "clothingrack",
+          "locker",
+          "clothingdryer",
+          "smallbox"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

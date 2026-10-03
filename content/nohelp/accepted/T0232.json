@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "WPDIY"
+    },
+    "body": "The tool receipt lists a watering can with the saws and hammers; the field-use box is checked before the delivery truck is unloaded.",
+    "id": "t0232-01",
+    "kind": "set",
+    "pieces": [
+      "Hammer",
+      "Nails"
+    ],
+    "title": "Tools at the rural stop",
+    "where": [
+      {
+        "containers": [
+          "toolcabinet",
+          "metal_shelves",
+          "crate",
+          "smallbox",
+          "smallcrate",
+          "militarycrate"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

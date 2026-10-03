@@ -1,0 +1,145 @@
+[
+  {
+    "recall": "R1",
+    "row": {
+      "anchor": {
+        "print": "ArtGalleryofLouisville"
+      },
+      "body": "A gallery key is tied to a collection checklist marked secure before the guard’s handover was signed. One frame is listed without a room.",
+      "id": "t0171-01",
+      "kind": "set",
+      "pieces": [
+        "Photo",
+        "KeyRing"
+      ],
+      "title": "The gallery key returned",
+      "where": [
+        {
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "Art Gallery of Louisville",
+        "source": "print:ArtGalleryofLouisville"
+      },
+      "gloss": "The collection is marked secure before the guard change is complete.",
+      "prov": {
+        "batch": "T0171",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A field inspection could secure the collection and leave an incomplete frame location; the list does not identify the guard’s orders."
+    }
+  },
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "print": "ArtGalleryofLouisville"
+      },
+      "body": "red and blue cord join the baling twine to the hand torch. the red route is cut; the blue route ends in a sealed knot.",
+      "id": "t0171-01",
+      "kind": "set",
+      "pieces": [
+        "Twine",
+        "HandTorch"
+      ],
+      "title": "missing count beside the baling twine",
+      "where": [
+        {
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-warning",
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "gloss": "A response bundle preserves a missing count, changed route, or erased identity.",
+      "prov": {
+        "batch": "T0171",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A farm-program crew could have counted routes, repacked tools, or removed ownership marks during hurried field work; the objects do not prove a concealed public response."
+    }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "print": "ArtGalleryofLouisville"
+      },
+      "body": "red and blue cord join the baling twine to the hand torch. the red route is cut; the blue route ends in a sealed knot.",
+      "id": "t0171-01",
+      "kind": "set",
+      "pieces": [
+        "Twine",
+        "HandTorch"
+      ],
+      "title": "Baling twine beside the spare mark",
+      "where": [
+        {
+          "containers": [
+            "crate",
+            "shelves",
+            "desk",
+            "counter",
+            "cardboardbox",
+            "bin"
+          ],
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-warning",
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "gloss": "A response bundle preserves a missing count, changed route, or erased identity.",
+      "prov": {
+        "batch": "T0171",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A farm-program crew could have counted routes, repacked tools, or removed ownership marks during hurried field work; the objects do not prove a concealed public response."
+    }
+  }
+]

@@ -1,0 +1,106 @@
+[
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "map": "RosewoodStashMap1",
+        "mark": 1
+      },
+      "body": "The garden notebook has a removed instruction page and a note asking whether the unopened sample should go with the next supply run.",
+      "id": "t0104-01",
+      "kind": "set",
+      "pieces": [
+        "Notebook",
+        "Pencil"
+      ],
+      "title": "The missing instruction",
+      "where": [
+        {
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "marked address in Rosewood",
+        "source": "map:RosewoodStashMap1"
+      },
+      "gloss": "A sample is held for a supply run after its instruction page disappears.",
+      "prov": {
+        "batch": "T0104",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A response crew could have moved a sample during cleanup; the missing page does not identify what it contained."
+    }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "map": "RosewoodStashMap1",
+        "mark": 1
+      },
+      "body": "The garden notebook has a removed instruction page and a note asking whether the unopened sample should go with the next supply run.",
+      "id": "t0104-01",
+      "kind": "set",
+      "pieces": [
+        "Notebook",
+        "Pencil"
+      ],
+      "title": "The missing instruction",
+      "where": [
+        {
+          "containers": [
+            "desk",
+            "crate",
+            "shelves",
+            "counter",
+            "cardboardbox",
+            "bin"
+          ],
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "marked address in Rosewood",
+        "source": "map:RosewoodStashMap1"
+      },
+      "gloss": "A sample is held for a supply run after its instruction page disappears.",
+      "prov": {
+        "batch": "T0104",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A response crew could have moved a sample during cleanup; the missing page does not identify what it contained."
+    }
+  }
+]

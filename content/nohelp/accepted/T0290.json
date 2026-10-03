@@ -1,0 +1,58 @@
+[
+  {
+    "anchor": {
+      "scene": "RBDorm"
+    },
+    "body": "My note from before dawn: the field trial crew carried sealed seed packet. my brother started coughing. I had not yet heard that the county van arrived.\n\nI took the page when they shut the building. No one could tell me whether the missing line meant delayed, refused, or already gone.\n\nIt may have started elsewhere; none of us saw the beginning. I only know what had reached this place before they closed the road.",
+    "id": "t0290-01",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "Before dawn: sealed seed packet",
+    "where": [
+      {
+        "containers": [
+          "desk",
+          "filingcabinet",
+          "sidetable",
+          "shelves",
+          "smallbox",
+          "cashregister"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RBDorm"
+    },
+    "body": "Room count at noon: four beds slept in, six beds assigned, eight names on the door. Nobody could explain the difference. We had made the list from the doors because the office list had been taken.\n\nA visitor came back with the office list in her hand and asked us to erase two names. She did not ask whether either student was still here. We argued about it quietly because the girl in the end bed was asleep.\n\nBy supper the visitor had gone. I wrote the two names again on a scrap and pushed it into my shoe. If somebody asks tomorrow, I can say I made a mistake. I would rather have a mistake I can show them.",
+    "id": "t0290-02",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "Eight names on six beds",
+    "where": [
+      {
+        "containers": [
+          "sidetable",
+          "filingcabinet",
+          "desk",
+          "shelves",
+          "smallbox",
+          "cashregister"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

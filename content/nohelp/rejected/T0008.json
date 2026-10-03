@@ -1,0 +1,92 @@
+{
+  "ticket": "T0008",
+  "returned_by": "Claude review, DR-20260928-NOHELP-REVIEW-FAST, 2026-09-28",
+  "note": "The ticket is returned whole: a place must keep both conspiracies, a person ticket is accepted or returned as a whole, and a map design keeps its set share.",
+  "rows": [
+    {
+      "id": "t0008-01",
+      "codes": [],
+      "note": "Passed its blind read; returned only because its ticket is returned whole. Redeliver it unchanged: its receipt stays valid while title, body, pieces and places are unchanged.",
+      "votes": "A 1, B 0, neither 0 (declared A)",
+      "row": {
+        "body": "The keyring is wrapped in the lunchbox's cloth lining. A chalk boundary crosses the lid; the ring is on the clean side and the meal on the dusty one.",
+        "id": "t0008-01",
+        "kind": "set",
+        "pieces": [
+          "Lunchbox",
+          "KeyRing"
+        ],
+        "title": "The keys stayed outside the marked floor",
+        "where": [
+          {
+            "lean": "containment",
+            "place": "warehouse",
+            "rival": "agricultural",
+            "spot": "ground"
+          }
+        ],
+        "axioms": {
+          "agricultural": [
+            "a-program",
+            "a-pathway"
+          ],
+          "containment": [
+            "c-orders",
+            "c-failure"
+          ]
+        },
+        "gloss": "A boundary separates the keys from the meal they travelled with.",
+        "prov": {
+          "batch": "T0008",
+          "handoff": "2026-09-27",
+          "writer": "ChatGPT"
+        },
+        "rival_reading": "A warehouse crew could separate access keys from stored supplies during a routine safety check; the chalk line may have nothing to do with evacuation."
+      }
+    },
+    {
+      "id": "t0008-02",
+      "codes": [
+        "LEAN_MISMATCH"
+      ],
+      "note": "Two independent blind reads (DR-20260928-NOHELP-REVIEW-FAST) both missed the declared lean (declared B; votes A 0, B 0, neither 2). Rework so one detail tilts it to its own side while the rival reading stays possible. Keep place, spot, lean, rival, pieces and axioms.",
+      "votes": "A 0, B 0, neither 2 (declared B)",
+      "row": {
+        "body": "The notebook has been laid over the bucket. A green crescent marks the page where it touched the rim; the rest of the page is blank except for a pressed grass stem.",
+        "id": "t0008-02",
+        "kind": "set",
+        "pieces": [
+          "Bucket",
+          "Notebook"
+        ],
+        "title": "The notebook used as a bucket lid",
+        "where": [
+          {
+            "lean": "agricultural",
+            "place": "warehouse",
+            "rival": "containment",
+            "spot": "ground"
+          }
+        ],
+        "axioms": {
+          "agricultural": [
+            "a-program",
+            "a-malfunction"
+          ],
+          "containment": [
+            "c-orders",
+            "c-failure"
+          ]
+        },
+        "gloss": "A plant trace remains where a notebook covered a bucket.",
+        "prov": {
+          "batch": "T0008",
+          "handoff": "2026-09-27",
+          "writer": "ChatGPT"
+        },
+        "rival_reading": "A cleanup crew could use a bucket and notebook while inspecting any spill; plant residue does not identify a pesticide or its route."
+      }
+    }
+  ],
+  "drift": "Batch note (whole round, read once): a key ring appears in about ten of the 38 rows, a crop-row sketch in about eight and a water ring or stain in five. Not a return reason this round; vary objects and details in the redeliveries and in T0019 onward so a player does not meet the same arrangement at every place."
+}

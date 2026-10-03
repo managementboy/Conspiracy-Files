@@ -1,0 +1,25 @@
+{
+  "t0082-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "got halfway but had to leave it all - too heavy",
+      "source": "map:MulStashMap13"
+    },
+    "gloss": "A field load was left behind after a route was interrupted.",
+    "prov": {
+      "batch": "T0082",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A response convoy could have abandoned supplies after gunfire; the card does not identify the crew or its work."
+  }
+}

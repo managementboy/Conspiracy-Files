@@ -1,0 +1,60 @@
+[
+  {
+    "anchor": {
+      "scene": "RBTSSoup"
+    },
+    "body": "A cloudy water bottle stands beside a tin opener crusted with yellow dust. A hand-drawn line on the bottle marks the level before boiling.",
+    "id": "t0320-01",
+    "kind": "set",
+    "pieces": [
+      "WaterBottle",
+      "TinOpener"
+    ],
+    "title": "Cloudy water beside the soup",
+    "where": [
+      {
+        "containers": [
+          "fridge",
+          "dishescabinet",
+          "counter",
+          "overhead",
+          "sidetable",
+          "freezer"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RBTSSoup"
+    },
+    "body": "One bowl is clean and tied to a second with string. The count scratched into the first was reduced in pencil on the other, though both were carried to the table.",
+    "id": "t0320-02",
+    "kind": "set",
+    "pieces": [
+      "Bowl",
+      "Spoon"
+    ],
+    "title": "The unserved bowl",
+    "where": [
+      {
+        "containers": [
+          "dishescabinet",
+          "overhead",
+          "counter",
+          "sidetable",
+          "shelves",
+          "smallbox"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

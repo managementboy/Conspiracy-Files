@@ -1,0 +1,43 @@
+[
+  {
+    "anchor": {
+      "scene": "RZSDean"
+    },
+    "body": "the fertilizer sack with a drained sprayer carry a greasy sheen from the fertilizer trial. they were packed before traffic was turned around.",
+    "id": "t0382-01",
+    "kind": "set",
+    "pieces": [
+      "Fertilizer",
+      "GardeningSprayEmpty"
+    ],
+    "title": "fertilizer sack with a drained sprayer at saturday before sunrise",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RZSDean"
+    },
+    "body": "Our camp was told the pickup would stop where the smoke could be seen. A vehicle came, copied the number of tents, and drove away before the sleeping people woke. The next day someone had crossed our site off the rescue map.",
+    "id": "t0382-02",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "title": "A head count by the fire",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
+  }
+]

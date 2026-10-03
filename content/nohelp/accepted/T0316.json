@@ -1,0 +1,60 @@
+[
+  {
+    "anchor": {
+      "scene": "RBTSElectronics"
+    },
+    "body": "A fresh battery is taped to a field radio. Green spray flecks fill the speaker grille, and the last tuning mark is below the county warning channel.",
+    "id": "t0316-01",
+    "kind": "set",
+    "pieces": [
+      "Battery",
+      "RadioBlack"
+    ],
+    "title": "Field radio with a fresh battery",
+    "where": [
+      {
+        "containers": [
+          "desk",
+          "shelves",
+          "toolcabinet",
+          "metal_shelves",
+          "smallbox",
+          "locker"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RBTSElectronics"
+    },
+    "body": "A radio sits beside a loose battery. A pencil mark on the dial matches one on the workbench; every other frequency has been scratched away.",
+    "id": "t0316-02",
+    "kind": "set",
+    "pieces": [
+      "RadioBlack",
+      "Battery"
+    ],
+    "title": "A receiver with a single mark",
+    "where": [
+      {
+        "containers": [
+          "cashregister",
+          "desk",
+          "toolcabinet",
+          "metal_shelves",
+          "smallbox",
+          "locker"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

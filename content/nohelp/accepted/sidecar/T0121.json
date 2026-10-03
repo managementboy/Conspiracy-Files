@@ -1,0 +1,25 @@
+{
+  "t0121-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "HUGE campgrounds",
+      "source": "map:WorldStashMap12"
+    },
+    "gloss": "A camp supply list leaves one pickup and one dose unresolved.",
+    "prov": {
+      "batch": "T0121",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A program team could keep medicine at its office; the blank line does not show whether anyone was stranded."
+  }
+}

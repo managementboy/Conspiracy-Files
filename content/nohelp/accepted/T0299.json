@@ -1,0 +1,60 @@
+[
+  {
+    "anchor": {
+      "scene": "RBOffice"
+    },
+    "body": "The two items are bundled beside marked feed sack; field dust lies beneath them, while a strip of road tape is caught around the bundle.",
+    "id": "t0299-01",
+    "kind": "set",
+    "pieces": [
+      "Bread",
+      "CannedCorn"
+    ],
+    "title": "Feed sack beneath the coat hem",
+    "where": [
+      {
+        "containers": [
+          "fridge",
+          "counter",
+          "overhead",
+          "dishescabinet",
+          "freezer",
+          "grocerstand"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RBOffice"
+    },
+    "body": "A sheet of paper has been pressed over a handwritten count. The marks beneath still show a larger number than the typed line above it. Someone saved the carbon but discarded the original.",
+    "id": "t0299-02",
+    "kind": "set",
+    "pieces": [
+      "Sheet",
+      "Pencil"
+    ],
+    "title": "Carbon under the blotter",
+    "where": [
+      {
+        "containers": [
+          "shelves",
+          "filingcabinet",
+          "sidetable",
+          "desk",
+          "smallbox",
+          "cashregister"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

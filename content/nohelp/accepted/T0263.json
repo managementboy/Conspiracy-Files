@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "GoldenSunset"
+    },
+    "body": "The care log lists a routine delivery, while the field sample box is marked outside the room before the resident’s check-in.",
+    "id": "t0263-01",
+    "kind": "set",
+    "pieces": [
+      "Bandage",
+      "Notebook"
+    ],
+    "title": "Elder-care delivery",
+    "where": [
+      {
+        "containers": [
+          "medicine",
+          "desk",
+          "sidetable",
+          "filingcabinet",
+          "locker",
+          "dresser"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

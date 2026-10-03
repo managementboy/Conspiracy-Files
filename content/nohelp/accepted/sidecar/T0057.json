@@ -1,0 +1,25 @@
+{
+  "t0057-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "guns and food in far stable",
+      "source": "map:LouisvilleStashMap9"
+    },
+    "gloss": "A supply cache is tied to a key and a route whose return time was removed.",
+    "prov": {
+      "batch": "T0057",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A field crew could have used the stable and avoided an unsafe road; the crossed-out time does not say why."
+  }
+}

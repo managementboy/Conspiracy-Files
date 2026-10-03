@@ -1,0 +1,32 @@
+[
+  {
+    "anchor": {
+      "map": "MarchRidgeStashMap3",
+      "mark": 1
+    },
+    "body": "A bakery receipt is tucked into a hunting route map; a note marks the last sighting beside a field-use date that was crossed out.",
+    "id": "t0066-01",
+    "kind": "set",
+    "pieces": [
+      "Bread",
+      "Map"
+    ],
+    "title": "Last place on the route",
+    "where": [
+      {
+        "containers": [
+          "counter",
+          "desk",
+          "overhead",
+          "filingcabinet",
+          "fridge",
+          "shelves"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

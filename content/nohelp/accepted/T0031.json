@@ -1,0 +1,62 @@
+[
+  {
+    "anchor": {
+      "map": "BBurgStashMap6",
+      "mark": 1
+    },
+    "body": "I left the spare key where you asked. The bus went past the property, but the office says our address was never on its pickup list. I thought you would come back for me.\n\nMy mother put it with the household bills so it would not be thrown away. It was the only part of the week that still had a date.\n\nSomeone had to finish the household list even though the office had closed. I wrote the names in the space left for expenses.",
+    "id": "t0031-01",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "title": "The unfinished handoff",
+    "where": [
+      {
+        "containers": [
+          "filingcabinet",
+          "desk",
+          "sidetable",
+          "shelves",
+          "smallbox",
+          "cashregister"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "BBurgStashMap6",
+      "mark": 1
+    },
+    "body": "Two cups are set beside a test-day notebook. The only signed line is for the room key; a note asks that the sample page stay out of the household drawer.",
+    "id": "t0031-02",
+    "kind": "set",
+    "pieces": [
+      "Notebook",
+      "Pencil",
+      "Teacup"
+    ],
+    "title": "Ink through the paper",
+    "where": [
+      {
+        "containers": [
+          "dishescabinet",
+          "desk",
+          "filingcabinet",
+          "overhead",
+          "sidetable",
+          "counter"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

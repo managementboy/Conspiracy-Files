@@ -7,7 +7,7 @@ local B={}
 -- the campaign evidence was therefore an undercount, and the 500 kB assertion
 -- was being made against the wrong number - the same shape of mistake as
 -- measuring one root and calling it the save (2026-09-21 retraction).
-local tags={generated="NHShared.Generated.G2",addresses="NHShared.AddressBook.Muldraugh",legacy="NHShared.DeadAir",identities="NHShared.IdentityObservations",keyConnections="NHShared.KeyConnections",localPeople="NHShared.LocalPeople",discoveries="NHShared.DiscoveryLedger",visitedBuildings="NHShared.VisitedBuildings",observedKeyLeads="NHShared.ObservedKeyLeads",personNames="NHShared.PersonNameObservations",bodyOutfits="NHShared.BodyOutfitObservations",placeVisits="NHShared.PlaceVisits",casePeople="NHShared.CasePeople",mapMedia="NHShared.MapMedia",threads="NHShared.Threads"}
+local tags={generated="NHShared.Generated.G2",addresses="NHShared.AddressBook.Muldraugh",identities="NHShared.IdentityObservations",keyConnections="NHShared.KeyConnections",localPeople="NHShared.LocalPeople",discoveries="NHShared.DiscoveryLedger",visitedBuildings="NHShared.VisitedBuildings",observedKeyLeads="NHShared.ObservedKeyLeads",personNames="NHShared.PersonNameObservations",bodyOutfits="NHShared.BodyOutfitObservations",placeVisits="NHShared.PlaceVisits",mapMedia="NHShared.MapMedia"}
 -- Measuring every saved root on every write cost 20-50 ms on the Linux test
 -- laptop (perf check, 2026-09-11): the whole ~170 KB was walked to record one
 -- map mark or one ID. A store keeps its identity while each write replaces its
@@ -45,9 +45,10 @@ function B.checkMany(replacements)
   if not ok then return false,tostring(name)..": "..tostring(why) end
   total=total+bytes
  end
- if total>V.MAX_ENCODED_BYTES then
-  return false,"combined canonical save budget exceeded ("..total.." bytes)"
- end
+ -- NO SIZE CEILING in No Help (owner, 2026-09-27: "No limit at all"; DECISIONS.md,
+ -- DR-20260927-NOHELP-RULE-PLACEMENT). Every root is still validated for
+ -- structure - a cycle or a bad value loses the whole save (spike T1) - and
+ -- the total is still returned, so a slow save can be traced to its size.
  return true,total
 end
 function B.check(kind,staged)

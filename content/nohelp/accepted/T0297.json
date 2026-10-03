@@ -1,0 +1,60 @@
+[
+  {
+    "anchor": {
+      "scene": "RBMayorWestPoint"
+    },
+    "body": "The pair is streaked with clouded sample jar from treated rows. It was set aside after the flies vanished, before anyone marked the kitchen chair unsafe.",
+    "id": "t0297-01",
+    "kind": "set",
+    "pieces": [
+      "WalkieTalkie1",
+      "FirstAidKit"
+    ],
+    "title": "The jar with its clouded rim",
+    "where": [
+      {
+        "containers": [
+          "metal_shelves",
+          "toolcabinet",
+          "medicine",
+          "locker",
+          "smallbox",
+          "sidetable"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RBMayorWestPoint"
+    },
+    "body": "A public notice and a pencil stub are folded together. The penciled time is earlier than the printed one, and someone has marked the first version to be collected before the doors opened.",
+    "id": "t0297-02",
+    "kind": "set",
+    "pieces": [
+      "Newspaper",
+      "Pencil"
+    ],
+    "title": "Two versions of the notice",
+    "where": [
+      {
+        "containers": [
+          "filingcabinet",
+          "sidetable",
+          "desk",
+          "shelves",
+          "shelvesmag",
+          "cashregister"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

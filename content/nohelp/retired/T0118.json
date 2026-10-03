@@ -1,0 +1,764 @@
+[
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "map": "WorldStashMap9",
+        "mark": 1
+      },
+      "body": "A crate tally includes the offices but lists no contents; the next page labels the same shipment for a field check.",
+      "id": "t0118-01",
+      "kind": "set",
+      "pieces": [
+        "Notebook",
+        "SheetPaper2"
+      ],
+      "title": "Crates without contents",
+      "where": [
+        {
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "crates all around, could be filled with stuff",
+        "source": "map:WorldStashMap9"
+      },
+      "gloss": "A field check is linked to crates whose contents were never recorded.",
+      "prov": {
+        "batch": "T0118",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "An emergency storage count could list crates without contents; the tally does not identify the shipment."
+    }
+  },
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "map": "WorldStashMap9",
+        "note": 1
+      },
+      "body": "Warehouse note: keep the empty crates for soil cores from the southern trial farms. Three returned damp and smelling of solvent, though the manifest lists them unused.",
+      "id": "t0118-02",
+      "kind": "written",
+      "pieces": [
+        "diary"
+      ],
+      "title": "Crates reserved for field samples",
+      "where": [
+        {
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "gloss": "Crates reserved for field samples",
+      "prov": {
+        "batch": "T0118",
+        "handoff": "2026-09-29",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work."
+    }
+  },
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "map": "WorldStashMap9",
+        "note": 2
+      },
+      "body": "Diary entry: the railyard pickup carried seed sacks and rinse drums before dawn. By breakfast the switchman’s eyes burned; the public closure came later.",
+      "id": "t0118-03",
+      "kind": "written",
+      "pieces": [
+        "notepad"
+      ],
+      "title": "Railyard pickup before dawn",
+      "where": [
+        {
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "gloss": "Railyard pickup before dawn",
+      "prov": {
+        "batch": "T0118",
+        "handoff": "2026-09-29",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work."
+    }
+  },
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "map": "WorldStashMap9",
+        "note": 3
+      },
+      "body": "Driver’s torn page: the Muldraugh route was crossed out after the field team reported foam in the drainage ditch. No replacement destination appears.",
+      "id": "t0118-04",
+      "kind": "written",
+      "pieces": [
+        "receipt"
+      ],
+      "title": "Muldraugh route crossed out",
+      "where": [
+        {
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "gloss": "Muldraugh route crossed out",
+      "prov": {
+        "batch": "T0118",
+        "handoff": "2026-09-29",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work."
+    }
+  },
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "map": "WorldStashMap9",
+        "note": 4
+      },
+      "body": "Driver’s diary: beside the Muldraugh label, the return route from the southern trial farms is written in pencil. Two stops are rubbed out, but their sample counts remain.",
+      "id": "t0118-05",
+      "kind": "written",
+      "pieces": [
+        "photograph"
+      ],
+      "title": "Muldraugh field route in the margin",
+      "where": [
+        {
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "gloss": "Muldraugh field route in the margin",
+      "prov": {
+        "batch": "T0118",
+        "handoff": "2026-09-29",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work."
+    }
+  },
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "map": "WorldStashMap9",
+        "note": 5
+      },
+      "body": "Notebook from the offices: four crop-test invoices, no company name, all paid in cash. A pencil note says the county men collected the carbon copies.",
+      "id": "t0118-06",
+      "kind": "written",
+      "pieces": [
+        "notebook"
+      ],
+      "title": "Office ledger with no owner",
+      "where": [
+        {
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "gloss": "Office ledger with no owner",
+      "prov": {
+        "batch": "T0118",
+        "handoff": "2026-09-29",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work."
+    }
+  },
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "map": "WorldStashMap9",
+        "note": 6
+      },
+      "body": "Cleaning receipt: warehouse bay three was washed twice after storing pasture-treatment drums. The second wash is billed before the first crew signed out.",
+      "id": "t0118-07",
+      "kind": "written",
+      "pieces": [
+        "letter"
+      ],
+      "title": "Warehouse bay washed twice",
+      "where": [
+        {
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "gloss": "Warehouse bay washed twice",
+      "prov": {
+        "batch": "T0118",
+        "handoff": "2026-09-29",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work."
+    }
+  },
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "map": "WorldStashMap9",
+        "note": 7
+      },
+      "body": "Personal rail log: none of the trains would start after the trial shipment arrived. The same oily grit coated each air intake, but the repair report calls it ordinary dust.",
+      "id": "t0118-08",
+      "kind": "written",
+      "pieces": [
+        "diary"
+      ],
+      "title": "Trains idle after the shipment",
+      "where": [
+        {
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "gloss": "Trains idle after the shipment",
+      "prov": {
+        "batch": "T0118",
+        "handoff": "2026-09-29",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work."
+    }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "map": "WorldStashMap9",
+        "mark": 1
+      },
+      "body": "A crate tally includes the offices but lists no contents; the next page labels the same shipment for a field check.",
+      "id": "t0118-01",
+      "kind": "set",
+      "pieces": [
+        "Notebook",
+        "SheetPaper2"
+      ],
+      "title": "Crates without contents",
+      "where": [
+        {
+          "containers": [
+            "filingcabinet",
+            "crate",
+            "shelves",
+            "desk",
+            "counter",
+            "cardboardbox"
+          ],
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "crates all around, could be filled with stuff",
+        "source": "map:WorldStashMap9"
+      },
+      "gloss": "A field check is linked to crates whose contents were never recorded.",
+      "prov": {
+        "batch": "T0118",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "An emergency storage count could list crates without contents; the tally does not identify the shipment."
+    }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "map": "WorldStashMap9",
+        "note": 1
+      },
+      "body": "Warehouse note: keep the empty crates for soil cores from the southern trial farms. Three returned damp and smelling of solvent, though the manifest lists them unused.\n\nSomeone said the smell was only from cleaning. I kept the scrap because the same smell had followed us from the previous stop.\n\nI wanted to keep a clean copy, but the stain is where the first entry was crossed out. I have not tried to improve it.",
+      "id": "t0118-02",
+      "kind": "written",
+      "pieces": [
+        "diary"
+      ],
+      "title": "Crates reserved for field samples",
+      "where": [
+        {
+          "containers": [
+            "desk",
+            "crate",
+            "shelves",
+            "counter",
+            "cardboardbox",
+            "bin"
+          ],
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "gloss": "Crates reserved for field samples",
+      "prov": {
+        "batch": "T0118",
+        "handoff": "2026-09-29",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work."
+    }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "map": "WorldStashMap9",
+        "note": 2
+      },
+      "body": "Diary entry: the railyard pickup carried seed sacks and rinse drums before dawn. By breakfast the switchman’s eyes burned; the public closure came later.\n\nThe mark was made in a hurry, before the queue moved. I checked it twice against the people standing with me.\n\nI wanted to keep a clean copy, but the stain is where the first entry was crossed out. I have not tried to improve it.",
+      "id": "t0118-03",
+      "kind": "written",
+      "pieces": [
+        "notepad"
+      ],
+      "title": "Railyard pickup before dawn",
+      "where": [
+        {
+          "containers": [
+            "desk",
+            "crate",
+            "shelves",
+            "counter",
+            "cardboardbox",
+            "bin"
+          ],
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "gloss": "Railyard pickup before dawn",
+      "prov": {
+        "batch": "T0118",
+        "handoff": "2026-09-29",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work."
+    }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "map": "WorldStashMap9",
+        "note": 3
+      },
+      "body": "Driver’s torn page: the Muldraugh route was crossed out after the field team reported foam in the drainage ditch. No replacement destination appears.\n\nOur copy stayed on the kitchen table. The official account came later and asked us to remember a much shorter day.\n\nI wanted to keep a clean copy, but the stain is where the first entry was crossed out. I have not tried to improve it.",
+      "id": "t0118-04",
+      "kind": "written",
+      "pieces": [
+        "receipt"
+      ],
+      "title": "Muldraugh route crossed out",
+      "where": [
+        {
+          "containers": [
+            "crate",
+            "shelves",
+            "desk",
+            "counter",
+            "cardboardbox",
+            "bin"
+          ],
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "gloss": "Muldraugh route crossed out",
+      "prov": {
+        "batch": "T0118",
+        "handoff": "2026-09-29",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work."
+    }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "map": "WorldStashMap9",
+        "note": 4
+      },
+      "body": "Driver’s diary: beside the Muldraugh label, the return route from the southern trial farms is written in pencil. Two stops are rubbed out, but their sample counts remain.\n\nI took the page when they shut the building. No one could tell me whether the missing line meant delayed, refused, or already gone.\n\nI do not know which of the two accounts was repeated afterward. The older one is the one I had in my hands that day.",
+      "id": "t0118-05",
+      "kind": "written",
+      "pieces": [
+        "photograph"
+      ],
+      "title": "Muldraugh field route in the margin",
+      "where": [
+        {
+          "containers": [
+            "dresser",
+            "crate",
+            "shelves",
+            "desk",
+            "counter",
+            "cardboardbox"
+          ],
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "gloss": "Muldraugh field route in the margin",
+      "prov": {
+        "batch": "T0118",
+        "handoff": "2026-09-29",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work."
+    }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "map": "WorldStashMap9",
+        "note": 5
+      },
+      "body": "Notebook from the offices: four crop-test invoices, no company name, all paid in cash. A pencil note says the county men collected the carbon copies.\n\nA pencil line had been rubbed thin but not erased. I could still read enough of it to recognize what had been there first.\n\nI do not know which of the two accounts was repeated afterward. The older one is the one I had in my hands that day.",
+      "id": "t0118-06",
+      "kind": "written",
+      "pieces": [
+        "notebook"
+      ],
+      "title": "Office ledger with no owner",
+      "where": [
+        {
+          "containers": [
+            "filingcabinet",
+            "crate",
+            "shelves",
+            "desk",
+            "counter",
+            "cardboardbox"
+          ],
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "gloss": "Office ledger with no owner",
+      "prov": {
+        "batch": "T0118",
+        "handoff": "2026-09-29",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work."
+    }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "map": "WorldStashMap9",
+        "note": 6
+      },
+      "body": "Cleaning receipt: warehouse bay three was washed twice after storing pasture-treatment drums. The second wash is billed before the first crew signed out.\n\nWe needed the supplies listed here for the following morning. The people who took the count left without asking whether we had them.\n\nI do not know which of the two accounts was repeated afterward. The older one is the one I had in my hands that day.",
+      "id": "t0118-07",
+      "kind": "written",
+      "pieces": [
+        "letter"
+      ],
+      "title": "Warehouse bay washed twice",
+      "where": [
+        {
+          "containers": [
+            "crate",
+            "shelves",
+            "desk",
+            "counter",
+            "cardboardbox",
+            "bin"
+          ],
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "gloss": "Warehouse bay washed twice",
+      "prov": {
+        "batch": "T0118",
+        "handoff": "2026-09-29",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work."
+    }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "map": "WorldStashMap9",
+        "note": 7
+      },
+      "body": "Personal rail log: none of the trains would start after the trial shipment arrived. The same oily grit coated each air intake, but the repair report calls it ordinary dust.\n\nThe children asked why the same place had two different names on the two papers. I told them to hold on to both until we knew.\n\nI wrote the time before I went back for the others. The clock may have been slow; the second vehicle was already gone.",
+      "id": "t0118-08",
+      "kind": "written",
+      "pieces": [
+        "diary"
+      ],
+      "title": "Trains idle after the shipment",
+      "where": [
+        {
+          "containers": [
+            "dresser",
+            "crate",
+            "shelves",
+            "desk",
+            "counter",
+            "cardboardbox"
+          ],
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "gloss": "Trains idle after the shipment",
+      "prov": {
+        "batch": "T0118",
+        "handoff": "2026-09-29",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work."
+    }
+  }
+]

@@ -1,0 +1,62 @@
+# The No Help content loop's check, on every push to the writer's branch.
+#
+# The owner plays blind and GitHub notifications and summaries reach them, so
+# everything this workflow prints to the summary is counts and opaque serials
+# only: the progress line (tools/nohelp_content/progress.lua) and the
+# converter's check line. Never row text, never what a serial is about.
+# Separate from offline.yml on purpose (test/ci_contract.lua documents that
+# file's jobs in docs/design/CI_PLAN.md).
+name: nohelp-content
+
+on:
+  push:
+    branches: [nohelp-content]
+  workflow_dispatch:
+
+concurrency:
+  group: nohelp-content-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    name: content check (Lua 5.1)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Lua 5.1
+        run: sudo apt-get update && sudo apt-get install -y lua5.1
+      - name: Converter check (writes nothing)
+        id: convert
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          lua5.1 tools/nohelp_content/convert.lua --check | tee convert.out
+      - name: No Help tests
+        id: tests
+        continue-on-error: true
+        run: |
+          n=0; failed=0
+          for t in test/nohelp_*.lua; do
+            n=$((n + 1))
+            if ! lua5.1 "$t" > /dev/null 2>test.err; then failed=$((failed + 1)); echo "FAIL $t"; tail -5 test.err; fi
+          done
+          echo "tests=$n run, $failed failed" >> "$GITHUB_OUTPUT"
+          [ "$failed" -eq 0 ]
+      - name: Progress
+        if: always()
+        run: |
+          line="$(lua5.1 tools/nohelp_content/progress.lua)"
+          check="$(grep -E '^check: ' convert.out || echo 'check: did not run')"
+          {
+            echo "### No Help content"
+            echo
+            echo "- progress: \`$line\`"
+            echo "- converter: \`$check\`"
+            echo "- tests: \`${{ steps.tests.outputs.tests }}\`"
+          } >> "$GITHUB_STEP_SUMMARY"
+      - name: Fail on a failed check
+        if: steps.convert.outcome != 'success' || steps.tests.outcome != 'success'
+        run: exit 1

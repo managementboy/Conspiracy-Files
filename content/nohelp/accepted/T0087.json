@@ -1,0 +1,32 @@
+[
+  {
+    "anchor": {
+      "map": "MulStashMap10",
+      "mark": 1
+    },
+    "body": "the leather strips and bath towel are wedged beneath unused warning tape. footprints pass around the bundle rather than toward it.",
+    "id": "t0087-01",
+    "kind": "set",
+    "pieces": [
+      "LeatherStrips",
+      "BathTowel"
+    ],
+    "title": "Leather strips beside the spare mark",
+    "where": [
+      {
+        "containers": [
+          "wardrobe",
+          "dresser",
+          "clothingrack",
+          "locker",
+          "clothingdryer",
+          "clothingwasher"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

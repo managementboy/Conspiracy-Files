@@ -1,0 +1,61 @@
+[
+  {
+    "anchor": {
+      "map": "BBurgStashMap8",
+      "mark": 1
+    },
+    "body": "opposite route arrows are painted on the paperclip box and hand radio. the older arrow was scraped away beneath fresh road grit.",
+    "id": "t0033-01",
+    "kind": "set",
+    "pieces": [
+      "PaperclipBox",
+      "WalkieTalkie1"
+    ],
+    "title": "Paperclip box beside the spare mark",
+    "where": [
+      {
+        "containers": [
+          "desk",
+          "toolcabinet",
+          "filingcabinet",
+          "metal_shelves",
+          "sidetable",
+          "locker"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "BBurgStashMap8",
+      "mark": 1
+    },
+    "body": "The room smells like the liquid from the field bottles, and Mom’s throat still hurts. I opened the window; the return truck says nothing spilled.\n\nWe needed the supplies listed here for the following morning. The people who took the count left without asking whether we had them.\n\nIt may have started elsewhere; none of us saw the beginning. I only know what had reached this place before they closed the road.",
+    "id": "t0033-02",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "title": "One page put aside",
+    "where": [
+      {
+        "containers": [
+          "desk",
+          "filingcabinet",
+          "sidetable",
+          "cashregister",
+          "shelves",
+          "smallbox"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

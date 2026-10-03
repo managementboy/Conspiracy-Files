@@ -4,7 +4,12 @@
 local Services=require("NHShared/MapMediaServiceStories")
 local Civic=require("NHShared/MapMediaCivicStories")
 local Places=require("NHShared/MapMediaPlaceStories")
-local Story=require("NHShared/Generated/Story")
+local Headings=require("NHShared/Headings")
+-- The document body's shape, moved here from the old case generator's Story
+-- module when that was removed (owner, 2026-09-27): found, source, meaning.
+local function body(observation,source,note)
+    return Headings.FOUND.."\n"..observation.."\n\n"..source.."\n\n"..Headings.MEANING.."\n"..note
+end
 local H=require("NHShared/Headings")
 local Kinds=require("NHShared/Generated/EvidenceKinds")
 local M={REVISION=3}
@@ -302,7 +307,7 @@ function M.render(binding,seed,part,observation)
     local note=expand(p.note,v)
     if observation==f.skill and part==f.observationPart then note=note.."\n\n"..expand(f.professional,v) end
     local source=expand(p.source,v)
-    return {title=p.title.." / "..v.code,body=Story.body(expand(p.observation,v),source,note),kind=p.kind,
+    return {title=p.title.." / "..v.code,body=body(expand(p.observation,v),source,note),kind=p.kind,
         premise=f.id,question=expand(f.question,v),event=expand(f.event,v),outcome=expand(f.outcome,v),grounding=f.grounding}
 end
 -- Numerical source dependencies are stable parts, not positions in the order

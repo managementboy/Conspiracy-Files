@@ -1,0 +1,32 @@
+[
+  {
+    "anchor": {
+      "map": "WpStashMap1",
+      "mark": 1
+    },
+    "body": "The route map points to a residence, but the weapon handover form says the occupant was already marked missing. The return route has no driver.",
+    "id": "t0133-01",
+    "kind": "set",
+    "pieces": [
+      "Pistol",
+      "Map"
+    ],
+    "title": "Do not fire at the house",
+    "where": [
+      {
+        "containers": [
+          "locker",
+          "desk",
+          "dresser",
+          "filingcabinet",
+          "wardrobe",
+          "sidetable"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

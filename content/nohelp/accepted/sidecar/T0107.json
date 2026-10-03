@@ -1,0 +1,25 @@
+{
+  "t0107-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "Left bug-out stuff here",
+      "source": "map:RosewoodStashMap4"
+    },
+    "gloss": "A group leaves with a reduced load before its pickup arrives.",
+    "prov": {
+      "batch": "T0107",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A field crew could have carried a limited load and changed its route; the card does not explain why the pickup failed."
+  }
+}

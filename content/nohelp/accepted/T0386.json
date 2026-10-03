@@ -1,0 +1,43 @@
+[
+  {
+    "anchor": {
+      "scene": "RZSHermitCamp"
+    },
+    "body": "the first-aid kit with a water bottle are tied in one bundle. mustard-colored dust marks the field side; torn warning tape marks the other.",
+    "id": "t0386-01",
+    "kind": "set",
+    "pieces": [
+      "FirstAidKit",
+      "WaterBottle"
+    ],
+    "title": "first-aid kit with a water bottle at the second evening",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RZSHermitCamp"
+    },
+    "body": "The old man had no part in the farm trial, yet a yellow rim formed around his water pail after the storm. He kept the first pail for washing and gave guests the second. The stream comes down from the same treated slope.",
+    "id": "t0386-02",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "Seed dust in the shelter",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  }
+]

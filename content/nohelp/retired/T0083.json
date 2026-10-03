@@ -1,0 +1,106 @@
+[
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "map": "MulStashMap6",
+        "mark": 1
+      },
+      "body": "A fortification list pairs a brace for the door with a bandage request; the person assigned to carry both has no check-out time.",
+      "id": "t0083-01",
+      "kind": "set",
+      "pieces": [
+        "Hammer",
+        "Bandage"
+      ],
+      "title": "Plan B in the margin",
+      "where": [
+        {
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "Bob, I want this place fortified like HELL.",
+        "source": "map:MulStashMap6"
+      },
+      "gloss": "A door repair and medical need share a list with no departure time.",
+      "prov": {
+        "batch": "T0083",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A field team could have secured its workroom and stocked first aid; the incomplete checkout does not identify a response order."
+    }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "map": "MulStashMap6",
+        "mark": 1
+      },
+      "body": "A fortification list pairs a brace for the door with a bandage request; the person assigned to carry both has no check-out time.",
+      "id": "t0083-01",
+      "kind": "set",
+      "pieces": [
+        "Hammer",
+        "Bandage"
+      ],
+      "title": "Plan B in the margin",
+      "where": [
+        {
+          "containers": [
+            "medicine",
+            "crate",
+            "shelves",
+            "desk",
+            "counter",
+            "cardboardbox"
+          ],
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "Bob, I want this place fortified like HELL.",
+        "source": "map:MulStashMap6"
+      },
+      "gloss": "A door repair and medical need share a list with no departure time.",
+      "prov": {
+        "batch": "T0083",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A field team could have secured its workroom and stocked first aid; the incomplete checkout does not identify a response order."
+    }
+  }
+]

@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "LeafhillHeights"
+    },
+    "body": "The office lease marks every suite available, but the building notebook reserves one floor for a field test through the tenant move-in date.",
+    "id": "t0225-01",
+    "kind": "set",
+    "pieces": [
+      "Notebook",
+      "Pencil"
+    ],
+    "title": "Office space and test room",
+    "where": [
+      {
+        "containers": [
+          "shelves",
+          "smallbox",
+          "desk",
+          "sidetable",
+          "filingcabinet",
+          "shelvesmag"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

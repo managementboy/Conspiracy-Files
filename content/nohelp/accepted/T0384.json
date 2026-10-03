@@ -1,0 +1,45 @@
+[
+  {
+    "anchor": {
+      "scene": "RZSForestCamp"
+    },
+    "body": "the hand shovel with a scrub bucket carry brown foam from the pasture treatment. they were packed before a cruiser waved us away.",
+    "id": "t0384-01",
+    "kind": "set",
+    "pieces": [
+      "KeyRing",
+      "Bucket"
+    ],
+    "title": "hand shovel with a scrub bucket at on the cold night",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RZSForestCamp"
+    },
+    "body": "A small receiver still set to an emergency band, a folded road map with the county roads crossed out in the same neat hand, and a strip of pills. The campers left before anyone announced a closure.",
+    "id": "t0384-02",
+    "kind": "set",
+    "pieces": [
+      "RadioReceiver",
+      "Map",
+      "Pills"
+    ],
+    "title": "Receiver and map left at the cold camp",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
+  }
+]

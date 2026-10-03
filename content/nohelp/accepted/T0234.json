@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "RosewoodFD"
+    },
+    "body": "The safety sheet marks the detectors checked a full day before any fire was reported, signed by a crew nobody at the station knew. A note clipped to the bottle says: keep the windows shut, do not open the station to the public, the notice will come from above.",
+    "id": "t0234-01",
+    "kind": "set",
+    "pieces": [
+      "Notebook",
+      "WaterBottle"
+    ],
+    "title": "Fire safety checklist",
+    "where": [
+      {
+        "containers": [
+          "fridge",
+          "desk",
+          "shelves",
+          "counter",
+          "filingcabinet",
+          "cardboardbox"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

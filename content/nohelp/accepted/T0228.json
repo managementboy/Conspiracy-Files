@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "CarFixation"
+    },
+    "body": "The service appointment is stamped complete, but the customer’s copy says the car was still waiting when the shop closed.",
+    "id": "t0228-01",
+    "kind": "set",
+    "pieces": [
+      "Notebook",
+      "Pencil"
+    ],
+    "title": "Appointment not on the calendar",
+    "where": [
+      {
+        "containers": [
+          "sidetable",
+          "filingcabinet",
+          "desk",
+          "shelves",
+          "smallbox",
+          "cashregister"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

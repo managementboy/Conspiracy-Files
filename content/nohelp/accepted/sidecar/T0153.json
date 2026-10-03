@@ -1,0 +1,25 @@
+{
+  "t0153-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "FashionaBelle",
+      "source": "print:FashionaBelle"
+    },
+    "gloss": "A fitting is closed before its pickup and the return van arrives.",
+    "prov": {
+      "batch": "T0153",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A supply crew could have used the same return van and fitting room; the card does not show why the schedule changed."
+  }
+}

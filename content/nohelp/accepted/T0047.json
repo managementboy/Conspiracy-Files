@@ -1,0 +1,32 @@
+[
+  {
+    "anchor": {
+      "map": "IrvingtonStashMap8",
+      "mark": 1
+    },
+    "body": "red and blue cord join the black pen to the bath towel. the red route is cut; the blue route ends in a sealed knot.",
+    "id": "t0047-01",
+    "kind": "set",
+    "pieces": [
+      "Pen",
+      "BathTowel"
+    ],
+    "title": "Black pen beside the spare mark",
+    "where": [
+      {
+        "containers": [
+          "desk",
+          "wardrobe",
+          "sidetable",
+          "dresser",
+          "filingcabinet",
+          "clothingrack"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

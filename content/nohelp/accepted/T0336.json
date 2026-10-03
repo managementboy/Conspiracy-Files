@@ -1,0 +1,58 @@
+[
+  {
+    "anchor": {
+      "scene": "RDSHenDo"
+    },
+    "body": "Sunday after supper: two workers from the greenhouse trial carried a bitter residue. my hands blistered before the phones went dead.\n\nThey counted the containers before anyone counted who had carried them. I wrote the second number here while I could still remember it.\n\nThe amount mattered to the office more than the people waiting outside. We stayed until dark because the last line still said to wait.",
+    "id": "t0336-01",
+    "kind": "written",
+    "pieces": [
+      "diary"
+    ],
+    "title": "Sunday after supper — a bitter residue",
+    "where": [
+      {
+        "containers": [
+          "sidetable",
+          "desk",
+          "dresser",
+          "filingcabinet",
+          "shelves",
+          "smallbox"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RDSHenDo"
+    },
+    "body": "We put the guests names on a sheet so we could keep the surprise. A stranger arrived with a copy that had two names removed.\n\nHe asked whether those two had already left. I said one was still upstairs, getting ready. He folded his copy and waited at the foot of the stairs.\n\nNobody wanted to spoil the party by arguing. I have kept our list because it is the only one with everyone on it.",
+    "id": "t0336-02",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "title": "The list for the party",
+    "where": [
+      {
+        "containers": [
+          "cashregister",
+          "desk",
+          "filingcabinet",
+          "sidetable",
+          "shelves",
+          "smallbox"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

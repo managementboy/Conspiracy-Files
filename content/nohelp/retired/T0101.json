@@ -1,0 +1,106 @@
+[
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "map": "RiversideStashMap8",
+        "mark": 1
+      },
+      "body": "A meal bundle is tied to a note asking the next person to eat before departure; the sighting entry on the reverse is dated after the route was closed.",
+      "id": "t0101-01",
+      "kind": "set",
+      "pieces": [
+        "Bread",
+        "WaterBottle"
+      ],
+      "title": "Eat before leaving",
+      "where": [
+        {
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "left you some food here",
+        "source": "map:RiversideStashMap8"
+      },
+      "gloss": "A sighting is recorded after the route closure, beside food left for departure.",
+      "prov": {
+        "batch": "T0101",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A field team could have left food and logged a sighting after a route change; the entry does not prove anyone was trapped."
+    }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "map": "RiversideStashMap8",
+        "mark": 1
+      },
+      "body": "A meal bundle is tied to a note asking the next person to eat before departure; the sighting entry on the reverse is dated after the route was closed.",
+      "id": "t0101-01",
+      "kind": "set",
+      "pieces": [
+        "Bread",
+        "WaterBottle"
+      ],
+      "title": "Eat before leaving",
+      "where": [
+        {
+          "containers": [
+            "desk",
+            "crate",
+            "shelves",
+            "counter",
+            "cardboardbox",
+            "bin"
+          ],
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "left you some food here",
+        "source": "map:RiversideStashMap8"
+      },
+      "gloss": "A sighting is recorded after the route closure, beside food left for departure.",
+      "prov": {
+        "batch": "T0101",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A field team could have left food and logged a sighting after a route change; the entry does not prove anyone was trapped."
+    }
+  }
+]

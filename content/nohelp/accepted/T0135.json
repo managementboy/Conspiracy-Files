@@ -1,0 +1,32 @@
+[
+  {
+    "anchor": {
+      "map": "WpStashMap3",
+      "mark": 1
+    },
+    "body": "a broken barrier board crushed the antibiotics against the folded road map. clean undersides show both were there before the road was blocked.",
+    "id": "t0135-01",
+    "kind": "set",
+    "pieces": [
+      "Antibiotics",
+      "Map"
+    ],
+    "title": "Antibiotics beside the spare mark",
+    "where": [
+      {
+        "containers": [
+          "filingcabinet",
+          "medicine",
+          "desk",
+          "smallbox",
+          "sidetable",
+          "shelves"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

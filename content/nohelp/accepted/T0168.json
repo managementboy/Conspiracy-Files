@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "BensCabin"
+    },
+    "body": "A fishing rod and water bottle sit beside a cabin rental card; the host asks guests not to drink from the stream until the next test.",
+    "id": "t0168-01",
+    "kind": "set",
+    "pieces": [
+      "FishingRod",
+      "HandTorch"
+    ],
+    "title": "Cabin water note",
+    "where": [
+      {
+        "containers": [
+          "metal_shelves",
+          "toolcabinet",
+          "crate",
+          "doghouse",
+          "smallbox",
+          "tent"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

@@ -1,0 +1,32 @@
+[
+  {
+    "anchor": {
+      "map": "WpStashMap2",
+      "mark": 1
+    },
+    "body": "A medical note records the patient found without a weapon; the adjoining field entry says the treatment room was reserved for a sample review.",
+    "id": "t0134-01",
+    "kind": "set",
+    "pieces": [
+      "Bandage",
+      "Notebook"
+    ],
+    "title": "The patient without a weapon",
+    "where": [
+      {
+        "containers": [
+          "medicine",
+          "desk",
+          "sidetable",
+          "filingcabinet",
+          "locker",
+          "dresser"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

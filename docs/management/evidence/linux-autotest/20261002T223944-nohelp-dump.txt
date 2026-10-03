@@ -1,0 +1,6 @@
+Linux nohelp-dump check 20261002T223944: FAIL
+source: b1fdad36
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+DUMP1: areasDecided=4 bytes=109326 carrier=7 cluesAgricultural=16 cluesContainment=11 deferred=31 filler=11309 foundByLook=0 foundBySearch=0 identity=1267 lost=0 map_areas=4 peakMs=56 preparation=2215 queued_filler=6 queued_preparation=1 relocation=7 scenes=4 tracking=7 zbDropped=0 zbFailed=0 zbQueued=0 zbSeen=7
+DUMP2: areasDecided=4 bytes=109876 carrier=3 cluesAgricultural=16 cluesContainment=11 deferred=30 filler=4433 foundByLook=0 foundBySearch=0 identity=383 lost=0 peakMs=4 placed=1 preparation=606 queued_filler=5 queued_identity=1 queued_preparation=1 queued_tracking=1 relocation=3 scenes=4 tracking=2 zbDropped=0 zbFailed=0 zbQueued=0 zbSeen=0
+FAIL: placement counts differ

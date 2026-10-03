@@ -1,0 +1,43 @@
+[
+  {
+    "anchor": {
+      "scene": "RZSBurntWreck"
+    },
+    "body": "the hand axe with a seed sack carry saltlike grains from the sprayer trial. they were packed before the shelter message aired.",
+    "id": "t0378-01",
+    "kind": "set",
+    "pieces": [
+      "Axe",
+      "SeedBag"
+    ],
+    "title": "hand axe with a seed sack at at tuesday dawn",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RZSBurntWreck"
+    },
+    "body": "The car had a windshield pass for a route officially clear of traffic. At the next crossing the guards had a revised list and would not honor it. The driver folded the pass into quarters to keep it dry for his wife.",
+    "id": "t0378-02",
+    "kind": "written",
+    "pieces": [
+      "notebook"
+    ],
+    "title": "The wrecked permit",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
+  }
+]

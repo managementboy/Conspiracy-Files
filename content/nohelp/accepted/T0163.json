@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "Fossoil5"
+    },
+    "body": "matching white stripes cross the warning whistle and first-aid kit. a name-sized patch on the warning whistle has been scrubbed bare.",
+    "id": "t0163-01",
+    "kind": "set",
+    "pieces": [
+      "Whistle",
+      "FirstAidKit"
+    ],
+    "title": "Warning whistle beside the spare mark",
+    "where": [
+      {
+        "containers": [
+          "dresser",
+          "medicine",
+          "sidetable",
+          "shelves",
+          "locker",
+          "smallbox"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

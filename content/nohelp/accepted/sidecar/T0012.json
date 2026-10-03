@@ -1,0 +1,41 @@
+{
+  "t0012-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "gloss": "A courier's card sets a return after the access window.",
+    "prov": {
+      "batch": "T0012",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A field-delivery schedule could run past a road restriction; the late return line does not identify who changed access."
+  },
+  "t0012-02": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-malfunction",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-warning",
+        "c-orders"
+      ]
+    },
+    "gloss": "A rare everyday object carries residue tied to field work before restriction.",
+    "prov": {
+      "batch": "T0012",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "Emergency workers crossing treated land could have picked up the same residue; the objects do not prove the farm program began the emergency."
+  }
+}

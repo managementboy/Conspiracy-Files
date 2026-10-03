@@ -1,0 +1,42 @@
+[
+  {
+    "anchor": {
+      "scene": "RDSGunmanInBathroom"
+    },
+    "body": "I saved the cloth with yellow dust for you. The field-sprayer test crew passed Friday before dawn; three people felt dizzy, and afterward the radio warned everyone indoors.\n\nWe tried to finish the ordinary work around it. The notice changed faster than the deliveries, and no one came to collect what was left.\n\nIt could be a mistake in the copying. The things stacked beside the page were real enough, and still waiting to be moved.",
+    "id": "t0334-01",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "title": "Friday before dawn — yellow dust",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "corpse"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RDSGunmanInBathroom"
+    },
+    "body": "He told us to stay in the room and wait for the count. We could hear boots in the hall and someone asking whether to include the people behind the bathroom door.\n\nThe answer was no. They read out a number, then asked us to leave one at a time. He stayed behind with the door locked.\n\nI wrote the number down because it was smaller than the number of voices I had heard.",
+    "id": "t0334-02",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "What he said through the door",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "corpse"
+      }
+    ]
+  }
+]

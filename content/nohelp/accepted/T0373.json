@@ -1,0 +1,42 @@
+[
+  {
+    "anchor": {
+      "scene": "RVSTrailerCrash"
+    },
+    "body": "my cab entry says the pasture treatment workers brushed off mustard-colored dust. not one fly remained before a cruiser waved us away.\n\nThe small ordinary expense was the part I could still account for. I could not make the other figure on this page match what I had seen.\n\nI could have mistaken the order in which those things happened. I could not mistake the empty place left for the person we had been waiting for.",
+    "id": "t0373-01",
+    "kind": "written",
+    "pieces": [
+      "notebook"
+    ],
+    "title": "cab note — on the cold night",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "vehicle"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RVSTrailerCrash"
+    },
+    "body": "I watched them seal the trailer, then ask the driver to take the family home by a route that had already closed. He asked for the children to be counted with the cargo because the passenger column was full. Nobody laughed.",
+    "id": "t0373-02",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "title": "Trailer manifest",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "vehicle"
+      }
+    ]
+  }
+]

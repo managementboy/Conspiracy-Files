@@ -386,8 +386,12 @@ function P.known()
     local known={}
     for _,row in ipairs(require("NHShared/EngineAPI").GeneratedRuntime.known()) do known[row.id]=true end
     for _,root in ipairs(roots) do
-        local first=root.case.documents[1]
-        if known[first.id] then
+        -- A new world record has no documents until an area is decided: the
+        -- unguarded read threw at every world start (first visible playtest,
+        -- 2026-09-27, logged as "Deferred known").
+        local docs=root.case and root.case.documents
+        local first=type(docs)=="table" and docs[1] or nil
+        if first and known[first.id] and type(first.locationId)=="string" then
             assert(noteFact({kind="anonymousClue",id=first.id,buildingId=first.locationId:gsub("^t3:","")},
                 "anonymousClue clue="..first.id.." building="..first.locationId))
         end

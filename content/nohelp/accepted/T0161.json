@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "Fossoil3"
+    },
+    "body": "the duct tape and hand radio were sealed together but never opened. soot darkens the bundle; clean outlines show it was packed before the fire.",
+    "id": "t0161-01",
+    "kind": "set",
+    "pieces": [
+      "DuctTape",
+      "WalkieTalkie1"
+    ],
+    "title": "Duct tape beside the spare mark",
+    "where": [
+      {
+        "containers": [
+          "metal_shelves",
+          "toolcabinet",
+          "crate",
+          "locker",
+          "smallbox",
+          "smallcrate"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

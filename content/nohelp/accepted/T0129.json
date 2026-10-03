@@ -1,0 +1,32 @@
+[
+  {
+    "anchor": {
+      "map": "WorldStashMap20",
+      "mark": 1
+    },
+    "body": "The access complaint has no names or dates, only a list of doors refused and a final mark that says the crew left.",
+    "id": "t0129-01",
+    "kind": "set",
+    "pieces": [
+      "SheetPaper2",
+      "Pencil"
+    ],
+    "title": "Names replaced by insults",
+    "where": [
+      {
+        "containers": [
+          "filingcabinet",
+          "desk",
+          "sidetable",
+          "shelves",
+          "smallbox",
+          "cashregister"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

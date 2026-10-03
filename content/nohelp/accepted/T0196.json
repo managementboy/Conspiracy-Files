@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "HouseforSale922"
+    },
+    "body": "the lug wrench and hand torch are wedged beneath unused warning tape. footprints pass around the bundle rather than toward it.",
+    "id": "t0196-01",
+    "kind": "set",
+    "pieces": [
+      "LugWrench",
+      "HandTorch"
+    ],
+    "title": "Lug wrench with the unclosed tally",
+    "where": [
+      {
+        "containers": [
+          "toolcabinet",
+          "desk",
+          "metal_shelves",
+          "shelves",
+          "crate",
+          "smallcrate"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

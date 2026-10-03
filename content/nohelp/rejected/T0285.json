@@ -1,0 +1,51 @@
+{
+  "ticket": "T0285",
+  "returned_by": "Claude review, 2026-09-29",
+  "rows": [
+    {
+      "id": "t0285-01",
+      "codes": [
+        "DUPLICATE"
+      ],
+      "note": "Word-for-word copy of another clue delivered for a different scene (owner, 2026-09-29: copies go back). Write a clue of its own for this ticket.",
+      "row": {
+        "id": "t0285-01",
+        "kind": "set",
+        "pieces": [
+          "Hammer",
+          "Nails"
+        ],
+        "where": [
+          {
+            "place": "mapNamed",
+            "spot": "furniture",
+            "lean": "containment",
+            "rival": "agricultural"
+          }
+        ],
+        "anchor": {
+          "scene": "RBBurnt"
+        },
+        "title": "A return kit, packed twice",
+        "body": "The inventory pairs a sealed supply with its ordinary spare, but leaves no name beside the count.",
+        "rival_reading": "A household or work crew could keep a spare kit for an ordinary task; the missing name does not prove an emergency order.",
+        "gloss": "A prepared pair is left without a clear account of why it was needed.",
+        "axioms": {
+          "containment": [
+            "c-orders",
+            "c-failure"
+          ],
+          "agricultural": [
+            "a-malfunction",
+            "a-pathway"
+          ]
+        },
+        "prov": {
+          "writer": "ChatGPT",
+          "handoff": "2026-09-28",
+          "batch": "T0285"
+        }
+      }
+    }
+  ]
+}

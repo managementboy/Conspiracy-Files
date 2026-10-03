@@ -1,0 +1,236 @@
+[
+  {
+    "body": "The calf stopped drinking after we opened the new feed. Its sister stayed in the back pen on the old sack and still pushed me for breakfast.\n\nI wrote that down before anyone thought to count people. The feed bill was due Friday. I kept telling myself the animal was sulking because I was late.",
+    "id": "t0436-01",
+    "kind": "written",
+    "pieces": [
+      "diary"
+    ],
+    "title": "The first sick calf",
+    "where": [
+      {
+        "containers": [
+          "medicine",
+          "sidetable",
+          "dresser",
+          "desk",
+          "smallbox",
+          "locker"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "We filled the near trough from the field line and the far one from the well. By dusk the near pen was quiet; the far pen made its usual racket.\n\nI switched the hose myself. My mother asked why I kept a note about water when the cattle needed hay.",
+    "id": "t0436-02",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "Sunday at the water trough",
+    "where": [
+      {
+        "containers": [
+          "smallbox",
+          "cardboardbox",
+          "shelves",
+          "desk",
+          "counter",
+          "crate"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "The bale under the roof was sound. The loose hay left beside the sprayer curled at the edges, and the rabbits would only eat from the roofed bale.\n\nI had promised to sweep both piles before supper. Now the clean one is marked with my old blue string so I can find it in a hurry.",
+    "id": "t0436-03",
+    "kind": "written",
+    "pieces": [
+      "notebook"
+    ],
+    "title": "The hay stayed clean",
+    "where": [
+      {
+        "containers": [
+          "dishescabinet",
+          "counter",
+          "shelves",
+          "sidetable",
+          "smallbox",
+          "bin"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "My brother took the sacks to the poultry shed on Tuesday. He came back nauseated and slept through Wednesday's milking. The children who stayed in town were well that night.\n\nThe invoice sat under the sugar bowl because we still owed for the load. I was angry about the money before I was frightened about him.",
+    "id": "t0436-04",
+    "kind": "written",
+    "pieces": [
+      "diary"
+    ],
+    "title": "The feed before the fever",
+    "where": [
+      {
+        "containers": [
+          "wardrobe",
+          "dresser",
+          "desk",
+          "filingcabinet",
+          "smallbox",
+          "shelves"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "Our goats grazed the ditch after the field truck passed. The ones shut in the upper pen ate the same hay but never reached the ditch, and they kept their appetites.\n\nI used to complain that the upper gate stuck. That day I was grateful and ashamed of how long it took me to notice why.",
+    "id": "t0436-05",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "title": "The open gate",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "mailbox"
+      }
+    ]
+  },
+  {
+    "body": "Only the flock beside the new grain bin stopped laying. I gave the birds in the yard from the old tin; they made noise all morning and left eggs by noon.\n\nI put the feed scoop on a shelf rather than wash it. It seemed useful to know exactly which bin it had touched.",
+    "id": "t0436-06",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "The day the hens fell silent",
+    "where": [
+      {
+        "containers": [
+          "locker",
+          "filingcabinet",
+          "desk",
+          "shelves",
+          "cardboardbox",
+          "crate"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "I swept the packing room while the new seed bags were stacked there. By evening my throat burned. My cousin swept the empty stall next door and went to the dance.\n\nWe both laughed at my cough at first. I can still see the pale stripe the sacks left on the floor.",
+    "id": "t0436-07",
+    "kind": "written",
+    "pieces": [
+      "diary"
+    ],
+    "title": "The barn dust",
+    "where": [
+      {
+        "containers": [
+          "desk",
+          "filingcabinet",
+          "shelves",
+          "cardboardbox",
+          "smallbox",
+          "crate"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "A row of beans wilted after water from the field barrel. The next row, planted the same day, had rainwater saved under the porch and still stood upright.\n\nI let the dry row grow long because I wanted to be sure I hadn't simply planted too late. Now both rows are easy to tell apart.",
+    "id": "t0436-08",
+    "kind": "written",
+    "pieces": [
+      "notebook"
+    ],
+    "title": "The second watering",
+    "where": [
+      {
+        "containers": [
+          "crate",
+          "metal_shelves",
+          "counter",
+          "shelves",
+          "cardboardbox",
+          "locker"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "Three calves were off their feed in the pen that received the new grain. The others had the same weather and the same night watch but ate from an unopened older sack.\n\nI was supposed to balance the feed bill. Instead I drew the pen divisions on the back of the envelope.",
+    "id": "t0436-09",
+    "kind": "written",
+    "pieces": [
+      "receipt"
+    ],
+    "title": "The morning after the delivery",
+    "where": [
+      {
+        "containers": [
+          "fridge",
+          "counter",
+          "shelves",
+          "smallbox",
+          "bin",
+          "cardboardbox"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "The lower garden took the muddy overflow from the field. The upper garden stayed dry. A week later the lower leaves had black edges and the upper cabbage was still growing.\n\nI meant to take a photograph for the seed supplier. The camera was full of birthday pictures and I could not bring myself to use the last frame.",
+    "id": "t0436-10",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "title": "What the river did not reach",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "mailbox"
+      }
+    ]
+  }
+]

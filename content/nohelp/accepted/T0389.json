@@ -1,0 +1,42 @@
+[
+  {
+    "anchor": {
+      "scene": "RZSMurderScene"
+    },
+    "body": "feed, soap, and a clean jar, paid cash. my note below says a medicinal odor came from the sprayer trial; the driver grew dizzy before the shelter message aired.\n\nThe children asked why the same place had two different names on the two papers. I told them to hold on to both until we knew.\n\nI wrote the time before I went back for the others. The clock may have been slow; the second vehicle was already gone.",
+    "id": "t0389-01",
+    "kind": "written",
+    "pieces": [
+      "receipt"
+    ],
+    "title": "coat pocket note — at tuesday dawn",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "corpse"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RZSMurderScene"
+    },
+    "body": "I heard three shots, then the person taking statements told me the file would say two. He said the third sound might have come from a car door. I put a mark beside it, because the woman on the ground heard it too.",
+    "id": "t0389-02",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "Pocket list of witnesses",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "corpse"
+      }
+    ]
+  }
+]

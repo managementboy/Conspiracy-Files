@@ -1,0 +1,25 @@
+{
+  "t0160-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "Fossoil (West Point)",
+      "source": "print:Fossoil2"
+    },
+    "gloss": "A fuel sample is cleared before the customer shift begins.",
+    "prov": {
+      "batch": "T0160",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A containment inspection could test fuel after a supply interruption; the sheet does not identify the sample."
+  }
+}

@@ -85,11 +85,47 @@ function M.fits(kind,body)
  local v=M.get(kind); if not v or type(body)~="string" then return false end
  if v.capacity=="short" then return #body<=M.SHORT_MAX_CHARS end
  -- An object carries no readable text at all: nothing is written on a hammer.
- -- Its body is the record's own sentence about having found it, so the cap
- -- is about what belongs in a row of noted evidence, not what fits on the item - a
+ -- Its record is the sight and what the survivor made of it, so the cap is
+ -- about what belongs in a row of noted evidence, not what fits on the item - a
  -- page of prose about an object would be the mod explaining the object,
- -- which is the one thing it must not do.
+ -- which is the one thing it must not do. The source
+ -- sentence (what is visibly true of the object) does not count against the
+ -- cap (owner decision 2026-10-02): the Mystery linter counts only the
+ -- observation and the note, so `body` here is that rest.
  if v.capacity=="object" then return #body<=M.OBJECT_MAX_CHARS end
  return true
+end
+-- A CARD READS LIKE A VANILLA CARD UNTIL IT IS RECOGNISED (owner, 2026-09-27;
+-- P4-R132: a clue is a plain item until then). The game names its own cards
+-- with InventoryItem.nameAfterDescriptor: the item's translated name, ": ",
+-- forename, " ", surname, set with setName alone (projectzomboid.jar, Build
+-- 42, read 2026-09-27) - "ID Card: Paris Stover", which is also the shape the
+-- identity observer reads a name from. So an authored card clue's title is
+-- the name on the card, and the card shows exactly that: no Evidence
+-- category, no stamp. A card whose title is only the kind's own default label
+-- (a placeholder with no name) keeps the game's plain name.
+M.CARD_KINDS={idcard=true,businesscard=true}
+-- The plain name, or nil when the card should keep the game's own. Pure.
+-- `vanillaName` is the item's own display name before any rename; the kind's
+-- short name stands in for it when it cannot be read.
+function M.plainCardName(kind,title,vanillaName)
+ local v=M.CARD_KINDS[kind] and M.get(kind)
+ if not v or type(title)~="string" then return nil end
+ title=title:gsub("^%s+",""):gsub("%s+$","")
+ if title=="" or title==v.label or title:find("[%c]") then return nil end
+ local base=(type(vanillaName)=="string" and vanillaName:find("%S") and not vanillaName:find(": ",1,true)) and vanillaName or v.short
+ if title:sub(1,#base+2)==base..": " then return title end
+ return base..": "..title
+end
+-- Name one placed card the vanilla way. The only engine calls are the item's
+-- own getDisplayName and setName, each in a pcall; true when renamed.
+function M.nameAsVanillaCard(item,doc)
+ if not item or type(doc)~="table" or doc.members~=nil then return false end
+ if not M.CARD_KINDS[doc.kind] then return false end
+ local okName,current=pcall(function() return item:getDisplayName() end)
+ local name=M.plainCardName(doc.kind,doc.title,okName and current or nil)
+ if not name then return false end
+ local ok=pcall(function() item:setName(name) end)
+ return ok
 end
 return M

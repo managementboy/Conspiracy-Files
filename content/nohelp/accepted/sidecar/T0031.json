@@ -1,0 +1,48 @@
+{
+  "t0031-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "I had an affair with Derek",
+      "source": "map:BBurgStashMap6"
+    },
+    "gloss": "A private apology is interrupted by a missing address on a pickup list.",
+    "prov": {
+      "batch": "T0031",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A work crew could have used the route and kept its own address list; the letter cannot say why the bus passed."
+  },
+  "t0031-02": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "I had an affair with Derek",
+      "source": "map:BBurgStashMap6"
+    },
+    "gloss": "A private room key is signed out beside an unsigned test record.",
+    "prov": {
+      "batch": "T0031",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A response team could have logged a sample during cleanup and kept records separate; the arrangement does not identify the test."
+  }
+}

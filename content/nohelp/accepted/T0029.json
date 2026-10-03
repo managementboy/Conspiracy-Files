@@ -1,0 +1,61 @@
+[
+  {
+    "anchor": {
+      "map": "BBurgStashMap4",
+      "mark": 1
+    },
+    "body": "four notches on the garden hoe match four marks on the camera; a fifth mark was sanded flat on both.",
+    "id": "t0029-01",
+    "kind": "set",
+    "pieces": [
+      "GardenHoe",
+      "Camera"
+    ],
+    "title": "Garden hoe beside the spare mark",
+    "where": [
+      {
+        "containers": [
+          "metal_shelves",
+          "dresser",
+          "toolcabinet",
+          "sidetable",
+          "crate",
+          "desk"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "BBurgStashMap4",
+      "mark": 1
+    },
+    "body": "You said one bite was enough, so I marked the water barrel too. The field crew calls the rinse routine; I still will not let the dog drink until the tank is flushed.\n\nI thought the date would settle it. When I asked, the person at the barrier looked at the seal instead and handed it back.\n\nI wrote the time before I went back for the others. The clock may have been slow; the second vehicle was already gone.",
+    "id": "t0029-02",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "title": "A corner still legible",
+    "where": [
+      {
+        "containers": [
+          "desk",
+          "filingcabinet",
+          "sidetable",
+          "cashregister",
+          "shelves",
+          "smallbox"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

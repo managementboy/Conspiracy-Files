@@ -1,0 +1,104 @@
+[
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "print": "MailCarrierAdEkron"
+      },
+      "body": "The carrier’s route bag contains a change notice that marks the route complete before the last neighborhood was delivered.",
+      "id": "t0216-01",
+      "kind": "set",
+      "pieces": [
+        "LetterHandwritten",
+        "Bag_ALICEpack"
+      ],
+      "title": "The mail route change",
+      "where": [
+        {
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "Mail Carrier Ad (Ekron)",
+        "source": "print:MailCarrierAdEkron"
+      },
+      "gloss": "A delivery route is closed before its last neighborhood is served.",
+      "prov": {
+        "batch": "T0216",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A field courier could use the same route and close it early; the notice does not show who changed the schedule."
+    }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "print": "MailCarrierAdEkron"
+      },
+      "body": "The carrier’s route bag contains a change notice that marks the route complete before the last neighborhood was delivered.",
+      "id": "t0216-01",
+      "kind": "set",
+      "pieces": [
+        "LetterHandwritten",
+        "Bag_ALICEpack"
+      ],
+      "title": "The mail route change",
+      "where": [
+        {
+          "containers": [
+            "crate",
+            "shelves",
+            "desk",
+            "counter",
+            "cardboardbox",
+            "bin"
+          ],
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "Mail Carrier Ad (Ekron)",
+        "source": "print:MailCarrierAdEkron"
+      },
+      "gloss": "A delivery route is closed before its last neighborhood is served.",
+      "prov": {
+        "batch": "T0216",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A field courier could use the same route and close it early; the notice does not show who changed the schedule."
+    }
+  }
+]

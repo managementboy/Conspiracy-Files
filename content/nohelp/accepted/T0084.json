@@ -1,0 +1,32 @@
+[
+  {
+    "anchor": {
+      "map": "MulStashMap7",
+      "mark": 1
+    },
+    "body": "A store receipt lists every shelf as stocked, while a note asks the crew to keep the test supplies separate from food. The separation box is blank.",
+    "id": "t0084-01",
+    "kind": "set",
+    "pieces": [
+      "TinOpener",
+      "Pills"
+    ],
+    "title": "Full store, missing check",
+    "where": [
+      {
+        "containers": [
+          "dishescabinet",
+          "medicine",
+          "overhead",
+          "smallbox",
+          "counter",
+          "sidetable"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

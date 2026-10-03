@@ -1,0 +1,251 @@
+[
+  {
+    "recall": "R1",
+    "row": {
+      "anchor": {
+        "map": "BBurgStashMap2",
+        "mark": 1
+      },
+      "body": "A master key lies across a folded departure notice; the hall door was logged locked before the bus left, though a margin says it stood open. The custodian has underlined “return key” twice.",
+      "id": "t0027-01",
+      "kind": "set",
+      "pieces": [
+        "SheetPaper2",
+        "Pencil",
+        "KeyRing"
+      ],
+      "title": "The key return",
+      "where": [
+        {
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "community center",
+        "source": "map:BBurgStashMap2"
+      },
+      "gloss": "A hall key and departure record disagree about whether the building was secured before transport left.",
+      "prov": {
+        "batch": "T0027",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A program crew could have used the hall and its transport during ordinary field work; the contradictory door note does not say why the bus left."
+    }
+  },
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "map": "BBurgStashMap2",
+        "mark": 1
+      },
+      "body": "the folded tarp and bath towel are wedged beneath unused warning tape. footprints pass around the bundle rather than toward it.",
+      "id": "t0027-01",
+      "kind": "set",
+      "pieces": [
+        "Tarp",
+        "BathTowel"
+      ],
+      "title": "missing count beside the folded tarp",
+      "where": [
+        {
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-warning",
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "gloss": "A response bundle preserves a missing count, changed route, or erased identity.",
+      "prov": {
+        "batch": "T0027",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A farm-program crew could have counted routes, repacked tools, or removed ownership marks during hurried field work; the objects do not prove a concealed public response."
+    }
+  },
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "map": "BBurgStashMap2",
+        "mark": 1
+      },
+      "body": "The caretaker says the grounds crew borrowed the kitchen sink for a rinse. Please keep the side room locked until the treated beds are dry; the folding chairs are still needed tomorrow.",
+      "id": "t0027-02",
+      "kind": "written",
+      "pieces": [
+        "letter"
+      ],
+      "title": "Before the beds dry",
+      "where": [
+        {
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-malfunction"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "community center",
+        "source": "map:BBurgStashMap2"
+      },
+      "gloss": "A caretaker's request links a grounds crew, rinsed equipment, and a temporary room restriction.",
+      "prov": {
+        "batch": "T0027",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A response crew could have rinsed equipment and restricted access after an emergency; the note never identifies what treatment reached the grounds."
+    }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "map": "BBurgStashMap2",
+        "mark": 1
+      },
+      "body": "the folded tarp and bath towel are wedged beneath unused warning tape. footprints pass around the bundle rather than toward it.",
+      "id": "t0027-01",
+      "kind": "set",
+      "pieces": [
+        "Tarp",
+        "BathTowel"
+      ],
+      "title": "Folded tarp beside the spare mark",
+      "where": [
+        {
+          "containers": [
+            "crate",
+            "shelves",
+            "desk",
+            "counter",
+            "cardboardbox",
+            "bin"
+          ],
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-warning",
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "gloss": "A response bundle preserves a missing count, changed route, or erased identity.",
+      "prov": {
+        "batch": "T0027",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A farm-program crew could have counted routes, repacked tools, or removed ownership marks during hurried field work; the objects do not prove a concealed public response."
+    }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "map": "BBurgStashMap2",
+        "mark": 1
+      },
+      "body": "The caretaker says the grounds crew borrowed the kitchen sink for a rinse. Please keep the side room locked until the treated beds are dry; the folding chairs are still needed tomorrow.\n\nThe person beside me recognized the handwriting and went quiet. We had been told not to rely on yesterday’s directions.\n\nThe person who was supposed to collect it had no time to stop. I did not put it back with the rest of the ordinary papers.",
+      "id": "t0027-02",
+      "kind": "written",
+      "pieces": [
+        "letter"
+      ],
+      "title": "Before the beds dry",
+      "where": [
+        {
+          "containers": [
+            "dresser",
+            "crate",
+            "shelves",
+            "desk",
+            "counter",
+            "cardboardbox"
+          ],
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-malfunction"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "community center",
+        "source": "map:BBurgStashMap2"
+      },
+      "gloss": "A caretaker's request links a grounds crew, rinsed equipment, and a temporary room restriction.",
+      "prov": {
+        "batch": "T0027",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A response crew could have rinsed equipment and restricted access after an emergency; the note never identifies what treatment reached the grounds."
+    }
+  }
+]

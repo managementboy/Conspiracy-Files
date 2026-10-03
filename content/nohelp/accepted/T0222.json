@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "HouseforSale930"
+    },
+    "body": "the spool of thread and first-aid kit carry the same black paint. a fresh scrape exposes an older evacuation color beneath.",
+    "id": "t0222-01",
+    "kind": "set",
+    "pieces": [
+      "Thread",
+      "FirstAidKit"
+    ],
+    "title": "Spool of thread with the unclosed tally",
+    "where": [
+      {
+        "containers": [
+          "wardrobe",
+          "smallbox",
+          "toolcabinet",
+          "locker",
+          "crate",
+          "medicine"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

@@ -1,0 +1,145 @@
+[
+  {
+    "recall": "R1",
+    "row": {
+      "anchor": {
+        "print": "SpiffosHiringWestPoint"
+      },
+      "body": "A shift pack is tied to the store key and a route card; the cashier’s sign-out is stamped before the delivery van’s return.",
+      "id": "t0184-01",
+      "kind": "set",
+      "pieces": [
+        "KeyRing",
+        "Bag_ALICEpack"
+      ],
+      "title": "The shift pack",
+      "where": [
+        {
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "Spiffo's Hiring! (West Point)",
+        "source": "print:SpiffosHiringWestPoint"
+      },
+      "gloss": "A cashier signs out before the delivery van returns.",
+      "prov": {
+        "batch": "T0184",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A program crew could carry supplies and return the van later; the card does not show who authorized the schedule."
+    }
+  },
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "print": "SpiffosHiringWestPoint"
+      },
+      "body": "the pipe wrench and seed sack are packed with treated seed. every kernel has the same cracked green coating.",
+      "id": "t0184-01",
+      "kind": "set",
+      "pieces": [
+        "PipeWrench",
+        "SeedBag"
+      ],
+      "title": "field residue on the pipe wrench",
+      "where": [
+        {
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-malfunction",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-warning",
+          "c-orders"
+        ]
+      },
+      "gloss": "A rare everyday object carries residue tied to field work before restriction.",
+      "prov": {
+        "batch": "T0184",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "Emergency workers crossing treated land could have picked up the same residue; the objects do not prove the farm program began the emergency."
+    }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "print": "SpiffosHiringWestPoint"
+      },
+      "body": "the pipe wrench and seed sack are packed with treated seed. every kernel has the same cracked green coating.",
+      "id": "t0184-01",
+      "kind": "set",
+      "pieces": [
+        "PipeWrench",
+        "SeedBag"
+      ],
+      "title": "After on the pipe wrench, the first copy",
+      "where": [
+        {
+          "containers": [
+            "toolcabinet",
+            "crate",
+            "shelves",
+            "desk",
+            "counter",
+            "cardboardbox"
+          ],
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-malfunction",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-warning",
+          "c-orders"
+        ]
+      },
+      "gloss": "A rare everyday object carries residue tied to field work before restriction.",
+      "prov": {
+        "batch": "T0184",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "Emergency workers crossing treated land could have picked up the same residue; the objects do not prove the farm program began the emergency."
+    }
+  }
+]

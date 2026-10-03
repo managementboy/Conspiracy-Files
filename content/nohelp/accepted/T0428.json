@@ -1,0 +1,240 @@
+[
+  {
+    "body": "This seam has two colors of dust. The fertilizer reached the lower half; the dry seed at the top still comes away clean.",
+    "id": "t0428-01",
+    "kind": "set",
+    "pieces": [
+      "SeedBag",
+      "Fertilizer"
+    ],
+    "title": "The dry half of the sack",
+    "where": [
+      {
+        "containers": [
+          "desk",
+          "filingcabinet",
+          "shelves",
+          "cardboardbox",
+          "smallbox",
+          "crate"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "The soil on this shovel stops at a sharp pale band. Someone rinsed one side and left the other coated in field grit.",
+    "id": "t0428-02",
+    "kind": "set",
+    "pieces": [
+      "HandShovel",
+      "Bucket"
+    ],
+    "title": "The washed border",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "vehicle"
+      }
+    ]
+  },
+  {
+    "body": "These seeds are separated with twine into two little piles. The damp ones have black tips; the dry ones have begun to sprout.",
+    "id": "t0428-03",
+    "kind": "set",
+    "pieces": [
+      "CornSeed",
+      "Twine"
+    ],
+    "title": "The second planting",
+    "where": [
+      {
+        "containers": [
+          "fridge",
+          "counter",
+          "shelves",
+          "smallbox",
+          "bin",
+          "cardboardbox"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "This folded bag has loose feed at the bottom and a tied-off strip from another bag. The strip is marked for a different delivery day.",
+    "id": "t0428-04",
+    "kind": "set",
+    "pieces": [
+      "SeedBag",
+      "Rope"
+    ],
+    "title": "The empty return",
+    "where": [
+      {
+        "containers": [
+          "toolcabinet",
+          "locker",
+          "crate",
+          "shelves",
+          "cardboardbox",
+          "desk"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "There is a sticky green rim inside the jar and clean water in the bottle beside it. Only the jar's contents have gone cloudy.",
+    "id": "t0428-05",
+    "kind": "set",
+    "pieces": [
+      "EmptyJar",
+      "WaterBottle"
+    ],
+    "title": "The patch beneath the lid",
+    "where": [
+      {
+        "containers": [
+          "dresser",
+          "wardrobe",
+          "sidetable",
+          "desk",
+          "locker",
+          "smallbox"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "The lowest sack has sprouted through its stitches. The bag above it is dry and still sealed.",
+    "id": "t0428-06",
+    "kind": "set",
+    "pieces": [
+      "SeedBag",
+      "CompostBag"
+    ],
+    "title": "The bottom of the stack",
+    "where": [
+      {
+        "containers": [
+          "postbox",
+          "shelves",
+          "counter",
+          "smallbox",
+          "cardboardbox",
+          "desk"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "A garden glove is folded around a seed packet; the fingertips have a dark crust that the packet's paper doesn't have.",
+    "id": "t0428-07",
+    "kind": "set",
+    "pieces": [
+      "Gloves_Dish",
+      "CarrotSeed"
+    ],
+    "title": "The hand at the fence",
+    "where": [
+      {
+        "lean": "agricultural",
+        "outfit": "farm",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "corpse"
+      }
+    ]
+  },
+  {
+    "body": "The tarp's underside is dotted with pale leaves. Outside its edge the same size stems have gone dark at their tips.",
+    "id": "t0428-08",
+    "kind": "set",
+    "pieces": [
+      "Tarp",
+      "HandShovel"
+    ],
+    "title": "The covered seedlings",
+    "where": [
+      {
+        "containers": [
+          "filingcabinet",
+          "desk",
+          "shelves",
+          "crate",
+          "locker",
+          "cardboardbox"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "This packet is unopened, tucked into a pot of healthy starts. A matching empty packet is stuck to the soil of the wilted tray.",
+    "id": "t0428-09",
+    "kind": "set",
+    "pieces": [
+      "CornSeed",
+      "Pot"
+    ],
+    "title": "The spared row",
+    "where": [
+      {
+        "containers": [
+          "medicine",
+          "sidetable",
+          "dresser",
+          "desk",
+          "smallbox",
+          "locker"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "There is fresh soil in the lunch bowl and none on the fork. Someone set food down to carry a wet seed bag back in.",
+    "id": "t0428-10",
+    "kind": "set",
+    "pieces": [
+      "Bowl",
+      "Fork",
+      "SeedBag"
+    ],
+    "title": "The first return from the field",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "vehicle"
+      }
+    ]
+  }
+]

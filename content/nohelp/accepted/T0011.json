@@ -1,0 +1,39 @@
+[
+  {
+    "body": "Delivery: office to road crews. Return copy expected when access resumes. Reverse: “Please bring the chipped blue cup back; it was my sister's.”",
+    "id": "t0011-01",
+    "kind": "written",
+    "person": "person-b",
+    "pieces": [
+      "idcard"
+    ],
+    "title": "County message runner card",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "office",
+        "rival": "agricultural",
+        "spot": "mailbox"
+      }
+    ]
+  },
+  {
+    "body": "the baling twine and hand torch smell sharply of bleach. mud outlines between them show that a third object was removed.",
+    "id": "t0011-02",
+    "kind": "set",
+    "person": "person-b",
+    "pieces": [
+      "Twine",
+      "HandTorch"
+    ],
+    "title": "Baling twine with the unclosed tally",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "office",
+        "rival": "agricultural",
+        "spot": "mailbox"
+      }
+    ]
+  }
+]

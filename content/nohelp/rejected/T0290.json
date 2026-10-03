@@ -1,0 +1,51 @@
+{
+  "ticket": "T0290",
+  "returned_by": "Claude review, 2026-09-29",
+  "rows": [
+    {
+      "id": "t0290-01",
+      "codes": [
+        "DUPLICATE"
+      ],
+      "note": "Word-for-word copy of another clue delivered for a different scene (owner, 2026-09-29: copies go back). Write a clue of its own for this ticket.",
+      "row": {
+        "id": "t0290-01",
+        "kind": "set",
+        "pieces": [
+          "Rope",
+          "Tarp"
+        ],
+        "where": [
+          {
+            "place": "mapNamed",
+            "spot": "furniture",
+            "lean": "agricultural",
+            "rival": "containment"
+          }
+        ],
+        "anchor": {
+          "scene": "RBDorm"
+        },
+        "title": "A checklist stopped short",
+        "body": "The items are together as if the last step mattered, although no one marked that step complete.",
+        "rival_reading": "This could be an ordinary work task interrupted for unrelated reasons.",
+        "gloss": "A prepared pair is left without a clear account of why it was needed.",
+        "axioms": {
+          "containment": [
+            "c-orders",
+            "c-failure"
+          ],
+          "agricultural": [
+            "a-malfunction",
+            "a-pathway"
+          ]
+        },
+        "prov": {
+          "writer": "ChatGPT",
+          "handoff": "2026-09-28",
+          "batch": "T0290"
+        }
+      }
+    }
+  ]
+}

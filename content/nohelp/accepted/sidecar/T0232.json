@@ -1,0 +1,25 @@
+{
+  "t0232-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "West Point DIY",
+      "source": "print:WPDIY"
+    },
+    "gloss": "A field-use entry precedes the tool delivery.",
+    "prov": {
+      "batch": "T0232",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A town crew could use the same tools during emergency repairs; the receipt does not show what the watering can was for."
+  }
+}

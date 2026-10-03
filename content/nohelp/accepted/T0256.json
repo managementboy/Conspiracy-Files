@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "BrottAuction"
+    },
+    "body": "the lighter and empty garden sprayer carry animal-feed grit under a strip of barrier tape. neither layer fully covers the other.",
+    "id": "t0256-01",
+    "kind": "set",
+    "pieces": [
+      "Lighter",
+      "GardeningSprayEmpty"
+    ],
+    "title": "Lighter carrying two traces",
+    "where": [
+      {
+        "containers": [
+          "toolcabinet",
+          "metal_shelves",
+          "cardboardbox",
+          "smallbox",
+          "crate",
+          "smallcrate"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

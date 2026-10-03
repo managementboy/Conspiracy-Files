@@ -1,0 +1,54 @@
+[
+  {
+    "body": "A numbered evacuation tag is knotted to the short rope, its name line scratched out. The water bottle has its label peeled off and the same number inked on the cap. Both are tied with one cord.",
+    "id": "t0008-01",
+    "kind": "set",
+    "pieces": [
+      "Rope",
+      "WaterBottle"
+    ],
+    "title": "Short rope and a scratched-out tag",
+    "where": [
+      {
+        "containers": [
+          "metal_shelves",
+          "toolcabinet",
+          "crate",
+          "smallcrate",
+          "shelves",
+          "bin"
+        ],
+        "lean": "containment",
+        "place": "warehouse",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "The notebook rests across the bucket. Its page labels two strips “control — standing” and “trial spray — curled by noon.” The next line reads “mix still active after valve shut.”",
+    "id": "t0008-02",
+    "kind": "set",
+    "pieces": [
+      "Bucket",
+      "Notebook"
+    ],
+    "title": "The trial strip curled after spraying",
+    "where": [
+      {
+        "containers": [
+          "metal_shelves",
+          "toolcabinet",
+          "crate",
+          "smallcrate",
+          "shelves",
+          "bin"
+        ],
+        "lean": "agricultural",
+        "place": "warehouse",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

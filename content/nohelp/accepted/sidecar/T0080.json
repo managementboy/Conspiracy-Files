@@ -1,0 +1,25 @@
+{
+  "t0080-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "shotgun - food in kitchen?",
+      "source": "map:MulStashMap12"
+    },
+    "gloss": "Food is kept beside a temporary water restriction during a crowd movement.",
+    "prov": {
+      "batch": "T0080",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "An emergency team could have restricted kitchen water while people moved through; the tag does not say what was in the lot."
+  }
+}

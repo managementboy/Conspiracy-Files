@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "MuldraughBakeSale"
+    },
+    "body": "The bake-sale list marks every box collected before the parking lot was cleared; one family’s unpaid loaf remains beside the pickup table.",
+    "id": "t0192-01",
+    "kind": "set",
+    "pieces": [
+      "Bread",
+      "SheetPaper2"
+    ],
+    "title": "Bake sale pickup",
+    "where": [
+      {
+        "containers": [
+          "cardboardbox",
+          "grocerstand",
+          "smallbox",
+          "crate",
+          "counter",
+          "desk"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

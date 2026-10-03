@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "HouseforSale907"
+    },
+    "body": "three pickup dots mark the magnifying glass and folded road map. two were scratched away without wear around them.",
+    "id": "t0218-01",
+    "kind": "set",
+    "pieces": [
+      "MagnifyingGlass",
+      "Map"
+    ],
+    "title": "Magnifying glass with the unclosed tally",
+    "where": [
+      {
+        "containers": [
+          "cardboardbox",
+          "smallbox",
+          "desk",
+          "sidetable",
+          "filingcabinet",
+          "dresser"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

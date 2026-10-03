@@ -1,0 +1,38 @@
+[
+  {
+    "body": "The postcard is stamped and addressed, but the map beneath it ends at a street crossed out in pencil. The message stops after, “We were told to wait by—”.",
+    "id": "t0006-01",
+    "kind": "set",
+    "pieces": [
+      "Map",
+      "Postcard"
+    ],
+    "title": "The postcard addressed to a crossed street",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "bookstore",
+        "rival": "agricultural",
+        "spot": "mailbox"
+      }
+    ]
+  },
+  {
+    "body": "A newspaper gardening column is folded around a notebook sketch of three crop rows. The drawing has a water line but no planting date; the column is for winter.",
+    "id": "t0006-02",
+    "kind": "set",
+    "pieces": [
+      "Newspaper",
+      "Notebook"
+    ],
+    "title": "The garden column with no matching season",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "bookstore",
+        "rival": "containment",
+        "spot": "mailbox"
+      }
+    ]
+  }
+]

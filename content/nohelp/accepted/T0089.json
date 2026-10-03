@@ -1,0 +1,32 @@
+[
+  {
+    "anchor": {
+      "map": "MulStashMap15",
+      "mark": 1
+    },
+    "body": "The bandage wrapper is tucked into a route book whose clinic stop is stamped complete before the patient’s return line is signed.",
+    "id": "t0089-01",
+    "kind": "set",
+    "pieces": [
+      "Bandage",
+      "Notebook"
+    ],
+    "title": "Careful past the clinic",
+    "where": [
+      {
+        "containers": [
+          "medicine",
+          "desk",
+          "smallbox",
+          "shelves",
+          "sidetable",
+          "filingcabinet"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

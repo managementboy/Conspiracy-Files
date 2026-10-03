@@ -1,0 +1,32 @@
+[
+  {
+    "anchor": {
+      "map": "RosewoodStashMap2",
+      "mark": 1
+    },
+    "body": "The route map is folded around a weapon handover slip; the last stop is marked complete, but the return route has no driver.",
+    "id": "t0105-01",
+    "kind": "set",
+    "pieces": [
+      "Pistol",
+      "Map"
+    ],
+    "title": "The line ends here",
+    "where": [
+      {
+        "containers": [
+          "militarylocker",
+          "desk",
+          "locker",
+          "filingcabinet",
+          "militarycrate",
+          "shelves"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

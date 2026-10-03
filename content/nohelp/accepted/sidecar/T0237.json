@@ -1,0 +1,25 @@
+{
+  "t0237-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "Muldraugh Police",
+      "source": "print:MuldraughPD"
+    },
+    "gloss": "A public meeting and field visit share one speaker and one time.",
+    "prov": {
+      "batch": "T0237",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "An emergency meeting could overlap a site inspection; the notes do not show what the field visit concerned."
+  }
+}

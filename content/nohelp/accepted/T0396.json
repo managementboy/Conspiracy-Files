@@ -1,0 +1,42 @@
+[
+  {
+    "anchor": {
+      "scene": "RZSOldShelter"
+    },
+    "body": "Tuesday: the pasture-test workers slept here with gray foam on their boots. The creek tasted bitter before warning tape appeared across the trail.\n\nThey counted the containers before anyone counted who had carried them. I wrote the second number here while I could still remember it.\n\nThere may be a simple reason for the change. Nobody at the next stop could tell us what to do with the first version.",
+    "id": "t0396-01",
+    "kind": "written",
+    "pieces": [
+      "diary"
+    ],
+    "title": "rain under the shelter roof",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RZSOldShelter"
+    },
+    "body": "We stayed under this roof because the trail below was listed as an evacuation route. A runner came back saying the gate at its end had been chained before noon. I left a dry blanket here for whoever believed the same sign.",
+    "id": "t0396-02",
+    "kind": "written",
+    "pieces": [
+      "notebook"
+    ],
+    "title": "Inside the dry seam",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
+  }
+]

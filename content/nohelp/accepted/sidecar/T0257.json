@@ -1,0 +1,25 @@
+{
+  "t0257-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "Cat on a Hot Tin Grill",
+      "source": "print:CatonaHotTinGrill"
+    },
+    "gloss": "Lunch is served before the pond sample is recorded.",
+    "prov": {
+      "batch": "T0257",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A routine food inspection could sample the pond after lunch; the slip does not identify what prompted it."
+  }
+}

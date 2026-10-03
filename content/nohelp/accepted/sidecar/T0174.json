@@ -1,0 +1,25 @@
+{
+  "t0174-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "Havisham Suites",
+      "source": "print:HavishamSuites"
+    },
+    "gloss": "A room charge closes while a water test remains pending.",
+    "prov": {
+      "batch": "T0174",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A response team could test water before reopening a room; the list does not identify what caused the check."
+  }
+}

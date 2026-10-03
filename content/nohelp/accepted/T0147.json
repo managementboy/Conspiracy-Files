@@ -1,0 +1,32 @@
+[
+  {
+    "anchor": {
+      "map": "WpStashMap15",
+      "mark": 1
+    },
+    "body": "road dust coats the comb and hand torch, but their ties are clean and newly cut. the bundle was repacked after travel.",
+    "id": "t0147-01",
+    "kind": "set",
+    "pieces": [
+      "Comb",
+      "HandTorch"
+    ],
+    "title": "Comb beside the spare mark",
+    "where": [
+      {
+        "containers": [
+          "metal_shelves",
+          "cardboardbox",
+          "smallbox",
+          "crate",
+          "toolcabinet",
+          "locker"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

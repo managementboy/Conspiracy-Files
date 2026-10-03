@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "PremisesforLease863"
+    },
+    "body": "the toilet roll and hand radio were sealed together but never opened. soot darkens the bundle; clean outlines show it was packed before the fire.",
+    "id": "t0244-01",
+    "kind": "set",
+    "pieces": [
+      "ToiletPaper",
+      "WalkieTalkie1"
+    ],
+    "title": "Toilet roll with the unclosed tally",
+    "where": [
+      {
+        "containers": [
+          "dresser",
+          "desk",
+          "sidetable",
+          "shelves",
+          "toolcabinet",
+          "smallbox"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

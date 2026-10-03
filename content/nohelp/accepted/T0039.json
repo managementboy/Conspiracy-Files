@@ -1,0 +1,32 @@
+[
+  {
+    "anchor": {
+      "map": "EkronStashMap6",
+      "mark": 1
+    },
+    "body": "A bottle of bleach sits beside a copied warning and a water bottle with its cap still sealed. The note says the caller was told to wait for instructions.",
+    "id": "t0039-01",
+    "kind": "set",
+    "pieces": [
+      "Bleach",
+      "WaterBottle"
+    ],
+    "title": "Advice by the sink",
+    "where": [
+      {
+        "containers": [
+          "clothingwasher",
+          "fridge",
+          "metal_shelves",
+          "counter",
+          "toolcabinet",
+          "cardboardbox"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

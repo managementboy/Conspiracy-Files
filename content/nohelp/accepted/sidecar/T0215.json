@@ -1,0 +1,25 @@
+{
+  "t0215-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "Greene's Job Ad (Ekron)",
+      "source": "print:GreenesJobAdEkron"
+    },
+    "gloss": "Protective gloves are returned before the listed first shift.",
+    "prov": {
+      "batch": "T0215",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A response crew could issue gloves before a worker begins; the card does not identify the task."
+  }
+}

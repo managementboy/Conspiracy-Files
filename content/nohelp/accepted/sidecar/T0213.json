@@ -1,0 +1,25 @@
+{
+  "t0213-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "Home Sweet Gnome",
+      "source": "print:GnomeSweetGnome"
+    },
+    "gloss": "A display garden waits for a test strip to dry before watering.",
+    "prov": {
+      "batch": "T0213",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A response team could restrict water during a cleanup; the note does not say what was on the strip."
+  }
+}

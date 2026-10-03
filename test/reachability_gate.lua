@@ -29,6 +29,7 @@ local function fakeWorld()
         local function receiver(self,name)
             assert(self==square,name..": engine methods need a receiver; use square:"..name.."(), not square."..name.."()")
         end
+        -- FAKE-OF zombie.iso.IsoGridSquare: isSolid isSolidTrans TreatAsSolidFloor HasStairs isBlockedTo isWindowTo
         function square.isSolid(self) receiver(self,"isSolid") return s.solid end
         function square.isSolidTrans(self) receiver(self,"isSolidTrans") return false end
         function square.TreatAsSolidFloor(self) receiver(self,"TreatAsSolidFloor") return true end
@@ -39,7 +40,7 @@ local function fakeWorld()
             -- its key isn't possible generically, so tests inject a probe.
             return other and other.__blockedFrom and other.__blockedFrom[square] or false
         end
-        function square.isWindowTo(self) receiver(self,"isWindowTo") return false end
+        function square.isWindowTo(self,other) receiver(self,"isWindowTo") return false end
         square.__x,square.__y,square.__z=x,y,z
         return square
     end

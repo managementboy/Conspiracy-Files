@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "MadDansDen"
+    },
+    "body": "the pocket calculator and first-aid kit carry the same black paint. a fresh scrape exposes an older evacuation color beneath.",
+    "id": "t0271-01",
+    "kind": "set",
+    "pieces": [
+      "Calculator",
+      "FirstAidKit"
+    ],
+    "title": "Pocket calculator beside the spare mark",
+    "where": [
+      {
+        "containers": [
+          "sidetable",
+          "crate",
+          "smallbox",
+          "toolcabinet",
+          "locker",
+          "desk"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

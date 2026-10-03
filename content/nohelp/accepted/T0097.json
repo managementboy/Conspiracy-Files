@@ -1,0 +1,32 @@
+[
+  {
+    "anchor": {
+      "map": "RiversideStashMap4",
+      "mark": 1
+    },
+    "body": "The medicine packet is attached to a transfer card; the patient’s departure is recorded, but the person assigned to collect them is blank.",
+    "id": "t0097-01",
+    "kind": "set",
+    "pieces": [
+      "Pills",
+      "Bandage"
+    ],
+    "title": "No one signed the transfer",
+    "where": [
+      {
+        "containers": [
+          "medicine",
+          "smallbox",
+          "sidetable",
+          "dresser",
+          "locker",
+          "filingcabinet"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

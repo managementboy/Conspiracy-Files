@@ -1,0 +1,42 @@
+[
+  {
+    "anchor": {
+      "scene": "RZSCharcoalBurner"
+    },
+    "body": "on the back: “friday at closing, silver specks in the weathered bundle after the feed test. the ditch smelled metallic. later, the noon siren sounded.”\n\nThe first person who saw it called it routine. The second asked me to stop using the well until another visit could be arranged.\n\nThe amount mattered to the office more than the people waiting outside. We stayed until dark because the last line still said to wait.",
+    "id": "t0381-01",
+    "kind": "written",
+    "pieces": [
+      "photograph"
+    ],
+    "title": "weathered bundle note — friday at closing",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RZSCharcoalBurner"
+    },
+    "body": "The ranger had given us a route out and said to keep the slip clean. A second ranger came before dark and told us the route had never been assigned. We used the old slip for tinder, except this corner with my mother’s name.",
+    "id": "t0381-02",
+    "kind": "written",
+    "pieces": [
+      "notebook"
+    ],
+    "title": "Burning the old directions",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
+  }
+]

@@ -51,9 +51,9 @@ getCell=function() return {getGridSquare=function() return square end} end
 getDebug=function() return true end;isClient=function() return false end;isServer=function() return false end
 instanceof=function(object,class) return type(object)=="table" and object.class==class end
 InventoryItemFactory={CreateItem=function(kind) return item(kind,99,"House key") end}
-ConspiracyFiles={GeneratedRuntime={metrics=function() return {} end,known=function()
+Engine.double("GeneratedRuntime",{metrics=function() return {} end,known=function()
     return known and {{id=session.docId,title="Unsigned office copy"}} or {}
-end}}
+end})
 local P=require('ConspiracyFiles/LocalPersonIntegration')
 local J=require('ConspiracyFiles/KeyJournal')
 local B=require('ConspiracyFiles/SaveBudget')

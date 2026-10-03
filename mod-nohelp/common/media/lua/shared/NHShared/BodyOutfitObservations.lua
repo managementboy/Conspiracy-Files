@@ -240,6 +240,37 @@ function M.describedIds()
 end
 function M.describedCount() return #M.describedIds() end
 
+-- CLOTHING AS A SOFT HINT (owner, 2026-09-27). Which broad kind of work
+-- clothes a vanilla outfit is, so a clue may PREFER a body dressed for its
+-- kind of place among the bodies already in reach. Never a rule, never waited
+-- for (Carriers.scan).
+--
+-- Closed, like DESCRIBED: an id that is not listed has no class, and nor does
+-- a Generic outfit. Every id below was checked against the installed game's
+-- media/clothing/clothing.xml (<m_Name>, Build 42.20, 2026-09-27).
+M.CLASSES={"uniform","farm","medical","hazard"}
+M.OUTFIT_CLASS={
+    -- Police, security, military, services: somebody in uniform.
+    Police="uniform",PoliceRiot="uniform",PoliceState="uniform",Police_SWAT="uniform",
+    Sheriff_Deputy="uniform",PrisonGuard="uniform",Security="uniform",MallSecurity="uniform",
+    AirportSecurityTarmac="uniform",ArmyServiceUniform="uniform",ArmyCamoGreen="uniform",
+    ArmyCamoDesert="uniform",ArmyInstructor="uniform",Ranger="uniform",Postal="uniform",
+    Fireman="uniform",FiremanFullSuit="uniform",
+    -- Farm work.
+    Farmer="farm",
+    -- Medical staff (not patients).
+    Doctor="medical",Nurse="medical",Pharmacist="medical",AmbulanceDriver="medical",
+    -- Protective suits.
+    HazardSuit="hazard",ExterminatorSuited="hazard",
+}
+local CLASS={}; for _,c in ipairs(M.CLASSES) do CLASS[c]=true end
+function M.isClass(c) return CLASS[c]==true end
+-- The class of one outfit id, or nil (unknown, Generic, or not an id).
+function M.classOf(id)
+    if type(id)~="string" then return nil end
+    return M.OUTFIT_CLASS[id]
+end
+
 function M.outfitFor(root,token)
     local ok=M.validate(root); if not ok then return nil end
     if type(token)~="string" then return nil end

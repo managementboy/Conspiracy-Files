@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "HouseforSale787"
+    },
+    "body": "three pickup dots mark the antibiotics and folded road map. two were scratched away without wear around them.",
+    "id": "t0266-01",
+    "kind": "set",
+    "pieces": [
+      "Antibiotics",
+      "Map"
+    ],
+    "title": "Antibiotics with the unclosed tally",
+    "where": [
+      {
+        "containers": [
+          "locker",
+          "smallbox",
+          "cardboardbox",
+          "medicine",
+          "desk",
+          "filingcabinet"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

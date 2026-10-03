@@ -1,0 +1,40 @@
+{
+  "t0318-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-warning",
+        "c-orders"
+      ]
+    },
+    "gloss": "Field residue and response material share one everyday bundle.",
+    "prov": {
+      "batch": "T0318",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "Field workers or an emergency crew could have bundled these supplies; dust and road tape leave the order of events unresolved."
+  },
+  "t0318-02": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-warning",
+        "c-accounting"
+      ]
+    },
+    "gloss": "An altered count or retained object was left at the scene.",
+    "prov": {
+      "batch": "T0318",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "An emergency team could have moved farm supplies during a containment response."
+  }
+}

@@ -1,0 +1,32 @@
+[
+  {
+    "anchor": {
+      "map": "MulStashMap2",
+      "mark": 1
+    },
+    "body": "The seed packet is kept with a bottle labelled for the plot; a note asks the next visitor to wait for the field reading before opening either.",
+    "id": "t0076-01",
+    "kind": "set",
+    "pieces": [
+      "SeedBag",
+      "WaterBottle"
+    ],
+    "title": "Left for the next visit",
+    "where": [
+      {
+        "containers": [
+          "shelves",
+          "fridge",
+          "metal_shelves",
+          "counter",
+          "cardboardbox",
+          "crate"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

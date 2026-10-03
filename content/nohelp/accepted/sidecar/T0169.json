@@ -1,0 +1,25 @@
+{
+  "t0169-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "Grand Ohio Mall",
+      "source": "print:GrandOhioMall"
+    },
+    "gloss": "A security sweep is complete before the listed shop closes.",
+    "prov": {
+      "batch": "T0169",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A store manager could close after a routine security sweep; the sheet does not show who was still inside."
+  }
+}

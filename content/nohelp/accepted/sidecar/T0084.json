@@ -1,0 +1,25 @@
+{
+  "t0084-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "Plan B",
+      "source": "map:MulStashMap7"
+    },
+    "gloss": "A stocked store lacks a completed separation check.",
+    "prov": {
+      "batch": "T0084",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "An emergency stockroom could segregate medical or cleanup supplies from food; the receipt does not identify the test."
+  }
+}

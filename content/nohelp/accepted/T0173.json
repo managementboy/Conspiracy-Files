@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "SunstarMotel"
+    },
+    "body": "chalk numbers run across the wax crayons and bath towel. the count skips one place, then resumes in a different hand.",
+    "id": "t0173-01",
+    "kind": "set",
+    "pieces": [
+      "Crayons",
+      "BathTowel"
+    ],
+    "title": "Wax crayons beside the spare mark",
+    "where": [
+      {
+        "containers": [
+          "dresser",
+          "wardrobe",
+          "sidetable",
+          "shelves",
+          "clothingrack",
+          "smallbox"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

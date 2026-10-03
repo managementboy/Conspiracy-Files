@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "DinerInTheWoods"
+    },
+    "body": "The diner’s seasonal menu is clipped to a trail map; the supply receipt marks the kitchen closed before the last walking group returned.",
+    "id": "t0248-01",
+    "kind": "set",
+    "pieces": [
+      "Bread",
+      "Map"
+    ],
+    "title": "The seasonal trail stop",
+    "where": [
+      {
+        "containers": [
+          "cardboardbox",
+          "grocerstand",
+          "smallbox",
+          "crate",
+          "counter",
+          "desk"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "Sanatorium"
+    },
+    "body": "The tour map marks the basement route open; the guide’s note asks visitors to stay away from the ventilation room until the next reading.",
+    "id": "t0278-01",
+    "kind": "set",
+    "pieces": [
+      "HandTorch",
+      "Map"
+    ],
+    "title": "The weekly ghost route",
+    "where": [
+      {
+        "containers": [
+          "shelves",
+          "crate",
+          "smallbox",
+          "metal_shelves",
+          "toolcabinet",
+          "locker"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

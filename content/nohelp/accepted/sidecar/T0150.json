@@ -1,0 +1,25 @@
+{
+  "t0150-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "McCoy Logging Co.",
+      "source": "print:McCoyLoggingCorp"
+    },
+    "gloss": "A work crew leaves before its truck is cleared, with costs carried forward.",
+    "prov": {
+      "batch": "T0150",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A field program could also hire mill workers and bill tools across shifts; the sheet does not say who ordered the crew home."
+  }
+}

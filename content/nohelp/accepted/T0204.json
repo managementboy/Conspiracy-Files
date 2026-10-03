@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "RoxysRollerRink"
+    },
+    "body": "The session tally is closed before the last skater returned the rental pair. A note asks staff to keep the rear exit open for the next group.",
+    "id": "t0204-01",
+    "kind": "set",
+    "pieces": [
+      "Shoes_Black",
+      "SheetPaper2"
+    ],
+    "title": "The rink’s last session",
+    "where": [
+      {
+        "containers": [
+          "wardrobe",
+          "desk",
+          "dresser",
+          "filingcabinet",
+          "clothingrack",
+          "sidetable"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

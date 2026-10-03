@@ -1,0 +1,3 @@
+Linux nohelp-dump check 20261002T232729: PASS
+source: ea9419a6
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0

@@ -1,0 +1,44 @@
+[
+  {
+    "anchor": {
+      "scene": "RDSPrisonEscape"
+    },
+    "body": "The first-aid kit and water bottle share sticky pollen from the seed trial. They were bundled before the county van arrived.",
+    "id": "t0341-01",
+    "kind": "set",
+    "pieces": [
+      "FirstAidKit",
+      "WaterBottle"
+    ],
+    "title": "First-aid kit and water bottle, monday morning",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "corpse"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RDSPrisonEscape"
+    },
+    "body": "A pencil and map share the same pocket. One route is marked toward the road, then overwritten with a line back toward the building.",
+    "id": "t0341-02",
+    "kind": "set",
+    "pieces": [
+      "Map",
+      "Pencil"
+    ],
+    "title": "An exit marked twice",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "corpse"
+      }
+    ]
+  }
+]

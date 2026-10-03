@@ -1,0 +1,60 @@
+[
+  {
+    "anchor": {
+      "scene": "RBTSSandwich"
+    },
+    "body": "A can of corn and sealed bandage are wrapped in the same strip of road tape. Yellow field dust is trapped under the tape.",
+    "id": "t0318-01",
+    "kind": "set",
+    "pieces": [
+      "CannedCorn",
+      "Bandage"
+    ],
+    "title": "Lunch wrapped with a bandage",
+    "where": [
+      {
+        "containers": [
+          "overhead",
+          "medicine",
+          "fridge",
+          "smallbox",
+          "counter",
+          "sidetable"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RBTSSandwich"
+    },
+    "body": "A spoon and a paperclip were caught in a folded feed sack used to line the tray. Its handwritten lot mark predates the closure notice pinned over it.",
+    "id": "t0318-02",
+    "kind": "set",
+    "pieces": [
+      "Spoon",
+      "Paperclip"
+    ],
+    "title": "A sack beneath the sandwich tray",
+    "where": [
+      {
+        "containers": [
+          "dishescabinet",
+          "desk",
+          "overhead",
+          "filingcabinet",
+          "counter",
+          "sidetable"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

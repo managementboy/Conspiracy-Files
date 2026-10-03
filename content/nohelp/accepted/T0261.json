@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "EkronCollege"
+    },
+    "body": "The college resource list includes a field-study room, but its access key is returned before the class roster is collected.",
+    "id": "t0261-01",
+    "kind": "set",
+    "pieces": [
+      "Book",
+      "Notebook"
+    ],
+    "title": "Classroom resource list",
+    "where": [
+      {
+        "containers": [
+          "displaycase",
+          "desk",
+          "shelvesmag",
+          "filingcabinet",
+          "shelves",
+          "sidetable"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

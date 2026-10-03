@@ -1,0 +1,42 @@
+[
+  {
+    "anchor": {
+      "scene": "RZSOccultActivity"
+    },
+    "body": "on the back: “saturday before sunrise, waxy pollen in the weathered bundle after the fertilizer trial. our cat hid from the water bowl. later, traffic was turned around.”\n\nA pencil line had been rubbed thin but not erased. I could still read enough of it to recognize what had been there first.\n\nIt may have started elsewhere; none of us saw the beginning. I only know what had reached this place before they closed the road.",
+    "id": "t0393-01",
+    "kind": "written",
+    "pieces": [
+      "photograph"
+    ],
+    "title": "weathered bundle note — saturday before sunrise",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RZSOccultActivity"
+    },
+    "body": "They gathered here after the road was closed, and someone carefully counted every person present. The official tally for this stretch was zero. The woman with the candles made a second list on the back of a wrapper.",
+    "id": "t0393-02",
+    "kind": "written",
+    "pieces": [
+      "notebook"
+    ],
+    "title": "Names after the candles",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
+  }
+]

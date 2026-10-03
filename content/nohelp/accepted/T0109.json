@@ -1,0 +1,32 @@
+[
+  {
+    "anchor": {
+      "map": "RosewoodStashMap5",
+      "mark": 1
+    },
+    "body": "The meal bag is marked for pickup only after the route opens. Someone has crossed out the driver’s name but left the note to wait for the household.",
+    "id": "t0109-01",
+    "kind": "set",
+    "pieces": [
+      "Bread",
+      "WaterBottle"
+    ],
+    "title": "Food for the last visit",
+    "where": [
+      {
+        "containers": [
+          "counter",
+          "fridge",
+          "overhead",
+          "cardboardbox",
+          "crate",
+          "grocerstand"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

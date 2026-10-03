@@ -1,0 +1,32 @@
+[
+  {
+    "anchor": {
+      "map": "WorldStashMap12",
+      "mark": 1
+    },
+    "body": "The camp list counts water and medicine but leaves one person’s pickup line blank. A note asks whether the missing dose is still at the main office.",
+    "id": "t0121-01",
+    "kind": "set",
+    "pieces": [
+      "Pills",
+      "WaterBottle"
+    ],
+    "title": "Camp supplies minus one person",
+    "where": [
+      {
+        "containers": [
+          "smallbox",
+          "crate",
+          "toolcabinet",
+          "locker",
+          "medicine",
+          "fridge"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

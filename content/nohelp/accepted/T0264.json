@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "GunsUnlimitedEchoCreek"
+    },
+    "body": "The sales ledger lists a firearm transfer complete, but the return count for ammunition is blank. The range receipt is dated the next day.",
+    "id": "t0264-01",
+    "kind": "set",
+    "pieces": [
+      "Pistol",
+      "Pistol2"
+    ],
+    "title": "The missing ammunition count",
+    "where": [
+      {
+        "containers": [
+          "militarylocker",
+          "locker",
+          "militarycrate",
+          "toolcabinet",
+          "dresser",
+          "smallbox"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

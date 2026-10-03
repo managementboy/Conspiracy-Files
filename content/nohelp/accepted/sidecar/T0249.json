@@ -1,0 +1,25 @@
+{
+  "t0249-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "Fallas Lake Church",
+      "source": "print:FallasLakeChurch"
+    },
+    "gloss": "A community gathering and a pending well test share the same site.",
+    "prov": {
+      "batch": "T0249",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "Emergency cleanup could cover a well pending testing; the letter does not identify what was tested."
+  }
+}

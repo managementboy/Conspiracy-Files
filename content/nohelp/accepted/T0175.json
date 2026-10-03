@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "LouisvilleBruiser"
+    },
+    "body": "A bat is paired with a production sheet. The final count lists units made; the line for those handed over to the evacuation convoy has been inked out, with the clerk's initials left beside it.",
+    "id": "t0175-01",
+    "kind": "set",
+    "pieces": [
+      "BaseballBat",
+      "SheetPaper2"
+    ],
+    "title": "The factory count",
+    "where": [
+      {
+        "containers": [
+          "locker",
+          "desk",
+          "wardrobe",
+          "filingcabinet",
+          "toolcabinet",
+          "sidetable"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

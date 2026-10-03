@@ -1,0 +1,9 @@
+Linux nohelp-pages check 20261002T131031: PASS
+source: fb57d80e
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+before: Base.BusinessCard|5|NoHelp|true|nil ; Base.CreditCard|-1|n/a|n/a| ; Base.Diary1|5|NoHelp|true|nil ; Base.IDcard|5|NoHelp|true|nil ; Base.LetterHandwritten|5|NoHelp|true|nil ; Base.Newspaper|5|NoHelp|true|nil ; Base.Notebook|5|NoHelp|true|nil ; Base.Notepad|5|NoHelp|true|nil ; Base.Note|5|NoHelp|true|nil ; Base.ParkingTicket|5|NoHelp|true|nil ; Base.Photo|5|NoHelp|true|nil ; Base.Receipt|5|NoHelp|true|nil ; Base.ScratchTicket|5|NoHelp|true|nil ; Base.SpeedingTicket|5|NoHelp|true|nil
+after:  Base.BusinessCard|5|NoHelp|true|nil ; Base.CreditCard|-1|n/a|n/a| ; Base.Diary1|5|NoHelp|true|nil ; Base.IDcard|5|NoHelp|true|nil ; Base.LetterHandwritten|5|NoHelp|true|nil ; Base.Newspaper|5|NoHelp|true|nil ; Base.Notebook|5|NoHelp|true|nil ; Base.Notepad|5|NoHelp|true|nil ; Base.Note|5|NoHelp|true|nil ; Base.ParkingTicket|5|NoHelp|true|nil ; Base.Photo|5|NoHelp|true|nil ; Base.Receipt|5|NoHelp|true|nil ; Base.ScratchTicket|5|NoHelp|true|nil ; Base.SpeedingTicket|5|NoHelp|true|nil
+wallet before: 1|inside=true
+wallet after:  1|inside=true
+FINDING: before reload Base.CreditCard (not proven by T7): pages=-1 lockedBy=n/a canBeWrite=n/a
+FINDING: after reload Base.CreditCard (not proven by T7): pages=-1 lockedBy=n/a canBeWrite=n/a

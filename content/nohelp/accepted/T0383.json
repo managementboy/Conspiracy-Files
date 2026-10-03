@@ -1,0 +1,42 @@
+[
+  {
+    "anchor": {
+      "scene": "RZSFishingTrip"
+    },
+    "body": "feed, soap, and a clean jar, paid cash. my note below says emerald flecks came from the orchard treatment; the horse kicked away its feed before the crossing was barricaded.\n\nI set it aside to show the neighbor when she returned. Her porch was empty by the time the light was good enough to read it.\n\nThere may be a simple reason for the change. Nobody at the next stop could tell us what to do with the first version.",
+    "id": "t0383-01",
+    "kind": "written",
+    "pieces": [
+      "receipt"
+    ],
+    "title": "weathered bundle note — during the hot afternoon",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RZSFishingTrip"
+    },
+    "body": "The fishing party was told to wait for a boat after the bridge closed. A patrol crossed upstream with room aboard, but its passenger sheet was filled out already. We waved a tackle box until our arms hurt.",
+    "id": "t0383-02",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "The bank after closing",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
+  }
+]

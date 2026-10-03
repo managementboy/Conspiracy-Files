@@ -1,0 +1,25 @@
+{
+  "t0281-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "The Wizard's Keep",
+      "source": "print:TheWizardsKeep"
+    },
+    "gloss": "An empty-room mark precedes the last visitor’s sign-out.",
+    "prov": {
+      "batch": "T0281",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A staged tour could clear a room ahead of a visitor; the log does not identify who was responsible."
+  }
+}

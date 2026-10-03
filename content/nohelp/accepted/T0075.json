@@ -1,0 +1,32 @@
+[
+  {
+    "anchor": {
+      "map": "MulStashMap1",
+      "mark": 1
+    },
+    "body": "A repair sheet lists floorboards lifted for a crowd shelter, but the count of returned boards is higher than the count issued. One nail is still bent flat.",
+    "id": "t0075-01",
+    "kind": "set",
+    "pieces": [
+      "Hammer",
+      "SheetPaper2"
+    ],
+    "title": "Under the boards",
+    "where": [
+      {
+        "containers": [
+          "toolcabinet",
+          "desk",
+          "metal_shelves",
+          "filingcabinet",
+          "crate",
+          "sidetable"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

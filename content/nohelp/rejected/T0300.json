@@ -1,0 +1,13 @@
+{
+  "ticket": "T0300",
+  "returned_by": "Claude review, 2026-09-29",
+  "rows": [
+    {
+      "id": null,
+      "codes": [
+        "EMPTY"
+      ],
+      "note": "The ticket came back empty (CLASSIFIER_STOP). Write it again alone, following its recipe; a written clue is personal paper, never an official document; never copy another ticket's text."
+    }
+  ]
+}

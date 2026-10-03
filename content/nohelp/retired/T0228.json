@@ -1,0 +1,104 @@
+[
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "print": "CarFixation"
+      },
+      "body": "The service appointment is stamped complete, but the customer’s copy says the car was still waiting when the shop closed.",
+      "id": "t0228-01",
+      "kind": "set",
+      "pieces": [
+        "Notebook",
+        "Pencil"
+      ],
+      "title": "Appointment not on the calendar",
+      "where": [
+        {
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "Car Fix-ation",
+        "source": "print:CarFixation"
+      },
+      "gloss": "A repair is marked complete while the car remains at the shop.",
+      "prov": {
+        "batch": "T0228",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A field vehicle could remain for a test after hours; the copy does not show who authorized the delay."
+    }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "print": "CarFixation"
+      },
+      "body": "The service appointment is stamped complete, but the customer’s copy says the car was still waiting when the shop closed.",
+      "id": "t0228-01",
+      "kind": "set",
+      "pieces": [
+        "Notebook",
+        "Pencil"
+      ],
+      "title": "Appointment not on the calendar",
+      "where": [
+        {
+          "containers": [
+            "crate",
+            "shelves",
+            "desk",
+            "counter",
+            "cardboardbox",
+            "bin"
+          ],
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "Car Fix-ation",
+        "source": "print:CarFixation"
+      },
+      "gloss": "A repair is marked complete while the car remains at the shop.",
+      "prov": {
+        "batch": "T0228",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A field vehicle could remain for a test after hours; the copy does not show who authorized the delay."
+    }
+  }
+]

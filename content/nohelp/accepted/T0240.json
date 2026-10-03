@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "HouseforSale845"
+    },
+    "body": "the bar of soap and briefcase are tied with cut warning tape. six tally cuts mark the bar of soap; only four are crossed through.",
+    "id": "t0240-01",
+    "kind": "set",
+    "pieces": [
+      "Soap2",
+      "Briefcase"
+    ],
+    "title": "Bar of soap with the unclosed tally",
+    "where": [
+      {
+        "containers": [
+          "locker",
+          "smallbox",
+          "medicine",
+          "dishescabinet",
+          "desk",
+          "clothingwasher"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

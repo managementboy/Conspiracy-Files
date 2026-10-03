@@ -1,0 +1,38 @@
+[
+  {
+    "body": "the loose badge and folded road map are tied with cut warning tape. six tally cuts mark the loose badge; only four are crossed through.",
+    "id": "t0001-01",
+    "kind": "set",
+    "pieces": [
+      "Badge",
+      "Map"
+    ],
+    "title": "Loose badge beside the spare mark",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "police",
+        "rival": "agricultural",
+        "spot": "mailbox"
+      }
+    ]
+  },
+  {
+    "body": "A green ring stains the bottle's inner neck. The bucket beside it is dry, though its handle is wet and smells faintly of crushed leaves.",
+    "id": "t0001-02",
+    "kind": "set",
+    "pieces": [
+      "Bucket",
+      "WaterBottle"
+    ],
+    "title": "The bottle kept the wrong color",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "police",
+        "rival": "containment",
+        "spot": "mailbox"
+      }
+    ]
+  }
+]

@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "HouseforSale818"
+    },
+    "body": "the animal-feed sack is tied to the hand radio by a clipped lanyard. an empty loop shows where an identifying tag was cut off.",
+    "id": "t0268-01",
+    "kind": "set",
+    "pieces": [
+      "AnimalFeedBag",
+      "WalkieTalkie1"
+    ],
+    "title": "Animal-feed sack with the unclosed tally",
+    "where": [
+      {
+        "containers": [
+          "smallcrate",
+          "bin",
+          "crate",
+          "trough",
+          "composter",
+          "doghouse"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

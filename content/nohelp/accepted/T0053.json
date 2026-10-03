@@ -1,0 +1,32 @@
+[
+  {
+    "anchor": {
+      "map": "LouisvilleStashMap5",
+      "mark": 1
+    },
+    "body": "A school bag and water bottle are listed for collection at the gym, but the driver marked the family transferred before the pickup time.",
+    "id": "t0053-01",
+    "kind": "set",
+    "pieces": [
+      "Bag_Schoolbag",
+      "WaterBottle"
+    ],
+    "title": "A family moved on",
+    "where": [
+      {
+        "containers": [
+          "wardrobe",
+          "fridge",
+          "dresser",
+          "counter",
+          "clothingrack",
+          "overhead"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

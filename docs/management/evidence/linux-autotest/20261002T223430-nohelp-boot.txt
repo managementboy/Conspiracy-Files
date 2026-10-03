@@ -1,0 +1,9 @@
+Linux No Help boot check 20261002T223430: PASS
+source: b1fdad36
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+new world: ZombieBuddy advices 144; listener v2 seen=10 queued=0 failed=0 dropped=0
+new world dump: areasDecided=4 bytes=86667 carrier=30 cluesAgricultural=5 cluesContainment=10 deferred=10 filler=30287 foundByLook=0 foundBySearch=0 identity=6595 lost=0 map_areas=4 peakMs=67 placed=10 placement=117 preparation=25174 queued_identity=1 queued_preparation=1 relocation=30 scenes=5 tracking=30 zbDropped=0 zbFailed=0 zbQueued=0 zbSeen=10
+reloaded save: ZombieBuddy advices 144; listener v2 seen=0 queued=0 failed=0 dropped=0
+reloaded save dump: areasDecided=5 bytes=98715 carrier=30 cluesAgricultural=6 cluesContainment=12 deferred=10 filler=2026 foundByLook=0 foundBySearch=0 identity=7544 lost=0 peakMs=48 placed=13 placement=35 preparation=43107 queued_identity=1 relocation=30 scenes=5 tracking=30 zbDropped=0 zbFailed=0 zbQueued=0 zbSeen=0
+reload: seed kept, confirmed scenes 5 -> 5

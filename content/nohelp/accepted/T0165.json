@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "Fossoil7"
+    },
+    "body": "The route copy marks the vehicle fueled before the road closure, but the dispatch note says the driver was still waiting at the pump.",
+    "id": "t0165-01",
+    "kind": "set",
+    "pieces": [
+      "Map",
+      "SheetPaper2"
+    ],
+    "title": "The route closed after fueling",
+    "where": [
+      {
+        "containers": [
+          "sidetable",
+          "bin",
+          "cardboardbox",
+          "smallbox",
+          "locker",
+          "desk"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

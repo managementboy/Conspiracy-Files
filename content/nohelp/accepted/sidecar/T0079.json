@@ -1,0 +1,25 @@
+{
+  "t0079-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "easier way out",
+      "source": "map:MulStashMap4"
+    },
+    "gloss": "A side exit is assigned after the main door was marked clear.",
+    "prov": {
+      "batch": "T0079",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A field team could have used a medical bag and side route; the card does not explain why the main door was closed."
+  }
+}

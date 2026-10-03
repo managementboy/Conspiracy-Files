@@ -1,0 +1,32 @@
+[
+  {
+    "anchor": {
+      "map": "MulStashMap17",
+      "mark": 1
+    },
+    "body": "The bakery bundle is tied to a household note asking the parents to stay inside until the next pickup. The driver marked the first delivery complete.",
+    "id": "t0091-01",
+    "kind": "set",
+    "pieces": [
+      "Garbagebag",
+      "Bread"
+    ],
+    "title": "The second delivery",
+    "where": [
+      {
+        "containers": [
+          "bin",
+          "counter",
+          "dumpster",
+          "overhead",
+          "cardboardbox",
+          "fridge"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

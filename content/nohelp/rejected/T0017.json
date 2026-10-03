@@ -1,0 +1,101 @@
+{
+  "ticket": "T0017",
+  "returned_by": "Claude review, DR-20260928-NOHELP-REVIEW-FAST, 2026-09-28",
+  "rows": [
+    {
+      "id": "t0017-01",
+      "codes": [
+        "ONE_SIDED"
+      ],
+      "merged": true,
+      "note": "Passed its blind read. Returned only because, without T0003 (returned), the accepted list would leave farms with no object set for one conspiracy (converter rule: a ticket that breaks the merged list is returned whole, merged=true). Redeliver it UNCHANGED in the same round as T0003: its receipt stays valid while title, body, pieces and places are unchanged.",
+      "votes": "A 1, B 0, neither 0 (declared A)",
+      "row": {
+        "anchor": {
+          "scene": "RDSRatKing"
+        },
+        "body": "The kit is sealed and pushed behind a rat-chewed board. One bandage has been set on top, dry and neatly folded as if someone expected to return for it.",
+        "id": "t0017-01",
+        "kind": "set",
+        "pieces": [
+          "FirstAidKit",
+          "Bandage"
+        ],
+        "title": "The first-aid kit under the kitchen shelf",
+        "where": [
+          {
+            "lean": "containment",
+            "place": "police",
+            "rival": "agricultural",
+            "spot": "furniture"
+          }
+        ],
+        "axioms": {
+          "agricultural": [
+            "a-program",
+            "a-pathway"
+          ],
+          "containment": [
+            "c-orders",
+            "c-failure"
+          ]
+        },
+        "gloss": "A sealed kit and one unused dressing remain behind a damaged board.",
+        "prov": {
+          "batch": "T0017",
+          "handoff": "2026-09-27",
+          "writer": "ChatGPT"
+        },
+        "rival_reading": "A household could keep supplies behind a damaged shelf while treating pests; the bandage does not show an official response failure."
+      }
+    },
+    {
+      "id": "t0017-02",
+      "codes": [
+        "ONE_SIDED"
+      ],
+      "merged": true,
+      "note": "Passed its blind read. Returned only because, without T0003 (returned), the accepted list would leave farms with no object set for one conspiracy (converter rule: a ticket that breaks the merged list is returned whole, merged=true). Redeliver it UNCHANGED in the same round as T0003: its receipt stays valid while title, body, pieces and places are unchanged.",
+      "votes": "A 0, B 1, neither 0 (declared B)",
+      "row": {
+        "anchor": {
+          "scene": "RDSRatKing"
+        },
+        "body": "The empty sprayer is tacky around its trigger. A notebook page has dried against its side; the page shows a rat-chewed root beside three crop rows.",
+        "id": "t0017-02",
+        "kind": "set",
+        "pieces": [
+          "GardeningSprayEmpty",
+          "Notebook"
+        ],
+        "title": "The spray bottle with a page stuck to it",
+        "where": [
+          {
+            "lean": "agricultural",
+            "place": "farm",
+            "rival": "containment",
+            "spot": "furniture"
+          }
+        ],
+        "axioms": {
+          "agricultural": [
+            "a-program",
+            "a-malfunction",
+            "a-pathway"
+          ],
+          "containment": [
+            "c-orders",
+            "c-accounting"
+          ]
+        },
+        "gloss": "A pest-control tool and a damaged root are recorded together.",
+        "prov": {
+          "batch": "T0017",
+          "handoff": "2026-09-27",
+          "writer": "ChatGPT"
+        },
+        "rival_reading": "Someone dealing with a household pest problem could use a garden sprayer and record damaged food; the sketch does not prove an experimental mixture."
+      }
+    }
+  ]
+}

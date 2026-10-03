@@ -1,0 +1,62 @@
+[
+  {
+    "anchor": {
+      "map": "BBurgStashMap3",
+      "mark": 1
+    },
+    "body": "The empty jar still holds a green film. A pencilled note tells the grounds crew to rinse the sprayed greens twice before they go to the kitchen, and counts the crates that came back with the film still on them.",
+    "id": "t0028-01",
+    "kind": "set",
+    "pieces": [
+      "EmptyJar",
+      "Pencil",
+      "SheetPaper2"
+    ],
+    "title": "The unfinished handoff",
+    "where": [
+      {
+        "containers": [
+          "dishescabinet",
+          "desk",
+          "overhead",
+          "sidetable",
+          "filingcabinet",
+          "counter"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "BBurgStashMap3",
+      "mark": 1
+    },
+    "body": "The repair ticket orders the front doors open for pickup, but the locksmith billed for cutting off the back lock. Tomorrow’s lunch count is still pencilled in.\n\nSomeone said the smell was only from cleaning. I kept the scrap because the same smell had followed us from the previous stop.\n\nI wanted to keep a clean copy, but the stain is where the first entry was crossed out. I have not tried to improve it.",
+    "id": "t0028-02",
+    "kind": "written",
+    "pieces": [
+      "receipt"
+    ],
+    "title": "One page put aside",
+    "where": [
+      {
+        "containers": [
+          "cashregister",
+          "desk",
+          "filingcabinet",
+          "sidetable",
+          "smallbox",
+          "shelves"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

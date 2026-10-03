@@ -15,13 +15,19 @@ local function key(t)
  return table.concat({t.x,t.y,t.z,t.objectIndex,t.containerIndex,t.vehiclePart or "-"},":")
 end
 M.key=key
-function M.new() return {groups={},order={},seen={}} end
+-- `prefer` (optional): kinds a clue names (E2). They are always kept, beyond
+-- MAX_KINDS, so a named fridge is never crowded out by eight earlier kinds.
+function M.new(prefer)
+ local set
+ for _,k in ipairs(prefer or {}) do set=set or {}; set[k]=true end
+ return {groups={},order={},seen={},prefer=set}
+end
 function M.offer(pool,target,room,occupied)
  local kind=target.containerType
  if not M.fixedKind(kind) or pool.seen[key(target)] then return false end
  local group=pool.groups[kind]
  if not group then
-  if #pool.order>=M.MAX_KINDS then return false end
+  if #pool.order>=M.MAX_KINDS and not (pool.prefer and pool.prefer[kind]) then return false end
   group={};pool.groups[kind]=group;pool.order[#pool.order+1]=kind
  end
  if #group>=M.PER_KIND then return false end

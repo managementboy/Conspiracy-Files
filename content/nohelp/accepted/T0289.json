@@ -1,0 +1,60 @@
+[
+  {
+    "anchor": {
+      "scene": "RBClinic"
+    },
+    "body": "The pair is streaked with clouded sample jar from treated rows. It was set aside after the flies vanished, before anyone marked the coat pocket unsafe.",
+    "id": "t0289-01",
+    "kind": "set",
+    "pieces": [
+      "Battery",
+      "RadioBlack"
+    ],
+    "title": "The jar with its clouded rim",
+    "where": [
+      {
+        "containers": [
+          "sidetable",
+          "toolcabinet",
+          "metal_shelves",
+          "desk",
+          "smallbox",
+          "shelves"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RBClinic"
+    },
+    "body": "The battery is taped into the radio with a strip cut from a medicine label. The dial is fixed in place. The clinic kept a receiver ready on one frequency even after ordinary broadcasts had stopped.",
+    "id": "t0289-02",
+    "kind": "set",
+    "pieces": [
+      "Battery",
+      "RadioBlack"
+    ],
+    "title": "A dial that cannot turn",
+    "where": [
+      {
+        "containers": [
+          "sidetable",
+          "toolcabinet",
+          "metal_shelves",
+          "desk",
+          "smallbox",
+          "shelves"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

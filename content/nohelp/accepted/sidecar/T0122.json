@@ -1,0 +1,25 @@
+{
+  "t0122-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "hal I KNOW its hard",
+      "source": "map:WorldStashMap13"
+    },
+    "gloss": "A personal departure request is tied to a crew’s planned return.",
+    "prov": {
+      "batch": "T0122",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A containment order could have prompted the same departure request; the letter does not identify what the crew was doing."
+  }
+}

@@ -1,0 +1,95 @@
+{
+  "ticket": "T0002",
+  "returned_by": "Claude blind re-read and batch read, 2026-09-28",
+  "drift": "Batch drift report (T0001-T0013, read together): the rows have converged on one template. About 20 of 28 say 'X was recorded before/after Y', add a child's drawing or sticker, and end with 'the only completed count is <returned objects>, not people'. Each row is fine on its own, but a player who finds three of them has found the same clue three times, and the world sounds like one clerk. The containment rows are all timestamp-and-form jokes and the agricultural rows are all 'water total before source'; a blind reader sorts them by that alone. Keep the tone (one human detail beside one institutional one), but vary it: different human stakes (not always a child), different institutional blind spots (not always a count), clues that are mostly an arrangement of objects with a short note or none, and other spots where both sides can use them (ground, vehicle, mailbox, corpse), not only furniture.",
+  "rows": [
+    {
+      "id": "t0002-01",
+      "codes": [
+        "NEVER_RIVAL",
+        "DRIFT"
+      ],
+      "note": "A blind re-read (5 independent reads, a different model, told nothing) never named the rival, so the row is one-sided. The lean should come from where the clue is placed and from one detail; the rest must leave the rival reading genuinely live. Rework title, body and if needed pieces; keep place, spot, lean and axioms. See the drift report at the top of this file.",
+      "votes": "A 5, B 0, neither 0 (clue lean A)",
+      "row": {
+        "body": "The outgoing count was signed before the last bed emptied. A child's sticker is on the first-aid kit; the form's only completed field is the case number, not the passenger.",
+        "id": "t0002-01",
+        "kind": "set",
+        "pieces": [
+          "FirstAidKit",
+          "Clipboard"
+        ],
+        "title": "Transfer complete, bed still occupied",
+        "where": [
+          {
+            "lean": "containment",
+            "place": "hospital",
+            "rival": "agricultural",
+            "spot": "furniture"
+          }
+        ],
+        "axioms": {
+          "agricultural": [
+            "a-program",
+            "a-pathway"
+          ],
+          "containment": [
+            "c-orders",
+            "c-failure"
+          ]
+        },
+        "gloss": "A transfer record closes before its listed bed is empty while a kit remains with the paperwork.",
+        "prov": {
+          "batch": "T0002",
+          "handoff": "2026-09-27",
+          "writer": "ChatGPT"
+        },
+        "rival_reading": "A field exposure could produce interrupted transfers and hurried kit logs; the mismatch alone does not show that officials caused or hid a containment failure."
+      }
+    },
+    {
+      "id": "t0002-02",
+      "codes": [
+        "NEVER_RIVAL",
+        "DRIFT"
+      ],
+      "note": "A blind re-read (5 independent reads, a different model, told nothing) never named the rival, so the row is one-sided. The lean should come from where the clue is placed and from one detail; the rest must leave the rival reading genuinely live. Rework title, body and if needed pieces; keep place, spot, lean and axioms. See the drift report at the top of this file.",
+      "votes": "A 0, B 5, neither 0 (clue lean B)",
+      "row": {
+        "body": "The bandage and full water bottle were logged against a field worker before the source box was filled in. The worker's lunch break was marked late; the only complete count is for used wraps.",
+        "id": "t0002-02",
+        "kind": "set",
+        "pieces": [
+          "Bandage",
+          "WaterBottle"
+        ],
+        "title": "Source field left blank",
+        "where": [
+          {
+            "lean": "agricultural",
+            "place": "hospital",
+            "rival": "containment",
+            "spot": "furniture"
+          }
+        ],
+        "axioms": {
+          "agricultural": [
+            "a-program",
+            "a-pathway"
+          ],
+          "containment": [
+            "c-orders",
+            "c-failure"
+          ]
+        },
+        "gloss": "A field worker's supplies are logged before a source entry is completed.",
+        "prov": {
+          "batch": "T0002",
+          "handoff": "2026-09-27",
+          "writer": "ChatGPT"
+        },
+        "rival_reading": "An intake during road restrictions could document supplies before tracing their source; a field worker's delayed meal may reflect an ordinary response disruption."
+      }
+    }
+  ]
+}

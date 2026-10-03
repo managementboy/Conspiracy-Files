@@ -1,0 +1,39 @@
+[
+  {
+    "body": "Transfer window: after road access ends. Return copy to sender. Reverse: “Bread for Mother, no crust if it is still warm.”",
+    "id": "t0012-01",
+    "kind": "written",
+    "person": "person-c",
+    "pieces": [
+      "businesscard"
+    ],
+    "title": "Courier card with a late return",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "checkpoint",
+        "rival": "agricultural",
+        "spot": "vehicle"
+      }
+    ]
+  },
+  {
+    "body": "yellow fertilizer crystals fill the seam between the wax crayons and animal-feed sack. the crystals are damp beneath a dry outer layer.",
+    "id": "t0012-02",
+    "kind": "set",
+    "person": "person-c",
+    "pieces": [
+      "Crayons",
+      "AnimalFeedBag"
+    ],
+    "title": "After on the wax crayons, the first copy",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "checkpoint",
+        "rival": "containment",
+        "spot": "vehicle"
+      }
+    ]
+  }
+]

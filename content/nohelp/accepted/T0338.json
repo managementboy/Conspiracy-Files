@@ -1,0 +1,58 @@
+[
+  {
+    "anchor": {
+      "scene": "RDSHouseParty"
+    },
+    "body": "Personal note — the early shift: wash off the blue powder left by the fertilizer test crew. the dog refused its water, and I had not yet heard that the buses quit running.\n\nI saved it from the bag of rubbish because there was a name on the reverse. The name was not on the list they posted.\n\nThere may be a simple reason for the change. Nobody at the next stop could tell us what to do with the first version.",
+    "id": "t0338-01",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "the early shift — blue powder",
+    "where": [
+      {
+        "containers": [
+          "filingcabinet",
+          "desk",
+          "sidetable",
+          "shelves",
+          "cashregister",
+          "smallbox"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RDSHouseParty"
+    },
+    "body": "We wrote names on the wall when the guest book disappeared. It was a joke until a visitor asked us to paint over them.\n\nOne friend had gone for more drinks and was not there to object. By morning somebody had covered only his name. The rest remained visible through the paint.\n\nI took a photograph before anyone did the second coat. I cannot tell if he came back while we were asleep.",
+    "id": "t0338-02",
+    "kind": "written",
+    "pieces": [
+      "diary"
+    ],
+    "title": "Someone took the guest book",
+    "where": [
+      {
+        "containers": [
+          "cardboardbox",
+          "desk",
+          "sidetable",
+          "dresser",
+          "filingcabinet",
+          "shelves"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

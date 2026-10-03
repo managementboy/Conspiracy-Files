@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "HouseforSale867"
+    },
+    "body": "the packet of tissues and first-aid kit were wiped on one face and left dusty on the other. field twine and warning tape cross at the handle.",
+    "id": "t0245-01",
+    "kind": "set",
+    "pieces": [
+      "Tissue",
+      "FirstAidKit"
+    ],
+    "title": "Packet of tissues with the second residue",
+    "where": [
+      {
+        "containers": [
+          "medicine",
+          "crate",
+          "smallbox",
+          "toolcabinet",
+          "locker",
+          "desk"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

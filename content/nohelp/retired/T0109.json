@@ -1,0 +1,106 @@
+[
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "map": "RosewoodStashMap5",
+        "mark": 1
+      },
+      "body": "The meal bag is marked for pickup only after the route opens. Someone has crossed out the driver’s name but left the note to wait for the household.",
+      "id": "t0109-01",
+      "kind": "set",
+      "pieces": [
+        "Bread",
+        "WaterBottle"
+      ],
+      "title": "Food for the last visit",
+      "where": [
+        {
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "food here",
+        "source": "map:RosewoodStashMap5"
+      },
+      "gloss": "A family ration waits on a route-opening decision.",
+      "prov": {
+        "batch": "T0109",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A field delivery could have used the same pickup rule; the missing driver does not explain why the route was closed."
+    }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "map": "RosewoodStashMap5",
+        "mark": 1
+      },
+      "body": "The meal bag is marked for pickup only after the route opens. Someone has crossed out the driver’s name but left the note to wait for the household.",
+      "id": "t0109-01",
+      "kind": "set",
+      "pieces": [
+        "Bread",
+        "WaterBottle"
+      ],
+      "title": "Food for the last visit",
+      "where": [
+        {
+          "containers": [
+            "fridge",
+            "crate",
+            "shelves",
+            "desk",
+            "counter",
+            "cardboardbox"
+          ],
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "food here",
+        "source": "map:RosewoodStashMap5"
+      },
+      "gloss": "A family ration waits on a route-opening decision.",
+      "prov": {
+        "batch": "T0109",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A field delivery could have used the same pickup rule; the missing driver does not explain why the route was closed."
+    }
+  }
+]

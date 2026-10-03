@@ -1,0 +1,25 @@
+{
+  "t0145-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "shotgun kills: 12",
+      "source": "map:WpStashMap13"
+    },
+    "gloss": "An incident tally counts equipment outcomes but leaves returns blank.",
+    "prov": {
+      "batch": "T0145",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A field crew could record equipment incidents rather than an official response; the repeated tally does not identify who was lost."
+  }
+}

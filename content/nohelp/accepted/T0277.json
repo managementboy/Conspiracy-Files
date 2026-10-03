@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "Sammies"
+    },
+    "body": "the comb and hand torch are wedged beneath unused warning tape. footprints pass around the bundle rather than toward it.",
+    "id": "t0277-01",
+    "kind": "set",
+    "pieces": [
+      "Comb",
+      "HandTorch"
+    ],
+    "title": "Comb beside the spare mark",
+    "where": [
+      {
+        "containers": [
+          "wardrobe",
+          "desk",
+          "dresser",
+          "shelves",
+          "clothingrack",
+          "toolcabinet"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

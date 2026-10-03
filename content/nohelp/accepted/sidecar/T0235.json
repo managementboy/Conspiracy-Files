@@ -1,0 +1,22 @@
+{
+  "t0235-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-malfunction",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-warning",
+        "c-orders"
+      ]
+    },
+    "gloss": "A rare everyday object carries residue tied to field work before restriction.",
+    "prov": {
+      "batch": "T0235",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "Emergency workers crossing treated land could have picked up the same residue; the objects do not prove the farm program began the emergency."
+  }
+}

@@ -1,0 +1,32 @@
+[
+  {
+    "anchor": {
+      "map": "RiversideStashMap10",
+      "mark": 1
+    },
+    "body": "the sponge and folded road map are tied with cut warning tape. six tally cuts mark the sponge; only four are crossed through.",
+    "id": "t0103-01",
+    "kind": "set",
+    "pieces": [
+      "Sponge",
+      "Map"
+    ],
+    "title": "Sponge beside the spare mark",
+    "where": [
+      {
+        "containers": [
+          "dishescabinet",
+          "desk",
+          "overhead",
+          "filingcabinet",
+          "counter",
+          "sidetable"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

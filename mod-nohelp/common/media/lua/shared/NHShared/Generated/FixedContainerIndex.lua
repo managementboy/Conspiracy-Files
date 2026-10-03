@@ -43,18 +43,21 @@ local function denseTexts(values,max)
     return actual==count
 end
 
+-- The whole-map part of the check is NOT done here. It walked every building
+-- and counted the separators of 3.4 MB of encoded rows the first time the
+-- index was opened - the first area decision of every session - which is one
+-- scheduler step of about 20 ms under PUC Lua and was the 640-715 ms stutter
+-- measured in game (first visible playtest, 2026-09-27). Each building's entry
+-- is checked instead when it is first decoded (buildingOK, in candidates),
+-- and every one of its rows is checked there already.
 local function encodedOK(data)
-    if not denseTexts(data.sprites,300) or not denseTexts(data.types,80) or not denseTexts(data.rooms,120)
-        or type(data.buildings)~="table" or not integer(data.count) or data.count<0 then return false end
-    local count=0
-    for buildingId,encoded in pairs(data.buildings) do
-        if not text(buildingId,160) or type(encoded)~="table" then return false end
-        for key in pairs(encoded) do if type(key)~="number" or key<1 or key>3 or key~=math.floor(key) then return false end end
-        if not integer(encoded[1]) or not integer(encoded[2]) or type(encoded[3])~="string" or encoded[3]=="" then return false end
-        local _,separators=string.gsub(encoded[3],";","")
-        count=count+separators+1
-    end
-    return count==data.count
+    return denseTexts(data.sprites,300) and denseTexts(data.types,80) and denseTexts(data.rooms,120)
+        and type(data.buildings)=="table" and integer(data.count) and data.count>=0
+end
+local function buildingOK(buildingId,encoded)
+    if not text(buildingId,160) or type(encoded)~="table" then return false end
+    for key in pairs(encoded) do if type(key)~="number" or key<1 or key>3 or key~=math.floor(key) then return false end end
+    return integer(encoded[1]) and integer(encoded[2]) and type(encoded[3])=="string" and encoded[3]~=""
 end
 
 -- Validate generated data before it influences case generation.  Duplicate
@@ -141,6 +144,7 @@ function F.open(bundle,map,build)
             source={}
             local raw=string.sub(id or "",1,3)=="t3:" and string.sub(id,4) or id
             local encoded=chosen.buildings[raw]
+            if encoded~=nil and not buildingOK(raw,encoded) then error("invalid encoded fixed-container building") end
             if encoded then
                 local function base36(value)
                     local sign=1

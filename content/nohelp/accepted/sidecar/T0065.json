@@ -1,0 +1,25 @@
+{
+  "t0065-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "left you a pistol",
+      "source": "map:MarchRidgeStashMap2"
+    },
+    "gloss": "A collection record predates a closure notice, leaving the next family’s supplies behind.",
+    "prov": {
+      "batch": "T0065",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A field crew could have collected equipment before access closed; the receipt does not identify the family or the purpose."
+  }
+}

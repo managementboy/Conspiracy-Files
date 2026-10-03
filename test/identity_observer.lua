@@ -1,7 +1,13 @@
 package.path="mod/common/media/lua/shared/?.lua;mod/common/media/lua/client/?.lua;"..package.path
 next=nil
 package.preload['ISUI/ISInventoryPane']=function() end
-local callbacks={};Events={OnTick={Add=function(f) callbacks.tick=f end},OnGameStart={Add=function(f) callbacks.start=f end}}
+-- Like the game's Events, every handler added is kept: other modules (the
+-- discovery ledger's consumers load lazily mid-test) add their own OnTick, and a
+-- single-slot stub let the last one silently replace the observer's flush.
+local callbacks={};local tickers,starters={},{}
+Events={OnTick={Add=function(f) tickers[#tickers+1]=f end},OnGameStart={Add=function(f) starters[#starters+1]=f end}}
+callbacks.tick=function() for _,f in ipairs(tickers) do pcall(f) end end
+callbacks.start=function() for _,f in ipairs(starters) do pcall(f) end end
 local originalCalls=0;ISInventoryPane={render=function() originalCalls=originalCalls+1 end}
 local db={};local failWrite=false
 ModData={get=function(k) return db[k] end,getOrCreate=function(k) if failWrite then error('write unavailable') end;db[k]=db[k] or {};return db[k] end}

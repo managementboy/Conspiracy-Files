@@ -1,0 +1,25 @@
+{
+  "t0162-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "Fossoil (Ekron)",
+      "source": "print:Fossoil4"
+    },
+    "gloss": "A routine test ends with a request to stop using the hose.",
+    "prov": {
+      "batch": "T0162",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "An emergency crew could isolate a hose after contamination or damage; the record does not identify the test."
+  }
+}

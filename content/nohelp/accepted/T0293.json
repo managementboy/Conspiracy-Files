@@ -1,0 +1,44 @@
+[
+  {
+    "anchor": {
+      "scene": "RBHeatBreakAfternoon"
+    },
+    "body": "The two items are bundled beside clouded sample jar; field dust lies beneath them, while a strip of road tape is caught around the bundle.",
+    "id": "t0293-01",
+    "kind": "set",
+    "pieces": [
+      "Axe",
+      "SeedBag"
+    ],
+    "title": "The jar with its clouded rim",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "vehicle"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RBHeatBreakAfternoon"
+    },
+    "body": "The map is folded to hide three streets, and the water bottle has a fresh mark for each one. Whoever drove here was counting stops before anyone on the road knew there was a route.",
+    "id": "t0293-02",
+    "kind": "set",
+    "pieces": [
+      "Map",
+      "WaterBottle"
+    ],
+    "title": "A sealed morning route",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "vehicle"
+      }
+    ]
+  }
+]

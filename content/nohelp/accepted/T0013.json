@@ -1,0 +1,120 @@
+[
+  {
+    "anchor": {
+      "map": "IrvingtonStashMap1",
+      "mark": 1
+    },
+    "body": "the black umbrella bears a treated-seed stain and the camera a closure mark. one rope knot holds both objects together.",
+    "id": "t0013-01",
+    "kind": "set",
+    "pieces": [
+      "UmbrellaBlack",
+      "Camera"
+    ],
+    "title": "Black umbrella with the second residue",
+    "where": [
+      {
+        "containers": [
+          "locker",
+          "cardboardbox",
+          "smallbox",
+          "wardrobe",
+          "dresser",
+          "sidetable"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "IrvingtonStashMap1",
+      "note": 1
+    },
+    "body": "A clear ring dries across the notebook's crop-row drawing. The bottle cap is clean; the page beneath it is stained only where the drawn rows meet.",
+    "id": "t0013-02",
+    "kind": "set",
+    "pieces": [
+      "Notebook",
+      "WaterBottle"
+    ],
+    "title": "The bottle's ring crosses a row sketch",
+    "where": [
+      {
+        "containers": [
+          "cardboardbox",
+          "crate",
+          "smallbox",
+          "smallcrate",
+          "grocerstand",
+          "desk"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "IrvingtonStashMap1",
+      "note": 2
+    },
+    "body": "“Track access ends at the barrier. Keep the west lane clear for the last vehicle.” The receiving line is blank; on the back, someone asks for a green scarf to be saved.\n\nThe person who handed this to me asked me to keep the date. I did, though the next version left that day out entirely.\n\nThe next morning I looked for a second copy and found only the envelope. I left this one unfolded for whoever came after us.",
+    "id": "t0013-03",
+    "kind": "written",
+    "pieces": [
+      "dispatch"
+    ],
+    "title": "Dispatch copy with an unfinished return",
+    "where": [
+      {
+        "containers": [
+          "smallbox",
+          "desk",
+          "filingcabinet",
+          "sidetable",
+          "cashregister",
+          "shelves"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "IrvingtonStashMap1",
+      "note": 3
+    },
+    "body": "The note lists three crop rows and a water check, then continues onto the cover. “Bring the small boots home” is written below the last line.\n\nI carried it home because there was nowhere open to return it. The mark did not come off when I tried to wash my hands.\n\nThe next morning I looked for a second copy and found only the envelope. I left this one unfolded for whoever came after us.",
+    "id": "t0013-04",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "The row count continues past the page",
+    "where": [
+      {
+        "containers": [
+          "smallbox",
+          "desk",
+          "sidetable",
+          "filingcabinet",
+          "shelves",
+          "cashregister"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

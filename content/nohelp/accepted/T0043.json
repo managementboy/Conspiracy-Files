@@ -1,0 +1,32 @@
+[
+  {
+    "anchor": {
+      "map": "IrvingtonStashMap4",
+      "mark": 1
+    },
+    "body": "A copied verse about helping a wounded stranger is folded around an unpaid bar tab; the return slip marks the road pass as revoked.",
+    "id": "t0043-01",
+    "kind": "set",
+    "pieces": [
+      "SheetPaper2",
+      "Pencil"
+    ],
+    "title": "A verse on the return",
+    "where": [
+      {
+        "containers": [
+          "filingcabinet",
+          "desk",
+          "sidetable",
+          "shelves",
+          "smallbox",
+          "cashregister"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

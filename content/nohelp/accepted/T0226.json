@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "FarmingAndRuralSupplyDoeValley"
+    },
+    "body": "The supply receipt groups seeds, tools, and firearms in one pickup; the return sheet records the vehicle before the delivery was signed.",
+    "id": "t0226-01",
+    "kind": "set",
+    "pieces": [
+      "SeedBag",
+      "Pistol"
+    ],
+    "title": "Supply order for the rural stop",
+    "where": [
+      {
+        "containers": [
+          "shelves",
+          "militarylocker",
+          "metal_shelves",
+          "locker",
+          "cardboardbox",
+          "militarycrate"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

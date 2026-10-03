@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "QuillManor"
+    },
+    "body": "the measuring tape and empty garden sprayer share two stains: sweet field residue below and bleach above. both could have been packed during either job.",
+    "id": "t0276-01",
+    "kind": "set",
+    "pieces": [
+      "MeasuringTape",
+      "GardeningSprayEmpty"
+    ],
+    "title": "Measuring tape carrying two traces",
+    "where": [
+      {
+        "containers": [
+          "toolcabinet",
+          "metal_shelves",
+          "cardboardbox",
+          "smallbox",
+          "crate",
+          "smallcrate"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

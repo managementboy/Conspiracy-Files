@@ -1,0 +1,25 @@
+{
+  "t0197-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "House for Sale (no. 934)",
+      "source": "print:HouseforSale934"
+    },
+    "gloss": "A home inspection is signed before the sample is taken.",
+    "prov": {
+      "batch": "T0197",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A containment inspection could collect a sample after checking a property; the form does not explain the rust."
+  }
+}

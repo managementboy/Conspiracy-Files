@@ -1,0 +1,44 @@
+[
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "scene": "RVSChangingTire"
+      },
+      "body": "On the back: “the first morning, a medicinal odor in the cab after the experimental seed run. my throat tightened. Later, county trucks reached us.”",
+      "id": "t0363-01",
+      "kind": "written",
+      "pieces": [
+        "photograph"
+      ],
+      "title": "Cab note — the first morning",
+      "where": [
+        {
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "vehicle"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-warning",
+          "c-failure"
+        ]
+      },
+      "gloss": "A personal field trace precedes the visible emergency response.",
+      "prov": {
+        "batch": "T0363",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "Responders could have collected the a medicinal odor while crossing treated land; the note or objects do not prove the program began the emergency."
+    }
+  }
+]

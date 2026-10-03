@@ -1,0 +1,25 @@
+{
+  "t0177-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "Scarlet Oak Distillery",
+      "source": "print:ScarletOakDistillery"
+    },
+    "gloss": "A bottle delivery is counted before arrival and one worker is unaccounted for.",
+    "prov": {
+      "batch": "T0177",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A field team could collect the same supplies and miss a signature; the tally does not say why the worker was absent."
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "t0155-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "Crossroads Mall",
+      "source": "print:CrossRoadsMall"
+    },
+    "gloss": "The meeting point is cleared before its last bus arrives.",
+    "prov": {
+      "batch": "T0155",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A promotional crew could have cleared the meeting point for ordinary closing; the receipt does not say who waited for the bus."
+  }
+}

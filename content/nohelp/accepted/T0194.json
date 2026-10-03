@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "HouseforSale895"
+    },
+    "body": "road dust coats the car jack and clipboard, but their ties are clean and newly cut. the bundle was repacked after travel.",
+    "id": "t0194-01",
+    "kind": "set",
+    "pieces": [
+      "Jack",
+      "Clipboard"
+    ],
+    "title": "Car jack with the unclosed tally",
+    "where": [
+      {
+        "containers": [
+          "metal_shelves",
+          "toolcabinet",
+          "crate",
+          "smallcrate",
+          "militarycrate",
+          "smallbox"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

@@ -33,8 +33,13 @@ end
 -- happens to share a fullType with a watched identity document type.
 next=nil
 package.preload['ISUI/ISInventoryPane']=function() end
-local callbacks={}
-Events={OnTick={Add=function(f) callbacks.tick=f end},OnGameStart={Add=function(f) callbacks.start=f end}}
+-- Like the game's Events, every handler added is kept: other modules add their
+-- own OnTick mid-test, and a single-slot stub let the last one silently replace
+-- the observer's flush.
+local callbacks={};local tickers,starters={},{}
+Events={OnTick={Add=function(f) tickers[#tickers+1]=f end},OnGameStart={Add=function(f) starters[#starters+1]=f end}}
+callbacks.tick=function() for _,f in ipairs(tickers) do pcall(f) end end
+callbacks.start=function() for _,f in ipairs(starters) do pcall(f) end end
 ISInventoryPane={render=function() end}
 local db={}
 ModData={get=function(k) return db[k] end,getOrCreate=function(k) db[k]=db[k] or {};return db[k] end}
@@ -45,7 +50,10 @@ getPlayer=function() return player end;getSpecificPlayer=function(n) if n==0 the
 getGameTime=function() return {getWorldAgeHours=function() return 1 end} end
 getDebug=function() return true end;isClient=function() return false end;isServer=function() return false end
 instanceof=function(o,k) return type(o)=='table' and o.kind==k end
-ConspiracyFiles={GeneratedRuntime={metrics=function() return {} end}}
+ConspiracyFiles=ConspiracyFiles or {}
+-- Engine first, then the double: see test/support/engine_first.lua.
+local Engine=dofile("test/support/engine_first.lua")
+Engine.double("GeneratedRuntime",{metrics=function() return {} end})
 local corpse={kind='IsoDeadBody'}
 local container={getParent=function() return corpse end,getType=function() return 'inventorymale' end}
 local function item(id,fullType,modData)

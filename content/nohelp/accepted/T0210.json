@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "KnoxPackKitchens"
+    },
+    "body": "the hole punch and clipboard smell sharply of bleach. mud outlines between them show that a third object was removed.",
+    "id": "t0210-01",
+    "kind": "set",
+    "pieces": [
+      "HolePuncher",
+      "Clipboard"
+    ],
+    "title": "Hole punch with the unclosed tally",
+    "where": [
+      {
+        "containers": [
+          "filingcabinet",
+          "desk",
+          "sidetable",
+          "cashregister",
+          "shelves",
+          "smallbox"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

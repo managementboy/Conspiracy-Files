@@ -1,0 +1,32 @@
+[
+  {
+    "anchor": {
+      "map": "WpStashMap13",
+      "mark": 1
+    },
+    "body": "A tally sheet groups losses by weapon and vehicle, but the line for who was brought back is empty. One tally has been copied twice.",
+    "id": "t0145-01",
+    "kind": "set",
+    "pieces": [
+      "BaseballBat",
+      "SheetPaper2"
+    ],
+    "title": "Three tallies, no names",
+    "where": [
+      {
+        "containers": [
+          "locker",
+          "toolcabinet",
+          "crate",
+          "smallbox",
+          "desk",
+          "wardrobe"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

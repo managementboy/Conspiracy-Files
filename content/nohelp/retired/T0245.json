@@ -1,0 +1,143 @@
+[
+  {
+    "recall": "R1",
+    "row": {
+      "anchor": {
+        "print": "HouseforSale867"
+      },
+      "body": "The key packet includes a water bottle tag from the field crew; the property note asks the new owner not to use the garden tap yet.",
+      "id": "t0245-01",
+      "kind": "set",
+      "pieces": [
+        "KeyRing",
+        "WaterBottle"
+      ],
+      "title": "The ideally placed home",
+      "where": [
+        {
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "House for Sale (no. 867)",
+        "source": "print:HouseforSale867"
+      },
+      "gloss": "A home handover comes with a temporary garden-water restriction.",
+      "prov": {
+        "batch": "T0245",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A containment inspection could restrict a tap during cleanup; the note does not identify the water concern."
+    }
+  },
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "print": "HouseforSale867"
+      },
+      "body": "the packet of tissues and first-aid kit were wiped on one face and left dusty on the other. field twine and warning tape cross at the handle.",
+      "id": "t0245-01",
+      "kind": "set",
+      "pieces": [
+        "Tissue",
+        "FirstAidKit"
+      ],
+      "title": "two traces on the packet of tissues",
+      "where": [
+        {
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-warning",
+          "c-orders"
+        ]
+      },
+      "gloss": "Farm residue and response markings share one deliberately ambiguous bundle.",
+      "prov": {
+        "batch": "T0245",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "The farm program and the emergency response each explain one layer of the bundle, and the shared knot does not establish which purpose came first."
+    }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "print": "HouseforSale867"
+      },
+      "body": "the packet of tissues and first-aid kit were wiped on one face and left dusty on the other. field twine and warning tape cross at the handle.",
+      "id": "t0245-01",
+      "kind": "set",
+      "pieces": [
+        "Tissue",
+        "FirstAidKit"
+      ],
+      "title": "Packet of tissues with the second residue",
+      "where": [
+        {
+          "containers": [
+            "crate",
+            "shelves",
+            "desk",
+            "counter",
+            "cardboardbox",
+            "bin"
+          ],
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-warning",
+          "c-orders"
+        ]
+      },
+      "gloss": "Farm residue and response markings share one deliberately ambiguous bundle.",
+      "prov": {
+        "batch": "T0245",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "The farm program and the emergency response each explain one layer of the bundle, and the shared knot does not establish which purpose came first."
+    }
+  }
+]

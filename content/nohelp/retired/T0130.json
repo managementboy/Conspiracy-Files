@@ -1,0 +1,568 @@
+[
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "map": "WorldStashMap21",
+        "mark": 1
+      },
+      "body": "The seed bag is kept beside a water bottle; the notebook page where the plot directions should be has been removed.",
+      "id": "t0130-01",
+      "kind": "set",
+      "pieces": [
+        "SeedBag",
+        "WaterBottle"
+      ],
+      "title": "Plot with no note",
+      "where": [
+        {
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "gloss": "Garden supplies remain with their directions missing.",
+      "prov": {
+        "batch": "T0130",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A household garden could leave the same supplies together; the missing page does not identify the crop or its purpose."
+    }
+  },
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "map": "WorldStashMap21",
+        "mark": 2
+      },
+      "body": "Orchard diary: at the apple mark, windfalls carried a waxy film after the trial pass. The buyer rejected them before any evacuation notice.",
+      "id": "t0130-02",
+      "kind": "written",
+      "pieces": [
+        "diary"
+      ],
+      "title": "Apple mark beside treated windfalls",
+      "where": [
+        {
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "gloss": "Apple mark beside treated windfalls",
+      "prov": {
+        "batch": "T0130",
+        "handoff": "2026-09-29",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work."
+    }
+  },
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "map": "WorldStashMap21",
+        "mark": 3
+      },
+      "body": "Repair receipt: the hammer mark identifies the pump sealed after drawing cloudy field water. Its gasket was new, yet the metal inside had turned green.",
+      "id": "t0130-03",
+      "kind": "written",
+      "pieces": [
+        "notepad"
+      ],
+      "title": "Hammer mark for a sealed pump",
+      "where": [
+        {
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "gloss": "Hammer mark for a sealed pump",
+      "prov": {
+        "batch": "T0130",
+        "handoff": "2026-09-29",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work."
+    }
+  },
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "map": "WorldStashMap21",
+        "note": 1
+      },
+      "body": "Cash slip at the fuel symbol: twelve gallons for the trial sprayer, though its tank holds eight. The clerk wrote the excess under a second farm number.",
+      "id": "t0130-04",
+      "kind": "written",
+      "pieces": [
+        "receipt"
+      ],
+      "title": "Fuel symbol on the sprayer account",
+      "where": [
+        {
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "gloss": "Fuel symbol on the sprayer account",
+      "prov": {
+        "batch": "T0130",
+        "handoff": "2026-09-29",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work."
+    }
+  },
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "map": "WorldStashMap21",
+        "note": 2
+      },
+      "body": "Photograph back at the apple symbol: the rejected fruit crate has clean skins on top and spotted fruit underneath. A field-trial ribbon is tied to one handle.",
+      "id": "t0130-05",
+      "kind": "written",
+      "pieces": [
+        "photograph"
+      ],
+      "title": "Apple symbol and the rejected crate",
+      "where": [
+        {
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "gloss": "Apple symbol and the rejected crate",
+      "prov": {
+        "batch": "T0130",
+        "handoff": "2026-09-29",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work."
+    }
+  },
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "map": "WorldStashMap21",
+        "note": 3
+      },
+      "body": "Repair note at the hammer symbol: replace the pump gasket after the experimental feed runoff. The old rubber had turned green without cracking.",
+      "id": "t0130-06",
+      "kind": "written",
+      "pieces": [
+        "notebook"
+      ],
+      "title": "Hammer symbol over a green gasket",
+      "where": [
+        {
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "gloss": "Hammer symbol over a green gasket",
+      "prov": {
+        "batch": "T0130",
+        "handoff": "2026-09-29",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work."
+    }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "map": "WorldStashMap21",
+        "mark": 1
+      },
+      "body": "The seed bag is kept beside a water bottle; the notebook page where the plot directions should be has been removed.",
+      "id": "t0130-01",
+      "kind": "set",
+      "pieces": [
+        "SeedBag",
+        "WaterBottle"
+      ],
+      "title": "Plot with no note",
+      "where": [
+        {
+          "containers": [
+            "desk",
+            "crate",
+            "shelves",
+            "counter",
+            "cardboardbox",
+            "bin"
+          ],
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "gloss": "Garden supplies remain with their directions missing.",
+      "prov": {
+        "batch": "T0130",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A household garden could leave the same supplies together; the missing page does not identify the crop or its purpose."
+    }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "map": "WorldStashMap21",
+        "mark": 2
+      },
+      "body": "Orchard diary: at the apple mark, windfalls carried a waxy film after the trial pass. The buyer rejected them before any evacuation notice.\n\nI set it aside to show the neighbor when she returned. Her porch was empty by the time the light was good enough to read it.\n\nThe amount mattered to the office more than the people waiting outside. We stayed until dark because the last line still said to wait.",
+      "id": "t0130-02",
+      "kind": "written",
+      "pieces": [
+        "diary"
+      ],
+      "title": "Apple mark beside treated windfalls",
+      "where": [
+        {
+          "containers": [
+            "desk",
+            "crate",
+            "shelves",
+            "counter",
+            "cardboardbox",
+            "bin"
+          ],
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "gloss": "Apple mark beside treated windfalls",
+      "prov": {
+        "batch": "T0130",
+        "handoff": "2026-09-29",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work."
+    }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "map": "WorldStashMap21",
+        "mark": 3
+      },
+      "body": "Repair receipt: the hammer mark identifies the pump sealed after drawing cloudy field water. Its gasket was new, yet the metal inside had turned green.\n\nThey counted the containers before anyone counted who had carried them. I wrote the second number here while I could still remember it.\n\nThe amount mattered to the office more than the people waiting outside. We stayed until dark because the last line still said to wait.",
+      "id": "t0130-03",
+      "kind": "written",
+      "pieces": [
+        "notepad"
+      ],
+      "title": "Hammer mark for a sealed pump",
+      "where": [
+        {
+          "containers": [
+            "toolcabinet",
+            "crate",
+            "shelves",
+            "desk",
+            "counter",
+            "cardboardbox"
+          ],
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "gloss": "Hammer mark for a sealed pump",
+      "prov": {
+        "batch": "T0130",
+        "handoff": "2026-09-29",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work."
+    }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "map": "WorldStashMap21",
+        "note": 1
+      },
+      "body": "Cash slip at the fuel symbol: twelve gallons for the trial sprayer, though its tank holds eight. The clerk wrote the excess under a second farm number.\n\nThe clerk wanted a cleaner version. I kept the stained one because it showed which part had been changed after the road closed.\n\nThe amount mattered to the office more than the people waiting outside. We stayed until dark because the last line still said to wait.",
+      "id": "t0130-04",
+      "kind": "written",
+      "pieces": [
+        "receipt"
+      ],
+      "title": "Fuel symbol on the sprayer account",
+      "where": [
+        {
+          "containers": [
+            "filingcabinet",
+            "crate",
+            "shelves",
+            "desk",
+            "counter",
+            "cardboardbox"
+          ],
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "gloss": "Fuel symbol on the sprayer account",
+      "prov": {
+        "batch": "T0130",
+        "handoff": "2026-09-29",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work."
+    }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "map": "WorldStashMap21",
+        "note": 2
+      },
+      "body": "Photograph back at the apple symbol: the rejected fruit crate has clean skins on top and spotted fruit underneath. A field-trial ribbon is tied to one handle.\n\nI did not know where to put it after the shelves were cleared. There was still someone coming back for the answer written on it.\n\nPerhaps the new instructions were meant to help us. They arrived after we had already followed the old ones.",
+      "id": "t0130-05",
+      "kind": "written",
+      "pieces": [
+        "photograph"
+      ],
+      "title": "Apple symbol and the rejected crate",
+      "where": [
+        {
+          "containers": [
+            "crate",
+            "shelves",
+            "desk",
+            "counter",
+            "cardboardbox",
+            "bin"
+          ],
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "gloss": "Apple symbol and the rejected crate",
+      "prov": {
+        "batch": "T0130",
+        "handoff": "2026-09-29",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work."
+    }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "map": "WorldStashMap21",
+        "note": 3
+      },
+      "body": "Repair note at the hammer symbol: replace the pump gasket after the experimental feed runoff. The old rubber had turned green without cracking.\n\nWe waited for a correction that never came. Every passing driver had a different instruction and no room for one more passenger.\n\nPerhaps the new instructions were meant to help us. They arrived after we had already followed the old ones.",
+      "id": "t0130-06",
+      "kind": "written",
+      "pieces": [
+        "notebook"
+      ],
+      "title": "Hammer symbol over a green gasket",
+      "where": [
+        {
+          "containers": [
+            "toolcabinet",
+            "crate",
+            "shelves",
+            "desk",
+            "counter",
+            "cardboardbox"
+          ],
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "gloss": "Hammer symbol over a green gasket",
+      "prov": {
+        "batch": "T0130",
+        "handoff": "2026-09-29",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work."
+    }
+  }
+]

@@ -1,0 +1,148 @@
+[
+  {
+    "recall": "R1",
+    "row": {
+      "anchor": {
+        "map": "WpStashMap3",
+        "mark": 1
+      },
+      "body": "A house key is enclosed with a request for help; the reply box is marked delivered, though the envelope was never sealed.",
+      "id": "t0135-01",
+      "kind": "set",
+      "pieces": [
+        "LetterHandwritten",
+        "KeyRing"
+      ],
+      "title": "A key left for help",
+      "where": [
+        {
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "marked address in West Point",
+        "source": "map:WpStashMap3"
+      },
+      "gloss": "A help request is marked delivered while its envelope remains open.",
+      "prov": {
+        "batch": "T0135",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A program office could have logged an unsealed message as delivered; the key does not say who was meant to respond."
+    }
+  },
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "map": "WpStashMap3",
+        "mark": 1
+      },
+      "body": "a broken barrier board crushed the antibiotics against the folded road map. clean undersides show both were there before the road was blocked.",
+      "id": "t0135-01",
+      "kind": "set",
+      "pieces": [
+        "Antibiotics",
+        "Map"
+      ],
+      "title": "missing count beside the antibiotics",
+      "where": [
+        {
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-warning",
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "gloss": "A response bundle preserves a missing count, changed route, or erased identity.",
+      "prov": {
+        "batch": "T0135",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A farm-program crew could have counted routes, repacked tools, or removed ownership marks during hurried field work; the objects do not prove a concealed public response."
+    }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "map": "WpStashMap3",
+        "mark": 1
+      },
+      "body": "a broken barrier board crushed the antibiotics against the folded road map. clean undersides show both were there before the road was blocked.",
+      "id": "t0135-01",
+      "kind": "set",
+      "pieces": [
+        "Antibiotics",
+        "Map"
+      ],
+      "title": "Antibiotics beside the spare mark",
+      "where": [
+        {
+          "containers": [
+            "crate",
+            "shelves",
+            "desk",
+            "counter",
+            "cardboardbox",
+            "bin"
+          ],
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-warning",
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "gloss": "A response bundle preserves a missing count, changed route, or erased identity.",
+      "prov": {
+        "batch": "T0135",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A farm-program crew could have counted routes, repacked tools, or removed ownership marks during hurried field work; the objects do not prove a concealed public response."
+    }
+  }
+]

@@ -1,0 +1,32 @@
+[
+  {
+    "anchor": {
+      "map": "WorldStashMap8",
+      "mark": 1
+    },
+    "body": "The route page is complete except for its destination. The departure box is checked, and a margin asks the driver to wait for an updated order.",
+    "id": "t0117-01",
+    "kind": "set",
+    "pieces": [
+      "Notebook",
+      "Pencil"
+    ],
+    "title": "A destination without a name",
+    "where": [
+      {
+        "containers": [
+          "shelves",
+          "desk",
+          "sidetable",
+          "filingcabinet",
+          "smallbox",
+          "shelvesmag"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

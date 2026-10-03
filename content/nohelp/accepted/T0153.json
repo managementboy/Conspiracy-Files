@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "FashionaBelle"
+    },
+    "body": "The tailor’s fitting card is stamped complete before the customer’s pickup time; a note asks staff to leave the back door open for the return van.",
+    "id": "t0153-01",
+    "kind": "set",
+    "pieces": [
+      "Scissors",
+      "SheetPaper2"
+    ],
+    "title": "A fitting appointment moved",
+    "where": [
+      {
+        "containers": [
+          "toolcabinet",
+          "desk",
+          "filingcabinet",
+          "sidetable",
+          "shelves",
+          "smallbox"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

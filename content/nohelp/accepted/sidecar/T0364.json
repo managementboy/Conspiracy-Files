@@ -1,0 +1,40 @@
+{
+  "t0364-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-warning",
+        "c-failure"
+      ]
+    },
+    "gloss": "A personal field trace precedes the visible emergency response.",
+    "prov": {
+      "batch": "T0364",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "Responders could have collected the violet powder while crossing treated land; the note or objects do not prove the program began the emergency."
+  },
+  "t0364-02": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-warning"
+      ]
+    },
+    "gloss": "A crew was told to listen and keep quiet before any closure was public.",
+    "prov": {
+      "batch": "T0364",
+      "handoff": "2026-09-29",
+      "writer": "Claude"
+    },
+    "rival_reading": "A foreman could fix a radio to one channel for ordinary site safety; nothing says who gave the order."
+  }
+}

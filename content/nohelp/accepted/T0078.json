@@ -1,0 +1,32 @@
+[
+  {
+    "anchor": {
+      "map": "MulStashMap3",
+      "mark": 1
+    },
+    "body": "the sewing needle and clipboard carry the same black paint. a fresh scrape exposes an older evacuation color beneath.",
+    "id": "t0078-01",
+    "kind": "set",
+    "pieces": [
+      "Needle",
+      "Clipboard"
+    ],
+    "title": "Sewing needle with the unclosed tally",
+    "where": [
+      {
+        "containers": [
+          "wardrobe",
+          "desk",
+          "dresser",
+          "filingcabinet",
+          "clothingrack",
+          "sidetable"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

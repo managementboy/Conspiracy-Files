@@ -1,0 +1,42 @@
+[
+  {
+    "anchor": {
+      "scene": "RZSForestCampEaten"
+    },
+    "body": "my weathered bundle entry says the experimental seed run workers brushed off chalky water. my throat tightened before county trucks reached us.\n\nNo one wanted to keep the wet copy. It dried unevenly, and the ink from the first entry stayed visible beneath the second.\n\nThe younger one wanted to throw it away. I promised we would ask in the morning, and put it where neither of us could forget.",
+    "id": "t0385-01",
+    "kind": "written",
+    "pieces": [
+      "notebook"
+    ],
+    "title": "weathered bundle note — the first morning",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RZSForestCampEaten"
+    },
+    "body": "I was told everyone here had been collected in the morning. I still heard my neighbor calling from the other tent when the men packed up their list. I wrote her name where their pencil had left a blank.",
+    "id": "t0385-02",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "title": "Under the bedroll",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
+  }
+]

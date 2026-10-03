@@ -1,0 +1,42 @@
+[
+  {
+    "anchor": {
+      "scene": "RVSCarCrashCorpse"
+    },
+    "body": "My cab entry says the orchard treatment workers brushed off a cloying orchard smell. the horse kicked away its feed before the crossing was barricaded.\n\nMy mother put it with the household bills so it would not be thrown away. It was the only part of the week that still had a date.\n\nIt may have started elsewhere; none of us saw the beginning. I only know what had reached this place before they closed the road.",
+    "id": "t0361-01",
+    "kind": "written",
+    "pieces": [
+      "notebook"
+    ],
+    "title": "Cab note — during the hot afternoon",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "vehicle"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RVSCarCrashCorpse"
+    },
+    "body": "The person beside me waited in the car while I asked for help. A man in a vest said the crash happened outside the area they were collecting names from. I wrote ours down anyway, so somebody might look for both of us.",
+    "id": "t0361-02",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "title": "Passenger’s folded page",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "vehicle"
+      }
+    ]
+  }
+]

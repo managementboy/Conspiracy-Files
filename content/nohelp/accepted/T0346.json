@@ -1,0 +1,58 @@
+[
+  {
+    "anchor": {
+      "scene": "RDSResourceGarage"
+    },
+    "body": "I saved the cloth with milky water for you. The crop plot crew passed Saturday near lunch; two hens went still, and afterward the lane was closed.\n\nWe needed the supplies listed here for the following morning. The people who took the count left without asking whether we had them.\n\nSomeone had to finish the household list even though the office had closed. I wrote the names in the space left for expenses.",
+    "id": "t0346-01",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "title": "Saturday near lunch — milky water",
+    "where": [
+      {
+        "containers": [
+          "desk",
+          "filingcabinet",
+          "sidetable",
+          "shelves",
+          "smallbox",
+          "cashregister"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RDSResourceGarage"
+    },
+    "body": "I told them which shelves had fuel and which held tools. They asked for the names of people who had filled containers the night before.\n\nI could remember the man who paid in coins because I had counted them twice. His number was already on their sheet. They did not ask me about the fuel after that.\n\nI put the coins away separately. The drawer still has the gap where the sheet had been kept.",
+    "id": "t0346-02",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "The garage inventory",
+    "where": [
+      {
+        "containers": [
+          "desk",
+          "filingcabinet",
+          "sidetable",
+          "shelves",
+          "smallbox",
+          "cashregister"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

@@ -1,0 +1,40 @@
+{
+  "t0287-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-warning",
+        "c-orders"
+      ]
+    },
+    "gloss": "Field residue and response material share one personal bundle.",
+    "prov": {
+      "batch": "T0287",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "Field work and a hurried emergency response could each explain the mixed residue and road tape; neither fixes which came first."
+  },
+  "t0287-02": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-warning",
+        "c-accounting"
+      ]
+    },
+    "gloss": "A personal account or object records an intervention that left part of the account missing.",
+    "prov": {
+      "batch": "T0287",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A farmer might have saved a sample of ash from a failed field treatment."
+  }
+}

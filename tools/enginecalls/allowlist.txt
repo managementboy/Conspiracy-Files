@@ -1,0 +1,1 @@
+# Known false alarms: "relative/file.lua:method | why it is not a bug". A dead entry fails the run.

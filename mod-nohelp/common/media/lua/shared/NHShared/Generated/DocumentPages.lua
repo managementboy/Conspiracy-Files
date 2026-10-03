@@ -9,7 +9,21 @@
 -- Pure: no PZ dependency, so the split is testable without launching a game.
 local PlaceNames=require("NHShared/Generated/PlaceNames")
 local H=require("NHShared/Headings")
-local M={MAX_PAGE_CHARS=700,MAX_PAGES=8}
+-- A hundred pages: texts have no maximum (owner, 2026-09-29); the item is
+-- given as many pages as its text needs (GeneratedRuntime.writePages).
+-- The vanilla journal that opens a locked page holds at most 15 lines of 80
+-- characters (T7, installed ISUIWriteJournal). A page is kept to 13 lines at an
+-- assumed 70 characters each, so a page of short paragraphs cannot run past it.
+local M={MAX_PAGE_CHARS=700,MAX_PAGES=100,MAX_PAGE_LINES=13,LINE_CHARS=70}
+
+-- Lines a block of text takes on the page: each paragraph wraps at LINE_CHARS.
+function M.lines(text)
+    local n=0
+    for line in (text.."\n"):gmatch("(.-)\n") do
+        n=n+math.max(1,math.ceil(#line/M.LINE_CHARS))
+    end
+    return n
+end
 -- Headings the mod adds around the document's own text. Everything from the
 -- first of these onwards is ours.
 local OURS=H.OURS
@@ -56,11 +70,11 @@ function M.pages(body,case,describe)
     for _,para in ipairs(paragraphs) do
         if #pages>=M.MAX_PAGES then break end
         if current=="" then current=para
-        elseif #current+#para+2<=M.MAX_PAGE_CHARS then current=current.."\n\n"..para
+        elseif #current+#para+2<=M.MAX_PAGE_CHARS and M.lines(current.."\n\n"..para)<=M.MAX_PAGE_LINES then current=current.."\n\n"..para
         else flush(); current=para end
         -- A paragraph longer than a page is cut on whitespace, never mid-word.
-        while #current>M.MAX_PAGE_CHARS and #pages<M.MAX_PAGES do
-            local head=current:sub(1,M.MAX_PAGE_CHARS)
+        while (#current>M.MAX_PAGE_CHARS or M.lines(current)>M.MAX_PAGE_LINES) and #pages<M.MAX_PAGES do
+            local head=current:sub(1,math.min(M.MAX_PAGE_CHARS,M.MAX_PAGE_LINES*M.LINE_CHARS))
             local cut=head:match("^.*%s")
             if not cut or #cut<M.MAX_PAGE_CHARS/2 then cut=head end
             pages[#pages+1]=(cut:gsub("%s+$",""))

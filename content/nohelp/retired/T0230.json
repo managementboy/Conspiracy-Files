@@ -1,0 +1,104 @@
+[
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "print": "NailsAndNuts"
+      },
+      "body": "The hardware receipt lists nails and tools for pickup, but the access sheet says the shop closed before the order was collected.",
+      "id": "t0230-01",
+      "kind": "set",
+      "pieces": [
+        "Hammer",
+        "Nails"
+      ],
+      "title": "The hardware order",
+      "where": [
+        {
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "Nails & Nuts",
+        "source": "print:NailsAndNuts"
+      },
+      "gloss": "A supply order remains uncollected after the shop closure.",
+      "prov": {
+        "batch": "T0230",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A program crew could have ordered supplies and missed the pickup; the sheet does not show who closed the shop."
+    }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "print": "NailsAndNuts"
+      },
+      "body": "The hardware receipt lists nails and tools for pickup, but the access sheet says the shop closed before the order was collected.",
+      "id": "t0230-01",
+      "kind": "set",
+      "pieces": [
+        "Hammer",
+        "Nails"
+      ],
+      "title": "The hardware order",
+      "where": [
+        {
+          "containers": [
+            "toolcabinet",
+            "crate",
+            "shelves",
+            "desk",
+            "counter",
+            "cardboardbox"
+          ],
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "Nails & Nuts",
+        "source": "print:NailsAndNuts"
+      },
+      "gloss": "A supply order remains uncollected after the shop closure.",
+      "prov": {
+        "batch": "T0230",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A program crew could have ordered supplies and missed the pickup; the sheet does not show who closed the shop."
+    }
+  }
+]

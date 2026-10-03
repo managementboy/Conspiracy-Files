@@ -1,0 +1,94 @@
+{
+  "ticket": "T0009",
+  "returned_by": "Claude blind re-read and batch read, 2026-09-28",
+  "drift": "Batch drift report (T0001-T0013, read together): the rows have converged on one template. About 20 of 28 say 'X was recorded before/after Y', add a child's drawing or sticker, and end with 'the only completed count is <returned objects>, not people'. Each row is fine on its own, but a player who finds three of them has found the same clue three times, and the world sounds like one clerk. The containment rows are all timestamp-and-form jokes and the agricultural rows are all 'water total before source'; a blind reader sorts them by that alone. Keep the tone (one human detail beside one institutional one), but vary it: different human stakes (not always a child), different institutional blind spots (not always a count), clues that are mostly an arrangement of objects with a short note or none, and other spots where both sides can use them (ground, vehicle, mailbox, corpse), not only furniture.",
+  "rows": [
+    {
+      "id": "t0009-01",
+      "codes": [
+        "NEVER_RIVAL",
+        "DRIFT"
+      ],
+      "note": "A blind re-read (5 independent reads, a different model, told nothing) never named the rival, so the row is one-sided. The lean should come from where the clue is placed and from one detail; the rest must leave the rival reading genuinely live. Rework title, body and if needed pieces; keep place, spot, lean and axioms. See the drift report at the top of this file.",
+      "votes": "A 5, B 0, neither 0 (clue lean A)",
+      "row": {
+        "body": "The map's road closure is dated before the revision is signed. A child's crayon marks the way home; the file's only completed count is copies returned, not people moved.",
+        "id": "t0009-01",
+        "kind": "set",
+        "pieces": [
+          "Map",
+          "Clipboard"
+        ],
+        "title": "Restriction recorded before revision signed",
+        "where": [
+          {
+            "lean": "containment",
+            "place": "government",
+            "rival": "agricultural",
+            "spot": "furniture"
+          }
+        ],
+        "axioms": {
+          "agricultural": [
+            "a-program",
+            "a-obscured"
+          ],
+          "containment": [
+            "c-orders",
+            "c-accounting"
+          ]
+        },
+        "gloss": "A road restriction is entered before its revision receives a signature.",
+        "prov": {
+          "batch": "T0009",
+          "handoff": "2026-09-27",
+          "writer": "ChatGPT"
+        },
+        "rival_reading": "The dates could describe routine access administration around the field route; neither a crossed line nor a missing crowd count shows officials caused the outbreak."
+      }
+    },
+    {
+      "id": "t0009-02",
+      "codes": [
+        "DRIFT"
+      ],
+      "note": "Passed the blind re-read; returned only because its ticket is returned. Redeliver it unchanged if it still fits after the drift fix (its receipt stays valid only while title, body, pieces and places are unchanged). See the drift report at the top of this file.",
+      "votes": "A 1, B 4, neither 0 (clue lean B)",
+      "row": {
+        "body": "The notebook lists water for two field rounds before the review date. A lunch reminder is taped to the bottle; the ledger counts delivered containers but leaves the source line blank.",
+        "id": "t0009-02",
+        "kind": "set",
+        "pieces": [
+          "Notebook",
+          "WaterBottle"
+        ],
+        "title": "Water tally predates review",
+        "where": [
+          {
+            "lean": "agricultural",
+            "place": "government",
+            "rival": "containment",
+            "spot": "furniture"
+          }
+        ],
+        "axioms": {
+          "agricultural": [
+            "a-program",
+            "a-malfunction"
+          ],
+          "containment": [
+            "c-orders",
+            "c-failure"
+          ]
+        },
+        "gloss": "A field water tally predates a review date while its source remains blank.",
+        "prov": {
+          "batch": "T0009",
+          "handoff": "2026-09-27",
+          "writer": "ChatGPT"
+        },
+        "rival_reading": "Public staff could record water allotments during a containment response and leave the source entry for a later review; the record does not establish an agricultural malfunction."
+      }
+    }
+  ]
+}

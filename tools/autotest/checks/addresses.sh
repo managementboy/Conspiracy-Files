@@ -10,6 +10,7 @@
 # Real display only (software OpenGL distorts timings).
 # Exit 0 pass, 1 fail, 2 could not run.
 set -uo pipefail
+export PZ_NOHELP_ONLY=1   # No Help only; it supports every build from 42.20 on
 . "$(dirname "${BASH_SOURCE[0]}")/../lib.sh"
 say() { echo "addresses: $*" >&2; }
 abort() { say "$*"; "$PZ" stop; exit 2; }
@@ -19,14 +20,14 @@ findings=()
 claim_game || exit 2
 start_cold || abort "the game did not reach a playable world"
 id="$(session)"
-wait_true 60 'ConspiracyFiles.AddressMap~=nil and ConspiracyFiles.AddressMap.ready()' >/dev/null || fail "the address book was not ready within 60 s of game start"
+wait_true 60 'NHShared.AddressMap~=nil and NHShared.AddressMap.ready()' >/dev/null || fail "the address book was not ready within 60 s of game start"
 ev -f "$REPO/tools/autotest/checks/addresses.lua" >/dev/null || abort "could not load the check's Lua"
 
 state="$(ev 'return CFAdr.state()')"
 [ "$(cut -f1 <<<"$state")" = true ] || fail "not ready: $(cut -f4 <<<"$state")"
 [ "$(cut -f3 <<<"$state")" = false ] || fail "an address book was written to the save"
 findings+=("load: $(cut -f2 <<<"$state") ms; status: $(cut -f4 <<<"$state")")
-cases="$(ev 'local s=ConspiracyFiles.GeneratedRuntime.automaticStatus(); return s and s.count or 0' | cut -f1)"
+cases="$(ev 'local s=NHShared.GeneratedRuntime and NHShared.GeneratedRuntime.automaticStatus and NHShared.GeneratedRuntime.automaticStatus(); return s and s.count or 0' | cut -f1)"
 findings+=("cases at the time of the check: ${cases:-?}")
 
 shipped="$(ev 'return CFAdr.verifyStart()' | cut -f1)"

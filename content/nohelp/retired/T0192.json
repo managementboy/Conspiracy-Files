@@ -1,0 +1,104 @@
+[
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "print": "MuldraughBakeSale"
+      },
+      "body": "The bake-sale list marks every box collected before the parking lot was cleared; one family’s unpaid loaf remains beside the pickup table.",
+      "id": "t0192-01",
+      "kind": "set",
+      "pieces": [
+        "Bread",
+        "SheetPaper2"
+      ],
+      "title": "Bake sale pickup",
+      "where": [
+        {
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "Muldraugh Ladies Committee Bake Sale",
+        "source": "print:MuldraughBakeSale"
+      },
+      "gloss": "The pickup list closes while one family’s order remains.",
+      "prov": {
+        "batch": "T0192",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A volunteer sale could close its list early for ordinary reasons; the loaf does not prove anyone was turned away."
+    }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "print": "MuldraughBakeSale"
+      },
+      "body": "The bake-sale list marks every box collected before the parking lot was cleared; one family’s unpaid loaf remains beside the pickup table.",
+      "id": "t0192-01",
+      "kind": "set",
+      "pieces": [
+        "Bread",
+        "SheetPaper2"
+      ],
+      "title": "Bake sale pickup",
+      "where": [
+        {
+          "containers": [
+            "crate",
+            "shelves",
+            "desk",
+            "counter",
+            "cardboardbox",
+            "bin"
+          ],
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "Muldraugh Ladies Committee Bake Sale",
+        "source": "print:MuldraughBakeSale"
+      },
+      "gloss": "The pickup list closes while one family’s order remains.",
+      "prov": {
+        "batch": "T0192",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A volunteer sale could close its list early for ordinary reasons; the loaf does not prove anyone was turned away."
+    }
+  }
+]

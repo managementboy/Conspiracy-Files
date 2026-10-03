@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "HouseforSale912"
+    },
+    "body": "the sewing kit is tied to the hand radio by a clipped lanyard. an empty loop shows where an identifying tag was cut off.",
+    "id": "t0220-01",
+    "kind": "set",
+    "pieces": [
+      "SewingKit",
+      "WalkieTalkie1"
+    ],
+    "title": "Sewing kit with the unclosed tally",
+    "where": [
+      {
+        "containers": [
+          "metal_shelves",
+          "cardboardbox",
+          "smallbox",
+          "crate",
+          "toolcabinet",
+          "locker"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

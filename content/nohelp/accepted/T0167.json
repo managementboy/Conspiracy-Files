@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "Delilah"
+    },
+    "body": "The dock map is marked for arrival, but the passenger list is signed complete before the boat’s final location was entered.",
+    "id": "t0167-01",
+    "kind": "set",
+    "pieces": [
+      "Map",
+      "WaterBottle"
+    ],
+    "title": "The boat’s last location",
+    "where": [
+      {
+        "containers": [
+          "cardboardbox",
+          "crate",
+          "smallbox",
+          "smallcrate",
+          "grocerstand",
+          "desk"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

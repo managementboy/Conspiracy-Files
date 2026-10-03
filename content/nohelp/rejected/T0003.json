@@ -1,0 +1,92 @@
+{
+  "ticket": "T0003",
+  "returned_by": "Claude review, DR-20260928-NOHELP-REVIEW-FAST, 2026-09-28",
+  "note": "The ticket is returned whole: a place must keep both conspiracies, a person ticket is accepted or returned as a whole, and a map design keeps its set share.",
+  "rows": [
+    {
+      "id": "t0003-01",
+      "codes": [
+        "LEAN_MISMATCH"
+      ],
+      "note": "Two independent blind reads (DR-20260928-NOHELP-REVIEW-FAST) both missed the declared lean (declared A; votes A 0, B 0, neither 2). Rework so one detail tilts it to its own side while the rival reading stays possible. Keep place, spot, lean, rival, pieces and axioms.",
+      "votes": "A 0, B 0, neither 2 (declared A)",
+      "row": {
+        "body": "The map is open to a farm track, but the keyring rests beyond the drawn gate. Its tag is still tied on; the paper around the knot has torn in two.",
+        "id": "t0003-01",
+        "kind": "set",
+        "pieces": [
+          "Map",
+          "KeyRing"
+        ],
+        "title": "The gate key on the far side",
+        "where": [
+          {
+            "lean": "containment",
+            "place": "farm",
+            "rival": "agricultural",
+            "spot": "ground"
+          }
+        ],
+        "axioms": {
+          "agricultural": [
+            "a-program",
+            "a-pathway"
+          ],
+          "containment": [
+            "c-orders",
+            "c-failure"
+          ]
+        },
+        "gloss": "A gate route and its key no longer meet.",
+        "prov": {
+          "batch": "T0003",
+          "handoff": "2026-09-27",
+          "writer": "ChatGPT"
+        },
+        "rival_reading": "A farm worker could set a spare key beside a track while changing field access; a torn tag says nothing about an evacuation order."
+      }
+    },
+    {
+      "id": "t0003-02",
+      "codes": [],
+      "note": "Passed its blind read; returned only because its ticket is returned whole. Redeliver it unchanged: its receipt stays valid while title, body, pieces and places are unchanged.",
+      "votes": "A 0, B 1, neither 0 (declared B)",
+      "row": {
+        "body": "The seed bag is folded shut around the shovel handle. A straight line of dark soil runs from the blade to the bag's seam, but the shovel has no soil on its grip.",
+        "id": "t0003-02",
+        "kind": "set",
+        "pieces": [
+          "SeedBag",
+          "HandShovel"
+        ],
+        "title": "The seed bag holds a narrow trench",
+        "where": [
+          {
+            "lean": "agricultural",
+            "place": "farm",
+            "rival": "containment",
+            "spot": "ground"
+          }
+        ],
+        "axioms": {
+          "agricultural": [
+            "a-program",
+            "a-malfunction"
+          ],
+          "containment": [
+            "c-orders",
+            "c-failure"
+          ]
+        },
+        "gloss": "Seed stock and a freshly used tool were wrapped together.",
+        "prov": {
+          "batch": "T0003",
+          "handoff": "2026-09-27",
+          "writer": "ChatGPT"
+        },
+        "rival_reading": "A response crew could move seed stock and tools while clearing a farm; the clean grip could come from ordinary handling."
+      }
+    }
+  ],
+  "drift": "Batch note (whole round, read once): a key ring appears in about ten of the 38 rows, a crop-row sketch in about eight and a water ring or stain in five. Not a return reason this round; vary objects and details in the redeliveries and in T0019 onward so a player does not meet the same arrangement at every place."
+}

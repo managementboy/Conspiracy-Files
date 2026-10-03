@@ -1,0 +1,60 @@
+[
+  {
+    "anchor": {
+      "scene": "RDSRatKing"
+    },
+    "body": "The kit is sealed and pushed behind a rat-chewed board. One bandage has been set on top, dry and neatly folded as if someone expected to return for it.",
+    "id": "t0017-01",
+    "kind": "set",
+    "pieces": [
+      "FirstAidKit",
+      "Bandage"
+    ],
+    "title": "The first-aid kit under the kitchen shelf",
+    "where": [
+      {
+        "containers": [
+          "medicine",
+          "locker",
+          "smallbox",
+          "sidetable",
+          "dresser",
+          "filingcabinet"
+        ],
+        "lean": "containment",
+        "place": "police",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RDSRatKing"
+    },
+    "body": "The empty sprayer is tacky around its trigger. A notebook page has dried against its side; the page shows a rat-chewed root beside three crop rows.",
+    "id": "t0017-02",
+    "kind": "set",
+    "pieces": [
+      "GardeningSprayEmpty",
+      "Notebook"
+    ],
+    "title": "The spray bottle with a page stuck to it",
+    "where": [
+      {
+        "containers": [
+          "metal_shelves",
+          "desk",
+          "shelves",
+          "cardboardbox",
+          "filingcabinet",
+          "crate"
+        ],
+        "lean": "agricultural",
+        "place": "farm",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

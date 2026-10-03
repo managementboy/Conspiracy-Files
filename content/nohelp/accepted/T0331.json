@@ -1,0 +1,44 @@
+[
+  {
+    "anchor": {
+      "scene": "RDSDevouredByRats"
+    },
+    "body": "The battery and field radio are tied together. green flecks coats one side; a torn strip of road tape covers the other.",
+    "id": "t0331-01",
+    "kind": "set",
+    "pieces": [
+      "Battery",
+      "RadioBlack"
+    ],
+    "title": "Battery and field radio, tuesday at dusk",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "corpse"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RDSDevouredByRats"
+    },
+    "body": "The folded paper lists six arrivals and four departures. The pencil is tucked into the same pocket; two departures have been erased until the paper is almost transparent.",
+    "id": "t0331-02",
+    "kind": "set",
+    "pieces": [
+      "Paperclip",
+      "Pencil"
+    ],
+    "title": "A count beneath the torn coat",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "corpse"
+      }
+    ]
+  }
+]

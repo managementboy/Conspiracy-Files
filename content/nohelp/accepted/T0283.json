@@ -1,0 +1,60 @@
+[
+  {
+    "anchor": {
+      "scene": "RBBar"
+    },
+    "body": "The pair is streaked with feed sack marking from the treated rows. Dead flies fill the bottom ring of the bucket, and the shovel blade has the same bitter green film.",
+    "id": "t0283-01",
+    "kind": "set",
+    "pieces": [
+      "HandShovel",
+      "Bucket"
+    ],
+    "title": "After sack by the counter, the first copy",
+    "where": [
+      {
+        "containers": [
+          "crate",
+          "metal_shelves",
+          "toolcabinet",
+          "doghouse",
+          "bin",
+          "smallcrate"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RBBar"
+    },
+    "body": "The glass was rinsed but the strip of tape stays on it, marked to be kept after closing. The cloth is stiff with bleach. Someone expected the counter to be cleaned before the glass was taken away.",
+    "id": "t0283-02",
+    "kind": "set",
+    "pieces": [
+      "GlassTumbler",
+      "DishCloth"
+    ],
+    "title": "The glass nobody collected",
+    "where": [
+      {
+        "containers": [
+          "dishescabinet",
+          "overhead",
+          "counter",
+          "displaycase",
+          "clothingrack",
+          "shelves"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

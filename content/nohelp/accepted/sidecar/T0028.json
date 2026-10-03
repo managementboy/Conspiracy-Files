@@ -1,0 +1,48 @@
+{
+  "t0028-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "wrecked restaurant",
+      "source": "map:BBurgStashMap3"
+    },
+    "gloss": "A restaurant rinse note and an interrupted order connect a crew visit to routine service.",
+    "prov": {
+      "batch": "T0028",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "None: one-sided on purpose (owner, 2026-10-02); the other side does not use this clue."
+  },
+  "t0028-02": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "wrecked restaurant",
+      "source": "map:BBurgStashMap3"
+    },
+    "gloss": "A repair bill records conflicting access instructions while the restaurant planned to reopen.",
+    "prov": {
+      "batch": "T0028",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A field crew could have needed separate access to the building; the bill does not say who changed the locks or why."
+  }
+}

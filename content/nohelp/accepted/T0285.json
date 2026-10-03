@@ -1,0 +1,60 @@
+[
+  {
+    "anchor": {
+      "scene": "RBBurnt"
+    },
+    "body": "The pair is streaked with clouded sample jar from treated rows. It was set aside after the flies vanished, before anyone marked the cab unsafe.",
+    "id": "t0285-01",
+    "kind": "set",
+    "pieces": [
+      "FirstAidKit",
+      "WaterBottle"
+    ],
+    "title": "The jar with its clouded rim",
+    "where": [
+      {
+        "containers": [
+          "medicine",
+          "fridge",
+          "sidetable",
+          "counter",
+          "locker",
+          "overhead"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RBBurnt"
+    },
+    "body": "The kit is unopened. The water bottle has a black line drawn halfway down it and the same line repeated on the charred wall. Whoever marked it was measuring what survived the fire, not treating a burn.",
+    "id": "t0285-02",
+    "kind": "set",
+    "pieces": [
+      "FirstAidKit",
+      "WaterBottle"
+    ],
+    "title": "A waterline after the fire",
+    "where": [
+      {
+        "containers": [
+          "medicine",
+          "fridge",
+          "sidetable",
+          "counter",
+          "locker",
+          "overhead"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

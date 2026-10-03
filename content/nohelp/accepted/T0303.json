@@ -1,0 +1,60 @@
+[
+  {
+    "anchor": {
+      "scene": "RBPoliceSiege"
+    },
+    "body": "A hand shovel rests across a wash pail, both striped with yellow dust. The pail smells of crop spray; road tape is knotted through its handle.",
+    "id": "t0303-01",
+    "kind": "set",
+    "pieces": [
+      "HandShovel",
+      "Bucket"
+    ],
+    "title": "Field dust on the wash pail",
+    "where": [
+      {
+        "containers": [
+          "toolcabinet",
+          "metal_shelves",
+          "crate",
+          "smallcrate",
+          "shelves",
+          "bin"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RBPoliceSiege"
+    },
+    "body": "The radio dial is bound with a narrow strip of tape. Its battery has been replaced recently, although the callers barricaded here had no way to send a reply. Someone wanted them listening to one channel.",
+    "id": "t0303-02",
+    "kind": "set",
+    "pieces": [
+      "Battery",
+      "RadioBlack"
+    ],
+    "title": "Frequency held through the siege",
+    "where": [
+      {
+        "containers": [
+          "shelves",
+          "desk",
+          "toolcabinet",
+          "metal_shelves",
+          "smallbox",
+          "locker"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

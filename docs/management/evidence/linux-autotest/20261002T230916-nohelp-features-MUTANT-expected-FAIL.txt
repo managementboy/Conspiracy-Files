@@ -1,0 +1,19 @@
+Linux No Help features check 20261002T230916: FAIL
+source: b1fdad36
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+(a) close cue: FAILED - see FAIL lines
+(c) Shift+L: NOT-EXERCISED - the key press did not reach the game (clue_where lines 0/0/0); window 52428807
+(d) quiet observer line: FAILED - 7 lines while quiet
+(b) seated-car clue: FAILED - see FAIL lines
+note: clues (total, placed, waiting, in cars): 3 3 0 0
+note: cue clue: number 1, stood 1 tile(s) from it, seen from there
+note: cue far away: 8 tiles, said 0 -> 0 (must not change)
+note: cue near: fired 1 tile(s) from the clue; log line bubble=true; spoken line shipped; screenshot 20261002T230916-nohelp-cue.png
+note: re-roll control: with the interval broken no cue came in 12 s (the re-roll assertion can fail)
+note: observer: afterRender reached lines 1; unsupported lines with the gate shut 12 s, verbose off: 7; verbose on 6 s: 10
+note: seat: other car's container while seated: 0 recognised (must be 0)
+note: game ERROR lines in this run: 9; of those inside the mods: 0; mod lvl=e lines: 0
+FAIL: re-roll: no cue within 15 s after a failed roll, standing 3 tiles or nearer
+FAIL: Shift+L: the key press did not reach the game (clue_where lines 0/0/0); window 52428807
+FAIL: observer: 7 'observer unsupported' lines with verbose off
+FAIL: seat: the clue in the seated car's glove box was not recognised after opening it in the loot panel

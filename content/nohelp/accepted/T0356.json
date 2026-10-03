@@ -1,0 +1,43 @@
+[
+  {
+    "anchor": {
+      "scene": "RVSAmbulanceCrash"
+    },
+    "body": "The cut potato with a soil jar are tied in one bundle. a greasy sheen marks the field side; torn warning tape marks the other.",
+    "id": "t0356-01",
+    "kind": "set",
+    "pieces": [
+      "Potato",
+      "EmptyJar"
+    ],
+    "title": "Cut potato with a soil jar at at Tuesday dawn",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "vehicle"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RVSAmbulanceCrash"
+    },
+    "body": "My sister was brought from the treated rows before anybody called the ambulance. The crew asked for her work clothes to be put in a separate sack. By the time they reached us, three neighbors who never entered the field had the same burning eyes.",
+    "id": "t0356-02",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "Harvest at the stretcher",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "vehicle"
+      }
+    ]
+  }
+]

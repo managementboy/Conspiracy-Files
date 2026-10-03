@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "SunsetPinesFuneralHome"
+    },
+    "body": "a feed-sack thread binds the eraser to the hand torch; a strip of road tape reinforces the same knot.",
+    "id": "t0211-01",
+    "kind": "set",
+    "pieces": [
+      "Eraser",
+      "HandTorch"
+    ],
+    "title": "Eraser with the second residue",
+    "where": [
+      {
+        "containers": [
+          "shelves",
+          "filingcabinet",
+          "desk",
+          "sidetable",
+          "toolcabinet",
+          "metal_shelves"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

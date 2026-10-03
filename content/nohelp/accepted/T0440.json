@@ -1,0 +1,228 @@
+[
+  {
+    "body": "I worked the irrigation pump after the trial mix spilled near its intake. The handle left a pale smear on my hand. The other worker who stayed at the dry well never touched the pump and ate supper.\n\nMy palms began to itch before we heard about any illness in town. I had intended to borrow his gloves the following day.",
+    "id": "t0440-01",
+    "kind": "written",
+    "pieces": [
+      "diary"
+    ],
+    "title": "The scraped pump handle",
+    "where": [
+      {
+        "containers": [
+          "shelvesmag",
+          "displaycase",
+          "counter",
+          "crate",
+          "smallbox",
+          "desk"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "The feed truck dropped its first load at our farm. We swept the bed but the seam still held green grit when it collected another family's produce. They called two days later about a strange taste.\n\nI had swept that seam myself. I went back with a stiff brush and could still lift a pinch of the same grit.",
+    "id": "t0440-02",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "title": "The green seam in the truck",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "mailbox"
+      }
+    ]
+  },
+  {
+    "body": "The truck driver tied the wet sacks on the outside of the load to dry. Seeds fell where the road crossed the creek, and the goats began to graze there.\n\nI found a torn strip of sack on the fence. My first thought was that somebody would expect me to pay for the lost grain.",
+    "id": "t0440-03",
+    "kind": "written",
+    "pieces": [
+      "notebook"
+    ],
+    "title": "The sacks at the crossing",
+    "where": [
+      {
+        "containers": [
+          "desk",
+          "filingcabinet",
+          "shelves",
+          "cardboardbox",
+          "smallbox",
+          "crate"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "The crew washed their sprayers in the yard by the shared drain. The next morning our downspout bucket carried a green ring. The covered barrel beside the house did not.\n\nI used the bucket for mopping before I looked at the rim. The floor smelled like the field, so I took the mop outside.",
+    "id": "t0440-04",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "The field crew's wash",
+    "where": [
+      {
+        "containers": [
+          "crate",
+          "metal_shelves",
+          "counter",
+          "shelves",
+          "cardboardbox",
+          "locker"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "My sister wore her work apron home from the seed sorting shed and hung it with the baby clothes. The apron shed pale dust when the wind picked up; the clothes farther down the line stayed clean.\n\nShe had planned to wash it in the morning. I took it down that night because it left grit on my fingers.",
+    "id": "t0440-05",
+    "kind": "written",
+    "pieces": [
+      "diary"
+    ],
+    "title": "The apron on the line",
+    "where": [
+      {
+        "containers": [
+          "fridge",
+          "counter",
+          "shelves",
+          "smallbox",
+          "bin",
+          "cardboardbox"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "We raked the treated plot, then used the rake on the garden behind the house. The first garden row the rake touched curled at the tips; the last row, planted later with a clean tool, stayed straight.\n\nI knew whose rake it was because the handle had my initials burned into it. I had not noticed what lodged between the teeth.",
+    "id": "t0440-06",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "title": "The second plot with the same rake",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "mailbox"
+      }
+    ]
+  },
+  {
+    "body": "The first owner carried field bags in the trailer. The next carried hay to an untouched farm. Powder remained behind the hinges, and the animals fed from the hay before they showed any trouble.\n\nI wrote down who had the trailer on which day because we shared the hire fee. None of us was thinking about what had collected in the hinges.",
+    "id": "t0440-07",
+    "kind": "written",
+    "pieces": [
+      "receipt"
+    ],
+    "title": "The rented trailer",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "vehicle"
+      }
+    ]
+  },
+  {
+    "body": "I turned the field gloves inside out and carried them in my coat. The lining had dust from the mixing shed; my clean scarf picked it up before I got home.\n\nThe scarf was a gift. I nearly washed it with the rest of the laundry but could see where the dust had transferred.",
+    "id": "t0440-08",
+    "kind": "written",
+    "pieces": [
+      "diary"
+    ],
+    "title": "The wrong side of the gloves",
+    "where": [
+      {
+        "containers": [
+          "postbox",
+          "shelves",
+          "counter",
+          "smallbox",
+          "cardboardbox",
+          "desk"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "They borrowed our bucket to rinse a field tank. When it came back, the inside had a faint green line. My son used it to water the beans; only that bed browned along its edges.\n\nI should have checked it before lending it to him. He wanted to help and had already filled it when I saw the mark.",
+    "id": "t0440-09",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "The borrowed bucket at the gate",
+    "where": [
+      {
+        "containers": [
+          "shelves",
+          "grocerstand",
+          "counter",
+          "smallcrate",
+          "cardboardbox",
+          "crate"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "The grain sacks stood beside the mill's intake fan. Pale powder from their seams got into the flour bags nearest the fan; the bags stacked behind a closed door remained white.\n\nThe miller said we could exchange the nearest bags. I wrote their positions down because all the labels looked the same.",
+    "id": "t0440-10",
+    "kind": "written",
+    "pieces": [
+      "notebook"
+    ],
+    "title": "The flour in the mill",
+    "where": [
+      {
+        "containers": [
+          "filingcabinet",
+          "desk",
+          "shelves",
+          "crate",
+          "locker",
+          "cardboardbox"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

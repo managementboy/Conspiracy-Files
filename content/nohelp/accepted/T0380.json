@@ -1,0 +1,43 @@
+[
+  {
+    "anchor": {
+      "scene": "RZSCampsite"
+    },
+    "body": "the wrapped bread with canned corn are tied in one bundle. waxy pollen marks the field side; torn warning tape marks the other.",
+    "id": "t0380-01",
+    "kind": "set",
+    "pieces": [
+      "Bread",
+      "CannedCorn"
+    ],
+    "title": "wrapped bread with canned corn at before thursday lunch",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RZSCampsite"
+    },
+    "body": "We pitched the tent beyond the trial orchard because they said the fields were the only treated ground. Rain ran down the canvas and left the same yellow dust on our cups. My daughter had not eaten anything from the orchard.",
+    "id": "t0380-02",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "Bitter rain at camp",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  }
+]

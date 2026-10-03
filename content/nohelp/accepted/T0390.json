@@ -1,0 +1,43 @@
+[
+  {
+    "anchor": {
+      "scene": "RZSMusicFest"
+    },
+    "body": "the stiff mop with a rinse bucket carry violet powder from the crop trial. they were packed before the back road closed.",
+    "id": "t0390-01",
+    "kind": "set",
+    "pieces": [
+      "Mop",
+      "Bucket"
+    ],
+    "title": "stiff mop with a rinse bucket at late wednesday",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RZSMusicFest"
+    },
+    "body": "The festival volunteers were asked to count exits while the music still played. The man at the gate kept the old total when the rear fence came down. He said correcting it would delay the buses.",
+    "id": "t0390-02",
+    "kind": "written",
+    "pieces": [
+      "notebook"
+    ],
+    "title": "Attendance at the stage",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
+  }
+]

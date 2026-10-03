@@ -1,0 +1,43 @@
+[
+  {
+    "anchor": {
+      "scene": "RVSCarCrash"
+    },
+    "body": "The battery with a field radio carry mustard-colored dust from the fertilizer trial. They were packed before traffic was turned around.",
+    "id": "t0360-01",
+    "kind": "set",
+    "pieces": [
+      "Battery",
+      "RadioBlack"
+    ],
+    "title": "Battery with a field radio at Saturday before sunrise",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "vehicle"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RVSCarCrash"
+    },
+    "body": "The driver had been told the south road was open to families. Someone moved the barrier while we stopped for water. He went back to ask and was offered a different map with the old road drawn out of it.",
+    "id": "t0360-02",
+    "kind": "written",
+    "pieces": [
+      "notebook"
+    ],
+    "title": "A route after midnight",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "vehicle"
+      }
+    ]
+  }
+]

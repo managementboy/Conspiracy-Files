@@ -1,0 +1,5 @@
+# Which game build the real-engine tests were verified against. Change only with --relock.
+build_id=25485521
+jar_sha256=e1a69eb743ede60b213a0fe7f8b83d4fcab773036d256cc4543a336f3b058a33
+min_real=5
+startup_budget_ms=15000

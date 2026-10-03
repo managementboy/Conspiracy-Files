@@ -1,0 +1,51 @@
+{
+  "ticket": "T0295",
+  "returned_by": "Claude review, 2026-09-29",
+  "rows": [
+    {
+      "id": "t0295-01",
+      "codes": [
+        "DUPLICATE"
+      ],
+      "note": "Word-for-word copy of another clue delivered for a different scene (owner, 2026-09-29: copies go back). Write a clue of its own for this ticket.",
+      "row": {
+        "id": "t0295-01",
+        "kind": "set",
+        "pieces": [
+          "Crowbar",
+          "Rope"
+        ],
+        "where": [
+          {
+            "place": "mapNamed",
+            "spot": "furniture",
+            "lean": "containment",
+            "rival": "agricultural"
+          }
+        ],
+        "anchor": {
+          "scene": "RBJudge"
+        },
+        "title": "A departure without a tally",
+        "body": "The kit contains what someone expected to need, but the count was never signed.",
+        "rival_reading": "A private precaution can account for the supplies without any wider cause.",
+        "gloss": "A prepared pair is left without a clear account of why it was needed.",
+        "axioms": {
+          "containment": [
+            "c-orders",
+            "c-failure"
+          ],
+          "agricultural": [
+            "a-malfunction",
+            "a-pathway"
+          ]
+        },
+        "prov": {
+          "writer": "ChatGPT",
+          "handoff": "2026-09-28",
+          "batch": "T0295"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "McCoyLoggingCorp"
+    },
+    "body": "The mill tool sheet records a saw crew sent home before its truck was cleared; the last sharpening charge is still billed to the next shift.",
+    "id": "t0150-01",
+    "kind": "set",
+    "pieces": [
+      "Axe",
+      "SheetPaper2"
+    ],
+    "title": "Tools on the unpaid shift",
+    "where": [
+      {
+        "containers": [
+          "dumpster",
+          "bin",
+          "smallcrate",
+          "crate",
+          "cardboardbox",
+          "smallbox"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

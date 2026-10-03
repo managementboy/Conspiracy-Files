@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "LoveDuet"
+    },
+    "body": "The fitting card is marked complete before the bride’s pickup time; the shop key remains checked out to an unnamed assistant.",
+    "id": "t0270-01",
+    "kind": "set",
+    "pieces": [
+      "Scissors",
+      "SheetPaper2"
+    ],
+    "title": "The dress appointment",
+    "where": [
+      {
+        "containers": [
+          "sidetable",
+          "bin",
+          "cardboardbox",
+          "smallbox",
+          "locker",
+          "desk"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

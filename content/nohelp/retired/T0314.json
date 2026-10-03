@@ -1,0 +1,96 @@
+[
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "scene": "RBTSDinner"
+      },
+      "body": "A potato cut in half sits beside a jar of gray field water. Both carry the same waxy residue along the rim.",
+      "id": "t0314-01",
+      "kind": "set",
+      "pieces": [
+        "Potato",
+        "EmptyJar"
+      ],
+      "title": "Supper left with a soil jar",
+      "where": [
+        {
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-warning",
+          "c-orders"
+        ]
+      },
+      "gloss": "A personal trace places field-program residue before a later restriction.",
+      "prov": {
+        "batch": "T0314",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "Emergency workers could have encountered the same residue while responding; the personal trace does not by itself prove the field program caused the emergency."
+    }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "scene": "RBTSDinner"
+      },
+      "body": "A spoon is laid across a bowl with a penciled count on its underside. The number is two higher than the count entered beside the meal.",
+      "id": "t0314-02",
+      "kind": "set",
+      "pieces": [
+        "Spoon",
+        "Bowl"
+      ],
+      "title": "A cleared place setting",
+      "where": [
+        {
+          "containers": [
+            "dishescabinet",
+            "desk",
+            "counter",
+            "crate",
+            "locker",
+            "shelves"
+          ],
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-warning",
+          "c-accounting"
+        ]
+      },
+      "gloss": "An altered count or retained object was left at the scene.",
+      "prov": {
+        "batch": "T0314",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A response to an agricultural exposure could explain the same record or object."
+    }
+  }
+]

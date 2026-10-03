@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "DarkwallowGuestHouse"
+    },
+    "body": "a broken barrier board crushed the alcohol wipes against the briefcase. clean undersides show both were there before the road was blocked.",
+    "id": "t0260-01",
+    "kind": "set",
+    "pieces": [
+      "AlcoholWipes",
+      "Briefcase"
+    ],
+    "title": "Alcohol wipes with the unclosed tally",
+    "where": [
+      {
+        "containers": [
+          "crate",
+          "smallbox",
+          "toolcabinet",
+          "locker",
+          "medicine",
+          "wardrobe"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

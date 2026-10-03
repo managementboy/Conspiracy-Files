@@ -1,0 +1,25 @@
+{
+  "t0176-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "The Sea Shanty",
+      "source": "print:TheSeaShanty"
+    },
+    "gloss": "A meal is served before a water sample is recorded.",
+    "prov": {
+      "batch": "T0176",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "An emergency cleanup could precede a water test; the sheet does not say why the sample was taken."
+  }
+}

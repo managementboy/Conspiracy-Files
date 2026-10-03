@@ -1,0 +1,43 @@
+[
+  {
+    "anchor": {
+      "scene": "RZSNastyMattress"
+    },
+    "body": "the battery with a field radio are tied in one bundle. rust-colored grit marks the field side; torn warning tape marks the other.",
+    "id": "t0392-01",
+    "kind": "set",
+    "pieces": [
+      "Battery",
+      "RadioBlack"
+    ],
+    "title": "battery with a field radio at friday at closing",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RZSNastyMattress"
+    },
+    "body": "The woman had been sleeping beside a field where the trial sprayers passed at dawn. She moved her bedding when the smell reached it, but the pale film returned overnight. Nobody in camp had seen a warning sign.",
+    "id": "t0392-02",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "A mattress by the ditch",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  }
+]

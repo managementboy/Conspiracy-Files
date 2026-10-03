@@ -1,0 +1,61 @@
+[
+  {
+    "anchor": {
+      "map": "MarchRidgeStashMap1",
+      "mark": 1
+    },
+    "body": "road dust coats the lug wrench and hand torch, but their ties are clean and newly cut. the bundle was repacked after travel.",
+    "id": "t0022-01",
+    "kind": "set",
+    "pieces": [
+      "LugWrench",
+      "HandTorch"
+    ],
+    "title": "Lug wrench with the unclosed tally",
+    "where": [
+      {
+        "containers": [
+          "toolcabinet",
+          "metal_shelves",
+          "crate",
+          "smallcrate",
+          "smallbox",
+          "militarycrate"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "MarchRidgeStashMap1",
+      "mark": 1
+    },
+    "body": "Keep the pesticide trial jars sealed until the boundary check is done. The neighbor keeps knocking because the map says don't go; the dog is still in the yard.\n\nWe kept one copy for ourselves. The person collecting the other one said the numbers would be corrected later, once everyone had moved.\n\nI do not know which of the two accounts was repeated afterward. The older one is the one I had in my hands that day.",
+    "id": "t0022-02",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "The jars stay sealed",
+    "where": [
+      {
+        "containers": [
+          "desk",
+          "sidetable",
+          "filingcabinet",
+          "shelves",
+          "cashregister",
+          "smallbox"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

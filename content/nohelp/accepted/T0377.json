@@ -1,0 +1,42 @@
+[
+  {
+    "anchor": {
+      "scene": "RZSBeachParty"
+    },
+    "body": "feed, soap, and a clean jar, paid cash. my note below says violet powder came from the well-water study; the mice abandoned the bin before the nurse stopped taking calls.\n\nNobody agreed on whose list this belonged to. I left it where the next person would look for the things we still owed each other.\n\nI thought someone would ask for this at the gate. They asked instead how many were in the car, and let the paper stay in my hand.",
+    "id": "t0377-01",
+    "kind": "written",
+    "pieces": [
+      "receipt"
+    ],
+    "title": "weathered bundle note — after monday supper",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RZSBeachParty"
+    },
+    "body": "A handwritten note beside the coolers says the coastal road was open through sundown. Someone came back for a forgotten shoe after dark and found the gate shut. The person responsible for the sign had gone home with the only key.",
+    "id": "t0377-02",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "The last shore road",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
+  }
+]

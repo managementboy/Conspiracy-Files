@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "KnoxGunOwnersClubGetTogether"
+    },
+    "body": "The range sheet records a safety check and a field briefing in the same time slot; one attendee signed both lines from the same station.",
+    "id": "t0193-01",
+    "kind": "set",
+    "pieces": [
+      "Pistol",
+      "Notebook"
+    ],
+    "title": "Meeting range sheet",
+    "where": [
+      {
+        "containers": [
+          "militarylocker",
+          "desk",
+          "locker",
+          "shelves",
+          "militarycrate",
+          "filingcabinet"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

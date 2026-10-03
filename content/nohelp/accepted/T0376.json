@@ -1,0 +1,43 @@
+[
+  {
+    "anchor": {
+      "scene": "RZSBaseball"
+    },
+    "body": "the battery with a field radio carry a medicinal odor from the livestock supplement test. they were packed before warning tape went up.",
+    "id": "t0376-01",
+    "kind": "set",
+    "pieces": [
+      "Battery",
+      "RadioBlack"
+    ],
+    "title": "battery with a field radio at before sunday's rain",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RZSBaseball"
+    },
+    "body": "They promised a ride for everyone still at the field after the game. The volunteer wrote down jerseys instead of names and told two siblings in ordinary clothes to wait. The bus left with empty seats and the list said full.",
+    "id": "t0376-02",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "title": "Scoreboard of arrivals",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
+  }
+]

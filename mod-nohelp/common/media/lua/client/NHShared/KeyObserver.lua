@@ -6,6 +6,7 @@
 -- walks, so this adds no scan of its own over containers.
 local CFLog=require("NHShared/Log")
 local Model=require("NHShared/KeyObservations")
+local AreaCase=require("NHShared/Generated/AreaCase")
 NHShared=NHShared or {}
 local O=NHShared.KeyObserver or {}
 NHShared.KeyObserver=O
@@ -91,24 +92,16 @@ function O.see(item,carrierLabel,token)
     return true
 end
 
--- A building that holds part of an open case, as a phrase for the journal.
+-- A building that is a decided No Help area, as a plain phrase for the
+-- journal ("a police building"), or nil. The lookup reads the world record
+-- only (AreaCase.keyPhrase): which areas exist never depends on what the
+-- player read or carried, and the vanilla key record is not changed.
 local function caseFor(building)
-    local ok,phrase=pcall(function()
-        local Cases=require("NHShared/Generated/SuccessiveCases")
-        local wrapper=Cases.currentCached(ModData.get("NHShared.Generated.G2"),getTimeInMillis and getTimeInMillis())
-        for _,r in ipairs(wrapper and Cases.sessions(wrapper) or {}) do
-            local case=r.case
-            if case and case.locations then
-                for _,site in ipairs(case.locations) do
-                    if site.id=="t3:"..building then
-                        return "an address in the file marked "..tostring(case.facts and case.facts.code or "?")
-                    end
-                end
-            end
-        end
-    end)
-    return ok and phrase or nil
+    local rt=NHShared.GeneratedRuntime
+    local case=rt and rt.worldCase and rt.worldCase()
+    return AreaCase.keyPhrase(case,building)
 end
+O.caseFor=caseFor
 
 function O.rows()
     local ok,rows=pcall(function()

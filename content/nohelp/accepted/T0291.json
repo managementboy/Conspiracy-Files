@@ -1,0 +1,60 @@
+[
+  {
+    "anchor": {
+      "scene": "RBGunstoreSiege"
+    },
+    "body": "The pair is streaked with marked feed sack from treated rows. It was set aside after the flies vanished, before anyone marked the toolbox unsafe.",
+    "id": "t0291-01",
+    "kind": "set",
+    "pieces": [
+      "FishingRod",
+      "WaterBottle"
+    ],
+    "title": "After sack by the toolbox, the first copy",
+    "where": [
+      {
+        "containers": [
+          "toolcabinet",
+          "fridge",
+          "metal_shelves",
+          "counter",
+          "crate",
+          "overhead"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RBGunstoreSiege"
+    },
+    "body": "A battery sits beside a radio whose tuning knob has been removed. The barricade can hear a single station, but no one inside can change it.",
+    "id": "t0291-02",
+    "kind": "set",
+    "pieces": [
+      "Battery",
+      "RadioBlack"
+    ],
+    "title": "The spare receiver",
+    "where": [
+      {
+        "containers": [
+          "shelves",
+          "desk",
+          "toolcabinet",
+          "metal_shelves",
+          "smallbox",
+          "locker"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

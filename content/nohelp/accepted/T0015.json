@@ -1,0 +1,61 @@
+[
+  {
+    "anchor": {
+      "map": "EkronStashMap8",
+      "mark": 1
+    },
+    "body": "the crowbar and briefcase are wrapped in a child's raincoat. one stayed dry while the other was left in road mud.",
+    "id": "t0015-01",
+    "kind": "set",
+    "pieces": [
+      "Crowbar",
+      "Briefcase"
+    ],
+    "title": "Crowbar beside the spare mark",
+    "where": [
+      {
+        "containers": [
+          "dumpster",
+          "bin",
+          "smallcrate",
+          "crate",
+          "cardboardbox",
+          "smallbox"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "EkronStashMap8",
+      "mark": 1
+    },
+    "body": "“Forget the box. Just get here before the rows are watered.” The lower half is torn away; a muddy thumb has blurred the place where a name would go.\n\nI had promised to bring this home for supper. Its date and the empty chair at the table now belong to the same evening.\n\nPerhaps the new instructions were meant to help us. They arrived after we had already followed the old ones.",
+    "id": "t0015-02",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "title": "The note that asks someone to come back",
+    "where": [
+      {
+        "containers": [
+          "cardboardbox",
+          "crate",
+          "bin",
+          "smallbox",
+          "locker",
+          "desk"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

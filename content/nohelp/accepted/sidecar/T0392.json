@@ -1,0 +1,38 @@
+{
+  "t0392-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-warning",
+        "c-failure"
+      ]
+    },
+    "gloss": "A mixed bundle keeps field activity and emergency response equally plausible.",
+    "prov": {
+      "batch": "T0392",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "The bundle could belong to field workers caught in a response or responders crossing a work site; it preserves both readings."
+  },
+  "t0392-02": {
+    "axioms": {
+      "agricultural": [
+        "a-pathway"
+      ],
+      "containment": [
+        "c-failure"
+      ]
+    },
+    "gloss": "A witness records evidence of exposure near treated land.",
+    "prov": {
+      "batch": "T0392",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "The containment response might explain a contaminated object or warning being displaced."
+  }
+}

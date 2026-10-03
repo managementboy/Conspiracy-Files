@@ -1,0 +1,32 @@
+[
+  {
+    "anchor": {
+      "map": "EkronStashMap4",
+      "mark": 1
+    },
+    "body": "the stapler and first-aid kit were sealed together but never opened. soot darkens the bundle; clean outlines show it was packed before the fire.",
+    "id": "t0037-01",
+    "kind": "set",
+    "pieces": [
+      "Stapler",
+      "FirstAidKit"
+    ],
+    "title": "Stapler beside the spare mark",
+    "where": [
+      {
+        "containers": [
+          "medicine",
+          "desk",
+          "filingcabinet",
+          "sidetable",
+          "locker",
+          "shelves"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

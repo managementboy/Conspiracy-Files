@@ -1,0 +1,106 @@
+[
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "map": "EkronStashMap2",
+        "mark": 1
+      },
+      "body": "The vegetable crate has a delivery tag dated after the road was closed. A pencilled note asks whether the driver should still be charged for the trip.",
+      "id": "t0035-01",
+      "kind": "set",
+      "pieces": [
+        "Potato",
+        "Notebook"
+      ],
+      "title": "The last crate",
+      "where": [
+        {
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "vegs",
+        "source": "map:EkronStashMap2"
+      },
+      "gloss": "A food delivery is recorded after access closed, with the driver’s payment unresolved.",
+      "prov": {
+        "batch": "T0035",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A field supply route could also have been delayed by access restrictions; the tag cannot explain who closed the road."
+    }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "map": "EkronStashMap2",
+        "mark": 1
+      },
+      "body": "The vegetable crate has a delivery tag dated after the road was closed. A pencilled note asks whether the driver should still be charged for the trip.",
+      "id": "t0035-01",
+      "kind": "set",
+      "pieces": [
+        "Potato",
+        "Notebook"
+      ],
+      "title": "The last crate",
+      "where": [
+        {
+          "containers": [
+            "desk",
+            "crate",
+            "shelves",
+            "counter",
+            "cardboardbox",
+            "bin"
+          ],
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "vegs",
+        "source": "map:EkronStashMap2"
+      },
+      "gloss": "A food delivery is recorded after access closed, with the driver’s payment unresolved.",
+      "prov": {
+        "batch": "T0035",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A field supply route could also have been delayed by access restrictions; the tag cannot explain who closed the road."
+    }
+  }
+]

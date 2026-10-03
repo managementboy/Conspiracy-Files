@@ -1,0 +1,32 @@
+[
+  {
+    "anchor": {
+      "map": "EkronStashMap5",
+      "mark": 1
+    },
+    "body": "The school aid list pairs a bandage with a note to keep the test-room door shut; the last line asks who will collect the used kit.",
+    "id": "t0038-01",
+    "kind": "set",
+    "pieces": [
+      "Bandage",
+      "Notebook"
+    ],
+    "title": "Aid for the school",
+    "where": [
+      {
+        "containers": [
+          "medicine",
+          "desk",
+          "smallbox",
+          "shelves",
+          "sidetable",
+          "filingcabinet"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]
