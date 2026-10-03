@@ -27,7 +27,7 @@
         "c-failure"
       ]
     },
-    "gloss": "A witness records a failed evacuation count or route.",
+    "gloss": "A witness records contradictory evacuation counts at a checkpoint.",
     "prov": {
       "batch": "T0357",
       "handoff": "2026-09-27",

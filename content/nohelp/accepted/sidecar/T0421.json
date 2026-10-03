@@ -25,7 +25,7 @@
         "c-failure"
       ]
     },
-    "gloss": "One-sided on purpose.",
+    "gloss": "Points to agricultural chemicals spreading unexpectedly.",
     "prov": {
       "batch": "T0421",
       "handoff": "2026-09-27",
@@ -42,7 +42,7 @@
         "c-failure"
       ]
     },
-    "gloss": "One-sided on purpose.",
+    "gloss": "Wrong treatment concentration delivered.",
     "prov": {
       "batch": "T0421",
       "handoff": "2026-09-27",
@@ -59,7 +59,7 @@
         "c-failure"
       ]
     },
-    "gloss": "One-sided on purpose.",
+    "gloss": "The experimental treatment spread beyond the marked test area.",
     "prov": {
       "batch": "T0421",
       "handoff": "2026-09-27",
@@ -161,12 +161,12 @@
         "c-failure"
       ]
     },
-    "gloss": "A trace of trial material appears beyond a field boundary.",
+    "gloss": "Experimental pesticide reached households at improper concentrations.",
     "prov": {
       "batch": "T0421",
       "handoff": "2026-09-27",
       "writer": "ChatGPT"
     },
-    "rival_reading": "The emergency response could have moved or contaminated these things."
+    "rival_reading": "None: one-sided on purpose"
   }
 }

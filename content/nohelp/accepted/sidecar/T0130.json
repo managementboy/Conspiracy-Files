@@ -10,7 +10,7 @@
         "c-failure"
       ]
     },
-    "gloss": "Seed supplies with residue remain with their plot directions missing.",
+    "gloss": "Experimental pesticide caused abnormal growth in treated seeds.",
     "prov": {
       "batch": "T0130",
       "handoff": "2026-09-28",
@@ -86,13 +86,13 @@
         "c-failure"
       ]
     },
-    "gloss": "Apple symbol and the rejected crate",
+    "gloss": "Field trial crate with contaminated fruit",
     "prov": {
       "batch": "T0130",
       "handoff": "2026-09-29",
       "writer": "ChatGPT"
     },
-    "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work."
+    "rival_reading": "None: one-sided on purpose"
   },
   "t0130-06": {
     "axioms": {

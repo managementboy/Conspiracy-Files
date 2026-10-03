@@ -9,7 +9,7 @@
         "c-failure"
       ]
     },
-    "gloss": "An ordinary trace links a farm exposure to a distinct observed outcome: the field lunch.",
+    "gloss": "The sprayer dust on lunch items links farm chemical exposure to the outbreak.",
     "prov": {
       "batch": "T0432",
       "handoff": "2026-09-27",
@@ -153,7 +153,7 @@
         "c-failure"
       ]
     },
-    "gloss": "An ordinary trace links a farm exposure to a distinct observed outcome: the grass on the cuff.",
+    "gloss": "Pesticide residue and crop debris point to field application work.",
     "prov": {
       "batch": "T0432",
       "handoff": "2026-09-27",
@@ -171,12 +171,12 @@
         "c-failure"
       ]
     },
-    "gloss": "An ordinary trace links a farm exposure to a distinct observed outcome: the unfinished washing.",
+    "gloss": "Interrupted washing after contact with pesticide-treated grain.",
     "prov": {
       "batch": "T0432",
       "handoff": "2026-09-27",
       "writer": "ChatGPT"
     },
-    "rival_reading": "A failure of the later response could still have left this exposure unaddressed."
+    "rival_reading": "None: one-sided on purpose"
   }
 }

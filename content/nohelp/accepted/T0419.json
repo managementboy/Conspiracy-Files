@@ -208,14 +208,14 @@
     ]
   },
   {
-    "body": "The postcard shows a neighbor's address just past the county line. An empty sprayer rests on it, chemical residue still wet. Someone was treating areas they shouldn't have been.",
+    "body": "The postcard advertises a new crop treatment, free trial offer. The empty sprayer rests on it, nozzle caked with residue. Someone applied the entire concentrate to one field.",
     "id": "t0419-09",
     "kind": "set",
     "pieces": [
       "GardeningSprayEmpty",
       "Postcard"
     ],
-    "title": "Postcard and empty sprayer",
+    "title": "postcard and empty sprayer",
     "where": [
       {
         "containers": [

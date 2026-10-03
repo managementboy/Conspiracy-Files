@@ -29,12 +29,12 @@
         "c-accounting"
       ]
     },
-    "gloss": "A water mark and plant trace were collected together.",
+    "gloss": "Field notes from pesticide application testing.",
     "prov": {
       "batch": "T0002",
       "handoff": "2026-09-27",
       "writer": "ChatGPT"
     },
-    "rival_reading": "A responder could collect water and leaves while checking an evacuation route; the residue could be ordinary field dirt."
+    "rival_reading": "None: one-sided on purpose"
   }
 }

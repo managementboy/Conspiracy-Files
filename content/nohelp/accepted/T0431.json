@@ -73,14 +73,14 @@
     ]
   },
   {
-    "body": "The tarp's blue weave is stiff with dried yellow residue. Rope burns show where it was lashed down tight over something. Whatever was underneath left those streaks.",
+    "body": "The tarp is stiff with dried yellow residue that flakes at touch. Rope coiled nearby shows the same yellow coating on every fiber. Both carry a sharp chemical smell.",
     "id": "t0431-05",
     "kind": "set",
     "pieces": [
       "Tarp",
       "Rope"
     ],
-    "title": "Tarp and rope",
+    "title": "tarp and rope",
     "where": [
       {
         "lean": "agricultural",

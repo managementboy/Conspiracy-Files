@@ -59,13 +59,13 @@
         "c-failure"
       ]
     },
-    "gloss": "A trace of trial material appears beyond a field boundary.",
+    "gloss": "Pesticide residue spread beyond the intended application area.",
     "prov": {
       "batch": "T0415",
       "handoff": "2026-09-27",
       "writer": "ChatGPT"
     },
-    "rival_reading": "The emergency response could have moved or contaminated these things."
+    "rival_reading": "None: one-sided on purpose"
   },
   "t0415-05": {
     "axioms": {
@@ -110,7 +110,7 @@
         "c-failure"
       ]
     },
-    "gloss": "One-sided on purpose.",
+    "gloss": "Pesticide exposure is becoming unavoidable in daily life.",
     "prov": {
       "batch": "T0415",
       "handoff": "2026-09-27",

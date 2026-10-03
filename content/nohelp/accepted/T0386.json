@@ -3,14 +3,14 @@
     "anchor": {
       "scene": "RZSHermitCamp"
     },
-    "body": "The first-aid kit and water bottle are tied with torn warning tape. A numbered tag hangs from the kit's handle. There's a sticker pressed over the bottle cap.",
+    "body": "The first-aid kit and water bottle are bound with a tag. The tag lists a shelter code that's been crossed out twice. Medical supplies are missing from inside the kit.",
     "id": "t0386-01",
     "kind": "set",
     "pieces": [
       "FirstAidKit",
       "WaterBottle"
     ],
-    "title": "First-aid kit and water bottle",
+    "title": "first-aid kit and water bottle",
     "where": [
       {
         "lean": "containment",

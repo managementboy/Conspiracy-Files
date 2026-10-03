@@ -1,6 +1,6 @@
 {
   "clue": "t0036-01",
-  "sha256": "856f3bb1699f683461b179bea0e609af977362994c5a68e27aef314b39525724",
+  "sha256": "696119d8725e5dc97c87a93e99b3cda87eba598c8167fafe73909f11c6f91bcf",
   "model": "claude-haiku-4-5 (no repo access, no tools, fresh context per read)",
   "date": "2026-10-03",
   "votes": {

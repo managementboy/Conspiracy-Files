@@ -3,14 +3,14 @@
     "anchor": {
       "print": "StuartandLogScrapyard"
     },
-    "body": "I found a sheet saying the sprayer passed its test early.\nThe screwdriver sits right on top.\nThey cleared equipment before the day even started.",
+    "body": "The paper shows the sprayer was set to triple concentration.\nI found the screwdriver next to the valve adjustment notes.\nSomeone ran the test without resetting it.",
     "id": "t0280-01",
     "kind": "set",
     "pieces": [
       "Screwdriver",
       "SheetPaper2"
     ],
-    "title": "Screwdriver and sheet of paper",
+    "title": "Screwdriver and paper",
     "where": [
       {
         "containers": [

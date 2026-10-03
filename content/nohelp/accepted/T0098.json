@@ -4,14 +4,14 @@
       "map": "RiversideStashMap5",
       "mark": 1
     },
-    "body": "The paper warns to avoid the sprayed fields.\nIt's dated before the clearance to evacuate.\nA bat's left beside it.",
+    "body": "The paper warns to stay clear of the sprayed fields.\nIt's dated two days after the application.\nA bat's left beside it.",
     "id": "t0098-01",
     "kind": "set",
     "pieces": [
       "BaseballBat",
       "SheetPaper2"
     ],
-    "title": "Baseball bat and sheet of paper",
+    "title": "baseball bat and sheet of paper",
     "where": [
       {
         "containers": [

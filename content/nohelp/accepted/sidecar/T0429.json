@@ -9,13 +9,13 @@
         "c-failure"
       ]
     },
-    "gloss": "An ordinary trace links a farm exposure to a distinct observed outcome: the shared trough.",
+    "gloss": "Residue on mixing vessels links to contaminated pesticide use.",
     "prov": {
       "batch": "T0429",
       "handoff": "2026-09-27",
       "writer": "ChatGPT"
     },
-    "rival_reading": "A failure of the later response could still have left this exposure unaddressed."
+    "rival_reading": "None: one-sided on purpose"
   },
   "t0429-02": {
     "axioms": {

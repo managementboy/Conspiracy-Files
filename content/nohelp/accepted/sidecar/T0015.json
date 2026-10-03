@@ -35,12 +35,12 @@
       "quote": "forget them! Just get here",
       "source": "map:EkronStashMap8"
     },
-    "gloss": "A hurried request links an unnamed person to watered rows.",
+    "gloss": "A warning about an incorrect chemical mixture.",
     "prov": {
       "batch": "T0015",
       "handoff": "2026-09-27",
       "writer": "ChatGPT"
     },
-    "rival_reading": "An emergency crew could tell someone to reach a farm before irrigation resumed; the urgency could follow a road closure rather than a program failure."
+    "rival_reading": "None: one-sided on purpose"
   }
 }

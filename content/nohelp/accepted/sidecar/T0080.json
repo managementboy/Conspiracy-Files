@@ -14,12 +14,12 @@
       "quote": "shotgun - food in kitchen?",
       "source": "map:MulStashMap12"
     },
-    "gloss": "Food is kept beside a temporary water restriction during a crowd movement.",
+    "gloss": "Food from an agricultural trial left where crops failed.",
     "prov": {
       "batch": "T0080",
       "handoff": "2026-09-28",
       "writer": "ChatGPT"
     },
-    "rival_reading": "An emergency team could have restricted kitchen water while people moved through; the tag does not say what was in the lot."
+    "rival_reading": "None: one-sided on purpose"
   }
 }

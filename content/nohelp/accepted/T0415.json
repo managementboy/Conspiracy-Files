@@ -78,14 +78,14 @@
     ]
   },
   {
-    "body": "The feed bag was moved beyond the treatment zone. Found a bucket here too, same film on both. It traveled.",
+    "body": "The animal feed bag was by the sprayed crops. This bucket has the same residue coating it. The chemical drifted off the field.",
     "id": "t0415-04",
     "kind": "set",
     "pieces": [
       "AnimalFeedBag",
       "Bucket"
     ],
-    "title": "Feed sack and bucket",
+    "title": "Feed bag and bucket",
     "where": [
       {
         "containers": [
@@ -156,14 +156,14 @@
     ]
   },
   {
-    "body": "The cloth smells strongly of pesticide. The bread is wrapped in it anyway. Running out of options, clearly.",
+    "body": "The cloth smells like the pesticide they sprayed last week. Someone used it to wrap bread. Can't escape the chemical smell anymore.",
     "id": "t0415-07",
     "kind": "set",
     "pieces": [
       "Bread",
       "DishCloth"
     ],
-    "title": "Bread and dish cloth",
+    "title": "bread and dish cloth",
     "where": [
       {
         "containers": [

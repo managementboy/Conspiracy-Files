@@ -14,13 +14,13 @@
       "quote": "we can fortify here",
       "source": "map:IrvingtonStashMap9"
     },
-    "gloss": "A door is reinforced ahead of a treatment, with no return plan.",
+    "gloss": "Repairs were planned ahead of an experimental crop spray trial.",
     "prov": {
       "batch": "T0048",
       "handoff": "2026-09-28",
       "writer": "ChatGPT"
     },
-    "rival_reading": "A response crew might secure a building after any hazard; the timing of the treatment is not recorded."
+    "rival_reading": "None: one-sided on purpose"
   },
   "t0048-02": {
     "axioms": {
@@ -52,7 +52,7 @@
         "c-failure"
       ]
     },
-    "gloss": "First heart, clean cot",
+    "gloss": "Farm sprayers tracked pesticide dust to family bedding",
     "prov": {
       "batch": "T0048",
       "handoff": "2026-09-29",
@@ -128,7 +128,7 @@
         "c-failure"
       ]
     },
-    "gloss": "Fifth heart, empty cradle",
+    "gloss": "Evacuation stopped, no records",
     "prov": {
       "batch": "T0048",
       "handoff": "2026-09-29",

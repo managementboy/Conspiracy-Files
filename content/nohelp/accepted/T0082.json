@@ -4,14 +4,14 @@
       "map": "MulStashMap13",
       "mark": 1
     },
-    "body": "The backpack reeks of chemicals from the fields. A pistol lies on top. Looks like they bailed when the route got cut.",
+    "body": "The alicepack reeks of crop spray. A pistol lies on top. Field application equipment hangs from the straps.",
     "id": "t0082-01",
     "kind": "set",
     "pieces": [
       "Bag_ALICEpack",
       "Pistol"
     ],
-    "title": "Backpack and pistol",
+    "title": "backpack and pistol",
     "where": [
       {
         "containers": [

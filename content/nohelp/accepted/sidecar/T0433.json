@@ -99,13 +99,13 @@
         "c-failure"
       ]
     },
-    "gloss": "An ordinary trace links a farm exposure to a distinct observed outcome: the sample in a jar.",
+    "gloss": "A farmer's sample links experimental crop chemicals to the outbreak.",
     "prov": {
       "batch": "T0433",
       "handoff": "2026-09-27",
       "writer": "ChatGPT"
     },
-    "rival_reading": "A failure of the later response could still have left this exposure unaddressed."
+    "rival_reading": "None: one-sided on purpose"
   },
   "t0433-07": {
     "axioms": {

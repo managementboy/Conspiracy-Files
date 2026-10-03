@@ -14,12 +14,12 @@
       "quote": "Cat on a Hot Tin Grill",
       "source": "print:CatonaHotTinGrill"
     },
-    "gloss": "Lunch is served before the pond sample is recorded.",
+    "gloss": "The cook stopped when the fish smelled of chemicals.",
     "prov": {
       "batch": "T0257",
       "handoff": "2026-09-28",
       "writer": "ChatGPT"
     },
-    "rival_reading": "A routine food inspection could sample the pond after lunch; the slip does not identify what prompted it."
+    "rival_reading": "None: one-sided on purpose"
   }
 }

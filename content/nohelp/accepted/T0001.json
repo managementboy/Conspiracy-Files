@@ -1,13 +1,13 @@
 [
   {
-    "body": "The badge and map are tied together with cut warning tape. I count six tally cuts on it, but only four are crossed through.",
+    "body": "The photo and name are completely scratched off the badge. The map shows quarantine zones with routes crossed out in red. I count six tallies on the binding tape, only four crossed through.",
     "id": "t0001-01",
     "kind": "set",
     "pieces": [
       "Badge",
       "Map"
     ],
-    "title": "Badge and map",
+    "title": "badge and map",
     "where": [
       {
         "lean": "containment",
@@ -18,14 +18,14 @@
     ]
   },
   {
-    "body": "There's a green ring inside the neck of the water bottle. The bucket next to it is dry, but its handle is wet. It smells faintly of crushed leaves.",
+    "body": "The bucket still has pesticide foam clinging to the sides. A water bottle floats in it, label dissolved. The mix smells wrong, too concentrated.",
     "id": "t0001-02",
     "kind": "set",
     "pieces": [
       "Bucket",
       "WaterBottle"
     ],
-    "title": "Bucket and water bottle",
+    "title": "bucket and water bottle",
     "where": [
       {
         "lean": "agricultural",

@@ -91,14 +91,14 @@
     ]
   },
   {
-    "body": "A little jar holds green sediment. A dry seed packet has been folded over its lid. The parcel was too thick for the slot.",
+    "body": "I found an empty jar with green residue caked inside. A carrot seed packet is taped across the top. It was stored in the chemical shed behind the barn.",
     "id": "t0433-06",
     "kind": "set",
     "pieces": [
       "EmptyJar",
       "CarrotSeed"
     ],
-    "title": "Empty jar and carrot seed",
+    "title": "Empty jar and seed",
     "where": [
       {
         "lean": "agricultural",

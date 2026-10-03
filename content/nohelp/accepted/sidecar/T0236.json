@@ -14,12 +14,12 @@
       "quote": "Louisville Fire Department",
       "source": "print:LVFD"
     },
-    "gloss": "The visitor count closes before the demonstration and equipment return.",
+    "gloss": "Official records end mid-briefing with equipment unreturned.",
     "prov": {
       "batch": "T0236",
       "handoff": "2026-09-28",
       "writer": "ChatGPT"
     },
-    "rival_reading": "A visitor could leave early and return gloves later; the roster does not establish an emergency or a missed headcount."
+    "rival_reading": "None: one-sided on purpose"
   }
 }

@@ -3,14 +3,14 @@
     "anchor": {
       "scene": "RDSDevouredByRats"
     },
-    "body": "A battery and a field radio are tied together. Green flecks coat one side. A torn strip of road tape covers the other.",
+    "body": "A battery and black radio lie caked in dried green pesticide. Crop chaff clogs the speaker grille. The antenna is thick with chemical spray.",
     "id": "t0331-01",
     "kind": "set",
     "pieces": [
       "Battery",
       "RadioBlack"
     ],
-    "title": "Battery and radio",
+    "title": "battery and black radio",
     "where": [
       {
         "lean": "agricultural",

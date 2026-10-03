@@ -29,12 +29,12 @@
         "c-accounting"
       ]
     },
-    "gloss": "A glass is retained after a hurried cleaning of the counter.",
+    "gloss": "A specimen was collected after the site was sanitized.",
     "prov": {
       "batch": "T0283",
       "handoff": "2026-09-27",
       "writer": "ChatGPT"
     },
-    "rival_reading": "An ordinary sanitation check after spoiled supplies could account for the tape and bleach."
+    "rival_reading": "None: one-sided on purpose"
   }
 }

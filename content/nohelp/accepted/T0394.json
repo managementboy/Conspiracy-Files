@@ -3,14 +3,14 @@
     "anchor": {
       "scene": "RZSOldFirepit"
     },
-    "body": "The axe and seed sack have silver specks on them. I think they're from the orchard treatment. They were packed before the crossing was barricaded.",
+    "body": "The axe and seed bag have silver specks on them. I think they're from the orchard treatment. The residue wasn't in the application instructions.",
     "id": "t0394-01",
     "kind": "set",
     "pieces": [
       "Axe",
       "SeedBag"
     ],
-    "title": "Axe and seed sack",
+    "title": "axe and seed bag",
     "where": [
       {
         "lean": "agricultural",

@@ -14,12 +14,12 @@
       "quote": "Muldraugh Police",
       "source": "print:MuldraughPD"
     },
-    "gloss": "A public meeting and field visit share one speaker and one time.",
+    "gloss": "Spray logs reveal overlapping pesticide applications.",
     "prov": {
       "batch": "T0237",
       "handoff": "2026-09-28",
       "writer": "ChatGPT"
     },
-    "rival_reading": "An emergency meeting could overlap a site inspection; the notes do not show what the field visit concerned."
+    "rival_reading": "None: one-sided on purpose"
   }
 }

@@ -10,13 +10,13 @@
         "c-orders"
       ]
     },
-    "gloss": "Field residue and response material share one everyday bundle.",
+    "gloss": "Officials distributed contaminated supplies marked as safe.",
     "prov": {
       "batch": "T0318",
       "handoff": "2026-09-27",
       "writer": "ChatGPT"
     },
-    "rival_reading": "Field workers or an emergency crew could have bundled these supplies; dust and road tape leave the order of events unresolved."
+    "rival_reading": "None: one-sided on purpose"
   },
   "t0318-02": {
     "axioms": {
@@ -29,12 +29,12 @@
         "c-accounting"
       ]
     },
-    "gloss": "An altered count or retained object was left at the scene.",
+    "gloss": "Improvised tools were used to mix or measure the chemical.",
     "prov": {
       "batch": "T0318",
       "handoff": "2026-09-27",
       "writer": "ChatGPT"
     },
-    "rival_reading": "An emergency team could have moved farm supplies during a containment response."
+    "rival_reading": "None: one-sided on purpose"
   }
 }

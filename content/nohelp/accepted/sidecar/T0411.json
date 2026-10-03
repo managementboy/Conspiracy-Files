@@ -8,13 +8,13 @@
         "c-failure"
       ]
     },
-    "gloss": "A trace of trial material appears beyond a field boundary.",
+    "gloss": "Experimental agricultural chemicals from a county program.",
     "prov": {
       "batch": "T0411",
       "handoff": "2026-09-27",
       "writer": "ChatGPT"
     },
-    "rival_reading": "The emergency response could have moved or contaminated these things."
+    "rival_reading": "None: one-sided on purpose"
   },
   "t0411-02": {
     "axioms": {
@@ -127,7 +127,7 @@
         "c-failure"
       ]
     },
-    "gloss": "A tagged wash set from an abandoned screening post.",
+    "gloss": "A tagged hygiene kit from an abandoned evacuation checkpoint.",
     "prov": {
       "batch": "T0411",
       "handoff": "2026-09-27",
@@ -161,12 +161,12 @@
         "c-failure"
       ]
     },
-    "gloss": "A trace of trial material appears beyond a field boundary.",
+    "gloss": "A concentration error during routine crop application.",
     "prov": {
       "batch": "T0411",
       "handoff": "2026-09-27",
       "writer": "ChatGPT"
     },
-    "rival_reading": "The emergency response could have moved or contaminated these things."
+    "rival_reading": "None: one-sided on purpose"
   }
 }

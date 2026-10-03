@@ -3,14 +3,14 @@
     "anchor": {
       "scene": "RZSBurntWreck"
     },
-    "body": "The axe and seed sack have saltlike grains on them. I think they came from the sprayer trial. They were packed before the shelter message aired.",
+    "body": "The axe and seed bag have saltlike grains on them. They came from the test sprayer run last week. I grabbed them before the crops started withering.",
     "id": "t0378-01",
     "kind": "set",
     "pieces": [
       "Axe",
       "SeedBag"
     ],
-    "title": "Axe and seed sack",
+    "title": "Axe and seed bag",
     "where": [
       {
         "lean": "agricultural",

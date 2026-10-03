@@ -4,14 +4,14 @@
       "map": "WorldStashMap18",
       "mark": 1
     },
-    "body": "The wipes and briefcase are wrapped in a child's raincoat. One stayed dry while the other was left in road mud.",
+    "body": "The briefcase holds evacuation lists with half the names crossed out. Wipes scatter from a medic pouch stamped for checkpoint nine. Both wrapped in a small raincoat, dropped here in the roadside mud.",
     "id": "t0127-01",
     "kind": "set",
     "pieces": [
       "AlcoholWipes",
       "Briefcase"
     ],
-    "title": "Alcohol wipes and briefcase",
+    "title": "alcohol wipes and briefcase",
     "where": [
       {
         "containers": [
@@ -179,13 +179,13 @@
       "map": "WorldStashMap18",
       "note": 6
     },
-    "body": "Receipt margin: replace two boots burned at the sixth fire on the sampling route. Both soles carried the same sticky amber residue.\n\nThe residue stuck to the pencil as I wrote this.",
+    "body": "New pesticide formula dissolved my rubber boots in the field. Amber gel coating every plant and pooling in the furrows. My hands itch where droplets landed on bare skin.",
     "id": "t0127-07",
     "kind": "written",
     "pieces": [
       "letter"
     ],
-    "title": "Handwritten letter",
+    "title": "Application note",
     "where": [
       {
         "containers": [
@@ -266,13 +266,13 @@
       "map": "WorldStashMap18",
       "note": 9
     },
-    "body": "Photograph note: the ninth fire follows the drainage cut from the experimental plot. Frogs floated below it while the bank still smoked.\n\nWe tried to finish the ordinary work around it. The notice changed faster than the deliveries, and no one came to collect what was left.\n\nIt could be a mistake in the copying. The things stacked beside the page were real enough, and still waiting to be moved.",
+    "body": "The application rate on the invoice did not match the concentration. Dead frogs appeared in the drainage before the second field was done. The container labels were different from what we requested.",
     "id": "t0127-10",
     "kind": "written",
     "pieces": [
       "receipt"
     ],
-    "title": "Receipt",
+    "title": "Delivery Receipt",
     "where": [
       {
         "containers": [
@@ -295,13 +295,13 @@
       "map": "WorldStashMap18",
       "note": 10
     },
-    "body": "Maintenance page: the tenth fire blackened the parked sprayer from beneath. The fuel line was intact; dried treatment foam covered the hot shield.\n\nNobody agreed on whose list this belonged to. I left it where the next person would look for the things we still owed each other.\n\nI could have mistaken the order in which those things happened. I could not mistake the empty place left for the person we had been waiting for.",
+    "body": "The tenth sprayer fire started beneath the tank mount. Treatment foam had crystallized across the engine housing. The residue pattern matched the previous equipment failures.",
     "id": "t0127-11",
     "kind": "written",
     "pieces": [
       "photograph"
     ],
-    "title": "Photograph",
+    "title": "Maintenance Photo",
     "where": [
       {
         "containers": [
@@ -324,13 +324,13 @@
       "map": "WorldStashMap18",
       "note": 11
     },
-    "body": "Personal note: after the eleventh fire, every test cage stood open. The rabbits were gone, but their water pans held white crystals.\n\nThe feed trough beside them was dusted with the same crystals.",
+    "body": "The research pens held only bones and that white powder. It coated the feed pellets, the water lines, even the soil samples. I found dosage charts pinned above each station.",
     "id": "t0127-12",
     "kind": "written",
     "pieces": [
       "notebook"
     ],
-    "title": "Notebook page",
+    "title": "Field notes",
     "where": [
       {
         "containers": [
@@ -382,13 +382,13 @@
       "map": "WorldStashMap18",
       "note": 13
     },
-    "body": "Feed receipt back: at the thirteenth fire we found six empty additive tins behind the shed. The purchase line lists five.\n\nThe tins were labelled for crop treatment and still wet inside.",
+    "body": "Found it beside two empty chemical tins. Receipt shows both products bought same day. The warning says never mix these formulas.",
     "id": "t0127-14",
     "kind": "written",
     "pieces": [
       "diary"
     ],
-    "title": "Diary page",
+    "title": "Spray receipt",
     "where": [
       {
         "containers": [
@@ -498,13 +498,13 @@
       "map": "WorldStashMap18",
       "note": 17
     },
-    "body": "Photograph back at the first gun: the sick applicator sat on the step beside the sprayer while the sample case stayed locked in the cab. His hands were stained yellow-green to the wrist.\n\nI wrote this on the back because nobody would take a statement about the coating he was spreading. I kept the picture in my coat until my hands stopped shaking.",
+    "body": "The applicator was sick beside his sprayer when I took this. His hands were stained yellow-green to the wrist from the coating. The sample case stayed locked in the cab the whole time.",
     "id": "t0127-18",
     "kind": "written",
     "pieces": [
       "notebook"
     ],
-    "title": "Notebook page",
+    "title": "Photograph note",
     "where": [
       {
         "containers": [
@@ -585,13 +585,13 @@
       "map": "WorldStashMap18",
       "note": 20
     },
-    "body": "Notebook line: the second dead face marks the well tender who sampled cloudy water for the pasture study. His sample bottle was gone before dawn.\n\nHe told me the water smelled sweet, like the drums behind the equipment shed. The pasture beside the well had gone grey-green in a ring where the runoff ran.\n\nThe truck was still in his yard. I copied his sample dates from the pump house wall before they painted it.",
+    "body": "I found the well tender's log by the pasture test site. Water samples smelled sweet like the drums behind the shed. The grass turned grey-green in rings where runoff pooled. Stock refused to drink from the trough after the spraying.",
     "id": "t0127-21",
     "kind": "written",
     "pieces": [
       "notepad"
     ],
-    "title": "Notepad page",
+    "title": "Sample log page",
     "where": [
       {
         "containers": [
@@ -759,13 +759,13 @@
       "map": "WorldStashMap18",
       "note": 26
     },
-    "body": "Personal map note: the eighth dead face lay beyond the last trial flag, where the wind carried the mist. Officials later measured only inside the flags.\n\nWe waited for a correction that never came. Every passing driver had a different instruction and no room for one more passenger.\n\nPerhaps the new instructions were meant to help us. They arrived after we had already followed the old ones.",
+    "body": "Eight dead crows past the test flags where the wind took the mist. The spray was meant for the plots inside the markers. I found them while checking my own fields downwind.",
     "id": "t0127-27",
     "kind": "written",
     "pieces": [
       "notepad"
     ],
-    "title": "Notepad page",
+    "title": "Field note",
     "where": [
       {
         "containers": [
@@ -962,13 +962,13 @@
       "map": "WorldStashMap18",
       "note": 33
     },
-    "body": "Diary line at the third skull: birds dropped beneath the plot wire after dawn spraying. The crew buried them before opening the gate.\n\nThey lay in a line along the treated rows, wings dry and bills stained pale. Nothing had touched them but the mist.\n\nI wrote the number down before the shovels came.",
+    "body": "The mist settled wrong over the back forty yesterday morning. Birds fell mid-flight where the wind carried it thick. Their beaks showed white residue when I checked the rows. I counted eighteen before the rain came.",
     "id": "t0127-34",
     "kind": "written",
     "pieces": [
       "receipt"
     ],
-    "title": "Receipt",
+    "title": "Spray Record",
     "where": [
       {
         "containers": [
@@ -1049,13 +1049,13 @@
       "map": "WorldStashMap18",
       "note": 36
     },
-    "body": "Photograph back at the sixth skull: bean leaves blackened in the shape of yesterday’s spray fan. The roots remained pale and firm.\n\nNo one wanted to keep the wet copy. It dried unevenly, and the ink from the first entry stayed visible beneath the second.\n\nI wrote the time before I went back for the others. The clock may have been slow; the second vehicle was already gone.",
+    "body": "The spray drifted farther than the wind could carry it. Leaves curled in an hour where the label said three days.\n\nI switched to the backup tank at noon. The same browning appeared on untreated rows by evening.\n\nThe concentrate separated overnight despite constant mixing.",
     "id": "t0127-37",
     "kind": "written",
     "pieces": [
       "letter"
     ],
-    "title": "Handwritten letter",
+    "title": "Field notes",
     "where": [
       {
         "containers": [

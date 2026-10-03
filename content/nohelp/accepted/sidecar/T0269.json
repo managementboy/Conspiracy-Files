@@ -14,12 +14,12 @@
       "quote": "Irvington Gun Club",
       "source": "print:IrvingtonGunClub"
     },
-    "gloss": "A field briefing overlaps a range inspection without a safety sign-off.",
+    "gloss": "Notes documenting crop failure from experimental spray program.",
     "prov": {
       "batch": "T0269",
       "handoff": "2026-09-28",
       "writer": "ChatGPT"
     },
-    "rival_reading": "A response team could inspect the range during an emergency; the missing sign-off does not identify the briefing."
+    "rival_reading": "None: one-sided on purpose"
   }
 }

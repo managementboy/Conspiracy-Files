@@ -3,14 +3,14 @@
     "anchor": {
       "scene": "RVSDeadEnd"
     },
-    "body": "Rust-colored grit from the well-water study is on sack and sprayer. I think they were packed before the nurse stopped taking calls.",
+    "body": "Rust-colored grit from the well study coats the sack and nozzle. Sprayer ran dry during the second application. The wheat in that plot turned black within a week.",
     "id": "t0366-01",
     "kind": "set",
     "pieces": [
       "Fertilizer",
       "GardeningSprayEmpty"
     ],
-    "title": "Fertilizer sack and empty sprayer",
+    "title": "fertilizer and empty sprayer",
     "where": [
       {
         "lean": "agricultural",

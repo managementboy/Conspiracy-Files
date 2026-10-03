@@ -4,14 +4,14 @@
       "map": "WorldStashMap9",
       "mark": 1
     },
-    "body": "The notebook tallies outbound crates, contents never recorded. The sheet of paper marks them for field testing.",
+    "body": "I found batch codes and dilution rates logged in the notebook. The sheet marks the same test plots for a second treatment.",
     "id": "t0118-01",
     "kind": "set",
     "pieces": [
       "Notebook",
       "SheetPaper2"
     ],
-    "title": "Notebook and sheet of paper",
+    "title": "notebook and sheet of paper",
     "where": [
       {
         "containers": [
@@ -121,13 +121,13 @@
       "map": "WorldStashMap9",
       "note": 4
     },
-    "body": "Driver's diary: beside the Muldraugh label, the return route from the southern trial farms is written in pencil. Two stops are rubbed out, but their sample counts remain.\n\nThe counts rose with each stop, and the sample bags were stained the colour of the treated seed.",
+    "body": "I found route notes with collection points marked in faint pencil. The sample counts climb steadily heading north from the trial farms. Each bag carries the same dark stain as the treated seed.",
     "id": "t0118-05",
     "kind": "written",
     "pieces": [
       "photograph"
     ],
-    "title": "Photograph",
+    "title": "Sample Log",
     "where": [
       {
         "containers": [
@@ -179,13 +179,13 @@
       "map": "WorldStashMap9",
       "note": 6
     },
-    "body": "Cleaning receipt: warehouse bay three was washed twice after storing pasture-treatment drums. The second wash is billed before the first crew signed out.\n\nWe needed the supplies listed here for the following morning. The people who took the count left without asking whether we had them.\n\nI do not know which of the two accounts was repeated afterward. The older one is the one I had in my hands that day.",
+    "body": "The equipment shed took three wash cycles after the tanks spilled. Residue still tested above the pesticide safety threshold. I found the warning labels peeling off the empty drums.",
     "id": "t0118-07",
     "kind": "written",
     "pieces": [
       "letter"
     ],
-    "title": "Handwritten letter",
+    "title": "Wash record",
     "where": [
       {
         "containers": [

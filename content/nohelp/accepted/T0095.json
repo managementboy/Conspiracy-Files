@@ -4,14 +4,14 @@
       "map": "RiversideStashMap2",
       "mark": 1
     },
-    "body": "The soap and briefcase are bound with a torn sleeve. The fabric is smoke-stained outside but spotless under the knot.",
+    "body": "The briefcase clasp is broken, the soap wedged inside. Route maps inside mark crossings safe that I saw burning.",
     "id": "t0095-01",
     "kind": "set",
     "pieces": [
       "Soap2",
       "Briefcase"
     ],
-    "title": "Bar of soap and briefcase",
+    "title": "soap and briefcase",
     "where": [
       {
         "containers": [

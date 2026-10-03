@@ -3,14 +3,14 @@
     "anchor": {
       "scene": "RBWoodcraft"
     },
-    "body": "A key ring and a bucket share a bitter residue. It looks like the field-sprayer test. They were bundled before the radio warned everyone indoors.",
+    "body": "A key ring and a bucket share a bitter residue. The sprayer went over the same field twice that morning. Nobody expected the dosage to stack like that.",
     "id": "t0323-01",
     "kind": "set",
     "pieces": [
       "KeyRing",
       "Bucket"
     ],
-    "title": "Key ring and bucket",
+    "title": "key ring and bucket",
     "where": [
       {
         "containers": [

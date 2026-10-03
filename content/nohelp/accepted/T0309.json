@@ -3,14 +3,14 @@
     "anchor": {
       "scene": "RBSpiffo"
     },
-    "body": "A mop has dried stiff across a bucket holding an oily film. The same film marks bootprints leading away from the kitchen shelf.",
+    "body": "A mop sits in a bucket of yellow chemical film. The smell is sharp, almost sweet. Bootprints lead in from the crop sprayer outside.",
     "id": "t0309-01",
     "kind": "set",
     "pieces": [
       "Mop",
       "Bucket"
     ],
-    "title": "Mop and bucket",
+    "title": "mop and bucket",
     "where": [
       {
         "containers": [

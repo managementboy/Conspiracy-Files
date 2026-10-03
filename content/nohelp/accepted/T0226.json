@@ -3,7 +3,7 @@
     "anchor": {
       "print": "FarmingAndRuralSupplyDoeValley"
     },
-    "body": "The seed bag has a checkpoint tag still tied to it. The pistol does too, same number. Supply manifest lists both. Someone blanked the passenger count.",
+    "body": "This seed bag and pistol both have the same checkpoint tag. The manifest lists them as evacuation kit for one person. That person's entry has been completely blacked out.",
     "id": "t0226-01",
     "kind": "set",
     "pieces": [

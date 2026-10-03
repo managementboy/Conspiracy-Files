@@ -32,14 +32,14 @@
     "anchor": {
       "scene": "RBBar"
     },
-    "body": "The glass was rinsed, but the tape on it says keep after closing. The cloth is stiff with bleach. I think someone wanted the counter cleaned before the glass was taken.",
+    "body": "The glass has tape marked evacuation zone specimen. The cloth is stiff with dried bleach. I think they cleaned the counter before taking the glass.",
     "id": "t0283-02",
     "kind": "set",
     "pieces": [
       "GlassTumbler",
       "DishCloth"
     ],
-    "title": "Glass tumbler and dish cloth",
+    "title": "glass tumbler and dish cloth",
     "where": [
       {
         "containers": [

@@ -14,12 +14,12 @@
       "quote": "Scarlet Oak Distillery",
       "source": "print:ScarletOakDistillery"
     },
-    "gloss": "A bottle delivery is counted before arrival and one worker is unaccounted for.",
+    "gloss": "Evacuation records were altered to conceal someone's disappearance.",
     "prov": {
       "batch": "T0177",
       "handoff": "2026-09-28",
       "writer": "ChatGPT"
     },
-    "rival_reading": "A field team could collect the same supplies and miss a signature; the tally does not say why the worker was absent."
+    "rival_reading": "None: one-sided on purpose"
   }
 }

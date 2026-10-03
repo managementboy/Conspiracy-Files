@@ -3,14 +3,14 @@
     "anchor": {
       "scene": "RZSHunterCamp"
     },
-    "body": "The cut potato and soil jar have an acrid film on them. I think it's from the well-water study. They were packed before the nurse stopped taking calls.",
+    "body": "The potato has a waxy film that won't rinse off. The empty jar smells like the crop spray from last week. I've never seen residue this thick before.",
     "id": "t0388-01",
     "kind": "set",
     "pieces": [
       "Potato",
       "EmptyJar"
     ],
-    "title": "Potato and jar",
+    "title": "Potato and empty jar",
     "where": [
       {
         "lean": "agricultural",

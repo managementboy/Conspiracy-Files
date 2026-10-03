@@ -4,14 +4,14 @@
       "map": "MulStashMap18",
       "mark": 1
     },
-    "body": "A fuel can is paired with a sprayer-trailer log. The entries are for the seed-treatment rows; a pistol is listed back. The trailer's key line is still open after check-in.",
+    "body": "The sprayer rig fuel gauge reads empty, petrol can beside it. Field trial notes list experimental compound batches. A pistol lies on the application schedule sheet.",
     "id": "t0092-01",
     "kind": "set",
     "pieces": [
       "Pistol",
       "PetrolCan"
     ],
-    "title": "Pistol and petrol can",
+    "title": "pistol and petrol can",
     "where": [
       {
         "containers": [

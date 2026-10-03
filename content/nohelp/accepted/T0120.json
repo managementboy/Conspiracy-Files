@@ -4,14 +4,14 @@
       "map": "WorldStashMap11",
       "mark": 1
     },
-    "body": "The test sheet says the signal dropped during crop monitoring. A note asks to check field power before swapping the radio receiver. Nobody ever came back.",
+    "body": "The sheet shows signal dropped during crop spraying tests. A note says 'check field power' by the radio receiver. Calibration was never completed.",
     "id": "t0120-01",
     "kind": "set",
     "pieces": [
       "RadioReceiver",
       "SheetPaper2"
     ],
-    "title": "Radio receiver and test sheet",
+    "title": "Radio receiver and sheet",
     "where": [
       {
         "containers": [
@@ -34,13 +34,13 @@
       "map": "WorldStashMap11",
       "note": 1
     },
-    "body": "Personal service note: dish three on tower two relayed moisture readings from the trial plots. The signal vanished during the night application, before any public emergency traffic.\n\nThe small ordinary expense was the part I could still account for. I could not make the other figure on this page match what I had seen.\n\nI thought someone would ask for this at the gate. They asked instead how many were in the car, and let the paper stay in my hand.",
+    "body": "The monitor stopped during the night spray on the trial plots. Readings before dropout showed values I had never seen before. Equipment was intact but the plots looked different at dawn.",
     "id": "t0120-02",
     "kind": "written",
     "pieces": [
       "diary"
     ],
-    "title": "Diary page",
+    "title": "Equipment log",
     "where": [
       {
         "containers": [
@@ -121,13 +121,13 @@
       "map": "WorldStashMap11",
       "note": 4
     },
-    "body": "Photograph back at the sun mark: the crop-weather receiver is lit, but its plot channel reads blank. The operator noted a chemical smell inside the cabinet.\n\nI carried it home because there was nowhere open to return it. The mark did not come off when I tried to wash my hands.\n\nWhen I returned, the window was closed and the board was blank. I kept the page because it was the only one with our address.",
+    "body": "The crop monitor had brown residue inside and smelled chemical. The spray log showed treatments I never authorized or applied.\n\nWhen I touched the panel my hands stained the same color. The marks stayed even after scrubbing with soap and water.",
     "id": "t0120-05",
     "kind": "written",
     "pieces": [
       "photograph"
     ],
-    "title": "Photograph",
+    "title": "Monitor Photograph",
     "where": [
       {
         "containers": [

@@ -4,14 +4,14 @@
       "map": "BBurgStashMap4",
       "mark": 1
     },
-    "body": "Four notches on the hoe match four marks on the camera. A fifth is sanded flat on both, and they're tied with roadblock tape. The camera's last frame is a numbered checkpoint sign.",
+    "body": "Four notches on the hoe, four on the camera. A fifth is filed down on both. Bound with roadblock tape. Last frame: empty checkpoint.",
     "id": "t0029-01",
     "kind": "set",
     "pieces": [
       "GardenHoe",
       "Camera"
     ],
-    "title": "Garden hoe and camera",
+    "title": "garden hoe and camera",
     "where": [
       {
         "containers": [

@@ -127,13 +127,13 @@
         "c-failure"
       ]
     },
-    "gloss": "A trace of trial material appears beyond a field boundary.",
+    "gloss": "Agricultural trial runoff contaminated a residential water source.",
     "prov": {
       "batch": "T0423",
       "handoff": "2026-09-27",
       "writer": "ChatGPT"
     },
-    "rival_reading": "The emergency response could have moved or contaminated these things."
+    "rival_reading": "None: one-sided on purpose"
   },
   "t0423-09": {
     "axioms": {

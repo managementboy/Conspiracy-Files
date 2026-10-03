@@ -10,13 +10,13 @@
         "c-orders"
       ]
     },
-    "gloss": "A personal trace connects a farm trial to symptoms before a later restriction.",
+    "gloss": "Field notes document pesticide mixing errors and resulting symptoms.",
     "prov": {
       "batch": "T0324",
       "handoff": "2026-09-27",
       "writer": "ChatGPT"
     },
-    "rival_reading": "Emergency workers could have picked up the same a sharp solvent smell while responding near a field; this personal trace does not prove the trial caused the emergency."
+    "rival_reading": "None: one-sided on purpose"
   },
   "t0324-02": {
     "axioms": {

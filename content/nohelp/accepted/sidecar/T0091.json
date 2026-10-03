@@ -14,12 +14,12 @@
       "quote": "zippees full of stuff",
       "source": "map:MulStashMap17"
     },
-    "gloss": "A completed delivery is followed by a second pickup request.",
+    "gloss": "An incomplete first attempt required a second visit.",
     "prov": {
       "batch": "T0091",
       "handoff": "2026-09-28",
       "writer": "ChatGPT"
     },
-    "rival_reading": "A field crew could have left food and a stay-inside request at a work stop; the receipt does not identify who was meant to collect it."
+    "rival_reading": "None: one-sided on purpose"
   }
 }

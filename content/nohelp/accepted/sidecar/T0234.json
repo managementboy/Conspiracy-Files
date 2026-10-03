@@ -14,12 +14,12 @@
       "quote": "Rosewood Fire Department",
       "source": "print:RosewoodFD"
     },
-    "gloss": "A crew prepared the station for a sealed building before there was anything to answer.",
+    "gloss": "The fields got sprayed too many times by mistake.",
     "prov": {
       "batch": "T0234",
       "handoff": "2026-09-29",
       "writer": "Claude"
     },
-    "rival_reading": "A response crew could prepare a building for any hazard; the sequence does not show what prompted the check."
+    "rival_reading": "None: one-sided on purpose"
   }
 }

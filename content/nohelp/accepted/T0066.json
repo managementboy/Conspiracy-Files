@@ -4,14 +4,14 @@
       "map": "MarchRidgeStashMap3",
       "mark": 1
     },
-    "body": "The bread is dated one day before a spray date marked on the map. Someone crossed out the spray date and drew a route away from town. The route passes right through the sprayed fields.",
+    "body": "The bread tastes faintly chemical underneath the wrapper. The map shows crop dusting routes for the surrounding farms. The spray concentration was crossed out and rewritten higher.",
     "id": "t0066-01",
     "kind": "set",
     "pieces": [
       "Bread",
       "Map"
     ],
-    "title": "Bread and map",
+    "title": "bread and map",
     "where": [
       {
         "containers": [

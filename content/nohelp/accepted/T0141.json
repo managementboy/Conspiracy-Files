@@ -4,14 +4,14 @@
       "map": "WpStashMap8",
       "mark": 1
     },
-    "body": "The walkie talkie's locked on emergency supply frequencies. This feed bag has a delivery tag for three locations marked. Someone crossed out two stops and never told the radio crews.",
+    "body": "The radio's locked on emergency dispatch. This feed sack has stamps for three evacuation sites. Someone crossed two out and never told the convoy crews.",
     "id": "t0141-01",
     "kind": "set",
     "pieces": [
       "AnimalFeedBag",
       "WalkieTalkie1"
     ],
-    "title": "Feed sack and hand radio",
+    "title": "Feed sack and radio",
     "where": [
       {
         "containers": [

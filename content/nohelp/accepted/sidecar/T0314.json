@@ -10,13 +10,13 @@
         "c-orders"
       ]
     },
-    "gloss": "A personal trace places field-program residue before a later restriction.",
+    "gloss": "Fertilizer residue marks both objects from the same field program.",
     "prov": {
       "batch": "T0314",
       "handoff": "2026-09-27",
       "writer": "ChatGPT"
     },
-    "rival_reading": "Emergency workers could have encountered the same residue while responding; the personal trace does not by itself prove the field program caused the emergency."
+    "rival_reading": "None: one-sided on purpose"
   },
   "t0314-02": {
     "axioms": {
@@ -29,12 +29,12 @@
         "c-accounting"
       ]
     },
-    "gloss": "An altered count or retained object was left at the scene.",
+    "gloss": "Official evacuation records were altered after processing.",
     "prov": {
       "batch": "T0314",
       "handoff": "2026-09-27",
       "writer": "ChatGPT"
     },
-    "rival_reading": "A response to an agricultural exposure could explain the same record or object."
+    "rival_reading": "None: one-sided on purpose"
   }
 }

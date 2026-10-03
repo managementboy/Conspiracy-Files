@@ -10,13 +10,13 @@
         "c-orders"
       ]
     },
-    "gloss": "A personal trace places field-program residue before a later restriction.",
+    "gloss": "Field chemical residue carried home by a farm worker.",
     "prov": {
       "batch": "T0307",
       "handoff": "2026-09-27",
       "writer": "ChatGPT"
     },
-    "rival_reading": "Emergency workers could have encountered the same residue while responding; the personal trace does not by itself prove the field program caused the emergency."
+    "rival_reading": "None: one-sided on purpose"
   },
   "t0307-02": {
     "axioms": {

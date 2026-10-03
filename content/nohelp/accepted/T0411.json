@@ -1,6 +1,6 @@
 [
   {
-    "body": "The jar's empty but dusty with whatever was in the seed bag. Both have the same faded label talking about some trial plot. Strange finding them this far from any field.",
+    "body": "Jar's caked with dried pesticide residue inside. Seed bag says trial formula from the county extension office. There's a whole case of these in the barn outside.",
     "id": "t0411-01",
     "kind": "set",
     "pieces": [
@@ -182,14 +182,14 @@
     ]
   },
   {
-    "body": "The sponge is dry and the soap is worn on one edge. It's all wrapped in barrier tape with a small cup. There's a numbered tag tied to the bag.",
+    "body": "The soap is worn down on one side and the sponge is dry. They're wrapped in barrier tape with a cup. A numbered tag is tied to the package.",
     "id": "t0411-08",
     "kind": "set",
     "pieces": [
       "Soap2",
       "Sponge"
     ],
-    "title": "Soap and sponge",
+    "title": "soap and sponge",
     "where": [
       {
         "containers": [
@@ -234,14 +234,14 @@
     ]
   },
   {
-    "body": "There's powder residue inside the glass. The fertilizer bag is ripped open, half gone. Strange place to be spreading anything.",
+    "body": "Residue crusted in the tumbler. Half the fertilizer is gone from the bag. Someone measured out doses here.",
     "id": "t0411-10",
     "kind": "set",
     "pieces": [
       "Fertilizer",
       "GlassTumbler"
     ],
-    "title": "Fertilizer and drinking glass",
+    "title": "Fertilizer and tumbler",
     "where": [
       {
         "containers": [

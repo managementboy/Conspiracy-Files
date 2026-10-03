@@ -10,13 +10,13 @@
         "c-orders"
       ]
     },
-    "gloss": "A personal trace links trial residue to illness before a later restriction.",
+    "gloss": "A chemical application record connects trial materials to physical harm.",
     "prov": {
       "batch": "T0294",
       "handoff": "2026-09-27",
       "writer": "ChatGPT"
     },
-    "rival_reading": "A response team could have carried farm supplies while checking exposure; the objects and timing do not establish that the trial caused it."
+    "rival_reading": "None: one-sided on purpose"
   },
   "t0294-02": {
     "axioms": {

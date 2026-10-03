@@ -4,14 +4,14 @@
       "map": "MulStashMap17",
       "mark": 1
     },
-    "body": "I found bread next to a garbage bag marked for pickup. Someone wrote 'stay inside until collection' on the bag. The first run is checked off but they noted a second pass.",
+    "body": "I found bread near a garbage bag with an official tag. The tag said 'stay inside' and listed two removal dates. The first date is checked off but they returned.",
     "id": "t0091-01",
     "kind": "set",
     "pieces": [
       "Garbagebag",
       "Bread"
     ],
-    "title": "Garbage bag and bread",
+    "title": "Bread and garbage bag",
     "where": [
       {
         "containers": [

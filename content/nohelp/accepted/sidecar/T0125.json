@@ -68,7 +68,7 @@
         "c-failure"
       ]
     },
-    "gloss": "North arrow past the wash drums",
+    "gloss": "Chemical drums near the agricultural test site",
     "prov": {
       "batch": "T0125",
       "handoff": "2026-09-29",
@@ -106,7 +106,7 @@
         "c-failure"
       ]
     },
-    "gloss": "Checkpoint checked field badges",
+    "gloss": "Applicator contaminated by experimental compound",
     "prov": {
       "batch": "T0125",
       "handoff": "2026-09-29",
@@ -144,12 +144,12 @@
         "c-failure"
       ]
     },
-    "gloss": "Upper arrow toward the trial gate",
+    "gloss": "Ruptured pesticide tank at trial plot",
     "prov": {
       "batch": "T0125",
       "handoff": "2026-09-29",
       "writer": "ChatGPT"
     },
-    "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work."
+    "rival_reading": "None: one-sided on purpose"
   }
 }

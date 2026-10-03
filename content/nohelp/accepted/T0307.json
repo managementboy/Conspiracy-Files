@@ -3,14 +3,14 @@
     "anchor": {
       "scene": "RBSchool"
     },
-    "body": "A cloudy water bottle and an empty sample jar share a strip of twine. Pale spray dust is left beneath both, inside the cupboard.",
+    "body": "I find a water bottle and empty jar bound with twine. Pale spray residue lines the inside of both. The jar's label mentions crop treatment concentrate.",
     "id": "t0307-01",
     "kind": "set",
     "pieces": [
       "WaterBottle",
       "EmptyJar"
     ],
-    "title": "Water bottle and empty jar",
+    "title": "water bottle and empty jar",
     "where": [
       {
         "containers": [

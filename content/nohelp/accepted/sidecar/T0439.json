@@ -45,13 +45,13 @@
         "c-failure"
       ]
     },
-    "gloss": "An ordinary trace links a farm exposure to a distinct observed outcome: the sheep beyond the hedge.",
+    "gloss": "A grazing record links exposure to treated crops with livestock illness.",
     "prov": {
       "batch": "T0439",
       "handoff": "2026-09-27",
       "writer": "ChatGPT"
     },
-    "rival_reading": "A failure of the later response could still have left this exposure unaddressed."
+    "rival_reading": "None: one-sided on purpose"
   },
   "t0439-04": {
     "axioms": {
@@ -99,13 +99,13 @@
         "c-failure"
       ]
     },
-    "gloss": "An ordinary trace links a farm exposure to a distinct observed outcome: the pasture beside the ditch.",
+    "gloss": "An observed difference links agricultural treatment runoff to grazing exposure.",
     "prov": {
       "batch": "T0439",
       "handoff": "2026-09-27",
       "writer": "ChatGPT"
     },
-    "rival_reading": "A failure of the later response could still have left this exposure unaddressed."
+    "rival_reading": "None: one-sided on purpose"
   },
   "t0439-07": {
     "axioms": {

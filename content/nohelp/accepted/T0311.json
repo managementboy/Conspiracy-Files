@@ -3,14 +3,14 @@
     "anchor": {
       "scene": "RBTSBreakfast"
     },
-    "body": "A loaf and a first aid kit are tied with twine and barrier tape. A paper tag with only a number hangs from the bundle. The same number is stamped on the kit lid.",
+    "body": "A loaf and a first aid kit tied with barrier tape and twine. A paper tag with an evacuation number hangs from the bundle. The barrier tape has been cut and retied. The kit expired two months before the number's stamped date.",
     "id": "t0311-01",
     "kind": "set",
     "pieces": [
       "Bread",
       "FirstAidKit"
     ],
-    "title": "Bread and first aid kit",
+    "title": "bread and first aid kit",
     "where": [
       {
         "containers": [

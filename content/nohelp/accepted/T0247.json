@@ -3,14 +3,14 @@
     "anchor": {
       "print": "WPTownHall"
     },
-    "body": "Field dust covers one side of the candle and feed sack. Torn warning tape covers the other side. It looks like the bundle was opened from both ends.",
+    "body": "The animal feed bag reeks of chemicals I can't name. Pellets inside have an oily green coating. A candle sits melted on top. Batch numbers and test dates run along the seam.",
     "id": "t0247-01",
     "kind": "set",
     "pieces": [
       "Candle",
       "AnimalFeedBag"
     ],
-    "title": "Candle and feed sack",
+    "title": "Candle and feed bag",
     "where": [
       {
         "containers": [

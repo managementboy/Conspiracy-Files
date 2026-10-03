@@ -3,14 +3,14 @@
     "anchor": {
       "scene": "RBMayorWestPoint"
     },
-    "body": "The walkie talkie and first aid kit are streaked with field runoff. I think they were set aside when the flies vanished. That was before anyone got seriously ill.",
+    "body": "The walkie talkie and first aid kit are soaked in pesticide. I found them where the spray crew worked that morning. Everyone got sick hours after the fields were treated.",
     "id": "t0297-01",
     "kind": "set",
     "pieces": [
       "WalkieTalkie1",
       "FirstAidKit"
     ],
-    "title": "Walkie-talkie and first aid kit",
+    "title": "Walkie talkie and first aid kit",
     "where": [
       {
         "containers": [

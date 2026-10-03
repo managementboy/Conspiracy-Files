@@ -1,6 +1,6 @@
 [
   {
-    "body": "The bread sits whole but the water bottle has pale dust settled in it. A tissue below has the same powder. Left at field's edge, lunch interrupted.",
+    "body": "The bread sits dry but pale powder lines the water bottle. A tissue shows the same dust. The sprayer rig still sits in the adjacent row.",
     "id": "t0432-01",
     "kind": "set",
     "pieces": [
@@ -8,7 +8,7 @@
       "WaterBottle",
       "Tissue"
     ],
-    "title": "Bread, water bottle and tissue",
+    "title": "bread, water bottle and tissue",
     "where": [
       {
         "lean": "agricultural",
@@ -152,14 +152,14 @@
     ]
   },
   {
-    "body": "The army jacket has pale spray dust caked on the cuff. Crop leaves are crushed into the olive drab fabric. The tissue in the pocket is clean, never used.",
+    "body": "The olive jacket reeks of pesticide. White residue stains both cuffs and collar. Crushed crop leaves cling to the fabric. The tissue in the pocket is still folded.",
     "id": "t0432-09",
     "kind": "set",
     "pieces": [
       "Jacket_ArmyOliveDrab",
       "Tissue"
     ],
-    "title": "Olive drab jacket and tissue",
+    "title": "olive jacket and tissue",
     "where": [
       {
         "lean": "agricultural",
@@ -171,7 +171,7 @@
     ]
   },
   {
-    "body": "The soap is wet on one side. Grain grit is still pressed into the glove fingers. The water bottle is nearly empty.",
+    "body": "Grain dust and a slick residue coat the glove fingertips. The soap bar has a waxy film across one side. The water bottle lies on its side, mostly empty.",
     "id": "t0432-10",
     "kind": "set",
     "pieces": [
@@ -179,7 +179,7 @@
       "Gloves_Dish",
       "WaterBottle"
     ],
-    "title": "Soap, dish gloves and water bottle",
+    "title": "soap, dish gloves and bottle",
     "where": [
       {
         "lean": "agricultural",

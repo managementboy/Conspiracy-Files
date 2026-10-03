@@ -14,12 +14,12 @@
       "quote": "A1 Hay",
       "source": "print:A1Hay"
     },
-    "gloss": "Feed arrives before the animal count while water is held back.",
+    "gloss": "Supplies distributed before evacuation and water access restricted by official order.",
     "prov": {
       "batch": "T0252",
       "handoff": "2026-09-28",
       "writer": "ChatGPT"
     },
-    "rival_reading": "A program worker could delay water during routine testing; the receipt does not explain the order."
+    "rival_reading": "None: one-sided on purpose"
   }
 }

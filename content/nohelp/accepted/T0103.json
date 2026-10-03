@@ -4,14 +4,14 @@
       "map": "RiversideStashMap10",
       "mark": 1
     },
-    "body": "The sponge and folded map are tied with cut quarantine tape. Six tally cuts mark the sponge, but only four are crossed through. The map's roads are inked shut at two checkpoints.",
+    "body": "The sponge and map are tied with cut quarantine tape. Six marks are scratched on the sponge but only four crossed off. Both evacuation routes on the map end at checkpoint barriers.",
     "id": "t0103-01",
     "kind": "set",
     "pieces": [
       "Sponge",
       "Map"
     ],
-    "title": "Sponge and map",
+    "title": "sponge and map",
     "where": [
       {
         "containers": [

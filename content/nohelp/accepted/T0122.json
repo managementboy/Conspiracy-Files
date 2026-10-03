@@ -4,14 +4,14 @@
       "map": "WorldStashMap13",
       "mark": 1
     },
-    "body": "A seed bag is wrapped in a letter. It asks someone to leave before the field crew returns. It says the route is safer if no one waits at the door.",
+    "body": "A seed bag has a handwritten letter tucked inside. The note mentions the test treatment wasn't ready yet. It describes crop rows dying faster than anyone expected.",
     "id": "t0122-01",
     "kind": "set",
     "pieces": [
       "LetterHandwritten",
       "SeedBag"
     ],
-    "title": "Handwritten letter and seed bag",
+    "title": "handwritten letter and seed bag",
     "where": [
       {
         "containers": [

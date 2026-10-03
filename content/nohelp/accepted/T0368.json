@@ -3,14 +3,14 @@
     "anchor": {
       "scene": "RVSPoliceBlockade"
     },
-    "body": "The shovel and scrub bucket are tied together with torn warning tape. A yellow tag with only a number hangs from the knot. A stamp is smudged on the bucket.",
+    "body": "The hand shovel and bucket are tied with torn warning tape. The same number is marked on both. Dried blood lines the bucket. They were buried behind the checkpoint.",
     "id": "t0368-01",
     "kind": "set",
     "pieces": [
       "HandShovel",
       "Bucket"
     ],
-    "title": "Hand shovel and bucket",
+    "title": "hand shovel and bucket",
     "where": [
       {
         "lean": "containment",

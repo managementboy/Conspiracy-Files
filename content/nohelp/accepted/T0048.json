@@ -4,14 +4,14 @@
       "map": "IrvingtonStashMap9",
       "mark": 1
     },
-    "body": "A hammer and unopened nails sit beside a note. It says to brace the garden-side door before the next treatment. It doesn't say who will return.",
+    "body": "I find a hammer and nails by notes on the test plot spray cycle. Posts along the crop rows needed repair before application. The pesticide batch number is crossed out and rewritten.",
     "id": "t0048-01",
     "kind": "set",
     "pieces": [
       "Hammer",
       "Nails"
     ],
-    "title": "Hammer and nails",
+    "title": "hammer and nails",
     "where": [
       {
         "containers": [
@@ -63,13 +63,13 @@
       "map": "IrvingtonStashMap9",
       "note": 2
     },
-    "body": "Diary margin: the first heart marks the cot where the orchard crew slept after the spray run. Their boots left a sweet yellow dust; the family returned before anyone posted a warning.\n\nI wrote it down at the time, before the dust was swept. The cot's blanket still smelled sweet a week later.",
+    "body": "Margin note: heart is the cot where farm sprayers slept. Their boots tracked yellow dust across the bedroom. The family used that cot two nights later. I could smell the sweetness on the blanket for days.",
     "id": "t0048-03",
     "kind": "written",
     "pieces": [
       "notepad"
     ],
-    "title": "Notepad page",
+    "title": "Diary page",
     "where": [
       {
         "containers": [
@@ -179,7 +179,7 @@
       "map": "IrvingtonStashMap9",
       "note": 6
     },
-    "body": "Letter draft: the fifth heart was for the baby room. A soldier at the roadblock told us to keep the children indoors, but would not put the order in writing.\n\nThere was a numbered tag on our door the next morning. I wrote the date here while I could still remember it.",
+    "body": "Letter draft: the fifth heart was for the baby room. At the roadblock they said evacuations halted, would not document it.\n\nThere was a numbered tag on our door the next morning. I wrote the date here while I could still remember it.",
     "id": "t0048-07",
     "kind": "written",
     "pieces": [

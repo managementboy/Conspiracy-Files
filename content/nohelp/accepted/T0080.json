@@ -4,14 +4,14 @@
       "map": "MulStashMap12",
       "mark": 1
     },
-    "body": "The corn can has a program sticker. It says to keep clear of the field pathway till the trucks finish. Someone left a pistol beside it.",
+    "body": "This corn can has a trial batch sticker from the co-op. The field beside it is rotting on the stalk. A pistol lies next to it.",
     "id": "t0080-01",
     "kind": "set",
     "pieces": [
       "Pistol",
       "CannedCorn"
     ],
-    "title": "Pistol and canned corn",
+    "title": "pistol and canned corn",
     "where": [
       {
         "containers": [

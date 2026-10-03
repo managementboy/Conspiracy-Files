@@ -29,12 +29,12 @@
         "c-warning"
       ]
     },
-    "gloss": "A measured perimeter was laid out around the vans.",
+    "gloss": "A measured perimeter inadequate for evacuation.",
     "prov": {
       "batch": "T0405",
       "handoff": "2026-09-29",
       "writer": "Claude"
     },
-    "rival_reading": "Field workers could mark out a treated plot the same way; the lengths alone do not say what was fenced in."
+    "rival_reading": "None: one-sided on purpose"
   }
 }

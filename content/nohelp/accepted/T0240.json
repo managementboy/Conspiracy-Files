@@ -3,14 +3,14 @@
     "anchor": {
       "print": "HouseforSale845"
     },
-    "body": "The soap and briefcase are tied with cut warning tape. Six tally cuts mark the soap, but only four are crossed through.",
+    "body": "I found the briefcase at the roadblock, warning tape across it. Two bars of soap and a tally sheet inside. Six names, four checked off, two crossed out.",
     "id": "t0240-01",
     "kind": "set",
     "pieces": [
       "Soap2",
       "Briefcase"
     ],
-    "title": "Bar of soap and briefcase",
+    "title": "Soap and briefcase",
     "where": [
       {
         "containers": [

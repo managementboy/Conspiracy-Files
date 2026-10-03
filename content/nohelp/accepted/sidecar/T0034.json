@@ -14,12 +14,12 @@
       "quote": "old factory",
       "source": "map:EkronStashMap1"
     },
-    "gloss": "A tool return predates the worker shift, leaving the equipment’s purpose unclear.",
+    "gloss": "Application records show excessive repeated treatment of a single area.",
     "prov": {
       "batch": "T0034",
       "handoff": "2026-09-28",
       "writer": "ChatGPT"
     },
-    "rival_reading": "A response crew could have checked shared tools during a closure; the early entry does not identify what the nozzle was used for."
+    "rival_reading": "None: one-sided on purpose"
   }
 }

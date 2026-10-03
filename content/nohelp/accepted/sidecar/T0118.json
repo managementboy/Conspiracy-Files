@@ -14,13 +14,13 @@
       "quote": "crates all around, could be filled with stuff",
       "source": "map:WorldStashMap9"
     },
-    "gloss": "A field check is linked to crates whose contents were never recorded.",
+    "gloss": "Test plot documentation shows the same fields treated twice.",
     "prov": {
       "batch": "T0118",
       "handoff": "2026-09-28",
       "writer": "ChatGPT"
     },
-    "rival_reading": "An emergency storage count could list crates without contents; the tally does not identify the shipment."
+    "rival_reading": "None: one-sided on purpose"
   },
   "t0118-02": {
     "axioms": {
@@ -90,7 +90,7 @@
         "c-failure"
       ]
     },
-    "gloss": "Muldraugh field route in the margin",
+    "gloss": "Sampling route showing contamination spreading from test farms",
     "prov": {
       "batch": "T0118",
       "handoff": "2026-09-29",
@@ -128,13 +128,13 @@
         "c-failure"
       ]
     },
-    "gloss": "Warehouse bay washed twice",
+    "gloss": "Persistent pesticide contamination from storage spill",
     "prov": {
       "batch": "T0118",
       "handoff": "2026-09-29",
       "writer": "ChatGPT"
     },
-    "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work."
+    "rival_reading": "None: one-sided on purpose"
   },
   "t0118-08": {
     "axioms": {

@@ -3,14 +3,14 @@
     "anchor": {
       "scene": "RBTSDinner"
     },
-    "body": "A potato cut in half sits beside a jar of gray field water. Both carry the same waxy residue along the rim.",
+    "body": "A potato cut in half and an empty jar both carry gray waxy residue. The jar smells like the fertilizer concentrate it once held.",
     "id": "t0314-01",
     "kind": "set",
     "pieces": [
       "Potato",
       "EmptyJar"
     ],
-    "title": "Potato and empty jar",
+    "title": "potato and empty jar",
     "where": [
       {
         "containers": [
@@ -32,7 +32,7 @@
     "anchor": {
       "scene": "RBTSDinner"
     },
-    "body": "A spoon lies across a bowl with a penciled count underneath. The number is two higher than the count entered beside the meal.",
+    "body": "A spoon lies across evacuation papers with crossed-out counts. The bowl has a tag number absent from the official ledger.",
     "id": "t0314-02",
     "kind": "set",
     "pieces": [

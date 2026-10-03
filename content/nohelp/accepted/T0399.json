@@ -3,14 +3,14 @@
     "anchor": {
       "scene": "RZSRockerParty"
     },
-    "body": "A fresh battery and radio are wrapped together. Red field grit fills the speaker. There's a smear of dried spray on the tuning dial.",
+    "body": "I found a battery and black radio in the spray barn. Red field dust clogs the speaker vents. The dial is sticky with dried chemical residue.",
     "id": "t0399-01",
     "kind": "set",
     "pieces": [
       "Battery",
       "RadioBlack"
     ],
-    "title": "Battery and radio",
+    "title": "battery and black radio",
     "where": [
       {
         "lean": "agricultural",

@@ -14,12 +14,12 @@
       "quote": "marked address in Irvington",
       "source": "map:IrvingtonStashMap7"
     },
-    "gloss": "An incomplete garden record leaves the timing of a crew visit unresolved.",
+    "gloss": "Notes from an agricultural experiment with escalated chemical dosing.",
     "prov": {
       "batch": "T0046",
       "handoff": "2026-09-28",
       "writer": "ChatGPT"
     },
-    "rival_reading": "A garden volunteer could have kept the same incomplete notes; the seed packet does not prove an experimental program."
+    "rival_reading": "None: one-sided on purpose"
   }
 }

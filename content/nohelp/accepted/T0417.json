@@ -78,14 +78,14 @@
     ]
   },
   {
-    "body": "Chalky residue clings to the animal feed bag. The bucket has it too. These weren't supposed to leave the test field.",
+    "body": "The animal feed bag smells like pesticide, not grain. The bucket reeks of it too. Someone ran chemicals through the feed mill.",
     "id": "t0417-04",
     "kind": "set",
     "pieces": [
       "AnimalFeedBag",
       "Bucket"
     ],
-    "title": "Feed sack and bucket",
+    "title": "Feed bag and bucket",
     "where": [
       {
         "containers": [
@@ -104,14 +104,14 @@
     ]
   },
   {
-    "body": "The seed bag is taped shut but the duct tape's melted into it. Whatever was inside ate through both. I found this past the crop line.",
+    "body": "The seed bag has test markers and chemical residue inside. The duct tape holding it melted and corroded through. Found it in an experimental field plot.",
     "id": "t0417-05",
     "kind": "set",
     "pieces": [
       "SeedBag",
       "DuctTape"
     ],
-    "title": "Seed bag and duct tape",
+    "title": "seed bag and duct tape",
     "where": [
       {
         "containers": [
@@ -156,7 +156,7 @@
     ]
   },
   {
-    "body": "The bread's covered in yellow dust. I wiped it with the dish cloth. The dust just smeared around.",
+    "body": "The bread's covered in yellow dust. I wiped it with the dish cloth. It's the same stuff they spray on the fields.",
     "id": "t0417-07",
     "kind": "set",
     "pieces": [
@@ -182,14 +182,14 @@
     ]
   },
   {
-    "body": "The sponge is green in the middle and the soap is worn on one edge. They're in a bag with a small cup.",
+    "body": "The sponge is stained green through the middle. The soap is worn on one edge. They're in a mesh bag with a measuring cup marked in milliliters.",
     "id": "t0417-08",
     "kind": "set",
     "pieces": [
       "Soap2",
       "Sponge"
     ],
-    "title": "Soap and sponge",
+    "title": "soap and sponge",
     "where": [
       {
         "containers": [

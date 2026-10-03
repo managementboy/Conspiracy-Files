@@ -81,13 +81,13 @@
         "c-failure"
       ]
     },
-    "gloss": "An ordinary trace links a farm exposure to a distinct observed outcome: the apron on the line.",
+    "gloss": "Work clothing carries agricultural treatment residue into household spaces.",
     "prov": {
       "batch": "T0440",
       "handoff": "2026-09-27",
       "writer": "ChatGPT"
     },
-    "rival_reading": "A failure of the later response could still have left this exposure unaddressed."
+    "rival_reading": "None: one-sided on purpose"
   },
   "t0440-06": {
     "axioms": {
