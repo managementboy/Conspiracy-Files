@@ -58,3 +58,36 @@ assert(mover:find("hasRoomFor",1,true)<mover:find("oldContainer:Remove",1,true),
 assert(mover:find("expectedCount(api,candidate)==1 or isObjectSet(api,candidate)",1,true),
     "only single clues and sets move; a pile stays")
 print("nohelp sets: guard and mover hold for object sets")
+
+-- Owner decision 2026-10-03: object-SET pieces keep their vanilla item names;
+-- paper clues keep their title. Run the real stamp functions against stub items.
+local f=assert(io.open("mod-nohelp/common/media/lua/client/NHShared/GeneratedRuntime.lua","rb"))
+local src=f:read("*a"); f:close()
+local chunk=src:match("local function isSet%(doc%).-\nlocal function categoryOf%(%) return \"Evidence\" end")
+assert(chunk,"stamp functions found")
+local stampRec=src:match("local function stampRecognised%(.-\nend\n")
+assert(stampRec,"stampRecognised found")
+local env=setmetatable({pcall=pcall,type=type,tostring=tostring},{__index=_G})
+local code=chunk.."\n"..stampRec.."\nreturn stampEvidence,stampRecognised,categoryOf"
+local fn
+if setfenv then fn=assert(loadstring(code)); setfenv(fn,env) else fn=assert(load(code,nil,"t",env)) end
+local stampEvidence,stampRecognised=fn()
+local function item(vanilla)
+    local o={name=vanilla,custom=true,cat=nil,named=0}
+    function o:setName(n) self.name=n; self.named=self.named+1 end
+    function o:setCustomName(b) self.custom=b end
+    function o:setDisplayCategory(c) self.cat=c end
+    function o:getScriptItem() return {getDisplayName=function() return vanilla end} end
+    return o
+end
+local setDoc={id="s",title="Placeholder Set Title",members={{kind="a"}}}
+local paperDoc={id="p",title="Placeholder Paper Title"}
+local a=item("Badge"); stampEvidence(a,setDoc.title,setDoc)
+assert(a.name=="Badge" and a.cat=="Evidence" and a.custom==false,"a set piece keeps its vanilla name and is Evidence")
+local b=item("Badge"); b.name="Placeholder Set Title"; stampRecognised(b,setDoc,"s",1,1)
+assert(b.name=="Badge" and b.custom==false and b.cat=="Evidence","an old save's renamed set piece gets its vanilla name back")
+local c=item("Note"); stampEvidence(c,paperDoc.title,paperDoc)
+assert(c.name=="Placeholder Paper Title" and c.custom==true and c.cat=="Evidence","a paper clue keeps its title")
+local d=item("Note"); stampRecognised(d,paperDoc,"p",1,1)
+assert(d.name=="Placeholder Paper Title" and d.cat=="Evidence")
+print("nohelp sets: set pieces keep vanilla names, paper clues keep their title")

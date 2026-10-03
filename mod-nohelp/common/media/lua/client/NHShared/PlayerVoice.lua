@@ -190,12 +190,18 @@ local function log(message) CFLog.message("voice","voice",message) end
 -- colored and white. it makes more sence"): the white halo carries the
 -- survivor's words and holds the longer display; the coloured bubble carries
 -- the fact, in as few words as will fit.
-local function deliver(player,text,label)
+local function deliver(player,text,label,bubbleOnly)
     -- Call engine methods with colon syntax, the way vanilla does.
     -- pcall(obj.method, obj, ...) extracts the method first; Kahlua treats that
     -- differently from a real method call, and pcall then hides any complaint, so
     -- a true result can mean 'did not throw' rather than 'worked'.
     local halo=false
+    if bubbleOnly then
+        -- A clue caption: the words in the coloured bubble only, no halo, no title.
+        if player.Say then pcall(function() player:Say(text) end) end
+        log("said clue line \""..tostring(text).."\" bubble only")
+        return false,false
+    end
     if player.setHaloNote then
         halo=pcall(function() player:setHaloNote(text,255,255,255,HALO_DURATION) end)
     end
@@ -265,7 +271,7 @@ function V.drain()
     local p=player(); if not p then return end
     local nextLine=table.remove(queue,1)
     lastSpokenAt,lastHold=t,nextLine.hold or holdFor(nextLine.text)
-    deliver(p,nextLine.text,nextLine.label)
+    deliver(p,nextLine.text,nextLine.label,nextLine.bubbleOnly)
 end
 require("NHShared/Events/InteractionEvents").on("OnTick", V.drain)
 
@@ -380,10 +386,13 @@ end
 -- Why one sentence at a time, short: the white halo is TextDrawObject with
 -- maxCharsLine=-1 (IsoGameCharacter builds it with no wrap; checked in the
 -- game's own jar), so it NEVER wraps - a long text is one line across the
--- whole screen (owner, 2026-10-03). The only fix is short lines. The bubble
--- (ChatElement, 75 chars a line) does wrap; it carries the title.
+-- whole screen (owner, 2026-10-03). Owner decision 2026-10-03: a clue is now
+-- spoken in the coloured bubble only (no halo, no title). ChatElement wraps at
+-- 75 chars (setMaxCharsPerLine(75) in its constructor, checked in the jar), so
+-- 75 is the per-line cap; a bubble lives lineDisplayTime=314 ticks at 1.25 per
+-- update, about 4-8 s, and Say lines stack above one another (max 10).
 -- A line is one sentence; a longer one is cut between words.
-V.LINE_CHARS=64
+V.LINE_CHARS=75
 V.PIECE_CHARS=V.LINE_CHARS
 V.MS_PER_CHAR=60
 V.MIN_HOLD_MS=2500
@@ -413,13 +422,12 @@ function V.sayCue(text,label)
 end
 function V.sayClue(title,text)
     local p=player(); if not p then return 0 end
-    local label=tostring(title or "")
     local kept={}
     for _,q in ipairs(queue) do if not q.reading then kept[#kept+1]=q end end
     queue=kept
     local list=V.pieces(text)
     for _,piece in ipairs(list) do
-        queue[#queue+1]={text=piece,label=(label~="" and label~=piece) and label or "...",reading=true,hold=V.readHold(piece)}
+        queue[#queue+1]={text=piece,label="...",reading=true,bubbleOnly=true,hold=V.readHold(piece)}
     end
     log("clue text: "..#list.." piece(s) queued")
     V.drain()

@@ -24,7 +24,7 @@ local two=V.pieces(s1.." "..s2)
 assert(#two==2 and two[1]==s1 and two[2]==s2,"two sentences are two lines, in order")
 local text=s1.." "..s2.." "..long
 local p=V.pieces(text)
-assert(V.LINE_CHARS<=70 and V.LINE_CHARS>=60,"cap is about 60-70 characters")
+assert(V.LINE_CHARS==75,"cap is the bubble's own 75 characters")
 assert(table.concat(p," "):gsub("%s+"," ")==text:gsub("%s+"," "),"every word is said, in order")
 for _,x in ipairs(p) do
     assert(#x<=V.LINE_CHARS,"a line fits the cap: "..#x)
@@ -32,7 +32,7 @@ for _,x in ipairs(p) do
 end
 assert(#p>=4 and p[1]==s1 and p[2]==s2,"short sentences stay whole and apart")
 for i=3,#p-1 do assert(p[i]:match("word$"),"a long sentence breaks at a word boundary, not inside one: "..p[i]) end
-assert(#V.pieces(string.rep("x",200))>=4,"an unbroken run is still cut to the cap")
+assert(#V.pieces(string.rep("x",200))>=3,"an unbroken run is still cut to the cap")
 for _,x in ipairs(V.pieces(string.rep("x",200))) do assert(#x<=V.LINE_CHARS) end
 assert(#V.pieces("")==0 and #V.pieces(nil)==0,"no text, nothing said")
 
@@ -43,32 +43,34 @@ assert(V.readHold(string.rep("a",64))>V.readHold(string.rep("a",50)) and V.readH
 -- Said one at a time: never two lines before the first has had its hold.
 local n=V.sayClue("Placeholder Title",text)
 assert(n==#p and n>=4,"all lines queued: "..n)
-assert(halos[1]==p[1] and says[1]=="Placeholder Title","first line: words in the halo, title in the bubble")
+assert(#halos==0 and says[1]==p[1],"first line: the words in the bubble, no halo, no title")
 for i=2,n do
     local hold=V.readHold(p[i-1])
-    tick(hold-100); assert(#halos==i-1,"line "..i.." waits while line "..(i-1).." is read")
-    tick(100); assert(halos[i]==p[i] and #halos==i,"line "..i.." follows in order, alone")
+    tick(hold-100); assert(#says==i-1,"line "..i.." waits while line "..(i-1).." is read")
+    tick(100); assert(says[i]==p[i] and #says==i,"line "..i.." follows in order, alone")
 end
-assert(#says==n and says[n]=="Placeholder Title")
+assert(#says==n and #halos==0,"no halo call for a caption")
+for _,t in ipairs(says) do assert(t~="Placeholder Title","the title is never spoken") end
 
 -- A cue goes through the same queue: it waits for the caption line showing.
 tick(20000); halos={}; says={}
 V.sayClue("T","Placeholder first line. Placeholder second line.")
 local ok1=V.sayCue("Placeholder cue words","Hm?")
-assert(#halos==1 and halos[1]=="Placeholder first line.","the cue does not land on the line being read")
-tick(20000); assert(halos[2]=="Placeholder second line." and #halos==2)
-tick(20000); assert(halos[3]=="Placeholder cue words" and says[3]=="Hm?" and #halos==3,"the cue is said in turn, bubble and halo together")
-tick(20000); assert(#halos==3)
+assert(#says==1 and says[1]=="Placeholder first line." and #halos==0,"the cue does not land on the line being read")
+tick(20000); assert(says[2]=="Placeholder second line." and #says==2)
+tick(20000); assert(halos[1]=="Placeholder cue words" and says[3]=="Hm?" and #says==3,"the cue is said in turn, its own look unchanged")
+tick(20000); assert(#says==3 and #halos==1)
 -- On its own a cue is said at once.
-tick(20000); V.sayCue("Alone","Hm?"); assert(halos[4]=="Alone")
+tick(20000); V.sayCue("Alone","Hm?"); assert(halos[2]=="Alone")
 
 -- A diary is as long as it is: more lines than the ordinary four-line bound.
 local diary=string.rep("Placeholder diary line that goes on. ",40)
 local m=V.sayClue("Diary",diary)
 assert(m>4,"a long text is not cut to four lines: "..m)
-local before=#halos
+local before=#says
 for _=1,m do tick(20000) end
-assert(#halos-before==m,"every piece of a long text is said")
+assert(#says-before==m,"every piece of a long text is said")
+assert(#says>=m)
 
 -- Inspecting another clue drops what is left of the one before.
 halos={}; says={}
@@ -76,9 +78,9 @@ tick(20000)
 V.sayClue("First",string.rep("Placeholder first text. ",30))
 V.sayClue("Second","Placeholder second text.")
 for _=1,10 do tick(20000) end
-local last=halos[#halos]
+local last=says[#says]
 assert(last=="Placeholder second text.","the newer clue is said")
-for i=2,#halos-1 do assert(not halos[i]:find("first",1,true),"the older clue's remaining pieces are dropped") end
+for i=2,#says-1 do assert(not says[i]:find("first",1,true),"the older clue's remaining pieces are dropped") end
 
 -- The runtime says it on every Inspect, with the document's title and body.
 local f=assert(io.open("mod-nohelp/common/media/lua/client/NHShared/GeneratedRuntime.lua","rb"))
@@ -87,4 +89,4 @@ local inspect=src:match("function R%.inspect%(.-\nend\n")
 assert(inspect and inspect:find("voice.sayClue,doc.title,doc.body",1,true),"R.inspect says the clue's words")
 assert(not inspect:find("not already[^\n]*sayClue"),"on every Inspect, not only the first")
 
-print("nohelp voice clue: the survivor says a clue's text on Inspect, piece by piece, title in the bubble")
+print("nohelp voice clue: the survivor says a clue's text on Inspect, piece by piece, bubble only")

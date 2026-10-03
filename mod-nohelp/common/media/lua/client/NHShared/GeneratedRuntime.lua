@@ -168,9 +168,21 @@ R.writePages=writePages
 -- Translate/EN/IG_UI.json (seen in play as "IGUI_ItemCat_Evidence" down a
 -- whole column). And it is a RUNTIME property: it is not saved with the item,
 -- which is why loading a game re-stamps it as well.
-local function stampEvidence(item,title)
+-- Object-SET pieces (doc.members is a table) keep their own vanilla item name
+-- (owner, 2026-10-03); only paper clues are named after their title. A piece
+-- an older save already renamed gets its script name back.
+local function isSet(doc) return type(doc)=="table" and type(doc.members)=="table" end
+local function resetVanillaName(item)
+    pcall(function()
+        item:setCustomName(false)
+        local script=item:getScriptItem()
+        if script then item:setName(script:getDisplayName()) end
+    end)
+end
+local function stampEvidence(item,title,doc)
     if not item then return end
-    item:setName(title); item:setCustomName(true)
+    if isSet(doc) then resetVanillaName(item)
+    else item:setName(title); item:setCustomName(true) end
     pcall(function() item:setDisplayCategory("Evidence") end)
 end
 -- Every clue in No Help is plain Evidence: no case ever finishes, so nothing is Old.
@@ -1042,7 +1054,8 @@ local function stampRecognised(item,doc,id,copy,of)
     if not item or not doc then return end
     local name=doc.title
     if of and of>1 and doc.label then name=doc.label.." ("..copy.." of "..of..")" end
-    pcall(function() item:setName(name); item:setCustomName(true) end)
+    if isSet(doc) then resetVanillaName(item)
+    else pcall(function() item:setName(name); item:setCustomName(true) end) end
     pcall(function() item:setDisplayCategory(categoryOf(id)) end)
 end
 -- Every copy of document `id` the runtime can reach now: the survivor's
@@ -1588,7 +1601,7 @@ local function relocation(api)
                 -- cannot drift the same way.
                 -- Still a plain item unless the survivor had already recognised
                 -- it (P4-R132).
-                if R.isRecognisedId(id) then stampEvidence(piece,doc.title)
+                if R.isRecognisedId(id) then stampEvidence(piece,doc.title,doc)
                 else Kinds.nameAsVanillaCard(piece,doc) end
                 applyWear(piece,member)
                 writePages(piece,doc,root.case)
