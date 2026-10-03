@@ -82,6 +82,9 @@ end
 -- bubble keeps the short cue ("Hm?"). With no halo the words go in the bubble.
 local function say(player,line)
     local spoken=Rules.pickLine(Lines,recentSpoken,function(n) return Q.rand(n) end)
+    -- The first cue of a save explains the hint by itself (owner, 2026-10-03:
+    -- the extra line under it was repetitive): no varied line with it.
+    if line==Rules.FIRST then spoken=nil end
     Q.lastSpoken=spoken
     -- Through PlayerVoice's queue when it is loaded, so a cue never lands on a
     -- caption line being read (one line on screen at a time).

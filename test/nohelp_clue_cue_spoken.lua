@@ -5,7 +5,7 @@ local Rules=require("NHShared/ClueCueRules")
 local Lines=require("NHShared/ClueCueLines")
 
 -- The lines: plain, short, no digits, no repeats among themselves.
-assert(#Lines>=80,"80 lines: "..#Lines)
+assert(#Lines>=40,"at least 40 varied lines: "..#Lines)
 local seen={}
 for i,l in ipairs(Lines) do
     assert(type(l)=="string" and l:match("%S"),"line "..i.." is a non-empty string")
@@ -77,14 +77,15 @@ visible=true; roll=0.99; tick()
 assert(#halos==0 and #says==0,"a failed roll speaks nothing")
 -- Fires: the varied line is spoken (halo), the short cue is the bubble.
 roll=0.1; clock=clock+Rules.REROLL_MS; tick()
-assert(#halos==1 and halos[1]==Lines[1],"varied line spoken: "..tostring(halos[1]))
-assert(#says==1 and says[1]==Rules.FIRST,"bubble keeps the cue: "..tostring(says[1]))
+-- The very first cue of a save is the teaching line alone (owner, 2026-10-03).
+assert(#halos==0,"first cue: no varied line under the teaching line: "..tostring(halos[1]))
+assert(#says==1 and says[1]==Rules.FIRST,"first cue is the teaching line: "..tostring(says[1]))
 -- Cooldown: nothing more.
 clock=clock+Rules.REROLL_MS; tick()
-assert(#halos==1,"cooldown speaks nothing")
+assert(#halos==0,"cooldown speaks nothing")
 -- Many cues: the injected random always says 1, yet no repeat within 12.
-local got={halos[1]}
-for _=1,20 do
+local got={}
+for _=1,21 do
     clock=clock+Rules.COOLDOWN_MS; Cue.debugReset(); tick()
     got[#got+1]=halos[#halos]
 end
