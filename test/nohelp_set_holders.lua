@@ -159,7 +159,7 @@ assert(wrapRefuse(ps2,"s",T,"Base.Bag_Schoolbag")==ps2 and #made:getInventory().
 
 -- Wiring in the runtime, in order.
 local function has(needle,msg) assert(runtime:find(needle,1,true),msg or needle) end
-has("Holders.pick(R.worldSeed(),id,pieces)","placement picks the holder from world seed and clue id")
+has("Holders.pick(R.worldSeed(),id,pieces,Holders.targetFits(current))","placement picks the holder from world seed and clue id")
 assert(not runtime:find('CFLog.write("i","holder"',1,true),"CFLog.write only takes events the log knows; an unknown one throws mid-placement (seen in the first real run)")
 has('log("holder "..tostring(pick.id)',"the holder is noted in the case log")
 has("md.cfPiece=#createdItems+1","pieces are numbered on placement")
@@ -178,3 +178,51 @@ local inPiece=mk({cfGeneratedId="s",cfPhysicalToken=T}); function inPiece:getCon
 assert(H.roleOf(inPiece)=="inside" and H.roleOf(holder({}))=="holder" and H.roleOf(piece(1))=="plain")
 has("Holders.shouldSpeak(Holders.roleOf(item),captioned[doc.id]==true)")
 print("set holders: placement, relocation, hint and caption wiring hold")
+
+-- TARGET fit, owner algorithm: draw; if too big for the target, redraw from strictly smaller ones.
+local pcs2=H.pieces(set({"Notebook","WaterBottle"}))
+local function target(cap,used) return {getCapacity=function() return cap end,getContentsWeight=function() return used end} end
+local room,cap=H.roomOf(target(5,1))
+assert(room==4 and cap==5 and H.roomOf({ground=true})==nil,"room is capacity less contents; ground is unlimited")
+assert(H.targetFits({ground=true})==nil,"ground has no test: the first draw stands")
+-- Ground / roomy target: first draw always, attempt 0, identical to the unlimited pick.
+for n=1,200 do
+    local h,att=H.pick(3,"gr"..n,pcs2,nil)
+    assert(att==0,"ground accepts the first draw")
+    local h2,att2=H.pick(3,"gr"..n,pcs2,H.targetFits(target(500,0)))
+    assert(h2.id==h.id and att2==0,"a roomy target accepts the first draw too")
+end
+-- Small target (glovebox 5, empty): never a holder too big for it; retries strictly smaller.
+local fitsGlove=H.targetFits(target(5,0))
+local retried,distinct=0,{}
+for n=1,600 do
+    local first=H.pick(5,"g"..n,pcs2,nil)
+    local seen={}
+    local h,att=H.pick(5,"g"..n,pcs2,function(c,total) seen[#seen+1]=c; return fitsGlove(c,total) end)
+    assert(h,"a small holder exists for the glovebox")
+    assert(h.capacity<=5 and h.weight+1.0<=5,"too-big never placed into a small target: "..h.id)
+    for k=2,#seen do
+        local a,b=seen[k-1],seen[k]
+        assert(b.capacity<a.capacity or (b.capacity==a.capacity and b.weight<=a.weight),"every retry is smaller")
+        assert(b.id~=a.id,"and a different holder")
+    end
+    assert(#seen==att+1,"one test per draw")
+    if att>0 then retried=retried+1 end
+    distinct[h.id]=true
+    local again=H.pick(5,"g"..n,pcs2,fitsGlove)
+    assert(again.id==h.id,"same result again (reload)")
+    assert(first.capacity>=h.capacity,"the result is never bigger than the first draw")
+end
+assert(retried>50,"big first draws really are redrawn: "..retried)
+-- Terminates when nothing fits: pieces loose.
+local calls=0
+assert(H.pick(1,"none",pcs2,function() calls=calls+1; return false end)==nil,"if even the smallest does not fit: loose")
+assert(calls<=#H.fitting(pcs2),"the loop ends: every redraw is from a smaller pool")
+assert(H.pick(1,"tiny",pcs2,H.targetFits(target(1,0.9)))==nil,"a nearly full target takes nothing")
+local c=0 for _ in pairs(distinct) do c=c+1 end
+assert(c>=5,"small target still draws variety: "..c)
+local roomy={}
+for n=1,300 do roomy[H.pick(9,"r"..n,pcs2,nil).id]=true end
+c=0 for _ in pairs(roomy) do c=c+1 end
+assert(c>=40,"a roomy target still allows many holders: "..c)
+print("set holders: target fit holds")

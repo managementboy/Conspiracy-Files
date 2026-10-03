@@ -390,7 +390,7 @@ local function placement(api,id)
         end
         if isSet(doc) then
             local pieces=Holders.pieces(doc)
-            local pick=Holders.pick(R.worldSeed(),id,pieces)
+            local pick=Holders.pick(R.worldSeed(),id,pieces,Holders.targetFits(current))
             local wrapped=wrapInHolder(createdItems,id,a.physicalToken,pick and pick.fullType)
             if wrapped~=createdItems then
                 log("holder "..tostring(pick.id).." holds the "..#createdItems.." pieces of "..tostring(id))

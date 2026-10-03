@@ -28,14 +28,14 @@ function H.pieces(doc)
     return out
 end
 
--- Holders a given set physically fits in: capacity at least the pieces' total
--- weight, no piece larger than the holder's MaxItemSize, and not the very same
--- kind of item as a piece (two identical bags in one clue would only confuse).
--- No other preselection. nil weight (unknown piece) fits nothing.
+-- Holders a given set physically fits in (the only preselection): capacity at
+-- least the pieces' total weight, no piece larger than the holder's MaxItemSize,
+-- and not the very same kind of item as a piece. Ordered smallest first by
+-- capacity, then weight, then id. nil weight (unknown piece) fits nothing.
 function H.fitting(pieces)
     local total=0
     for _,p in ipairs(pieces) do
-        if type(p.weight)~="number" then return {} end
+        if type(p.weight)~="number" then return {},0 end
         total=total+p.weight
     end
     local out={}
@@ -47,16 +47,56 @@ function H.fitting(pieces)
         if ok then for _,p in ipairs(pieces) do if p.fullType==h.fullType then ok=false; break end end end
         if ok then out[#out+1]=h end
     end
-    return out
+    table.sort(out,function(x,y)
+        if x.capacity~=y.capacity then return x.capacity<y.capacity end
+        if x.weight~=y.weight then return x.weight<y.weight end
+        return x.id<y.id
+    end)
+    return out,total
 end
 
--- The holder of one set clue, or nil when it has none (a single piece, or no
--- holder fits). Same inputs, same answer, always.
-function H.pick(seed,id,pieces)
+-- Owner algorithm (2026-10-03): draw one candidate at random, deterministically
+-- from hash(world seed, clue id, attempt). If it fits the TARGET, use it. If not,
+-- draw again from only the candidates smaller than the one that failed. If even
+-- the smallest does not fit, nil (pieces are placed loose). `fits(holder,total)`
+-- answers for the target; nil means a target with no limit (open ground).
+-- Every retry pool is strictly smaller, so the loop ends. Same inputs, same answer.
+function H.pick(seed,id,pieces,fits)
     if #pieces<H.MIN_PIECES then return nil end
-    local fit=H.fitting(pieces)
-    if #fit==0 then return nil end
-    return fit[1+Pick.hash(Pick.key({tonumber(seed) or 0,tostring(id),"holder"}))%#fit]
+    local pool,total=H.fitting(pieces)
+    local size=#pool
+    local attempt=0
+    while size>0 do
+        local i=1+Pick.hash(Pick.key({tonumber(seed) or 0,tostring(id),"holder",attempt}))%size
+        local h=pool[i]
+        if not fits or fits(h,total) then return h,attempt end
+        size=i-1
+        attempt=attempt+1
+    end
+    return nil
+end
+
+-- Free weight in a target container, read from the real container (its own
+-- capacity less what is in it), or nil when it has no limit (open ground) or
+-- cannot be read. World containers define no MaxItemSize of their own; that
+-- limit exists only on carried container items (HolderData.maxItemSize).
+function H.roomOf(container)
+    if type(container)~="table" and type(container)~="userdata" then return nil end
+    if container.ground==true then return nil end
+    local ok,cap,used=pcall(function() return container:getCapacity(),container:getContentsWeight() end)
+    if not ok or type(cap)~="number" or type(used)~="number" then return nil end
+    return cap-used,cap
+end
+-- The target test for H.pick: the holder with its contents (full weight, no
+-- reduction credited) must fit the free weight, and, as a size proxy, a bag that
+-- could hold more than the whole target does is too big to sit in it. Open
+-- ground (or a limit that cannot be read) accepts the first draw.
+function H.targetFits(container)
+    local room,cap=H.roomOf(container)
+    if not room then return nil end
+    return function(h,total)
+        return h.weight+total<=room and h.capacity<=cap
+    end
 end
 
 -- Markers on the items. The holder carries the clue's id and token like a

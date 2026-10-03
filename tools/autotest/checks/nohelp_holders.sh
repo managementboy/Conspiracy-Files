@@ -73,7 +73,8 @@ errs="$(mod_errors)"; [ -z "$errs" ] || fail "errors inside the mods: $(head -3 
 result=PASS; [ ${#fails[@]} -eq 0 ] || result=FAIL
 out="$EVIDENCE/$id-nohelp-holders.txt"
 { echo "Linux No Help holders check $id: $result"; source_line
-  for x in "${notes[@]}"; do echo "note: $x"; done; for f in "${fails[@]}"; do echo "FAIL: $f"; done; } > "$out"
+  for x in "${notes[@]}"; do echo "note: $x"; done; for f in "${fails[@]}"; do echo "FAIL: $f"; done; } > "$out.part"
+mv "$out.part" "$out"
 say "written: $out"; cat "$out"
 "$PZ" stop >/dev/null 2>&1
 [ "$result" = PASS ] && exit 0 || exit 1

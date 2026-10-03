@@ -12,12 +12,24 @@ recorded). Nothing is picked by us. Only containers that refuse ordinary items a
 left out: those with an `AcceptItemFunction` (wallets, key rings, ammo straps,
 holster: 41). 267 remain.
 
-## The pick (`NHShared/SetHolders.lua`, pure)
-Among holders where capacity >= total weight of the pieces (weights from the
-game's item scripts, via ObjectCatalogue), no piece is above the holder's
-MaxItemSize, and the holder is not the same item as a piece. The holder is
-`hash(world seed, clue id)` modulo that list, so it is identical after a reload
-or a relocation. No room or place preselection.
+## The pick (`NHShared/SetHolders.lua`, pure) - owner algorithm
+Deterministic from `hash(world seed, clue id, attempt number)`, so identical after
+a reload or a relocation:
+1. Candidates = every holder with capacity >= total piece weight (weights from
+   the game's item scripts via ObjectCatalogue) and a MaxItemSize that allows
+   every piece (not the same item as a piece). This is the only preselection.
+2. Draw one at random (attempt 0).
+3. Does it fit the TARGET it is placed into? Free weight (the real container's
+   capacity less its contents, read from the game; the holder counted with its
+   contents at full weight) and, as a size proxy for the target's own item-size
+   limit, holder capacity <= target capacity. World containers define no
+   MaxItemSize of their own; the game checks weight only. Yes: use it.
+4. No: draw again (attempt+1) from only the candidates smaller than the one that
+   failed (capacity, then weight, then id). Every pool is strictly smaller, so
+   the loop ends.
+5. If even the smallest does not fit, no holder: pieces are placed loose.
+Open ground has no limit, so its first draw always stands. Relocation keeps the
+old holder kind and checks the destination's room as before.
 
 ## Interactions
 - **Placement**: pieces are created, put inside the holder, and only the holder
@@ -42,5 +54,5 @@ or a relocation. No room or place preselection.
   plain loose rule and never adds one. Unplaced sets get a holder when placed.
 
 ## Risks
-A big holder may be randomly chosen for a small container (owner: no
-preselection); the relocation room check then keeps the set where it is.
+The size proxy (holder capacity <= target capacity) is ours, not a game rule.
+Relocation can still be refused by room and then leaves the set where it is.
