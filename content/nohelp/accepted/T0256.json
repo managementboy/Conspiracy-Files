@@ -3,14 +3,14 @@
     "anchor": {
       "print": "BrottAuction"
     },
-    "body": "the lighter and the empty sprayer both smell of bleach. barrier tape is wrapped round the sprayer's nozzle and a decontamination tag is tied to its handle.",
+    "body": "the lighter and the empty canteen are bound with barrier tape, a numbered tag tied to the canteen's strap. a checkpoint sticker is pressed over the knot.",
     "id": "t0256-01",
     "kind": "set",
     "pieces": [
       "Lighter",
       "GardeningSprayEmpty"
     ],
-    "title": "Lighter carrying two traces",
+    "title": "Lighter and canteen, taped",
     "where": [
       {
         "containers": [

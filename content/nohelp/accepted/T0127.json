@@ -150,7 +150,7 @@
       "map": "WorldStashMap18",
       "note": 5
     },
-    "body": "Torn notebook page: the fifth fire followed a split treatment drum. Water spread the burning film, so we covered it with field soil and left.\n\nThe soil darkened and smoked where the film touched it.",
+    "body": "Torn notebook page: the fifth fire followed a split treatment drum at the trial plot. Water spread the burning film, so we covered it with field soil and left.\n\nThe soil darkened and smoked where the film touched it.",
     "id": "t0127-06",
     "kind": "written",
     "pieces": [
@@ -208,7 +208,7 @@
       "map": "WorldStashMap18",
       "note": 7
     },
-    "body": "Letter draft: the seventh fire caught damp hay where the pasture spray settled. The extension worker asked us to call it a lantern accident.\n\nThere was no lantern, only a sprayer parked at the fence.",
+    "body": "Letter draft: the seventh fire caught damp hay by the road. A deputy asked us to call it a lantern accident and to say nothing of the others.\n\nThere was no lantern, only a patrol truck parked at the fence.",
     "id": "t0127-08",
     "kind": "written",
     "pieces": [
@@ -225,9 +225,9 @@
           "filingcabinet",
           "shelves"
         ],
-        "lean": "agricultural",
+        "lean": "containment",
         "place": "mapNamed",
-        "rival": "containment",
+        "rival": "agricultural",
         "spot": "furniture"
       }
     ]
@@ -411,13 +411,13 @@
       "map": "WorldStashMap18",
       "note": 14
     },
-    "body": "Notebook sketch: the fourteenth fire crawled across wet ground in the same path as yesterday's trial runoff. Ordinary straw would not burn there.\n\nThe runoff had left a slick, yellowish film on the stubble.",
+    "body": "Notebook sketch: the fourteenth fire burned along the line where yesterday's cordon tape was strung. A patrol truck waited at each end and no one was let past.\n\nNumbered stakes marked the tape every few paces.",
     "id": "t0127-15",
     "kind": "written",
     "pieces": [
       "notepad"
     ],
-    "title": "Fourteenth fire along wet ground",
+    "title": "Fourteenth fire along the tape line",
     "where": [
       {
         "containers": [
@@ -428,9 +428,9 @@
           "locker",
           "desk"
         ],
-        "lean": "agricultural",
+        "lean": "containment",
         "place": "mapNamed",
-        "rival": "containment",
+        "rival": "agricultural",
         "spot": "furniture"
       }
     ]
@@ -556,13 +556,13 @@
       "map": "WorldStashMap18",
       "note": 19
     },
-    "body": "Torn diary page: at the first dead face, stained gloves remained beside a crop-trial badge. The posted list later called the wearer an unknown traveler.\n\nI knew him. He ate at our table twice and talked about the test rows like they were his children. Nobody who knew his name was asked.\n\nI tore this page out so it would not sit with the ordinary days. The badge number is on the back.",
+    "body": "Torn diary page: at the first dead face, a tag with a number stayed tied to the wrist. The posted list later called the wearer an unknown traveler.\n\nI knew him. He ate at our table twice and said he would be sent home by Friday. Nobody who knew his name was asked.\n\nI tore this page out so it would not sit with the ordinary days. The tag number is on the back.",
     "id": "t0127-20",
     "kind": "written",
     "pieces": [
       "diary"
     ],
-    "title": "First dead face, stained gloves",
+    "title": "First dead face, numbered tag",
     "where": [
       {
         "containers": [
@@ -573,9 +573,9 @@
           "bin",
           "desk"
         ],
-        "lean": "agricultural",
+        "lean": "containment",
         "place": "mapNamed",
-        "rival": "containment",
+        "rival": "agricultural",
         "spot": "furniture"
       }
     ]
@@ -672,7 +672,7 @@
       "map": "WorldStashMap18",
       "note": 23
     },
-    "body": "Diary entry: the fifth dead face is beside the crew wash basin. The water smelled of bleach and the rinse ledger had been torn out.\n\nThe crew rinsed boots and sprayer hoses here every evening of the trial. I wrote down which hose went with which tank while I could still remember it.\n\nThe water below the basin ran yellow into the ditch.",
+    "body": "Diary entry: the fifth dead face is beside the crew wash basin. The water smelled of bleach and sprayer solvent.\n\nThe crew rinsed boots and sprayer hoses here every evening of the trial. I wrote down which hose went with which tank while I could still remember it.\n\nThe water below the basin ran yellow into the ditch.",
     "id": "t0127-24",
     "kind": "written",
     "pieces": [
@@ -701,13 +701,13 @@
       "map": "WorldStashMap18",
       "note": 24
     },
-    "body": "Torn letter: at the sixth dead face, orchard netting covered a man still wearing sample tags. The fruit above him had split without ripening, all along the sprayed rows.\n\nThe trial supervisor wanted a cleaner version of the harvest report. I kept the stained one because it shows which rows were treated and which were not.",
+    "body": "Torn letter: at the sixth dead face, a tarp covered a man still wearing a numbered tag. A tape line ran around him, and someone had chalked a tally beside the tarp.\n\nSomeone wanted a cleaner version of the count. I kept the first one because it shows how many we saw and how many were reported.",
     "id": "t0127-25",
     "kind": "written",
     "pieces": [
       "letter"
     ],
-    "title": "Sixth dead face under orchard netting",
+    "title": "Sixth dead face under a tarp",
     "where": [
       {
         "containers": [
@@ -718,9 +718,9 @@
           "cashregister",
           "shelves"
         ],
-        "lean": "agricultural",
+        "lean": "containment",
         "place": "mapNamed",
-        "rival": "containment",
+        "rival": "agricultural",
         "spot": "furniture"
       }
     ]
@@ -846,13 +846,13 @@
       "map": "WorldStashMap18",
       "note": 29
     },
-    "body": "Diary margin at the second gun: an armed man collected the rinse records and left the seed invoices. He wore no farm badge.\n\nThe records were the only list of which tanks had held the coating. The invoices said only what we had bought.\n\nI wrote this down before the next shift, in the order I saw it, and have not tried to improve it.",
+    "body": "Diary margin at the second gun: an armed man collected the roll of names and left the supply invoices. He wore no unit patch.\n\nThe roll was the only list of who had been through the checkpoint. The invoices said only what we had bought.\n\nI wrote this down before the next shift, in the order I saw it, and have not tried to improve it.",
     "id": "t0127-30",
     "kind": "written",
     "pieces": [
       "notebook"
     ],
-    "title": "Second gun guarding rinse records",
+    "title": "Second gun guarding the lists",
     "where": [
       {
         "containers": [
@@ -863,9 +863,9 @@
           "bin",
           "desk"
         ],
-        "lean": "agricultural",
+        "lean": "containment",
         "place": "mapNamed",
-        "rival": "containment",
+        "rival": "agricultural",
         "spot": "furniture"
       }
     ]
@@ -933,7 +933,7 @@
       "map": "WorldStashMap18",
       "note": 32
     },
-    "body": "Receipt back at the second skull: one rain-barrel sample, paid cash. The barrel stood downwind of the experimental orchard.\n\nThe water in it had a film on top that smelled of the spray. A pencil line on the receipt had been rubbed thin but not erased; I could still read what the sample was meant to be tested for.",
+    "body": "Receipt back at the second skull: one rain-barrel sample, paid cash. The barrel stood downwind of the experimental orchard.\n\nThe water in it had a film on top that smelled of the spray, and dead bees floated in it.",
     "id": "t0127-33",
     "kind": "written",
     "pieces": [
@@ -991,13 +991,13 @@
       "map": "WorldStashMap18",
       "note": 34
     },
-    "body": "Warehouse note at the fourth skull: the returned treatment drum weighed nine pounds less than dispatch. Its seal appeared untouched.\n\nSomething had been drawn off at the plot, not at the warehouse; the rim was crusted yellow where a hose had sat.\n\nI wrote the weights side by side. The drum was shipped back out the same afternoon.",
+    "body": "Warehouse note at the fourth skull: the crate count on the dispatch list was nine short of the number loaded onto the truck. The truck had passed two checkpoints.\n\nNo one signed for the nine. The tally was crossed out and rewritten smaller.\n\nI wrote the numbers side by side. The truck was sent back out the same afternoon.",
     "id": "t0127-35",
     "kind": "written",
     "pieces": [
       "photograph"
     ],
-    "title": "Fourth skull, missing drum weight",
+    "title": "Fourth skull, missing crate count",
     "where": [
       {
         "containers": [
@@ -1008,9 +1008,9 @@
           "filingcabinet",
           "shelves"
         ],
-        "lean": "agricultural",
+        "lean": "containment",
         "place": "mapNamed",
-        "rival": "containment",
+        "rival": "agricultural",
         "spot": "furniture"
       }
     ]
@@ -1020,7 +1020,7 @@
       "map": "WorldStashMap18",
       "note": 35
     },
-    "body": "Farm notebook at the fifth skull: pour away milk from the test pasture until told otherwise. The instruction arrived before the cattle looked ill.\n\nThe pasture had been sprayed twice that month for the grass trial. The first sick cow came three days after the second pass.\n\nI poured it behind the barn and wrote the dates here.",
+    "body": "Farm notebook at the fifth skull: I poured away the milk from the test pasture. The first sick cow came three days after the second spraying.\n\nThe pasture had been sprayed twice that month for the grass trial.\n\nI poured it behind the barn and wrote the dates here.",
     "id": "t0127-36",
     "kind": "written",
     "pieces": [
@@ -1078,13 +1078,13 @@
       "map": "WorldStashMap18",
       "note": 37
     },
-    "body": "Torn ledger at the seventh skull: the final field count omits two applicators and one sample case. Their truck is still marked returned.\n\nTwo men sprayed the north rows with the coating and did not come back from them. The truck stood at the field edge with the tank empty.\n\nI saved the page because their names are on the reverse, and not on the crew tally.",
+    "body": "Torn ledger at the seventh skull: the final count omits two guards and one supply case. Their truck is still marked returned.\n\nTwo men went to the north cordon and did not come back. The truck stood at the checkpoint with the tailgate open.\n\nI saved the page because their names are on the reverse, and not on the roll.",
     "id": "t0127-38",
     "kind": "written",
     "pieces": [
       "diary"
     ],
-    "title": "Seventh skull, final field count",
+    "title": "Seventh skull, final head count",
     "where": [
       {
         "containers": [
@@ -1095,9 +1095,9 @@
           "locker",
           "desk"
         ],
-        "lean": "agricultural",
+        "lean": "containment",
         "place": "mapNamed",
-        "rival": "containment",
+        "rival": "agricultural",
         "spot": "furniture"
       }
     ]

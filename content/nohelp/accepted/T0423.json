@@ -25,13 +25,13 @@
     ]
   },
   {
-    "body": "I covered the herbs when the trial vehicle passed. By evening the leaves under the cover had curled too. The neighbor said the spray could not have crossed the fence, but her laundry had the same pale grains.\n\nI wrote down the day because the leaves started to curl after it. The lettuce beside the fence bolted early. Someone else might remember the same afternoon.",
+    "body": "I covered the herbs when the patrol vehicle passed. It stopped at each gate and a man read names from a list; ours was not on it, and the neighbor's was crossed through.\n\nI wrote down the day because of the count they gave us. We were told to keep quiet about it. Someone else might remember the same afternoon.",
     "id": "t0423-02",
     "kind": "written",
     "pieces": [
       "notebook"
     ],
-    "title": "The garden after misting — kept overnight",
+    "title": "The gate list — kept overnight",
     "where": [
       {
         "containers": [
@@ -42,15 +42,15 @@
           "locker",
           "desk"
         ],
-        "lean": "agricultural",
+        "lean": "containment",
         "place": "mapNamed",
-        "rival": "containment",
+        "rival": "agricultural",
         "spot": "furniture"
       }
     ]
   },
   {
-    "body": "The feed-store driver left a sack and stopped to wash his hands before accepting a cup of tea. He asked us not to use the rain barrel. The seed treatment on the sack was not mentioned on the delivery slip.\n\nThe child's blanket was drying nearby and held the same fine dust. The treated seed had already been sown along our fence. I kept this separate because the person involved might come back for it.",
+    "body": "A driver stopped at our gate and read from a list before accepting a cup of tea. He asked us not to use the road past the barrier. The count on the list did not match the people in our house.\n\nThe child's blanket was drying nearby when they taped the gate. They told us to keep the tag and say nothing. I kept this separate because the person involved might come back for it.",
     "id": "t0423-03",
     "kind": "written",
     "pieces": [
@@ -67,9 +67,9 @@
           "locker",
           "desk"
         ],
-        "lean": "agricultural",
+        "lean": "containment",
         "place": "mapNamed",
-        "rival": "containment",
+        "rival": "agricultural",
         "spot": "furniture"
       }
     ]

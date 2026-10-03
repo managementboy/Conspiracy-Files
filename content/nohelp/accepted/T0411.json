@@ -156,14 +156,14 @@
     ]
   },
   {
-    "body": "The loaf was wrapped in a clean cloth. Yellow spray powder lies between the cloth and the crust, though the knot was never opened. A strip of cloth keeps the pair together.",
+    "body": "The loaf is wrapped in clean cloth, the knot tied and sealed with barrier tape. A numbered paper tag beneath the tape shows a checkpoint designation and handwritten initials. Similar tags were used to mark processed belongings at the perimeter.",
     "id": "t0411-07",
     "kind": "set",
     "pieces": [
       "Bread",
       "DishCloth"
     ],
-    "title": "Bread under field dust after the shift",
+    "title": "Loaf sealed at evacuation checkpoint",
     "where": [
       {
         "containers": [
@@ -174,22 +174,22 @@
           "cardboardbox",
           "clothingrack"
         ],
-        "lean": "agricultural",
+        "lean": "containment",
         "place": "mapNamed",
-        "rival": "containment",
+        "rival": "agricultural",
         "spot": "furniture"
       }
     ]
   },
   {
-    "body": "The sponge is green at the center and the soap is worn only on one edge, both dusted with fine field grains. They were wrapped in a bag beside a small cup stained with spray residue. The corner still bears a hurried thumbprint.",
+    "body": "The sponge is dry and the soap worn only on one edge. Wrapped in barrier tape beside a small cup, with a numbered tag tied to the bag. The corner bears a hurried thumbprint from when they abandoned the post.",
     "id": "t0411-08",
     "kind": "set",
     "pieces": [
       "Soap2",
       "Sponge"
     ],
-    "title": "The wash that failed after the shift",
+    "title": "Screening wash set, tagged",
     "where": [
       {
         "containers": [
@@ -200,9 +200,9 @@
           "sidetable",
           "cardboardbox"
         ],
-        "lean": "agricultural",
+        "lean": "containment",
         "place": "mapNamed",
-        "rival": "containment",
+        "rival": "agricultural",
         "spot": "furniture"
       }
     ]

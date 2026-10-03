@@ -52,7 +52,7 @@
     ]
   },
   {
-    "body": "The kettle holds clean water. The bucket beside it is stained green where it caught the first rain running off the spray tarp, and the seedlings in the bucket are wilted.",
+    "body": "The spray tarp over the field still drips. The bucket beneath it is stained green where the runoff pooled, and the seedlings someone tried to start there are brown and curled.",
     "id": "t0429-03",
     "kind": "set",
     "pieces": [
@@ -60,7 +60,7 @@
       "Bucket",
       "Tarp"
     ],
-    "title": "The dry tap",
+    "title": "Runoff from the tarp",
     "where": [
       {
         "containers": [

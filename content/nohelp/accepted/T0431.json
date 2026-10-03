@@ -127,14 +127,14 @@
     ]
   },
   {
-    "body": "The spray hose is coiled around the wheel; the rinse from it has pooled green in the bucket. A sprig of blackened crop leaves floats on top, and the other wheel stayed dry.",
+    "body": "Green chemical residue has dried in streaks down the tire treads and pooled in the wheel well. The attached hose still drips concentrate—the mixing valve was left half-open. Withered crop leaves stick to the rubber, their edges curled black where the spray touched them.",
     "id": "t0431-08",
     "kind": "set",
     "pieces": [
       "RubberHose",
       "Bucket"
     ],
-    "title": "The washed wheel",
+    "title": "The spray rig wheel",
     "where": [
       {
         "lean": "agricultural",

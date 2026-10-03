@@ -3,7 +3,7 @@
     "anchor": {
       "print": "RiversidePD"
     },
-    "body": "The range briefing sheet lists soil and crop samples taken from the field behind the range, ticked complete before the range was inspected. A visitor's card asks whether the sprayed rows were fenced.",
+    "body": "The range briefing sheet lists the duty roster for the checkpoint on the road behind the range, ticked complete before the range was inspected. A visitor's card asks who keeps count of those let through.",
     "id": "t0239-01",
     "kind": "set",
     "pieces": [
@@ -21,9 +21,9 @@
           "wardrobe",
           "sidetable"
         ],
-        "lean": "agricultural",
+        "lean": "containment",
         "place": "mapNamed",
-        "rival": "containment",
+        "rival": "agricultural",
         "spot": "furniture"
       }
     ]

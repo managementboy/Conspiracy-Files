@@ -3,7 +3,7 @@
     "anchor": {
       "print": "YourLocalShelterBrandenburg"
     },
-    "body": "The shelter pack is marked ready, but its water bottle is clouded with a green film and tied with a note to wait for the field reading before anyone drinks. seed hulls lie in the bottom of the pack.",
+    "body": "The shelter pack is marked ready, but a numbered tag is tied to it with a list of names, one of them crossed out. A roll of barrier tape and a dosimeter lie in the bottom of the pack.",
     "id": "t0219-01",
     "kind": "set",
     "pieces": [
@@ -21,9 +21,9 @@
           "clothingrack",
           "overhead"
         ],
-        "lean": "agricultural",
+        "lean": "containment",
         "place": "mapNamed",
-        "rival": "containment",
+        "rival": "agricultural",
         "spot": "furniture"
       }
     ]

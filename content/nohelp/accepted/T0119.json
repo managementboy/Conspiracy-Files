@@ -34,7 +34,7 @@
       "map": "WorldStashMap10",
       "mark": 2
     },
-    "body": "Laundry receipt: coveralls from the second circle carried orange pollen from the test rows. The clerk noted numb fingers after handling the bag.\n\nThe pollen would not wash out, even after the third rinse.",
+    "body": "Laundry receipt: coveralls from the second circle carried orange pollen from the sprayed test rows. The clerk noted numb fingers after handling the bag.\n\nThe pollen would not wash out, even after the third rinse, and the water smelled of the spray tank.",
     "id": "t0119-02",
     "kind": "written",
     "pieces": [
@@ -92,13 +92,13 @@
       "map": "WorldStashMap10",
       "mark": 4
     },
-    "body": "Photograph note: the fourth circle shows where three field cars were hosed down. Pale foam ran toward the ditch and the grass along it was dying in a clean strip.\n\nThe foam smelled like the spray tanks on the trial plots.",
+    "body": "Photograph note: the fourth circle shows where three cars were stopped behind the garage and their drivers lined up for a head count. Every plate was copied onto a list, and the road beyond was blocked with a sawhorse.\n\nThe list was numbered in chalk on the garage door.",
     "id": "t0119-04",
     "kind": "written",
     "pieces": [
       "receipt"
     ],
-    "title": "Cars rinsed behind the garage",
+    "title": "Cars stopped behind the garage",
     "where": [
       {
         "containers": [
@@ -109,9 +109,9 @@
           "locker",
           "desk"
         ],
-        "lean": "agricultural",
+        "lean": "containment",
         "place": "mapNamed",
-        "rival": "containment",
+        "rival": "agricultural",
         "spot": "furniture"
       }
     ]
@@ -150,13 +150,13 @@
       "map": "WorldStashMap10",
       "note": 2
     },
-    "body": "Torn note under the clothes label: bag the trial coveralls separately and leave them off the laundry invoice. My wrists blistered while tying the second bag.\n\nThe cloth was stiff with dried spray.",
+    "body": "Torn note under the clothes label: bag the trial coveralls separately from the household wash. My wrists blistered while tying the second bag.\n\nThe cloth was stiff with dried spray and smelled of the crop sprayer.",
     "id": "t0119-06",
     "kind": "written",
     "pieces": [
       "notebook"
     ],
-    "title": "Coveralls kept off the invoice",
+    "title": "Coveralls bagged apart",
     "where": [
       {
         "containers": [
@@ -208,7 +208,7 @@
       "map": "WorldStashMap10",
       "note": 4
     },
-    "body": "Farm-program mileage page: four cars left for the plots, three returned for washing. The blank driver line sits beside a note about seed-treatment samples on the back seat.\n\nThe fourth car was never rinsed.",
+    "body": "Mileage page: four cars left for the checkpoint, three returned to the garage. The blank driver line sits beside a note to keep the count off the radio.\n\nThe fourth car was never logged back in.",
     "id": "t0119-08",
     "kind": "written",
     "pieces": [
@@ -225,9 +225,9 @@
           "filingcabinet",
           "shelves"
         ],
-        "lean": "agricultural",
+        "lean": "containment",
         "place": "mapNamed",
-        "rival": "containment",
+        "rival": "agricultural",
         "spot": "furniture"
       }
     ]

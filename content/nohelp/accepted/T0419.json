@@ -156,14 +156,14 @@
     ]
   },
   {
-    "body": "The loaf was wrapped in a clean cloth. Yellow spray powder lies between the cloth and the crust, though the knot was never opened. The string has been retied since morning.",
+    "body": "The loaf was wrapped in clean cloth, the knot never opened. A strip of barrier tape lies across the knot with a numbered tag beneath it. Someone retied the string after the morning patrol cleared the block.",
     "id": "t0419-07",
     "kind": "set",
     "pieces": [
       "Bread",
       "DishCloth"
     ],
-    "title": "Bread under field dust at closing",
+    "title": "Bread under tape at closing",
     "where": [
       {
         "containers": [
@@ -174,22 +174,22 @@
           "cardboardbox",
           "clothingrack"
         ],
-        "lean": "agricultural",
+        "lean": "containment",
         "place": "mapNamed",
-        "rival": "containment",
+        "rival": "agricultural",
         "spot": "furniture"
       }
     ]
   },
   {
-    "body": "The sponge is green at the center and the soap is worn only on one edge, both dusted with fine field grains. They were wrapped in a bag beside a small cup stained with spray residue. The date is on the wrapper, not on the object.",
+    "body": "The sponge is dry and the soap is worn only on one edge. They were wrapped in a bag sealed with barrier tape beside a small cup, with a numbered tag tied to the bag. The date is on the wrapper, not on the object.",
     "id": "t0419-08",
     "kind": "set",
     "pieces": [
       "Soap2",
       "Sponge"
     ],
-    "title": "The wash that failed at closing",
+    "title": "The wash set sealed at closing",
     "where": [
       {
         "containers": [
@@ -200,9 +200,9 @@
           "sidetable",
           "cardboardbox"
         ],
-        "lean": "agricultural",
+        "lean": "containment",
         "place": "mapNamed",
-        "rival": "containment",
+        "rival": "agricultural",
         "spot": "furniture"
       }
     ]
@@ -234,14 +234,14 @@
     ]
   },
   {
-    "body": "Fine fertilizer grains cling to the rim of a drinking glass. The sack beside it was sealed with household thread and has leaked pellets onto the shelf. The corner still bears a hurried thumbprint.",
+    "body": "A drinking glass and canvas bag bound together with barrier tape, marked with an evacuation tag bearing a thumbprint and partial official stamp. The seal remains intact—these items were logged and processed according to procedure, but the checkpoint itself was abandoned before anyone returned to collect them.",
     "id": "t0419-10",
     "kind": "set",
     "pieces": [
       "Fertilizer",
       "GlassTumbler"
     ],
-    "title": "Fertilizer and a dry cup at closing",
+    "title": "Belongings sealed at abandoned checkpoint",
     "where": [
       {
         "containers": [
@@ -252,9 +252,9 @@
           "cardboardbox",
           "smallbox"
         ],
-        "lean": "agricultural",
+        "lean": "containment",
         "place": "mapNamed",
-        "rival": "containment",
+        "rival": "agricultural",
         "spot": "furniture"
       }
     ]

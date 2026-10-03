@@ -34,13 +34,13 @@
       "map": "IrvingtonStashMap9",
       "note": 1
     },
-    "body": "Farm log: “fortify here” meant boards over the garden door before the next treatment truck. The crew promised to collect its sample jars and never returned.\n\nMy mother put it with the household bills so it would not be thrown away. It was the only part of the week that still had a date.",
+    "body": "Notebook page: “fortify here” meant boards over the garden door before the next patrol came through. A man with a clipboard took our names and told us to say nothing about the count.\n\nMy mother put it with the household bills so it would not be thrown away. It was the only part of the week that still had a date.",
     "id": "t0048-02",
     "kind": "written",
     "pieces": [
       "diary"
     ],
-    "title": "Fortify before the treatment",
+    "title": "Fortify before the patrol",
     "where": [
       {
         "containers": [
@@ -51,9 +51,9 @@
           "filingcabinet",
           "shelves"
         ],
-        "lean": "agricultural",
+        "lean": "containment",
         "place": "mapNamed",
-        "rival": "containment",
+        "rival": "agricultural",
         "spot": "furniture"
       }
     ]
@@ -179,7 +179,7 @@
       "map": "IrvingtonStashMap9",
       "note": 6
     },
-    "body": "Letter draft: the fifth heart was for the baby room. A crop-trial driver warned us not to use the rain barrel, but would not put his warning on the delivery slip.\n\nThe barrel had a rainbow sheen after the crop spray drifted over the roof. I wrote the date here while I could still remember it.",
+    "body": "Letter draft: the fifth heart was for the baby room. A soldier at the roadblock told us to keep the children indoors, but would not put the order in writing.\n\nThere was a numbered tag on our door the next morning. I wrote the date here while I could still remember it.",
     "id": "t0048-07",
     "kind": "written",
     "pieces": [
@@ -196,9 +196,9 @@
           "cashregister",
           "shelves"
         ],
-        "lean": "agricultural",
+        "lean": "containment",
         "place": "mapNamed",
-        "rival": "containment",
+        "rival": "agricultural",
         "spot": "furniture"
       }
     ]

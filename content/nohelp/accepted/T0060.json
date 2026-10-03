@@ -4,14 +4,14 @@
       "map": "LouisvilleStashMap12",
       "mark": 1
     },
-    "body": "The tent's drink list includes water from the garden hose; a note says the hose was used to rinse spray tanks before the food shift, and the rinse water ran green into the bucket.",
+    "body": "The tent's drink list includes water from the garden hose; a note says the hose rinsed the spray tanks before the food shift, and the rinse water ran green into the bucket. A sprayer nozzle still hangs from the hose, crusted blue.",
     "id": "t0060-01",
     "kind": "set",
     "pieces": [
       "Pizza",
       "WaterBottle"
     ],
-    "title": "Food tent supply",
+    "title": "Hose water for the food shift",
     "where": [
       {
         "containers": [

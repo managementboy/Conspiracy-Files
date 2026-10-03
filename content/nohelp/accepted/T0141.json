@@ -4,14 +4,14 @@
       "map": "WpStashMap8",
       "mark": 1
     },
-    "body": "Three pickup dots are marked on the animal-feed sack and hand radio, each with a unit number. Two were scratched out and rewritten as one route, the stops now fewer than the dots.",
+    "body": "Three pickup dots are marked on the sack and the hand radio, each with a unit number. Two were scratched out and rewritten as one route ending at a checkpoint; the stops are now fewer than the dots.",
     "id": "t0141-01",
     "kind": "set",
     "pieces": [
       "AnimalFeedBag",
       "WalkieTalkie1"
     ],
-    "title": "Animal-feed sack beside the spare mark",
+    "title": "Sack beside the spare mark",
     "where": [
       {
         "containers": [

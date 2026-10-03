@@ -14,7 +14,7 @@
       "quote": "Plan B",
       "source": "map:MulStashMap7"
     },
-    "gloss": "A stocked store lacks a completed separation check.",
+    "gloss": "A stocked store with a closing order and a blank count box.",
     "prov": {
       "batch": "T0084",
       "handoff": "2026-09-28",

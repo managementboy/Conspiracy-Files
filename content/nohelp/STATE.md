@@ -26,4 +26,4 @@ none
 2026-09-28 T0001
 
 ## PROGRESS
-NOT DONE: balance 57% @0e4ca149
+NOT DONE: scene sides 118/125 @98a80666

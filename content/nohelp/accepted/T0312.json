@@ -3,7 +3,7 @@
     "anchor": {
       "scene": "RBTSButcher"
     },
-    "body": "I wrote down the sour smell after the field truck unloaded its rinse barrels behind the shop. The meat was still cold when the flies vanished and the grass behind the shop went pale in a ring.\n\nI wrote the time and the barrel markings before I went back for the others. The clock may have been slow; the ring was there by evening.",
+    "body": "I wrote down the time a patrol truck stopped behind the shop and how many names they took off their list. The meat was still cold when they told us to close early.\n\nI wrote the time and the number on a strip of tape before I went back for the others. The clock may have been slow; the tape was across the back door by evening.",
     "id": "t0312-01",
     "kind": "written",
     "pieces": [
@@ -20,9 +20,9 @@
           "smallbox",
           "cashregister"
         ],
-        "lean": "agricultural",
+        "lean": "containment",
         "place": "mapNamed",
-        "rival": "containment",
+        "rival": "agricultural",
         "spot": "furniture"
       }
     ]
@@ -31,13 +31,13 @@
     "anchor": {
       "scene": "RBTSButcher"
     },
-    "body": "The shopkeeper made me bring the parcel through the back. He said the front counter was closed to anyone who had been beyond the roadblock.\n\nA visitor checked the wrapper but never asked what was inside. He took the slip with the customer name and told us both that the parcel was not to be sold or discussed, and that the name would be kept by his office. He left the parcel on the table.",
+    "body": "The shopkeeper made me bring the parcel through the back. He said the front counter was closed to anyone who had been beyond the roadblock.\n\nA visitor checked the wrapper but never asked what was inside. He took the slip with the customer name and told us both that the parcel was not to be handed out or discussed, and that the name would be kept on his list. He left the parcel on the table.",
     "id": "t0312-02",
     "kind": "written",
     "pieces": [
       "notepad"
     ],
-    "title": "A separate cut of meat",
+    "title": "A parcel put aside under orders",
     "where": [
       {
         "containers": [

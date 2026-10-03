@@ -3,14 +3,14 @@
     "anchor": {
       "print": "HavishamSuites"
     },
-    "body": "A water bottle is placed with a suite service list that requests a residue test before the next guest arrives. The room charge is already closed.",
+    "body": "A water bottle is placed with a suite service list that orders every door locked and the floor kept quiet. A head count is filled in for each room but one. The room charge is already closed.",
     "id": "t0174-01",
     "kind": "set",
     "pieces": [
       "WaterBottle",
       "Notebook"
     ],
-    "title": "The suite water order",
+    "title": "The suite floor order",
     "where": [
       {
         "containers": [
@@ -21,9 +21,9 @@
           "overhead",
           "sidetable"
         ],
-        "lean": "agricultural",
+        "lean": "containment",
         "place": "mapNamed",
-        "rival": "containment",
+        "rival": "agricultural",
         "spot": "furniture"
       }
     ]

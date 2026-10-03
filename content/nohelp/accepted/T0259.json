@@ -3,7 +3,7 @@
     "anchor": {
       "print": "ColdWarBunker"
     },
-    "body": "The tour log lists the bunker ready for visitors; a field note asks guides to keep the ventilation hatch closed because fumes from the seed-treatment bins in the test field drift down until the next reading.",
+    "body": "The tour log lists the bunker as open for visitors, but the count column is blank after the last entry and the pages after it are torn out. The torch lies on the log with its lens covered by a strip of barrier tape.",
     "id": "t0259-01",
     "kind": "set",
     "pieces": [
@@ -21,9 +21,9 @@
           "locker",
           "smallcrate"
         ],
-        "lean": "agricultural",
+        "lean": "containment",
         "place": "mapNamed",
-        "rival": "containment",
+        "rival": "agricultural",
         "spot": "furniture"
       }
     ]

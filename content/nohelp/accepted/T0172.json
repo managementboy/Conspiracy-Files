@@ -3,14 +3,14 @@
     "anchor": {
       "print": "FossoilField"
     },
-    "body": "A sports bottle is set beside a grounds sheet asking the crew to rinse the field after the spray test. The gate schedule still lists a public event.",
+    "body": "A sports bottle is set beside a grounds sheet ordering the crew to clear the stands and close the gates at dusk. The gate schedule still lists a public event.",
     "id": "t0172-01",
     "kind": "set",
     "pieces": [
       "BaseballBat",
       "WaterBottle"
     ],
-    "title": "A stadium rinse",
+    "title": "A stadium closure",
     "where": [
       {
         "containers": [
@@ -21,9 +21,9 @@
           "locker",
           "fridge"
         ],
-        "lean": "agricultural",
+        "lean": "containment",
         "place": "mapNamed",
-        "rival": "containment",
+        "rival": "agricultural",
         "spot": "furniture"
       }
     ]

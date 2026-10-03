@@ -11,7 +11,7 @@
         "c-failure"
       ]
     },
-    "gloss": "A response bundle preserves a missing count, changed route, or erased identity.",
+    "gloss": "A checkpoint bundle preserves a missing count, changed route, or erased identity.",
     "prov": {
       "batch": "T0029",
       "handoff": "2026-09-27",

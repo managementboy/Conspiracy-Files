@@ -50,7 +50,7 @@
     ]
   },
   {
-    "body": "The feed-store driver left a sack of the new treated grain and washed his hands before accepting a cup of tea. He asked us not to use the rain barrel for the garden. The delivery slip said nothing of the dust.\n\nThe peas I watered from it wilted in two days, while the ones watered from the well are fine.",
+    "body": "A driver came to the gate with a list of households and stopped to accept a cup of tea. He asked us not to use the back road, which was closed by a barrier.\n\nThe list had a number beside our name and he would not say what it counted. Everyone on the road was told to keep quiet about it.",
     "id": "t0427-03",
     "kind": "written",
     "pieces": [
@@ -67,9 +67,9 @@
           "locker",
           "desk"
         ],
-        "lean": "agricultural",
+        "lean": "containment",
         "place": "mapNamed",
-        "rival": "containment",
+        "rival": "agricultural",
         "spot": "furniture"
       }
     ]

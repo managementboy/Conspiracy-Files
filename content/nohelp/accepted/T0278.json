@@ -3,7 +3,7 @@
     "anchor": {
       "print": "Sanatorium"
     },
-    "body": "The tour map marks the basement route open; the guide's note asks visitors to stay away from the ventilation room because treated seed stored there gives off fumes until the next reading.",
+    "body": "The tour map marks the basement route open, but a strip of barrier tape is stuck across the route and a number is penciled beside each stair, counting down to a closed door. The torch lens is taped down to a narrow slit.",
     "id": "t0278-01",
     "kind": "set",
     "pieces": [
@@ -21,9 +21,9 @@
           "toolcabinet",
           "locker"
         ],
-        "lean": "agricultural",
+        "lean": "containment",
         "place": "mapNamed",
-        "rival": "containment",
+        "rival": "agricultural",
         "spot": "furniture"
       }
     ]

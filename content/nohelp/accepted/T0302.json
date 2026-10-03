@@ -3,13 +3,13 @@
     "anchor": {
       "scene": "RBPizzaWhirled"
     },
-    "body": "My note from near lunchtime: the field trial crew carried sealed seed packets past the shop. My brother started coughing after he handled one, and the potted herbs by the door wilted by evening.\n\nI did not know where to put the packets after the shelves were cleared. I could not mistake the empty place left for the person we had been waiting for.",
+    "body": "My note from near lunchtime: a list of addresses was read out at the shop door and the delivery bags were taken from the shelf by count. We were told to keep the shop dark and say nothing if asked.\n\nI did not know where to put the bags after the shelves were cleared. I could not mistake the empty place left for the person we had been waiting for.",
     "id": "t0302-01",
     "kind": "written",
     "pieces": [
       "notepad"
     ],
-    "title": "Near lunchtime: sealed seed packet",
+    "title": "Near lunchtime: the list at the door",
     "where": [
       {
         "containers": [
@@ -20,9 +20,9 @@
           "cashregister",
           "smallbox"
         ],
-        "lean": "agricultural",
+        "lean": "containment",
         "place": "mapNamed",
-        "rival": "containment",
+        "rival": "agricultural",
         "spot": "furniture"
       }
     ]
@@ -31,7 +31,7 @@
     "anchor": {
       "scene": "RBPizzaWhirled"
     },
-    "body": "At closing I counted the remaining boxes and wrote the number on the lid. A driver came for them after I had put away the register.\n\nHe had a list of addresses, but it was folded so I could only see the first. He crossed it out without unloading anything, and told me the number I had written was to be changed to zero. I was to say nothing about the boxes if asked.",
+    "body": "At closing I counted the remaining boxes and wrote the number on the lid. A driver came for them after I had put away the register.\n\nHe had a list of shelter addresses, but it was folded so I could only see the first. He crossed it out without unloading anything, and told me the number I had written was to be changed to zero. I was to say nothing about the shipment if asked, and the access road was to stay closed.",
     "id": "t0302-02",
     "kind": "written",
     "pieces": [

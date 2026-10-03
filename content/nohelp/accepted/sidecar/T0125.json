@@ -30,7 +30,7 @@
         "c-failure"
       ]
     },
-    "gloss": "First trap held a torn field tag",
+    "gloss": "First trap held a torn numbered tag",
     "prov": {
       "batch": "T0125",
       "handoff": "2026-09-29",
@@ -125,7 +125,7 @@
         "c-failure"
       ]
     },
-    "gloss": "Barriers moved after the spill",
+    "gloss": "Barriers moved after the closure",
     "prov": {
       "batch": "T0125",
       "handoff": "2026-09-29",

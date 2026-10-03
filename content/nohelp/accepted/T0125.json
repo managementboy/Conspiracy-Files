@@ -34,13 +34,13 @@
       "map": "WorldStashMap16",
       "note": 1
     },
-    "body": "Diary line at the first trap: a torn pasture-test tag was caught beneath the spring. Its number belongs to a treatment drum the return ledger calls sealed.\n\nThe tag was sticky with the same blue coating as the trial seed.",
+    "body": "Diary line at the first trap: a torn numbered tag was caught beneath the spring. Its number belongs to a household that the return list calls cleared.\n\nThe tag still had a strip of tape stuck to it.",
     "id": "t0125-02",
     "kind": "written",
     "pieces": [
       "diary"
     ],
-    "title": "First trap held a torn field tag",
+    "title": "First trap held a torn numbered tag",
     "where": [
       {
         "containers": [
@@ -51,9 +51,9 @@
           "filingcabinet",
           "shelves"
         ],
-        "lean": "agricultural",
+        "lean": "containment",
         "place": "mapNamed",
-        "rival": "containment",
+        "rival": "agricultural",
         "spot": "furniture"
       }
     ]
@@ -179,13 +179,13 @@
       "map": "WorldStashMap16",
       "note": 6
     },
-    "body": "Road-crew receipt: barriers were moved downhill after a trial drum leaked. The billed hours match the day the pasture grass browned below the road.\n\nThe runoff left a yellow stain along the culvert.",
+    "body": "Road-crew receipt: barriers were moved downhill after the road was closed to traffic. The billed hours match the night the patrol took names from the houses along the road.\n\nA checkpoint was left standing past the culvert.",
     "id": "t0125-07",
     "kind": "written",
     "pieces": [
       "letter"
     ],
-    "title": "Barriers moved after the spill",
+    "title": "Barriers moved after the closure",
     "where": [
       {
         "containers": [
@@ -196,9 +196,9 @@
           "locker",
           "desk"
         ],
-        "lean": "agricultural",
+        "lean": "containment",
         "place": "mapNamed",
-        "rival": "containment",
+        "rival": "agricultural",
         "spot": "furniture"
       }
     ]

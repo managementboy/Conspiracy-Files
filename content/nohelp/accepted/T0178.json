@@ -3,14 +3,14 @@
     "anchor": {
       "print": "ReadyPrep"
     },
-    "body": "A preparedness pack is tied to a route sheet for a spray test; the checklist says the respirator and gloves are optional until the next field briefing.",
+    "body": "A preparedness pack is tied to a route sheet marked with checkpoints; the list says the logs and seals are for the patrol only, and the pack is to be left at the first stop.",
     "id": "t0178-01",
     "kind": "set",
     "pieces": [
       "Bag_ALICEpack",
       "Map"
     ],
-    "title": "Prepared for a different threat",
+    "title": "Pack tied to the route",
     "where": [
       {
         "containers": [
@@ -21,9 +21,9 @@
           "militarylocker",
           "shelves"
         ],
-        "lean": "agricultural",
+        "lean": "containment",
         "place": "mapNamed",
-        "rival": "containment",
+        "rival": "agricultural",
         "spot": "furniture"
       }
     ]

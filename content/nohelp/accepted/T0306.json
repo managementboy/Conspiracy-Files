@@ -3,7 +3,7 @@
     "anchor": {
       "scene": "RBSafehouse"
     },
-    "body": "Thursday: the trial crew left their work shirts in the spare room. The sharp smell reached the kitchen, and the dog was sick by evening. The tomato plants in the window box shriveled in two days.\n\nI wrote down what the crew said they had been spraying. The name on the drum was not one I had heard of.",
+    "body": "Thursday: they left a numbered tag on the spare room door and told us to keep it shut. A patrol came by twice before evening and took a count of the house.\n\nI wrote down the number they gave us. I was told not to repeat it.",
     "id": "t0306-01",
     "kind": "written",
     "pieces": [
@@ -20,9 +20,9 @@
           "shelves",
           "smallbox"
         ],
-        "lean": "agricultural",
+        "lean": "containment",
         "place": "mapNamed",
-        "rival": "containment",
+        "rival": "agricultural",
         "spot": "furniture"
       }
     ]

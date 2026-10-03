@@ -3,14 +3,14 @@
     "anchor": {
       "print": "TheSeaShanty"
     },
-    "body": "A fish order is kept beside a tasting sheet that says the water sample was taken after the kitchen sink was rinsed of crop spray. The cook marked the meal served.",
+    "body": "A fish order is stapled to an official directive ordering immediate facility lockdown and complete personnel verification at the rear evacuation point. The cook initialed the final service timestamp. One name on the official evacuation roster has been struck through.",
     "id": "t0176-01",
     "kind": "set",
     "pieces": [
       "FishFillet",
       "KitchenKnife"
     ],
-    "title": "The kitchen’s tasting note",
+    "title": "Emergency lockdown directive",
     "where": [
       {
         "containers": [
@@ -21,9 +21,9 @@
           "counter",
           "cardboardbox"
         ],
-        "lean": "agricultural",
+        "lean": "containment",
         "place": "mapNamed",
-        "rival": "containment",
+        "rival": "agricultural",
         "spot": "furniture"
       }
     ]

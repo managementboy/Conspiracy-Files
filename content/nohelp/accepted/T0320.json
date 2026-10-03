@@ -3,14 +3,14 @@
     "anchor": {
       "scene": "RBTSSoup"
     },
-    "body": "A cloudy water bottle stands beside a tin opener crusted with yellow dust. A hand-drawn line on the bottle marks the level before boiling, and a few dead aphids lie in the dust.",
+    "body": "A water bottle and tin opener sit tagged with numbered paper tied by string. A pen mark tracks the bottle's level, and barrier tape circles the opener's handle. Each tag lists an evacuation zone but leaves the recipient line unfilled.",
     "id": "t0320-01",
     "kind": "set",
     "pieces": [
       "WaterBottle",
       "TinOpener"
     ],
-    "title": "Cloudy water beside the soup",
+    "title": "Awaiting assignment",
     "where": [
       {
         "containers": [
@@ -21,9 +21,9 @@
           "sidetable",
           "freezer"
         ],
-        "lean": "agricultural",
+        "lean": "containment",
         "place": "mapNamed",
-        "rival": "containment",
+        "rival": "agricultural",
         "spot": "furniture"
       }
     ]

@@ -121,13 +121,13 @@
       "map": "WorldStashMap23",
       "note": 3
     },
-    "body": "Photograph back at the hammer mark: the basement vent was nailed shut after yellow dust appeared inside. The treatment truck had idled directly above it, spraying the yard beyond.\n\nThe dust settled on the sample shelves and on the jars. It stained the fingers when touched.\n\nI took the picture before the boards went up.",
+    "body": "Photograph looking back at the boarded vent: they nailed it shut during the evacuation lockdown, day three when the patrol came through. Every access point had to be secured before they'd authorize transport.\n\nThe stored provisions were cleared from the shelves first.\n\nI took the picture before the strip went up.",
     "id": "t0132-05",
     "kind": "written",
     "pieces": [
       "photograph"
     ],
-    "title": "Hammer mark over a sealed vent",
+    "title": "Numbered strip over sealed vent",
     "where": [
       {
         "containers": [
@@ -138,9 +138,9 @@
           "locker",
           "desk"
         ],
-        "lean": "agricultural",
+        "lean": "containment",
         "place": "mapNamed",
-        "rival": "containment",
+        "rival": "agricultural",
         "spot": "furniture"
       }
     ]
@@ -150,7 +150,7 @@
       "map": "WorldStashMap23",
       "note": 4
     },
-    "body": "Diary line under \"basement\": leaf jars from three farms occupied the lower shelf. By morning every label had been peeled away, but the dates remained on the lids.\n\nThe leaves in each were spotted the same way, black along the veins. Three farms, one treatment.\n\nI copied the dates before the jars were moved.",
+    "body": "Diary line under \"basement\": leaf jars from three farms occupied the lower shelf, each labelled with a field name and a date.\n\nThe leaves in each were spotted the same way, black along the veins. Three farms, one treatment.\n\nI copied the dates before the jars were collected.",
     "id": "t0132-06",
     "kind": "written",
     "pieces": [

@@ -4,14 +4,14 @@
       "map": "MulStashMap7",
       "mark": 1
     },
-    "body": "A store receipt lists every shelf as stocked, while a note asks the crew to keep the pesticide trial supplies separate from food. The separation box is blank.",
+    "body": "A store receipt lists every shelf as stocked, while a typed order on the back tells staff to close the doors at dusk and keep the head count off the sheet. The checkpoint box is blank.",
     "id": "t0084-01",
     "kind": "set",
     "pieces": [
       "TinOpener",
       "Pills"
     ],
-    "title": "Full store, missing check",
+    "title": "Full store, missing count",
     "where": [
       {
         "containers": [
@@ -22,9 +22,9 @@
           "counter",
           "sidetable"
         ],
-        "lean": "agricultural",
+        "lean": "containment",
         "place": "mapNamed",
-        "rival": "containment",
+        "rival": "agricultural",
         "spot": "furniture"
       }
     ]

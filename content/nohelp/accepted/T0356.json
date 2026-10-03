@@ -3,14 +3,14 @@
     "anchor": {
       "scene": "RVSAmbulanceCrash"
     },
-    "body": "The cut potato and the empty jar are tied in one bundle with torn red warning tape, the cordon kind. A paper tag with only a number on it hangs from the knot.",
+    "body": "The child's shoe and the water bottle are tied in one bundle with torn red cordon tape, the quarantine kind. A paper tag with an evacuation sector code hangs from the knot, and a second tag with a struck-through sector code hangs beneath it—both bearing the same emergency authority stamp.",
     "id": "t0356-01",
     "kind": "set",
     "pieces": [
       "Potato",
       "EmptyJar"
     ],
-    "title": "Cut potato and empty jar, Tuesday dawn",
+    "title": "Child's shoe and water bottle, Tuesday dawn",
     "where": [
       {
         "lean": "containment",

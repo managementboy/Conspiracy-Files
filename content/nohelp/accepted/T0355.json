@@ -3,13 +3,13 @@
     "anchor": {
       "scene": "RDSZombiesEating"
     },
-    "body": "My coat pocket entry says the well-water study workers brushed off silver specks.\n\nThe mice abandoned the bin that night, and the water in the trough wore a silver film by morning.",
+    "body": "My coat pocket entry says the well-water study workers brushed off silver specks from their sprayer.\n\nThe mice abandoned the bin that night, and the water in the trough wore a silver film by morning.",
     "id": "t0355-01",
     "kind": "written",
     "pieces": [
       "notebook"
     ],
-    "title": "Coat pocket note — after Monday supper",
+    "title": "Coat pocket note: after Monday supper",
     "where": [
       {
         "lean": "agricultural",

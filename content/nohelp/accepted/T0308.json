@@ -3,13 +3,13 @@
     "anchor": {
       "scene": "RBShopLooted"
     },
-    "body": "Soap, gloves, and two water jugs, paid cash. On the back: \"Trial crew used the sink at dawn. My eyes burned and the basil on the sill turned brown.\"\n\nI saved it from the bag of rubbish because the note named the sink. The things stacked beside the page were real enough, and still waiting to be moved.",
+    "body": "Soap, gloves, and two water jugs, paid cash. On the back: \"Checkpoint counted the bags at dawn and wrote our names on their list. They told me to keep quiet about it.\"\n\nI saved it from the bag of rubbish because the note named the checkpoint. The things stacked beside the page were real enough, and still waiting to be moved.",
     "id": "t0308-01",
     "kind": "written",
     "pieces": [
       "receipt"
     ],
-    "title": "Soap bought after the field run",
+    "title": "Soap bought, then the checkpoint",
     "where": [
       {
         "containers": [
@@ -20,9 +20,9 @@
           "smallbox",
           "cashregister"
         ],
-        "lean": "agricultural",
+        "lean": "containment",
         "place": "mapNamed",
-        "rival": "containment",
+        "rival": "agricultural",
         "spot": "furniture"
       }
     ]
@@ -31,13 +31,13 @@
     "anchor": {
       "scene": "RBShopLooted"
     },
-    "body": "The shelves were emptied twice. The first group took food; the second stepped over the broken glass to ask for the delivery ledger.\n\nI showed them the register because I had no ledger left. They wanted the names of people who had bought anything that morning, and they wrote down one woman whose son carried the bag. They told me not to mention their visit, and took the register with them.",
+    "body": "The shelves were emptied twice. The first group took what was on them; the second stepped over the broken glass to ask for the ledger.\n\nI showed them the register—the ledger was gone. They wanted the names from that morning. When they found one woman and her son, they wrote those down, asked when I'd last seen them, if they'd said where they were going. The tape went across the door when they left. They told me not to mention their visit and took the register with them.",
     "id": "t0308-02",
     "kind": "written",
     "pieces": [
       "notepad"
     ],
-    "title": "The inventory they took",
+    "title": "The names they wanted",
     "where": [
       {
         "containers": [
