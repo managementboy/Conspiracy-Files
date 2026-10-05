@@ -3,14 +3,14 @@
     "anchor": {
       "print": "A1Hay"
     },
-    "body": "Guard tag 22 hangs on the seed bag and the water bottle. Tape across both says nobody moves them until the convoy comes. The checkpoint count on the tag reads six people.",
+    "body": "A seed bag and a water bottle sit under guard tag 22, both taped shut until the convoy comes. The count on the tag reads six people. Nobody came back for any of it.",
     "id": "t0252-01",
     "kind": "set",
     "pieces": [
       "SeedBag",
       "WaterBottle"
     ],
-    "title": "seed bag and water bottle",
+    "title": "Seed bag and water bottle",
     "where": [
       {
         "containers": [

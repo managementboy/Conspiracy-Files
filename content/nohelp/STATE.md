@@ -14,7 +14,8 @@ EXPANSION
 none
 
 ## NEXT
-Review T0428-T0441 (140 rows, 0 returned)
+t0226-01 is still 'both' after the three rewrites the process allows
+(tools/cluegates/blind_reread.md). Owner call: replace it or leave it.
 
 ## OPEN RETURNS
 none
@@ -26,4 +27,4 @@ none
 2026-09-28 T0001
 
 ## PROGRESS
-DONE-CANDIDATE @850c6e86
+DONE-CANDIDATE @456a75a8
