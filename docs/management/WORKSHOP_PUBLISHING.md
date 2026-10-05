@@ -197,7 +197,6 @@ The item exists: **3810750865** (unlisted). Its ID is committed in
 5. On the first upload only: commit the new `published_file_id`, add
    ZombieBuddy (3619862853) under Required Items on the Workshop page, and
    optionally add a preview image.
-6. Subscribers get the update when Steam next syncs. On **42.21**, until
-   ZombieBuddy ships a fix, they also need a ZombieBuddy agent with PR #56
-   (see NO_HELP_PLAYTEST_2026-09-30_B42.21.md), or the scene listener stays
-   off.
+6. Subscribers get the update when Steam next syncs. On **42.21** they need
+   ZombieBuddy **2.3.4 or later** (released 2026-10-03); 2.3.2 and 2.3.3 load
+   no Java mods there, so the scene listener stays off.

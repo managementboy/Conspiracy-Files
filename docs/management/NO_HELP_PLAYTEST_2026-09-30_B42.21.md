@@ -11,16 +11,18 @@ is still open.
   The watermark says "No active Java mods"; ZBBetterFPS failed the same way.
   Upstream issue zed-0xff/ZombieBuddy#53: 42.21 changed
   `ZomboidFileSystem.loadMods(ArrayList<String>)` to `loadMods(List<String>)`,
-  so ZombieBuddy's hook matches nothing. Fix: PR #56 (unmerged).
-- **Workaround in use on the owner's machine** (recipe and patch: `tools/zombiebuddy-42.21/`): ZombieBuddy tag `v2.3.3` with
-  PR #56 ported by hand (5 signatures `ArrayList<String>` -> `List<String>`),
-  built with Gradle 9.3.1 + Zulu JDK 25, `shadowJar`, copied over
-  `ProjectZomboid\ZombieBuddy.jar` (original kept as
-  `ZombieBuddy.jar.2.3.2-backup`). Steam "verify files" can undo it. Go back
-  to the official jar once ZombieBuddy ships a 42.21 fix. Every other 42.21
-  player of No Help needs that fix too.
-- **With the patched agent:** `NoHelpScenes.jar` passes ZBS verification, and
-  **all 143 scene patches apply on 42.21**; the story classes did not change.
+  so ZombieBuddy's hook matches nothing.
+- **RESOLVED UPSTREAM 2026-10-03: ZombieBuddy 2.3.4** ("backport fix for
+  #56", Workshop updated the same day) takes `List<String>`, and issue #53 is
+  closed. The owner's game ran the official 2.3.4 on 42.21.0 on 2026-10-03:
+  it loaded the Java mods, verified `NoHelpScenes.jar` and applied all 143
+  scene patches. **42.21 players only need ZombieBuddy 2.3.4 or later.**
+- *History:* until then the owner ran a local build, ZombieBuddy tag `v2.3.3`
+  with PR #56 ported by hand (5 signatures `ArrayList<String>` ->
+  `List<String>`), built with Gradle 9.3.1 + Zulu JDK 25. The patch and the
+  rebuild recipe were `tools/zombiebuddy-42.21/`, removed once 2.3.4 shipped;
+  see commit 7a250fad. On that build, too, all 143 scene patches applied; the
+  42.21 story classes did not change.
 - **Clue locations need `-debug`.** Steam launch options
   `-agentlib:zbNative -- -debug`: JVM arguments go before `--`, game arguments
   after. Then, in the Lua console:
