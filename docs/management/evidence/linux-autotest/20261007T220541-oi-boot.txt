@@ -1,0 +1,8 @@
+Linux Of Interest boot check 20261007T220541: PASS
+source: a7cc4258
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+mod list: OfInterest=true dependency=true ZombieBuddy=true NoHelp=false DeadAir=false
+ZombieBuddy advices 144; listener v2 seen=8 queued=0 failed=0 dropped=0
+dependency read: registered=true content=true opened=true window=true id-baked=true (no text read)
+ERROR lines in the whole console: 17 (mod errors: 0)

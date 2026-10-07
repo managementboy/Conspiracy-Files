@@ -57,7 +57,7 @@ function G.placeTest(noteId, where, place)
     if p.kind == "letter" then
         fullType = "Base.LetterHandwritten" -- the window follows the category, not the item type
     end
-    local item = InventoryItemFactory.CreateItem(fullType)
+    local item = instanceItem(fullType)
     if not item then return nil, "no-item" end
     local deps = G.deps()
     local recs = deps.store(F.RECORD)
