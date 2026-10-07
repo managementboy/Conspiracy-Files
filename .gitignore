@@ -46,3 +46,4 @@ docs/reference/pz-modding/vanilla-lua/
 tools/realengine/*.class
 tools/enginecalls/.cache/
 tools/realengine/out/
+dev/ofinterest-private/
