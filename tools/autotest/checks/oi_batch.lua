@@ -80,9 +80,39 @@ function K.select(kind, nth)
                 CFSCENE.id = docId
                 CFSCENE.home = { x = math.floor((l.bounds.x1 + l.bounds.x2) / 2), y = math.floor((l.bounds.y1 + l.bounds.y2) / 2), z = l.bounds.z or 0 }
                 CFSCENE.noteId = noteOf(l.id)
+                K.bounds = l.bounds; K.docId = docId; K.spawnedOk = nil
                 return docId, CFSCENE.noteId
             end
         end
     end
     return false
 end
+
+-- VEHICLE HOST: the world has no fitting vehicle at the site by chance, so the check spawns one (debug call) on
+-- a free outdoor square next to the building, of the first vehicle type the scene names.
+function K.prep()
+    local b = K.bounds
+    getPlayer():teleportTo(math.floor((b.x1 + b.x2) / 2) + 0.5, math.floor((b.y1 + b.y2) / 2) + 0.5, 0)
+    return true
+end
+function K.spawn()
+    if K.spawnedOk then return true end
+    local b, cell = K.bounds, getCell()
+    local doc
+    for _, d in ipairs(R().worldCase().documents) do if d.id == K.docId then doc = d end end
+    if not (b and cell and doc and doc.vehicles) then return false end
+    local script = doc.vehicles[1]
+    for r = 2, 12 do
+        for x = b.x1 - r, b.x2 + r do
+            for _, y in ipairs({ b.y1 - r, b.y2 + r }) do
+                local sq = cell:getGridSquare(x, y, 0)
+                if sq and sq:isFree(false) and sq:isOutside() and not sq:getBuilding() then
+                    local v = addVehicleDebug("Base." .. script, IsoDirections.S, nil, sq)
+                    if v then K.spawnedOk = true; K.spawnedAt = x .. "," .. y; K.spawnedScript = script; return true end
+                end
+            end
+        end
+    end
+    return false
+end
+function K.spawned() return K.spawnedScript or "-", K.spawnedAt or "-" end

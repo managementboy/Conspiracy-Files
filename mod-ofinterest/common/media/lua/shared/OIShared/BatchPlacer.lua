@@ -174,6 +174,7 @@ function B.place(world,catalogue,buildings,recipes,seed,stories,opts)
         local d={id=sceneOf[id],standalone=true,host=host,noteId=id,place=rec.place,objects=objs,where={kind="ground"},
             bounds={x1=b.x,y1=b.y,x2=b.x2,y2=b.y2,z=0},building=b.id,area=b.area,town=t,cat=b.cat,matched=matched}
         if extra then for k,v in pairs(extra) do d[k]=v end end
+        if host=="vehicle" then d.where={kind="vehicle"} elseif host=="body" then d.where={kind="corpse"} end
         out[#out+1]=d
         R.perTown[t].placed=R.perTown[t].placed+1
         R.counts.placed=R.counts.placed+1

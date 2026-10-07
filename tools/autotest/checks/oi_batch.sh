@@ -89,6 +89,11 @@ arrive() { # arrive KIND [NTH]
     [ "$(f 1 <<<"$r")" != false ] || { fail "$story: no such scene in the record"; return 1; }
     NID="$(f 2 <<<"$r")"; SID="$(f 1 <<<"$r")"
     note "$story: first scene clue $SID, note id $NID"
+    if [ "$story" = vehicle ]; then
+        ev "return CFBATCH.prep()" >/dev/null
+        wait_true 90 'CFBATCH.spawn()' || { fail "vehicle: could not spawn a fitting vehicle at the host's site"; return 1; }
+        note "vehicle host: spawned (type, at) $(ev 'return CFBATCH.spawned()' | tr '\t' ' ')"
+    fi
     local deadline=$(( $(date +%s) + 300 ))
     while :; do
         ev "return CFSCENE.far($side)" >/dev/null

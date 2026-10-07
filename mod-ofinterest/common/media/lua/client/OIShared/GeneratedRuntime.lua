@@ -1935,7 +1935,7 @@ end
 -- confirmed. A No Help vehicle clue takes any car at its place: the observer
 -- only runs in debug, so requiring a signature left every No Help vehicle
 -- clue waiting forever in normal play (step 5 design pass).
-local function vehicleCandidateFor(site,taken,needScene)
+local function vehicleCandidateFor(site,taken,needScene,scripts)
     local b=site.bounds
     local cx=math.floor((b.x1+b.x2)/2)
     local cy=math.floor((b.y1+b.y2)/2)
@@ -1946,9 +1946,14 @@ local function vehicleCandidateFor(site,taken,needScene)
         if entry.x>=b.x1-Session.VEHICLE_RADIUS and entry.x<b.x2+Session.VEHICLE_RADIUS
             and entry.y>=b.y1-Session.VEHICLE_RADIUS and entry.y<b.y2+Session.VEHICLE_RADIUS then
             local script=entry.vehicle.getScriptName and entry.vehicle:getScriptName() or "vehicle"
+            local wanted=not scripts
+            if scripts then
+                local bare=tostring(script):gsub("^.*%.","")
+                for _,w in ipairs(scripts) do if w==bare then wanted=true end end
+            end
             local signature=okScene and sceneRuntime.matchVehicle
                 and sceneRuntime.matchVehicle(entry.x,entry.y,entry.z,tostring(script)) or nil
-            for _,part in ipairs(entry.parts) do
+            for _,part in ipairs(wanted and entry.parts or {}) do
                 local target={x=entry.x,y=entry.y,z=entry.z,objectIndex=0,containerIndex=0,
                     containerType=Session.VEHICLE_CONTAINER,sprite=tostring(script),vehiclePart=part.part,
                     sceneSignature=signature}
@@ -2128,7 +2133,7 @@ local function filler(api,onlyArea)
                     return not taken[Session.physicalKey(candidate)] and Session.intentMatches(doc,candidate)
                 end
                 if wantsVehicle(doc) then
-                    target=vehicleCandidateFor(site,taken,doc and doc.placementIntent=="vehicle")
+                    target=vehicleCandidateFor(site,taken,doc and doc.placementIntent=="vehicle",doc and doc.vehicles)
                 elseif doc and doc.spot=="ground" then
                     -- Open ground (GroundSpots): checked squares in the
                     -- world's order, never a spot that gave up a clue, never

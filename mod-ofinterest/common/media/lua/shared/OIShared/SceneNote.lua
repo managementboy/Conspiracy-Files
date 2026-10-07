@@ -27,7 +27,11 @@ function S.check(row)
         seen[o]=true
     end
     local w=row.where
-    if type(w)~="table" or (w.kind~="ground" and w.kind~="furniture") then return false,"bad-where" end
+    if type(w)~="table" or (w.kind~="ground" and w.kind~="furniture" and w.kind~="vehicle" and w.kind~="corpse") then return false,"bad-where" end
+    if w.kind=="vehicle" then
+        if type(row.vehicles)~="table" or #row.vehicles<1 or #row.vehicles>8 then return false,"bad-vehicles" end
+        for _,v in ipairs(row.vehicles) do if type(v)~="string" or not v:match("^[%w_]+$") then return false,"bad-vehicles" end end
+    end
     if w.containers~=nil and (w.kind~="furniture" or type(w.containers)~="table" or #w.containers<1 or #w.containers>6) then return false,"bad-containers" end
     return true
 end

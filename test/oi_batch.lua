@@ -130,8 +130,9 @@ assert(v>0 and b>0,"both host kinds are used when switched on: "..v.." "..b)
 assert(v<=math.floor(0.15*#btH) and b<=math.floor(0.10*#btH),"caps")
 for t,n in pairs(vp) do assert(n<=2) end
 for t,n in pairs(bp) do assert(n<=1) end
-print(string.format("hosts on: %d vehicle, %d body of %d standalone; category match %d of %d tagged (off: %d)",v,b,#btH,repH.counts.matched,repH.counts.tagged,brep.counts.matched))
-assert(repH.counts.matched>brep.counts.matched)
+print(string.format("hosts on: %d vehicle, %d body of %d standalone; category match %d of %d tagged",v,b,#btH,repH.counts.matched,repH.counts.tagged))
+local _,_,_,repOff=run(SEED,{vehicle=false,body=false})
+assert(repH.counts.matched>repOff.counts.matched,"hosts raise the category match")
 for p,l in pairs(HostTypes.vehicles) do for _,id in ipairs(l) do assert(type(id)=="string") end end
 for _,vh in ipairs(Vehicles.vehicles) do end  -- the catalogue lists the common vehicles; the host table's ids are checked against the game by gen_hosts.py
 -- the generator verified every host id against the installed game; --check says the file is current
@@ -163,4 +164,27 @@ local function copy(v) if type(v)~="table" then return v end local o={}; for k,x
 local reloaded=copy(saved)
 local api2=assert(Session.open(reloaded,function(n) reloaded=n end))
 for _,d in ipairs(all) do assert(select(2,api2.addNoteScene{site=siteOf(d),row=d,version="v2",hours=2})=="decided") end
+-- vehicle and body hosts: valid rows, a valid record, the engine's spot and hints on the clue
+do
+    local root2=assert(Session.createArea(SEED)); local saved2=root2
+    local api3=assert(Session.open(root2,function(n) saved2=n end))
+    local nv,nb=0,0
+    for _,d in ipairs(btH) do
+        assert(SceneNote.check(d),"host row valid: "..d.id)
+        local ok,idsOut=api3.addNoteScene{site=siteOf(d),row=d,version="v",hours=1}; assert(ok,tostring(idsOut))
+        if d.host=="vehicle" then nv=nv+1 elseif d.host=="body" then nb=nb+1 end
+    end
+    assert(Session.validate(saved2))
+    local sv,sb=0,0
+    for _,doc in ipairs(saved2.case.documents) do
+        if doc.spot=="vehicle" then sv=sv+1; assert(type(doc.vehicles)=="table" and #doc.vehicles>0) end
+        if doc.spot=="corpse" then sb=sb+1; assert(doc.outfit) end
+    end
+    assert(sv==nv and sb==nb and nv>0 and nb>0,"vehicle and body hosts become vehicle and corpse clues")
+    -- a vehicle row without a vehicle type is refused
+    local bad
+    for _,d in ipairs(btH) do if d.host=="vehicle" then bad=d; break end end
+    local copyRow={}; for k,v in pairs(bad) do copyRow[k]=v end; copyRow.vehicles=nil
+    assert(not SceneNote.check(copyRow))
+end
 print("test/oi_batch.lua: ok")

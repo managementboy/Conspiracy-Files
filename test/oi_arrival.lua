@@ -77,6 +77,6 @@ print("nohelp arrival: searched buildings and bodies may still hold clues")
 do
     local src=assert(io.open("mod-ofinterest/common/media/lua/client/OIShared/GeneratedRuntime.lua","rb")):read("*a")
     assert(src:find("(signature or not needScene)",1,true),"a signature is only required when the clue needs a scene")
-    assert(src:find('vehicleCandidateFor(site,taken,doc and doc.placementIntent=="vehicle")',1,true),
+    assert(src:find('vehicleCandidateFor(site,taken,doc and doc.placementIntent=="vehicle",doc and doc.vehicles)',1,true),
         "No Help vehicle clues do not need a scene")
 end

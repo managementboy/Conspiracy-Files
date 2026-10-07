@@ -78,7 +78,7 @@ function K.shape()
     local doc = docOf(K.id)
     local shape = H().shape(container, t.token)
     local want = #H().pieces(doc)
-    local pick = H().pick(R().worldSeed(), K.id, H().pieces(doc))
+    local pick = H().pick(R().worldSeed(), K.id, H().pieces(doc), H().targetFits(container))
     local note = noteIn(container, t.token)
     if not note then return false, "no forced note at the spot", shape.holders, shape.inside, shape.loose, want end
     local md = note:getModData()
