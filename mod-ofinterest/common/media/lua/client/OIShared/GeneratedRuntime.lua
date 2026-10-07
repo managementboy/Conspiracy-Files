@@ -21,6 +21,8 @@ local Reachability=require("OIShared/ReachabilityAdapter")
 local MapSites=require("OIShared/Generated/MapSites")
 local GroundSpots=require("OIShared/GroundSpots")
 local Holders=require("OIShared/SetHolders")
+local SceneNote=require("OIShared/SceneNote")
+local Objects=require("OIShared/Generated/ObjectCatalogue")
 local MarkedArea=require("OIShared/MarkedArea")
 require("OIShared/DiscoveryLog")
 OIShared=OIShared or {}
@@ -175,6 +177,9 @@ R.writePages=writePages
 local function isSet(doc) return type(doc)=="table" and type(doc.members)=="table" end
 local function resetVanillaName(item)
     pcall(function()
+        -- A forced note keeps the name the dependency's own code gave it (letters carry a category name).
+        local md=item.getModData and item:getModData()
+        if md and md.oiToken then return end
         item:setCustomName(false)
         local script=item:getScriptItem()
         if script then item:setName(script:getDisplayName()) end
@@ -236,6 +241,20 @@ end
 local function evidenceMembers(doc)
     if type(doc.members)=="table" and #doc.members>0 then return doc.members end
     return {{kind=doc.kind,quantity=doc.quantity or 1,wear=doc.wear}}
+end
+
+-- A NOTE SCENE'S NOTE PIECE (phase 4). The fresh item is forced BEFORE it enters the world. When the
+-- handshake or the forcing fails, the piece silently becomes its ordinary stand-in object (one log line
+-- is written by the forcer), so no item ever carries partial note keys and the piece count is kept.
+-- Returns the item to use (or nil when even the stand-in cannot be made) and whether it carries a note.
+local function sceneNoteItem(member,item,token)
+    local game=OIShared.NoteForcerGame
+    local ok,forced=false,false
+    if game and game.forceFor then ok,forced=pcall(game.forceFor,item,member,token) end
+    if ok and forced==true then return item,true end
+    local kind=SceneNote.standIn(member)
+    local object=kind and Objects.get(kind)
+    return object and instanceItem(object.fullType) or nil,false
 end
 
 -- A set of 2+ pieces is found as ONE thing: a vanilla bag, box or case with the
@@ -373,6 +392,15 @@ local function placement(api,id)
                 log("Evidence creation failed: "..tostring(createWhy))
                 return true
             end
+            local isNote=false
+            if member.noteId then
+                item,isNote=sceneNoteItem(member,item,a.physicalToken)
+                if not item then
+                    checked(api.status(id,"unknown"))
+                    log("Evidence creation failed: scene stand-in")
+                    return true
+                end
+            end
             local md=item:getModData()
             md.oiGeneratedId=id; md.oiPhysicalToken=a.physicalToken
             if isSet(doc) then md.oiPiece=#createdItems+1 end
@@ -382,7 +410,8 @@ local function placement(api,id)
             -- No title and no category here (P4-R132): the plain item, until
             -- the survivor recognises it (R.recognise).
             applyWear(item,member)
-            writePages(item,doc,api.snapshot().case)
+            -- The forced note's pages are the dependency's own; nothing of ours is written on it.
+            if not isNote then writePages(item,doc,api.snapshot().case) end
             -- A card clue reads like a vanilla card with its name on it.
             Kinds.nameAsVanillaCard(item,doc)
             createdItems[#createdItems+1]=item
@@ -944,6 +973,23 @@ function R.decideScenes()
     CFLog.write("d","skip",{case="scene:"..row.key,kind=row.rec.kind,why="scene-"..tostring(ids)})
     return 0
 end
+-- A NOTE SCENE (phase 4, Generated/Scenes row): decided once into the world record at `bounds`
+-- ({x1,y1,x2,y2,z}); the filler then places the set when the survivor arrives, like any clue.
+-- Returns true, the document ids  or  false, why.
+function R.decideNoteScene(row,bounds)
+    if not allowed() or not areaSession then return false,"no world record" end
+    local ok,why=SceneNote.check(row)
+    if not ok then return false,why end
+    if type(bounds)~="table" then return false,"no bounds" end
+    local b={x1=bounds.x1,y1=bounds.y1,x2=bounds.x2,y2=bounds.y2,z=bounds.z or 0}
+    local site={id=SceneNote.areaId(row),areaId=SceneNote.areaId(row),
+        name="A place at "..math.floor((b.x1+b.x2)/2)..", "..math.floor((b.y1+b.y2)/2),
+        mapId=MapSites.map,buildLine=MapSites.game,bounds=b,
+        source={kind="note-scene",reference=row.id},paperStorage="unknown",containerTypes={},excluded=false}
+    local added,ids=areaSession.addNoteScene{site=site,row=row,version=Manifest.VERSION,hours=worldHours()}
+    if added then CFLog.write("i","case",{case=site.id,n=#ids,why="area-decided-note-scene"}) end
+    return added,ids
+end
 -- The world record's seed, or nil when this save has no world record. The map
 -- trails take their seed from it (MapMediaRuntime).
 function R.worldSeed()
@@ -1168,6 +1214,17 @@ function R.recognise(target,how)
     root=Cases.find(wrapper,id) or root
     local stamped=stampReachable(id,root)
     CFLog.write("i","recognised",{doc=id,how=tostring(how or "?"),n=stamped})
+    -- A note scene is found: ONE short neutral line, once per scene (recognition happens once), never
+    -- anything the note says.
+    for _,d in ipairs(root and root.case and root.case.documents or {}) do
+        if d.id==id then
+            if SceneNote.isScene(d) then
+                local voice=require("OIShared/InteractionAPI").PlayerVoice
+                if voice and voice.sayNudge then pcall(voice.sayNudge,id) end
+            end
+            break
+        end
+    end
     return true,true
 end
 -- Where each live clue is, for Search Mode (ClueSearch). Plain rows read from
@@ -1644,6 +1701,12 @@ local function relocation(api)
               for _=1,member.quantity do
                 local carrier=assert(require("OIShared/Generated/EvidenceKinds").get(member.kind))
                 local piece=assert(instanceItem(carrier.fullType),"could not create relocated evidence item")
+                -- A scene's note is forced again under the SAME token and id (the pieces are re-created).
+                local isNote=false
+                if member.noteId then
+                    piece,isNote=sceneNoteItem(member,piece,a.physicalToken)
+                    assert(piece,"could not create relocated scene stand-in")
+                end
                 local md=piece:getModData()
                 md.oiGeneratedId=id; md.oiPhysicalToken=a.physicalToken
                 if isSet(doc) then md.oiPiece=#newItem+1 end
@@ -1658,7 +1721,7 @@ local function relocation(api)
                 if R.isRecognisedId(id) then stampEvidence(piece,doc.title,doc)
                 else Kinds.nameAsVanillaCard(piece,doc) end
                 applyWear(piece,member)
-                writePages(piece,doc,root.case)
+                if not isNote then writePages(piece,doc,root.case) end
                 newItem[#newItem+1]=piece
               end
             end

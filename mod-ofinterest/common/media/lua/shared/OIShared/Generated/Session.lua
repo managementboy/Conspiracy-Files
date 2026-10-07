@@ -857,6 +857,23 @@ function S.open(initial,sink)
         if not ok then return false,why end
         return true,ids
     end
+    -- A note scene (Generated/Scenes row, AreaCase.decideNote): its area and its one clue in one
+    -- write, with the clue's waiting assignment, exactly like a confirmed vanilla scene.
+    function api.addNoteScene(args)
+        if not isArea(root) then return false,"not a No Help world" end
+        if not validHours(args.hours) then return false,"invalid hours" end
+        local nextCase,ids=AreaCase.decideNote{case=root.case,site=args.site,row=args.row,version=args.version,hours=args.hours}
+        if not nextCase then return false,ids end
+        local ok,why=commit(function(r)
+            r.case=nextCase
+            for _,id in ipairs(ids) do
+                r.assignments[id]={physicalToken="cf-g2:"..id,status="deferred",locationId=args.site.id,
+                    deferredHours=args.hours,relocations=0}
+            end
+        end)
+        if not ok then return false,why end
+        return true,ids
+    end
     function api.project()
         return AreaCase.project(root.case)
     end

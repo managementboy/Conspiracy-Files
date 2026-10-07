@@ -15,6 +15,7 @@ local Kinds=require("OIShared/Generated/EvidenceKinds")
 local Outfits=require("OIShared/BodyOutfitObservations")
 local Trails=require("OIShared/Generated/Trails")
 local Scenes=require("OIShared/Generated/VanillaScenes")
+local SceneNote=require("OIShared/SceneNote")
 local M={KIND="nohelp-areas",SCHEMA=1,CASE_ID="nohelp:world"}
 M.MAX_TITLE=120
 -- Texts have no maximum (owner, 2026-09-29); this only bounds a corrupt save,
@@ -91,7 +92,7 @@ end
 local function recount(case)
     local ledger={areas={},world={},placed={}}
     local scene={}
-    for _,a in ipairs(case.areas or {}) do if a.place=="scene" then scene[a.id]=true end end
+    for _,a in ipairs(case.areas or {}) do if a.place=="scene" or a.place=="note" then scene[a.id]=true end end
     for _,d in ipairs(case.documents) do
         local kind=d.members and "set" or "written"
         if scene[d.locationId] then
@@ -121,12 +122,12 @@ local function computeTotals(case)
     -- Build scene-area set once.
     local sceneAreas={}
     for _,a in ipairs(case.areas or {}) do
-        if a.place=="scene" then sceneAreas[a.id]=true end
+        if a.place=="scene" or a.place=="note" then sceneAreas[a.id]=true end
     end
 
     -- Count areas, short stops, and sources.
     for _,a in ipairs(case.areas or {}) do
-        if a.place~="scene" then totals.areasDecided=totals.areasDecided+1 end
+        if a.place~="scene" and a.place~="note" then totals.areasDecided=totals.areasDecided+1 end
         if a.short and a.short>0 then totals.short=totals.short+1 end
         totals.bySource[a.source]=(totals.bySource[a.source] or 0)+1
     end
@@ -379,6 +380,33 @@ function M.decideScene(args)
     return next,{doc.id}
 end
 
+-- A NOTE SCENE (phase 4, Generated/Scenes row): one area "note:<scene id>" with exactly one clue, a set
+-- of the forced note + 1-3 ordinary objects (SceneNote.members). Decided once; counted apart from every
+-- place. args: {case, site (id "note:<row.id>"), row, version, hours}. Returns the new case and the new
+-- document ids, or nil and "decided" / a refusal.
+function M.decideNote(args)
+    local case,site,row=args.case,args.site,args.row
+    if not M.isAreaCase(case) or type(site)~="table" or type(site.id)~="string" then return nil,"invalid" end
+    local ok,why=SceneNote.check(row)
+    if not ok then return nil,"bad scene row: "..tostring(why) end
+    if site.id~=SceneNote.areaId(row) then return nil,"a note scene area is named by its scene" end
+    for _,a in ipairs(case.areas) do if a.id==site.id then return nil,"decided" end end
+    local next=extend(case)
+    next.locations[#next.locations+1]=copy(site)
+    local first=#next.documents+1
+    local doc={id=M.docId(site.id,row.id,1),locationId=site.id,clue=row.id,copy=1,lean="containment",rival="agricultural",
+        spot=row.where.kind=="ground" and "ground" or "furniture",
+        kind=SceneNote.members(row)[1].kind,members=SceneNote.members(row),
+        title=SceneNote.TITLE,body=type(row.caption)=="string" and row.caption~="" and row.caption or SceneNote.CAPTION,
+        containers=row.where.containers and copy(row.where.containers) or nil}
+    next.documents[#next.documents+1]=doc
+    next.areas[#next.areas+1]={id=site.id,place="note",source="note",version=tostring(args.version),
+        decidedHours=args.hours or 0,first=first,count=1,short=0}
+    next.ledger=recount(next)
+    next.totals=computeTotals(next)
+    return next,{doc.id}
+end
+
 -- The whole record's shape, with every derived field recomputed. Today's clue
 -- list is never consulted: a content update must not break a save.
 function M.validate(case)
@@ -401,7 +429,7 @@ function M.validate(case)
     local docIndex,copies=1,{}
     local seenAreaId={}
     for i,a in ipairs(case.areas) do
-        if type(a)~="table" or not sites[a.id] or not (PLACE[a.place] or a.place=="scene") or type(a.source)~="string"
+        if type(a)~="table" or not sites[a.id] or not (PLACE[a.place] or a.place=="scene" or a.place=="note") or type(a.source)~="string"
             or type(a.version)~="string" or not hours(a.decidedHours) then return false,"invalid area "..tostring(i) end
         if a.first~=docIndex or not integer(a.count) or a.count<1 or not integer(a.short) or a.short<0 then
             return false,"area "..tostring(a.id).." does not account for its clues"
@@ -430,6 +458,14 @@ function M.validate(case)
             local d=case.documents[a.first]
             if d.spot~=Scenes.SPOT_OF[sc.anchor] then return false,"a scene's clue is not at its anchor" end
             if type(d.anchor)~="table" or d.anchor.scene~=sc.kind then return false,"a scene's clue is not written for it" end
+        end
+        -- A NOTE SCENE (phase 4): exactly one clue, a set whose first piece is a forced note; counted
+        -- apart from every place (like a vanilla scene), so no place's picks ever change.
+        if a.place=="note" then
+            local d=case.documents[a.first]
+            if a.count~=1 or a.short~=0 or a.trail~=nil or not SceneNote.isScene(d) or a.id~="note:"..tostring(d.clue) then
+                return false,"invalid note scene on area "..tostring(a.id)
+            end
         end
         if a.trail~=nil then
             local t=a.trail

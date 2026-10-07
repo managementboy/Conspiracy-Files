@@ -36,6 +36,24 @@ function G.sweep()
     return c, back, n
 end
 
+-- Cheap hourly sweep: the dependency clears a pool's used-list when the pool is exhausted, which would
+-- drop our tracker flags; put every flag of the world record back. One log line only when it had to.
+function G.hourly()
+    local deps = G.deps()
+    local back, n = F.reassertTracker(deps)
+    if back > 0 then deps.log("w", { op = "hourly", records = n, tracker = back }) end
+    return back, n
+end
+require("OIShared/Events/EngineEvents").on("EveryHours", function() pcall(G.hourly) end)
+
+-- A scene's note piece (OIShared/SceneNote): force `member`'s note onto the fresh `item` under the
+-- clue's stable token. true when forced; false leaves the item and the world untouched.
+function G.forceFor(item, member, token)
+    pcall(function() require("OIShared/DependencyAdapter").ensure() end)
+    local ok = require("OIShared/SceneNote").forcePiece(item, member, token, G.deps())
+    return ok == true
+end
+
 local wrapped = false
 local function install()
     pcall(G.sweep)

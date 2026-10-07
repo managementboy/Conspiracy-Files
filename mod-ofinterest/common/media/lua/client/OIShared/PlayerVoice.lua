@@ -434,6 +434,20 @@ function V.sayClue(title,text)
     return #list
 end
 
+-- A NOTE SCENE IS FOUND (Of Interest phase 4): the survivor's ONE neutral line, chosen by the scene's
+-- clue id from SceneNudgeLines, in the coloured bubble only (like a caption), once per scene. It never
+-- says anything the note says. Not a "reading" entry, so a later caption does not drop it.
+function V.sayNudge(docId)
+    local p=player(); if not p then return false end
+    if not once("nudge:"..tostring(docId)) then return false end
+    local text=require("OIShared/SceneNote").nudgeLine(require("OIShared/SceneNudgeLines"),docId)
+    if not text then return false end
+    queue[#queue+1]={text=text,label="...",bubbleOnly=true,hold=V.readHold(text)}
+    log("scene nudge queued")
+    V.drain()
+    return true
+end
+
 -- Set E: a newly found document connects to one already held.
 -- `kind` is the connection's own kind, as recorded on the document.
 function V.onConnection(kind,documentId)

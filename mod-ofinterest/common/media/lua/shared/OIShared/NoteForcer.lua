@@ -15,7 +15,8 @@
 --
 -- Keys we add to the ITEM's modData: oiToken, oiSeal. We add to THEIR tables nothing but
 -- tracker[poolKey][id] = true. Our authority is the world record ModData "OIShared.ForcedNotes":
--- token -> {note, place, fp, ver, st, fix}. verify() re-asserts the item (and the tracker) from it.
+-- token -> {note, place, fp, ver, st, fix, re}. re = how many times a replacement item was forced under the
+-- same token and id (a scene's relocation re-creates its pieces). verify() re-asserts the item (and the tracker) from it.
 --
 -- deps = {registry, poolFor(poolKey)->array, categories (their KNOWN_CATEGORIES), store(name)->table,
 --         version, fingerprint, catalogue (optional, with isActive/get), getText (optional), log(level, fields)}
@@ -139,6 +140,8 @@ function F.force(item, spec, deps)
     if not mine and type(used) == "table" and used[p.file] then return refuse("contested") end
 
     local rec = mine or { note = spec.noteId, token = spec.token, ver = F.VERSION, st = "forced", fix = 0 }
+    -- A replacement item for a known token (relocation re-creates the pieces): same id, counted.
+    if mine and md.oiToken == nil then rec.re = (rec.re or 0) + 1 end
     rec.place = spec.place or 0
     rec.fp = deps.fingerprint or "-"
     rec.st = mine and rec.st or "forced"
