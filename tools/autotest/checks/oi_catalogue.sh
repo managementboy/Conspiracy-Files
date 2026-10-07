@@ -5,7 +5,9 @@
 #
 # Boots Of Interest + the dependency + ZombieBuddy TWICE (new world each time) and reads the
 # catalogue through the eval channel. PASS needs, on both boots:
-#   entries 500, stories 23, places 13, dropped 0, unknown 0, placemismatch 0, state active;
+#   entries 493, stories 23, places 13, dropped 7, unknown 0, placemismatch 0, state active;
+#   (our table has 500 ids; the dependency itself holds back 7 in its ignored-entries.txt, and
+#   the 7 dropped ids must be exactly those);
 #   exactly one "ev=catalogue" log line; no error inside the mods;
 # and the two fingerprints (static and dynamic) identical across the boots.
 # Only counts and fingerprints come back - never any note text or id.
@@ -23,8 +25,11 @@ for boot in 1 2; do
     wait_true 60 'OIShared.NoteCatalogue.isActive()' || fail "boot $boot: catalogue not active"
     r="$(ev 'local C=OIShared.NoteCatalogue; local n=C.counts(); local s,d=C.fingerprint(); return C.isActive(),n.entries,n.stories,n.places,n.themes,n.dropped,n.unknown,n.placemismatch,n.duplicates,n.pools,s,d,C.current().lang')"
     IFS=$'\t' read -r act ent sto pla the dro unk mis dup poo fs fd lang <<<"$r"
-    [ "$act" = true ] && [ "$ent" = 500 ] && [ "$sto" = 23 ] && [ "$pla" = 13 ] && [ "$dro" = 0 ] && [ "$unk" = 0 ] && [ "$mis" = 0 ] \
+    [ "$act" = true ] && [ "$ent" = 493 ] && [ "$sto" = 23 ] && [ "$pla" = 13 ] && [ "$dro" = 7 ] && [ "$unk" = 0 ] && [ "$mis" = 0 ] \
         || fail "boot $boot counts: active=$act entries=$ent stories=$sto places=$pla dropped=$dro unknown=$unk placemismatch=$mis"
+    dl="$(ev 'return table.concat(OIShared.NoteCatalogue.current().droppedIds,",")' | tr ',' '\n' | sort | tr '\n' ' ')"
+    ign="$(sed 's/#.*//' "$HOME/.steam/debian-installation/steamapps/workshop/content/108600/3796373365/mods/ItIsOfInterestToMe/42/media/lua/shared/ItIsOfInterestToMe/Content/ignored-entries.txt" | tr -d ' \r' | grep . | sed -E 's#^Letters/#Letter/#; s#\.txt$##' | sort | tr '\n' ' ')"
+    [ "$dl" = "$ign" ] || fail "boot $boot: dropped ids are not exactly the dependency's held-back list"
     lines="$(run_log | grep -c "ev=catalogue")"
     [ "$lines" = 1 ] || fail "boot $boot: $lines catalogue log lines (want 1)"
     errs="$(mod_errors)"; [ -z "$errs" ] || fail "boot $boot: errors inside the mods: $(head -3 <<<"$errs" | tr '\n' ' ')"
