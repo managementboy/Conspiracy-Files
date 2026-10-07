@@ -46,6 +46,34 @@ function A.snapshot(force)
     return c
 end
 
+-- Handles for NoteForcer (phase 3): the registry, pools, their location categories, the world store.
+function A.forceDeps()
+    local _, dyn = Catalogue.fingerprint()
+    return {
+        registry = ReadableItemRegistry,
+        poolFor = function(k)
+            if k == "Note" then return NoteContentPool end
+            return LetterContentPools and LetterContentPools[k] or nil
+        end,
+        categories = LocationCategory and LocationCategory.KNOWN_CATEGORIES or nil,
+        store = function(n) return ModData.getOrCreate(n) end,
+        version = require("OIShared/NoteForcer").VERSION, fingerprint = dyn,
+        catalogue = Catalogue, getText = getText,
+        log = function(level, fields) Log.write(level, "force", fields) end,
+    }
+end
+
+-- Runs before(item) just ahead of the dependency's own Read, once. Returns true when installed.
+function A.wrapOpen(before)
+    if not ReadableItemRegistry or type(ReadableItemRegistry.open) ~= "function" then return false end
+    local original = ReadableItemRegistry.open
+    ReadableItemRegistry.open = function(item, playerNum)
+        before(item)
+        return original(item, playerNum)
+    end
+    return true
+end
+
 -- Lazy entry for callers that run before OnGameStart finished.
 function A.ensure() return A.snapshot(false) end
 function A.reset() tried = false; Catalogue.reset() end
