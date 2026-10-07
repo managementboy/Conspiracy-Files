@@ -12,6 +12,7 @@
 -- Ids, codes and counts only; nothing here knows any note text.
 local Pick=require("OIShared/Generated/Pick")
 local Objects=require("OIShared/Generated/ObjectCatalogue")
+local Plausible=require("OIShared/Plausibility")
 local P={}
 P.MIN_AREA=36        -- footprint limits of a building a scene may use (tiles)
 P.MAX_AREA=1600
@@ -22,9 +23,10 @@ P.WINDOW=4           -- an ordinary part chooses among the nearest WINDOW x (par
 local function h(...) return Pick.hash(Pick.key({...})) end
 
 -- Generated/Buildings rows -> {id,x,y,x2,y2,area,cat,town,cx,cy}
-function P.parseBuildings(data)
+function P.parseBuildings(data,tick)
     local out={}
-    for _,r in ipairs(data.rows) do
+    for i,r in ipairs(data.rows) do
+        if tick and i%500==0 then tick() end
         local id,x,y,x2,y2,a,c=r:match("^(%d+)|(%-?%d+)|(%-?%d+)|(%-?%d+)|(%-?%d+)|(%d+)|(%d+)$")
         if id then
             x,y,x2,y2,a,c=tonumber(x),tonumber(y),tonumber(x2),tonumber(y2),tonumber(a),tonumber(c)
@@ -38,6 +40,7 @@ local function eligible(b)
     local w,hh=b.x2-b.x,b.y2-b.y
     return w>=P.MIN_SIDE and hh>=P.MIN_SIDE and w*hh>=P.MIN_AREA and w*hh<=P.MAX_AREA
 end
+P.eligible=eligible
 
 local function catOf(recipe)
     local o=Objects.get(recipe[1])
@@ -47,6 +50,7 @@ end
 -- The recipe of one part: place recipes first, then its themes' recipes, then the general list; within a
 -- stage only recipes whose lead object category the story has not used yet, if there are any.
 local function chooseRecipe(seed,noteId,rec,recipes,usedCats)
+    local place=rec.place
     local stages={}
     if rec.place and recipes.place[rec.place] then stages[#stages+1]=recipes.place[rec.place] end
     local th={}
@@ -55,12 +59,15 @@ local function chooseRecipe(seed,noteId,rec,recipes,usedCats)
     stages[#stages+1]=recipes.general
     for s,list in ipairs(stages) do
         local ok={}
-        for _,r in ipairs(list) do if not usedCats[catOf(r)] then ok[#ok+1]=r end end
+        for _,r in ipairs(list) do if not usedCats[catOf(r)] and not Plausible.denied(place,r) then ok[#ok+1]=r end end
         if #ok>0 then return ok[1+h(seed,"recipe",noteId,s)%#ok] end
     end
-    local all=recipes.general
+    local all={}
+    for _,r in ipairs(recipes.general) do if not Plausible.denied(place,r) then all[#all+1]=r end end
+    if #all==0 then return nil end
     return all[1+h(seed,"recipe",noteId,0)%#all]
 end
+P.chooseRecipe=chooseRecipe
 
 local function sortedKeys(t) local o={}; for k in pairs(t) do o[#o+1]=k end; table.sort(o); return o end
 
@@ -75,6 +82,7 @@ local function sortedKeys(t) local o={}; for k in pairs(t) do o[#o+1]=k end; tab
 --   all=every decision (enabled or not), counts={...}}
 function P.place(world,catalogue,buildings,recipes,seed,opts)
     world=world or {}
+    local tick=(opts and opts.tick) or function() end
     local used={}
     for id in pairs(world.used or {}) do used[id]=true end
     local report={stories={},held={},all={},counts={placed=0,held=0,nofit=0,scenes=0,tagged=0,matched=0,relaxed=0}}
@@ -91,7 +99,8 @@ function P.place(world,catalogue,buildings,recipes,seed,opts)
     end
     -- towns
     local towns={}
-    for _,b in ipairs(buildings) do
+    for i,b in ipairs(buildings) do
+        if i%500==0 then tick() end
         if eligible(b) then
             local t=towns[b.town]; if not t then t={ord={},bycat={}}; towns[b.town]=t end
             if b.cat==0 then t.ord[#t.ord+1]=b else
@@ -108,6 +117,7 @@ function P.place(world,catalogue,buildings,recipes,seed,opts)
     table.sort(order,function(a,b) if #groups[a]~=#groups[b] then return #groups[a]>#groups[b] end return a<b end)
     local byStory={}
     for _,s in ipairs(order) do
+        tick()
         local ids=groups[s]; local n=#ids
         local low=false
         for _,id in ipairs(ids) do if catalogue.entries[id].conf==1 then low=true end end
@@ -197,7 +207,7 @@ function P.place(world,catalogue,buildings,recipes,seed,opts)
                 local usedCats={}
                 for part,id in ipairs(ids) do
                     local rec=catalogue.entries[id]
-                    local recipe=chooseRecipe(seed,id,rec,recipes,usedCats)
+                    local recipe=chooseRecipe(seed,id,rec,recipes,usedCats) or recipes.general[1]
                     usedCats[catOf(recipe)]=true
                     local objs={}; for i,o in ipairs(recipe) do objs[i]=o end
                     local b=pick[id]

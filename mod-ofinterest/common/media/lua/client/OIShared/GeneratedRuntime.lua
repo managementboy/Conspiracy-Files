@@ -988,7 +988,11 @@ function R.decideNoteScene(row,bounds,meta)
         source={kind="note-scene",reference=row.id},paperStorage="unknown",containerTypes={},excluded=false}
     -- A story part (phase 5): which story, town and building it was given, kept in the record for good.
     if type(meta)=="table" then
-        site.story={story=meta.story,part=meta.part,town=meta.town,area=meta.area,building=meta.building,cat=meta.cat,matched=meta.matched}
+        if meta.standalone then
+            site.batch={host=meta.host,town=meta.town,area=meta.area,building=meta.building,cat=meta.cat,matched=meta.matched}
+        else
+            site.story={story=meta.story,part=meta.part,town=meta.town,area=meta.area,building=meta.building,cat=meta.cat,matched=meta.matched}
+        end
     end
     local added,ids=areaSession.addNoteScene{site=site,row=row,version=Manifest.VERSION,hours=worldHours()}
     if added then CFLog.write("i","case",{case=site.id,n=#ids,why="area-decided-note-scene"}) end
@@ -1001,12 +1005,15 @@ end
 R.STORY_PER_PASS=4
 local storiesDone=false
 local storyPlan=nil
+local planCo,planBusy,planPasses=nil,0,0
+local PLAN_SLICE_MS=6
 local function recordStories()
     local used,decided={}, {}
     local case=R.worldCase()
     for _,l in ipairs(case and case.locations or {}) do
         decided[l.id]=true
         if type(l.story)=="table" and l.story.building then used[l.story.building]=l.id end
+        if type(l.batch)=="table" and l.batch.building then used[l.batch.building]=l.id end
     end
     return used,decided
 end
@@ -1017,16 +1024,48 @@ function R.decideStories()
     local seed=R.worldSeed()
     if not seed then return 0 end
     if not storyPlan then
-        local t0=getTimeInMillis and getTimeInMillis() or 0
-        local Placer=require("OIShared/StoryPlacer")
-        local enable={}
-        for _,s in ipairs(require("OIShared/Generated/StoryEnable")) do enable[s]=true end
-        local decisions,report=Placer.place({enable=enable},cat.current(),Placer.parseBuildings(require("OIShared/Generated/Buildings")),
-            require("OIShared/Generated/Recipes"),seed)
-        storyPlan=decisions
-        local c=report.counts
-        CFLog.write("i","stories",{why="plan",scenes=#decisions,placed=c.placed,held=c.held,nofit=c.nofit,tagged=c.tagged,
-            matched=c.matched,relaxed=c.relaxed,ms=(getTimeInMillis and getTimeInMillis() or 0)-t0})
+        -- The plan is worked out inside a coroutine that hands the frame back every few milliseconds, so
+        -- world start never stalls on it (the placers call tick() inside their loops).
+        local now=getTimeInMillis or function() return 0 end
+        if not planCo then
+            planBusy,planPasses=0,0
+            planCo=coroutine.create(function()
+                local last=now()
+                local function tick()
+                    if now()-last>=PLAN_SLICE_MS then coroutine.yield(); last=now() end
+                end
+                local Placer=require("OIShared/StoryPlacer")
+                local Batch=require("OIShared/BatchPlacer")
+                local Config=require("OIShared/Generated/BatchConfig")
+                local recipes=require("OIShared/Generated/Recipes")
+                local enable={}
+                for _,s in ipairs(require("OIShared/Generated/StoryEnable")) do enable[s]=true end
+                local buildings=Placer.parseBuildings(require("OIShared/Generated/Buildings"),tick)
+                local decisions,report=Placer.place({enable=enable},cat.current(),buildings,recipes,seed,{tick=tick})
+                local batch,brep=Batch.place({},cat.current(),buildings,recipes,seed,decisions,{target=Config.target,
+                    minTown=Config.minTown,hosts=Config.hosts,hostTables=require("OIShared/Generated/HostTypes"),tick=tick})
+                return decisions,report,batch,brep
+            end)
+        end
+        local t0=now()
+        local ok,decisions,report,batch,brep=coroutine.resume(planCo)
+        planBusy=planBusy+(now()-t0); planPasses=planPasses+1
+        if not ok then
+            storiesDone=true
+            CFLog.write("w","stories",{why="plan-error",passes=planPasses})
+            return 0
+        end
+        if coroutine.status(planCo)~="dead" then return 0 end
+        planCo=nil
+        storyPlan={}
+        for _,d in ipairs(decisions) do storyPlan[#storyPlan+1]=d end
+        for _,d in ipairs(batch) do storyPlan[#storyPlan+1]=d end
+        local c,b,rr=report.counts,brep.counts,brep.reasons
+        CFLog.write("i","stories",{why="plan",scenes=#storyPlan,stories=#decisions,standalone=#batch,placed=c.placed,held=c.held,nofit=c.nofit,
+            tagged=c.tagged,matched=c.matched,relaxed=c.relaxed,ms=planBusy,passes=planPasses})
+        CFLog.write("i","batch",{why="plan",building=b.building,vehicle=b.vehicle,body=b.body,tagged=b.tagged,matched=b.matched,relaxed=b.relaxed,
+            heldBack=rr.heldBack,notDrawn=rr.notDrawn,densityBand=rr.densityBand,noFit=rr.noFit,noRecipe=rr.noRecipe,hostCap=rr.hostCap,
+            noCategoryBuilding=rr.noCategoryBuilding,quota=brep.quotaTotal})
     end
     local used,decided=recordStories()
     local made,skipped,pending=0,0,0
@@ -2645,7 +2684,7 @@ end
 
 require("OIShared/Events/EngineEvents").on("OnGameStart", function()
     sessions,scheduler,preparing,wrapper,areaSession=nil,nil,false,nil,nil
-    lastDecide=nil; emptyNoted={}; servicesStarted=false; storiesDone=false; storyPlan=nil
+    lastDecide=nil; emptyNoted={}; servicesStarted=false; storiesDone=false; storyPlan=nil; planCo=nil
     mapQueue,mapQueued={},{}; inRing={}
     -- Forget what we could see last time. A new session has not looked yet,
     -- and should say so rather than inherit yesterday's confidence.

@@ -56,6 +56,10 @@ if ! out="$(bash tools/autotest/checks/relocation_evidence_test.sh 2>&1)"; then
     fail=$((fail + 1))
 fi
 echo "$out"
+# Of Interest manifest linter (placement of the notes' scenes over several world seeds).
+if ! out="$(timeout 300 lua5.1 tools/ofinterest/lint_manifest.lua 2>&1)"; then
+    fail=$((fail + 1)); echo "FAIL tools/ofinterest/lint_manifest.lua"; echo "$out" | tail -12 | sed 's/^/    /'
+else echo "$out" | tail -1; fi
 # The packaging tool's own tests. Nothing else ran these before 2026-09-21.
 if ! out="$(cd test && timeout 120 python3 -m unittest discover -p '*_test.py' 2>&1)"; then
     fail=$((fail + 1)); echo "FAIL test/*_test.py"; echo "$out" | tail -10 | sed 's/^/    /'

@@ -58,8 +58,10 @@ for _,d in ipairs(dec) do assert(not held[d.story],"a held-back story was placed
 local want=0; for s=1,19 do want=want+stories[s] end
 assert(#dec==want and rep.counts.scenes==want and #rep.all==want,"every part of every placed story is one scene: "..#dec)
 -- with the enable list only the two test stories come out; the rest of the table is the same
-local en={}; for _,s in ipairs(Enable) do en[s]=true end
-assert(en[1] and en[9] and #Enable==2,"phase 5 enables the 12-part story and one 2-part story")
+-- phase 6 enables all 19 placeable stories; this test places the 12-part and one 2-part story on their own
+assert(#Enable==19,"phase 6 enables every placeable story")
+for s=1,19 do assert(Enable[s]==s) end
+local en={[1]=true,[9]=true}
 assert(stories[1]==12 and stories[9]==2)
 local decE,repE=Placer.place({enable=en},cat,buildings,Recipes,SEED)
 assert(#decE==14,#decE)
