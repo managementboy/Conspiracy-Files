@@ -976,7 +976,7 @@ end
 -- A NOTE SCENE (phase 4, Generated/Scenes row): decided once into the world record at `bounds`
 -- ({x1,y1,x2,y2,z}); the filler then places the set when the survivor arrives, like any clue.
 -- Returns true, the document ids  or  false, why.
-function R.decideNoteScene(row,bounds)
+function R.decideNoteScene(row,bounds,meta)
     if not allowed() or not areaSession then return false,"no world record" end
     local ok,why=SceneNote.check(row)
     if not ok then return false,why end
@@ -986,9 +986,67 @@ function R.decideNoteScene(row,bounds)
         name="A place at "..math.floor((b.x1+b.x2)/2)..", "..math.floor((b.y1+b.y2)/2),
         mapId=MapSites.map,buildLine=MapSites.game,bounds=b,
         source={kind="note-scene",reference=row.id},paperStorage="unknown",containerTypes={},excluded=false}
+    -- A story part (phase 5): which story, town and building it was given, kept in the record for good.
+    if type(meta)=="table" then
+        site.story={story=meta.story,part=meta.part,town=meta.town,area=meta.area,building=meta.building,cat=meta.cat,matched=meta.matched}
+    end
     local added,ids=areaSession.addNoteScene{site=site,row=row,version=Manifest.VERSION,hours=worldHours()}
     if added then CFLog.write("i","case",{case=site.id,n=#ids,why="area-decided-note-scene"}) end
     return added,ids
+end
+-- STORIES AS SCENES (phase 5). Once per session, when the catalogue is active and the world record is
+-- open: StoryPlacer works out every story's scenes from the world seed (pure, the same every time) and the
+-- enabled ones (Generated/StoryEnable) are decided into the world record, a few per pass. A scene already in
+-- the record is never touched; one whose building another scene holds is skipped (and counted).
+R.STORY_PER_PASS=4
+local storiesDone=false
+local storyPlan=nil
+local function recordStories()
+    local used,decided={}, {}
+    local case=R.worldCase()
+    for _,l in ipairs(case and case.locations or {}) do
+        decided[l.id]=true
+        if type(l.story)=="table" and l.story.building then used[l.story.building]=l.id end
+    end
+    return used,decided
+end
+function R.decideStories()
+    if storiesDone or not allowed() or not areaSession then return 0 end
+    local cat=OIShared.NoteCatalogue
+    if not (cat and cat.isActive()) then return 0 end
+    local seed=R.worldSeed()
+    if not seed then return 0 end
+    if not storyPlan then
+        local t0=getTimeInMillis and getTimeInMillis() or 0
+        local Placer=require("OIShared/StoryPlacer")
+        local enable={}
+        for _,s in ipairs(require("OIShared/Generated/StoryEnable")) do enable[s]=true end
+        local decisions,report=Placer.place({enable=enable},cat.current(),Placer.parseBuildings(require("OIShared/Generated/Buildings")),
+            require("OIShared/Generated/Recipes"),seed)
+        storyPlan=decisions
+        local c=report.counts
+        CFLog.write("i","stories",{why="plan",scenes=#decisions,placed=c.placed,held=c.held,nofit=c.nofit,tagged=c.tagged,
+            matched=c.matched,relaxed=c.relaxed,ms=(getTimeInMillis and getTimeInMillis() or 0)-t0})
+    end
+    local used,decided=recordStories()
+    local made,skipped,pending=0,0,0
+    for _,d in ipairs(storyPlan) do
+        if not decided[SceneNote.areaId(d)] then
+            if used[d.building] then skipped=skipped+1
+            elseif made>=R.STORY_PER_PASS then pending=pending+1
+            else
+                local ok,ids=R.decideNoteScene(d,d.bounds,d)
+                if ok then made=made+1; used[d.building]=d.id
+                else skipped=skipped+1; CFLog.write("d","skip",{case=SceneNote.areaId(d),why="story-scene-"..tostring(ids)}) end
+            end
+        end
+    end
+    if made>0 then CFLog.write("i","stories",{why="decided",made=made,pending=pending,skipped=skipped}) end
+    if pending==0 then
+        storiesDone=true
+        CFLog.write("i","stories",{why="done",skipped=skipped})
+    end
+    return made
 end
 -- The world record's seed, or nil when this save has no world record. The map
 -- trails take their seed from it (MapMediaRuntime).
@@ -2553,6 +2611,9 @@ require("OIShared/Events/EngineEvents").on("OnTick", function()
         -- And the vanilla scenes found near the survivor (NH-D7).
         ok,err=pcall(R.decideScenes)
         if not ok then log("deciding scenes failed: "..tostring(err)) end
+        -- And the story scenes (phase 5), decided from the world seed once the catalogue is up.
+        ok,err=pcall(R.decideStories)
+        if not ok then log("deciding story scenes failed: "..tostring(err)) end
         if #mapQueue>0 then scheduler.enqueue("map-areas","map-areas",mapDrain) end
     end
     scheduler.step()
@@ -2584,7 +2645,7 @@ end
 
 require("OIShared/Events/EngineEvents").on("OnGameStart", function()
     sessions,scheduler,preparing,wrapper,areaSession=nil,nil,false,nil,nil
-    lastDecide=nil; emptyNoted={}; servicesStarted=false
+    lastDecide=nil; emptyNoted={}; servicesStarted=false; storiesDone=false; storyPlan=nil
     mapQueue,mapQueued={},{}; inRing={}
     -- Forget what we could see last time. A new session has not looked yet,
     -- and should say so rather than inherit yesterday's confidence.
