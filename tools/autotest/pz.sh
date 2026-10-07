@@ -132,6 +132,12 @@ setup() {
         sync_mod "$REPO/mod-nohelp" ConspiracyFilesNoHelp
     fi
     [ -d "$ZB_WORKSHOP" ] && sync_mod "$ZB_WORKSHOP" ZombieBuddy
+    # The game here does not find Workshop mods by itself (as with ZombieBuddy), so the
+    # dependency is copied from the Steam Workshop folder into the test mods folder.
+    if [ "${PZ_OI:-0}" = 1 ]; then
+        local dep="${PZ_OI_DEP:-$HOME/.steam/steam/steamapps/workshop/content/108600/3796373365/mods/ItIsOfInterestToMe}"
+        [ -d "$dep" ] && sync_mod "$dep" ItIsOfInterestToMe || say "dependency not found at $dep"
+    fi
     if [ "${PZ_OI:-0}" = 1 ]; then approve_jar "$REPO/mod-ofinterest/42/media/java/OfInterestScenes.jar" ConspiracyFilesOfInterest
     else approve_nohelp_jar; fi
     sync_mod "$REPO/tools/autotest/CFAutoTest" CFAutoTest
@@ -151,6 +157,10 @@ setup() {
     if [ "${PZ_NOHELP_ONLY:-0}" = 1 ]; then
         wanted="CFAutoTest ConspiracyFilesNoHelp ZombieBuddy"
         sed -i '/^ *mod = ConspiracyFiles,$/d' "$d"
+    fi
+    if [ "${PZ_OI:-0}" != 1 ]; then
+        # Of Interest is incompatible with the other two mods: never leave it in default.txt.
+        sed -i '/^ *mod = ConspiracyFilesOfInterest,$/d; /^ *mod = ItIsOfInterestToMe,$/d' "$d"
     fi
     if [ "${PZ_OI:-0}" = 1 ]; then
         wanted="CFAutoTest ConspiracyFilesOfInterest ItIsOfInterestToMe ZombieBuddy"
