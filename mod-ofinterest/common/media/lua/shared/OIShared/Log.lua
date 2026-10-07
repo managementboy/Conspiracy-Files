@@ -39,7 +39,7 @@ Log.level="i"
 -- not listed here.
 local EVENTS={
     -- lifecycle
-    start=true,ready=true,stop=true,error=true,skip=true,catalogue=true,force=true,stories=true,
+    start=true,ready=true,stop=true,error=true,skip=true,catalogue=true,force=true,stories=true,batch=true,
     -- cases and evidence
     case=true,placed=true,relocated=true,conflict=true,found=true,inspected=true,
     retired=true,stale=true,recognised=true,
