@@ -202,7 +202,7 @@ def run(args):
         return 20
     sigs = args.sigs or jar_sigs(pz, jh)
     meth = parse_sigs(sigs)
-    roots = args.root or [os.path.join(REPO, "mod"), os.path.join(REPO, "mod-nohelp")]
+    roots = args.root or [os.path.join(REPO, "mod"), os.path.join(REPO, "mod-nohelp"), os.path.join(REPO, "mod-ofinterest")]
     files = sorted(f for r in roots for f in glob.glob(os.path.join(r, "**/*.lua"), recursive=True))
     tmp = None
     if args.tree_from_git:  # scan the mod as it was at a past commit (regression proof)

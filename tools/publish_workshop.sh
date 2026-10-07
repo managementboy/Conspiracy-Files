@@ -8,6 +8,8 @@
 #                                                deliberately waive Linux boot
 #   tools/publish_workshop.sh --mod nohelp ...   "Conspiracy Files: No Help", a
 #                                                separate item (tools/workshop-nohelp/)
+#   tools/publish_workshop.sh --mod ofinterest   "Conspiracy Files: Of Interest" (tools/workshop-ofinterest/);
+#                                                needs the Workshop mod "It is of interest to me!" and ZombieBuddy
 #
 # Two machines, one account: this machine develops and publishes, the other
 # subscribes and plays. Steam pushes the update to the play machine; nothing is
@@ -83,7 +85,10 @@ case "$mod" in
     nohelp)
         NAME=ConspiracyFilesNoHelp; TITLE="Conspiracy Files: No Help"
         ITEM_DIR="$REPO/tools/workshop-nohelp"; BUILD="$REPO/dist/workshop-nohelp" ;;
-    *) echo "--mod must be deadair or nohelp" >&2; exit 2 ;;
+    ofinterest)
+        NAME=ConspiracyFilesOfInterest; TITLE="Conspiracy Files: Of Interest"
+        ITEM_DIR="$REPO/tools/workshop-ofinterest"; BUILD="$REPO/dist/workshop-ofinterest" ;;
+    *) echo "--mod must be deadair, nohelp or ofinterest" >&2; exit 2 ;;
 esac
 ID_FILE="$ITEM_DIR/published_file_id"
 PREVIEW="$ITEM_DIR/preview.png"
@@ -112,7 +117,7 @@ version="$(sed -n 's/^modversion=//p' "$CONTENT/mods/$NAME/42/mod.info" | tr -d 
 # The Linux boot check (tools/autotest/boot_check.sh) checks Dead Air's files
 # and evidence album. No Help has no automated boot check yet, so its uploads
 # are always an attended owner decision.
-if [ "$mod" = nohelp ] && [ -z "$boot_override_reason" ] && [ "$dry_run" -eq 0 ]; then
+if { [ "$mod" = nohelp ] || [ "$mod" = ofinterest ]; } && [ -z "$boot_override_reason" ] && [ "$dry_run" -eq 0 ]; then
     echo "No Help has no automated boot check. Boot it yourself, then publish with" >&2
     echo "  --owner-override-boot-check \"reason\"" >&2
     exit 1
@@ -204,8 +209,8 @@ echo "  vdf         $VDF"
 if [ -n "$boot_override_reason" ]; then
     echo "  boot gate   OWNER OVERRIDE: $boot_override_reason"
 else
-    if [ "$mod" = nohelp ]; then
-        echo "  boot gate   none automated for No Help: --owner-override-boot-check required"
+    if [ "$mod" = nohelp ] || [ "$mod" = ofinterest ]; then
+        echo "  boot gate   none automated for No Help / Of Interest: --owner-override-boot-check required"
     else
         echo "  boot gate   Linux native boot check required before upload"
     fi

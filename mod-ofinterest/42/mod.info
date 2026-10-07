@@ -1,0 +1,12 @@
+name=Conspiracy Files: Of Interest
+id=ConspiracyFilesOfInterest
+author=Conspiracy-Files development
+url=https://github.com/managementboy/Conspiracy-Files
+modversion=0.0.1-dev
+versionMin=42.20.0
+description=Places ordinary-looking objects (sets, holders, ground spots) next to the notes of "It is of interest to me!" so the notes read as part of a larger case. Needs the mod "It is of interest to me!" and ZombieBuddy. Skeleton: no authored clues yet.
+require=\ZombieBuddy,\ItIsOfInterestToMe
+javaJarFile=media/java/OfInterestScenes.jar
+javaPkgName=conspiracyfiles.ofinterest
+incompatible=\ConspiracyFilesNoHelp,\ConspiracyFiles
+ZBVersionMin=2.3.0

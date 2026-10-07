@@ -94,19 +94,20 @@ sync_mod() { # sync_mod <source> <name>
 # once in ZombieBuddy's dialog). PZ_ZB=0 launches without the agent.
 ZB_WORKSHOP="${PZ_ZB_WORKSHOP:-$HOME/.steam/steam/steamapps/workshop/content/108600/3619862853/mods/ZombieBuddy}"
 ZB_AGENT_ARGS="${PZ_ZB_AGENT_ARGS:-policy=deny-new,verbosity=1}"
-approve_nohelp_jar() {
-    local jar="$REPO/mod-nohelp/42/media/java/NoHelpScenes.jar"
+approve_nohelp_jar() { approve_jar "$REPO/mod-nohelp/42/media/java/NoHelpScenes.jar" ConspiracyFilesNoHelp; }
+approve_jar() { # approve_jar <jar> <mod id>
+    local jar="$1" id="$2"
     [ -f "$jar" ] || return 0
-    python3 - "$jar" "$HOME/.zombie_buddy/mod_approvals.json" <<'PY'
+    python3 - "$jar" "$HOME/.zombie_buddy/mod_approvals.json" "$id" <<'PY'
 import hashlib, json, os, sys, datetime
-jar, path = sys.argv[1], sys.argv[2]
+jar, path, mid = sys.argv[1], sys.argv[2], sys.argv[3]
 sha = hashlib.sha256(open(jar, "rb").read()).hexdigest()
 os.makedirs(os.path.dirname(path), exist_ok=True)
 try: data = json.load(open(path))
 except Exception: data = {}
-mods = [m for m in data.get("mods", []) if not (m.get("id") == "ConspiracyFilesNoHelp" and m.get("jar_hash") != sha)]
-if not any(m.get("id") == "ConspiracyFilesNoHelp" and m.get("jar_hash") == sha for m in mods):
-    mods.append({"id": "ConspiracyFilesNoHelp", "jar_hash": sha, "decision": True,
+mods = [m for m in data.get("mods", []) if not (m.get("id") == mid and m.get("jar_hash") != sha)]
+if not any(m.get("id") == mid and m.get("jar_hash") == sha for m in mods):
+    mods.append({"id": mid, "jar_hash": sha, "decision": True,
                  "time": datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ"), "author_id": 76561198083988095})
 data["mods"] = mods
 json.dump(data, open(path, "w"), indent=2)
@@ -119,10 +120,20 @@ setup() {
     # helper only - not the old Dead Air mod (owner, 2026-10-02: "we are
     # currently only working on No Help and ZombieBuddy"). The command channel
     # (DevEval) comes with the helper, so nothing here needs the old mod.
-    if [ "${PZ_NOHELP_ONLY:-0}" != 1 ]; then sync_mod "$REPO/mod" ConspiracyFiles; fi
-    sync_mod "$REPO/mod-nohelp" ConspiracyFilesNoHelp
+    # PZ_OI=1: an Of Interest session loads Of Interest, its dependency (Workshop
+    # 3796373365, found by the game in the Steam workshop folder), ZombieBuddy and the
+    # helper. Of Interest is incompatible with the other two mods, so they are not
+    # installed here and are taken out of default.txt below.
+    if [ "${PZ_OI:-0}" = 1 ]; then
+        rm -rf "$ZOMBOID/mods/ConspiracyFiles" "$ZOMBOID/mods/ConspiracyFilesNoHelp"
+        sync_mod "$REPO/mod-ofinterest" ConspiracyFilesOfInterest
+    else
+        if [ "${PZ_NOHELP_ONLY:-0}" != 1 ]; then sync_mod "$REPO/mod" ConspiracyFiles; fi
+        sync_mod "$REPO/mod-nohelp" ConspiracyFilesNoHelp
+    fi
     [ -d "$ZB_WORKSHOP" ] && sync_mod "$ZB_WORKSHOP" ZombieBuddy
-    approve_nohelp_jar
+    if [ "${PZ_OI:-0}" = 1 ]; then approve_jar "$REPO/mod-ofinterest/42/media/java/OfInterestScenes.jar" ConspiracyFilesOfInterest
+    else approve_nohelp_jar; fi
     sync_mod "$REPO/tools/autotest/CFAutoTest" CFAutoTest
     link "$LOCAL/inbox/cf_inbox.lua" "$ZOMBOID/Lua/cf_inbox.lua"
     link "$CONSOLE" "$LOCAL/log/live-local.txt"
@@ -140,6 +151,10 @@ setup() {
     if [ "${PZ_NOHELP_ONLY:-0}" = 1 ]; then
         wanted="CFAutoTest ConspiracyFilesNoHelp ZombieBuddy"
         sed -i '/^ *mod = ConspiracyFiles,$/d' "$d"
+    fi
+    if [ "${PZ_OI:-0}" = 1 ]; then
+        wanted="CFAutoTest ConspiracyFilesOfInterest ItIsOfInterestToMe ZombieBuddy"
+        sed -i '/^ *mod = ConspiracyFiles,$/d; /^ *mod = ConspiracyFilesNoHelp,$/d' "$d"
     fi
     for m in $wanted; do
         grep -qE "mod = $m," "$d" || sed -i "/^mods$/,/^}/ s/^{$/{\n    mod = $m,/" "$d"

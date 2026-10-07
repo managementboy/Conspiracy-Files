@@ -26,7 +26,7 @@ if [ ! -f "$RE_DIR/RealEngine.class" ] || [ "$RE_DIR/RealEngine.java" -nt "$RE_D
     "$JAVA_HOME/bin/javac" -cp "$JAR" -d "$RE_DIR" "$RE_DIR/RealEngine.java" || exit 2
 fi
 CP="$JAR:$RE_DIR"
-ROOTS="mod/common/media/lua/client mod/common/media/lua/shared mod-nohelp/common/media/lua/client mod-nohelp/common/media/lua/shared"
+ROOTS="mod/common/media/lua/client mod/common/media/lua/shared mod-nohelp/common/media/lua/client mod-nohelp/common/media/lua/shared mod-ofinterest/common/media/lua/client mod-ofinterest/common/media/lua/shared"
 
 # One JVM per file: the engine's set-up is process-wide, so one test can never leak into the next.
 run_one() { # file -> prints the harness lines; sets RE_RESULT RE_TOUCHED RE_MS

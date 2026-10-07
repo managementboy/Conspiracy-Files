@@ -3,6 +3,7 @@
 #
 #   tools/package.sh              -> dist/ConspiracyFiles-<version>.zip
 #   tools/package.sh --install    -> also install it into this machine's mods folder
+#   CF_MOD=ofinterest tools/package.sh -> the same for "Conspiracy Files: Of Interest"
 #   CF_MOD=nohelp tools/package.sh -> the same for "Conspiracy Files: No Help"
 #                                     (mod-nohelp/ -> dist/ConspiracyFilesNoHelp-<version>.zip)
 #
@@ -29,7 +30,13 @@ case "${CF_MOD:-deadair}" in
         [ -n "$version" ] || { echo "could not read modversion from mod-nohelp/42/mod.info" >&2; exit 1; }
         version="$version+$(git -C "$REPO" rev-parse --short HEAD 2>/dev/null || echo nogit)"
         ;;
-    *) echo "CF_MOD must be deadair or nohelp" >&2; exit 2 ;;
+    ofinterest)
+        SRC="$REPO/mod-ofinterest"; NAME=ConspiracyFilesOfInterest; PREFIX=OIShared
+        version="$(sed -n 's/^modversion=//p' "$SRC/42/mod.info" | tr -d '\r' | head -1)"
+        [ -n "$version" ] || { echo "could not read modversion from mod-ofinterest/42/mod.info" >&2; exit 1; }
+        version="$version+$(git -C "$REPO" rev-parse --short HEAD 2>/dev/null || echo nogit)"
+        ;;
+    *) echo "CF_MOD must be deadair, nohelp or ofinterest" >&2; exit 2 ;;
 esac
 
 staging="$(mktemp -d)"; trap 'rm -rf "$staging"' EXIT

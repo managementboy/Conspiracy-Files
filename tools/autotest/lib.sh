@@ -171,9 +171,9 @@ mod_errors() {
     run_log | awk '
         function flush() { if (head != "" && mod) print head (msg != "" ? "  |  " msg : ""); head = "" }
         /^ERROR/ && /dumping Lua stack trace/ { next }
-        /^ERROR/ { flush(); head = $0; mod = /MOD:Conspiracy(-Files|[ ]Files: No Help)/; msg = ""; next }
+        /^ERROR/ { flush(); head = $0; mod = /MOD:Conspiracy(-Files|[ ]Files: (No Help|Of Interest))/; msg = ""; next }
         head != "" && msg == "" && /Exception: / { msg = $0; sub(/^[ \t]*[^ ]*Exception: /, "", msg) }
-        head != "" && /MOD:Conspiracy(-Files|[ ]Files: No Help)/ { mod = 1 }
+        head != "" && /MOD:Conspiracy(-Files|[ ]Files: (No Help|Of Interest))/ { mod = 1 }
         END { flush() }' | sed 's/^ERROR: *//'
 }
 

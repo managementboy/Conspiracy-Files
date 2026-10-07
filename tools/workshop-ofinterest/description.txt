@@ -1,0 +1,9 @@
+Conspiracy Files: Of Interest places ordinary-looking objects next to the notes and letters of "It is of interest to me!", so that what you read feels like part of something larger. You find the objects, inspect them and work it out. No PDA, no organiser, no objective marker.
+
+[b]Requires "It is of interest to me!"[/b] (Workshop item 3796373365). This mod adds nothing of its own to the notes; it needs that mod to be subscribed and enabled.
+
+[b]Requires ZombieBuddy.[/b] Subscribe to it and set its Steam launch option (see the ZombieBuddy page). Of Interest ships a small signed Java listener (OfInterestScenes.jar) that hears the game's own scene generation; ZombieBuddy asks once whether to allow it.
+
+[b]Not compatible with Conspiracy Files: No Help or the older Conspiracy-Files mod.[/b] Enable only one of them.
+
+[b]This is an early development build (skeleton: no placed content yet).[/b] Start a new game. Single-player. Vanilla map (Muldraugh, KY). No network access, no runtime AI.

@@ -1,0 +1,355 @@
+-- A SEPARATE, PARALLEL RUNTIME FOR HAND-AUTHORED VOCABULARY MYSTERIES.
+--
+-- Owner, 2026-09-25, on the rebuild: "build the new engine and content."
+-- Three ADHD frames (3am on-call, game designer, one-hour) converged on
+-- keeping this structurally independent of the live case generator, so it
+-- can never alter its behaviour, be broken by it, or be blamed for a fault
+-- in it:
+--   * NO require of GeneratedRuntime, Session, Story or Generator - this
+--     module knows nothing about the live scheduler and the live scheduler
+--     never calls into this one;
+--   * its own ModData root ("OIShared.Mystery"), its own tag on
+--     items ("oiMysteryId"), so nothing it writes can collide with the
+--     legacy case's own "oiGeneratedId";
+--   * its own Events hooks (OnGameStart, EveryTenMinutes), not a job on the
+--     legacy scheduler - a bug here cannot stall the legacy tick;
+--   * deletable as a file: nothing else in the mod requires this one.
+--
+-- What it does: places one hand-authored mystery's findings into real
+-- containers near the survivor, detects its GATE (here: a skill threshold
+-- read directly from the engine, itself a real, provable game state), and
+-- reports what the Interpreter says is now visible and what CLOSE reports.
+-- Placement, discovery and GATE detection are new, minimal and honest -
+-- not reused pretending to be the legacy engine's own, and not yet the
+-- general MysteryPlacement adapter the build plan names for later content;
+-- this is the first mystery's own working proof, native-verified, that the
+-- pure engine core (Vocabulary/Ledger/Interpreter/Linter/Spoilage) is real.
+local Vocab=require("OIShared/Mystery/Vocabulary")
+local Ledger=require("OIShared/Mystery/Ledger")
+local Interpreter=require("OIShared/Mystery/Interpreter")
+local Linter=require("OIShared/Mystery/Linter")
+local Kinds=require("OIShared/Generated/EvidenceKinds")
+local Searched=require("OIShared/SearchedContainers")
+local CFLog=require("OIShared/Log")
+
+-- A real, container-bearing part on a vehicle - tried in this order because
+-- `getPartById` on an id the vehicle does not have returns nil rather than
+-- erroring (same discipline vehicle_reach.lua's own door-id list already
+-- uses). Not `sq:getVehicleContainer():AddItem(...)`: that method returns
+-- the BaseVehicle itself, not an ItemContainer, and calling AddItem on it
+-- throws "tried to call nil in place" - found live, 2026-09-26, once a real
+-- vehicle actually stood in range for the first time.
+local VEHICLE_CONTAINER_PARTS={"TruckBed","TrunkDoor","GloveBox","Trunk"}
+local function vehicleItemContainer(vehicle)
+    for _,partId in ipairs(VEHICLE_CONTAINER_PARTS) do
+        local ok,part=pcall(function() return vehicle:getPartById(partId) end)
+        if ok and part then
+            local cok,container=pcall(function() return part:getItemContainer() end)
+            if cok and container then return container end
+        end
+    end
+end
+
+-- The real PZ item type an object/prose/short finding's `kind` spawns. An
+-- object-capacity kind (a rule-eligible catalogue item name like
+-- "ElectronicsScrap") IS the real item type, exactly as ObjectRules
+-- already lists it; a prose/short-capacity kind is EvidenceKinds' own
+-- SYMBOLIC key (the same one the legacy engine authors write, "ticket",
+-- "notepad") and the real item lives at its `.fullType`. Confusing the two
+-- placed nothing near the survivor - found live, 2026-09-25: AddItem
+-- returned nil for "ticket" and "Base.Ticket" alike, silently, because
+-- neither is a real item; only "Base.ParkingTicket" (EvidenceKinds' own
+-- fullType for that key) is.
+local function itemType(finding)
+    if finding.capacity=="object" then return finding.kind end
+    local carrier=finding.kind and Kinds.get(finding.kind)
+    return (carrier and carrier.fullType) or finding.kind
+end
+
+OIShared=OIShared or {}
+local M=OIShared.MysteryRuntime or {}
+OIShared.MysteryRuntime=M
+OIEngine=OIEngine or {};OIEngine.MysteryRuntime=M
+
+local TAG="OIShared.Mystery"
+local ITEM_MARK="oiMysteryId"
+local DOOR_MARK="oiMysteryGate"
+local function log(message) CFLog.message("mystery","note",message) end
+
+local function root()
+    local store=ModData and ModData.getOrCreate(TAG)
+    if not store then return nil end
+    store.schemaVersion=store.schemaVersion or 1
+    store.placedAt=store.placedAt or {}       -- findingId -> in-game hour
+    store.doorTagged=store.doorTagged or {}   -- gate.produces -> true, once a real door is tagged
+    store.ledger=store.ledger or Ledger.new()
+    store.mysteryId=store.mysteryId
+    return store
+end
+
+local function worldHours()
+    local ok,h=pcall(function() return getGameTime():getWorldAgeHours() end)
+    if ok and type(h)=="number" and h==h then return h end
+    return 0
+end
+
+-- Load one mystery (a Vocabulary table, already linted offline) and
+-- attach its ledger. Refuses to attach a mystery the linter would refuse -
+-- named and refused here too, not only in the offline test suite, so a
+-- corrupt save can never carry an invalid one.
+function M.attach(mystery)
+    local ok,why=Linter.lint(mystery)
+    if not ok then return false,"mystery failed the honesty check: "..tostring(why) end
+    local store=root(); if not store then return false,"no save to attach to" end
+    if store.mysteryId and store.mysteryId~=mystery.id then
+        return false,"a different mystery is already attached this save"
+    end
+    store.mysteryId=mystery.id
+    M.current=mystery
+    return true
+end
+
+-- Place every "site", "onMe" and "vehicle" finding for real, one finding
+-- per container/inventory/trunk - honestly minimal: this picks the first
+-- eligible target it finds via a bounded local scan, the same discipline
+-- the legacy Storage.scan uses (a container that can hold an item, that is
+-- not already searched). It does not touch Session's placement machinery.
+function M.place(mystery,x,y,z)
+    local store=root(); if not store then return false,"no save" end
+    local cell=getCell and getCell(); if not cell then return false,"no world" end
+    local placed=0
+    -- "onMe": starts in the survivor's hand (Vocabulary.WHERE's own words) -
+    -- placed directly into the real inventory, not found later. pollInventory
+    -- recognises it the same poll it already runs, no separate path needed.
+    for id,finding in pairs(mystery.findings) do
+        if finding.where=="onMe" and not store.placedAt[id] then
+            local p=getPlayer and getPlayer()
+            local item=p and p:getInventory():AddItem(itemType(finding) or "Base.Notepad")
+            if item then
+                item:getModData()[ITEM_MARK]=id
+                store.placedAt[id]=worldHours()
+                placed=placed+1
+                log("placed "..id.." on the survivor")
+            end
+        end
+    end
+    -- "vehicle": a real nearby vehicle's own trunk, not a container on the
+    -- ground - the one placement channel neither earlier mystery exercised.
+    -- The radius is Session.VEHICLE_RADIUS (12) - "a driveway, not the next
+    -- street" (Storage.lua's own words for the legacy engine's identical
+    -- rule). A first pass scanned wider on the theory that "nearby" could
+    -- mean whatever it took to find one; that is dishonest in exactly the
+    -- way the whole engine refuses to be - a car forty tiles off is not
+    -- this house's car, and a mystery finding "a vehicle" is not entitled
+    -- to claim one that far away. If no vehicle sits this close, a vehicle
+    -- finding simply does not place, the same as a site finding with no
+    -- eligible container - the mystery's own design must account for that
+    -- (Linter.lua's own admission: reachability is play, not provable here).
+    for id,finding in pairs(mystery.findings) do
+        if finding.where=="vehicle" and not store.placedAt[id] then
+            for dx=-12,12 do for dy=-12,12 do
+                if store.placedAt[id] then break end
+                local sq=cell:getGridSquare(x+dx,y+dy,z)
+                -- sq:getVehicleContainer() returns the vehicle itself, not
+                -- an ItemContainer - the real container lives on one of its
+                -- parts (vehicleItemContainer, above).
+                local vehicle=sq and sq.getVehicleContainer and sq:getVehicleContainer()
+                local trunk=vehicle and vehicleItemContainer(vehicle)
+                if trunk then
+                    local item=trunk:AddItem(itemType(finding) or "Base.Notepad")
+                    if item then
+                        item:getModData()[ITEM_MARK]=id
+                        store.placedAt[id]=worldHours()
+                        placed=placed+1
+                        log("placed "..id.." in a nearby vehicle at "..tostring(x+dx)..","..tostring(y+dy))
+                    end
+                end
+            end end
+        end
+    end
+    for id,finding in pairs(mystery.findings) do
+        if finding.where=="site" and not store.placedAt[id] then
+            local found=false
+            for dx=-1,1 do for dy=-1,1 do
+                if found then break end
+                local sq=cell:getGridSquare(x+dx,y+dy,z)
+                local objects=sq and sq:getObjects()
+                for i=0,(objects and objects:size() or 0)-1 do
+                    local obj=objects:get(i)
+                    if obj and obj.getContainerCount and obj:getContainerCount()>0 then
+                        local container=obj:getContainerByIndex(0)
+                        -- NOT isExplored(): the engine sets that for a whole
+                        -- building's containers as its chunk loads, before
+                        -- the survivor can reach any of them - the exact
+                        -- fault DR-20260925-SEARCHED-MEANS-LOOKED found and
+                        -- fixed in the legacy engine, reproduced here until
+                        -- caught live (a fresh world placed zero findings
+                        -- near the survivor, every time, 2026-09-25). The
+                        -- same module answers it the same way: the player
+                        -- having looked, not loot having generated.
+                        if container and Searched.searched(container)~=true then
+                            local item=container:AddItem(itemType(finding) or "Base.Notepad")
+                            if item then
+                                item:getModData()[ITEM_MARK]=id
+                                store.placedAt[id]=worldHours()
+                                placed=placed+1; found=true
+                                log("placed "..id.." at "..tostring(x+dx)..","..tostring(y+dy))
+                                break
+                            end
+                        end
+                    end
+                end
+            end end
+        end
+    end
+    -- A "door" GATE gets a real door tagged near the same site, once - a
+    -- real IsoDoor object, not a threshold: the survivor must actually try
+    -- it, mirroring the discipline ITEM_MARK already holds for a found
+    -- item. Untagged if no real door is in range; a mystery may say so in
+    -- its own design note rather than pretend a mechanic always fires
+    -- (Linter.lua's own admission: reachability is play, not provable here).
+    for _,gate in ipairs(mystery.gates or {}) do
+        if gate.kind=="door" and not store.doorTagged[gate.produces] then
+            for dx=-3,3 do for dy=-3,3 do
+                if store.doorTagged[gate.produces] then break end
+                local sq=cell:getGridSquare(x+dx,y+dy,z)
+                local objects=sq and sq:getObjects()
+                for i=0,(objects and objects:size() or 0)-1 do
+                    local obj=objects:get(i)
+                    local ok,cn=pcall(function() return obj:getClass():getSimpleName() end)
+                    if ok and cn=="IsoDoor" then
+                        obj:getModData()[DOOR_MARK]=gate.produces
+                        store.doorTagged[gate.produces]=true
+                        log("tagged a door for gate "..gate.produces.." at "..tostring(x+dx)..","..tostring(y+dy))
+                        break
+                    end
+                end
+            end end
+        end
+    end
+    return true,placed
+end
+
+-- A finding is known the moment its marked item is picked up by the
+-- survivor - a minimal, honest discovery signal for this first mystery,
+-- distinct from the legacy engine's Search Mode recognition.
+function M.pollInventory()
+    local store=root(); if not store or not M.current then return end
+    local p=getPlayer and getPlayer(); if not p then return end
+    local inv=p:getInventory(); if not inv then return end
+    local items=inv:getItems()
+    for i=0,items:size()-1 do
+        local it=items:get(i)
+        local md=it and it.getModData and it:getModData()
+        local id=type(md)=="table" and md[ITEM_MARK]
+        if id and M.current.findings[id] and not Ledger.isKnown(store.ledger,id) then
+            local ledger,why=Ledger.markKnown(store.ledger,id,worldHours(),"picked-up")
+            if ledger then store.ledger=ledger; log("recognised "..id) end
+        end
+    end
+end
+
+-- Mark a "heard" PRIMARY finding known - the second channel's own minimal
+-- placement primitive, parallel to M.place() for site findings. Real
+-- content wires this to whatever overheard-dialogue/radio trigger actually
+-- fires in the world; this module only records that it happened and when,
+-- the same discipline M.place() already holds for a found item.
+function M.hear(findingId)
+    local store=root(); if not store or not M.current then return false,"no mystery" end
+    local finding=M.current.findings[findingId]
+    if not finding or finding.where~="heard" then return false,"not a heard finding" end
+    if Ledger.isKnown(store.ledger,findingId) then return true end
+    local ledger,why=Ledger.markKnown(store.ledger,findingId,worldHours(),"heard")
+    if not ledger then return false,why end
+    store.ledger=ledger
+    log("heard "..findingId)
+    return true
+end
+
+-- The survivor's own act of giving a reading - a real, explicit action
+-- distinct from a debug ledger flip. The attacker frame's core Phase E
+-- finding: a native test that flips ledger state directly "certifies a
+-- UI/state change rather than a real mystery." This only records the ACT;
+-- pollGates below still refuses to let an "answer" GATE fire unless its
+-- own `requires` finding is already known - answering about something the
+-- survivor never heard commits nothing.
+function M.giveAnswer(gateProduces)
+    local store=root(); if not store or not M.current then return false,"no mystery" end
+    store.answered=store.answered or {}
+    store.answered[gateProduces]=true
+    return true
+end
+
+-- Whether a GATE's own mechanic is satisfied, checked against real game
+-- state - a skill threshold, or an "answer" already given AND its own
+-- precondition finding already known - and if so, marks its produced
+-- finding known. The mechanic check lives here, in the runtime, never in
+-- the pure Interpreter: the interpreter only reads a ledger.
+-- Whether a tagged real door for this gate is now unlocked - the survivor
+-- having actually tried the key, not a threshold. Scans a bounded area
+-- around the survivor's current square, the same discipline M.place()
+-- already holds; a door tagged far from where the survivor now stands
+-- simply is not found this poll, and the gate stays unsatisfied honestly
+-- rather than guessed at.
+local function doorUnlocked(p,gateProduces)
+    local cell=getCell and getCell(); if not cell then return false end
+    local x,y,z=math.floor(p:getX()),math.floor(p:getY()),math.floor(p:getZ())
+    for dx=-6,6 do for dy=-6,6 do
+        local sq=cell:getGridSquare(x+dx,y+dy,z)
+        local objects=sq and sq:getObjects()
+        for i=0,(objects and objects:size() or 0)-1 do
+            local obj=objects:get(i)
+            local md=obj and obj.getModData and obj:getModData()
+            if type(md)=="table" and md[DOOR_MARK]==gateProduces then
+                local ok,locked=pcall(function() return obj:isLocked() end)
+                if ok and locked==false then return true end
+            end
+        end
+    end end
+    return false
+end
+
+M.SKILL_THRESHOLD=2
+function M.pollGates()
+    local store=root(); if not store or not M.current then return end
+    local p=getPlayer and getPlayer(); if not p then return end
+    for i,gate in ipairs(M.current.gates or {}) do
+        if not Ledger.isKnown(store.ledger,gate.produces) then
+            local satisfied=false
+            if gate.kind=="skill" then
+                local ok,level=pcall(function() return p:getPerkLevel(Perks.Electricity) end)
+                satisfied=ok and type(level)=="number" and level>=M.SKILL_THRESHOLD
+            elseif gate.kind=="answer" then
+                local requiresKnown=not gate.requires or Ledger.isKnown(store.ledger,gate.requires)
+                satisfied=requiresKnown and store.answered and store.answered[gate.produces]==true
+            elseif gate.kind=="door" then
+                satisfied=doorUnlocked(p,gate.produces)
+            end
+            if satisfied then
+                local ledger=Ledger.markKnown(store.ledger,gate.produces,worldHours(),"gate:"..gate.kind)
+                if ledger then
+                    store.ledger=ledger
+                    log("gate "..i.." satisfied: "..gate.produces.." now known")
+                end
+            end
+        end
+    end
+end
+
+-- What the survivor's record currently shows, and what the mystery reports.
+function M.record()
+    local store=root(); if not store or not M.current then return {} end
+    return Interpreter.visibleReveals(M.current,store.ledger,worldHours(),store.placedAt)
+end
+function M.status()
+    local store=root(); if not store or not M.current then return "no-mystery" end
+    return Interpreter.close(M.current,store.ledger)
+end
+
+require("OIShared/Events/EngineEvents").on("OnGameStart", function() pcall(root) end)
+require("OIShared/Events/EngineEvents").on("EveryTenMinutes", function()
+    pcall(M.pollInventory)
+    pcall(M.pollGates)
+end)
+
+return M

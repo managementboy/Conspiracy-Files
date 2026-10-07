@@ -58,7 +58,7 @@ CP="$(cf_jpath "$PZ/projectzomboid.jar")$CPSEP$(cf_jpath "$REPO/tools/kahlua")"
 # PUC Lua accepting a file says nothing about whether Kahlua will parse it.
 if [ "${1:-}" = "--parse-all" ]; then
     cd "$REPO"
-    exec "$JDK/bin/java" -cp "$CP" RunLua --parse $(find mod/common mod-nohelp/common -name '*.lua' | sort)
+    exec "$JDK/bin/java" -cp "$CP" RunLua --parse $(find mod/common mod-nohelp/common mod-ofinterest/common -name '*.lua' | sort)
 fi
 # --parse <file...>: the same engine compile, for files outside mod/common -
 # a test mod under tools/, say. The plain single-file mode below EXECUTES a
