@@ -66,6 +66,7 @@ end
 -- The contract check. Returns true, parsed  or  false, reason-code. Touches nothing.
 function F.handshake(spec, deps)
     if type(deps) ~= "table" or type(spec) ~= "table" then return false, "args" end
+    if deps.enabled == false then return false, "drift-off" end -- the drift gate's level 3: forcing is off
     local p = F.parse(spec.noteId)
     if not p then return false, "bad-id" end
     local r = deps.registry
@@ -164,6 +165,7 @@ local function copyOf(rec) return { token = rec.token, note = rec.note, ver = re
 -- verify(item, deps): "unknown" (not ours, untouched) | "foreign" (carries our token but the record
 -- is gone: left alone) | "gone" (the dependency no longer has that id: left alone) | "ok" | "repaired".
 function F.verify(item, deps)
+    if deps.enabled == false then return "unknown" end -- level 3: touch nothing
     local okM, md = pcall(function() return item:getModData() end)
     if not okM or type(md) ~= "table" or not md.oiToken then return "unknown" end
     local recs = deps.store(F.RECORD)
@@ -188,6 +190,7 @@ end
 -- Re-asserts every record's tracker flag (the dependency clears a pool's flags when a cycle ends).
 -- Returns how many flags had to be put back, and the number of records.
 function F.reassertTracker(deps)
+    if deps.enabled == false then return 0, 0 end -- level 3: touch nothing
     local recs = deps.store(F.RECORD)
     local back, n = 0, 0
     local t = tracker(deps)
@@ -195,7 +198,7 @@ function F.reassertTracker(deps)
     for _, rec in pairs(recs) do
         n = n + 1
         local p = F.parse(rec.note)
-        if p then
+        if p and poolHas(deps, p) then -- never toward an id the dependency no longer has
             local flagged = type(t[p.tracker]) == "table" and t[p.tracker][p.file] == true
             if not flagged then markTracker(deps, p); back = back + 1 end
         end
@@ -205,6 +208,7 @@ end
 
 -- Sweep: tracker re-assert + verify of the given items. One log line with counts.
 function F.sweep(deps, items)
+    if deps.enabled == false then say(deps, "i", { op = "sweep", off = 1 }); return { ok = 0, repaired = 0, foreign = 0, gone = 0, unknown = 0 }, 0, 0 end
     local c = { ok = 0, repaired = 0, foreign = 0, gone = 0, unknown = 0 }
     local back, n = F.reassertTracker(deps)
     for _, it in ipairs(items or {}) do

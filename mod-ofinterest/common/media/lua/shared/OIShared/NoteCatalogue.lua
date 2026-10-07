@@ -168,6 +168,25 @@ function C.build(deps, tables)
     return c
 end
 
+-- Cuts a built catalogue back to the ids we ship a row for (the drift gate's level 1: new notes of a newer
+-- dependency are never placed). Counts stay as built; returns how many entries were cut.
+function C.restrictKnown(c)
+    if type(c) ~= "table" or not c.entries then return 0 end
+    local cut = 0
+    local function keep(list)
+        local out = {}
+        for _, id in ipairs(list) do if c.entries[id] and c.entries[id].known then out[#out + 1] = id end end
+        return out
+    end
+    for id, rec in pairs(c.entries) do if not rec.known then c.entries[id] = nil; cut = cut + 1 end end
+    c.ids = keep(c.ids)
+    c.standaloneIdx = keep(c.standaloneIdx)
+    for _, group in ipairs({ c.byStoryIdx, c.byPlaceIdx, c.byThemeIdx }) do
+        for k, l in pairs(group) do group[k] = keep(l) end
+    end
+    return cut
+end
+
 -- Module-level current catalogue (installed by the adapter) and the API for later phases.
 local current = empty("not built", nil)
 function C.install(inst) current = inst or empty("not built", nil); return current end

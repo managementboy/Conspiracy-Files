@@ -11,6 +11,8 @@ local function logs()
     local out={}; local real=print; print=function(...) out[#out+1]=table.concat({...}," ") end
     return out,function() print=real end
 end
+-- the catalogue audit lines only (the drift gate writes its own single ev=drift line per boot)
+local function only(out,ev) local o={}; for _,l in ipairs(out) do if l:find("ev="..ev,1,true) then o[#o+1]=l end end return o end
 -- fake dependency built from an id list (default: every id of our table)
 local function fake(ids,opts)
     opts=opts or {}
@@ -106,7 +108,8 @@ local out,restore=logs()
 local ok,err=pcall(Adapter.snapshot)
 Adapter.ensure(); Adapter.ensure()
 restore(); assert(ok,tostring(err))
-assert(not Cat.isActive() and Cat.get("Note/0001")==nil and #out==1,"one line, got "..#out)
+assert(not Cat.isActive() and Cat.get("Note/0001")==nil and #only(out,"catalogue")==1 and #only(out,"drift")==1,"one line each, got "..#out)
+out=only(out,"catalogue")
 assert(out[1]:find("ev=catalogue",1,true) and out[1]:find("state=inactive",1,true),out[1])
 -- the adapter with fakes in the globals: active, one audit line of counts only
 local d=fake(ids)
@@ -114,13 +117,14 @@ NoteContentPool,NoteContentPoolEN,LetterContentPools,LetterContentPoolsEN=d.Note
 LocationCategory={KNOWN_CATEGORIES=KNOWN}; ContentLoader={LANGUAGE="RU"}
 Adapter.reset()
 out,restore=logs(); local c=Adapter.snapshot(); Adapter.snapshot(); restore()
-assert(c.active and Cat.isActive() and #out==1,"active, one line "..#out)
+assert(c.active and Cat.isActive() and #only(out,"catalogue")==1 and #only(out,"drift")==1,"active, one line each "..#out)
+out=only(out,"catalogue")
 for _,k in ipairs({"entries=500","stories=23","places=13","dropped=0","unknown=0","nonEN=1","lang=RU"}) do assert(out[1]:find(k,1,true),k..": "..out[1]) end
 assert(not out[1]:find("FAKE",1,true))
 -- a throwing global must not escape
 setmetatable(_G,{__index=function(_,k) if k=="NoteContentPool" then error("boom") end end})
 NoteContentPool=nil; Adapter.reset(); out,restore=logs(); local ok2=pcall(Adapter.snapshot); restore(); setmetatable(_G,nil)
-assert(ok2 and not Cat.isActive() and #out==1)
+assert(ok2 and not Cat.isActive() and #only(out,"catalogue")==1)
 NoteContentPool,NoteContentPoolEN,LetterContentPools,LetterContentPoolsEN,LocationCategory,ContentLoader=nil,nil,nil,nil,nil,nil
 Adapter.reset()
 
@@ -137,7 +141,7 @@ for id,t in pairs(Tables) do
 end
 -- every dependency source in our tree goes through the adapter only
 local p=io.popen('grep -rlE "NoteContentPool|LetterContentPools|ReadableItemRegistry|LocationCategory" mod-ofinterest/common --include=*.lua')
-for l in p:lines() do assert(l:find("DependencyAdapter.lua",1,true) or l:find("NoteCatalogue",1,true),"dependency touched in "..l) end p:close()
+for l in p:lines() do assert(l:find("DependencyAdapter.lua",1,true) or l:find("NoteCatalogue",1,true) or l:find("DriftGate.lua",1,true),"dependency touched in "..l) end p:close()
 
 -- the ids of our table exist in the real dependency: FILE NAMES ONLY (a directory listing; no file is opened)
 local root=os.getenv("HOME").."/.steam/debian-installation/steamapps/workshop/content/108600/3796373365/mods/ItIsOfInterestToMe/42/media/lua/shared/ItIsOfInterestToMe/Content"

@@ -1021,8 +1021,17 @@ function R.decideStories()
     if storiesDone or not allowed() or not areaSession then return 0 end
     local cat=OIShared.NoteCatalogue
     if not (cat and cat.isActive()) then return 0 end
+    -- DRIFT GATE: level 3 decides nothing; level 2 decides nothing new in a save that already has note scenes.
+    local gate=OIShared.DriftGate
+    if gate and not gate.forcingOn() then
+        storiesDone=true; CFLog.write("i","stories",{why="drift-off"}); return 0
+    end
     local seed=R.worldSeed()
     if not seed then return 0 end
+    if gate and (gate.level() or 0)>=2 and not storyPlan then
+        local _,already=recordStories()
+        if next(already) then storiesDone=true; CFLog.write("i","stories",{why="drift-held",level=gate.level()}); return 0 end
+    end
     if not storyPlan then
         -- The plan is worked out inside a coroutine that hands the frame back every few milliseconds, so
         -- world start never stalls on it (the placers call tick() inside their loops).
