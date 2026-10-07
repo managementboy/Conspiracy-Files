@@ -157,6 +157,17 @@ function S.intentMatches(doc,target)
     end
     return true
 end
+-- A note scene whose vehicle host was missing at arrival was moved ONCE to a building (api.moveWaiting): its
+-- assignment carries fallback=1 and the clue then goes on the ground there, so every placement check reads
+-- the effective document, not the decided one.
+function S.effectiveDoc(doc,a)
+    if type(doc)=="table" and type(a)=="table" and a.fallback==1 and doc.spot=="vehicle" then
+        local d={}; for k,v in pairs(doc) do d[k]=v end
+        d.spot="ground"; d.vehicles=nil; d.containers=nil
+        return d
+    end
+    return doc
+end
 -- How many of this case's clues are already on something that moves.
 function S.mobileCount(root)
     local n=0
@@ -368,7 +379,7 @@ function S.validate(root)
         ids[d.id]=true
         local a=root.assignments[d.id]
         if not fields(a,{physicalToken=true,target=true,planned=true,status=true,placedHours=true,relocations=true,
-                         locationId=true,deferredHours=true,missingHours=true,droppedFrom=true}) or a.physicalToken~="cf-g2:"..d.id
+                         locationId=true,deferredHours=true,missingHours=true,droppedFrom=true,fallback=true}) or a.physicalToken~="cf-g2:"..d.id
             or not ({pending=true,placing=true,placed=true,unknown=true,conflict=true,
                      deferred=true,indexed=true,dropped=true})[a.status] then return false,"invalid assignment" end
         -- Relocation moves the physical object, never the document's own
@@ -389,7 +400,7 @@ function S.validate(root)
             elseif a.planned~=nil then return false,"invalid assignment" end
         else
             if a.deferredHours~=nil or a.planned~=nil then return false,"invalid assignment" end
-            if not S.target(a.target,sites[a.locationId or d.locationId]) or not S.intentMatches(d,a.target) then
+            if not S.target(a.target,sites[a.locationId or d.locationId]) or not S.intentMatches(S.effectiveDoc(d,a),a.target) then
                 return false,"invalid assignment"
             end
             if a.status=="placed" and not validHours(a.placedHours) then return false,"invalid assignment" end
@@ -644,8 +655,8 @@ function S.open(initial,sink)
         if isArea(root) then
             local doc
             for _,d in ipairs(root.case.documents) do if d.id==id then doc=d end end
-            if not doc or site.id~=doc.locationId then return false,"a clue stays in its own area" end
-            if not S.intentMatches(doc,target) then return false,"a clue moves only to the same kind of spot" end
+            if not doc or site.id~=(a.fallback==1 and a.locationId or doc.locationId) then return false,"a clue stays in its own area" end
+            if not S.intentMatches(S.effectiveDoc(doc,a),target) then return false,"a clue moves only to the same kind of spot" end
         end
         return commit(function(r)
             local ra=r.assignments[id]
@@ -666,7 +677,7 @@ function S.open(initial,sink)
         if not site or not S.target(target,site) then return false,"target does not match the clue's own site" end
         local doc
         for _,d in ipairs(root.case.documents) do if d.id==id then doc=d end end
-        if not S.intentMatches(doc,target) then return false,"target does not match the clue's placement intent" end
+        if not S.intentMatches(S.effectiveDoc(doc,a),target) then return false,"target does not match the clue's placement intent" end
         -- The cap holds for a late arrival too (P4-R134): a clue that waited is
         -- welcome on a carrier, but only while the case has no mobile clue yet.
         if S.isMobile(target) and not isArea(root) and S.mobileCount(root)>=S.MOBILE_PER_CASE then
@@ -676,6 +687,28 @@ function S.open(initial,sink)
         return commit(function(r)
             local ra=r.assignments[id]
             ra.target=copy(target); ra.status="pending"; ra.deferredHours=nil; ra.planned=nil
+        end)
+    end
+    -- THE VEHICLE FALLBACK (phase 7): a waiting vehicle-hosted note scene whose vehicle never turned up is moved
+    -- ONCE to a building: the building's site is appended to the world record (it only grows), the clue's
+    -- assignment points at it and carries fallback=1, and the wait clock restarts. Nothing decided changes.
+    function api.moveWaiting(id,site,hours)
+        local a=root.assignments[id]; if not a then return false,"unknown document" end
+        if not isArea(root) then return false,"not a No Help world" end
+        if a.status~="deferred" then return false,"only a waiting clue moves" end
+        if a.fallback~=nil then return false,"a scene moves once" end
+        if not validHours(hours) then return false,"invalid hours" end
+        local doc
+        for _,d in ipairs(root.case.documents) do if d.id==id then doc=d end end
+        if not doc or doc.spot~="vehicle" or type(doc.members)~="table" or type(doc.members[1])~="table" or type(doc.members[1].noteId)~="string" then
+            return false,"only a vehicle note scene moves"
+        end
+        if type(site)~="table" or type(site.id)~="string" or type(site.bounds)~="table" then return false,"invalid site" end
+        for _,l in ipairs(root.case.locations) do if l.id==site.id then return false,"site exists" end end
+        return commit(function(r)
+            r.case.locations[#r.case.locations+1]=copy(site)
+            local ra=r.assignments[id]
+            ra.locationId=site.id; ra.deferredHours=hours; ra.fallback=1
         end)
     end
     -- An indexed signature that no longer matches the live building becomes an

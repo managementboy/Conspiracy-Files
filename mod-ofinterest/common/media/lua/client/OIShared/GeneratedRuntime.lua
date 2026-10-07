@@ -1030,7 +1030,8 @@ function R.decideStories()
     if not seed then return 0 end
     if gate and (gate.level() or 0)>=2 and not storyPlan then
         local _,already=recordStories()
-        if next(already) then storiesDone=true; CFLog.write("i","stories",{why="drift-held",level=gate.level()}); return 0 end
+        local any=false; for _ in pairs(already) do any=true; break end
+        if any then storiesDone=true; CFLog.write("i","stories",{why="drift-held",level=gate.level()}); return 0 end
     end
     if not storyPlan then
         -- The plan is worked out inside a coroutine that hands the frame back every few milliseconds, so
@@ -1118,6 +1119,11 @@ end
 function R.worldCase()
     local root=worldRoot()
     return root and root.case or nil
+end
+-- The world record's assignment of one clue (read only; the checks read where a scene ended up).
+function R.assignmentOf(id)
+    local root=worldRoot()
+    return root and root.assignments and root.assignments[id] or nil
 end
 function R.known()
     refreshAddressCache()
@@ -2072,6 +2078,45 @@ R.holdsProps=holdsProps
 local function wantsVehicle(doc)
     return doc~=nil and (doc.placementIntent=="vehicle" or doc.spot=="vehicle")
 end
+-- THE VEHICLE FALLBACK (phase 7). A vehicle-hosted note scene whose vehicle is not there when the survivor has
+-- arrived (no allowed vehicle within 25 tiles of its site, the site's squares loaded) is moved ONCE to the nearest
+-- free building within 60 tiles (OIShared/VehicleFallback); with no free building it stays pending and is
+-- counted. Returns true when it moved (the attempt is spent).
+local fallbackBuildings
+local fallbackNone={}
+local function vehicleFallback(api,id,site,doc,hours)
+    local VF=require("OIShared/VehicleFallback")
+    if not (SceneNote.isScene(doc) and doc.spot=="vehicle") then return false end
+    local a=api.assignment(id)
+    if not a or a.fallback~=nil then return false end
+    local b=site.bounds
+    local cx,cy=math.floor((b.x1+b.x2)/2),math.floor((b.y1+b.y2)/2)
+    local d=survivorDistance(site)
+    if d==nil or d>VF.NO_VEHICLE_TILES then return false end
+    local cell=getCell and getCell()
+    if not (cell and cell:getGridSquare(cx,cy,b.z or 0)) then return false end
+    for _,entry in ipairs(World.vehiclesNear(cx,cy,b.z or 0,VF.NO_VEHICLE_TILES,16)) do
+        local script=entry.vehicle.getScriptName and entry.vehicle:getScriptName() or ""
+        if VF.allowed(script,doc.vehicles) then return false end
+    end
+    if not fallbackBuildings then
+        fallbackBuildings=require("OIShared/StoryPlacer").parseBuildings(require("OIShared/Generated/Buildings"))
+    end
+    local used=recordStories()
+    local m=doc.members and doc.members[1]
+    local bld,dist,matched=VF.pick(fallbackBuildings,used,cx,cy,m and m.place or nil)
+    if not bld then
+        if not fallbackNone[id] then
+            fallbackNone[id]=true
+            CFLog.write("w","batch",{why="vehicle-fallback-none",doc=id})
+        end
+        return false
+    end
+    local ok,why=api.moveWaiting(id,VF.site(site,bld,matched),hours)
+    if not ok then log("vehicle fallback refused: "..tostring(why)); return false end
+    CFLog.write("i","batch",{why="vehicle-fallback",doc=id,building=bld.id,dist=dist,cat=bld.cat,matched=matched and 1 or 0})
+    return true
+end
 -- `onlyArea` (optional): one attempt for that area's clues only - the arrival
 -- trigger's attempt, run the moment the survivor enters the area's ring.
 local function filler(api,onlyArea)
@@ -2128,6 +2173,7 @@ local function filler(api,onlyArea)
                 if s.id==root.assignments[id].locationId then site=s end
             end
             for _,d in ipairs(root.case.documents) do if d.id==id then doc=d end end
+            doc=Session.effectiveDoc(doc,root.assignments[id])
             if not site then return true end
             if not indexed and farFromSurvivor(site) then
                 declinePlacement("the area of "..tostring(id).." is far from the survivor")
@@ -2205,6 +2251,7 @@ local function filler(api,onlyArea)
         end
         if not target then
             if wantsVehicle(doc) then
+                if vehicleFallback(api,id,site,doc,hours) then return true end
                 -- Named: the fitness audit (20260924T191606) stood at this
                 -- clue's site for two minutes and could only report
                 -- "last reason: none". A clue that wants a vehicle waits for

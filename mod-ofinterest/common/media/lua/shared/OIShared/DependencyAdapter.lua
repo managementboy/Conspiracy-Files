@@ -13,6 +13,7 @@ local Gate = require("OIShared/DriftGate")
 local A = {}
 local tried = false
 local lastProbe
+local hiddenCount = 0
 local hidden = {} -- TEST HOOK: note ids the adapter pretends are gone from the live pool (debug only)
 
 function A.gather()
@@ -106,7 +107,7 @@ function A.forceDeps()
         poolFor = function(k)
             local pool
             if k == "Note" then pool = NoteContentPool else pool = LetterContentPools and LetterContentPools[k] or nil end
-            if next(hidden) and type(pool) == "table" then
+            if hiddenCount > 0 and type(pool) == "table" then
                 local out = {}
                 for _, e in ipairs(pool) do
                     local id = type(e) == "table" and e.id or nil
@@ -139,13 +140,14 @@ end
 -- TEST HOOK (debug sessions only): pretend the dependency no longer has this note id. nil clears all.
 function A.testHide(noteId)
     if not (isDebugEnabled and isDebugEnabled()) then return false end
-    if noteId == nil then hidden = {} else hidden[noteId] = true end
+    if noteId == nil then hidden = {}; hiddenCount = 0
+    elseif not hidden[noteId] then hidden[noteId] = true; hiddenCount = hiddenCount + 1 end
     return true
 end
 function A.lastProbe() return lastProbe end
 
 -- Lazy entry for callers that run before OnGameStart finished.
 function A.ensure() return A.snapshot(false) end
-function A.reset() tried = false; hidden = {}; lastProbe = nil; Catalogue.reset(); Gate.reset() end
+function A.reset() tried = false; hidden = {}; hiddenCount = 0; lastProbe = nil; Catalogue.reset(); Gate.reset() end
 
 return A
