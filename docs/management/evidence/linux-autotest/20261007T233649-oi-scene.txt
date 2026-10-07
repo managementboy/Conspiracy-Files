@@ -1,0 +1,21 @@
+Linux Of Interest scene check 20261007T233649: PASS
+source: 2fa8bd49
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+note: scene decided: clue nh:note:ns001:ns001:1, note id Note/0159
+note: placed at x,y,z = 10855,10128,0; recognised=false
+note: placed: holders=1 inside=4 loose=0 want=4 holder=Base.Bag_DeadMice pickRule=true note piece=1 item=Base.Note file=0159.txt re=0 fix=0 verify=ok
+note: placed: forced pieces=1, plain object pieces=3, objects carrying note keys=0
+note: close cue (said, suppressed, last was this scene): 1 1 true; cue lines in the log: 0
+note: Search Mode live rows for the scene: 1
+note: tracker cycle (flag cleared, flags put back, records, flag now): true 1 1 true
+note: clock (hours before, after): 2.1 98.1
+note: relocated: the scene moved from 10855,10128 to 10852,10141
+note: after relocation: holders=1 inside=4 loose=0 want=4 holder=Base.Bag_DeadMice pickRule=true note piece=1 item=Base.Note file=0159.txt re=1 fix=0 verify=ok
+note: after relocation: forced pieces=1, plain object pieces=3, objects carrying note keys=0
+note: reloaded: status placed at 10852,10141
+note: reloaded save: holders=1 inside=4 loose=0 want=4 holder=Base.Bag_DeadMice pickRule=true note piece=1 item=Base.Note file=0159.txt re=1 fix=0 verify=ok
+note: reloaded save: forced pieces=1, plain object pieces=3, objects carrying note keys=0
+note: reload sweep line: foreign=0 gone=0 items=0 ok=0 op=sweep records=1 repaired=0 tracker=0
+note: find via Search Mode (ok, new, recognised): true true true; then Look it over (ok, new, recognised): true false true
+note: find events in the log: 1; nudge lines queued: 1
