@@ -242,6 +242,7 @@ function P.see(item,container)
         keyId=read(item,"getKeyId")}
     queued[item]=true
 end
+local adoptedSaid={}
 local function remember(entry)
     if entry.body then
         local md=read(entry.body,"getModData")
@@ -253,7 +254,12 @@ local function remember(entry)
         -- carries instead of treating an ordinary sequence of player actions
         -- as a contradiction and throwing.
         if md.oiObservedSource and md.oiObservedSource~=entry.token then
-            log("adopted corpse provenance "..tostring(md.oiObservedSource).." for a queued observation")
+            -- Said once per pair: a body still in reach is seen again every few frames.
+            local pair=tostring(md.oiObservedSource).."|"..tostring(entry.token)
+            if not adoptedSaid[pair] then
+                adoptedSaid[pair]=true
+                log("adopted corpse provenance "..tostring(md.oiObservedSource).." for a queued observation")
+            end
             entry.token=md.oiObservedSource
         end
         md.oiObservedSource=entry.token
