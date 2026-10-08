@@ -19,8 +19,10 @@ class Gate(unittest.TestCase):
         self.f = os.path.join(self.tmp, "APPROVED_BY_OWNER")
         self.h = hashlib.sha256(open(DESC, "rb").read()).hexdigest()
 
-    def test_owner_file_is_not_committed_by_us(self):
-        self.assertFalse(os.path.exists(REAL_APPROVAL), "the approval file is the owner's to create")
+    def test_owner_file_if_present_is_for_the_current_text(self):
+        # The owner creates this file (2026-10-08); we never write it. If the page text changes it goes stale.
+        if os.path.exists(REAL_APPROVAL):
+            self.assertIn(self.h, open(REAL_APPROVAL).read().split("\n")[0], "page text changed: the owner must approve again")
 
     def test_dry_run_reports_missing_stale_ok_and_the_hash(self):
         r = run(["--dry-run"], self.f); self.assertEqual(r.returncode, 0, r.stderr)

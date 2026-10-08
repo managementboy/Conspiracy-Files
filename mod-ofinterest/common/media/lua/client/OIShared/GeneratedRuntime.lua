@@ -995,7 +995,7 @@ function R.decideNoteScene(row,bounds,meta)
         end
     end
     local added,ids=areaSession.addNoteScene{site=site,row=row,version=Manifest.VERSION,hours=worldHours()}
-    if added then CFLog.write("i","case",{case=site.id,n=#ids,why="area-decided-note-scene"}) end
+    if added then CFLog.write("d","case",{case=site.id,n=#ids,why="area-decided-note-scene"}) end
     return added,ids
 end
 -- STORIES AS SCENES (phase 5). Once per session, when the catalogue is active and the world record is
@@ -1003,6 +1003,7 @@ end
 -- enabled ones (Generated/StoryEnable) are decided into the world record, a few per pass. A scene already in
 -- the record is never touched; one whose building another scene holds is skipped (and counted).
 R.STORY_PER_PASS=4
+R.STORY_PASS_MS=6 -- a pass stops starting new scenes after this long; the rest wait for the next pass
 local storiesDone=false
 local storyPlan=nil
 local planCo,planBusy,planPasses=nil,0,0
@@ -1079,10 +1080,12 @@ function R.decideStories()
     end
     local used,decided=recordStories()
     local made,skipped,pending=0,0,0
+    local clock=getTimeInMillis or function() return 0 end
+    local t0=clock()
     for _,d in ipairs(storyPlan) do
         if not decided[SceneNote.areaId(d)] then
             if used[d.building] then skipped=skipped+1
-            elseif made>=R.STORY_PER_PASS then pending=pending+1
+            elseif made>=R.STORY_PER_PASS or clock()-t0>=R.STORY_PASS_MS then pending=pending+1
             else
                 local ok,ids=R.decideNoteScene(d,d.bounds,d)
                 if ok then made=made+1; used[d.building]=d.id
@@ -1090,7 +1093,7 @@ function R.decideStories()
             end
         end
     end
-    if made>0 then CFLog.write("i","stories",{why="decided",made=made,pending=pending,skipped=skipped}) end
+    if made>0 then CFLog.write("d","stories",{why="decided",made=made,pending=pending,skipped=skipped}) end
     if pending==0 then
         storiesDone=true
         CFLog.write("i","stories",{why="done",skipped=skipped})
