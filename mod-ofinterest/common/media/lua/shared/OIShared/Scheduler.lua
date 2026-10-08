@@ -17,6 +17,12 @@ function Scheduler.new(clock, report)
     -- at any document count; every class is keyed, so the queue stays small.
     local api = { maxSteps = 48, budgetMs = 2, maxJobs = 32, peakMs = 0 }
     local held = {}
+    -- Jobs that ran longer than the budget, per subsystem, since the last takeSlow().
+    local slow = {}
+    function api.takeSlow()
+        local out = slow; slow = {}
+        return out
+    end
     local function hold(subsystem, n) held[subsystem] = (held[subsystem] or 0) + n end
     function api.counts()
         local out = {}
@@ -68,7 +74,13 @@ function Scheduler.new(clock, report)
             local job = table.remove(queue, 1)
             if disabled[job.subsystem] then keys[job.key] = nil; hold(job.subsystem, -1)
             else
+                local t0 = clock()
                 local ok, done = pcall(job.step)
+                local took = clock() - t0
+                if took > api.budgetMs then
+                    local rec = slow[job.subsystem] or { n = 0, maxMs = 0 }
+                    rec.n = rec.n + 1; rec.maxMs = math.max(rec.maxMs, took); slow[job.subsystem] = rec
+                end
                 steps = steps + 1
                 counts[job.subsystem] = (counts[job.subsystem] or 0) + 1
                 if not ok then

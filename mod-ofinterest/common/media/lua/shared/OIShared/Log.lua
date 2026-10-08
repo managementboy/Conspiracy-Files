@@ -93,6 +93,10 @@ function Log.enabled(level)
 end
 
 -- Log.write("i","placed",{case="3",doc="d4",room="kitchen"})
+Log.REPEAT_EVERY=100
+local SEEN_CAP=256
+local seen_lines,seen_count={},0
+function Log.resetRepeats() seen_lines,seen_count={},0 end -- for checks that boot the same state twice
 function Log.write(level,event,fields)
     if not LEVELS[level] then level="i" end
     if not Log.enabled(level) then return end
@@ -113,7 +117,18 @@ function Log.write(level,event,fields)
     for key in pairs(fields) do if not seen[key] then rest[#rest+1]=key end end
     table.sort(rest)
     for _,key in ipairs(rest) do parts[#parts+1]=key.."="..clean(fields[key]) end
-    print(table.concat(parts," "))
+    -- The same line again inside the same in-game minute is the same news (a body still in reach
+    -- is seen every few frames): print it once, then once more per REPEAT_EVERY, saying how many.
+    local line=table.concat(parts," ")
+    local n=(seen_lines[line] or 0)+1
+    if seen_count>=SEEN_CAP and not seen_lines[line] then seen_lines,seen_count={},0 end
+    if not seen_lines[line] then seen_count=seen_count+1 end
+    seen_lines[line]=n
+    if n>1 then
+        if n%Log.REPEAT_EVERY~=0 then return end
+        line=line.." repeated="..n
+    end
+    print(line)
 end
 
 function Log.error(event,fields) Log.write("e",event,fields) end

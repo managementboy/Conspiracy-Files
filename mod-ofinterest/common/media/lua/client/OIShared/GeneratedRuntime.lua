@@ -2720,6 +2720,12 @@ require("OIShared/Events/EngineEvents").on("OnTick", function()
         if #mapQueue>0 then scheduler.enqueue("map-areas","map-areas",mapDrain) end
     end
     scheduler.step()
+    -- Said only when a job ran over its budget: which job class, how many times, the worst in ms.
+    if ticks%1800==0 and scheduler.takeSlow then
+        for subsystem,rec in pairs(scheduler.takeSlow()) do
+            CFLog.write("i","probe",{why="slow-job",subsystem=subsystem,n=rec.n,maxMs=rec.maxMs})
+        end
+    end
 end)
 -- setDisplayCategory is a RUNTIME property: the custom name is saved with the
 -- item and the category is not, so reloading a save dropped every document

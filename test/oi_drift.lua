@@ -82,6 +82,7 @@ end
 local function boot(d)
     install(d)
     Adapter.reset()
+    require("OIShared/Log").resetRepeats()
     local n0=#LOG
     local ok,err=pcall(Adapter.snapshot)
     local out={}; for i=n0+1,#LOG do out[#out+1]=LOG[i] end
