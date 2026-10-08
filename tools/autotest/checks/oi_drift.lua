@@ -4,7 +4,7 @@
 CFDRIFT = CFDRIFT or {}
 local K = CFDRIFT
 local function R() return OIShared.GeneratedRuntime end
-local function A() return OIShared.DependencyAdapter end
+local function A() return require("OIShared/DependencyAdapter") end
 local function ser(v)
     if type(v) ~= "table" then return tostring(v) end
     local k = {}
