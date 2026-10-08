@@ -129,6 +129,25 @@ published_id="0"
 
 description="$(cat "$ITEM_DIR/description.txt" 2>/dev/null || echo "$TITLE")"
 
+# OWNER APPROVAL GATE (Of Interest only). A real upload needs the file
+# tools/workshop-ofinterest/APPROVED_BY_OWNER whose FIRST line contains the
+# sha256 of description.txt, so any later change of the page text needs a new
+# approval. Only the owner creates that file; nothing here ever writes it.
+approval="n/a"
+if [ "$mod" = ofinterest ]; then
+    approval_file="${CF_OI_APPROVAL_FILE:-$ITEM_DIR/APPROVED_BY_OWNER}"
+    desc_hash="$(sha256sum "$ITEM_DIR/description.txt" 2>/dev/null | cut -d' ' -f1)"
+    if [ ! -f "$approval_file" ]; then approval=missing
+    elif [ -n "$desc_hash" ] && head -1 "$approval_file" | tr -d '\r' | grep -qF "$desc_hash"; then approval=ok
+    else approval=stale; fi
+    if [ "$dry_run" -eq 0 ] && [ "$approval" != ok ]; then
+        echo "Of Interest upload refused: owner approval is $approval." >&2
+        echo "The file $approval_file must exist and its first line must contain the" >&2
+        echo "sha256 of description.txt ($desc_hash). Only the owner creates it." >&2
+        exit 1
+    fi
+fi
+
 # Git Bash paths such as /c/Users/... are valid to its own tools but are not
 # valid inside a VDF read directly by the native Windows steamcmd.exe. Use the
 # mixed C:/... form there; forward slashes also avoid KeyValues backslash
@@ -204,6 +223,10 @@ echo "  visibility  $vis_name ($visibility)"
 echo "  account     $STEAM_USER"
 echo "  item        $([ "$published_id" = "0" ] && echo 'NEW - will be created' || echo "$published_id")"
 echo "  changenote  $changenote"
+if [ "$mod" = ofinterest ]; then
+    echo "  description sha256 $desc_hash"
+    echo "  approval: $approval"
+fi
 [ -f "$PREVIEW" ] || echo "  preview     none (Workshop page will have no image)"
 echo "  vdf         $VDF"
 if [ -n "$boot_override_reason" ]; then
