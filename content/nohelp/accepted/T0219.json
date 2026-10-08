@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "YourLocalShelterBrandenburg"
+    },
+    "body": "Somebody numbered this pack and tied a tag to it. The tag lists names for access, one crossed out. The water bottle is sealed, never handed out.",
+    "id": "t0219-01",
+    "kind": "set",
+    "pieces": [
+      "Bag_ALICEpack",
+      "WaterBottle"
+    ],
+    "title": "Pack and water bottle",
+    "where": [
+      {
+        "containers": [
+          "wardrobe",
+          "fridge",
+          "dresser",
+          "counter",
+          "clothingrack",
+          "overhead"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

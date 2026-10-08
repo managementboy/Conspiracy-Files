@@ -1,0 +1,32 @@
+[
+  {
+    "anchor": {
+      "map": "RiversideStashMap8",
+      "mark": 1
+    },
+    "body": "Bread and a water bottle tied to a note for whoever comes next. It says to eat before leaving. The back has a sighting dated after they closed this route.",
+    "id": "t0101-01",
+    "kind": "set",
+    "pieces": [
+      "Bread",
+      "WaterBottle"
+    ],
+    "title": "Bread and water bottle",
+    "where": [
+      {
+        "containers": [
+          "counter",
+          "fridge",
+          "overhead",
+          "dishescabinet",
+          "freezer",
+          "grocerstand"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

@@ -1,0 +1,148 @@
+[
+  {
+    "recall": "R1",
+    "row": {
+      "anchor": {
+        "map": "MulStashMap10",
+        "mark": 1
+      },
+      "body": "A door key is kept with a cleaning bottle and a checklist that says the rooms were clear. The back asks for one more walk-through before reopening.",
+      "id": "t0087-01",
+      "kind": "set",
+      "pieces": [
+        "Disinfectant",
+        "KeyRing"
+      ],
+      "title": "Clear on the first pass",
+      "where": [
+        {
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "death house",
+        "source": "map:MulStashMap10"
+      },
+      "gloss": "A completed clearance is followed by a request for another inspection.",
+      "prov": {
+        "batch": "T0087",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A program site might require a routine recheck after cleaning; the list does not say why it was closed."
+    }
+  },
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "map": "MulStashMap10",
+        "mark": 1
+      },
+      "body": "the leather strips and bath towel are wedged beneath unused warning tape. footprints pass around the bundle rather than toward it.",
+      "id": "t0087-01",
+      "kind": "set",
+      "pieces": [
+        "LeatherStrips",
+        "BathTowel"
+      ],
+      "title": "missing count beside the leather strips",
+      "where": [
+        {
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-warning",
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "gloss": "A response bundle preserves a missing count, changed route, or erased identity.",
+      "prov": {
+        "batch": "T0087",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A farm-program crew could have counted routes, repacked tools, or removed ownership marks during hurried field work; the objects do not prove a concealed public response."
+    }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "map": "MulStashMap10",
+        "mark": 1
+      },
+      "body": "the leather strips and bath towel are wedged beneath unused warning tape. footprints pass around the bundle rather than toward it.",
+      "id": "t0087-01",
+      "kind": "set",
+      "pieces": [
+        "LeatherStrips",
+        "BathTowel"
+      ],
+      "title": "Leather strips beside the spare mark",
+      "where": [
+        {
+          "containers": [
+            "crate",
+            "shelves",
+            "desk",
+            "counter",
+            "cardboardbox",
+            "bin"
+          ],
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-warning",
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "gloss": "A response bundle preserves a missing count, changed route, or erased identity.",
+      "prov": {
+        "batch": "T0087",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A farm-program crew could have counted routes, repacked tools, or removed ownership marks during hurried field work; the objects do not prove a concealed public response."
+    }
+  }
+]

@@ -6,7 +6,11 @@
 package.preload["ConspiracyFiles/ClueCue"]=function() return {} end
 package.path="mod/common/media/lua/shared/?.lua;mod/common/media/lua/client/?.lua;"..package.path
 local events={}
-Events={OnTick={Add=function(f) events.tick=f end},OnGameStart={Add=function(f) events.start=f end},
+-- Only the handlers registered by loading the runtime are captured. R.start requires
+-- InteractionAPI lazily, whose modules register their own OnTick/OnGameStart AFTER the
+-- runtime's; a one-slot stub kept the last and silently dropped the runtime's.
+local frozen=false
+Events={OnTick={Add=function(f) if not frozen then events.tick=f end end},OnGameStart={Add=function(f) if not frozen then events.start=f end end},
     OnFillInventoryObjectContextMenu={Add=function() end}}
 local function list(t) return {size=function() return #t end,get=function(_,i) return t[i+1] end} end
 local function record(t) local o={} for k,v in pairs(t) do local val=v; o[k]=function() return val end end return o end
@@ -62,6 +66,7 @@ end
 package.preload["ConspiracyFiles/T3Nearby"]=function() return {start=function() return true end,result=result} end
 package.preload["ConspiracyFiles/GeneratedMenu"]=function() return {} end
 local R=require("ConspiracyFiles/GeneratedRuntime")
+frozen=true
 assert(R.start(1)); for _=1,200 do events.tick() end
 local root=saved.campaign.canonical
 assert(root,"a case was placed")
@@ -169,7 +174,9 @@ print("PASS clue recognition: placed plain, recognised once by search or look, s
 -- wraps never see it: the finding location has to be taken at the note, or the
 -- pen has nothing to write.
 local marked={}
-ConspiracyFiles.ClueMarkers={foundHere=function(it) marked[#marked+1]=it; return true end}
+-- The runtime reaches the marker module through InteractionAPI.clueMarkers(), i.e. require(), not the shared table.
+local markerDouble={foundHere=function(it) marked[#marked+1]=it; return true end}
+ConspiracyFiles.ClueMarkers=markerDouble; package.loaded["ConspiracyFiles/ClueMarkers"]=markerDouble
 local lying
 for _,c in pairs(containers) do
     for _,v in ipairs(c.items) do

@@ -1,0 +1,43 @@
+[
+  {
+    "anchor": {
+      "scene": "RZSOrphanedFawn"
+    },
+    "body": "A cloudy water bottle and a sample jar share a waxy green film. A scrap of twine around both still holds treated pasture grass.",
+    "id": "t0397-01",
+    "kind": "set",
+    "pieces": [
+      "WaterBottle",
+      "EmptyJar"
+    ],
+    "title": "Water bottle and jar",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RZSOrphanedFawn"
+    },
+    "body": "The ranger brought the fawn to the road and asked for a wildlife pickup. The checkpoint worker recorded one animal and no people, though the child holding its blanket stood beside him. She was still there when they shut the lane.",
+    "id": "t0397-02",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "title": "Letter",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
+  }
+]

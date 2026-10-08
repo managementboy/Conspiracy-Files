@@ -1,0 +1,262 @@
+[
+  {
+    "body": "Jar's caked with dried pesticide residue inside. Seed bag says trial formula from the county extension office. There's a whole case of these in the barn outside.",
+    "id": "t0411-01",
+    "kind": "set",
+    "pieces": [
+      "EmptyJar",
+      "SeedBag"
+    ],
+    "title": "Empty jar and seed bag",
+    "where": [
+      {
+        "containers": [
+          "smallcrate",
+          "bin",
+          "crate",
+          "trough",
+          "composter",
+          "doghouse"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "A clean bottle and a cloudy bucket share a chalk mark. The bucket was filled far from the rows after the sprayer passed.",
+    "id": "t0411-02",
+    "kind": "set",
+    "pieces": [
+      "WaterBottle",
+      "Bucket"
+    ],
+    "title": "Water bottle and bucket",
+    "where": [
+      {
+        "containers": [
+          "dumpster",
+          "bin",
+          "smallcrate",
+          "crate",
+          "cardboardbox",
+          "smallbox"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "The leather gloves are stained yellow-brown around the fingers. The spray can is bone dry but reeks of chemicals. Someone was working fields when things went wrong.",
+    "id": "t0411-03",
+    "kind": "set",
+    "pieces": [
+      "Gloves_LeatherGloves",
+      "GardeningSprayEmpty"
+    ],
+    "title": "Leather gloves and empty sprayer",
+    "where": [
+      {
+        "containers": [
+          "smallcrate",
+          "dumpster",
+          "bin",
+          "crate",
+          "cardboardbox",
+          "smallbox"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "The feed sack has an oily streak under its fold. A rinse pail has the same mark above the waterline.",
+    "id": "t0411-04",
+    "kind": "set",
+    "pieces": [
+      "AnimalFeedBag",
+      "Bucket"
+    ],
+    "title": "Feed sack and bucket",
+    "where": [
+      {
+        "containers": [
+          "dumpster",
+          "bin",
+          "smallcrate",
+          "crate",
+          "trough",
+          "composter"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "Tape seals a slit in the seed sack. The pale dust under it has caught on the outside. A child's height is marked on the tape.",
+    "id": "t0411-05",
+    "kind": "set",
+    "pieces": [
+      "SeedBag",
+      "DuctTape"
+    ],
+    "title": "Seed bag and duct tape",
+    "where": [
+      {
+        "containers": [
+          "shelves",
+          "toolcabinet",
+          "metal_shelves",
+          "cardboardbox",
+          "crate",
+          "smallbox"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "The empty jar has checkpoint tape and tag 5 on it. The map has the evacuation route marked with a thick line. A scribbled order on the map says to stay quiet.",
+    "id": "t0411-06",
+    "kind": "set",
+    "pieces": [
+      "EmptyJar",
+      "Map"
+    ],
+    "title": "Empty jar and map",
+    "where": [
+      {
+        "containers": [
+          "dishescabinet",
+          "desk",
+          "overhead",
+          "filingcabinet",
+          "counter",
+          "shelves"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "The loaf is in clean cloth, tied and sealed with barrier tape. A numbered tag under the tape has a checkpoint code and initials. I think I've seen tags like this on belongings at the perimeter.",
+    "id": "t0411-07",
+    "kind": "set",
+    "pieces": [
+      "Bread",
+      "DishCloth"
+    ],
+    "title": "Bread and dish cloth",
+    "where": [
+      {
+        "containers": [
+          "counter",
+          "dishescabinet",
+          "overhead",
+          "fridge",
+          "cardboardbox",
+          "clothingrack"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "The soap is worn down on one side and the sponge is dry. They're wrapped in barrier tape with a cup. A numbered tag is tied to the package.",
+    "id": "t0411-08",
+    "kind": "set",
+    "pieces": [
+      "Soap2",
+      "Sponge"
+    ],
+    "title": "soap and sponge",
+    "where": [
+      {
+        "containers": [
+          "medicine",
+          "dishescabinet",
+          "counter",
+          "clothingwasher",
+          "sidetable",
+          "cardboardbox"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "The card asks for supper to be kept warm. A ring from a sprayer runs across it, and the ink looks fresh.",
+    "id": "t0411-09",
+    "kind": "set",
+    "pieces": [
+      "GardeningSprayEmpty",
+      "Postcard"
+    ],
+    "title": "Empty sprayer and postcard",
+    "where": [
+      {
+        "containers": [
+          "dumpster",
+          "bin",
+          "smallcrate",
+          "crate",
+          "cardboardbox",
+          "smallbox"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "Residue crusted in the tumbler. Half the fertilizer is gone from the bag. Someone measured out doses here.",
+    "id": "t0411-10",
+    "kind": "set",
+    "pieces": [
+      "Fertilizer",
+      "GlassTumbler"
+    ],
+    "title": "Fertilizer and tumbler",
+    "where": [
+      {
+        "containers": [
+          "dumpster",
+          "bin",
+          "smallcrate",
+          "crate",
+          "cardboardbox",
+          "smallbox"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

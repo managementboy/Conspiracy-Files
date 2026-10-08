@@ -1,0 +1,22 @@
+{
+  "t0214-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-warning",
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "gloss": "A taped bundle with a roll-call page whose names were struck out.",
+    "prov": {
+      "batch": "T0214",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "None: one-sided on purpose"
+  }
+}

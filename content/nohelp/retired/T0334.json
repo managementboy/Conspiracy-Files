@@ -1,0 +1,44 @@
+[
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "scene": "RDSGunmanInBathroom"
+      },
+      "body": "I saved the cloth with yellow dust for you. The field-sprayer test crew passed Friday before dawn; three people felt dizzy, and afterward the radio warned everyone indoors.",
+      "id": "t0334-01",
+      "kind": "written",
+      "pieces": [
+        "letter"
+      ],
+      "title": "Friday before dawn — yellow dust",
+      "where": [
+        {
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "corpse"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-warning",
+          "c-orders"
+        ]
+      },
+      "gloss": "A personal trace connects a farm trial to symptoms before a later restriction.",
+      "prov": {
+        "batch": "T0334",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "Emergency workers could have picked up the same yellow dust while responding near a field; this personal trace does not prove the trial caused the emergency."
+    }
+  }
+]

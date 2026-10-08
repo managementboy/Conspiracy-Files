@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "PremisesforLease863"
+    },
+    "body": "The toilet roll and radio are sealed together, never opened. Soot darkens the bundle. Clean outlines look like it was packed before the fire.",
+    "id": "t0244-01",
+    "kind": "set",
+    "pieces": [
+      "ToiletPaper",
+      "WalkieTalkie1"
+    ],
+    "title": "Toilet paper and radio",
+    "where": [
+      {
+        "containers": [
+          "dresser",
+          "desk",
+          "sidetable",
+          "shelves",
+          "toolcabinet",
+          "smallbox"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

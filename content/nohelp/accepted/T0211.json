@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "SunsetPinesFuneralHome"
+    },
+    "body": "A feed-sack thread binds the eraser to the hand torch. Seed husks and pale spray dust cling to the knot.",
+    "id": "t0211-01",
+    "kind": "set",
+    "pieces": [
+      "Eraser",
+      "HandTorch"
+    ],
+    "title": "Eraser and hand torch",
+    "where": [
+      {
+        "containers": [
+          "shelves",
+          "filingcabinet",
+          "desk",
+          "sidetable",
+          "toolcabinet",
+          "metal_shelves"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

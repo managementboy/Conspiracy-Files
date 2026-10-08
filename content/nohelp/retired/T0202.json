@@ -1,0 +1,145 @@
+[
+  {
+    "recall": "R1",
+    "row": {
+      "anchor": {
+        "print": "LowryCourt"
+      },
+      "body": "The apartment plan marks the unit occupied, while the key log says the building was empty at the same time. A tenant’s route note ends at the stairwell.",
+      "id": "t0202-01",
+      "kind": "set",
+      "pieces": [
+        "KeyRing",
+        "Map"
+      ],
+      "title": "Cozy unit, no exit note",
+      "where": [
+        {
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "Lowry Court",
+        "source": "print:LowryCourt"
+      },
+      "gloss": "Occupancy and building-clear records overlap.",
+      "prov": {
+        "batch": "T0202",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A field crew could use an apartment as a temporary room; the records do not say who held the key."
+    }
+  },
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "print": "LowryCourt"
+      },
+      "body": "opposite route arrows are painted on the dish cloth and folded road map. the older arrow was scraped away beneath fresh road grit.",
+      "id": "t0202-01",
+      "kind": "set",
+      "pieces": [
+        "DishCloth",
+        "Map"
+      ],
+      "title": "missing count beside the dish cloth",
+      "where": [
+        {
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-warning",
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "gloss": "A response bundle preserves a missing count, changed route, or erased identity.",
+      "prov": {
+        "batch": "T0202",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A farm-program crew could have counted routes, repacked tools, or removed ownership marks during hurried field work; the objects do not prove a concealed public response."
+    }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "print": "LowryCourt"
+      },
+      "body": "opposite route arrows are painted on the dish cloth and folded road map. the older arrow was scraped away beneath fresh road grit.",
+      "id": "t0202-01",
+      "kind": "set",
+      "pieces": [
+        "DishCloth",
+        "Map"
+      ],
+      "title": "Dish cloth with the unclosed tally",
+      "where": [
+        {
+          "containers": [
+            "crate",
+            "shelves",
+            "desk",
+            "counter",
+            "cardboardbox",
+            "bin"
+          ],
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-warning",
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "gloss": "A response bundle preserves a missing count, changed route, or erased identity.",
+      "prov": {
+        "batch": "T0202",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A farm-program crew could have counted routes, repacked tools, or removed ownership marks during hurried field work; the objects do not prove a concealed public response."
+    }
+  }
+]

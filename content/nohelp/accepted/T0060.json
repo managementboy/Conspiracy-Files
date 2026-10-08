@@ -1,0 +1,32 @@
+[
+  {
+    "anchor": {
+      "map": "LouisvilleStashMap12",
+      "mark": 1
+    },
+    "body": "The pizza sat by the field station tent. They filled the water bottle from a hose that rinses sprayers. Green residue still coats the connection.",
+    "id": "t0060-01",
+    "kind": "set",
+    "pieces": [
+      "Pizza",
+      "WaterBottle"
+    ],
+    "title": "Pizza and water bottle",
+    "where": [
+      {
+        "containers": [
+          "counter",
+          "fridge",
+          "overhead",
+          "dishescabinet",
+          "freezer",
+          "grocerstand"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

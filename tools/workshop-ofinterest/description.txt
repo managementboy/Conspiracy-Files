@@ -1,0 +1,35 @@
+[h1]Conspiracy Files: Of Interest[/h1]
+Of Interest places ordinary-looking objects in buildings and vehicles across the map, each next to one of the notes or letters of the mod 'It is of interest to me!', so that what you read feels like part of something larger. You find the objects, inspect them and work it out yourself: no PDA, no organiser, no objective marker.
+
+[h2]Required mods (both)[/h2]
+[list]
+[*] [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3796373365]It is of interest to me![/url] (Workshop 3796373365): every note and letter you read comes from this mod. Subscribe and enable it.
+[*] [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3619862853]ZombieBuddy[/url] (Workshop 3619862853): loads the small Java part of this mod. Set its Steam launch option as described on its page; it asks once whether to allow our jar.
+[/list]
+
+[h2]WARNING: Build 42.21 and ZombieBuddy[/h2]
+The official ZombieBuddy 2.3.2 loads no Java mods on Build 42.21 (upstream issue zed-0xff/ZombieBuddy#53; the fix, pull request #56, is not merged yet). Without a fixed ZombieBuddy, the scene detector of this mod is inactive.
+What still works: the mod places all of its own scenes (about 250 across the map), each with its forced note, and you find them as normal.
+What is lost: the detector is how the mod notices the scenes the game itself generates (a very large number of kinds of staged scene) and gives them a clue too. Without it only 3 of the 125 kinds of generated scene, and one hand-checked scene, can still be recognised, so the game's own scenes will mostly have no clue next to them.
+You will see one short on-screen message, once per save, when this happens. It is not the survivor speaking.
+
+[h2]Credit[/h2]
+Thank you to amurin and the other authors of 'It is of interest to me!' for the notes and letters. This mod uses their notes at run time and copies nothing: no note text, name or place is stored in Of Interest, only the ids. Their page: https://steamcommunity.com/sharedfiles/filedetails/?id=3796373365
+
+[h2]About the AI-written parts[/h2]
+Be aware that the short survivor lines (hints, nudges, captions) and the choice and wording of the object scenes in this mod were written by an AI. ALL notes and letters belong to the authors of 'It is of interest to me!', who state that theirs were written by hand without AI. Nothing of ours is mixed into their notes.
+
+[h2]Save safety[/h2]
+If 'It is of interest to me!' updates, the mod checks it at every start and your save is never rewritten:
+[list]
+[*] Unchanged: everything works as before.
+[*] New notes added: fine. New notes are not used until this mod is updated.
+[*] Some notes we use were removed: those scenes keep their objects but no longer carry a note. Nothing else changes.
+[*] Its structure changed or it is missing: placing notes is switched off for that session and every scene shows only its objects. Your save is untouched and recovers when the mods match again.
+[/list]
+
+[h2]Compatibility[/h2]
+Single-player only. Vanilla map (Muldraugh, KY and the 14 towns it covers). Start a new game. Not compatible with 'Conspiracy Files: No Help' or the older 'Conspiracy Files': enable only one of them. No network access, no runtime AI.
+
+[h2]Spoilers[/h2]
+This page says nothing about the stories behind the notes. Please do not post them in the comments either.

@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "ScarletOakDistillery"
+    },
+    "body": "A manifest lists twelve wine bottles but I count only eleven. An empty jar bears a quarantine tag crossed out in black ink. The evacuation roster for that week has its last page missing.",
+    "id": "t0177-01",
+    "kind": "set",
+    "pieces": [
+      "Wine",
+      "EmptyJar"
+    ],
+    "title": "Wine and empty jar",
+    "where": [
+      {
+        "containers": [
+          "fridge",
+          "dishescabinet",
+          "counter",
+          "overhead",
+          "cardboardbox",
+          "displaycase"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

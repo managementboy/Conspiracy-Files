@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "GnomeSweetGnome"
+    },
+    "body": "A gnome receipt is attached to a grounds note. It says the beds were sprayed with a trial mix, so no watering. The leaves nearest the gnome are curling.",
+    "id": "t0213-01",
+    "kind": "set",
+    "pieces": [
+      "Mov_GardenGnome",
+      "SheetPaper2"
+    ],
+    "title": "Garden gnome and paper",
+    "where": [
+      {
+        "containers": [
+          "trough",
+          "desk",
+          "metal_shelves",
+          "filingcabinet",
+          "toolcabinet",
+          "sidetable"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

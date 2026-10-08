@@ -1,0 +1,54 @@
+[
+  {
+    "body": "The screwdriver is inside the open briefcase. The lock is intact, but the keyhole's metal is bright from turning. A loose key sits in the lining.",
+    "id": "t0005-01",
+    "kind": "set",
+    "pieces": [
+      "Briefcase",
+      "Screwdriver"
+    ],
+    "title": "Briefcase and screwdriver",
+    "where": [
+      {
+        "containers": [
+          "locker",
+          "toolcabinet",
+          "desk",
+          "metal_shelves",
+          "wardrobe",
+          "crate"
+        ],
+        "lean": "containment",
+        "place": "office",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "A seed packet is tucked into the stitched fold of the fertilizer sack. The planting diagram is intact. The panel for mixing instructions has been cut out cleanly.",
+    "id": "t0005-02",
+    "kind": "set",
+    "pieces": [
+      "SeedBag",
+      "Fertilizer"
+    ],
+    "title": "Seed bag and fertilizer",
+    "where": [
+      {
+        "containers": [
+          "shelves",
+          "composter",
+          "metal_shelves",
+          "cardboardbox",
+          "crate",
+          "smallcrate"
+        ],
+        "lean": "agricultural",
+        "place": "office",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

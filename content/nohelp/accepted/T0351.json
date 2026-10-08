@@ -1,0 +1,44 @@
+[
+  {
+    "anchor": {
+      "scene": "RDSSuicidePact"
+    },
+    "body": "Blue powder from the pasture study dusts the loaf and the corn. The loaf's wrapper has gone stiff with it.",
+    "id": "t0351-01",
+    "kind": "set",
+    "pieces": [
+      "Bread",
+      "CannedCorn"
+    ],
+    "title": "Bread and canned corn",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "corpse"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RDSSuicidePact"
+    },
+    "body": "A folded sheet and pencil are held beneath the same hand. Two names are boxed together. A third is pressed in hard enough to leave a mark without ink.",
+    "id": "t0351-02",
+    "kind": "set",
+    "pieces": [
+      "Sheet",
+      "Pencil"
+    ],
+    "title": "Paper sheet and pencil",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "corpse"
+      }
+    ]
+  }
+]

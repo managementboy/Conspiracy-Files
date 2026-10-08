@@ -1,0 +1,45 @@
+{
+  "t0029-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-warning",
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "gloss": "A checkpoint tally deliberately reduced by one.",
+    "prov": {
+      "batch": "T0029",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "None: one-sided on purpose"
+  },
+  "t0029-02": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "one bite = death",
+      "source": "map:BBurgStashMap4"
+    },
+    "gloss": "A family water warning follows a field crew rinse and leaves the source uncertain.",
+    "prov": {
+      "batch": "T0029",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "None: one-sided on purpose"
+  }
+}

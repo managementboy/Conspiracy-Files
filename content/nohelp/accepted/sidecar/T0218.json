@@ -1,0 +1,22 @@
+{
+  "t0218-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-warning",
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "gloss": "Removed pickup marks and a route ending at a barricade.",
+    "prov": {
+      "batch": "T0218",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "None: one-sided on purpose"
+  }
+}

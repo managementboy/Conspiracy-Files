@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "PremiseswithApartmentsforLeaselistingno891"
+    },
+    "body": "Field dust covers one side of the pen and feed sack. Torn warning tape covers the other side. It looks like the bundle was opened from both ends.",
+    "id": "t0217-01",
+    "kind": "set",
+    "pieces": [
+      "BluePen",
+      "AnimalFeedBag"
+    ],
+    "title": "Blue pen and feed sack",
+    "where": [
+      {
+        "containers": [
+          "trough",
+          "desk",
+          "sidetable",
+          "doghouse",
+          "filingcabinet",
+          "composter"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

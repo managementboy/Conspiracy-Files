@@ -1,0 +1,60 @@
+[
+  {
+    "anchor": {
+      "scene": "RDSBedroomZed"
+    },
+    "body": "A cut potato and a sample jar share red grit from the fertilizer test. They were bundled before the buses quit running.",
+    "id": "t0327-01",
+    "kind": "set",
+    "pieces": [
+      "Potato",
+      "EmptyJar"
+    ],
+    "title": "Potato and empty jar",
+    "where": [
+      {
+        "containers": [
+          "trough",
+          "dishescabinet",
+          "counter",
+          "overhead",
+          "fridge",
+          "cardboardbox"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RDSBedroomZed"
+    },
+    "body": "A bottle of water and a strip of bandage have matching pencil marks. They look like dates, not doses. I think someone checked this bed before its occupant woke.",
+    "id": "t0327-02",
+    "kind": "set",
+    "pieces": [
+      "WaterBottle",
+      "Bandage"
+    ],
+    "title": "Water bottle and bandage",
+    "where": [
+      {
+        "containers": [
+          "fridge",
+          "medicine",
+          "counter",
+          "smallbox",
+          "cardboardbox",
+          "sidetable"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

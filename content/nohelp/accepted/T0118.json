@@ -1,0 +1,235 @@
+[
+  {
+    "anchor": {
+      "map": "WorldStashMap9",
+      "mark": 1
+    },
+    "body": "I found batch codes and dilution rates logged in the notebook. The sheet marks the same test plots for a second treatment.",
+    "id": "t0118-01",
+    "kind": "set",
+    "pieces": [
+      "Notebook",
+      "SheetPaper2"
+    ],
+    "title": "notebook and sheet of paper",
+    "where": [
+      {
+        "containers": [
+          "cardboardbox",
+          "crate",
+          "bin",
+          "smallbox",
+          "locker",
+          "desk"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "WorldStashMap9",
+      "note": 1
+    },
+    "body": "Warehouse note: keep the empty crates for soil cores from the southern trial farms. Three returned damp and smelling of solvent, though the manifest lists them unused.\n\nSomeone said the smell was only from cleaning. The soil inside had the same pale film as the treated rows.",
+    "id": "t0118-02",
+    "kind": "written",
+    "pieces": [
+      "diary"
+    ],
+    "title": "Diary page",
+    "where": [
+      {
+        "containers": [
+          "cardboardbox",
+          "crate",
+          "bin",
+          "smallbox",
+          "locker",
+          "desk"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "WorldStashMap9",
+      "note": 2
+    },
+    "body": "Diary entry: the railyard pickup carried seed sacks and rinse drums before dawn. By breakfast the switchman’s eyes burned; the public closure came later.\n\nThe mark was made in a hurry, before the queue moved. I checked it twice against the people standing with me.\n\nI wanted to keep a clean copy, but the stain is where the first entry was crossed out. I have not tried to improve it.",
+    "id": "t0118-03",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "Notepad page",
+    "where": [
+      {
+        "containers": [
+          "smallbox",
+          "crate",
+          "cardboardbox",
+          "bin",
+          "locker",
+          "desk"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "WorldStashMap9",
+      "note": 3
+    },
+    "body": "Driver's torn page: the Muldraugh route was crossed out after the field team reported foam in the drainage ditch below the treated plots. No replacement destination appears.\n\nI kept the page on the kitchen table. The ditch water left a pale ring on every boot that crossed it.",
+    "id": "t0118-04",
+    "kind": "written",
+    "pieces": [
+      "receipt"
+    ],
+    "title": "Receipt",
+    "where": [
+      {
+        "containers": [
+          "cardboardbox",
+          "crate",
+          "bin",
+          "smallbox",
+          "locker",
+          "desk"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "WorldStashMap9",
+      "note": 4
+    },
+    "body": "I found route notes with collection points marked in faint pencil. The sample counts climb steadily heading north from the trial farms. Each bag carries the same dark stain as the treated seed.",
+    "id": "t0118-05",
+    "kind": "written",
+    "pieces": [
+      "photograph"
+    ],
+    "title": "Sample Log",
+    "where": [
+      {
+        "containers": [
+          "smallbox",
+          "dresser",
+          "sidetable",
+          "desk",
+          "filingcabinet",
+          "shelves"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "WorldStashMap9",
+      "note": 5
+    },
+    "body": "Notebook from the offices: four crop-test invoices, no company name, all paid in cash. A pencil note says the program agent collected the carbon copies.\n\nEach invoice lists the same seed treatment, billed per acre, for fields nobody here had leased.",
+    "id": "t0118-06",
+    "kind": "written",
+    "pieces": [
+      "notebook"
+    ],
+    "title": "Notebook page",
+    "where": [
+      {
+        "containers": [
+          "smallbox",
+          "desk",
+          "shelves",
+          "sidetable",
+          "filingcabinet",
+          "shelvesmag"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "WorldStashMap9",
+      "note": 6
+    },
+    "body": "The equipment shed took three wash cycles after the tanks spilled. Residue still tested above the pesticide safety threshold. I found the warning labels peeling off the empty drums.",
+    "id": "t0118-07",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "title": "Wash record",
+    "where": [
+      {
+        "containers": [
+          "smallbox",
+          "desk",
+          "filingcabinet",
+          "sidetable",
+          "cashregister",
+          "shelves"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "WorldStashMap9",
+      "note": 7
+    },
+    "body": "Personal rail log: none of the trains would start after the trial shipment arrived. The same oily grit coated each air intake, but the repair report calls it ordinary dust.\n\nThe grit smelled of the same treatment as the crates it came in.",
+    "id": "t0118-08",
+    "kind": "written",
+    "pieces": [
+      "diary"
+    ],
+    "title": "Diary page",
+    "where": [
+      {
+        "containers": [
+          "smallbox",
+          "desk",
+          "sidetable",
+          "dresser",
+          "filingcabinet",
+          "shelves"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

@@ -1,0 +1,43 @@
+[
+  {
+    "anchor": {
+      "scene": "RVSCarCrashDeer"
+    },
+    "body": "I found an axe and seed bag wrapped in checkpoint tape. The tag shows one location crossed out, another written over it. Tape edges say something about relocating citizens and files.",
+    "id": "t0362-01",
+    "kind": "set",
+    "pieces": [
+      "Axe",
+      "SeedBag"
+    ],
+    "title": "axe and seed bag",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "vehicle"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RVSCarCrashDeer"
+    },
+    "body": "The deer came from a pasture that had been sprayed yesterday. Its mouth was wet with a bitter smell, and its legs shook. The driver said the creek near the rows smelled the same.",
+    "id": "t0362-02",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "Notepad page",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "vehicle"
+      }
+    ]
+  }
+]

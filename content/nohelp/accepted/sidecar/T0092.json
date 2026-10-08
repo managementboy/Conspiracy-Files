@@ -1,0 +1,25 @@
+{
+  "t0092-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "Crazy Willy's trailer",
+      "source": "map:MulStashMap18"
+    },
+    "gloss": "Agricultural trial equipment and records left during field testing.",
+    "prov": {
+      "batch": "T0092",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "None: one-sided on purpose"
+  }
+}

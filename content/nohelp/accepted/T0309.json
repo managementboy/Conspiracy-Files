@@ -1,0 +1,60 @@
+[
+  {
+    "anchor": {
+      "scene": "RBSpiffo"
+    },
+    "body": "A mop sits in a bucket of yellow chemical film. The smell is sharp, almost sweet. Bootprints lead in from the crop sprayer outside.",
+    "id": "t0309-01",
+    "kind": "set",
+    "pieces": [
+      "Mop",
+      "Bucket"
+    ],
+    "title": "mop and bucket",
+    "where": [
+      {
+        "containers": [
+          "dishescabinet",
+          "metal_shelves",
+          "toolcabinet",
+          "crate",
+          "clothingwasher",
+          "bin"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RBSpiffo"
+    },
+    "body": "A dish cloth by a paperclip, bent open now. It held papers once, I think. They wiped clean and took only what was clipped here.",
+    "id": "t0309-02",
+    "kind": "set",
+    "pieces": [
+      "DishCloth",
+      "Paperclip"
+    ],
+    "title": "Dish cloth and paperclip",
+    "where": [
+      {
+        "containers": [
+          "dishescabinet",
+          "desk",
+          "counter",
+          "filingcabinet",
+          "overhead",
+          "sidetable"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

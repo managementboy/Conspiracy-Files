@@ -1,0 +1,44 @@
+{
+  "t0030-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "catfish restaurant",
+      "source": "map:BBurgStashMap5"
+    },
+    "gloss": "A restaurant order remains unpaid while a routine water check delays the catch.",
+    "prov": {
+      "batch": "T0030",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "None: one-sided on purpose"
+  },
+  "t0030-02": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-warning",
+        "c-orders"
+      ]
+    },
+    "gloss": "Issued containment supplies deliberately bundled then abandoned during evacuation.",
+    "prov": {
+      "batch": "T0030",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "None: one-sided on purpose"
+  }
+}

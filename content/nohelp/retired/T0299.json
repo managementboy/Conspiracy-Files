@@ -1,0 +1,147 @@
+[
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "scene": "RBOffice"
+      },
+      "body": "The two items are bundled beside marked feed sack; field dust lies beneath them, while a strip of road tape is caught around the bundle.",
+      "id": "t0299-01",
+      "kind": "set",
+      "pieces": [
+        "Bread",
+        "CannedCorn"
+      ],
+      "title": "Marked feed sack by the coat pocket",
+      "where": [
+        {
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-warning",
+          "c-orders"
+        ]
+      },
+      "gloss": "Field residue and response material share one personal bundle.",
+      "prov": {
+        "batch": "T0299",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "Field work and a hurried emergency response could each explain the mixed residue and road tape; neither fixes which came first."
+    }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "scene": "RBOffice"
+      },
+      "body": "The two items are bundled beside marked feed sack; field dust lies beneath them, while a strip of road tape is caught around the bundle.",
+      "id": "t0299-01",
+      "kind": "set",
+      "pieces": [
+        "Bread",
+        "CannedCorn"
+      ],
+      "title": "Feed sack beneath the coat hem",
+      "where": [
+        {
+          "containers": [
+            "dresser",
+            "crate",
+            "shelves",
+            "desk",
+            "counter",
+            "cardboardbox"
+          ],
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-warning",
+          "c-orders"
+        ]
+      },
+      "gloss": "Field residue and response material share one personal bundle.",
+      "prov": {
+        "batch": "T0299",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "Field work and a hurried emergency response could each explain the mixed residue and road tape; neither fixes which came first."
+    }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "scene": "RBOffice"
+      },
+      "body": "A sheet of paper has been pressed over a handwritten count. The marks beneath still show a larger number than the typed line above it. Someone saved the carbon but discarded the original.",
+      "id": "t0299-02",
+      "kind": "set",
+      "pieces": [
+        "Sheet",
+        "Pencil"
+      ],
+      "title": "Carbon under the blotter",
+      "where": [
+        {
+          "containers": [
+            "desk",
+            "counter",
+            "crate",
+            "locker",
+            "shelves",
+            "bin"
+          ],
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-warning",
+          "c-accounting"
+        ]
+      },
+      "gloss": "A scene-specific count or record was controlled while people were still present.",
+      "prov": {
+        "batch": "T0299",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "The same trace could follow an investigation of contaminated farm goods or an ordinary emergency response."
+    }
+  }
+]

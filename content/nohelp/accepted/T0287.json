@@ -1,0 +1,44 @@
+[
+  {
+    "anchor": {
+      "scene": "RBBurntFireman"
+    },
+    "body": "The potato and jar sit beside a marked feed sack. Field dust lies beneath them. Sticky spray residue and seed husks cling to the bundle.",
+    "id": "t0287-01",
+    "kind": "set",
+    "pieces": [
+      "Potato",
+      "EmptyJar"
+    ],
+    "title": "Potato and empty jar",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "corpse"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RBBurntFireman"
+    },
+    "body": "Scratched on the jar's bottom: 447. Inked on the potato: 531. One family's stock, two different evacuation codes.",
+    "id": "t0287-02",
+    "kind": "set",
+    "pieces": [
+      "Potato",
+      "EmptyJar"
+    ],
+    "title": "Potato and empty jar",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "corpse"
+      }
+    ]
+  }
+]

@@ -1,0 +1,91 @@
+{
+  "t0013-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-warning",
+        "c-orders"
+      ]
+    },
+    "gloss": "Farm residue and response markings share one deliberately ambiguous bundle.",
+    "prov": {
+      "batch": "T0013",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "The farm program and the emergency response each explain one layer of the bundle, and the shared knot does not establish which purpose came first."
+  },
+  "t0013-02": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-accounting"
+      ]
+    },
+    "cites": {
+      "quote": "Dart - 1 minute, 14.55 seconds",
+      "source": "map:IrvingtonStashMap1"
+    },
+    "gloss": "A water mark crosses a field sketch without showing its source.",
+    "prov": {
+      "batch": "T0013",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A response worker could record field conditions while checking a route; the ring and sketch do not establish that a program spread anything."
+  },
+  "t0013-03": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-obscured"
+      ],
+      "containment": [
+        "c-warning",
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "Cossette - 56.34 seconds",
+      "source": "map:IrvingtonStashMap1"
+    },
+    "gloss": "A dispatch copy closes a route but records no receiver.",
+    "prov": {
+      "batch": "T0013",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A work crew could close its course and leave a receipt incomplete; the blank line does not show whether the order came from emergency response or a test."
+  },
+  "t0013-04": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-timing"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "Dart - 1 minute, 14.55 seconds",
+      "source": "map:IrvingtonStashMap1"
+    },
+    "gloss": "Field notes carrying traces of an agricultural chemical.",
+    "prov": {
+      "batch": "T0013",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "None: one-sided on purpose"
+  }
+}

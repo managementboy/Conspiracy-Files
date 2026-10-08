@@ -1,0 +1,25 @@
+{
+  "t0254-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "AMZ Steel",
+      "source": "print:AMZSteel"
+    },
+    "gloss": "An inspection is complete while the delivery record has no truck.",
+    "prov": {
+      "batch": "T0254",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A field project could receive materials at another entrance; the tally does not prove the shipment was lost."
+  }
+}

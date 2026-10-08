@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "HouseforSale919"
+    },
+    "body": "Road dust coats the needle and clipboard, but the ties look newly cut. The roll of names was neatly trimmed off the clipboard. I think the bundle was repacked after travel.",
+    "id": "t0224-01",
+    "kind": "set",
+    "pieces": [
+      "Needle",
+      "Clipboard"
+    ],
+    "title": "Sewing needle and clipboard",
+    "where": [
+      {
+        "containers": [
+          "dresser",
+          "smallbox",
+          "desk",
+          "sidetable",
+          "filingcabinet",
+          "wardrobe"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

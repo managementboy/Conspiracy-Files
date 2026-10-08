@@ -1,0 +1,104 @@
+[
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "print": "HouseforSale799"
+      },
+      "body": "The listing packet includes a water-test appointment after the move-in date. A note asks the owner to leave the kitchen tap unused until then.",
+      "id": "t0267-01",
+      "kind": "set",
+      "pieces": [
+        "WaterBottle",
+        "Notebook"
+      ],
+      "title": "Central listing sample",
+      "where": [
+        {
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "House for Sale (no. 799)",
+        "source": "print:HouseforSale799"
+      },
+      "gloss": "A new occupant is scheduled before the water test.",
+      "prov": {
+        "batch": "T0267",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A containment crew could restrict a tap during a response inspection; the appointment does not say what prompted it."
+    }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "print": "HouseforSale799"
+      },
+      "body": "The listing packet includes a water-test appointment after the move-in date. A note asks the owner to leave the kitchen tap unused until then.",
+      "id": "t0267-01",
+      "kind": "set",
+      "pieces": [
+        "WaterBottle",
+        "Notebook"
+      ],
+      "title": "Central listing sample",
+      "where": [
+        {
+          "containers": [
+            "desk",
+            "crate",
+            "shelves",
+            "counter",
+            "cardboardbox",
+            "bin"
+          ],
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "House for Sale (no. 799)",
+        "source": "print:HouseforSale799"
+      },
+      "gloss": "A new occupant is scheduled before the water test.",
+      "prov": {
+        "batch": "T0267",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A containment crew could restrict a tap during a response inspection; the appointment does not say what prompted it."
+    }
+  }
+]

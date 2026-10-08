@@ -1,0 +1,43 @@
+[
+  {
+    "anchor": {
+      "scene": "RVSBanditRoad"
+    },
+    "body": "Brown foam from the greenhouse test is on the stiff mop and bucket. I think they were packed before the telephone line died.",
+    "id": "t0358-01",
+    "kind": "set",
+    "pieces": [
+      "Mop",
+      "Bucket"
+    ],
+    "title": "Mop and bucket",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "vehicle"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RVSBanditRoad"
+    },
+    "body": "The men at the road took our spare fuel and said the next checkpoint would let us through. I wrote the amount on the back of the grocery slip. There was no checkpoint there, only the cars they had already turned around.",
+    "id": "t0358-02",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "title": "Handwritten letter",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "vehicle"
+      }
+    ]
+  }
+]

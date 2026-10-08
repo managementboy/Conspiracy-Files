@@ -1,0 +1,1105 @@
+[
+  {
+    "anchor": {
+      "map": "WorldStashMap18",
+      "mark": 1
+    },
+    "body": "The briefcase holds evacuation lists with half the names crossed out. Wipes scatter from a medic pouch stamped for checkpoint nine. Both wrapped in a small raincoat, dropped here in the roadside mud.",
+    "id": "t0127-01",
+    "kind": "set",
+    "pieces": [
+      "AlcoholWipes",
+      "Briefcase"
+    ],
+    "title": "alcohol wipes and briefcase",
+    "where": [
+      {
+        "containers": [
+          "locker",
+          "smallbox",
+          "medicine",
+          "desk",
+          "sidetable",
+          "wardrobe"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "WorldStashMap18",
+      "note": 1
+    },
+    "body": "Farm diary: the first fire started beneath the assay table after a field sample cracked. The wet soil burned blue before any building caught.\n\nThe sample came from the treated plots, and the flame smelled sweet and chemical.",
+    "id": "t0127-02",
+    "kind": "written",
+    "pieces": [
+      "diary"
+    ],
+    "title": "Diary page",
+    "where": [
+      {
+        "containers": [
+          "desk",
+          "smallbox",
+          "sidetable",
+          "dresser",
+          "filingcabinet",
+          "shelves"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "WorldStashMap18",
+      "note": 2
+    },
+    "body": "Diary entry: beside the second fire mark lay a scorched tray from the soil assay. Its unburned label says the orchard batch was reapplied after rain.\n\nThe tray rim was crusted with the same residue as the sprayer nozzles.",
+    "id": "t0127-03",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "Notepad page",
+    "where": [
+      {
+        "containers": [
+          "sidetable",
+          "smallbox",
+          "desk",
+          "filingcabinet",
+          "shelves",
+          "cashregister"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "WorldStashMap18",
+      "note": 3
+    },
+    "body": "Photograph back: the third fire began among returned seed sacks, not the nearby lumber. Violet grains remained in the seams after the flames went out.\n\nThe lumber beside them was barely scorched.",
+    "id": "t0127-04",
+    "kind": "written",
+    "pieces": [
+      "receipt"
+    ],
+    "title": "Receipt",
+    "where": [
+      {
+        "containers": [
+          "smallbox",
+          "crate",
+          "cardboardbox",
+          "bin",
+          "locker",
+          "desk"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "WorldStashMap18",
+      "note": 4
+    },
+    "body": "Farm log: smoke at the fourth fire rose from the rinse pit after the trial crew emptied its hoses. The grass died in a clean ring before dusk.\n\nThe pit water still foamed when stirred.",
+    "id": "t0127-05",
+    "kind": "written",
+    "pieces": [
+      "photograph"
+    ],
+    "title": "Photograph",
+    "where": [
+      {
+        "containers": [
+          "smallbox",
+          "crate",
+          "cardboardbox",
+          "bin",
+          "locker",
+          "desk"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "WorldStashMap18",
+      "note": 5
+    },
+    "body": "Torn notebook page: the fifth fire followed a split treatment drum at the trial plot. Water spread the burning film, so we covered it with field soil and left.\n\nThe soil darkened and smoked where the film touched it.",
+    "id": "t0127-06",
+    "kind": "written",
+    "pieces": [
+      "notebook"
+    ],
+    "title": "Notebook page",
+    "where": [
+      {
+        "containers": [
+          "locker",
+          "crate",
+          "cardboardbox",
+          "smallbox",
+          "bin",
+          "desk"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "WorldStashMap18",
+      "note": 6
+    },
+    "body": "New pesticide formula dissolved my rubber boots in the field. Amber gel coating every plant and pooling in the furrows. My hands itch where droplets landed on bare skin.",
+    "id": "t0127-07",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "title": "Application note",
+    "where": [
+      {
+        "containers": [
+          "smallbox",
+          "crate",
+          "cardboardbox",
+          "bin",
+          "locker",
+          "desk"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "WorldStashMap18",
+      "note": 7
+    },
+    "body": "Letter draft: the seventh fire caught damp hay by the road. A deputy asked us to call it a lantern accident and to say nothing of the others.\n\nThere was no lantern, only a patrol truck parked at the fence.",
+    "id": "t0127-08",
+    "kind": "written",
+    "pieces": [
+      "diary"
+    ],
+    "title": "Diary page",
+    "where": [
+      {
+        "containers": [
+          "desk",
+          "smallbox",
+          "sidetable",
+          "dresser",
+          "filingcabinet",
+          "shelves"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "WorldStashMap18",
+      "note": 8
+    },
+    "body": "Diary line: the eighth fire glowed before sunrise around bags from the night application. No homes were burning and no one had run for the road.\n\nThe bags were treated seed, split at the seams.",
+    "id": "t0127-09",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "Notepad page",
+    "where": [
+      {
+        "containers": [
+          "sidetable",
+          "smallbox",
+          "desk",
+          "filingcabinet",
+          "shelves",
+          "cashregister"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "WorldStashMap18",
+      "note": 9
+    },
+    "body": "The application rate on the invoice did not match the concentration. Dead frogs appeared in the drainage before the second field was done. The container labels were different from what we requested.",
+    "id": "t0127-10",
+    "kind": "written",
+    "pieces": [
+      "receipt"
+    ],
+    "title": "Delivery Receipt",
+    "where": [
+      {
+        "containers": [
+          "cashregister",
+          "smallbox",
+          "desk",
+          "filingcabinet",
+          "sidetable",
+          "shelves"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "WorldStashMap18",
+      "note": 10
+    },
+    "body": "The tenth sprayer fire started beneath the tank mount. Treatment foam had crystallized across the engine housing. The residue pattern matched the previous equipment failures.",
+    "id": "t0127-11",
+    "kind": "written",
+    "pieces": [
+      "photograph"
+    ],
+    "title": "Maintenance Photo",
+    "where": [
+      {
+        "containers": [
+          "dresser",
+          "smallbox",
+          "sidetable",
+          "desk",
+          "filingcabinet",
+          "shelves"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "WorldStashMap18",
+      "note": 11
+    },
+    "body": "The research pens held only bones and that white powder. It coated the feed pellets, the water lines, even the soil samples. I found dosage charts pinned above each station.",
+    "id": "t0127-12",
+    "kind": "written",
+    "pieces": [
+      "notebook"
+    ],
+    "title": "Field notes",
+    "where": [
+      {
+        "containers": [
+          "locker",
+          "crate",
+          "cardboardbox",
+          "smallbox",
+          "bin",
+          "desk"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "WorldStashMap18",
+      "note": 12
+    },
+    "body": "Farm diary: the twelfth fire consumed only the flagged crop rows. Untreated rows on either side stayed green until the next rain.\n\nThe flags carried the trial's plot numbers in marker.",
+    "id": "t0127-13",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "title": "Handwritten letter",
+    "where": [
+      {
+        "containers": [
+          "smallbox",
+          "crate",
+          "cardboardbox",
+          "bin",
+          "locker",
+          "desk"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "WorldStashMap18",
+      "note": 13
+    },
+    "body": "Found it beside two empty chemical tins. Receipt shows both products bought same day. The warning says never mix these formulas.",
+    "id": "t0127-14",
+    "kind": "written",
+    "pieces": [
+      "diary"
+    ],
+    "title": "Spray receipt",
+    "where": [
+      {
+        "containers": [
+          "locker",
+          "crate",
+          "cardboardbox",
+          "smallbox",
+          "bin",
+          "desk"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "WorldStashMap18",
+      "note": 14
+    },
+    "body": "Notebook sketch: the fourteenth fire burned along the line where yesterday's cordon tape was strung. A patrol truck waited at each end and no one was let past.\n\nNumbered stakes marked the tape every few paces.",
+    "id": "t0127-15",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "Notepad page",
+    "where": [
+      {
+        "containers": [
+          "smallbox",
+          "crate",
+          "cardboardbox",
+          "bin",
+          "locker",
+          "desk"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "WorldStashMap18",
+      "note": 15
+    },
+    "body": "Letter fragment: beneath the fifteenth fire mark I buried a sealed leaf jar. Its leaves spotted black the day after the trial rows were sprayed.\n\nI carried it home because the seed man had no one to return it to. The film from the jar did not come off when I washed my hands.\n\nThe next morning I looked for the second jar and found only the lid. I left this one for whoever tends those rows after me.",
+    "id": "t0127-16",
+    "kind": "written",
+    "pieces": [
+      "receipt"
+    ],
+    "title": "Receipt",
+    "where": [
+      {
+        "containers": [
+          "cashregister",
+          "smallbox",
+          "desk",
+          "filingcabinet",
+          "sidetable",
+          "shelves"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "WorldStashMap18",
+      "note": 16
+    },
+    "body": "Diary line at the sad face: the field cook wept when three workers could not swallow lunch. All had handled the new grain coating that morning, bare-handed, filling the seed drill.\n\nThe coating came in unmarked sacks from the trial supplier. Nobody had told us to wear gloves.\n\nI wrote down who had touched the sacks, in the order they came to the table, while I still remembered.",
+    "id": "t0127-17",
+    "kind": "written",
+    "pieces": [
+      "photograph"
+    ],
+    "title": "Photograph",
+    "where": [
+      {
+        "containers": [
+          "dresser",
+          "smallbox",
+          "sidetable",
+          "desk",
+          "filingcabinet",
+          "shelves"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "WorldStashMap18",
+      "note": 17
+    },
+    "body": "The applicator was sick beside his sprayer when I took this. His hands were stained yellow-green to the wrist from the coating. The sample case stayed locked in the cab the whole time.",
+    "id": "t0127-18",
+    "kind": "written",
+    "pieces": [
+      "notebook"
+    ],
+    "title": "Photograph note",
+    "where": [
+      {
+        "containers": [
+          "shelves",
+          "smallbox",
+          "desk",
+          "sidetable",
+          "filingcabinet",
+          "shelvesmag"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "WorldStashMap18",
+      "note": 18
+    },
+    "body": "Pay-envelope note at the first happy face: bonus for completing the late spray despite complaints. My hands were numb when I signed.\n\nThe foreman drew the smiling face himself, said it meant we had earned it. Two of the crew had already gone home coughing and still got the same envelope, sealed, no questions.\n\nI have not spent it. It is folded inside this note, and I keep telling myself the numbness is only from the cold mornings.",
+    "id": "t0127-19",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "title": "Handwritten letter",
+    "where": [
+      {
+        "containers": [
+          "filingcabinet",
+          "smallbox",
+          "desk",
+          "sidetable",
+          "cashregister",
+          "shelves"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "WorldStashMap18",
+      "note": 19
+    },
+    "body": "Torn diary page: at the first dead face, a tag with a number stayed tied to the wrist. The posted list later called the wearer an unknown traveler.\n\nI knew him. He ate at our table twice and said he would be sent home by Friday. Nobody who knew his name was asked.\n\nI tore this page out so it would not sit with the ordinary days. The tag number is on the back.",
+    "id": "t0127-20",
+    "kind": "written",
+    "pieces": [
+      "diary"
+    ],
+    "title": "Diary page",
+    "where": [
+      {
+        "containers": [
+          "locker",
+          "crate",
+          "cardboardbox",
+          "smallbox",
+          "bin",
+          "desk"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "WorldStashMap18",
+      "note": 20
+    },
+    "body": "I found the well tender's log by the pasture test site. Water samples smelled sweet like the drums behind the shed. The grass turned grey-green in rings where runoff pooled. Stock refused to drink from the trough after the spraying.",
+    "id": "t0127-21",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "Sample log page",
+    "where": [
+      {
+        "containers": [
+          "smallbox",
+          "crate",
+          "cardboardbox",
+          "bin",
+          "locker",
+          "desk"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "WorldStashMap18",
+      "note": 21
+    },
+    "body": "Photograph note: the third dead face lies beside corn that looks untouched. A trial flag was pulled from the row but its wire hole remains, and the stalks beyond it are sprayed pale at the base.\n\nThe man beside me recognized the planting pattern and went quiet. Only the rows with flags had been treated.\n\nI did not put this back with the ordinary papers.",
+    "id": "t0127-22",
+    "kind": "written",
+    "pieces": [
+      "receipt"
+    ],
+    "title": "Receipt",
+    "where": [
+      {
+        "containers": [
+          "locker",
+          "crate",
+          "cardboardbox",
+          "smallbox",
+          "bin",
+          "desk"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "WorldStashMap18",
+      "note": 22
+    },
+    "body": "Mileage slip back: the fourth dead face was found on the field truck path. Tire tracks lead away before the road closure begins.\n\nI set it aside to show the neighbor when she returned. Her porch was empty by the time the light was good enough to read it.\n\nThe amount mattered to the office more than the people waiting outside. We stayed until dark because the last line still said to wait.",
+    "id": "t0127-23",
+    "kind": "written",
+    "pieces": [
+      "photograph"
+    ],
+    "title": "Photograph",
+    "where": [
+      {
+        "containers": [
+          "locker",
+          "crate",
+          "cardboardbox",
+          "smallbox",
+          "bin",
+          "desk"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "WorldStashMap18",
+      "note": 23
+    },
+    "body": "Diary entry: the fifth dead face is beside the crew wash basin. The water smelled of bleach and sprayer solvent.\n\nThe crew rinsed boots and sprayer hoses here every evening of the trial. I wrote down which hose went with which tank while I could still remember it.\n\nThe water below the basin ran yellow into the ditch.",
+    "id": "t0127-24",
+    "kind": "written",
+    "pieces": [
+      "notebook"
+    ],
+    "title": "Notebook page",
+    "where": [
+      {
+        "containers": [
+          "desk",
+          "smallbox",
+          "shelves",
+          "sidetable",
+          "filingcabinet",
+          "shelvesmag"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "WorldStashMap18",
+      "note": 24
+    },
+    "body": "Torn letter: at the sixth dead face, a tarp covered a man still wearing a numbered tag. A tape line ran around him, and someone had chalked a tally beside the tarp.\n\nSomeone wanted a cleaner version of the count. I kept the first one because it shows how many we saw and how many were reported.",
+    "id": "t0127-25",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "title": "Handwritten letter",
+    "where": [
+      {
+        "containers": [
+          "filingcabinet",
+          "smallbox",
+          "desk",
+          "sidetable",
+          "cashregister",
+          "shelves"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "WorldStashMap18",
+      "note": 25
+    },
+    "body": "Receipt note: the seventh dead face fell beside feed mixed for the supplement trial. The cart number is absent from the barn account.\n\nThe calves that ate from that cart went off their feed within two days. The mix had a sweet chemical smell the plain feed never had.\n\nI kept the receipt because it names the additive.",
+    "id": "t0127-26",
+    "kind": "written",
+    "pieces": [
+      "diary"
+    ],
+    "title": "Diary page",
+    "where": [
+      {
+        "containers": [
+          "sidetable",
+          "smallbox",
+          "desk",
+          "dresser",
+          "filingcabinet",
+          "shelves"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "WorldStashMap18",
+      "note": 26
+    },
+    "body": "Eight dead crows past the test flags where the wind took the mist. The spray was meant for the plots inside the markers. I found them while checking my own fields downwind.",
+    "id": "t0127-27",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "Field note",
+    "where": [
+      {
+        "containers": [
+          "sidetable",
+          "smallbox",
+          "desk",
+          "filingcabinet",
+          "shelves",
+          "cashregister"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "WorldStashMap18",
+      "note": 27
+    },
+    "body": "Notebook page: a sealed flask beside the ninth dead face contains green field water. The label asks for testing, but no laboratory is named.\n\nI took it from the drainage ditch below the trial plot, where the spray rig was rinsed. The water there had killed the grass along both banks.\n\nI had promised to bring it home for supper. The empty chair at the table and the date on this page now belong to the same evening.",
+    "id": "t0127-28",
+    "kind": "written",
+    "pieces": [
+      "receipt"
+    ],
+    "title": "Receipt",
+    "where": [
+      {
+        "containers": [
+          "locker",
+          "crate",
+          "cardboardbox",
+          "smallbox",
+          "bin",
+          "desk"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "WorldStashMap18",
+      "note": 28
+    },
+    "body": "Photograph back at the second happy face: the supervisor held up a clean yield sheet while smoke rose behind the trial rows, where the blighted plants were being burned.\n\nSomeone said the smell was only from burning stubble. I kept the scrap because the same sweet smell had come from the last field we treated.\n\nThe stain is where the first yield figure was crossed out. I have not tried to improve it.",
+    "id": "t0127-29",
+    "kind": "written",
+    "pieces": [
+      "photograph"
+    ],
+    "title": "Photograph",
+    "where": [
+      {
+        "containers": [
+          "smallbox",
+          "crate",
+          "cardboardbox",
+          "bin",
+          "locker",
+          "desk"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "WorldStashMap18",
+      "note": 29
+    },
+    "body": "Diary margin at the second gun: an armed man collected the roll of names and left the supply invoices. He wore no unit patch.\n\nThe roll was the only list of who had been through the checkpoint. The invoices said only what we had bought.\n\nI wrote this down before the next shift, in the order I saw it, and have not tried to improve it.",
+    "id": "t0127-30",
+    "kind": "written",
+    "pieces": [
+      "notebook"
+    ],
+    "title": "Notebook page",
+    "where": [
+      {
+        "containers": [
+          "locker",
+          "crate",
+          "cardboardbox",
+          "smallbox",
+          "bin",
+          "desk"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "WorldStashMap18",
+      "note": 30
+    },
+    "body": "Letter fragment at the second sad face: twelve calf tags came back from the supplement pasture, but only eleven calves were unloaded.\n\nOur copy stayed on the kitchen table. The official account came later and asked us to remember a much shorter day.\n\nI wanted to keep a clean copy, but the stain is where the first entry was crossed out. I have not tried to improve it.",
+    "id": "t0127-31",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "title": "Handwritten letter",
+    "where": [
+      {
+        "containers": [
+          "locker",
+          "crate",
+          "cardboardbox",
+          "smallbox",
+          "bin",
+          "desk"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "WorldStashMap18",
+      "note": 31
+    },
+    "body": "Field log at the first skull: this soil core was rejected for a sharp solvent smell. The replacement core came from outside the treated rows.\n\nThe rejected core was grey and dry through the root layer, as if the seedlings had been scalded from below.\n\nI took the page when the lab sent back the replacement and it read clean.",
+    "id": "t0127-32",
+    "kind": "written",
+    "pieces": [
+      "diary"
+    ],
+    "title": "Diary page",
+    "where": [
+      {
+        "containers": [
+          "sidetable",
+          "smallbox",
+          "desk",
+          "dresser",
+          "filingcabinet",
+          "shelves"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "WorldStashMap18",
+      "note": 32
+    },
+    "body": "Receipt back at the second skull: one rain-barrel sample, paid cash. The barrel stood downwind of the experimental orchard.\n\nThe water in it had a film on top that smelled of the spray, and dead bees floated in it.",
+    "id": "t0127-33",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "Notepad page",
+    "where": [
+      {
+        "containers": [
+          "sidetable",
+          "smallbox",
+          "desk",
+          "filingcabinet",
+          "shelves",
+          "cashregister"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "WorldStashMap18",
+      "note": 33
+    },
+    "body": "The mist settled wrong over the back forty yesterday morning. Birds fell mid-flight where the wind carried it thick. Their beaks showed white residue when I checked the rows. I counted eighteen before the rain came.",
+    "id": "t0127-34",
+    "kind": "written",
+    "pieces": [
+      "receipt"
+    ],
+    "title": "Spray Record",
+    "where": [
+      {
+        "containers": [
+          "cashregister",
+          "smallbox",
+          "desk",
+          "filingcabinet",
+          "sidetable",
+          "shelves"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "WorldStashMap18",
+      "note": 34
+    },
+    "body": "Warehouse note at the fourth skull: the crate count on the dispatch list was nine short of the number loaded onto the truck. The truck had passed two checkpoints.\n\nNo one signed for the nine. The tally was crossed out and rewritten smaller.\n\nI wrote the numbers side by side. The truck was sent back out the same afternoon.",
+    "id": "t0127-35",
+    "kind": "written",
+    "pieces": [
+      "photograph"
+    ],
+    "title": "Photograph",
+    "where": [
+      {
+        "containers": [
+          "dresser",
+          "smallbox",
+          "sidetable",
+          "desk",
+          "filingcabinet",
+          "shelves"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "WorldStashMap18",
+      "note": 35
+    },
+    "body": "Farm notebook at the fifth skull: I poured away the milk from the test pasture. The first sick cow came three days after the second spraying.\n\nThe pasture had been sprayed twice that month for the grass trial.\n\nI poured it behind the barn and wrote the dates here.",
+    "id": "t0127-36",
+    "kind": "written",
+    "pieces": [
+      "notebook"
+    ],
+    "title": "Notebook page",
+    "where": [
+      {
+        "containers": [
+          "filingcabinet",
+          "bin",
+          "cardboardbox",
+          "smallbox",
+          "locker",
+          "desk"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "WorldStashMap18",
+      "note": 36
+    },
+    "body": "The spray drifted farther than the wind could carry it. Leaves curled in an hour where the label said three days.\n\nI switched to the backup tank at noon. The same browning appeared on untreated rows by evening.\n\nThe concentrate separated overnight despite constant mixing.",
+    "id": "t0127-37",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "title": "Field notes",
+    "where": [
+      {
+        "containers": [
+          "locker",
+          "crate",
+          "cardboardbox",
+          "smallbox",
+          "bin",
+          "desk"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "WorldStashMap18",
+      "note": 37
+    },
+    "body": "Torn ledger at the seventh skull: the final count omits two guards and one supply case. Their truck is still marked returned.\n\nTwo men went to the north cordon and did not come back. The truck stood at the checkpoint with the tailgate open.\n\nI saved the page because their names are on the reverse, and not on the roll.",
+    "id": "t0127-38",
+    "kind": "written",
+    "pieces": [
+      "diary"
+    ],
+    "title": "Diary page",
+    "where": [
+      {
+        "containers": [
+          "filingcabinet",
+          "bin",
+          "cardboardbox",
+          "smallbox",
+          "locker",
+          "desk"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

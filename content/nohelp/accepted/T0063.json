@@ -1,0 +1,32 @@
+[
+  {
+    "anchor": {
+      "map": "LouisvilleStashMap15",
+      "mark": 1
+    },
+    "body": "Three pickup dots mark the sewing kit and the hand radio. Two were scratched away, with no wear around them.",
+    "id": "t0063-01",
+    "kind": "set",
+    "pieces": [
+      "SewingKit",
+      "WalkieTalkie1"
+    ],
+    "title": "Sewing kit and walkie-talkie",
+    "where": [
+      {
+        "containers": [
+          "wardrobe",
+          "desk",
+          "dresser",
+          "shelves",
+          "clothingrack",
+          "toolcabinet"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

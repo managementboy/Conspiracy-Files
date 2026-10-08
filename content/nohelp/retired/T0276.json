@@ -1,0 +1,143 @@
+[
+  {
+    "recall": "R1",
+    "row": {
+      "anchor": {
+        "print": "QuillManor"
+      },
+      "body": "The manor tour key is signed out beside a field note asking the guide to keep visitors away from the north lawn until the test is over.",
+      "id": "t0276-01",
+      "kind": "set",
+      "pieces": [
+        "Book",
+        "KeyRing"
+      ],
+      "title": "The Saturday tour key",
+      "where": [
+        {
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "Brenford's Quill Manor",
+        "source": "print:QuillManor"
+      },
+      "gloss": "A public tour shares a schedule with a restricted lawn test.",
+      "prov": {
+        "batch": "T0276",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A containment crew could close the lawn during cleanup; the note does not identify the test material."
+    }
+  },
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "print": "QuillManor"
+      },
+      "body": "the measuring tape and empty garden sprayer share two stains: sweet field residue below and bleach above. both could have been packed during either job.",
+      "id": "t0276-01",
+      "kind": "set",
+      "pieces": [
+        "MeasuringTape",
+        "GardeningSprayEmpty"
+      ],
+      "title": "two traces on the measuring tape",
+      "where": [
+        {
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-warning",
+          "c-orders"
+        ]
+      },
+      "gloss": "Farm residue and response markings share one deliberately ambiguous bundle.",
+      "prov": {
+        "batch": "T0276",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "The farm program and the emergency response each explain one layer of the bundle, and the shared knot does not establish which purpose came first."
+    }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "print": "QuillManor"
+      },
+      "body": "the measuring tape and empty garden sprayer share two stains: sweet field residue below and bleach above. both could have been packed during either job.",
+      "id": "t0276-01",
+      "kind": "set",
+      "pieces": [
+        "MeasuringTape",
+        "GardeningSprayEmpty"
+      ],
+      "title": "Measuring tape carrying two traces",
+      "where": [
+        {
+          "containers": [
+            "crate",
+            "shelves",
+            "desk",
+            "counter",
+            "cardboardbox",
+            "bin"
+          ],
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-warning",
+          "c-orders"
+        ]
+      },
+      "gloss": "Farm residue and response markings share one deliberately ambiguous bundle.",
+      "prov": {
+        "batch": "T0276",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "The farm program and the emergency response each explain one layer of the bundle, and the shared knot does not establish which purpose came first."
+    }
+  }
+]

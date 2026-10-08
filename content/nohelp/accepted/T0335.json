@@ -1,0 +1,44 @@
+[
+  {
+    "anchor": {
+      "scene": "RDSGunslinger"
+    },
+    "body": "The loaf and canned corn smell sweet and chemical, like the crop plot. I think they were bundled before the lane was closed.",
+    "id": "t0335-01",
+    "kind": "set",
+    "pieces": [
+      "Bread",
+      "CannedCorn"
+    ],
+    "title": "Bread and canned corn",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "corpse"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RDSGunslinger"
+    },
+    "body": "The map has an evacuation route erased in pencil. Duct tape on the back hides the first exit they marked. The printed path was changed.",
+    "id": "t0335-02",
+    "kind": "set",
+    "pieces": [
+      "Map",
+      "DuctTape"
+    ],
+    "title": "Map and duct tape",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "corpse"
+      }
+    ]
+  }
+]

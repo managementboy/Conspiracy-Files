@@ -2,7 +2,11 @@ package.preload["ConspiracyFiles/ClueCue"]=function() return {} end
 next=nil -- PZ Kahlua: fresh-save setup must not depend on the next global.
 package.path="mod/common/media/lua/shared/?.lua;mod/common/media/lua/client/?.lua;"..package.path
 local events={}
-Events={OnTick={Add=function(f) events.tick=f end},OnGameStart={Add=function(f) events.start=f end}}
+-- Only the handlers registered by loading the runtime are captured. R.start requires
+-- InteractionAPI lazily, whose modules register their own OnTick/OnGameStart AFTER the
+-- runtime's; a one-slot stub kept the last and silently dropped the runtime's.
+local frozen=false
+Events={OnTick={Add=function(f) if not frozen then events.tick=f end end},OnGameStart={Add=function(f) if not frozen then events.start=f end end}}
 local function list(t) return {size=function() return #t end,get=function(_,i) return t[i+1] end} end
 local function record(t) local o={} for k,v in pairs(t) do local val=v; o[k]=function() return val end end return o end
 local containers={}
@@ -61,6 +65,7 @@ local probe={start=function() return true end,result=result}
 package.preload["ConspiracyFiles/T3Nearby"]=function() return probe end
 package.preload["ConspiracyFiles/GeneratedMenu"]=function() return {} end
 local R=require("ConspiracyFiles/GeneratedRuntime")
+frozen=true
 local originalStore=saved
 saved=setmetatable({},{__newindex=function() error('injected initial campaign write failure') end})
 -- Four hundred ticks, not eighty: a storage scan now walks a mailbox band
@@ -168,7 +173,8 @@ assert(stableStore.campaign==stableCampaign and #R.known()==2,'failed write pres
 saved=stableStore;assert(R.inspect(late));assert(R.known()[2].id==newItem:getModData().cfGeneratedId and R.known()[3].id==late:getModData().cfGeneratedId)
 Markers.update()
 UIFont={Small=1};getTextManager=function() return {getFontHeight=function() return 12 end,MeasureStringX=function(_,_,v) return #v end} end
-local texts={};local map={width=1000,height=800,mapAPI={getZoomF=function() return 18 end,worldToUIX=function(_,x) return x+100 end,worldToUIY=function(_,x,y) return y+100 end},drawText=function(_,text) texts[#texts+1]=text end}
+-- FAKE-OF zombie.worldMap.UIWorldMapV3: getZoomF worldToUIX worldToUIY
+local texts={};local map={width=1000,height=800,mapAPI={getZoomF=function() return 18 end,worldToUIX=function(_,x,y) return x+100 end,worldToUIY=function(_,x,y) return y+100 end},drawText=function(_,text) texts[#texts+1]=text end}
 Markers.draw(map);local all=table.concat(texts,'|');assert(all:find('#2 ',1,true) and all:find('#3 ',1,true),'global marker numbering matches interleaved evidence projection')
 texts={};Markers.drawRecords(map,{known={'fixture'},case={documents={{id='fixture',title='Isolated fixture'}}}},{records={fixture={x=0,y=0,z=0,map='mock',written=true,ink='BluePen'}}})
 assert(table.concat(texts,'|'):find('Isolated fixture',1,true),'fixture renderer uses supplied context')

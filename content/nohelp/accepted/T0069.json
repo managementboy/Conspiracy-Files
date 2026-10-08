@@ -1,0 +1,32 @@
+[
+  {
+    "anchor": {
+      "map": "MarchRidgeStashMap5",
+      "mark": 1
+    },
+    "body": "A bandage and a bat share a medical-center bag. The note on its tie says to keep the back room quiet. That's until the wash is finished.",
+    "id": "t0069-01",
+    "kind": "set",
+    "pieces": [
+      "BaseballBat",
+      "Bandage"
+    ],
+    "title": "Baseball bat and bandage",
+    "where": [
+      {
+        "containers": [
+          "locker",
+          "medicine",
+          "dresser",
+          "sidetable",
+          "wardrobe",
+          "toolcabinet"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

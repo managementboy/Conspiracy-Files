@@ -1,0 +1,235 @@
+[
+  {
+    "anchor": {
+      "map": "WorldStashMap16",
+      "mark": 1
+    },
+    "body": "Chalk numbers run across the extinguisher and the camera. The count skips one place, then goes on in a different hand.",
+    "id": "t0125-01",
+    "kind": "set",
+    "pieces": [
+      "Extinguisher",
+      "Camera"
+    ],
+    "title": "Fire extinguisher and camera",
+    "where": [
+      {
+        "containers": [
+          "toolcabinet",
+          "metal_shelves",
+          "locker",
+          "crate",
+          "smallcrate",
+          "smallbox"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "WorldStashMap16",
+      "note": 1
+    },
+    "body": "Diary line at the first trap: a torn numbered tag was caught beneath the spring. Its number belongs to a household that the return list calls cleared.\n\nThe tag still had a strip of tape stuck to it.",
+    "id": "t0125-02",
+    "kind": "written",
+    "pieces": [
+      "diary"
+    ],
+    "title": "Diary page",
+    "where": [
+      {
+        "containers": [
+          "desk",
+          "smallbox",
+          "sidetable",
+          "dresser",
+          "filingcabinet",
+          "shelves"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "WorldStashMap16",
+      "note": 2
+    },
+    "body": "Camp log: the pasture-study team slept here for three nights. On the fourth morning their cook poured out the water because it smelled medicinal.\n\nMy mother put it with the household bills so it would not be thrown away. It was the only part of the week that still had a date.\n\nI do not know which of the two accounts was repeated afterward. The older one is the one I had in my hands that day.",
+    "id": "t0125-03",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "Notepad page",
+    "where": [
+      {
+        "containers": [
+          "desk",
+          "smallbox",
+          "sidetable",
+          "filingcabinet",
+          "shelves",
+          "cashregister"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "WorldStashMap16",
+      "note": 3
+    },
+    "body": "I found the test drums behind the north fence marker.\nOne was leaking a milky fluid onto the ground.\nEvery plant beneath it had turned black and brittle.",
+    "id": "t0125-04",
+    "kind": "written",
+    "pieces": [
+      "receipt"
+    ],
+    "title": "Field Log",
+    "where": [
+      {
+        "containers": [
+          "cashregister",
+          "smallbox",
+          "desk",
+          "filingcabinet",
+          "sidetable",
+          "shelves"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "WorldStashMap16",
+      "note": 4
+    },
+    "body": "Photograph back: the second trap contained a torn soil-sample bag, not an animal. Blue granules beneath it matched the coating on the trial seed.\n\nThe granules had eaten a ring of bare ground around the bag.",
+    "id": "t0125-05",
+    "kind": "written",
+    "pieces": [
+      "photograph"
+    ],
+    "title": "Photograph",
+    "where": [
+      {
+        "containers": [
+          "smallbox",
+          "crate",
+          "cardboardbox",
+          "bin",
+          "locker",
+          "desk"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "WorldStashMap16",
+      "note": 5
+    },
+    "body": "Pulled this from a crop duster's cab after he stumbled out. Last page documents the new orange compound on the south fields. His script goes crooked, then just orange fingerprints.",
+    "id": "t0125-06",
+    "kind": "written",
+    "pieces": [
+      "notebook"
+    ],
+    "title": "Spray log",
+    "where": [
+      {
+        "containers": [
+          "smallbox",
+          "crate",
+          "cardboardbox",
+          "bin",
+          "locker",
+          "desk"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "WorldStashMap16",
+      "note": 6
+    },
+    "body": "Road-crew receipt: barriers were moved downhill after the road was closed to traffic. The billed hours match the night the patrol took names from the houses along the road.\n\nA checkpoint was left standing past the culvert.",
+    "id": "t0125-07",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "title": "Handwritten letter",
+    "where": [
+      {
+        "containers": [
+          "smallbox",
+          "crate",
+          "cardboardbox",
+          "bin",
+          "locker",
+          "desk"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "WorldStashMap16",
+      "note": 7
+    },
+    "body": "Followed the markers to the spray zone and counted the tanks. Seven canisters went into the test plot but only six came out.\n\nThe missing one must have ruptured in the trial rows. I documented the chemical burn pattern for the review.",
+    "id": "t0125-08",
+    "kind": "written",
+    "pieces": [
+      "diary"
+    ],
+    "title": "Application notes",
+    "where": [
+      {
+        "containers": [
+          "smallbox",
+          "crate",
+          "cardboardbox",
+          "bin",
+          "locker",
+          "desk"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

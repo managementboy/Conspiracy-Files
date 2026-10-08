@@ -1,0 +1,144 @@
+[
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "scene": "RBCafe"
+      },
+      "body": "before breakfast: the crop trial crew brought rinsed gloves. my brother started coughing. I washed everything twice before the buses quit running.",
+      "id": "t0288-01",
+      "kind": "written",
+      "pieces": [
+        "diary"
+      ],
+      "title": "Before breakfast: rinsed gloves",
+      "where": [
+        {
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-warning",
+          "c-orders"
+        ]
+      },
+      "gloss": "A personal trace links trial residue to illness before a later restriction.",
+      "prov": {
+        "batch": "T0288",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A response team could have carried farm supplies while checking exposure; the objects and timing do not establish that the trial caused it."
+    }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "scene": "RBCafe"
+      },
+      "body": "before breakfast: the crop trial crew brought rinsed gloves. my brother started coughing. I washed everything twice before the buses quit running.\n\nThere was a place for a signature and no one willing to write one. I used the margin to note what we actually found.\n\nSomeone had to finish the household list even though the office had closed. I wrote the names in the space left for expenses.",
+      "id": "t0288-01",
+      "kind": "written",
+      "pieces": [
+        "diary"
+      ],
+      "title": "Before breakfast: rinsed gloves",
+      "where": [
+        {
+          "containers": [
+            "crate",
+            "shelves",
+            "desk",
+            "counter",
+            "cardboardbox",
+            "bin"
+          ],
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-warning",
+          "c-orders"
+        ]
+      },
+      "gloss": "A personal trace links trial residue to illness before a later restriction.",
+      "prov": {
+        "batch": "T0288",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A response team could have carried farm supplies while checking exposure; the objects and timing do not establish that the trial caused it."
+    }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "scene": "RBCafe"
+      },
+      "body": "The woman at the next table asked why they were taking names with the breakfast order. I told her it was probably for the bill. The waitress folded the list and put it in her apron, though we had all paid at the counter.\n\nLater a man came in through the kitchen, spoke to her, and left with the folded paper. Nobody cleared our plates while he was there. I kept looking at the clock because my sister was due to meet me.\n\nShe never arrived. I wrote down the time, then crossed it out when I realized I couldn't remember whether the clock had stopped before or after the man came in. The waitress set a fresh pot on the stove and kept serving everyone else.",
+      "id": "t0288-02",
+      "kind": "written",
+      "pieces": [
+        "diary"
+      ],
+      "title": "Names with breakfast",
+      "where": [
+        {
+          "containers": [
+            "counter",
+            "desk",
+            "bin",
+            "shelves",
+            "crate",
+            "filingcabinet"
+          ],
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-warning",
+          "c-accounting"
+        ]
+      },
+      "gloss": "A personal account or object records an intervention that left part of the account missing.",
+      "prov": {
+        "batch": "T0288",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "The list may trace who ate food delivered from a contaminated farm."
+    }
+  }
+]

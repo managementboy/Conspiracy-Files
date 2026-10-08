@@ -1,0 +1,117 @@
+{
+  "t0115-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-warning",
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "gloss": "A response bundle preserves a missing count, changed route, or erased identity.",
+    "prov": {
+      "batch": "T0115",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A farm-program crew could have counted routes, repacked tools, or removed ownership marks during hurried field work; the objects do not prove a concealed public response."
+  },
+  "t0115-02": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "gloss": "Cross beside the trial store",
+    "prov": {
+      "batch": "T0115",
+      "handoff": "2026-09-29",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "None: one-sided on purpose"
+  },
+  "t0115-03": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "gloss": "Abandoned gear from when the crop program failed",
+    "prov": {
+      "batch": "T0115",
+      "handoff": "2026-09-29",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "None: one-sided on purpose"
+  },
+  "t0115-04": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "gloss": "Too large for one field crew",
+    "prov": {
+      "batch": "T0115",
+      "handoff": "2026-09-29",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "None: one-sided on purpose"
+  },
+  "t0115-05": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "gloss": "Cross checked after the seed delivery",
+    "prov": {
+      "batch": "T0115",
+      "handoff": "2026-09-29",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work."
+  },
+  "t0115-06": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "gloss": "Initials beside the plot count",
+    "prov": {
+      "batch": "T0115",
+      "handoff": "2026-09-29",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "None: one-sided on purpose"
+  }
+}

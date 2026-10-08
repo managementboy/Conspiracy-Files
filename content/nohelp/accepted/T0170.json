@@ -1,0 +1,30 @@
+[
+  {
+    "anchor": {
+      "print": "DragRacingTrack"
+    },
+    "body": "A feed-store receipt lists fuel and rinse soap beside a handwritten line: \"Trial rig at the track before sunrise. Wash the tank before the first cars arrive.\"\n\nThe soap was bought by the case, enough for a sprayer tank many times over. The rig left a yellow ring on the gravel.\n\nI kept the page because the handwriting is the trial foreman's.",
+    "id": "t0170-01",
+    "kind": "written",
+    "pieces": [
+      "receipt"
+    ],
+    "title": "Receipt",
+    "where": [
+      {
+        "containers": [
+          "cashregister",
+          "smallbox",
+          "desk",
+          "filingcabinet",
+          "sidetable",
+          "shelves"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

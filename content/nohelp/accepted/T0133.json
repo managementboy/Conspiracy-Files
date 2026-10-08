@@ -1,0 +1,32 @@
+[
+  {
+    "anchor": {
+      "map": "WpStashMap1",
+      "mark": 1
+    },
+    "body": "The map shows a house marked with someone already missing. This pistol was issued days after. They knew but kept going.",
+    "id": "t0133-01",
+    "kind": "set",
+    "pieces": [
+      "Pistol",
+      "Map"
+    ],
+    "title": "Pistol and map",
+    "where": [
+      {
+        "containers": [
+          "locker",
+          "desk",
+          "dresser",
+          "filingcabinet",
+          "wardrobe",
+          "sidetable"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

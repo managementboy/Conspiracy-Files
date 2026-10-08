@@ -1,0 +1,12 @@
+Linux Of Interest cue check 20261008T161810: PASS
+source: 29ae5e01
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+note: scene decided: clue nh:note:ns001:ns001:1
+note: placed; recognised=false
+note: live clue rows for the scene (what the cue iterates): 1
+note: cue (said, suppressed, last was this scene, bubble length, spoken length): 1 0 true 44 0
+note: cue lines in the log for this walk: 1
+note: log line (shape only): mod=hint msg="..."
+note: cue count staying near the clue for 12 s: 1 -> 1
+note: second approach (said, suppressed, last was this scene, bubble length, spoken length): 2 5 true 3 36

@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "QuillManor"
+    },
+    "body": "The tape and empty garden sprayer share a sticky pale-blue residue. I think it's from the same spray run. A few seed husks are stuck in the tape's housing.",
+    "id": "t0276-01",
+    "kind": "set",
+    "pieces": [
+      "MeasuringTape",
+      "GardeningSprayEmpty"
+    ],
+    "title": "Measuring tape and garden sprayer",
+    "where": [
+      {
+        "containers": [
+          "toolcabinet",
+          "metal_shelves",
+          "cardboardbox",
+          "smallbox",
+          "crate",
+          "smallcrate"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

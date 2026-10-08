@@ -1,6 +1,7 @@
 local Core=require("NHShared/Generated/AddressIndex")
 local Roads=require("NHShared/Generated/AddressRoads")
 local V=require("NHShared/Validator")
+local GameBuild=require("NHShared/GameBuild")
 NHShared=NHShared or {}
 if NHShared.AddressMap and NHShared.AddressMap.stop then NHShared.AddressMap.stop() end
 local M={}; NHShared.AddressMap=M
@@ -15,7 +16,14 @@ local status="Not started"
 local view,viewReasons,auditHandler
 local function stopAudit() if auditHandler then require("NHShared/Events/EngineEvents").off("OnTick", auditHandler);auditHandler=nil end end
 function M.status() log(status); return status end
-local function allowed() return getDebug and getDebug() and not (isClient and isClient()) and not (isServer and isServer()) end
+-- Every single-player game, like ClueMarkers (owner playtest 2026-10-03: this
+-- used to need the debug flag, so a normal game never drew a single number).
+local function allowed() return not (isClient and isClient()) and not (isServer and isServer()) end
+-- The per-save scan and the audit stay development tools.
+local function debugOn() return getDebug and getDebug() and allowed() end
+-- Labels draw when the map shows at most this many tiles across (about zoom 17 or closer; the map is drawn tilted, so this is the corner-to-corner box,
+-- not the visible width); wider views would be a crowd of numbers.
+local MAX_SPAN=1100
 local function valid(root)
     local ok=V.validateStructure(root)
     if not ok or type(root)~="table" or root.revision~=Core.REVISION or type(root.records)~="table" then return false end
@@ -232,7 +240,7 @@ function M.describe(body,case)
     return out
 end
 function M.draw(ui)
-    if not book or not allowed() or not ui.mapAPI or ui.mapAPI:getZoomF()<18 then return end
+    if not book or not allowed() or not ui.mapAPI then return end
     local visited=WorldMapVisited.getInstance()
     local api=ui.mapAPI
     local minX,minY,maxX,maxY=math.huge,math.huge,-math.huge,-math.huge
@@ -240,9 +248,10 @@ function M.draw(ui)
         local x,y=api:uiToWorldX(p[1],p[2]),api:uiToWorldY(p[1],p[2])
         minX,minY,maxX,maxY=math.min(minX,x),math.min(minY,y),math.max(maxX,x),math.max(maxY,y)
     end
-    if maxX-minX>1024 or maxY-minY>1024 then return end
+    if maxX-minX>MAX_SPAN or maxY-minY>MAX_SPAN then return end
     view={minX=minX,minY=minY,maxX=maxX,maxY=maxY};viewReasons={}
     local occupied,drawn,checked={},0,0
+    M.lastDrawn=0
     -- Fixed work limits keep the same labels visible regardless of frame timing.
     for bx=math.floor(minX/64),math.floor(maxX/64) do for by=math.floor(minY/64),math.floor(maxY/64) do
         for _,r in ipairs(buckets[bx..":"..by] or {}) do
@@ -262,7 +271,7 @@ function M.draw(ui)
                     viewReasons[r.id]="suppressed by label overlap"
                     if not occupied[key] then
                         viewReasons[r.id]="drawn"
-                        occupied[key]=true;drawn=drawn+1
+                        occupied[key]=true;drawn=drawn+1;M.lastDrawn=drawn
                         ui:drawText(number,x-width/2,y-height/2,0.12,0.10,0.08,1,UIFont.Small)
                     end
                 end
@@ -272,7 +281,7 @@ function M.draw(ui)
 end
 -- Explicit development-only, read-only audit of the last close-zoom map view.
 function M.audit()
-    if not allowed() or not book or not view then log("Open the world map and zoom in first.");return false end
+    if not debugOn() or not book or not view then log("Open the world map and zoom in first.");return false end
     if job then log("Wait for address generation to finish first.");return false end
     stopAudit()
     local area,reasons=view,viewReasons
@@ -332,7 +341,7 @@ function M.start(options)
     if job then return false,"address index already building" end
     local world=getWorld(); if not world then return false,"load a game first" end
     local map=tostring(world:getMap()); local build=tostring(getGameVersion())
-    if build~="42.20" and build~="42.20.4" then return false,"unverified game build" end
+    if not GameBuild.supported(build) then return false,"unsupported game build (needs 42.20 or later)" end
     if not map:find("Muldraugh, KY",1,true) then return false,"unsupported map" end
     hook()
     local existing=ModData.get(TAG)
@@ -348,11 +357,12 @@ function M.start(options)
             return true
         end
         log("Shipped addresses not used: "..tostring(why))
-        if options.noScan then return false,why end
+        if options.noScan or not debugOn() then return false,why end
     end
     local frozen
     if existing and existing.canonical then
-        if not valid(existing.canonical) or existing.canonical.map~=map or existing.canonical.build~=build then return false,"saved address book refused; no renumbering" end
+        if not valid(existing.canonical) or existing.canonical.map~=map
+            or (existing.canonical.build~=build and not GameBuild.supported(existing.canonical.build)) then return false,"saved address book refused; no renumbering" end
         use(existing.canonical)
         if book.coverage==3 then log("Restored "..#book.records.." fixed addresses. Zoom in on the world map.");return true end
         frozen=book.records

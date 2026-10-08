@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "Pondview"
+    },
+    "body": "The guards stuffed an empty seed bag with their own rubbish and left it beside the pizza box at the checkpoint. The wall list still orders everyone to wait here for transport. Roadblock tape closes the road and nobody lifted it.",
+    "id": "t0275-01",
+    "kind": "set",
+    "pieces": [
+      "SeedBag",
+      "Pizza"
+    ],
+    "title": "Seed bag and pizza",
+    "where": [
+      {
+        "containers": [
+          "metal_shelves",
+          "cardboardbox",
+          "crate",
+          "composter",
+          "grocerstand",
+          "smallcrate"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

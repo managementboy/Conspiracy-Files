@@ -10,8 +10,8 @@ local I=NHShared.IdentityObserver or {}
 NHShared.IdentityObserver=I
 NHEngine=NHEngine or {};NHEngine.IdentityObserver=I
 local TAG="NHShared.IdentityObservations"
-local types={['Base.IDcard']=true,['Base.IDcard_Stolen']=true,['Base.IDcard_Female']=true,
- ['Base.IDcard_Male']=true,['Base.CreditCard']=true,['Base.CreditCard_Stolen']=true,['Base.ParkingTicket']=true,['Base.SpeedingTicket']=true,['Base.BusinessCard']=true,['Base.BusinessCard_Personal']=true,['Base.BusinessCard_Nolans']=true,['Base.Passport']=true,['Base.PressID']=true,['Base.Badge']=true,['Base.Diary1']=true,['Base.Diary2']=true}
+-- The one list of identity types lives with the model (IdentityObservations.TYPES).
+local types=Model.TYPES
 local queue,queued,seen={},{},{}
 -- How many times one identity may fail to record before it is dropped and
 -- said so. The same cap, for the same reason, as LocalPersonIntegration's:
@@ -203,7 +203,8 @@ end
 I.sawRender=false
 function I.afterRender(pane)
  if not I.sawRender then I.sawRender=true; CFLog.message("identity","person","afterRender reached for the first time") end
- if not supported() then return gate("observer unsupported (debug/MP/runtime gate)") end
+ -- Unsupported (not debug, or MP) is the normal state of a played game: 269 lines per session when logged. Verbose only.
+ if not supported() then return bail("observer unsupported (debug/MP/runtime gate)") end
  if #queue>=16 then return gate("queue full") end
  if pane.mode~="details" then return gate("pane mode is "..tostring(pane.mode)..", expected details") end
  -- dragStarted does NOT mean "a drag is happening". ISInventoryPane sets it
@@ -386,17 +387,16 @@ if Events and Events.OnTick and not I.tickHandler then
 end
 function I.reset() queue={};queued={};seen={};tokenless={};elapsed=0 end
 if Events and Events.OnGameStart and not I.startHandler then
- -- Seven modules are reached only by PZ executing their file, with nothing
- -- requiring them. Two are load-bearing: AutomaticInvestigations makes cases
- -- appear without console commands, and LocalPersonHooks installs the door
+ -- Some modules are reached only by PZ executing their file, with nothing
+ -- requiring them. LocalPersonHooks, for one, installs the door
  -- and transfer hooks the whole person/key strand depends on. PlayerVoice did
  -- the same thing and silently never loaded (86ade2c), so this reports the
  -- truth at game start instead of leaving it to be discovered mid-test.
  local function reportModules()
-  local expected={"AutomaticInvestigations","LocalPersonHooks","LocalPersonRuntime",
+  local expected={"LocalPersonHooks","LocalPersonRuntime",
    "GeneratedRuntime","DiscoveryLog","PlayerVoice","PersonNameLog","ClueCue",
    "ClueMarkers","IdentityObserver","ObservedKeyLeads","EvidencePickupHint",
-   "CasePerson","KeyObserver"}
+   "KeyObserver"}
   local missing={}
   for _,name in ipairs(expected) do
    if NHShared[name]==nil then missing[#missing+1]=name end

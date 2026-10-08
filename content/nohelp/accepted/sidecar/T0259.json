@@ -1,0 +1,25 @@
+{
+  "t0259-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "March Ridge Cold War Bunker",
+      "source": "print:ColdWarBunker"
+    },
+    "gloss": "A tour log with its count left blank and a torch taped over.",
+    "prov": {
+      "batch": "T0259",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "None: one-sided on purpose"
+  }
+}

@@ -1,0 +1,30 @@
+Linux Of Interest batch check 20261008T005214: FAIL
+source: 25e7ccc0
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+note: time until the stories pass finished: 244 s; scenes in the record: 250 193
+note: decided: scenes (all, standalone) = 250 193; (dup notes, unknown notes, shared buildings, digest) = 0 0 0 95639428; towns (min, max, count) = 1 79 14; per town: 10:24 11:17 12:12 13:9 14:19 1:12 2:11 3:11 4:8 5:18 6:8 7:1 8:79 9:21; standalone hosts (building, vehicle, body) = 175 18 0
+note: plan line: why=plan held=4 matched=11 ms=713 nofit=0 passes=38 placed=19 relaxed=1 scenes=250 standalone=193 stories=57 tagged=12
+note: batch line: vehicle=18 why=plan body=0 building=175 densityBand=0 heldBack=9 hostCap=0 matched=62 noCategoryBuilding=34 noFit=0 noRecipe=0 notDrawn=234 quota=193 relaxed=16 tagged=78
+note: kinds checked on arrival: story building vehicle
+note: story: first scene clue nh:note:ns101:ns101:1, note id Letter/InvitationLetter/0009
+note: story: created at 10309,12712,0
+note: story first scene: holders=1 inside=3 loose=0 want=3 holder=Base.Hatbox pickRule=true note piece=1 item=Base.LetterHandwritten re=0 verify=ok
+note: story: find via Search Mode (ok,new) true true; Look it over (ok,new) true false; find events in the log: 1
+note: building: first scene clue nh:note:ns201:ns201:1, note id Letter/AcceptanceLetter/0002
+note: building: created at 14281,2713,0
+note: building first scene: holders=1 inside=3 loose=0 want=3 holder=Base.HollowBook_Prison pickRule=true note piece=1 item=Base.LetterHandwritten re=0 verify=ok
+note: building: find via Search Mode (ok,new) true true; Look it over (ok,new) true false; find events in the log: 1
+note: vehicle: first scene clue nh:note:ns208:ns208:1, note id Letter/CharityLetter/0002
+note: vehicle host: spawned (type, at) StepVan_MobileLibrary 13049,5183
+note: vehicle: created at 13049,5183,0
+note: vehicle first scene: holders=1 inside=3 loose=0 want=3 holder=Base.Bag_RifleCaseGreen pickRule=false note piece=1 item=Base.LetterHandwritten re=0 verify=ok
+note: vehicle: find via Search Mode (ok,new) true true; Look it over (ok,new) true false; find events in the log: 1
+note: reloaded: scenes (all, standalone) = 250 193; (dup notes, unknown notes, shared buildings, digest) = 0 0 0 95639428; towns (min, max, count) = 1 79 14; per town: 10:24 11:17 12:12 13:9 14:19 1:12 2:11 3:11 4:8 5:18 6:8 7:1 8:79 9:21; standalone hosts (building, vehicle, body) = 175 18 0
+note: reload: the 250 scene:building decisions are identical
+note: reloaded story scene: holders=1 inside=3 loose=0 want=3 holder=Base.Hatbox pickRule=true note piece=1 item=Base.LetterHandwritten re=0 verify=ok
+note: reloaded building scene: holders=1 inside=3 loose=0 want=3 holder=Base.HollowBook_Prison pickRule=true note piece=1 item=Base.LetterHandwritten re=0 verify=ok
+note: reloaded vehicle scene: holders=1 inside=3 loose=0 want=3 holder=Base.Bag_RifleCaseGreen pickRule=false note piece=1 item=Base.LetterHandwritten re=0 verify=ok
+note: reload sweep line: foreign=0 gone=0 items=0 ok=0 op=sweep records=9 repaired=0 tracker=0
+FAIL: vehicle first scene: the holder is not the one the pick rule makes
+FAIL: reloaded vehicle scene: the holder is not the one the pick rule makes

@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "PileoCrepeJobAdCrossRoadsMall"
+    },
+    "body": "Pencil marks zones secure hours before the actual sweep. The notebook logs evacuations complete while roads were jammed. They documented it finished too early.",
+    "id": "t0186-01",
+    "kind": "set",
+    "pieces": [
+      "Pencil",
+      "Notebook"
+    ],
+    "title": "Pencil and notebook",
+    "where": [
+      {
+        "containers": [
+          "filingcabinet",
+          "desk",
+          "sidetable",
+          "shelves",
+          "smallbox",
+          "cashregister"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

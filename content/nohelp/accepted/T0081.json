@@ -1,0 +1,32 @@
+[
+  {
+    "anchor": {
+      "map": "MulStashMap5",
+      "mark": 1
+    },
+    "body": "One page is torn out of the notebook. There's a route copy with a blank arrival box. A pencilled note asks if the driver should wait or report it complete.",
+    "id": "t0081-01",
+    "kind": "set",
+    "pieces": [
+      "Notebook",
+      "Pencil"
+    ],
+    "title": "Notebook and pencil",
+    "where": [
+      {
+        "containers": [
+          "desk",
+          "shelves",
+          "sidetable",
+          "filingcabinet",
+          "smallbox",
+          "shelvesmag"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

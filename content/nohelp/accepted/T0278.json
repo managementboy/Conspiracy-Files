@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "Sanatorium"
+    },
+    "body": "The tour map marks the basement route open. Barrier tape is across the route, with a number penciled by each step. They count down to a closed door, torch lens taped to a slit.",
+    "id": "t0278-01",
+    "kind": "set",
+    "pieces": [
+      "HandTorch",
+      "Map"
+    ],
+    "title": "Torch and map",
+    "where": [
+      {
+        "containers": [
+          "shelves",
+          "crate",
+          "smallbox",
+          "metal_shelves",
+          "toolcabinet",
+          "locker"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

@@ -1,0 +1,9 @@
+Linux addresses check 20261002T224526: PASS
+source: b1fdad36
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+FINDING: load: 190 ms; status: Ready: 6796 shipped addresses for the whole map in 190 ms; nothing scanned or saved. Zoom in on the world map.
+FINDING: cases at the time of the check: 0
+FINDING: shipped houses: 6796
+FINDING: live world: 6796 shipped buildings found, 0 missing, 0 moved
+FINDING: samples: Brandenburg: 302 KY-60, Brandenburg | Irvington: 204 Irvington Road, Irvington | Muldraugh: 304 Buck Road | Riverside: 404 Rock Ridge Road, Riverside | West Point: 101 Prewitt Dr, West Point
+errors inside the mod: 0

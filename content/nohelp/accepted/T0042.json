@@ -1,0 +1,32 @@
+[
+  {
+    "anchor": {
+      "map": "IrvingtonStashMap3",
+      "mark": 1
+    },
+    "body": "The paper says to radio on the walkie talkie before turning back. It lists the spray crew under visitors for the route.",
+    "id": "t0042-01",
+    "kind": "set",
+    "pieces": [
+      "WalkieTalkie1",
+      "SheetPaper2"
+    ],
+    "title": "Walkie-talkie and paper",
+    "where": [
+      {
+        "containers": [
+          "shelves",
+          "desk",
+          "filingcabinet",
+          "toolcabinet",
+          "sidetable",
+          "metal_shelves"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

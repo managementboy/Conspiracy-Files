@@ -66,7 +66,7 @@ end
 
 -- Stable sequence numbers come from the ledger itself; the world clock is
 -- recorded alongside because several discoveries share one game-time interval.
-function D.record(kind,reference,mapState)
+function D.record(kind,reference)
     local ok,recorded=pcall(function()
         local at=worldHours(); if not at then return false end
         -- A place that cannot be read costs the entry nothing: the discovery
@@ -74,18 +74,8 @@ function D.record(kind,reference,mapState)
         local ok,where,whereId=pcall(whereNow); if not ok then where,whereId=nil,nil end
         local staged,changed=Ledger.record(root(),kind,reference,at,where,whereId)
         if not staged or not changed then return false end
-        local mapStore
-        if mapState then
-            local State=require("NHShared/MapMediaState")
-            local Catalogue=require("NHShared/MapMediaCatalogue")
-            if not State.validate(mapState,Catalogue) then return false end
-            if not Budget.checkMany({discoveries={canonical=staged},mapMedia={canonical=mapState}}) then return false end
-            mapStore=ModData.getOrCreate("NHShared.MapMedia")
-        elseif not Budget.check("discoveries",{canonical=staged}) then return false end
+        if not Budget.check("discoveries",{canonical=staged}) then return false end
         local store=ModData.getOrCreate(TAG)
-        -- Both roots are staged and checked together. No engine calls/yields
-        -- between these assignments; readers never observe a half discovery.
-        if mapStore then mapStore.canonical=mapState end
         store.canonical=staged
         local event=staged.events[#staged.events]
         -- Straight to disk, before anything else can go wrong. ModData will
@@ -208,14 +198,6 @@ function D.journalAppend(event)
         local fields={saveId(),encode(event.kind),encode(event.ref),
             encode(string.format("%.6f",event.at or 0)),encode(event.place),
             encode(event.placeId)}
-        local design,part=event.ref:match("^map:([^:]+):([1-4])$")
-        local store=design and ModData.get("NHShared.MapMedia")
-        local trail=store and store.canonical and store.canonical.trails[design]
-        local p=trail and (tonumber(part)==4 and trail.payoff or trail.fragments[tonumber(part)])
-        if trail and p and p.noted then
-            fields[7]=encode(trail.seed); fields[8]=encode(trail.at)
-            fields[9]=encode(p.attempt); fields[10]=encode(p.at); fields[11]=encode(p.observation)
-        end
         w:writeln(table.concat(fields,SEP))
         w:close()
         return true
@@ -237,10 +219,7 @@ function D.journalRead()
             if #f>=4 and f[1]==mine then
                 out[#out+1]={kind=f[2],ref=f[3],at=tonumber(f[4]),
                              place=(f[5]~="" and f[5]) or nil,
-                             placeId=(f[6]~="" and f[6]) or nil,
-                             mapSeed=tonumber(f[7]),mapReadAt=tonumber(f[8]),
-                             mapAttempt=tonumber(f[9]),mapPlacedAt=tonumber(f[10]),
-                             mapObservation=(f[11]~="" and f[11]) or nil}
+                             placeId=(f[6]~="" and f[6]) or nil}
             end
         end
         r:close()
@@ -257,33 +236,9 @@ function D.journalReplay()
         local ok,done=pcall(function()
             local staged,changed=Ledger.record(root(),e.kind,e.ref,e.at,e.place,e.placeId)
             if not staged then return false end
-            local mapNext,mapStore
-            local design,part=e.ref:match("^map:([^:]+):([1-4])$")
-            if design and e.mapSeed then
-                local S=require("NHShared/MapMediaState")
-                local C=require("NHShared/MapMediaCatalogue")
-                mapStore=ModData.getOrCreate("NHShared.MapMedia")
-                local current=mapStore.canonical or S.empty()
-                if not S.validate(current,C) then return false end
-                local trail=current.trails[design]
-                if trail and trail.seed~=e.mapSeed then return false end
-                local previous=S.get(current,design,tonumber(part))
-                if not previous or not previous.noted then
-                    mapNext=S.activate(current,design,e.mapSeed,e.mapReadAt,C)
-                    if not mapNext then return false end
-                    mapNext=S.set(mapNext,design,tonumber(part),{state="noted",noted=true,recognised=true,
-                        attempt=e.mapAttempt,at=e.mapPlacedAt,observation=e.mapObservation})
-                    if not S.validate(mapNext,C) then return false end
-                end
-            end
-            if not changed and not mapNext then return false end
-            local replacements={discoveries={canonical=staged}}
-            if mapNext then replacements.mapMedia={canonical=mapNext} end
-            if not Budget.checkMany(replacements) then return false end
-            local store=ModData.getOrCreate(TAG)
-            if mapNext then mapStore.canonical=mapNext end
-            store.canonical=staged
-            if mapNext and NHShared.MapMediaRuntime then NHShared.MapMediaRuntime.invalidate() end
+            if not changed then return false end
+            if not Budget.check("discoveries",{canonical=staged}) then return false end
+            ModData.getOrCreate(TAG).canonical=staged
             return true
         end)
         if ok and done then restored=restored+1 end

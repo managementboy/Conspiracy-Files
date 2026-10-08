@@ -1,0 +1,104 @@
+[
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "print": "FossoilField"
+      },
+      "body": "A sports bottle is set beside a grounds sheet asking the crew to rinse the field after the test. The gate schedule still lists a public event.",
+      "id": "t0172-01",
+      "kind": "set",
+      "pieces": [
+        "BaseballBat",
+        "WaterBottle"
+      ],
+      "title": "A stadium rinse",
+      "where": [
+        {
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "Fossoil Field",
+        "source": "print:FossoilField"
+      },
+      "gloss": "A field rinse is scheduled while the public event remains on the calendar.",
+      "prov": {
+        "batch": "T0172",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A response crew could clean a field after an emergency; the schedule does not identify the test."
+    }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "print": "FossoilField"
+      },
+      "body": "A sports bottle is set beside a grounds sheet asking the crew to rinse the field after the test. The gate schedule still lists a public event.",
+      "id": "t0172-01",
+      "kind": "set",
+      "pieces": [
+        "BaseballBat",
+        "WaterBottle"
+      ],
+      "title": "A stadium rinse",
+      "where": [
+        {
+          "containers": [
+            "crate",
+            "shelves",
+            "desk",
+            "counter",
+            "cardboardbox",
+            "bin"
+          ],
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "Fossoil Field",
+        "source": "print:FossoilField"
+      },
+      "gloss": "A field rinse is scheduled while the public event remains on the calendar.",
+      "prov": {
+        "batch": "T0172",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A response crew could clean a field after an emergency; the schedule does not identify the test."
+    }
+  }
+]

@@ -53,6 +53,8 @@ Phase 4 is broadcast anchoring against the game's 1.16 MB radio corpus.
 
 ### Owner request, queued 2026-09-15: house numbers for the whole map (AD-10)
 
+**Status 2026-10-02: built (see docs/design/WHOLE_MAP_ADDRESSES.md section 9). Left: owner checks docs/design/WHOLE_MAP_ADDRESS_BASELINES.md; attended Windows check of a found Riverside paper map.**
+
 Raised during the Windows playtest of DEV-0.36.0: a found Riverside map showed
 no house numbers. **Not to be built during a playtest.** The owner's position,
 first agreed around 2026-09-14 and not started: compute addresses for the whole
@@ -219,7 +221,7 @@ names...") where the survivor can only read, not confirm. Keep the observation
 rules: never infer identity or ownership; two readings stay live. Tests hold
 every heading to first person and to no certainty words.
 
-**Status:** queued; not built during play.
+**Status:** built. Headings: DR-20260925-RECORD-VOICE. 2026-10-02 finished the rest in both mods: link words ("I think it agrees with ...") and where-a-file-is-now sentences are first person with doubt (Headings.LINKS, EvidenceRows.WHEREABOUTS); test/nohelp_record_voice.lua. Not done: the device's narrow field labels (FOUND, WHEN, WHERE, MAP) are 34px wide in OrganiserScreen and were left; the row subtitle "Object found - Discovery N". Offline only.
 
 ## Owner question, 2026-09-25 (asked mid-build; for after the occupation openings ship)
 
@@ -237,4 +239,20 @@ width - the PDA wraps). While authoring the 24 occupation families today, five
 object records ran over it by 3-28 characters and had to be trimmed; the cap
 did its job as a style limit, but whether 240 is the right figure, and whether
 the *source* sentence of an object should count against it at all, is the
-owner's question to settle. Not changed.
+owner's question to settle.
+
+**Status:** decided 2026-10-02 and built. The source sentence no longer counts: `OBJECT_MAX_CHARS=240` now caps only the observation plus the note (No Help only, per the owner's rule to keep the two mods separate: `NHShared/Mystery/Linter.lua`; the older mod is untouched). Paper is unchanged. The save budget (SaveBudget, a total encoded-bytes check) is independent of the cap and its tests were rerun green; the locked-pages journal-safe page size (d2fb3bde) applies to readable paper, not object records. Test: `test/nohelp_object_cap.lua`.
+
+## Owner request, Windows playtest 2026-10-01 (game 42.21) — a hotkey that shows where the nearest clue will be placed
+
+The owner asked for a hotkey, **Shift+L**, that asks the game where the closest clue will be placed. It is wanted as a testing aid for checking clue placement and the "a clue is nearby" information to the player.
+
+Useful facts found while trying a debug-console workaround:
+- The live list of clues (id, status placed/pending, x/y/z, place, vehicle, part) comes from `GeneratedRuntime.clueTargets()` (`mod/common/media/lua/client/ConspiracyFiles/GeneratedRuntime.lua`).
+- In a running game it is reached with `require("ConspiracyFiles/EngineAPI").GeneratedRuntime`. `ConspiracyFiles.GeneratedRuntime` is nil in a live game; it only works in the autotest harness.
+- `tools/log.sh -e` filters `[CF]` lines only, so it misses engine and other-mod errors; the raw log must be checked for `ERROR`.
+- The `[CF]` log fields for place and position are written as `-`, so the log cannot say where a clue went.
+
+Owner decisions (same session): the hotkey is a **debug-only tool**, not shipped to players, and it prints to the **log only**, not to the screen.
+
+**Status:** built 2026-10-02 (NHShared/ClueWhere.lua, log event clue_where); offline-tested only.

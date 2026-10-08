@@ -1,0 +1,42 @@
+[
+  {
+    "anchor": {
+      "scene": "RVSBurntCar"
+    },
+    "body": "Feed, soap, and a clean jar, paid cash. My note below says chalky water came from the feed test.\n\nThe ditch smelled metallic, and the frogs were gone from it by noon.",
+    "id": "t0359-01",
+    "kind": "written",
+    "pieces": [
+      "receipt"
+    ],
+    "title": "Paper receipt",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RVSBurntCar"
+    },
+    "body": "The car burned after they copied its registration onto the clear list. I watched them carry a new list to the far side of the road. My father was told he had never arrived, although his name was on my first copy.",
+    "id": "t0359-02",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "Notepad page",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
+  }
+]

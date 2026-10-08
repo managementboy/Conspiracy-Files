@@ -1,0 +1,206 @@
+[
+  {
+    "anchor": {
+      "map": "IrvingtonStashMap9",
+      "mark": 1
+    },
+    "body": "I find a hammer and nails by notes on the test plot spray cycle. Posts along the crop rows needed repair before application. The pesticide batch number is crossed out and rewritten.",
+    "id": "t0048-01",
+    "kind": "set",
+    "pieces": [
+      "Hammer",
+      "Nails"
+    ],
+    "title": "hammer and nails",
+    "where": [
+      {
+        "containers": [
+          "toolcabinet",
+          "metal_shelves",
+          "crate",
+          "smallbox",
+          "smallcrate",
+          "militarycrate"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "IrvingtonStashMap9",
+      "note": 1
+    },
+    "body": "Notebook page: “fortify here” meant boards over the garden door before the next patrol came through. A man with a clipboard took our names and told us to say nothing about the count.\n\nMy mother put it with the household bills so it would not be thrown away. It was the only part of the week that still had a date.",
+    "id": "t0048-02",
+    "kind": "written",
+    "pieces": [
+      "diary"
+    ],
+    "title": "Diary page",
+    "where": [
+      {
+        "containers": [
+          "smallbox",
+          "desk",
+          "sidetable",
+          "dresser",
+          "filingcabinet",
+          "shelves"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "IrvingtonStashMap9",
+      "note": 2
+    },
+    "body": "Margin note: heart is the cot where farm sprayers slept. Their boots tracked yellow dust across the bedroom. The family used that cot two nights later. I could smell the sweetness on the blanket for days.",
+    "id": "t0048-03",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "Diary page",
+    "where": [
+      {
+        "containers": [
+          "cardboardbox",
+          "crate",
+          "bin",
+          "smallbox",
+          "locker",
+          "desk"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "IrvingtonStashMap9",
+      "note": 3
+    },
+    "body": "On the photograph back: second heart, our spare blanket. I rinsed green flecks from it after the seed-treatment men left, then the well began tasting of pennies.\n\nI kept the corner of the old page in my pocket. The flecks came out of the blanket slowly, and the well water was cloudy for days.",
+    "id": "t0048-04",
+    "kind": "written",
+    "pieces": [
+      "receipt"
+    ],
+    "title": "Receipt",
+    "where": [
+      {
+        "containers": [
+          "cardboardbox",
+          "crate",
+          "bin",
+          "smallbox",
+          "locker",
+          "desk"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "IrvingtonStashMap9",
+      "note": 4
+    },
+    "body": "Torn notebook page: the third heart is the room lent to two pasture-test workers. One wrote that the calves refused water after the pasture was sprayed.\n\nTheir boots by the door were caked with the same pale dust as the pasture gate. I wrote this down before their truck left.",
+    "id": "t0048-05",
+    "kind": "written",
+    "pieces": [
+      "photograph"
+    ],
+    "title": "Photograph",
+    "where": [
+      {
+        "containers": [
+          "cardboardbox",
+          "crate",
+          "bin",
+          "smallbox",
+          "locker",
+          "desk"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "IrvingtonStashMap9",
+      "note": 5
+    },
+    "body": "Personal note: at the fourth heart we shut the window during the field misting. The kitchen herbs curled by supper, hours after the spraying.\n\nI set the page aside to show the neighbor when she returned. Her porch was empty by the time the light was good enough to read it.\n\nThere may be a simple reason for the change. The seed supplier could not tell us what the first mix contained.",
+    "id": "t0048-06",
+    "kind": "written",
+    "pieces": [
+      "notebook"
+    ],
+    "title": "Notebook page",
+    "where": [
+      {
+        "containers": [
+          "cardboardbox",
+          "crate",
+          "bin",
+          "smallbox",
+          "locker",
+          "desk"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "IrvingtonStashMap9",
+      "note": 6
+    },
+    "body": "Letter draft: the fifth heart was for the baby room. At the roadblock they said evacuations halted, would not document it.\n\nThere was a numbered tag on our door the next morning. I wrote the date here while I could still remember it.",
+    "id": "t0048-07",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "title": "Handwritten letter",
+    "where": [
+      {
+        "containers": [
+          "smallbox",
+          "desk",
+          "filingcabinet",
+          "sidetable",
+          "cashregister",
+          "shelves"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

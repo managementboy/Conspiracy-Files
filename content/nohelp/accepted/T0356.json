@@ -1,0 +1,43 @@
+[
+  {
+    "anchor": {
+      "scene": "RVSAmbulanceCrash"
+    },
+    "body": "A jar and potato bear torn evacuation supply tags. One tag has a sector code struck through and corrected. Both carry the same emergency authority stamp.",
+    "id": "t0356-01",
+    "kind": "set",
+    "pieces": [
+      "Potato",
+      "EmptyJar"
+    ],
+    "title": "Potato and empty jar",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "vehicle"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RVSAmbulanceCrash"
+    },
+    "body": "My sister came in from the treated rows with burning eyes and blistered hands. Her work clothes reeked of the spray. By evening three neighbors who never entered the field had the same burning eyes.",
+    "id": "t0356-02",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "Notepad page",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "vehicle"
+      }
+    ]
+  }
+]

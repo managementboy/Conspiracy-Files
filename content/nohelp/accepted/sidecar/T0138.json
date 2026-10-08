@@ -1,0 +1,25 @@
+{
+  "t0138-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "tools",
+      "source": "map:WpStashMap5"
+    },
+    "gloss": "Agricultural workers were tracking pesticide applications and noticed errors.",
+    "prov": {
+      "batch": "T0138",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "None: one-sided on purpose"
+  }
+}

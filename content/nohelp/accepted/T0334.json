@@ -1,0 +1,42 @@
+[
+  {
+    "anchor": {
+      "scene": "RDSGunmanInBathroom"
+    },
+    "body": "I saved the cloth with yellow dust for you. The field-sprayer test crew passed Friday before dawn and three people felt dizzy. The corn leaves on the near rows were scorched by noon.\n\nWe tried to finish the ordinary work around it. The dust left yellow handprints on everything.",
+    "id": "t0334-01",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "title": "Handwritten letter",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "corpse"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RDSGunmanInBathroom"
+    },
+    "body": "He told us to stay in the room and wait for the count. We could hear boots in the hall and someone asking whether to include the people behind the bathroom door.\n\nThe answer was no. They read out a number, then asked us to leave one at a time. He stayed behind with the door locked.\n\nI wrote the number down because it was smaller than the number of voices I had heard.",
+    "id": "t0334-02",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "Notepad page",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "corpse"
+      }
+    ]
+  }
+]

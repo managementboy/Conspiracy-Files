@@ -1,0 +1,182 @@
+{
+  "t0436-01": {
+    "axioms": {
+      "agricultural": [
+        "a-pathway",
+        "a-timing"
+      ],
+      "containment": [
+        "c-failure"
+      ]
+    },
+    "gloss": "An ordinary trace links a farm exposure to a distinct observed outcome: the first sick calf.",
+    "prov": {
+      "batch": "T0436",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A failure of the later response could still have left this exposure unaddressed."
+  },
+  "t0436-02": {
+    "axioms": {
+      "agricultural": [
+        "a-pathway",
+        "a-timing"
+      ],
+      "containment": [
+        "c-failure"
+      ]
+    },
+    "gloss": "An ordinary trace links a farm exposure to a distinct observed outcome: sunday at the water trough.",
+    "prov": {
+      "batch": "T0436",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A failure of the later response could still have left this exposure unaddressed."
+  },
+  "t0436-03": {
+    "axioms": {
+      "agricultural": [
+        "a-pathway",
+        "a-timing"
+      ],
+      "containment": [
+        "c-failure"
+      ]
+    },
+    "gloss": "An ordinary trace links a farm exposure to a distinct observed outcome: the hay stayed clean.",
+    "prov": {
+      "batch": "T0436",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A failure of the later response could still have left this exposure unaddressed."
+  },
+  "t0436-04": {
+    "axioms": {
+      "agricultural": [
+        "a-pathway",
+        "a-timing"
+      ],
+      "containment": [
+        "c-failure"
+      ]
+    },
+    "gloss": "An ordinary trace links a farm exposure to a distinct observed outcome: the feed before the fever.",
+    "prov": {
+      "batch": "T0436",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A failure of the later response could still have left this exposure unaddressed."
+  },
+  "t0436-05": {
+    "axioms": {
+      "agricultural": [
+        "a-pathway",
+        "a-timing"
+      ],
+      "containment": [
+        "c-failure"
+      ]
+    },
+    "gloss": "An ordinary trace links a farm exposure to a distinct observed outcome: the open gate.",
+    "prov": {
+      "batch": "T0436",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A failure of the later response could still have left this exposure unaddressed."
+  },
+  "t0436-06": {
+    "axioms": {
+      "agricultural": [
+        "a-pathway",
+        "a-timing"
+      ],
+      "containment": [
+        "c-failure"
+      ]
+    },
+    "gloss": "An ordinary trace links a farm exposure to a distinct observed outcome: the day the hens fell silent.",
+    "prov": {
+      "batch": "T0436",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A failure of the later response could still have left this exposure unaddressed."
+  },
+  "t0436-07": {
+    "axioms": {
+      "agricultural": [
+        "a-pathway",
+        "a-timing"
+      ],
+      "containment": [
+        "c-failure"
+      ]
+    },
+    "gloss": "An ordinary trace links a farm exposure to a distinct observed outcome: the barn dust.",
+    "prov": {
+      "batch": "T0436",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A failure of the later response could still have left this exposure unaddressed."
+  },
+  "t0436-08": {
+    "axioms": {
+      "agricultural": [
+        "a-pathway",
+        "a-timing"
+      ],
+      "containment": [
+        "c-failure"
+      ]
+    },
+    "gloss": "Direct comparison shows the agricultural water system carried toxins.",
+    "prov": {
+      "batch": "T0436",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "None: one-sided on purpose"
+  },
+  "t0436-09": {
+    "axioms": {
+      "agricultural": [
+        "a-pathway",
+        "a-timing"
+      ],
+      "containment": [
+        "c-failure"
+      ]
+    },
+    "gloss": "An ordinary trace links a farm exposure to a distinct observed outcome: the morning after the delivery.",
+    "prov": {
+      "batch": "T0436",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A failure of the later response could still have left this exposure unaddressed."
+  },
+  "t0436-10": {
+    "axioms": {
+      "agricultural": [
+        "a-pathway",
+        "a-timing"
+      ],
+      "containment": [
+        "c-failure"
+      ]
+    },
+    "gloss": "An ordinary trace links a farm exposure to a distinct observed outcome: what the river did not reach.",
+    "prov": {
+      "batch": "T0436",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A failure of the later response could still have left this exposure unaddressed."
+  }
+}

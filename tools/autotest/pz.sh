@@ -86,9 +86,60 @@ sync_mod() { # sync_mod <source> <name>
     rsync -a --delete "$1/" "$dest/"
 }
 
+# ZOMBIEBUDDY (No Help requires it; DR-20260929-NOHELP-GAP-PLAN). The game
+# starts with the ZombieBuddy Java agent, policy deny-new: no dialog ever
+# blocks an unattended run, and a jar that is not approved is skipped - and
+# says so in the log. The No Help jar is approved here for its current hash
+# (the owner's own jar on the owner's machine; on Windows the owner approves it
+# once in ZombieBuddy's dialog). PZ_ZB=0 launches without the agent.
+ZB_WORKSHOP="${PZ_ZB_WORKSHOP:-$HOME/.steam/steam/steamapps/workshop/content/108600/3619862853/mods/ZombieBuddy}"
+ZB_AGENT_ARGS="${PZ_ZB_AGENT_ARGS:-policy=deny-new,verbosity=1}"
+approve_nohelp_jar() { approve_jar "$REPO/mod-nohelp/42/media/java/NoHelpScenes.jar" ConspiracyFilesNoHelp; }
+approve_jar() { # approve_jar <jar> <mod id>
+    local jar="$1" id="$2"
+    [ -f "$jar" ] || return 0
+    python3 - "$jar" "$HOME/.zombie_buddy/mod_approvals.json" "$id" <<'PY'
+import hashlib, json, os, sys, datetime
+jar, path, mid = sys.argv[1], sys.argv[2], sys.argv[3]
+sha = hashlib.sha256(open(jar, "rb").read()).hexdigest()
+os.makedirs(os.path.dirname(path), exist_ok=True)
+try: data = json.load(open(path))
+except Exception: data = {}
+mods = [m for m in data.get("mods", []) if not (m.get("id") == mid and m.get("jar_hash") != sha)]
+if not any(m.get("id") == mid and m.get("jar_hash") == sha for m in mods):
+    mods.append({"id": mid, "jar_hash": sha, "decision": True,
+                 "time": datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ"), "author_id": 76561198083988095})
+data["mods"] = mods
+json.dump(data, open(path, "w"), indent=2)
+PY
+}
+
 setup() {
     mkdir -p "$LOCAL/inbox" "$LOCAL/log" "$ZOMBOID/Lua" "$ZOMBOID/mods"
-    sync_mod "$REPO/mod" ConspiracyFiles
+    # PZ_NOHELP_ONLY=1: a No Help session loads No Help, ZombieBuddy and the
+    # helper only - not the old Dead Air mod (owner, 2026-10-02: "we are
+    # currently only working on No Help and ZombieBuddy"). The command channel
+    # (DevEval) comes with the helper, so nothing here needs the old mod.
+    # PZ_OI=1: an Of Interest session loads Of Interest, its dependency (Workshop
+    # 3796373365, found by the game in the Steam workshop folder), ZombieBuddy and the
+    # helper. Of Interest is incompatible with the other two mods, so they are not
+    # installed here and are taken out of default.txt below.
+    if [ "${PZ_OI:-0}" = 1 ]; then
+        rm -rf "$ZOMBOID/mods/ConspiracyFiles" "$ZOMBOID/mods/ConspiracyFilesNoHelp"
+        sync_mod "$REPO/mod-ofinterest" ConspiracyFilesOfInterest
+    else
+        if [ "${PZ_NOHELP_ONLY:-0}" != 1 ]; then sync_mod "$REPO/mod" ConspiracyFiles; fi
+        sync_mod "$REPO/mod-nohelp" ConspiracyFilesNoHelp
+    fi
+    [ -d "$ZB_WORKSHOP" ] && sync_mod "$ZB_WORKSHOP" ZombieBuddy
+    # The game here does not find Workshop mods by itself (as with ZombieBuddy), so the
+    # dependency is copied from the Steam Workshop folder into the test mods folder.
+    if [ "${PZ_OI:-0}" = 1 ]; then
+        local dep="${PZ_OI_DEP:-$HOME/.steam/steam/steamapps/workshop/content/108600/3796373365/mods/ItIsOfInterestToMe}"
+        [ -d "$dep" ] && sync_mod "$dep" ItIsOfInterestToMe || say "dependency not found at $dep"
+    fi
+    if [ "${PZ_OI:-0}" = 1 ]; then approve_jar "$REPO/mod-ofinterest/42/media/java/OfInterestScenes.jar" ConspiracyFilesOfInterest
+    else approve_nohelp_jar; fi
     sync_mod "$REPO/tools/autotest/CFAutoTest" CFAutoTest
     link "$LOCAL/inbox/cf_inbox.lua" "$ZOMBOID/Lua/cf_inbox.lua"
     link "$CONSOLE" "$LOCAL/log/live-local.txt"
@@ -102,7 +153,20 @@ setup() {
     # New worlds take their mod list from default.txt.
     local d="$ZOMBOID/mods/default.txt"
     sed -i '/^ *mod = FieldnoteTest,$/d' "$d"
-    for m in ConspiracyFiles CFAutoTest; do
+    local wanted="ConspiracyFiles CFAutoTest ConspiracyFilesNoHelp ZombieBuddy"
+    if [ "${PZ_NOHELP_ONLY:-0}" = 1 ]; then
+        wanted="CFAutoTest ConspiracyFilesNoHelp ZombieBuddy"
+        sed -i '/^ *mod = ConspiracyFiles,$/d' "$d"
+    fi
+    if [ "${PZ_OI:-0}" != 1 ]; then
+        # Of Interest is incompatible with the other two mods: never leave it in default.txt.
+        sed -i '/^ *mod = ConspiracyFilesOfInterest,$/d; /^ *mod = ItIsOfInterestToMe,$/d' "$d"
+    fi
+    if [ "${PZ_OI:-0}" = 1 ]; then
+        wanted="CFAutoTest ConspiracyFilesOfInterest ItIsOfInterestToMe ZombieBuddy"
+        sed -i '/^ *mod = ConspiracyFiles,$/d; /^ *mod = ConspiracyFilesNoHelp,$/d' "$d"
+    fi
+    for m in $wanted; do
         grep -qE "mod = $m," "$d" || sed -i "/^mods$/,/^}/ s/^{$/{\n    mod = $m,/" "$d"
     done
 }
@@ -257,7 +321,9 @@ cmd_start() {
     # the game, this script's own bash, and a flock that had been waiting
     # thirteen minutes. The Xvfb case was fixed months earlier and the comment
     # above it describes this exact failure; the game launch was simply missed.
-    (cd "$GAME" && exec setsid -f ./projectzomboid.sh -debug -nosteam </dev/null >/dev/null 2>&1 9>&-)
+    local agent=()
+    [ "${PZ_ZB:-1}" = 0 ] || agent=("-javaagent:ZombieBuddy.jar=$ZB_AGENT_ARGS" --)
+    (cd "$GAME" && exec setsid -f ./projectzomboid.sh "${agent[@]}" -debug -nosteam </dev/null >/dev/null 2>&1 9>&-)
 
     local deadline=$(( $(date +%s) + 300 )) stage=launch last_click=0 seen=""
     while [ "$(date +%s)" -lt "$deadline" ]; do

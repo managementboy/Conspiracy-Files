@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "MarchRidgeSchoolJobAd"
+    },
+    "body": "The open wrench is tied to the hand radio by a clipped lanyard. An empty loop looks like where an identifying tag was cut off.",
+    "id": "t0188-01",
+    "kind": "set",
+    "pieces": [
+      "Wrench",
+      "WalkieTalkie1"
+    ],
+    "title": "Wrench and hand radio",
+    "where": [
+      {
+        "containers": [
+          "toolcabinet",
+          "desk",
+          "metal_shelves",
+          "shelves",
+          "crate",
+          "smallcrate"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

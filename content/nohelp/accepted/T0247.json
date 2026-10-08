@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "WPTownHall"
+    },
+    "body": "The animal feed bag reeks of chemicals I can't name. Pellets inside have an oily green coating. A candle sits melted on top. Batch numbers and test dates run along the seam.",
+    "id": "t0247-01",
+    "kind": "set",
+    "pieces": [
+      "Candle",
+      "AnimalFeedBag"
+    ],
+    "title": "Candle and feed bag",
+    "where": [
+      {
+        "containers": [
+          "dresser",
+          "trough",
+          "sidetable",
+          "metal_shelves",
+          "shelves",
+          "toolcabinet"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

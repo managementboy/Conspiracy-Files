@@ -1,0 +1,25 @@
+{
+  "t0182-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "Spiffo's Hiring! (Dixie)",
+      "source": "print:SpiffosHiringDixie"
+    },
+    "gloss": "A hiring notice adds an unnamed after-hours transport duty.",
+    "prov": {
+      "batch": "T0182",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A field employer could arrange transport for ordinary shifts; the page does not identify why staff were kept available."
+  }
+}

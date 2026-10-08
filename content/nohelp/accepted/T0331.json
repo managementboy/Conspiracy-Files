@@ -1,0 +1,44 @@
+[
+  {
+    "anchor": {
+      "scene": "RDSDevouredByRats"
+    },
+    "body": "A battery and black radio lie caked in dried green pesticide. Crop chaff clogs the speaker grille. The antenna is thick with chemical spray.",
+    "id": "t0331-01",
+    "kind": "set",
+    "pieces": [
+      "Battery",
+      "RadioBlack"
+    ],
+    "title": "battery and black radio",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "corpse"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RDSDevouredByRats"
+    },
+    "body": "This pencil eraser is worn to bare metal. The paperclip held something thick, now missing. They cleared everything else when they evacuated.",
+    "id": "t0331-02",
+    "kind": "set",
+    "pieces": [
+      "Paperclip",
+      "Pencil"
+    ],
+    "title": "Paperclip and pencil",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "corpse"
+      }
+    ]
+  }
+]

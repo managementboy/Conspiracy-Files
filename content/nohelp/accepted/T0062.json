@@ -1,0 +1,32 @@
+[
+  {
+    "anchor": {
+      "map": "LouisvilleStashMap14",
+      "mark": 1
+    },
+    "body": "Nails hold a sheet of paper to the wall. It tells everyone to wait outside while the boards cure. The radio call time says half hour.",
+    "id": "t0062-01",
+    "kind": "set",
+    "pieces": [
+      "Nails",
+      "SheetPaper2"
+    ],
+    "title": "Nails and sheet of paper",
+    "where": [
+      {
+        "containers": [
+          "filingcabinet",
+          "desk",
+          "sidetable",
+          "shelves",
+          "smallbox",
+          "cashregister"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

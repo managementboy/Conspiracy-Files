@@ -1,0 +1,60 @@
+[
+  {
+    "anchor": {
+      "scene": "RBClinic"
+    },
+    "body": "The battery and radio black were under the tarp when they sprayed. Corn burned yellow the next morning. I found dead crows in every furrow.",
+    "id": "t0289-01",
+    "kind": "set",
+    "pieces": [
+      "Battery",
+      "RadioBlack"
+    ],
+    "title": "battery and radio black",
+    "where": [
+      {
+        "containers": [
+          "sidetable",
+          "toolcabinet",
+          "metal_shelves",
+          "desk",
+          "smallbox",
+          "shelves"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RBClinic"
+    },
+    "body": "The battery is taped into the radio with a strip of medicine label. The dial is fixed in place. Looks like the clinic kept one frequency ready after broadcasts ended.",
+    "id": "t0289-02",
+    "kind": "set",
+    "pieces": [
+      "Battery",
+      "RadioBlack"
+    ],
+    "title": "Battery and radio",
+    "where": [
+      {
+        "containers": [
+          "sidetable",
+          "toolcabinet",
+          "metal_shelves",
+          "desk",
+          "smallbox",
+          "shelves"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

@@ -1,0 +1,177 @@
+[
+  {
+    "anchor": {
+      "map": "WorldStashMap23",
+      "mark": 1
+    },
+    "body": "The fuel can is tagged for basement storage. The notebook lists a test visit on the same date. Sprayed leaf samples are listed, and the return box is empty.",
+    "id": "t0132-01",
+    "kind": "set",
+    "pieces": [
+      "PetrolCan",
+      "Notebook"
+    ],
+    "title": "Petrol can and notebook",
+    "where": [
+      {
+        "containers": [
+          "metal_shelves",
+          "toolcabinet",
+          "crate",
+          "smallcrate",
+          "doghouse",
+          "smallbox"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "WorldStashMap23",
+      "mark": 2
+    },
+    "body": "Maintenance note: use the hammer mark to find the basement vent. Yellow dust appeared inside after the seed-treatment truck idled above it.\n\nNo one wanted to keep the wet copy. It dried unevenly, and the ink from the first entry stayed visible beneath the second.\n\nI wrote the time before I went back for the others. The clock may have been slow; the second vehicle was already gone.",
+    "id": "t0132-02",
+    "kind": "written",
+    "pieces": [
+      "diary"
+    ],
+    "title": "Diary page",
+    "where": [
+      {
+        "containers": [
+          "sidetable",
+          "desk",
+          "dresser",
+          "filingcabinet",
+          "shelves",
+          "smallbox"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "WorldStashMap23",
+      "note": 1
+    },
+    "body": "Cash receipt at the fuel mark: the crop-study truck took two cans but returned one. The driver wrote that the missing can stayed with the basement samples.\n\nThe samples were leaf and soil from the sprayed plots, kept cold. The can was meant to run the pump that kept them so.\n\nI saved the receipt because the driver's name is on the reverse.",
+    "id": "t0132-03",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "Notepad page",
+    "where": [
+      {
+        "containers": [
+          "sidetable",
+          "smallbox",
+          "desk",
+          "filingcabinet",
+          "shelves",
+          "cashregister"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "WorldStashMap23",
+      "note": 2
+    },
+    "body": "Fuel receipt headed \"Thunder Gas\": two cans billed to the crop trial. One can returned with a sharp herbal smell and no cap.\n\nThe smell was the same as the spray. The man who filled it said it had been standing in the trial shed.\n\nThe well beside the shed has tasted sweet since. I have stopped using it.",
+    "id": "t0132-04",
+    "kind": "written",
+    "pieces": [
+      "receipt"
+    ],
+    "title": "Receipt",
+    "where": [
+      {
+        "containers": [
+          "cashregister",
+          "smallbox",
+          "desk",
+          "filingcabinet",
+          "sidetable",
+          "shelves"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "WorldStashMap23",
+      "note": 3
+    },
+    "body": "Photograph looking back at the boarded vent: they nailed it shut during the evacuation lockdown, day three when the patrol came through. Every access point had to be secured before they'd authorize transport.\n\nThe stored provisions were cleared from the shelves first.\n\nI took the picture before the strip went up.",
+    "id": "t0132-05",
+    "kind": "written",
+    "pieces": [
+      "photograph"
+    ],
+    "title": "Photograph",
+    "where": [
+      {
+        "containers": [
+          "filingcabinet",
+          "bin",
+          "cardboardbox",
+          "smallbox",
+          "locker",
+          "desk"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "WorldStashMap23",
+      "note": 4
+    },
+    "body": "Diary line under \"basement\": leaf jars from three farms occupied the lower shelf, each labelled with a field name and a date.\n\nThe leaves in each were spotted the same way, black along the veins. Three farms, one treatment.\n\nI copied the dates before the jars were collected.",
+    "id": "t0132-06",
+    "kind": "written",
+    "pieces": [
+      "notebook"
+    ],
+    "title": "Notebook page",
+    "where": [
+      {
+        "containers": [
+          "locker",
+          "crate",
+          "cardboardbox",
+          "smallbox",
+          "bin",
+          "desk"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

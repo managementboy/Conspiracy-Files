@@ -1,0 +1,148 @@
+[
+  {
+    "recall": "R1",
+    "row": {
+      "anchor": {
+        "map": "WorldStashMap1",
+        "mark": 1
+      },
+      "body": "The route key is tied to a note asking the driver to slow down near the test plots. The arrival box is checked before the fuel stop.",
+      "id": "t0110-01",
+      "kind": "set",
+      "pieces": [
+        "KeyRing",
+        "Map"
+      ],
+      "title": "Slow road instruction",
+      "where": [
+        {
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "Cara will help",
+        "source": "map:WorldStashMap1"
+      },
+      "gloss": "A driver is warned near a work area while the route record skips ahead.",
+      "prov": {
+        "batch": "T0110",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "An emergency detour could explain both the slow route and early arrival entry; the note does not identify the plots."
+    }
+  },
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "map": "WorldStashMap1",
+        "mark": 1
+      },
+      "body": "the toilet roll and water bottle are packed with treated seed. every kernel has the same cracked green coating.",
+      "id": "t0110-01",
+      "kind": "set",
+      "pieces": [
+        "ToiletPaper",
+        "WaterBottle"
+      ],
+      "title": "field residue on the toilet roll",
+      "where": [
+        {
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-malfunction",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-warning",
+          "c-orders"
+        ]
+      },
+      "gloss": "A rare everyday object carries residue tied to field work before restriction.",
+      "prov": {
+        "batch": "T0110",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "Emergency workers crossing treated land could have picked up the same residue; the objects do not prove the farm program began the emergency."
+    }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "map": "WorldStashMap1",
+        "mark": 1
+      },
+      "body": "the toilet roll and water bottle are packed with treated seed. every kernel has the same cracked green coating.",
+      "id": "t0110-01",
+      "kind": "set",
+      "pieces": [
+        "ToiletPaper",
+        "WaterBottle"
+      ],
+      "title": "After on the toilet roll, the first copy",
+      "where": [
+        {
+          "containers": [
+            "dresser",
+            "crate",
+            "shelves",
+            "desk",
+            "counter",
+            "cardboardbox"
+          ],
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-malfunction",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-warning",
+          "c-orders"
+        ]
+      },
+      "gloss": "A rare everyday object carries residue tied to field work before restriction.",
+      "prov": {
+        "batch": "T0110",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "Emergency workers crossing treated land could have picked up the same residue; the objects do not prove the farm program began the emergency."
+    }
+  }
+]

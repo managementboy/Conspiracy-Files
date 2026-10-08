@@ -1,0 +1,158 @@
+{
+  "t0118-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "crates all around, could be filled with stuff",
+      "source": "map:WorldStashMap9"
+    },
+    "gloss": "Test plot documentation shows the same fields treated twice.",
+    "prov": {
+      "batch": "T0118",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "None: one-sided on purpose"
+  },
+  "t0118-02": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "gloss": "Crates reserved for field samples",
+    "prov": {
+      "batch": "T0118",
+      "handoff": "2026-09-29",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "None: one-sided on purpose"
+  },
+  "t0118-03": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "gloss": "Railyard pickup before dawn",
+    "prov": {
+      "batch": "T0118",
+      "handoff": "2026-09-29",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A disaster-response worker could have made the same observation; this personal paper does not identify who directed the work."
+  },
+  "t0118-04": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "gloss": "Muldraugh route crossed out",
+    "prov": {
+      "batch": "T0118",
+      "handoff": "2026-09-29",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "None: one-sided on purpose"
+  },
+  "t0118-05": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "gloss": "Sampling route showing contamination spreading from test farms",
+    "prov": {
+      "batch": "T0118",
+      "handoff": "2026-09-29",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "None: one-sided on purpose"
+  },
+  "t0118-06": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "gloss": "Office ledger with no owner",
+    "prov": {
+      "batch": "T0118",
+      "handoff": "2026-09-29",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "None: one-sided on purpose"
+  },
+  "t0118-07": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "gloss": "Persistent pesticide contamination from storage spill",
+    "prov": {
+      "batch": "T0118",
+      "handoff": "2026-09-29",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "None: one-sided on purpose"
+  },
+  "t0118-08": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "gloss": "Trains idle after the shipment",
+    "prov": {
+      "batch": "T0118",
+      "handoff": "2026-09-29",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "None: one-sided on purpose"
+  }
+}

@@ -1,0 +1,60 @@
+[
+  {
+    "anchor": {
+      "scene": "RDSRatWar"
+    },
+    "body": "Gray foam from the field-sprayer test has dried on the mop and bucket. A few dead beetles lie in the bottom of the bucket. They are bundled together.",
+    "id": "t0345-01",
+    "kind": "set",
+    "pieces": [
+      "Mop",
+      "Bucket"
+    ],
+    "title": "Mop and bucket",
+    "where": [
+      {
+        "containers": [
+          "dishescabinet",
+          "metal_shelves",
+          "toolcabinet",
+          "crate",
+          "clothingwasher",
+          "bin"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RDSRatWar"
+    },
+    "body": "A bottle is tied to a pencil with string. The tally on the bottle differs from the number on the sheet.",
+    "id": "t0345-02",
+    "kind": "set",
+    "pieces": [
+      "WaterBottle",
+      "Pencil"
+    ],
+    "title": "Water bottle and pencil",
+    "where": [
+      {
+        "containers": [
+          "fridge",
+          "desk",
+          "counter",
+          "sidetable",
+          "cardboardbox",
+          "filingcabinet"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

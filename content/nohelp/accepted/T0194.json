@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "HouseforSale895"
+    },
+    "body": "The jack is dusty but the clipboard's clip is wiped clean. Staple holes are torn where pages were pulled. Sheet numbers jump from seven to eleven.",
+    "id": "t0194-01",
+    "kind": "set",
+    "pieces": [
+      "Jack",
+      "Clipboard"
+    ],
+    "title": "Jack and clipboard",
+    "where": [
+      {
+        "containers": [
+          "metal_shelves",
+          "toolcabinet",
+          "crate",
+          "smallcrate",
+          "militarycrate",
+          "smallbox"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

@@ -1,0 +1,42 @@
+[
+  {
+    "anchor": {
+      "scene": "RZSBBQParty"
+    },
+    "body": "On the back: “the second evening, an acrid film in the weathered bundle after the insecticide test. the tomato plants curled by dark.”",
+    "id": "t0375-01",
+    "kind": "written",
+    "pieces": [
+      "photograph"
+    ],
+    "title": "Photograph with note",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RZSBBQParty"
+    },
+    "body": "The party stayed after the announced closing time because the official road out was marked open on the paper. When the cars got there, a worker said the paper was from yesterday. We used it to start the fire when the night turned cold.",
+    "id": "t0375-02",
+    "kind": "written",
+    "pieces": [
+      "notebook"
+    ],
+    "title": "Notebook page",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
+  }
+]

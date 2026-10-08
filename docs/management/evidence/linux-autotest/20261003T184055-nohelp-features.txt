@@ -1,0 +1,23 @@
+Linux No Help features check 20261003T184055: FAIL
+source: 0e4ca149
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+(a) close cue: PROVEN-IN-GAME - silent far away, fires within 3 tiles with bubble and halo words, re-rolls after a failed roll; control with the re-roll broken sees none
+(c) Shift+L: PROVEN-IN-GAME - a real key press logs ev=clue_where for the nearest clue; plain L and a closed debug gate log nothing
+(d) quiet observer line: PROVEN-IN-GAME - 0 lines in 12 s with the gate shut and a loot pane rendering; 4 lines in 6 s with verbose on (control)
+(b) seated-car clue: PROVEN-IN-GAME - recognised via the real loot panel while seated; a real clue item moved by the harness into a spawned car (the world placed no clue in a car); seated by a direct vehicle:enter call (the walk-in action did not finish)
+(e) spoken caption: FAILED - see FAIL lines
+note: clues (total, placed, waiting, in cars): 4 4 0 0
+note: cue clue: number 2, stood 1 tile(s) from it, seen from there
+note: cue far away: 8 tiles, said 0 -> 0 (must not change)
+note: cue near: fired 1 tile(s) from the clue; log line bubble=true; spoken line shipped; screenshot 20261003T184055-nohelp-cue.png
+note: re-roll: failed roll (suppressed 4 -> 6), then the cue came with the survivor standing still
+note: re-roll control: with the interval broken no cue came in 12 s (the re-roll assertion can fail)
+note: Shift+L: real key press logged ev=clue_where (dist 1.0, names the clue stood beside); plain L logged nothing
+note: Shift+L with the debug gate shut: lines 1 -> 1 (must not change)
+note: observer: afterRender reached lines 1; unsupported lines with the gate shut 12 s, verbose off: 0; verbose on 6 s: 4
+note: seat: walk-in action did not seat the survivor in 65 s; seated by a direct vehicle:enter call
+note: seat: other car's container while seated: 0 recognised (must be 0)
+note: seat: a real clue item moved by the harness into a spawned car (the world placed no clue in a car); seated by a direct vehicle:enter call (the walk-in action did not finish); opened through the real loot panel while seated: recognised (how=search); from outside 0; control with findSeated stubbed: nothing
+note: caption: 5 lines (cap 64 chars) said one at a time, holds ms: 2500,2500,3840,3840,2500; screenshots 20261003T184055-nohelp-caption-1.png, -2.png
+note: game ERROR lines in this run: 9; of those inside the mods: 0; mod lvl=e lines: 0
+FAIL: caption: only 0 of 5 lines were said in 60 s

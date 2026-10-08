@@ -1,0 +1,32 @@
+[
+  {
+    "anchor": {
+      "map": "WpStashMap13",
+      "mark": 1
+    },
+    "body": "This paper lists weapons given out, including the bat. Column for who came back is empty. One entry repeats.",
+    "id": "t0145-01",
+    "kind": "set",
+    "pieces": [
+      "BaseballBat",
+      "SheetPaper2"
+    ],
+    "title": "Baseball bat and paper sheet",
+    "where": [
+      {
+        "containers": [
+          "locker",
+          "toolcabinet",
+          "crate",
+          "smallbox",
+          "desk",
+          "wardrobe"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

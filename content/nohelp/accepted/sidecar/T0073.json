@@ -1,0 +1,25 @@
+{
+  "t0073-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "survivors welcome to join us - always",
+      "source": "map:MarchRidgeStashMap9"
+    },
+    "gloss": "A group left before the next scheduled supply handoff.",
+    "prov": {
+      "batch": "T0073",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A work crew could have left a meal bundle at a field stop; the timing does not establish why they departed."
+  }
+}

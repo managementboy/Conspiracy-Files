@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "FarmingAndRuralSupplyDoeValley"
+    },
+    "body": "An empty seed bag refilled with sand weighs the tape down at checkpoint 14, and a pistol lies beside it under the same tag. The order on the tag says to say nothing about either. The evacuation list has every name crossed off.",
+    "id": "t0226-01",
+    "kind": "set",
+    "pieces": [
+      "SeedBag",
+      "Pistol"
+    ],
+    "title": "Seed bag and pistol",
+    "where": [
+      {
+        "containers": [
+          "shelves",
+          "militarylocker",
+          "metal_shelves",
+          "locker",
+          "cardboardbox",
+          "militarycrate"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

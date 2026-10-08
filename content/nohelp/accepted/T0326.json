@@ -1,0 +1,58 @@
+[
+  {
+    "anchor": {
+      "scene": "RDSBathroomZed"
+    },
+    "body": "Personal note: wash off the white crystals left by the livestock-feed study crew. The creek smelled wrong and the cattle at the fence would not drink from it.\n\nI folded the corner so I could find the entry again. I kept the page because it was the only one with our address.",
+    "id": "t0326-01",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "Notepad page",
+    "where": [
+      {
+        "containers": [
+          "desk",
+          "filingcabinet",
+          "sidetable",
+          "shelves",
+          "smallbox",
+          "cashregister"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RDSBathroomZed"
+    },
+    "body": "I heard someone knock while I was hiding here. He said he was checking the rooms and read a list aloud.\n\nThe name of the person with me was on it, though she had not told anyone we were here. She whispered that they had copied an older list from another building.\n\nHe left after we stayed quiet. I wrote the names I could remember so I can ask her later where that list came from.",
+    "id": "t0326-02",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "title": "Handwritten letter",
+    "where": [
+      {
+        "containers": [
+          "desk",
+          "filingcabinet",
+          "sidetable",
+          "shelves",
+          "smallbox",
+          "cashregister"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

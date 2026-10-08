@@ -1,0 +1,25 @@
+{
+  "t0251-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "The Rusty Rifle",
+      "source": "print:RustyRifle"
+    },
+    "gloss": "A venue is aired out after a field crew brings in spray-wet soil.",
+    "prov": {
+      "batch": "T0251",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "None: one-sided on purpose"
+  }
+}

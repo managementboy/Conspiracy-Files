@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "Delilah"
+    },
+    "body": "The map marks the area clear before they got anyone out. The water bottle's from a supply count closed too soon.",
+    "id": "t0167-01",
+    "kind": "set",
+    "pieces": [
+      "Map",
+      "WaterBottle"
+    ],
+    "title": "Map and water bottle",
+    "where": [
+      {
+        "containers": [
+          "cardboardbox",
+          "crate",
+          "smallbox",
+          "smallcrate",
+          "grocerstand",
+          "desk"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

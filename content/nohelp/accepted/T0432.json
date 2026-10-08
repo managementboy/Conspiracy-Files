@@ -1,0 +1,193 @@
+[
+  {
+    "body": "The bread sits dry but pale powder lines the water bottle. A tissue shows the same dust. The sprayer rig still sits in the adjacent row.",
+    "id": "t0432-01",
+    "kind": "set",
+    "pieces": [
+      "Bread",
+      "WaterBottle",
+      "Tissue"
+    ],
+    "title": "bread, water bottle and tissue",
+    "where": [
+      {
+        "lean": "agricultural",
+        "outfit": "farm",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "corpse"
+      }
+    ]
+  },
+  {
+    "body": "One work boot is stuffed with newspaper from the closure day. A numbered tag is laced to the other boot. The tag matches a list I saw at the checkpoint.",
+    "id": "t0432-02",
+    "kind": "set",
+    "pieces": [
+      "Shoes_WorkBoots",
+      "Newspaper"
+    ],
+    "title": "Work boots and newspaper",
+    "where": [
+      {
+        "lean": "containment",
+        "outfit": "farm",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "corpse"
+      }
+    ]
+  },
+  {
+    "body": "There are fresh drops on this cloth over a smear of fertilizer dust. The dry cloth tied beside it has none.",
+    "id": "t0432-03",
+    "kind": "set",
+    "pieces": [
+      "RippedSheets",
+      "Fertilizer"
+    ],
+    "title": "Ripped sheets and fertilizer",
+    "where": [
+      {
+        "lean": "agricultural",
+        "outfit": "farm",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "corpse"
+      }
+    ]
+  },
+  {
+    "body": "A lunch bowl has grain husks stuck to its rim. The unopened bread beside it looks packed for the same shift.",
+    "id": "t0432-04",
+    "kind": "set",
+    "pieces": [
+      "Bowl",
+      "Bread"
+    ],
+    "title": "Bowl and bread",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "vehicle"
+      }
+    ]
+  },
+  {
+    "body": "Dark treated-feed dust covers the outer sleeve of this jacket. A bottle inside has the same residue at its neck. A scorched crop leaf is in a pocket.",
+    "id": "t0432-05",
+    "kind": "set",
+    "pieces": [
+      "Jacket_ArmyCamoGreen",
+      "WaterBottle"
+    ],
+    "title": "Camo jacket and water bottle",
+    "where": [
+      {
+        "lean": "agricultural",
+        "outfit": "farm",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "corpse"
+      }
+    ]
+  },
+  {
+    "body": "A full bottle is knotted to a cloth strip with a brown stain. A scorched leaf of seed corn lies beside it. The cloth has a dusting of sprayed powder.",
+    "id": "t0432-06",
+    "kind": "set",
+    "pieces": [
+      "WaterBottle",
+      "RippedSheets"
+    ],
+    "title": "Water bottle and ripped sheets",
+    "where": [
+      {
+        "lean": "agricultural",
+        "outfit": "farm",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "corpse"
+      }
+    ]
+  },
+  {
+    "body": "The hand shovel has fresh field soil. A cloth on its grip is stained green from the sprayer. A bandage was laid out but never used.",
+    "id": "t0432-07",
+    "kind": "set",
+    "pieces": [
+      "HandShovel",
+      "Bandage"
+    ],
+    "title": "Hand shovel and bandage",
+    "where": [
+      {
+        "lean": "agricultural",
+        "outfit": "farm",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "corpse"
+      }
+    ]
+  },
+  {
+    "body": "A numbered tag is clipped inside this purse. The spoon beside it has tape marked with a count. I think they were taken at a checkpoint and dropped.",
+    "id": "t0432-08",
+    "kind": "set",
+    "pieces": [
+      "Purse",
+      "Spoon"
+    ],
+    "title": "Purse and spoon",
+    "where": [
+      {
+        "lean": "containment",
+        "outfit": "farm",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "corpse"
+      }
+    ]
+  },
+  {
+    "body": "The olive jacket reeks of pesticide. White residue stains both cuffs and collar. Crushed crop leaves cling to the fabric. The tissue in the pocket is still folded.",
+    "id": "t0432-09",
+    "kind": "set",
+    "pieces": [
+      "Jacket_ArmyOliveDrab",
+      "Tissue"
+    ],
+    "title": "olive jacket and tissue",
+    "where": [
+      {
+        "lean": "agricultural",
+        "outfit": "farm",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "corpse"
+      }
+    ]
+  },
+  {
+    "body": "The soap, dish gloves and water bottle share patrol tag 31. Tape on the bottle reads 'Hold for the convoy'. The tag orders everyone to tell no one where it was found.",
+    "id": "t0432-10",
+    "kind": "set",
+    "pieces": [
+      "Soap2",
+      "Gloves_Dish",
+      "WaterBottle"
+    ],
+    "title": "soap, dish gloves and bottle",
+    "where": [
+      {
+        "lean": "containment",
+        "outfit": "farm",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "corpse"
+      }
+    ]
+  }
+]

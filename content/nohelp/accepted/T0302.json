@@ -1,0 +1,58 @@
+[
+  {
+    "anchor": {
+      "scene": "RBPizzaWhirled"
+    },
+    "body": "My note from near lunchtime: a sprayer was left running at the shop door and the delivery bags on the shelf were dusted yellow. The whole place smelled of feed and weedkiller.\n\nI did not know where to put the bags once the shelves were wiped. I could not mistake the sick seedlings in the window for anything but spray damage.",
+    "id": "t0302-01",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "Notepad page",
+    "where": [
+      {
+        "containers": [
+          "filingcabinet",
+          "desk",
+          "sidetable",
+          "shelves",
+          "cashregister",
+          "smallbox"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RBPizzaWhirled"
+    },
+    "body": "At closing I counted the remaining boxes and wrote the number on the lid. A driver came for them after I had put away the register.\n\nHe had a list of shelter addresses, but it was folded so I could only see the first. He crossed it out without unloading anything, and told me the number I had written was to be changed to zero. I was to say nothing about the shipment if asked, and the access road was to stay closed.",
+    "id": "t0302-02",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "Notepad page",
+    "where": [
+      {
+        "containers": [
+          "filingcabinet",
+          "desk",
+          "sidetable",
+          "shelves",
+          "cashregister",
+          "smallbox"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

@@ -1,0 +1,32 @@
+[
+  {
+    "anchor": {
+      "map": "WorldStashMap15",
+      "mark": 1
+    },
+    "body": "A water bottle rests on a notebook. Last entry warns not to water until test results return. Something about checking the treatment program first.",
+    "id": "t0124-01",
+    "kind": "set",
+    "pieces": [
+      "Notebook",
+      "WaterBottle"
+    ],
+    "title": "Notebook and water bottle",
+    "where": [
+      {
+        "containers": [
+          "fridge",
+          "desk",
+          "filingcabinet",
+          "counter",
+          "sidetable",
+          "overhead"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

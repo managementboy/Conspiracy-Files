@@ -1,0 +1,17 @@
+Linux Of Interest force-note check 20261007T230425: PASS
+source: 71ebe6cc
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+chosen: Note/0001 and Letter/AcceptanceLetter/0002
+new world note: id=0001.txt baked=true place=- seal=true type=Base.Note
+new world letter: id=0002.txt baked=true seal=true category=AcceptanceLetter
+new world tracker: note=true letter=true; record: Note/0001 Letter/AcceptanceLetter/0002
+new world open path: id=0001.txt text length=160 (resolveTextById length=160)
+read wrapper: id wiped then Read -> id=0001.txt (open call ok=true)
+reloaded save note: id=0001.txt baked=true place=- seal=true type=Base.Note
+reloaded save letter: id=0002.txt baked=true seal=true category=AcceptanceLetter
+reloaded save tracker: note=true letter=true; record: Note/0001 Letter/AcceptanceLetter/0002
+reloaded save open path: id=0001.txt text length=160 (resolveTextById length=160)
+reload sweep line: foreign=0 gone=0 items=2 ok=2 op=sweep records=2 repaired=0 tracker=0
+40 dummy picks: forced id handed out 0 times
+drain: 117 more picks, forced id handed out 0 times; cycle reset cleared our flag=true, handed out on the reset pick=false; sweep put back 1 flag(s); flag now=true

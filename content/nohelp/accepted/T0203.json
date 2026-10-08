@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "UpscaleMobility"
+    },
+    "body": "The paperclip box and radio were sealed together, never opened. Soot darkens the bundle. The clean outlines suggest it was packed before the fire.",
+    "id": "t0203-01",
+    "kind": "set",
+    "pieces": [
+      "PaperclipBox",
+      "WalkieTalkie1"
+    ],
+    "title": "Paperclip box and hand radio",
+    "where": [
+      {
+        "containers": [
+          "shelves",
+          "filingcabinet",
+          "desk",
+          "sidetable",
+          "toolcabinet",
+          "metal_shelves"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

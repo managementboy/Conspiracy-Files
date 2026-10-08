@@ -1,0 +1,43 @@
+[
+  {
+    "anchor": {
+      "scene": "RVSDeadEnd"
+    },
+    "body": "Rust-colored grit from the well study coats the fertilizer sack. The empty sprayer ran dry during the second application. The wheat in that plot turned black within a week.",
+    "id": "t0366-01",
+    "kind": "set",
+    "pieces": [
+      "Fertilizer",
+      "GardeningSprayEmpty"
+    ],
+    "title": "fertilizer and empty sprayer",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RVSDeadEnd"
+    },
+    "body": "They painted an arrow to the exit, then shifted the barrier beyond the last turn. I walked back for my mother, who cannot climb the ditch. By then the painted arrow was covered and the man with the clipboard said he had seen no one.",
+    "id": "t0366-02",
+    "kind": "written",
+    "pieces": [
+      "notebook"
+    ],
+    "title": "Notebook page",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
+  }
+]

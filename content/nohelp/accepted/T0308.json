@@ -1,0 +1,58 @@
+[
+  {
+    "anchor": {
+      "scene": "RBShopLooted"
+    },
+    "body": "Soap, gloves, and two water jugs, paid cash. On the back: \"Bought spray for the north field and the seed corn came up curled. The cattle will not touch the new feed.\"\n\nI saved it from the bag of rubbish because the note named the spray. The things stacked beside the page were real enough, and still dusted yellow.",
+    "id": "t0308-01",
+    "kind": "written",
+    "pieces": [
+      "receipt"
+    ],
+    "title": "Paper receipt",
+    "where": [
+      {
+        "containers": [
+          "desk",
+          "filingcabinet",
+          "sidetable",
+          "shelves",
+          "smallbox",
+          "cashregister"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RBShopLooted"
+    },
+    "body": "The shelves were emptied twice. The first group took what was on them; the second stepped over the broken glass to ask for the ledger.\n\nI showed them the register—the ledger was gone. They wanted the names from that morning. When they found one woman and her son, they wrote those down, asked when I'd last seen them, if they'd said where they were going. The tape went across the door when they left. They told me not to mention their visit and took the register with them.",
+    "id": "t0308-02",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "Notepad page",
+    "where": [
+      {
+        "containers": [
+          "desk",
+          "filingcabinet",
+          "sidetable",
+          "shelves",
+          "smallbox",
+          "cashregister"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

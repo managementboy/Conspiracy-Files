@@ -1,0 +1,60 @@
+[
+  {
+    "anchor": {
+      "scene": "RBOffice"
+    },
+    "body": "Bread and canned corn are bundled beside a marked feed sack. Field dust lies under them and has worked into the coat hem.",
+    "id": "t0299-01",
+    "kind": "set",
+    "pieces": [
+      "Bread",
+      "CannedCorn"
+    ],
+    "title": "Bread and canned corn",
+    "where": [
+      {
+        "containers": [
+          "fridge",
+          "counter",
+          "overhead",
+          "dishescabinet",
+          "freezer",
+          "grocerstand"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RBOffice"
+    },
+    "body": "Someone used the pencil to change the count on the sheet. I can still see the original number beneath the marks. The new one is lower.",
+    "id": "t0299-02",
+    "kind": "set",
+    "pieces": [
+      "Sheet",
+      "Pencil"
+    ],
+    "title": "Sheet of paper and pencil",
+    "where": [
+      {
+        "containers": [
+          "shelves",
+          "filingcabinet",
+          "sidetable",
+          "desk",
+          "smallbox",
+          "cashregister"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

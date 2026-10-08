@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "RiversidePD"
+    },
+    "body": "The pistol lies on the paper. It lists checkpoint duty, ticked complete before inspection. Someone wrote 'how many through?' at the bottom, blank.",
+    "id": "t0239-01",
+    "kind": "set",
+    "pieces": [
+      "Pistol",
+      "SheetPaper2"
+    ],
+    "title": "Pistol and sheet of paper",
+    "where": [
+      {
+        "containers": [
+          "locker",
+          "desk",
+          "dresser",
+          "filingcabinet",
+          "wardrobe",
+          "sidetable"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

@@ -1,0 +1,32 @@
+[
+  {
+    "anchor": {
+      "map": "MarchRidgeStashMap9",
+      "mark": 1
+    },
+    "body": "A pistol and bread, standard issue both. Left behind before the next supply run. Looks like they got pulled out in a hurry.",
+    "id": "t0073-01",
+    "kind": "set",
+    "pieces": [
+      "Pistol",
+      "Bread"
+    ],
+    "title": "Pistol and bread",
+    "where": [
+      {
+        "containers": [
+          "militarylocker",
+          "counter",
+          "locker",
+          "overhead",
+          "militarycrate",
+          "fridge"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

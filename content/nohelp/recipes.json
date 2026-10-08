@@ -1,0 +1,1028 @@
+{
+ "_about": "Recipes (owner, 2026-09-29). Per ticket: side = which believer the clue should mainly serve (A cover-up, B farm program, both); form = written or set; keyRing = whether a key ring may appear. The converter check enforces form and keyRing; side is checked by the blind read and only reported. complete: the delivery covers every mark and note of the ticket's map, the rows already accepted kept unchanged in it (a ticket delivered again replaces all its rows). stock (E5): the ticket's clues have no anchor and are for any place of this kind; keep: the delivery holds every accepted row of the ticket, unchanged; addSide: and adds a clue leaning this way (C4). Scene tickets with addSide: deliver the whole ticket again. Stock and addSide recipes, owner 2026-09-29.",
+ "T0170": {
+  "side": "B",
+  "form": "written",
+  "keyRing": false
+ },
+ "T0283": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0284": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0285": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0286": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0287": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0288": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0289": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0290": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0291": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0292": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0293": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0294": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0295": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0296": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0297": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0298": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0299": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0300": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0301": {
+  "side": "A",
+  "keyRing": true,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0302": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0303": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0304": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0305": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0306": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0307": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0308": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0309": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0310": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0311": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0312": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0314": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0315": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0316": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0317": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0318": {
+  "side": "B",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "agricultural"
+ },
+ "T0319": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0320": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0322": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0323": {
+  "side": "A",
+  "keyRing": true,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0324": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0325": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0326": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0327": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0328": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0329": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0330": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0331": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0332": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0333": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0334": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0335": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0336": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0337": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0338": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0339": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0340": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0341": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0342": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0343": {
+  "side": "A",
+  "keyRing": true,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0344": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0345": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0346": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0347": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0348": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0349": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0350": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0351": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0352": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0353": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0355": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0356": {
+  "side": "B",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "agricultural"
+ },
+ "T0357": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0358": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0359": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0360": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0361": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0362": {
+  "side": "B",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "agricultural"
+ },
+ "T0363": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0364": {
+  "side": "A",
+  "keyRing": true,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0365": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0366": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0367": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0368": {
+  "side": "B",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "agricultural"
+ },
+ "T0369": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0370": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0371": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0372": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0373": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0374": {
+  "side": "B",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "agricultural"
+ },
+ "T0375": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0376": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0377": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0378": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0379": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0380": {
+  "side": "B",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "agricultural"
+ },
+ "T0381": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0382": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0383": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0384": {
+  "side": "A",
+  "keyRing": true,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0385": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0386": {
+  "side": "B",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "agricultural"
+ },
+ "T0387": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0388": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0389": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0390": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0391": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0392": {
+  "side": "B",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "agricultural"
+ },
+ "T0393": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0394": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0396": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0397": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0398": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0399": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0400": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0401": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0402": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0403": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0404": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0405": {
+  "side": "A",
+  "keyRing": true,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0406": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0407": {
+  "side": "A",
+  "keyRing": false,
+  "keep": true,
+  "addSide": "containment"
+ },
+ "T0048": {
+  "side": "B",
+  "keyRing": false,
+  "complete": true
+ },
+ "T0112": {
+  "side": "B",
+  "keyRing": false,
+  "complete": true
+ },
+ "T0115": {
+  "side": "B",
+  "keyRing": false,
+  "complete": true
+ },
+ "T0118": {
+  "side": "B",
+  "keyRing": false,
+  "complete": true
+ },
+ "T0119": {
+  "side": "B",
+  "keyRing": false,
+  "complete": true
+ },
+ "T0120": {
+  "side": "B",
+  "keyRing": false,
+  "complete": true
+ },
+ "T0125": {
+  "side": "B",
+  "keyRing": false,
+  "complete": true
+ },
+ "T0127": {
+  "side": "B",
+  "keyRing": false,
+  "complete": true
+ },
+ "T0130": {
+  "side": "B",
+  "keyRing": false,
+  "complete": true
+ },
+ "T0132": {
+  "side": "B",
+  "keyRing": false,
+  "complete": true
+ },
+ "T0321": {
+  "keep": true,
+  "addSide": "agricultural",
+  "side": "B",
+  "keyRing": false
+ },
+ "T0408": {
+  "stock": "mapNamed",
+  "side": "A",
+  "form": "set",
+  "keyRing": false,
+  "count": 10
+ },
+ "T0409": {
+  "stock": "mapNamed",
+  "side": "B",
+  "form": "set",
+  "keyRing": false,
+  "count": 10
+ },
+ "T0410": {
+  "stock": "mapNamed",
+  "side": "A",
+  "form": "set",
+  "keyRing": false,
+  "count": 10
+ },
+ "T0411": {
+  "stock": "mapNamed",
+  "side": "B",
+  "form": "set",
+  "keyRing": false,
+  "count": 10
+ },
+ "T0412": {
+  "stock": "mapNamed",
+  "side": "A",
+  "form": "set",
+  "keyRing": false,
+  "count": 10
+ },
+ "T0413": {
+  "stock": "mapNamed",
+  "side": "B",
+  "form": "set",
+  "keyRing": false,
+  "count": 10
+ },
+ "T0414": {
+  "stock": "mapNamed",
+  "side": "A",
+  "form": "set",
+  "keyRing": false,
+  "count": 10
+ },
+ "T0415": {
+  "stock": "mapNamed",
+  "side": "B",
+  "form": "set",
+  "keyRing": false,
+  "count": 10
+ },
+ "T0416": {
+  "stock": "mapNamed",
+  "side": "A",
+  "form": "set",
+  "keyRing": false,
+  "count": 10
+ },
+ "T0417": {
+  "stock": "mapNamed",
+  "side": "B",
+  "form": "set",
+  "keyRing": false,
+  "count": 10
+ },
+ "T0418": {
+  "stock": "mapNamed",
+  "side": "A",
+  "form": "set",
+  "keyRing": false,
+  "count": 10
+ },
+ "T0419": {
+  "stock": "mapNamed",
+  "side": "B",
+  "form": "set",
+  "keyRing": false,
+  "count": 10
+ },
+ "T0420": {
+  "stock": "mapNamed",
+  "side": "A",
+  "form": "written",
+  "keyRing": false,
+  "count": 10
+ },
+ "T0421": {
+  "stock": "mapNamed",
+  "side": "B",
+  "form": "written",
+  "keyRing": false,
+  "count": 10
+ },
+ "T0422": {
+  "stock": "mapNamed",
+  "side": "A",
+  "form": "written",
+  "keyRing": false,
+  "count": 10
+ },
+ "T0423": {
+  "stock": "mapNamed",
+  "side": "B",
+  "form": "written",
+  "keyRing": false,
+  "count": 10
+ },
+ "T0424": {
+  "stock": "mapNamed",
+  "side": "A",
+  "form": "written",
+  "keyRing": false,
+  "count": 10
+ },
+ "T0425": {
+  "stock": "mapNamed",
+  "side": "B",
+  "form": "written",
+  "keyRing": false,
+  "count": 10
+ },
+ "T0426": {
+  "stock": "mapNamed",
+  "side": "A",
+  "form": "written",
+  "keyRing": false,
+  "count": 10
+ },
+ "T0427": {
+  "stock": "mapNamed",
+  "side": "B",
+  "form": "written",
+  "keyRing": false,
+  "count": 10
+ },
+ "T0428": {
+  "stock": "mapNamed",
+  "side": "B",
+  "form": "set",
+  "keyRing": false,
+  "count": 10
+ },
+ "T0429": {
+  "stock": "mapNamed",
+  "side": "B",
+  "form": "set",
+  "keyRing": false,
+  "count": 10
+ },
+ "T0430": {
+  "stock": "mapNamed",
+  "side": "B",
+  "form": "set",
+  "keyRing": false,
+  "count": 10
+ },
+ "T0431": {
+  "stock": "mapNamed",
+  "side": "B",
+  "form": "set",
+  "keyRing": false,
+  "count": 10
+ },
+ "T0432": {
+  "stock": "mapNamed",
+  "side": "B",
+  "form": "set",
+  "keyRing": false,
+  "count": 10
+ },
+ "T0433": {
+  "stock": "mapNamed",
+  "side": "B",
+  "form": "set",
+  "keyRing": false,
+  "count": 10
+ },
+ "T0434": {
+  "stock": "mapNamed",
+  "side": "B",
+  "form": "set",
+  "keyRing": false,
+  "count": 10
+ },
+ "T0435": {
+  "stock": "mapNamed",
+  "side": "B",
+  "form": "set",
+  "keyRing": false,
+  "count": 10
+ },
+ "T0436": {
+  "stock": "mapNamed",
+  "side": "B",
+  "form": "written",
+  "keyRing": false,
+  "count": 10
+ },
+ "T0437": {
+  "stock": "mapNamed",
+  "side": "B",
+  "form": "written",
+  "keyRing": false,
+  "count": 10
+ },
+ "T0438": {
+  "stock": "mapNamed",
+  "side": "B",
+  "form": "written",
+  "keyRing": false,
+  "count": 10
+ },
+ "T0439": {
+  "stock": "mapNamed",
+  "side": "B",
+  "form": "written",
+  "keyRing": false,
+  "count": 10
+ },
+ "T0440": {
+  "stock": "mapNamed",
+  "side": "B",
+  "form": "written",
+  "keyRing": false,
+  "count": 10
+ },
+ "T0441": {
+  "stock": "mapNamed",
+  "side": "B",
+  "form": "written",
+  "keyRing": false,
+  "count": 10
+ }
+}

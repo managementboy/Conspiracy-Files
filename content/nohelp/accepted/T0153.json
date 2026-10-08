@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "FashionaBelle"
+    },
+    "body": "The paper sheet is stamped complete before the pickup time. It says leave the back door open for the return van. Scissors beside it, like they were rushing people through.",
+    "id": "t0153-01",
+    "kind": "set",
+    "pieces": [
+      "Scissors",
+      "SheetPaper2"
+    ],
+    "title": "Scissors and paper sheet",
+    "where": [
+      {
+        "containers": [
+          "toolcabinet",
+          "desk",
+          "filingcabinet",
+          "sidetable",
+          "shelves",
+          "smallbox"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

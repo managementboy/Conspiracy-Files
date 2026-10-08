@@ -1,0 +1,25 @@
+{
+  "t0165-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "Fossoil (Southwest Louisville)",
+      "source": "print:Fossoil7"
+    },
+    "gloss": "A dispatch note leaves a fueled vehicle waiting after the route closes.",
+    "prov": {
+      "batch": "T0165",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A field delivery could have waited for a road clearance too; the copy does not show which order arrived first."
+  }
+}

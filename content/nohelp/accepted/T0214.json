@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "MeadshireEstate"
+    },
+    "body": "The pen and camera are wrapped in a child's raincoat. They're sealed with barrier tape. A roll-call page inside has most names struck out.",
+    "id": "t0214-01",
+    "kind": "set",
+    "pieces": [
+      "RedPen",
+      "Camera"
+    ],
+    "title": "Red pen and camera",
+    "where": [
+      {
+        "containers": [
+          "dresser",
+          "cardboardbox",
+          "smallbox",
+          "locker",
+          "desk",
+          "crate"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

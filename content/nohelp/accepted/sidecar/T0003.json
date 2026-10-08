@@ -1,0 +1,40 @@
+{
+  "t0003-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-warning",
+        "c-orders"
+      ]
+    },
+    "gloss": "Farm residue and response markings share one deliberately ambiguous bundle.",
+    "prov": {
+      "batch": "T0003",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "The farm program and the emergency response each explain one layer of the bundle, and the shared knot does not establish which purpose came first."
+  },
+  "t0003-02": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-malfunction"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "gloss": "Seed stock and a freshly used tool were wrapped together.",
+    "prov": {
+      "batch": "T0003",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A response crew could move seed stock and tools while clearing a farm; the clean grip could come from ordinary handling."
+  }
+}

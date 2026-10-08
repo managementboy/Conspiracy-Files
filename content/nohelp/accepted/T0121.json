@@ -1,0 +1,32 @@
+[
+  {
+    "anchor": {
+      "map": "WorldStashMap12",
+      "mark": 1
+    },
+    "body": "I find pills and a water bottle next to a camp roster.\nSomeone's name has no pickup mark.\nA note asks if their dose ever reached the main office.",
+    "id": "t0121-01",
+    "kind": "set",
+    "pieces": [
+      "Pills",
+      "WaterBottle"
+    ],
+    "title": "Pills and water bottle",
+    "where": [
+      {
+        "containers": [
+          "smallbox",
+          "crate",
+          "toolcabinet",
+          "locker",
+          "medicine",
+          "fridge"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

@@ -1,0 +1,25 @@
+{
+  "t0174-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "Havisham Suites",
+      "source": "print:HavishamSuites"
+    },
+    "gloss": "A floor locked down with one room unaccounted for.",
+    "prov": {
+      "batch": "T0174",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "None: one-sided on purpose"
+  }
+}

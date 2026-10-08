@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "HouseforSale912"
+    },
+    "body": "The sewing kit is tied to the radio with a clipped lanyard. An empty loop shows where a tag was cut off.",
+    "id": "t0220-01",
+    "kind": "set",
+    "pieces": [
+      "SewingKit",
+      "WalkieTalkie1"
+    ],
+    "title": "Sewing kit and radio",
+    "where": [
+      {
+        "containers": [
+          "metal_shelves",
+          "cardboardbox",
+          "smallbox",
+          "crate",
+          "toolcabinet",
+          "locker"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

@@ -1,0 +1,144 @@
+[
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "scene": "RDSStudentNight"
+      },
+      "body": "Personal note — the late afternoon: wash off the a sharp solvent smell left by the orchard spray test crew. the mare refused her feed, and I had not yet heard that the bridge was blocked.",
+      "id": "t0350-01",
+      "kind": "written",
+      "pieces": [
+        "notepad"
+      ],
+      "title": "the late afternoon — a sharp solvent smell",
+      "where": [
+        {
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-warning",
+          "c-orders"
+        ]
+      },
+      "gloss": "A personal trace connects a farm trial to symptoms before a later restriction.",
+      "prov": {
+        "batch": "T0350",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "Emergency workers could have picked up the same a sharp solvent smell while responding near a field; this personal trace does not prove the trial caused the emergency."
+    }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "scene": "RDSStudentNight"
+      },
+      "body": "Personal note — the late afternoon: wash off the a sharp solvent smell left by the orchard spray test crew. the mare refused her feed, and I had not yet heard that the bridge was blocked.\n\nI took the page when they shut the building. No one could tell me whether the missing line meant delayed, refused, or already gone.\n\nI do not know which of the two accounts was repeated afterward. The older one is the one I had in my hands that day.",
+      "id": "t0350-01",
+      "kind": "written",
+      "pieces": [
+        "notepad"
+      ],
+      "title": "the late afternoon — a sharp solvent smell",
+      "where": [
+        {
+          "containers": [
+            "desk",
+            "crate",
+            "shelves",
+            "counter",
+            "cardboardbox",
+            "bin"
+          ],
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-warning",
+          "c-orders"
+        ]
+      },
+      "gloss": "A personal trace connects a farm trial to symptoms before a later restriction.",
+      "prov": {
+        "batch": "T0350",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "Emergency workers could have picked up the same a sharp solvent smell while responding near a field; this personal trace does not prove the trial caused the emergency."
+    }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "scene": "RDSStudentNight"
+      },
+      "body": "We were supposed to be studying. When the lights failed, we counted everyone by calling out names across the room.\n\nA visitor came with a shorter list and said two people had gone home. One of them answered from the far corner. He crossed her name out anyway.\n\nShe wanted to leave then, but none of us knew whether the door was still open. I kept this page with her name on it.",
+      "id": "t0350-02",
+      "kind": "written",
+      "pieces": [
+        "notepad"
+      ],
+      "title": "A list after the lights went out",
+      "where": [
+        {
+          "containers": [
+            "desk",
+            "counter",
+            "crate",
+            "locker",
+            "shelves",
+            "bin"
+          ],
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-warning",
+          "c-accounting"
+        ]
+      },
+      "gloss": "An altered count or retained object was left at the scene.",
+      "prov": {
+        "batch": "T0350",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A response to an agricultural exposure could explain the same record or object."
+    }
+  }
+]

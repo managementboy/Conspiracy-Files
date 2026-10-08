@@ -1,0 +1,144 @@
+[
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "scene": "RBOther"
+      },
+      "body": "before dawn: the crop trial crew brought rinsed gloves. my brother started coughing. I washed everything twice before the county van arrived.",
+      "id": "t0300-01",
+      "kind": "written",
+      "pieces": [
+        "diary"
+      ],
+      "title": "Before dawn: rinsed gloves",
+      "where": [
+        {
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-warning",
+          "c-orders"
+        ]
+      },
+      "gloss": "A personal trace links trial residue to illness before a later restriction.",
+      "prov": {
+        "batch": "T0300",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A response team could have carried farm supplies while checking exposure; the objects and timing do not establish that the trial caused it."
+    }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "scene": "RBOther"
+      },
+      "body": "before dawn: the crop trial crew brought rinsed gloves. my brother started coughing. I washed everything twice before the county van arrived.\n\nI meant to ask about it in the morning. By then the person who could answer had gone with the last vehicle, and this was all that remained.\n\nI thought someone would ask for this at the gate. They asked instead how many were in the car, and let the paper stay in my hand.",
+      "id": "t0300-01",
+      "kind": "written",
+      "pieces": [
+        "diary"
+      ],
+      "title": "Before dawn: rinsed gloves",
+      "where": [
+        {
+          "containers": [
+            "crate",
+            "shelves",
+            "desk",
+            "counter",
+            "cardboardbox",
+            "bin"
+          ],
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-warning",
+          "c-orders"
+        ]
+      },
+      "gloss": "A personal trace links trial residue to illness before a later restriction.",
+      "prov": {
+        "batch": "T0300",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A response team could have carried farm supplies while checking exposure; the objects and timing do not establish that the trial caused it."
+    }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "scene": "RBOther"
+      },
+      "body": "He wanted the room cleared before he opened his bag. We moved the chairs into the hall and he put three envelopes on the table.\n\nThe first was for the people still here. The other two had names of places already shut. He took those away when I asked him why he had come so late.\n\nI thought he would leave a copy. Instead he asked for the empty envelopes back, too. The chairs are still in the hall because no one knows whether the room is open.",
+      "id": "t0300-02",
+      "kind": "written",
+      "pieces": [
+        "notepad"
+      ],
+      "title": "What the messenger carried",
+      "where": [
+        {
+          "containers": [
+            "desk",
+            "counter",
+            "crate",
+            "locker",
+            "shelves",
+            "bin"
+          ],
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-warning",
+          "c-accounting"
+        ]
+      },
+      "gloss": "A scene-specific count or record was controlled while people were still present.",
+      "prov": {
+        "batch": "T0300",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "The same trace could follow an investigation of contaminated farm goods or an ordinary emergency response."
+    }
+  }
+]

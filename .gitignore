@@ -42,3 +42,8 @@ dev/eval/
 
 # graphify knowledge graph (derived, LINUX dev machine only)
 graphify-out/
+docs/reference/pz-modding/vanilla-lua/
+tools/realengine/*.class
+tools/enginecalls/.cache/
+tools/realengine/out/
+dev/ofinterest-private/

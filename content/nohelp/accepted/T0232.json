@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "WPDIY"
+    },
+    "body": "These nails and hammer were marked field-use before they shipped. Part of the program deployment, the tag says. Why rush tools to empty fields?",
+    "id": "t0232-01",
+    "kind": "set",
+    "pieces": [
+      "Hammer",
+      "Nails"
+    ],
+    "title": "Hammer and nails",
+    "where": [
+      {
+        "containers": [
+          "toolcabinet",
+          "metal_shelves",
+          "crate",
+          "smallbox",
+          "smallcrate",
+          "militarycrate"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

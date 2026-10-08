@@ -1,0 +1,60 @@
+[
+  {
+    "anchor": {
+      "scene": "RBTSElectronics"
+    },
+    "body": "A fresh battery is taped to a black radio. Green spray flecks cover the antenna and fill the speaker grille. The dial is set to an agricultural channel.",
+    "id": "t0316-01",
+    "kind": "set",
+    "pieces": [
+      "Battery",
+      "RadioBlack"
+    ],
+    "title": "Battery and black radio",
+    "where": [
+      {
+        "containers": [
+          "desk",
+          "shelves",
+          "toolcabinet",
+          "metal_shelves",
+          "smallbox",
+          "locker"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RBTSElectronics"
+    },
+    "body": "A radio sits beside a loose battery. A pencil mark on the dial matches one on the workbench. Every other frequency is scratched away. Tape over the dial shows only a time.",
+    "id": "t0316-02",
+    "kind": "set",
+    "pieces": [
+      "RadioBlack",
+      "Battery"
+    ],
+    "title": "Radio and battery",
+    "where": [
+      {
+        "containers": [
+          "cashregister",
+          "desk",
+          "toolcabinet",
+          "metal_shelves",
+          "smallbox",
+          "locker"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

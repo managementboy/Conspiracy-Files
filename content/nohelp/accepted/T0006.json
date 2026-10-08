@@ -1,0 +1,38 @@
+[
+  {
+    "body": "The postcard is stamped and addressed. The map under it ends at a street crossed out in pencil. The message stops at, “We were told to wait by—”.",
+    "id": "t0006-01",
+    "kind": "set",
+    "pieces": [
+      "Map",
+      "Postcard"
+    ],
+    "title": "Map and postcard",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "bookstore",
+        "rival": "agricultural",
+        "spot": "mailbox"
+      }
+    ]
+  },
+  {
+    "body": "The newspaper reports widespread crop failure. The notebook inside tracks field spraying schedules, the last entry reading: 'animals won't touch the feed.'",
+    "id": "t0006-02",
+    "kind": "set",
+    "pieces": [
+      "Newspaper",
+      "Notebook"
+    ],
+    "title": "Newspaper and notebook",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "bookstore",
+        "rival": "containment",
+        "spot": "mailbox"
+      }
+    ]
+  }
+]

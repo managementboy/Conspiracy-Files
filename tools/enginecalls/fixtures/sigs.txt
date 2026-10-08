@@ -1,0 +1,8 @@
+public final class zombie.iso.IsoGridSquare {
+  public zombie.iso.IsoObject getDoor(zombie.iso.objects.GridSquareEdgeFacingDirection);
+  public zombie.iso.IsoObject getDoor(zombie.iso.objects.GridSquareEdge);
+  public zombie.iso.IsoObject getDoor(zombie.iso.objects.GridSquareEdge, zombie.iso.IsoGridSquare$GetSquare);
+  public void optional(java.lang.Object...);
+  public void optional(int, java.lang.String...);
+  public void optional2(int, int);
+}

@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "ReadyPrep"
+    },
+    "body": "I found a pack with a map showing checkpoint routes. Map notes say patrol use only, do not share with civilians. They left it behind at the first stop.",
+    "id": "t0178-01",
+    "kind": "set",
+    "pieces": [
+      "Bag_ALICEpack",
+      "Map"
+    ],
+    "title": "Pack and map",
+    "where": [
+      {
+        "containers": [
+          "locker",
+          "desk",
+          "wardrobe",
+          "filingcabinet",
+          "militarylocker",
+          "shelves"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

@@ -1,0 +1,183 @@
+[
+  {
+    "body": "A seed packet leaked into this mailbox. The paper at the bottom is gritty. The letters above it stayed clean.",
+    "id": "t0433-01",
+    "kind": "set",
+    "pieces": [
+      "SeedBag",
+      "Newspaper"
+    ],
+    "title": "Seed bag and newspaper",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "mailbox"
+      }
+    ]
+  },
+  {
+    "body": "The opened packet is bound with a rubber band. A few dark kernels remain. A second unopened packet is tucked behind it.",
+    "id": "t0433-02",
+    "kind": "set",
+    "pieces": [
+      "CornSeed",
+      "SeedBag"
+    ],
+    "title": "Corn seed and seed bag",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "mailbox"
+      }
+    ]
+  },
+  {
+    "body": "A seed bag strip and a spoon were pushed in here together. The spoon still has the same dark grains stuck to the strip.",
+    "id": "t0433-03",
+    "kind": "set",
+    "pieces": [
+      "SeedBag",
+      "Spoon"
+    ],
+    "title": "Seed bag and spoon",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "mailbox"
+      }
+    ]
+  },
+  {
+    "body": "These seeds came back with blackened tips. The packet mailed out beside them is still sealed.",
+    "id": "t0433-04",
+    "kind": "set",
+    "pieces": [
+      "CarrotSeed",
+      "CornSeed"
+    ],
+    "title": "Carrot seed and corn seed",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "mailbox"
+      }
+    ]
+  },
+  {
+    "body": "Corn tied to the map with twine. Two circles in pencil, one crossed. The twine still smells like field chemicals.",
+    "id": "t0433-05",
+    "kind": "set",
+    "pieces": [
+      "Map",
+      "Twine",
+      "Corn"
+    ],
+    "title": "Map, twine and corn",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "mailbox"
+      }
+    ]
+  },
+  {
+    "body": "I found an empty jar with green residue caked inside. A carrot seed packet is taped across the top. It was stored in the chemical shed behind the barn.",
+    "id": "t0433-06",
+    "kind": "set",
+    "pieces": [
+      "EmptyJar",
+      "CarrotSeed"
+    ],
+    "title": "Empty jar and seed",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "mailbox"
+      }
+    ]
+  },
+  {
+    "body": "A newspaper is wrapped around a withered tomato vine. Its leaves are freckled where field dust collected.",
+    "id": "t0433-07",
+    "kind": "set",
+    "pieces": [
+      "Newspaper",
+      "Tomato"
+    ],
+    "title": "Newspaper and tomato",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "mailbox"
+      }
+    ]
+  },
+  {
+    "body": "Duct tape stuck to the seed bag corner. Two arrows drawn on it pointed somewhere else. Someone was tracking something through the fields.",
+    "id": "t0433-08",
+    "kind": "set",
+    "pieces": [
+      "DuctTape",
+      "SeedBag"
+    ],
+    "title": "Duct tape and seed bag",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "mailbox"
+      }
+    ]
+  },
+  {
+    "body": "The seed bag is tied shut with rope. The knot looks professional. Dark residue stains the outside. Nothing grew where it spilled.",
+    "id": "t0433-09",
+    "kind": "set",
+    "pieces": [
+      "SeedBag",
+      "Rope"
+    ],
+    "title": "Seed bag and rope",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "mailbox"
+      }
+    ]
+  },
+  {
+    "body": "One corn seed packet is damp and swollen. Another was packed dry beside it, next to an empty jar. Someone left both here for collection.",
+    "id": "t0433-10",
+    "kind": "set",
+    "pieces": [
+      "CornSeed",
+      "EmptyJar"
+    ],
+    "title": "Corn seed and empty jar",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "mailbox"
+      }
+    ]
+  }
+]

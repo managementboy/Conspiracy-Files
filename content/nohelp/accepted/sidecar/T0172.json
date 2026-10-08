@@ -1,0 +1,25 @@
+{
+  "t0172-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "Fossoil Field",
+      "source": "print:FossoilField"
+    },
+    "gloss": "A closure order is issued while the public event remains on the calendar.",
+    "prov": {
+      "batch": "T0172",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "None: one-sided on purpose"
+  }
+}

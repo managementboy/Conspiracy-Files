@@ -1,0 +1,62 @@
+[
+  {
+    "anchor": {
+      "scene": "RBJackieJaye",
+      "version": "A"
+    },
+    "body": "Three pickup dots mark the open wrench and the hand radio. Two were scratched away, with no wear around them.",
+    "id": "t0018-01",
+    "kind": "set",
+    "pieces": [
+      "Wrench",
+      "WalkieTalkie1"
+    ],
+    "title": "Wrench and walkie-talkie",
+    "where": [
+      {
+        "containers": [
+          "toolcabinet",
+          "metal_shelves",
+          "crate",
+          "locker",
+          "smallcrate",
+          "smallbox"
+        ],
+        "lean": "containment",
+        "place": "office",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RBJackieJaye",
+      "version": "B"
+    },
+    "body": "The notebook is trapped under a glass desk cover. Its crop-row sketch has a water stain across the center. The bottle beside it is dry and capped.",
+    "id": "t0018-02",
+    "kind": "set",
+    "pieces": [
+      "Notebook",
+      "WaterBottle"
+    ],
+    "title": "Notebook and water bottle",
+    "where": [
+      {
+        "containers": [
+          "desk",
+          "fridge",
+          "shelves",
+          "counter",
+          "filingcabinet",
+          "cardboardbox"
+        ],
+        "lean": "agricultural",
+        "place": "office",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

@@ -1,0 +1,32 @@
+[
+  {
+    "anchor": {
+      "map": "WorldStashMap8",
+      "mark": 1
+    },
+    "body": "The notebook's departure time is filled in. The destination line stays blank. A margin note says to wait for the updated route. The pencil lies across the page.",
+    "id": "t0117-01",
+    "kind": "set",
+    "pieces": [
+      "Notebook",
+      "Pencil"
+    ],
+    "title": "Notebook and pencil",
+    "where": [
+      {
+        "containers": [
+          "shelves",
+          "desk",
+          "sidetable",
+          "filingcabinet",
+          "smallbox",
+          "shelvesmag"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

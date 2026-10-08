@@ -1,0 +1,106 @@
+[
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "map": "LouisvilleStashMap5",
+        "mark": 1
+      },
+      "body": "A school bag and water bottle are listed for collection at the gym, but the driver marked the family transferred before the pickup time.",
+      "id": "t0053-01",
+      "kind": "set",
+      "pieces": [
+        "Bag_Schoolbag",
+        "WaterBottle"
+      ],
+      "title": "A family moved on",
+      "where": [
+        {
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "The Carlins moved here Debbie",
+        "source": "map:LouisvilleStashMap5"
+      },
+      "gloss": "A family transfer is logged before the listed pickup.",
+      "prov": {
+        "batch": "T0053",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A field crew could have used the gym as a meeting point; the early transfer mark does not prove a failed evacuation."
+    }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "map": "LouisvilleStashMap5",
+        "mark": 1
+      },
+      "body": "A school bag and water bottle are listed for collection at the gym, but the driver marked the family transferred before the pickup time.",
+      "id": "t0053-01",
+      "kind": "set",
+      "pieces": [
+        "Bag_Schoolbag",
+        "WaterBottle"
+      ],
+      "title": "A family moved on",
+      "where": [
+        {
+          "containers": [
+            "crate",
+            "shelves",
+            "desk",
+            "counter",
+            "cardboardbox",
+            "bin"
+          ],
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "The Carlins moved here Debbie",
+        "source": "map:LouisvilleStashMap5"
+      },
+      "gloss": "A family transfer is logged before the listed pickup.",
+      "prov": {
+        "batch": "T0053",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A field crew could have used the gym as a meeting point; the early transfer mark does not prove a failed evacuation."
+    }
+  }
+]

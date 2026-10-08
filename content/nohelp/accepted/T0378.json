@@ -1,0 +1,43 @@
+[
+  {
+    "anchor": {
+      "scene": "RZSBurntWreck"
+    },
+    "body": "The axe and seed bag have saltlike grains on them. They came from the test sprayer run last week. I grabbed them before the crops started withering.",
+    "id": "t0378-01",
+    "kind": "set",
+    "pieces": [
+      "Axe",
+      "SeedBag"
+    ],
+    "title": "Axe and seed bag",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RZSBurntWreck"
+    },
+    "body": "The car had a windshield pass for a route officially clear of traffic. At the next crossing the guards had a revised list and would not honor it. The driver folded the pass into quarters to keep it dry for his wife.",
+    "id": "t0378-02",
+    "kind": "written",
+    "pieces": [
+      "notebook"
+    ],
+    "title": "Notebook page",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
+  }
+]

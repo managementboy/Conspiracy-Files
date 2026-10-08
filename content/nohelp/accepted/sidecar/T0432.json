@@ -1,0 +1,182 @@
+{
+  "t0432-01": {
+    "axioms": {
+      "agricultural": [
+        "a-pathway",
+        "a-timing"
+      ],
+      "containment": [
+        "c-failure"
+      ]
+    },
+    "gloss": "The sprayer dust on lunch items links farm chemical exposure to the outbreak.",
+    "prov": {
+      "batch": "T0432",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "None: one-sided on purpose"
+  },
+  "t0432-02": {
+    "axioms": {
+      "agricultural": [
+        "a-pathway",
+        "a-timing"
+      ],
+      "containment": [
+        "c-failure"
+      ]
+    },
+    "gloss": "A numbered tag links checkpoint records to managed removal: the unworn boots.",
+    "prov": {
+      "batch": "T0432",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "None: one-sided on purpose"
+  },
+  "t0432-03": {
+    "axioms": {
+      "agricultural": [
+        "a-pathway",
+        "a-timing"
+      ],
+      "containment": [
+        "c-failure"
+      ]
+    },
+    "gloss": "An ordinary trace links a farm exposure to a distinct observed outcome: the first cough at dawn.",
+    "prov": {
+      "batch": "T0432",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A failure of the later response could still have left this exposure unaddressed."
+  },
+  "t0432-04": {
+    "axioms": {
+      "agricultural": [
+        "a-pathway",
+        "a-timing"
+      ],
+      "containment": [
+        "c-failure"
+      ]
+    },
+    "gloss": "An ordinary trace links a farm exposure to a distinct observed outcome: the supper carried home.",
+    "prov": {
+      "batch": "T0432",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A failure of the later response could still have left this exposure unaddressed."
+  },
+  "t0432-05": {
+    "axioms": {
+      "agricultural": [
+        "a-pathway",
+        "a-timing"
+      ],
+      "containment": [
+        "c-failure"
+      ]
+    },
+    "gloss": "An ordinary trace links a farm exposure to a distinct observed outcome: the borrowed coat.",
+    "prov": {
+      "batch": "T0432",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "None: one-sided on purpose"
+  },
+  "t0432-06": {
+    "axioms": {
+      "agricultural": [
+        "a-pathway",
+        "a-timing"
+      ],
+      "containment": [
+        "c-failure"
+      ]
+    },
+    "gloss": "A bottle, a stained cloth and a scorched corn leaf dusted with spray.",
+    "prov": {
+      "batch": "T0432",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "None: one-sided on purpose"
+  },
+  "t0432-07": {
+    "axioms": {
+      "agricultural": [
+        "a-pathway",
+        "a-timing"
+      ],
+      "containment": [
+        "c-failure"
+      ]
+    },
+    "gloss": "An ordinary trace links a farm exposure to a distinct observed outcome: the shift's last tool.",
+    "prov": {
+      "batch": "T0432",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "None: one-sided on purpose"
+  },
+  "t0432-08": {
+    "axioms": {
+      "agricultural": [
+        "a-pathway",
+        "a-timing"
+      ],
+      "containment": [
+        "c-failure"
+      ]
+    },
+    "gloss": "Checkpoint seizures logged then abandoned: the containment protocol collapsed mid-operation.",
+    "prov": {
+      "batch": "T0432",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "None: one-sided on purpose"
+  },
+  "t0432-09": {
+    "axioms": {
+      "agricultural": [
+        "a-pathway",
+        "a-timing"
+      ],
+      "containment": [
+        "c-failure"
+      ]
+    },
+    "gloss": "Pesticide residue and crop debris point to field application work.",
+    "prov": {
+      "batch": "T0432",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "None: one-sided on purpose"
+  },
+  "t0432-10": {
+    "axioms": {
+      "agricultural": [
+        "a-pathway",
+        "a-timing"
+      ],
+      "containment": [
+        "c-failure"
+      ]
+    },
+    "gloss": "Tagged supplies left by a patrol.",
+    "prov": {
+      "batch": "T0432",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "None: one-sided on purpose"
+  }
+}

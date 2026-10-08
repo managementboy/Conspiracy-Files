@@ -1,0 +1,42 @@
+[
+  {
+    "anchor": {
+      "scene": "RZSMurderScene"
+    },
+    "body": "Feed, soap, and a clean jar, paid cash. My note below says a medicinal odor came from the sprayer trial.\n\nThe driver grew dizzy at dawn, and the verge grass he walked through had gone gray.",
+    "id": "t0389-01",
+    "kind": "written",
+    "pieces": [
+      "receipt"
+    ],
+    "title": "Receipt with note",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "corpse"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RZSMurderScene"
+    },
+    "body": "I heard three shots, then the person taking statements told me the file would say two. He said the third sound might have come from a car door. I put a mark beside it, because the woman on the ground heard it too.",
+    "id": "t0389-02",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "Notepad page",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "corpse"
+      }
+    ]
+  }
+]

@@ -1,0 +1,25 @@
+{
+  "t0076-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "left it here xx",
+      "source": "map:MulStashMap2"
+    },
+    "gloss": "A planned visit is delayed until a field reading is available.",
+    "prov": {
+      "batch": "T0076",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "An emergency inspection could also hold supplies pending a reading; the note does not say what was measured."
+  }
+}

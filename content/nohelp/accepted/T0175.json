@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "LouisvilleBruiser"
+    },
+    "body": "A bat sits with a production sheet listing units made. The line for units handed to the evacuation convoy is inked out. The clerk's initials are left beside it.",
+    "id": "t0175-01",
+    "kind": "set",
+    "pieces": [
+      "BaseballBat",
+      "SheetPaper2"
+    ],
+    "title": "Baseball bat and paper sheet",
+    "where": [
+      {
+        "containers": [
+          "locker",
+          "desk",
+          "wardrobe",
+          "filingcabinet",
+          "toolcabinet",
+          "sidetable"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

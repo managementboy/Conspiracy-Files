@@ -7,7 +7,11 @@ local function newFixture(profession,indexedOpening)
     package.preload["ConspiracyFiles/ClueCue"]=function() return {} end
     package.preload["ConspiracyFiles/GeneratedMenu"]=function() return {} end
     local events={}
-    Events={OnTick={Add=function(f) events.tick=f end},OnGameStart={Add=function(f) events.start=f end}}
+    -- Only the handlers registered by loading the runtime are captured. R.start requires
+    -- InteractionAPI lazily, whose modules register their own OnTick/OnGameStart AFTER the
+    -- runtime's; a one-slot stub kept the last and silently dropped the runtime's.
+    local frozen=false
+    Events={OnTick={Add=function(f) if not frozen then events.tick=f end end},OnGameStart={Add=function(f) if not frozen then events.start=f end end}}
     local function list(t) return {size=function() return #t end,get=function(_,i) return t[i+1] end} end
     local function record(t) local o={} for k,v in pairs(t) do local value=v; o[k]=function() return value end end return o end
     local function container()
@@ -88,6 +92,7 @@ local function newFixture(profession,indexedOpening)
     end
     package.preload["ConspiracyFiles/T3Nearby"]=function() return {start=function() return true end,result=result} end
     local R=require("ConspiracyFiles/GeneratedRuntime")
+    frozen=true
     local f={R=R,saved=saved,containers=containers,inventory=inventory,loaded=loaded,events=events}
     function f.tick(n) for _=1,n do events.tick() end end
     function f.items(token)

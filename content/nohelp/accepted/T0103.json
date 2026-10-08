@@ -1,0 +1,32 @@
+[
+  {
+    "anchor": {
+      "map": "RiversideStashMap10",
+      "mark": 1
+    },
+    "body": "The sponge and map are tied with cut quarantine tape. Six marks are scratched on the sponge but only four crossed off. Both evacuation routes on the map end at checkpoint barriers.",
+    "id": "t0103-01",
+    "kind": "set",
+    "pieces": [
+      "Sponge",
+      "Map"
+    ],
+    "title": "sponge and map",
+    "where": [
+      {
+        "containers": [
+          "dishescabinet",
+          "desk",
+          "overhead",
+          "filingcabinet",
+          "counter",
+          "sidetable"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

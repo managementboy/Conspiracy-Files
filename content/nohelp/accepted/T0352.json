@@ -1,0 +1,58 @@
+[
+  {
+    "anchor": {
+      "scene": "RDSTinFoilHat"
+    },
+    "body": "The spray from the crop dusters left a film on everything outside. I came inside after working the field and my skin started burning. The animals stopped eating and the chickens died within two days. Now my hands have the same dark marks the livestock had.",
+    "id": "t0352-01",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "title": "Handwritten note",
+    "where": [
+      {
+        "containers": [
+          "filingcabinet",
+          "desk",
+          "sidetable",
+          "cashregister",
+          "shelves",
+          "smallbox"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RDSTinFoilHat"
+    },
+    "body": "I made a hat to keep the rain off the radio. It looked ridiculous, so nobody noticed when I carried it from room to room.\n\nThe same street names came through three times. After the second reading a visitor told us the broadcast had never happened and asked for the radio.\n\nI took the battery out first. The station may be silent now, but I want to know what it says if it comes back.",
+    "id": "t0352-02",
+    "kind": "written",
+    "pieces": [
+      "diary"
+    ],
+    "title": "Diary entry",
+    "where": [
+      {
+        "containers": [
+          "crate",
+          "desk",
+          "sidetable",
+          "dresser",
+          "filingcabinet",
+          "shelves"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

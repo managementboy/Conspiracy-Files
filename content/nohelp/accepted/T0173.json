@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "SunstarMotel"
+    },
+    "body": "Chalk numbers run across the crayons and the bath towel. The count skips one place, then resumes in a different hand.",
+    "id": "t0173-01",
+    "kind": "set",
+    "pieces": [
+      "Crayons",
+      "BathTowel"
+    ],
+    "title": "Crayons and bath towel",
+    "where": [
+      {
+        "containers": [
+          "dresser",
+          "wardrobe",
+          "sidetable",
+          "shelves",
+          "clothingrack",
+          "smallbox"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

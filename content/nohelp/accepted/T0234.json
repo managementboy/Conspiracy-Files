@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "RosewoodFD"
+    },
+    "body": "Notebook shows spray schedule got mixed up last week. Same fields got hit twice, maybe three times. Water bottle has that chemical smell the crops had.",
+    "id": "t0234-01",
+    "kind": "set",
+    "pieces": [
+      "Notebook",
+      "WaterBottle"
+    ],
+    "title": "notebook and water bottle",
+    "where": [
+      {
+        "containers": [
+          "fridge",
+          "desk",
+          "shelves",
+          "counter",
+          "filingcabinet",
+          "cardboardbox"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

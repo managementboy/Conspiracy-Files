@@ -1,0 +1,48 @@
+{
+  "t0152-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "West Maple Country Club",
+      "source": "print:WestMapleCountryClub"
+    },
+    "gloss": "A course closure and meal delivery fall on opposite sides of a pickup.",
+    "prov": {
+      "batch": "T0152",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A maintenance crew could have used the course during field work; the receipt does not say why the pickup was arranged."
+  },
+  "t0152-02": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "West Maple Country Club",
+      "source": "print:WestMapleCountryClub"
+    },
+    "gloss": "Spray application records show a dangerous dosing mistake.",
+    "prov": {
+      "batch": "T0152",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "None: one-sided on purpose"
+  }
+}

@@ -1,0 +1,54 @@
+[
+  {
+    "body": "A rubber band holds the newspaper open. Its fold covers the correction column, and the headline still shows. The page has split along the correction's first sentence.",
+    "id": "t0009-01",
+    "kind": "set",
+    "pieces": [
+      "Newspaper",
+      "RubberBand"
+    ],
+    "title": "Newspaper and rubber band",
+    "where": [
+      {
+        "containers": [
+          "filingcabinet",
+          "desk",
+          "cashregister",
+          "sidetable",
+          "shelves",
+          "smallbox"
+        ],
+        "lean": "containment",
+        "place": "government",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "The empty garden sprayer left a clean circle on the notebook. A dried green line runs from the nozzle to a sketch of crop rows.",
+    "id": "t0009-02",
+    "kind": "set",
+    "pieces": [
+      "GardeningSprayEmpty",
+      "Notebook"
+    ],
+    "title": "Garden sprayer and notebook",
+    "where": [
+      {
+        "containers": [
+          "filingcabinet",
+          "desk",
+          "cashregister",
+          "sidetable",
+          "shelves",
+          "smallbox"
+        ],
+        "lean": "agricultural",
+        "place": "government",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

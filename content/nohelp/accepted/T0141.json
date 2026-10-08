@@ -1,0 +1,32 @@
+[
+  {
+    "anchor": {
+      "map": "WpStashMap8",
+      "mark": 1
+    },
+    "body": "The radio's locked on emergency dispatch. This feed sack has stamps for three evacuation sites. Someone crossed two out and never told the convoy crews.",
+    "id": "t0141-01",
+    "kind": "set",
+    "pieces": [
+      "AnimalFeedBag",
+      "WalkieTalkie1"
+    ],
+    "title": "Feed sack and radio",
+    "where": [
+      {
+        "containers": [
+          "trough",
+          "desk",
+          "metal_shelves",
+          "shelves",
+          "toolcabinet",
+          "crate"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

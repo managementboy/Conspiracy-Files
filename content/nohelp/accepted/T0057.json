@@ -1,0 +1,32 @@
+[
+  {
+    "anchor": {
+      "map": "LouisvilleStashMap9",
+      "mark": 1
+    },
+    "body": "A hunting rifle tied to a corn can with wire. Both tagged for checkpoint supply run. I can't read the return time - someone burned it off the tags.",
+    "id": "t0057-01",
+    "kind": "set",
+    "pieces": [
+      "HuntingRifle",
+      "CannedCorn"
+    ],
+    "title": "Hunting rifle and canned corn",
+    "where": [
+      {
+        "containers": [
+          "militarycrate",
+          "locker",
+          "toolcabinet",
+          "cardboardbox",
+          "crate",
+          "grocerstand"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

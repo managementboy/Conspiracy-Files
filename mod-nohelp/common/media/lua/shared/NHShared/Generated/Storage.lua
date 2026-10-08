@@ -4,7 +4,6 @@ local Choices=require("NHShared/Generated/StorageChoices")
 local FixedIndex=require("NHShared/Generated/FixedContainerIndex")
 local FixedData=require("NHShared/Generated/FixedContainerIndexData")
 local W=require("NHShared/WorldAccess")
-local Searched=require("NHShared/SearchedContainers")
 local M={}
 -- Verified engine type: docs/management/evidence/linux-autotest/
 -- 20260918T002532-carriers.txt. Outdoor scope remains the mailbox band;
@@ -151,9 +150,17 @@ function M.scan(result,done,reachable,fixedData)
                 end
             end
             -- Retain up to four vehicle parts in addition to fixed choices.
-            local ok=pcall(addVehicles,catalog,candidates,rooms,occupied,targets)
-            if not ok then rooms=rooms; end
-            done(catalog,targets,candidates,rooms,occupied); return true
+            -- VEHICLES ARE OPTIONAL (owner code review F-02, 2026-09-28): a scan
+            -- whose vehicle pass fails still gives every furniture and mailbox
+            -- spot, and a clue that needs a car waits for the next scan. But
+            -- the failure is never silent: it is logged, and the catalogue says
+            -- so (done's sixth value, vehicleScanFailed), so a scan with no cars
+            -- can be told apart from a street with no cars.
+            local ok,err=pcall(addVehicles,catalog,candidates,rooms,occupied,targets)
+            if not ok then
+                require("NHShared/Log").write("e","error",{mod="storage",why="vehicle scan failed: "..tostring(err)})
+            end
+            done(catalog,targets,candidates,rooms,occupied,not ok); return true
         end
         local id="t3:"..r.building
         local site=sites[id]
@@ -183,16 +190,10 @@ function M.scan(result,done,reachable,fixedData)
         -- Every identified non-floor furniture kind is eligible inside a room.
         -- Outside, retain the observed mailbox-only footprint rule.
         local allowed=c and Choices.fixedKind(c:getType()) and (not r.outdoor or c:getType()==M.MAILBOX)
-        local unexplored=false
-        if c then
-            -- The player having looked, not loot having been generated
-            -- (SearchedContainers.lua). Test doubles and nonstandard
-            -- containers may not expose the read; selection is harmless,
-            -- because FixedContainerRuntime repeats it fail-closed
-            -- immediately before any insertion.
-            unexplored=Searched.searched(c)~=true
-        end
-        if c and name and allowed and unexplored and (r.z==0 or reachable(x,y,r.z)) then
+        -- A container the player already searched still counts (owner,
+        -- 2026-09-27: an emptied building may still become a clue place; a
+        -- clue is only ever seen through the hint and the inspection tool).
+        if c and name and allowed and (r.z==0 or reachable(x,y,r.z)) then
             local target={x=x,y=y,z=r.z,objectIndex=oi,containerIndex=ci,containerType=c:getType(),sprite=name}
             if W.resolve(target)==c then
                 pools[id]=pools[id] or Choices.new()

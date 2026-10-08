@@ -1,0 +1,32 @@
+[
+  {
+    "anchor": {
+      "map": "MulStashMap7",
+      "mark": 1
+    },
+    "body": "These never made it out. Tin opener sealed, pills unopened. Tag says close at dusk, leave head count blank.",
+    "id": "t0084-01",
+    "kind": "set",
+    "pieces": [
+      "TinOpener",
+      "Pills"
+    ],
+    "title": "Tin opener and pills",
+    "where": [
+      {
+        "containers": [
+          "dishescabinet",
+          "medicine",
+          "overhead",
+          "smallbox",
+          "counter",
+          "sidetable"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

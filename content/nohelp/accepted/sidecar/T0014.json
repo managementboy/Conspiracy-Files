@@ -1,0 +1,48 @@
+{
+  "t0014-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "south of Iroquois Park",
+      "source": "print:AmericanTire"
+    },
+    "gloss": "A tire drawing and dark groove residue accompany a repair tool.",
+    "prov": {
+      "batch": "T0014",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "None: one-sided on purpose (owner, 2026-10-02); the other side does not use this clue."
+  },
+  "t0014-02": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-obscured"
+      ],
+      "containment": [
+        "c-orders",
+        "c-accounting"
+      ]
+    },
+    "cites": {
+      "quote": "Show this flyer at our outlet",
+      "source": "print:AmericanTire"
+    },
+    "gloss": "A county tire charge is incomplete, with a note delaying public accounting.",
+    "prov": {
+      "batch": "T0014",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A shop could hold one tire aside during inventory after a road closure; the private bicycle request may be ordinary family borrowing."
+  }
+}

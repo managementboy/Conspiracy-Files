@@ -1,0 +1,32 @@
+[
+  {
+    "anchor": {
+      "map": "LouisvilleStashMap2",
+      "mark": 1
+    },
+    "body": "The book is wrapped in a note about a family visit. The back lists spray dates for the bean rows by the garden hose. It warns to keep the hose off the marked ground.",
+    "id": "t0050-01",
+    "kind": "set",
+    "pieces": [
+      "Book",
+      "LetterHandwritten"
+    ],
+    "title": "Book and handwritten letter",
+    "where": [
+      {
+        "containers": [
+          "smallbox",
+          "shelves",
+          "desk",
+          "shelvesmag",
+          "filingcabinet",
+          "sidetable"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

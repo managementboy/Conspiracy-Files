@@ -1,0 +1,60 @@
+[
+  {
+    "anchor": {
+      "scene": "RBPoliceSiege"
+    },
+    "body": "A hand shovel rests across a bucket, both striped with yellow dust. The bucket smells of crop spray. Road tape is knotted through its handle.",
+    "id": "t0303-01",
+    "kind": "set",
+    "pieces": [
+      "HandShovel",
+      "Bucket"
+    ],
+    "title": "Hand shovel and bucket",
+    "where": [
+      {
+        "containers": [
+          "toolcabinet",
+          "metal_shelves",
+          "crate",
+          "smallcrate",
+          "shelves",
+          "bin"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RBPoliceSiege"
+    },
+    "body": "The radio dial is bound with a narrow strip of tape. The battery looks recently replaced. I can't tell how anyone barricaded here could reply.",
+    "id": "t0303-02",
+    "kind": "set",
+    "pieces": [
+      "Battery",
+      "RadioBlack"
+    ],
+    "title": "Battery and radio",
+    "where": [
+      {
+        "containers": [
+          "shelves",
+          "desk",
+          "toolcabinet",
+          "metal_shelves",
+          "smallbox",
+          "locker"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

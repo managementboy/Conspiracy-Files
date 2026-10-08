@@ -1,0 +1,43 @@
+[
+  {
+    "anchor": {
+      "scene": "RVSRegionalProfessionVehicle"
+    },
+    "body": "Emerald flecks from the feed test are on the kit and the bottle. I think they were packed before the noon siren sounded.",
+    "id": "t0370-01",
+    "kind": "set",
+    "pieces": [
+      "FirstAidKit",
+      "WaterBottle"
+    ],
+    "title": "First-aid kit and water bottle",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "vehicle"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RVSRegionalProfessionVehicle"
+    },
+    "body": "The service driver showed me a card saying she could cross because her trade was needed. At the barrier they let the van through but asked her helper to wait. She had no line for him on the roster, only a place for the tools.",
+    "id": "t0370-02",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "title": "Handwritten letter",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "vehicle"
+      }
+    ]
+  }
+]

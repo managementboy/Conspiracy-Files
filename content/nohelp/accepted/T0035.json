@@ -1,0 +1,32 @@
+[
+  {
+    "anchor": {
+      "map": "EkronStashMap2",
+      "mark": 1
+    },
+    "body": "This potato has a checkpoint tag from three days after lockdown. The notebook shows guard duty logs, names all scratched out. He logged vehicles through, then disappeared.",
+    "id": "t0035-01",
+    "kind": "set",
+    "pieces": [
+      "Potato",
+      "Notebook"
+    ],
+    "title": "Potato and notebook",
+    "where": [
+      {
+        "containers": [
+          "fridge",
+          "desk",
+          "counter",
+          "filingcabinet",
+          "overhead",
+          "sidetable"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

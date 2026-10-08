@@ -1,0 +1,42 @@
+[
+  {
+    "anchor": {
+      "scene": "RZSOldShelter"
+    },
+    "body": "Tuesday: the pasture-test workers slept here with gray foam on their boots. The creek tasted bitter, and the grass along it had gone pale where they rinsed their tanks.\n\nI wrote down which pasture rows had browned while I could still remember them.\n\nThere may be a simple reason for the change. Nobody I asked knew what the foam was.",
+    "id": "t0396-01",
+    "kind": "written",
+    "pieces": [
+      "diary"
+    ],
+    "title": "Diary page",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RZSOldShelter"
+    },
+    "body": "We stayed under this roof because the trail below was listed as an evacuation route. A runner came back saying the gate at its end had been chained before noon. I left a dry blanket here for whoever believed the same sign.",
+    "id": "t0396-02",
+    "kind": "written",
+    "pieces": [
+      "notebook"
+    ],
+    "title": "Notebook page",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
+  }
+]

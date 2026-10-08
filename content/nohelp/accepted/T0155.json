@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "CrossRoadsMall"
+    },
+    "body": "I found a map in the wallet with some official paperwork. Says the checkpoint was cleared at noon. The buses weren't scheduled until two.",
+    "id": "t0155-01",
+    "kind": "set",
+    "pieces": [
+      "Wallet",
+      "Map"
+    ],
+    "title": "Wallet and map",
+    "where": [
+      {
+        "containers": [
+          "wardrobe",
+          "cardboardbox",
+          "smallbox",
+          "locker",
+          "crate",
+          "desk"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

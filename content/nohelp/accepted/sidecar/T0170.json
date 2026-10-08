@@ -1,0 +1,25 @@
+{
+  "t0170-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-malfunction"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "Drag Racing Track",
+      "source": "print:DragRacingTrack"
+    },
+    "gloss": "A receipt links a trial sprayer and tank washing to the track before first light.",
+    "prov": {
+      "batch": "T0170",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "None: one-sided on purpose"
+  }
+}

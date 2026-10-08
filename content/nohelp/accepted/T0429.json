@@ -1,0 +1,249 @@
+[
+  {
+    "body": "The bucket has a closure notice taped inside the rim. The bowl holds a list of names, half of them struck out.",
+    "id": "t0429-01",
+    "kind": "set",
+    "pieces": [
+      "Bucket",
+      "Bowl"
+    ],
+    "title": "bucket and bowl",
+    "where": [
+      {
+        "containers": [
+          "crate",
+          "metal_shelves",
+          "counter",
+          "shelves",
+          "cardboardbox",
+          "locker"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "Two water bottles are tied together with twine. Each has a numbered tag and a strip of tape. A patrol must have left them as a marker.",
+    "id": "t0429-02",
+    "kind": "set",
+    "pieces": [
+      "WaterBottle",
+      "Twine"
+    ],
+    "title": "Water bottle and twine",
+    "where": [
+      {
+        "containers": [
+          "fridge",
+          "counter",
+          "shelves",
+          "smallbox",
+          "bin",
+          "cardboardbox"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "A tarp covers a kettle and a bucket stacked together. Tape says do not move, closed by order until cleared. A checkpoint number is written on the kettle.",
+    "id": "t0429-03",
+    "kind": "set",
+    "pieces": [
+      "Kettle",
+      "Bucket",
+      "Tarp"
+    ],
+    "title": "Kettle, bucket and tarp",
+    "where": [
+      {
+        "containers": [
+          "toolcabinet",
+          "locker",
+          "crate",
+          "shelves",
+          "cardboardbox",
+          "desk"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "The untouched bowl has the same green ring as the sprayer can. The overturned water bottle near it is clear. A wilted seedling lies across the bucket rim.",
+    "id": "t0429-04",
+    "kind": "set",
+    "pieces": [
+      "Bowl",
+      "Bucket",
+      "WaterBottle"
+    ],
+    "title": "Bowl, bucket and water bottle",
+    "where": [
+      {
+        "containers": [
+          "dresser",
+          "wardrobe",
+          "sidetable",
+          "desk",
+          "locker",
+          "smallbox"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "My fishing net caught pale spray granules where the runoff narrowed. The bucket of dry mud from above the waterline has none. Dead fish lay where the crop rows end.",
+    "id": "t0429-05",
+    "kind": "set",
+    "pieces": [
+      "FishingNet",
+      "Bucket"
+    ],
+    "title": "Fishing net and bucket",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "vehicle"
+      }
+    ]
+  },
+  {
+    "body": "An empty jar and its lid both carry a guard's numbered tape. A list taped to the shelf shows twelve names, all crossed off. The order says nobody opens them or mentions the list.",
+    "id": "t0429-06",
+    "kind": "set",
+    "pieces": [
+      "EmptyJar",
+      "JarLid"
+    ],
+    "title": "Empty jar and jar lid",
+    "where": [
+      {
+        "containers": [
+          "shelves",
+          "grocerstand",
+          "counter",
+          "smallcrate",
+          "cardboardbox",
+          "crate"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "The rubber hose still smells like well water. A wrench lies near it, handle stained greenish. The fertilizer bag is torn open and empty.",
+    "id": "t0429-07",
+    "kind": "set",
+    "pieces": [
+      "RubberHose",
+      "Wrench",
+      "Fertilizer"
+    ],
+    "title": "Rubber hose, wrench and fertilizer",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "vehicle"
+      }
+    ]
+  },
+  {
+    "body": "A spoon hangs from the bucket by a tagged string. The tag lists a count of people and a closure date. The count is written over twice.",
+    "id": "t0429-08",
+    "kind": "set",
+    "pieces": [
+      "Bucket",
+      "Spoon"
+    ],
+    "title": "Bucket and spoon",
+    "where": [
+      {
+        "containers": [
+          "medicine",
+          "sidetable",
+          "dresser",
+          "desk",
+          "smallbox",
+          "locker"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "The boot has spray residue caked in its tread. A bucket of gray rinse water is beside it. The seedlings in it have yellowed, and the other boot is clean.",
+    "id": "t0429-09",
+    "kind": "set",
+    "pieces": [
+      "Shoes_WorkBoots",
+      "Bucket"
+    ],
+    "title": "Work boots and bucket",
+    "where": [
+      {
+        "containers": [
+          "smallbox",
+          "cardboardbox",
+          "shelves",
+          "desk",
+          "counter",
+          "crate"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "The wrench has a numbered tag wired to the handle. A bucket beyond it holds a sheet of orders to stay silent.",
+    "id": "t0429-10",
+    "kind": "set",
+    "pieces": [
+      "Wrench",
+      "Bucket"
+    ],
+    "title": "Wrench and bucket",
+    "where": [
+      {
+        "containers": [
+          "dishescabinet",
+          "counter",
+          "shelves",
+          "sidetable",
+          "smallbox",
+          "bin"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

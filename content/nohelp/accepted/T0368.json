@@ -1,0 +1,43 @@
+[
+  {
+    "anchor": {
+      "scene": "RVSPoliceBlockade"
+    },
+    "body": "The hand shovel and bucket are tied with torn warning tape. The same number is marked on both. Dried blood lines the bucket. They were buried behind the checkpoint.",
+    "id": "t0368-01",
+    "kind": "set",
+    "pieces": [
+      "HandShovel",
+      "Bucket"
+    ],
+    "title": "hand shovel and bucket",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "vehicle"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RVSPoliceBlockade"
+    },
+    "body": "A farm truck carried sacks from the test plot, with yellow dust on the seams. A torn sack left a stripe across the dirt road, and the grass where it fell had withered by evening.",
+    "id": "t0368-02",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "Notepad page",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "vehicle"
+      }
+    ]
+  }
+]

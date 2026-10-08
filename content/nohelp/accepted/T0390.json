@@ -1,0 +1,43 @@
+[
+  {
+    "anchor": {
+      "scene": "RZSMusicFest"
+    },
+    "body": "The mop and bucket carry violet powder, maybe from the crop trial. They were packed before the back road closed.",
+    "id": "t0390-01",
+    "kind": "set",
+    "pieces": [
+      "Mop",
+      "Bucket"
+    ],
+    "title": "Mop and bucket",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RZSMusicFest"
+    },
+    "body": "The festival volunteers were asked to count exits while the music still played. The man at the gate kept the old total when the rear fence came down. He said correcting it would delay the buses.",
+    "id": "t0390-02",
+    "kind": "written",
+    "pieces": [
+      "notebook"
+    ],
+    "title": "Notebook page",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
+  }
+]

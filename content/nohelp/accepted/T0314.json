@@ -1,0 +1,60 @@
+[
+  {
+    "anchor": {
+      "scene": "RBTSDinner"
+    },
+    "body": "A potato cut in half and an empty jar both carry gray waxy residue. The jar smells like the fertilizer concentrate it once held.",
+    "id": "t0314-01",
+    "kind": "set",
+    "pieces": [
+      "Potato",
+      "EmptyJar"
+    ],
+    "title": "potato and empty jar",
+    "where": [
+      {
+        "containers": [
+          "trough",
+          "dishescabinet",
+          "counter",
+          "overhead",
+          "fridge",
+          "cardboardbox"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RBTSDinner"
+    },
+    "body": "A spoon lies across evacuation papers with crossed-out counts. The bowl has a tag number absent from the official ledger.",
+    "id": "t0314-02",
+    "kind": "set",
+    "pieces": [
+      "Spoon",
+      "Bowl"
+    ],
+    "title": "Spoon and bowl",
+    "where": [
+      {
+        "containers": [
+          "dishescabinet",
+          "overhead",
+          "counter",
+          "cardboardbox",
+          "smallbox",
+          "displaycase"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

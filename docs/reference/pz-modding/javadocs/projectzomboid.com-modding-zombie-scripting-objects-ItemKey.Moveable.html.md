@@ -1,0 +1,3161 @@
+[Skip navigation links](#skip-navbar-top "Skip navigation links")
+
+* [Overview](../../../index.html)
+* Class
+* [Tree](package-tree.html)
+* [Deprecated](../../../deprecated-list.html)
+* [Index](../../../index-files/index-1.html)
+* [Search](../../../search.html)
+* [Help](../../../help-doc.html#class)
+
+1. [zombie.scripting.objects](package-summary.html)
+2. [ItemKey](ItemKey.html)
+3. [Moveable](ItemKey.Moveable.html)
+
+Contents
+
+1. [Description](#)
+2. [Field Summary](#field-summary)
+3. [Constructor Summary](#constructor-summary)
+4. [Method Summary](#method-summary)
+5. [Field Details](#field-detail)
+   1. [ANTLERS\_WALL](#ANTLERS_WALL)
+   2. [BLACKSMITH\_ANVIL\_ASSEMBLED](#BLACKSMITH_ANVIL_ASSEMBLED)
+   3. [BROKEN\_GLASS](#BROKEN_GLASS)
+   4. [BULL\_SKULL\_WALL](#BULL_SKULL_WALL)
+   5. [CALF\_LEATHER\_ANGUS\_FUR\_TAN](#CALF_LEATHER_ANGUS_FUR_TAN)
+   6. [CALF\_LEATHER\_HOLSTEIN\_FUR\_TAN](#CALF_LEATHER_HOLSTEIN_FUR_TAN)
+   7. [CALF\_LEATHER\_SIMMENTAL\_FUR\_TAN](#CALF_LEATHER_SIMMENTAL_FUR_TAN)
+   8. [CAMPING\_TENT\_KIT\_2](#CAMPING_TENT_KIT_2)
+   9. [COW\_HIDE](#COW_HIDE)
+   10. [COW\_LEATHER\_ANGUS\_FUR\_TAN](#COW_LEATHER_ANGUS_FUR_TAN)
+   11. [COW\_LEATHER\_HOLSTEIN\_FUR\_TAN](#COW_LEATHER_HOLSTEIN_FUR_TAN)
+   12. [COW\_LEATHER\_SIMMENTAL\_FUR\_TAN](#COW_LEATHER_SIMMENTAL_FUR_TAN)
+   13. [COW\_SKULL\_WALL](#COW_SKULL_WALL)
+   14. [DAPPLE\_DEER\_HIDE](#DAPPLE_DEER_HIDE)
+   15. [DEER\_DOE\_SKULL\_WALL](#DEER_DOE_SKULL_WALL)
+   16. [DEER\_HIDE](#DEER_HIDE)
+   17. [DEER\_LEATHER\_FUR\_TAN](#DEER_LEATHER_FUR_TAN)
+   18. [DEER\_STAG\_SKULL\_WALL](#DEER_STAG_SKULL_WALL)
+   19. [FAWN\_LEATHER\_FUR\_TAN](#FAWN_LEATHER_FUR_TAN)
+   20. [HEMATITE](#HEMATITE)
+   21. [HEMATITE\_LARGE](#HEMATITE_LARGE)
+   22. [HIDE\_TENT](#HIDE_TENT)
+   23. [IMPROVISED\_TENT\_KIT](#IMPROVISED_TENT_KIT)
+   24. [LAMB\_LEATHER\_FUR\_TAN](#LAMB_LEATHER_FUR_TAN)
+   25. [LARGE\_BELLOWS](#LARGE_BELLOWS)
+   26. [MALACHITE](#MALACHITE)
+   27. [MALACHITE\_LARGE](#MALACHITE_LARGE)
+   28. [MATTRESS](#MATTRESS)
+   29. [METAL\_DRUM](#METAL_DRUM)
+   30. [MOVEABLE](#MOVEABLE)
+   31. [MOV\_AIR\_CONDITIONER](#MOV_AIR_CONDITIONER)
+   32. [MOV\_ANTIQUE\_STOVE](#MOV_ANTIQUE_STOVE)
+   33. [MOV\_ARCADE\_MACHINE\_1](#MOV_ARCADE_MACHINE_1)
+   34. [MOV\_ARCADE\_MACHINE\_2](#MOV_ARCADE_MACHINE_2)
+   35. [MOV\_BACKLESS\_WOODEN\_BENCH](#MOV_BACKLESS_WOODEN_BENCH)
+   36. [MOV\_BEACH\_CHAIR](#MOV_BEACH_CHAIR)
+   37. [MOV\_BEIGE\_CURTAIN](#MOV_BEIGE_CURTAIN)
+   38. [MOV\_BEIGE\_ROTARY\_PHONE](#MOV_BEIGE_ROTARY_PHONE)
+   39. [MOV\_BENCH\_GRINDER](#MOV_BENCH_GRINDER)
+   40. [MOV\_BIN\_ROUND](#MOV_BIN_ROUND)
+   41. [MOV\_BIRCH\_CORNER\_COUNTER](#MOV_BIRCH_CORNER_COUNTER)
+   42. [MOV\_BIRCH\_COUNTER](#MOV_BIRCH_COUNTER)
+   43. [MOV\_BIRCH\_DRAWERS](#MOV_BIRCH_DRAWERS)
+   44. [MOV\_BIRCH\_DRAWERS\_MIRROR](#MOV_BIRCH_DRAWERS_MIRROR)
+   45. [MOV\_BIRDBATH](#MOV_BIRDBATH)
+   46. [MOV\_BLACK\_BBQ](#MOV_BLACK_BBQ)
+   47. [MOV\_BLACK\_CASH\_REGISTER](#MOV_BLACK_CASH_REGISTER)
+   48. [MOV\_BLACK\_CURTAIN](#MOV_BLACK_CURTAIN)
+   49. [MOV\_BLACK\_LOW\_MODERN\_TABLE](#MOV_BLACK_LOW_MODERN_TABLE)
+   50. [MOV\_BLACK\_MODERN\_PHONE](#MOV_BLACK_MODERN_PHONE)
+   51. [MOV\_BLACK\_ROTARY\_PHONE](#MOV_BLACK_ROTARY_PHONE)
+   52. [MOV\_BLACK\_SPEAKER\_CABINET](#MOV_BLACK_SPEAKER_CABINET)
+   53. [MOV\_BLUE\_COMBO\_WASHER\_DRYER](#MOV_BLUE_COMBO_WASHER_DRYER)
+   54. [MOV\_BLUE\_COMFY\_CHAIR](#MOV_BLUE_COMFY_CHAIR)
+   55. [MOV\_BLUE\_CURTAIN](#MOV_BLUE_CURTAIN)
+   56. [MOV\_BLUE\_FRIDGE](#MOV_BLUE_FRIDGE)
+   57. [MOV\_BLUE\_PLASTIC\_CHAIR](#MOV_BLUE_PLASTIC_CHAIR)
+   58. [MOV\_BLUE\_RATTAN\_CHAIR](#MOV_BLUE_RATTAN_CHAIR)
+   59. [MOV\_BLUE\_WALL\_LOCKER](#MOV_BLUE_WALL_LOCKER)
+   60. [MOV\_BONSAI\_TREE](#MOV_BONSAI_TREE)
+   61. [MOV\_BRAZIER](#MOV_BRAZIER)
+   62. [MOV\_BRICK\_PLANTER](#MOV_BRICK_PLANTER)
+   63. [MOV\_BROWN\_COMFY\_CHAIR](#MOV_BROWN_COMFY_CHAIR)
+   64. [MOV\_BROWN\_CURTAIN](#MOV_BROWN_CURTAIN)
+   65. [MOV\_BROWN\_DISHWASHER](#MOV_BROWN_DISHWASHER)
+   66. [MOV\_BROWN\_LOW\_TABLE](#MOV_BROWN_LOW_TABLE)
+   67. [MOV\_CABINET\_MEDICAL](#MOV_CABINET_MEDICAL)
+   68. [MOV\_CABINET\_TOOL](#MOV_CABINET_TOOL)
+   69. [MOV\_CACTUS](#MOV_CACTUS)
+   70. [MOV\_CARDBOARD\_BOX](#MOV_CARDBOARD_BOX)
+   71. [MOV\_CASH\_REGISTER](#MOV_CASH_REGISTER)
+   72. [MOV\_CAST\_IRON\_PLANT](#MOV_CAST_IRON_PLANT)
+   73. [MOV\_CHEMICAL\_TOILET](#MOV_CHEMICAL_TOILET)
+   74. [MOV\_CHEST\_FREEZER](#MOV_CHEST_FREEZER)
+   75. [MOV\_CHINESE\_EVERGREEN](#MOV_CHINESE_EVERGREEN)
+   76. [MOV\_CHROME\_SINK](#MOV_CHROME_SINK)
+   77. [MOV\_CLOTHES\_STAND](#MOV_CLOTHES_STAND)
+   78. [MOV\_COFFEE\_MAKER](#MOV_COFFEE_MAKER)
+   79. [MOV\_COMICS\_SHOP\_SHELVES](#MOV_COMICS_SHOP_SHELVES)
+   80. [MOV\_CONCRETE\_MIXER](#MOV_CONCRETE_MIXER)
+   81. [MOV\_CONCRETE\_ROAD\_BLOCK](#MOV_CONCRETE_ROAD_BLOCK)
+   82. [MOV\_CORK\_BOARD](#MOV_CORK_BOARD)
+   83. [MOV\_COT](#MOV_COT)
+   84. [MOV\_DARK\_BLUE\_CHAIR](#MOV_DARK_BLUE_CHAIR)
+   85. [MOV\_DARK\_CORNER\_COUNTER](#MOV_DARK_CORNER_COUNTER)
+   86. [MOV\_DARK\_COUNTER](#MOV_DARK_COUNTER)
+   87. [MOV\_DARK\_FANCY\_DRAWERS](#MOV_DARK_FANCY_DRAWERS)
+   88. [MOV\_DARK\_GREEN\_BARREL](#MOV_DARK_GREEN_BARREL)
+   89. [MOV\_DARK\_INDUSTRIAL\_SINK](#MOV_DARK_INDUSTRIAL_SINK)
+   90. [MOV\_DARK\_WOODEN\_CHAIR](#MOV_DARK_WOODEN_CHAIR)
+   91. [MOV\_DEEP\_FRYER](#MOV_DEEP_FRYER)
+   92. [MOV\_DEGREE\_DOCTOR](#MOV_DEGREE_DOCTOR)
+   93. [MOV\_DEGREE\_SURGEON](#MOV_DEGREE_SURGEON)
+   94. [MOV\_DESKTOP\_COMPUTER](#MOV_DESKTOP_COMPUTER)
+   95. [MOV\_DOGHOUSE](#MOV_DOGHOUSE)
+   96. [MOV\_DRAGON\_TREE](#MOV_DRAGON_TREE)
+   97. [MOV\_DRUM\_STOOL](#MOV_DRUM_STOOL)
+   98. [MOV\_ELECTRIC\_BLOWER\_FORGE](#MOV_ELECTRIC_BLOWER_FORGE)
+   99. [MOV\_ESPRESSO](#MOV_ESPRESSO)
+   100. [MOV\_EXTRACTOR\_HOOD](#MOV_EXTRACTOR_HOOD)
+   101. [MOV\_FANCY\_BLACK\_CHAIR](#MOV_FANCY_BLACK_CHAIR)
+   102. [MOV\_FANCY\_CHESTNUT\_DRAWERS](#MOV_FANCY_CHESTNUT_DRAWERS)
+   103. [MOV\_FANCY\_DARK\_TABLE](#MOV_FANCY_DARK_TABLE)
+   104. [MOV\_FANCY\_HANGING\_SINK](#MOV_FANCY_HANGING_SINK)
+   105. [MOV\_FANCY\_LOW\_TABLE](#MOV_FANCY_LOW_TABLE)
+   106. [MOV\_FANCY\_OUTDOOR\_LAMP](#MOV_FANCY_OUTDOOR_LAMP)
+   107. [MOV\_FANCY\_TABLE](#MOV_FANCY_TABLE)
+   108. [MOV\_FANCY\_TOILET](#MOV_FANCY_TOILET)
+   109. [MOV\_FANCY\_WHITE\_CHAIR](#MOV_FANCY_WHITE_CHAIR)
+   110. [MOV\_FERN](#MOV_FERN)
+   111. [MOV\_FICUS](#MOV_FICUS)
+   112. [MOV\_FIRE\_HYDRANT](#MOV_FIRE_HYDRANT)
+   113. [MOV\_FIRST\_AID\_CABINET](#MOV_FIRST_AID_CABINET)
+   114. [MOV\_FITNESS\_CONTRAPTION](#MOV_FITNESS_CONTRAPTION)
+   115. [MOV\_FLAG\_ADMIN](#MOV_FLAG_ADMIN)
+   116. [MOV\_FLAG\_USA](#MOV_FLAG_USA)
+   117. [MOV\_FLAG\_USALARGE](#MOV_FLAG_USALARGE)
+   118. [MOV\_FLAT\_COFFIN](#MOV_FLAT_COFFIN)
+   119. [MOV\_FLOATING\_TRAILER\_COUNTER](#MOV_FLOATING_TRAILER_COUNTER)
+   120. [MOV\_FOLDING\_CHAIR](#MOV_FOLDING_CHAIR)
+   121. [MOV\_FRIDGE\_MINI](#MOV_FRIDGE_MINI)
+   122. [MOV\_GARDEN\_GNOME](#MOV_GARDEN_GNOME)
+   123. [MOV\_GRAVE\_ARCHED](#MOV_GRAVE_ARCHED)
+   124. [MOV\_GRAVE\_ROUND](#MOV_GRAVE_ROUND)
+   125. [MOV\_GRAVE\_SQUARE](#MOV_GRAVE_SQUARE)
+   126. [MOV\_GRAVE\_WORN](#MOV_GRAVE_WORN)
+   127. [MOV\_GRAY\_CURTAIN](#MOV_GRAY_CURTAIN)
+   128. [MOV\_GRAY\_GARBAGE\_BIN](#MOV_GRAY_GARBAGE_BIN)
+   129. [MOV\_GRAY\_LONG\_CURTAIN](#MOV_GRAY_LONG_CURTAIN)
+   130. [MOV\_GREEN\_CHAIR](#MOV_GREEN_CHAIR)
+   131. [MOV\_GREEN\_COMFY\_CHAIR](#MOV_GREEN_COMFY_CHAIR)
+   132. [MOV\_GREEN\_CORNER\_COUNTER](#MOV_GREEN_CORNER_COUNTER)
+   133. [MOV\_GREEN\_COUNTER](#MOV_GREEN_COUNTER)
+   134. [MOV\_GREEN\_CURTAIN](#MOV_GREEN_CURTAIN)
+   135. [MOV\_GREEN\_FRIDGE](#MOV_GREEN_FRIDGE)
+   136. [MOV\_GREEN\_GARBAGE\_BIN](#MOV_GREEN_GARBAGE_BIN)
+   137. [MOV\_GREEN\_OVEN](#MOV_GREEN_OVEN)
+   138. [MOV\_GREEN\_WALL\_LOCKER](#MOV_GREEN_WALL_LOCKER)
+   139. [MOV\_GREY\_CHAIR](#MOV_GREY_CHAIR)
+   140. [MOV\_GREY\_COMFY\_CHAIR](#MOV_GREY_COMFY_CHAIR)
+   141. [MOV\_GREY\_OVEN](#MOV_GREY_OVEN)
+   142. [MOV\_GUITAR\_AMPLIFIER](#MOV_GUITAR_AMPLIFIER)
+   143. [MOV\_GURNEY](#MOV_GURNEY)
+   144. [MOV\_GYMN\_MAT](#MOV_GYMN_MAT)
+   145. [MOV\_HAYSTACK\_DOUBLE](#MOV_HAYSTACK_DOUBLE)
+   146. [MOV\_HAYSTACK\_SINGLE](#MOV_HAYSTACK_SINGLE)
+   147. [MOV\_HOTDOG\_MACHINE](#MOV_HOTDOG_MACHINE)
+   148. [MOV\_HUNTING\_TROPHY](#MOV_HUNTING_TROPHY)
+   149. [MOV\_INDUSTRIAL\_DISHWASHER](#MOV_INDUSTRIAL_DISHWASHER)
+   150. [MOV\_INDUSTRIAL\_FRIDGE](#MOV_INDUSTRIAL_FRIDGE)
+   151. [MOV\_INDUSTRIAL\_OVEN](#MOV_INDUSTRIAL_OVEN)
+   152. [MOV\_INDUSTRIAL\_SINK](#MOV_INDUSTRIAL_SINK)
+   153. [MOV\_JUKEBOX](#MOV_JUKEBOX)
+   154. [MOV\_KEY\_DUPLICATOR](#MOV_KEY_DUPLICATOR)
+   155. [MOV\_KICK\_DRUM](#MOV_KICK_DRUM)
+   156. [MOV\_LAMP\_1](#MOV_LAMP_1)
+   157. [MOV\_LAMP\_2](#MOV_LAMP_2)
+   158. [MOV\_LAMP\_3](#MOV_LAMP_3)
+   159. [MOV\_LAMP\_4](#MOV_LAMP_4)
+   160. [MOV\_LAMP\_5](#MOV_LAMP_5)
+   161. [MOV\_LAMP\_6](#MOV_LAMP_6)
+   162. [MOV\_LARGE\_INDUSTRIAL\_SINK](#MOV_LARGE_INDUSTRIAL_SINK)
+   163. [MOV\_LARGE\_OPEN\_TOPPED\_GARBAGE\_BIN](#MOV_LARGE_OPEN_TOPPED_GARBAGE_BIN)
+   164. [MOV\_LIGHT\_CONSTRUCTION](#MOV_LIGHT_CONSTRUCTION)
+   165. [MOV\_LIGHT\_GREEN\_BARREL](#MOV_LIGHT_GREEN_BARREL)
+   166. [MOV\_LIGHT\_ROUND\_TABLE](#MOV_LIGHT_ROUND_TABLE)
+   167. [MOV\_LONG\_BEIGE\_CURTAIN](#MOV_LONG_BEIGE_CURTAIN)
+   168. [MOV\_LONG\_TABLE](#MOV_LONG_TABLE)
+   169. [MOV\_LONG\_WHITE\_CURTAIN](#MOV_LONG_WHITE_CURTAIN)
+   170. [MOV\_LOW\_TOILET](#MOV_LOW_TOILET)
+   171. [MOV\_MAILBOX](#MOV_MAILBOX)
+   172. [MOV\_MANNEQUIN\_FEMALE](#MOV_MANNEQUIN_FEMALE)
+   173. [MOV\_MANNEQUIN\_MALE](#MOV_MANNEQUIN_MALE)
+   174. [MOV\_MAP\_USA](#MOV_MAP_USA)
+   175. [MOV\_METAL\_DISHWASHER](#MOV_METAL_DISHWASHER)
+   176. [MOV\_METAL\_LOCKER](#MOV_METAL_LOCKER)
+   177. [MOV\_METAL\_STOOL](#MOV_METAL_STOOL)
+   178. [MOV\_METAL\_TURNSTILE](#MOV_METAL_TURNSTILE)
+   179. [MOV\_METAL\_WALL\_SHELVES](#MOV_METAL_WALL_SHELVES)
+   180. [MOV\_MICROPHONE](#MOV_MICROPHONE)
+   181. [MOV\_MICROSCOPE](#MOV_MICROSCOPE)
+   182. [MOV\_MICROWAVE](#MOV_MICROWAVE)
+   183. [MOV\_MICROWAVE\_2](#MOV_MICROWAVE_2)
+   184. [MOV\_MILITARY\_CRATE](#MOV_MILITARY_CRATE)
+   185. [MOV\_MILITARY\_LOCKER](#MOV_MILITARY_LOCKER)
+   186. [MOV\_MIRROR\_LARGE](#MOV_MIRROR_LARGE)
+   187. [MOV\_MIRROR\_SMALL](#MOV_MIRROR_SMALL)
+   188. [MOV\_MIRROR\_SMALL\_WIDE](#MOV_MIRROR_SMALL_WIDE)
+   189. [MOV\_MIRROR\_TALL](#MOV_MIRROR_TALL)
+   190. [MOV\_MIRROR\_WOOD](#MOV_MIRROR_WOOD)
+   191. [MOV\_MOBILE\_BLOODBAG](#MOV_MOBILE_BLOODBAG)
+   192. [MOV\_MOBILE\_COUNTER](#MOV_MOBILE_COUNTER)
+   193. [MOV\_MODERN\_CORNER\_COUNTER](#MOV_MODERN_CORNER_COUNTER)
+   194. [MOV\_MODERN\_COUNTER](#MOV_MODERN_COUNTER)
+   195. [MOV\_MODERN\_OUTDOOR\_LAMP](#MOV_MODERN_OUTDOOR_LAMP)
+   196. [MOV\_MODERN\_OVEN](#MOV_MODERN_OVEN)
+   197. [MOV\_NAPKIN\_DISPENSER](#MOV_NAPKIN_DISPENSER)
+   198. [MOV\_NEON\_OPEN\_SIGN](#MOV_NEON_OPEN_SIGN)
+   199. [MOV\_OAK\_BENCH](#MOV_OAK_BENCH)
+   200. [MOV\_OAK\_CORNER\_COUNTER](#MOV_OAK_CORNER_COUNTER)
+   201. [MOV\_OAK\_COUNTER](#MOV_OAK_COUNTER)
+   202. [MOV\_OAK\_ROUND\_TABLE](#MOV_OAK_ROUND_TABLE)
+   203. [MOV\_OAK\_SHELVES](#MOV_OAK_SHELVES)
+   204. [MOV\_OFFICE\_CHAIR](#MOV_OFFICE_CHAIR)
+   205. [MOV\_ORANGE\_BARREL](#MOV_ORANGE_BARREL)
+   206. [MOV\_ORANGE\_FUTON](#MOV_ORANGE_FUTON)
+   207. [MOV\_ORANGE\_MODERN\_CHAIR](#MOV_ORANGE_MODERN_CHAIR)
+   208. [MOV\_OVAL\_OUTDOOR\_LAMP](#MOV_OVAL_OUTDOOR_LAMP)
+   209. [MOV\_PAINTING\_AAAAAH](#MOV_PAINTING_AAAAAH)
+   210. [MOV\_PAINTING\_ABE\_LINCOLN](#MOV_PAINTING_ABE_LINCOLN)
+   211. [MOV\_PAINTING\_APPLE\_FACED\_MAN](#MOV_PAINTING_APPLE_FACED_MAN)
+   212. [MOV\_PAINTING\_BEJAMIN\_FRANKLIN](#MOV_PAINTING_BEJAMIN_FRANKLIN)
+   213. [MOV\_PAINTING\_BETTY](#MOV_PAINTING_BETTY)
+   214. [MOV\_PAINTING\_CALVINIST](#MOV_PAINTING_CALVINIST)
+   215. [MOV\_PAINTING\_CHROMATIC\_ACCIDENT](#MOV_PAINTING_CHROMATIC_ACCIDENT)
+   216. [MOV\_PAINTING\_DESERT\_LANDSCAPE](#MOV_PAINTING_DESERT_LANDSCAPE)
+   217. [MOV\_PAINTING\_ELISA](#MOV_PAINTING_ELISA)
+   218. [MOV\_PAINTING\_FLOWERS\_ON\_TABLE](#MOV_PAINTING_FLOWERS_ON_TABLE)
+   219. [MOV\_PAINTING\_GEORGE\_WASHINGTON](#MOV_PAINTING_GEORGE_WASHINGTON)
+   220. [MOV\_PAINTING\_GREEN](#MOV_PAINTING_GREEN)
+   221. [MOV\_PAINTING\_HELIANTHUS](#MOV_PAINTING_HELIANTHUS)
+   222. [MOV\_PAINTING\_ISLAND\_BEACH](#MOV_PAINTING_ISLAND_BEACH)
+   223. [MOV\_PAINTING\_JOHN\_ADAMS](#MOV_PAINTING_JOHN_ADAMS)
+   224. [MOV\_PAINTING\_LAKESIDE](#MOV_PAINTING_LAKESIDE)
+   225. [MOV\_PAINTING\_LIBRARY](#MOV_PAINTING_LIBRARY)
+   226. [MOV\_PAINTING\_LILLYS\_WATERPOND](#MOV_PAINTING_LILLYS_WATERPOND)
+   227. [MOV\_PAINTING\_MAN\_WITH\_ONE\_EAR](#MOV_PAINTING_MAN_WITH_ONE_EAR)
+   228. [MOV\_PAINTING\_MARGARITE](#MOV_PAINTING_MARGARITE)
+   229. [MOV\_PAINTING\_MOUNT\_NEVER\_REST](#MOV_PAINTING_MOUNT_NEVER_REST)
+   230. [MOV\_PAINTING\_NIGHT\_WITH\_STARS](#MOV_PAINTING_NIGHT_WITH_STARS)
+   231. [MOV\_PAINTING\_NOMAD\_ABOVE\_THE\_GLOOM](#MOV_PAINTING_NOMAD_ABOVE_THE_GLOOM)
+   232. [MOV\_PAINTING\_RIVERSIDE](#MOV_PAINTING_RIVERSIDE)
+   233. [MOV\_PAINTING\_SHES\_GOT\_IT](#MOV_PAINTING_SHES_GOT_IT)
+   234. [MOV\_PAINTING\_SIR\_BRAKEFIRE](#MOV_PAINTING_SIR_BRAKEFIRE)
+   235. [MOV\_PAINTING\_THOMAS\_JEFFERSON](#MOV_PAINTING_THOMAS_JEFFERSON)
+   236. [MOV\_PAINTING\_TWO\_FRAME](#MOV_PAINTING_TWO_FRAME)
+   237. [MOV\_PAINTING\_VIOLETTA](#MOV_PAINTING_VIOLETTA)
+   238. [MOV\_PALLET\_BRICKS](#MOV_PALLET_BRICKS)
+   239. [MOV\_PALLET\_EMPTY](#MOV_PALLET_EMPTY)
+   240. [MOV\_PAY\_PHONES](#MOV_PAY_PHONES)
+   241. [MOV\_PILE\_OCREPE\_CHAIR](#MOV_PILE_OCREPE_CHAIR)
+   242. [MOV\_PINBALL\_MACHINE](#MOV_PINBALL_MACHINE)
+   243. [MOV\_PINE\_CORNER\_COUNTER](#MOV_PINE_CORNER_COUNTER)
+   244. [MOV\_PINE\_COUNTER](#MOV_PINE_COUNTER)
+   245. [MOV\_PINK\_CURTAIN](#MOV_PINK_CURTAIN)
+   246. [MOV\_PINK\_FLAMINGO](#MOV_PINK_FLAMINGO)
+   247. [MOV\_PINK\_FLAMINGO\_2](#MOV_PINK_FLAMINGO_2)
+   248. [MOV\_PLAIN\_FRIDGE](#MOV_PLAIN_FRIDGE)
+   249. [MOV\_PLASTIC\_CHAIR](#MOV_PLASTIC_CHAIR)
+   250. [MOV\_PLASTIC\_LOW\_TABLE](#MOV_PLASTIC_LOW_TABLE)
+   251. [MOV\_POPCORN\_MACHINE](#MOV_POPCORN_MACHINE)
+   252. [MOV\_POPSICLE\_FREEZER](#MOV_POPSICLE_FREEZER)
+   253. [MOV\_POSTER\_DROIDS](#MOV_POSTER_DROIDS)
+   254. [MOV\_POSTER\_ELEMENT](#MOV_POSTER_ELEMENT)
+   255. [MOV\_POSTER\_MEDICAL](#MOV_POSTER_MEDICAL)
+   256. [MOV\_POSTER\_OMEGA](#MOV_POSTER_OMEGA)
+   257. [MOV\_POSTER\_PAWS](#MOV_POSTER_PAWS)
+   258. [MOV\_POSTER\_PIE\_BLUE](#MOV_POSTER_PIE_BLUE)
+   259. [MOV\_POSTER\_PIE\_GREEN](#MOV_POSTER_PIE_GREEN)
+   260. [MOV\_POSTER\_PIE\_PINK](#MOV_POSTER_PIE_PINK)
+   261. [MOV\_POSTER\_PIE\_RED](#MOV_POSTER_PIE_RED)
+   262. [MOV\_PROJECTOR](#MOV_PROJECTOR)
+   263. [MOV\_PUBLIC\_GARBAGE\_BIN](#MOV_PUBLIC_GARBAGE_BIN)
+   264. [MOV\_PUBLIC\_MAIL\_BOX](#MOV_PUBLIC_MAIL_BOX)
+   265. [MOV\_PURPLE\_RATTAN\_CHAIR](#MOV_PURPLE_RATTAN_CHAIR)
+   266. [MOV\_PURPLE\_WOODEN\_CHAIR](#MOV_PURPLE_WOODEN_CHAIR)
+   267. [MOV\_RAISED\_PLANTBED](#MOV_RAISED_PLANTBED)
+   268. [MOV\_RECYCLE\_BIN](#MOV_RECYCLE_BIN)
+   269. [MOV\_RED\_BBQ](#MOV_RED_BBQ)
+   270. [MOV\_RED\_CHAIR](#MOV_RED_CHAIR)
+   271. [MOV\_RED\_FRIDGE](#MOV_RED_FRIDGE)
+   272. [MOV\_RED\_OVEN](#MOV_RED_OVEN)
+   273. [MOV\_RED\_ROTARY\_PHONE](#MOV_RED_ROTARY_PHONE)
+   274. [MOV\_RED\_WOODEN\_CHAIR](#MOV_RED_WOODEN_CHAIR)
+   275. [MOV\_ROAD\_BARRIER](#MOV_ROAD_BARRIER)
+   276. [MOV\_ROAD\_CONE](#MOV_ROAD_CONE)
+   277. [MOV\_ROAD\_CONE\_2](#MOV_ROAD_CONE_2)
+   278. [MOV\_ROUND\_OUTDOOR\_LAMP](#MOV_ROUND_OUTDOOR_LAMP)
+   279. [MOV\_ROUND\_TABLE](#MOV_ROUND_TABLE)
+   280. [MOV\_SALE\_SIGN](#MOV_SALE_SIGN)
+   281. [MOV\_SALT\_LICK](#MOV_SALT_LICK)
+   282. [MOV\_SATELLITE\_DISH](#MOV_SATELLITE_DISH)
+   283. [MOV\_SCALE\_MEDICAL](#MOV_SCALE_MEDICAL)
+   284. [MOV\_SCARECROW](#MOV_SCARECROW)
+   285. [MOV\_SECURITY\_TERMINAL](#MOV_SECURITY_TERMINAL)
+   286. [MOV\_SECURITY\_TERMINAL\_2](#MOV_SECURITY_TERMINAL_2)
+   287. [MOV\_SECURITY\_WALL\_MONITORS](#MOV_SECURITY_WALL_MONITORS)
+   288. [MOV\_SHOPPING\_BASKETS](#MOV_SHOPPING_BASKETS)
+   289. [MOV\_SHOP\_DISPLAY\_COUNTER](#MOV_SHOP_DISPLAY_COUNTER)
+   290. [MOV\_SIGN\_ARMY](#MOV_SIGN_ARMY)
+   291. [MOV\_SIGN\_CITRUS](#MOV_SIGN_CITRUS)
+   292. [MOV\_SIGN\_OUT\_OF\_GAS](#MOV_SIGN_OUT_OF_GAS)
+   293. [MOV\_SIGN\_OUT\_OF\_GAS\_FOSSOIL](#MOV_SIGN_OUT_OF_GAS_FOSSOIL)
+   294. [MOV\_SIGN\_OUT\_OF\_GAS\_GAS2GO](#MOV_SIGN_OUT_OF_GAS_GAS2GO)
+   295. [MOV\_SIGN\_RESTRICTED](#MOV_SIGN_RESTRICTED)
+   296. [MOV\_SIGN\_WARNING](#MOV_SIGN_WARNING)
+   297. [MOV\_SKELETON\_DISPLAY](#MOV_SKELETON_DISPLAY)
+   298. [MOV\_SMALL\_BORDEAUX\_CURTAIN](#MOV_SMALL_BORDEAUX_CURTAIN)
+   299. [MOV\_SMALL\_CHEST](#MOV_SMALL_CHEST)
+   300. [MOV\_SMALL\_GREEN\_CURTAIN](#MOV_SMALL_GREEN_CURTAIN)
+   301. [MOV\_SMALL\_PEARL\_CURTAIN](#MOV_SMALL_PEARL_CURTAIN)
+   302. [MOV\_SMALL\_PINE\_CABINET](#MOV_SMALL_PINE_CABINET)
+   303. [MOV\_SMALL\_TABLE](#MOV_SMALL_TABLE)
+   304. [MOV\_SMALL\_WHITE\_CURTAIN](#MOV_SMALL_WHITE_CURTAIN)
+   305. [MOV\_SNACK\_VENDING\_MACHINE](#MOV_SNACK_VENDING_MACHINE)
+   306. [MOV\_SNAKE\_PLANT](#MOV_SNAKE_PLANT)
+   307. [MOV\_SNARE\_DRUM](#MOV_SNARE_DRUM)
+   308. [MOV\_SODA\_MACHINE](#MOV_SODA_MACHINE)
+   309. [MOV\_SODA\_MACHINE\_LARGE](#MOV_SODA_MACHINE_LARGE)
+   310. [MOV\_SODA\_VENDING\_MACHINE](#MOV_SODA_VENDING_MACHINE)
+   311. [MOV\_SQUARE\_WALL\_CLOCK](#MOV_SQUARE_WALL_CLOCK)
+   312. [MOV\_STANDING\_VAULT](#MOV_STANDING_VAULT)
+   313. [MOV\_STEEL\_CORNER\_COUNTER](#MOV_STEEL_CORNER_COUNTER)
+   314. [MOV\_STEEL\_COUNTER](#MOV_STEEL_COUNTER)
+   315. [MOV\_STEEL\_FRIDGE](#MOV_STEEL_FRIDGE)
+   316. [MOV\_STOP\_SIGN](#MOV_STOP_SIGN)
+   317. [MOV\_TOASTER](#MOV_TOASTER)
+   318. [MOV\_TOM\_DRUM](#MOV_TOM_DRUM)
+   319. [MOV\_TOWEL\_DISPENSER](#MOV_TOWEL_DISPENSER)
+   320. [MOV\_TRAILER\_COUNTER](#MOV_TRAILER_COUNTER)
+   321. [MOV\_TRAILER\_FRIDGE](#MOV_TRAILER_FRIDGE)
+   322. [MOV\_TRAPEZOID\_SHOP\_SHELVES](#MOV_TRAPEZOID_SHOP_SHELVES)
+   323. [MOV\_TVCAMERA](#MOV_TVCAMERA)
+   324. [MOV\_UPRIGHT\_COFFIN](#MOV_UPRIGHT_COFFIN)
+   325. [MOV\_URINAL](#MOV_URINAL)
+   326. [MOV\_VIOLET\_FLOWERS](#MOV_VIOLET_FLOWERS)
+   327. [MOV\_WALL\_CLOCK](#MOV_WALL_CLOCK)
+   328. [MOV\_WALL\_SHOWER](#MOV_WALL_SHOWER)
+   329. [MOV\_WASHING\_BIN](#MOV_WASHING_BIN)
+   330. [MOV\_WATER\_DISPENSER](#MOV_WATER_DISPENSER)
+   331. [MOV\_WHEELIE\_BIN](#MOV_WHEELIE_BIN)
+   332. [MOV\_WHITE\_COMFY\_CHAIR](#MOV_WHITE_COMFY_CHAIR)
+   333. [MOV\_WHITE\_CORNER\_COUNTER](#MOV_WHITE_CORNER_COUNTER)
+   334. [MOV\_WHITE\_COUNTER](#MOV_WHITE_COUNTER)
+   335. [MOV\_WHITE\_CURTAIN](#MOV_WHITE_CURTAIN)
+   336. [MOV\_WHITE\_FANCY\_DRAWERS](#MOV_WHITE_FANCY_DRAWERS)
+   337. [MOV\_WHITE\_FILE\_CABINET](#MOV_WHITE_FILE_CABINET)
+   338. [MOV\_WHITE\_FRIDGE](#MOV_WHITE_FRIDGE)
+   339. [MOV\_WHITE\_HALF\_COUNTER](#MOV_WHITE_HALF_COUNTER)
+   340. [MOV\_WHITE\_HANGING\_SINK](#MOV_WHITE_HANGING_SINK)
+   341. [MOV\_WHITE\_INDUSTRIAL\_FRIDGE](#MOV_WHITE_INDUSTRIAL_FRIDGE)
+   342. [MOV\_WHITE\_MODERN\_PHONE](#MOV_WHITE_MODERN_PHONE)
+   343. [MOV\_WHITE\_ROTARY\_PHONE](#MOV_WHITE_ROTARY_PHONE)
+   344. [MOV\_WHITE\_SIMPLE\_CHAIR](#MOV_WHITE_SIMPLE_CHAIR)
+   345. [MOV\_WHITE\_SINK](#MOV_WHITE_SINK)
+   346. [MOV\_WHITE\_WOODEN\_CHAIR](#MOV_WHITE_WOODEN_CHAIR)
+   347. [MOV\_WINDOW\_CHROME](#MOV_WINDOW_CHROME)
+   348. [MOV\_WINDOW\_SLIDER](#MOV_WINDOW_SLIDER)
+   349. [MOV\_WINDOW\_TILED](#MOV_WINDOW_TILED)
+   350. [MOV\_WINDOW\_WHITE](#MOV_WINDOW_WHITE)
+   351. [MOV\_WINDOW\_WHITE\_TILED](#MOV_WINDOW_WHITE_TILED)
+   352. [MOV\_WINDOW\_WOODEN](#MOV_WINDOW_WOODEN)
+   353. [MOV\_WOODEN\_CHAIR](#MOV_WOODEN_CHAIR)
+   354. [MOV\_WOODEN\_CORNER\_COUNTER](#MOV_WOODEN_CORNER_COUNTER)
+   355. [MOV\_WOODEN\_COUNTER](#MOV_WOODEN_COUNTER)
+   356. [MOV\_WOODEN\_STOOL](#MOV_WOODEN_STOOL)
+   357. [MOV\_WOOD\_PEGBOARD](#MOV_WOOD_PEGBOARD)
+   358. [MOV\_WOOD\_SPEAKER\_CABINET](#MOV_WOOD_SPEAKER_CABINET)
+   359. [MOV\_YELLOW\_MODERN\_CHAIR](#MOV_YELLOW_MODERN_CHAIR)
+   360. [MOV\_YELLOW\_WALL\_LOCKER](#MOV_YELLOW_WALL_LOCKER)
+   361. [PIG\_LEATHER\_BLACK\_FUR\_TAN](#PIG_LEATHER_BLACK_FUR_TAN)
+   362. [PIG\_LEATHER\_LANDRACE\_FUR\_TAN](#PIG_LEATHER_LANDRACE_FUR_TAN)
+   363. [PIGLET\_LEATHER\_BLACK\_FUR\_TAN](#PIGLET_LEATHER_BLACK_FUR_TAN)
+   364. [PIGLET\_LEATHER\_LANDRACE\_FUR\_TAN](#PIGLET_LEATHER_LANDRACE_FUR_TAN)
+   365. [PIG\_SKULL\_WALL](#PIG_SKULL_WALL)
+   366. [RABBIT\_LEATHER\_FUR\_TAN](#RABBIT_LEATHER_FUR_TAN)
+   367. [SHEEP\_LEATHER\_FUR\_TAN](#SHEEP_LEATHER_FUR_TAN)
+   368. [SHEEP\_SKULL\_WALL](#SHEEP_SKULL_WALL)
+   369. [SLEEPING\_BAG\_BLUE\_PLAID](#SLEEPING_BAG_BLUE_PLAID)
+   370. [SLEEPING\_BAG\_CAMO](#SLEEPING_BAG_CAMO)
+   371. [SLEEPING\_BAG\_CHEAP\_BLUE](#SLEEPING_BAG_CHEAP_BLUE)
+   372. [SLEEPING\_BAG\_CHEAP\_GREEN](#SLEEPING_BAG_CHEAP_GREEN)
+   373. [SLEEPING\_BAG\_CHEAP\_GREEN\_2](#SLEEPING_BAG_CHEAP_GREEN_2)
+   374. [SLEEPING\_BAG\_GREEN](#SLEEPING_BAG_GREEN)
+   375. [SLEEPING\_BAG\_GREEN\_PLAID](#SLEEPING_BAG_GREEN_PLAID)
+   376. [SLEEPING\_BAG\_HIDE](#SLEEPING_BAG_HIDE)
+   377. [SLEEPING\_BAG\_HIGH\_QUALITY\_BROWN](#SLEEPING_BAG_HIGH_QUALITY_BROWN)
+   378. [SLEEPING\_BAG\_RED\_PLAID](#SLEEPING_BAG_RED_PLAID)
+   379. [SLEEPING\_BAG\_SPIFFO](#SLEEPING_BAG_SPIFFO)
+   380. [TENT\_BLUE](#TENT_BLUE)
+   381. [TENT\_BROWN](#TENT_BROWN)
+   382. [TENT\_GREEN](#TENT_GREEN)
+   383. [TENT\_YELLOW](#TENT_YELLOW)
+6. [Constructor Details](#constructor-detail)
+   1. [Moveable()](#%3Cinit%3E())
+7. [Method Details](#method-detail)
+   1. [moveable(String)](#moveable(java.lang.String))
+
+Hide sidebar ![Hide sidebar](../../../resource-files/left.svg)![Show sidebar](../../../resource-files/right.svg) Show sidebar
+
+Class ItemKey.Moveable
+======================
+
+[java.lang.Object](https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Object.html "class or interface in java.lang")
+
+zombie.scripting.objects.ItemKey.Moveable
+
+Enclosing class:
+:   `ItemKey`
+
+---
+
+public static class ItemKey.Moveable
+extends [Object](https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Object.html "class or interface in java.lang")
+
+* Field Summary
+  -------------
+
+  Fields
+
+  Modifier and Type
+
+  Field
+
+  Description
+
+  `static final ItemKey`
+
+  `ANTLERS_WALL`
+
+  `static final ItemKey`
+
+  `BLACKSMITH_ANVIL_ASSEMBLED`
+
+  `static final ItemKey`
+
+  `BROKEN_GLASS`
+
+  `static final ItemKey`
+
+  `BULL_SKULL_WALL`
+
+  `static final ItemKey`
+
+  `CALF_LEATHER_ANGUS_FUR_TAN`
+
+  `static final ItemKey`
+
+  `CALF_LEATHER_HOLSTEIN_FUR_TAN`
+
+  `static final ItemKey`
+
+  `CALF_LEATHER_SIMMENTAL_FUR_TAN`
+
+  `static final ItemKey`
+
+  `CAMPING_TENT_KIT_2`
+
+  `static final ItemKey`
+
+  `COW_HIDE`
+
+  `static final ItemKey`
+
+  `COW_LEATHER_ANGUS_FUR_TAN`
+
+  `static final ItemKey`
+
+  `COW_LEATHER_HOLSTEIN_FUR_TAN`
+
+  `static final ItemKey`
+
+  `COW_LEATHER_SIMMENTAL_FUR_TAN`
+
+  `static final ItemKey`
+
+  `COW_SKULL_WALL`
+
+  `static final ItemKey`
+
+  `DAPPLE_DEER_HIDE`
+
+  `static final ItemKey`
+
+  `DEER_DOE_SKULL_WALL`
+
+  `static final ItemKey`
+
+  `DEER_HIDE`
+
+  `static final ItemKey`
+
+  `DEER_LEATHER_FUR_TAN`
+
+  `static final ItemKey`
+
+  `DEER_STAG_SKULL_WALL`
+
+  `static final ItemKey`
+
+  `FAWN_LEATHER_FUR_TAN`
+
+  `static final ItemKey`
+
+  `HEMATITE`
+
+  `static final ItemKey`
+
+  `HEMATITE_LARGE`
+
+  `static final ItemKey`
+
+  `HIDE_TENT`
+
+  `static final ItemKey`
+
+  `IMPROVISED_TENT_KIT`
+
+  `static final ItemKey`
+
+  `LAMB_LEATHER_FUR_TAN`
+
+  `static final ItemKey`
+
+  `LARGE_BELLOWS`
+
+  `static final ItemKey`
+
+  `MALACHITE`
+
+  `static final ItemKey`
+
+  `MALACHITE_LARGE`
+
+  `static final ItemKey`
+
+  `MATTRESS`
+
+  `static final ItemKey`
+
+  `METAL_DRUM`
+
+  `static final ItemKey`
+
+  `MOV_AIR_CONDITIONER`
+
+  `static final ItemKey`
+
+  `MOV_ANTIQUE_STOVE`
+
+  `static final ItemKey`
+
+  `MOV_ARCADE_MACHINE_1`
+
+  `static final ItemKey`
+
+  `MOV_ARCADE_MACHINE_2`
+
+  `static final ItemKey`
+
+  `MOV_BACKLESS_WOODEN_BENCH`
+
+  `static final ItemKey`
+
+  `MOV_BEACH_CHAIR`
+
+  `static final ItemKey`
+
+  `MOV_BEIGE_CURTAIN`
+
+  `static final ItemKey`
+
+  `MOV_BEIGE_ROTARY_PHONE`
+
+  `static final ItemKey`
+
+  `MOV_BENCH_GRINDER`
+
+  `static final ItemKey`
+
+  `MOV_BIN_ROUND`
+
+  `static final ItemKey`
+
+  `MOV_BIRCH_CORNER_COUNTER`
+
+  `static final ItemKey`
+
+  `MOV_BIRCH_COUNTER`
+
+  `static final ItemKey`
+
+  `MOV_BIRCH_DRAWERS`
+
+  `static final ItemKey`
+
+  `MOV_BIRCH_DRAWERS_MIRROR`
+
+  `static final ItemKey`
+
+  `MOV_BIRDBATH`
+
+  `static final ItemKey`
+
+  `MOV_BLACK_BBQ`
+
+  `static final ItemKey`
+
+  `MOV_BLACK_CASH_REGISTER`
+
+  `static final ItemKey`
+
+  `MOV_BLACK_CURTAIN`
+
+  `static final ItemKey`
+
+  `MOV_BLACK_LOW_MODERN_TABLE`
+
+  `static final ItemKey`
+
+  `MOV_BLACK_MODERN_PHONE`
+
+  `static final ItemKey`
+
+  `MOV_BLACK_ROTARY_PHONE`
+
+  `static final ItemKey`
+
+  `MOV_BLACK_SPEAKER_CABINET`
+
+  `static final ItemKey`
+
+  `MOV_BLUE_COMBO_WASHER_DRYER`
+
+  `static final ItemKey`
+
+  `MOV_BLUE_COMFY_CHAIR`
+
+  `static final ItemKey`
+
+  `MOV_BLUE_CURTAIN`
+
+  `static final ItemKey`
+
+  `MOV_BLUE_FRIDGE`
+
+  `static final ItemKey`
+
+  `MOV_BLUE_PLASTIC_CHAIR`
+
+  `static final ItemKey`
+
+  `MOV_BLUE_RATTAN_CHAIR`
+
+  `static final ItemKey`
+
+  `MOV_BLUE_WALL_LOCKER`
+
+  `static final ItemKey`
+
+  `MOV_BONSAI_TREE`
+
+  `static final ItemKey`
+
+  `MOV_BRAZIER`
+
+  `static final ItemKey`
+
+  `MOV_BRICK_PLANTER`
+
+  `static final ItemKey`
+
+  `MOV_BROWN_COMFY_CHAIR`
+
+  `static final ItemKey`
+
+  `MOV_BROWN_CURTAIN`
+
+  `static final ItemKey`
+
+  `MOV_BROWN_DISHWASHER`
+
+  `static final ItemKey`
+
+  `MOV_BROWN_LOW_TABLE`
+
+  `static final ItemKey`
+
+  `MOV_CABINET_MEDICAL`
+
+  `static final ItemKey`
+
+  `MOV_CABINET_TOOL`
+
+  `static final ItemKey`
+
+  `MOV_CACTUS`
+
+  `static final ItemKey`
+
+  `MOV_CARDBOARD_BOX`
+
+  `static final ItemKey`
+
+  `MOV_CASH_REGISTER`
+
+  `static final ItemKey`
+
+  `MOV_CAST_IRON_PLANT`
+
+  `static final ItemKey`
+
+  `MOV_CHEMICAL_TOILET`
+
+  `static final ItemKey`
+
+  `MOV_CHEST_FREEZER`
+
+  `static final ItemKey`
+
+  `MOV_CHINESE_EVERGREEN`
+
+  `static final ItemKey`
+
+  `MOV_CHROME_SINK`
+
+  `static final ItemKey`
+
+  `MOV_CLOTHES_STAND`
+
+  `static final ItemKey`
+
+  `MOV_COFFEE_MAKER`
+
+  `static final ItemKey`
+
+  `MOV_COMICS_SHOP_SHELVES`
+
+  `static final ItemKey`
+
+  `MOV_CONCRETE_MIXER`
+
+  `static final ItemKey`
+
+  `MOV_CONCRETE_ROAD_BLOCK`
+
+  `static final ItemKey`
+
+  `MOV_CORK_BOARD`
+
+  `static final ItemKey`
+
+  `MOV_COT`
+
+  `static final ItemKey`
+
+  `MOV_DARK_BLUE_CHAIR`
+
+  `static final ItemKey`
+
+  `MOV_DARK_CORNER_COUNTER`
+
+  `static final ItemKey`
+
+  `MOV_DARK_COUNTER`
+
+  `static final ItemKey`
+
+  `MOV_DARK_FANCY_DRAWERS`
+
+  `static final ItemKey`
+
+  `MOV_DARK_GREEN_BARREL`
+
+  `static final ItemKey`
+
+  `MOV_DARK_INDUSTRIAL_SINK`
+
+  `static final ItemKey`
+
+  `MOV_DARK_WOODEN_CHAIR`
+
+  `static final ItemKey`
+
+  `MOV_DEEP_FRYER`
+
+  `static final ItemKey`
+
+  `MOV_DEGREE_DOCTOR`
+
+  `static final ItemKey`
+
+  `MOV_DEGREE_SURGEON`
+
+  `static final ItemKey`
+
+  `MOV_DESKTOP_COMPUTER`
+
+  `static final ItemKey`
+
+  `MOV_DOGHOUSE`
+
+  `static final ItemKey`
+
+  `MOV_DRAGON_TREE`
+
+  `static final ItemKey`
+
+  `MOV_DRUM_STOOL`
+
+  `static final ItemKey`
+
+  `MOV_ELECTRIC_BLOWER_FORGE`
+
+  `static final ItemKey`
+
+  `MOV_ESPRESSO`
+
+  `static final ItemKey`
+
+  `MOV_EXTRACTOR_HOOD`
+
+  `static final ItemKey`
+
+  `MOV_FANCY_BLACK_CHAIR`
+
+  `static final ItemKey`
+
+  `MOV_FANCY_CHESTNUT_DRAWERS`
+
+  `static final ItemKey`
+
+  `MOV_FANCY_DARK_TABLE`
+
+  `static final ItemKey`
+
+  `MOV_FANCY_HANGING_SINK`
+
+  `static final ItemKey`
+
+  `MOV_FANCY_LOW_TABLE`
+
+  `static final ItemKey`
+
+  `MOV_FANCY_OUTDOOR_LAMP`
+
+  `static final ItemKey`
+
+  `MOV_FANCY_TABLE`
+
+  `static final ItemKey`
+
+  `MOV_FANCY_TOILET`
+
+  `static final ItemKey`
+
+  `MOV_FANCY_WHITE_CHAIR`
+
+  `static final ItemKey`
+
+  `MOV_FERN`
+
+  `static final ItemKey`
+
+  `MOV_FICUS`
+
+  `static final ItemKey`
+
+  `MOV_FIRE_HYDRANT`
+
+  `static final ItemKey`
+
+  `MOV_FIRST_AID_CABINET`
+
+  `static final ItemKey`
+
+  `MOV_FITNESS_CONTRAPTION`
+
+  `static final ItemKey`
+
+  `MOV_FLAG_ADMIN`
+
+  `static final ItemKey`
+
+  `MOV_FLAG_USA`
+
+  `static final ItemKey`
+
+  `MOV_FLAG_USALARGE`
+
+  `static final ItemKey`
+
+  `MOV_FLAT_COFFIN`
+
+  `static final ItemKey`
+
+  `MOV_FLOATING_TRAILER_COUNTER`
+
+  `static final ItemKey`
+
+  `MOV_FOLDING_CHAIR`
+
+  `static final ItemKey`
+
+  `MOV_FRIDGE_MINI`
+
+  `static final ItemKey`
+
+  `MOV_GARDEN_GNOME`
+
+  `static final ItemKey`
+
+  `MOV_GRAVE_ARCHED`
+
+  `static final ItemKey`
+
+  `MOV_GRAVE_ROUND`
+
+  `static final ItemKey`
+
+  `MOV_GRAVE_SQUARE`
+
+  `static final ItemKey`
+
+  `MOV_GRAVE_WORN`
+
+  `static final ItemKey`
+
+  `MOV_GRAY_CURTAIN`
+
+  `static final ItemKey`
+
+  `MOV_GRAY_GARBAGE_BIN`
+
+  `static final ItemKey`
+
+  `MOV_GRAY_LONG_CURTAIN`
+
+  `static final ItemKey`
+
+  `MOV_GREEN_CHAIR`
+
+  `static final ItemKey`
+
+  `MOV_GREEN_COMFY_CHAIR`
+
+  `static final ItemKey`
+
+  `MOV_GREEN_CORNER_COUNTER`
+
+  `static final ItemKey`
+
+  `MOV_GREEN_COUNTER`
+
+  `static final ItemKey`
+
+  `MOV_GREEN_CURTAIN`
+
+  `static final ItemKey`
+
+  `MOV_GREEN_FRIDGE`
+
+  `static final ItemKey`
+
+  `MOV_GREEN_GARBAGE_BIN`
+
+  `static final ItemKey`
+
+  `MOV_GREEN_OVEN`
+
+  `static final ItemKey`
+
+  `MOV_GREEN_WALL_LOCKER`
+
+  `static final ItemKey`
+
+  `MOV_GREY_CHAIR`
+
+  `static final ItemKey`
+
+  `MOV_GREY_COMFY_CHAIR`
+
+  `static final ItemKey`
+
+  `MOV_GREY_OVEN`
+
+  `static final ItemKey`
+
+  `MOV_GUITAR_AMPLIFIER`
+
+  `static final ItemKey`
+
+  `MOV_GURNEY`
+
+  `static final ItemKey`
+
+  `MOV_GYMN_MAT`
+
+  `static final ItemKey`
+
+  `MOV_HAYSTACK_DOUBLE`
+
+  `static final ItemKey`
+
+  `MOV_HAYSTACK_SINGLE`
+
+  `static final ItemKey`
+
+  `MOV_HOTDOG_MACHINE`
+
+  `static final ItemKey`
+
+  `MOV_HUNTING_TROPHY`
+
+  `static final ItemKey`
+
+  `MOV_INDUSTRIAL_DISHWASHER`
+
+  `static final ItemKey`
+
+  `MOV_INDUSTRIAL_FRIDGE`
+
+  `static final ItemKey`
+
+  `MOV_INDUSTRIAL_OVEN`
+
+  `static final ItemKey`
+
+  `MOV_INDUSTRIAL_SINK`
+
+  `static final ItemKey`
+
+  `MOV_JUKEBOX`
+
+  `static final ItemKey`
+
+  `MOV_KEY_DUPLICATOR`
+
+  `static final ItemKey`
+
+  `MOV_KICK_DRUM`
+
+  `static final ItemKey`
+
+  `MOV_LAMP_1`
+
+  `static final ItemKey`
+
+  `MOV_LAMP_2`
+
+  `static final ItemKey`
+
+  `MOV_LAMP_3`
+
+  `static final ItemKey`
+
+  `MOV_LAMP_4`
+
+  `static final ItemKey`
+
+  `MOV_LAMP_5`
+
+  `static final ItemKey`
+
+  `MOV_LAMP_6`
+
+  `static final ItemKey`
+
+  `MOV_LARGE_INDUSTRIAL_SINK`
+
+  `static final ItemKey`
+
+  `MOV_LARGE_OPEN_TOPPED_GARBAGE_BIN`
+
+  `static final ItemKey`
+
+  `MOV_LIGHT_CONSTRUCTION`
+
+  `static final ItemKey`
+
+  `MOV_LIGHT_GREEN_BARREL`
+
+  `static final ItemKey`
+
+  `MOV_LIGHT_ROUND_TABLE`
+
+  `static final ItemKey`
+
+  `MOV_LONG_BEIGE_CURTAIN`
+
+  `static final ItemKey`
+
+  `MOV_LONG_TABLE`
+
+  `static final ItemKey`
+
+  `MOV_LONG_WHITE_CURTAIN`
+
+  `static final ItemKey`
+
+  `MOV_LOW_TOILET`
+
+  `static final ItemKey`
+
+  `MOV_MAILBOX`
+
+  `static final ItemKey`
+
+  `MOV_MANNEQUIN_FEMALE`
+
+  `static final ItemKey`
+
+  `MOV_MANNEQUIN_MALE`
+
+  `static final ItemKey`
+
+  `MOV_MAP_USA`
+
+  `static final ItemKey`
+
+  `MOV_METAL_DISHWASHER`
+
+  `static final ItemKey`
+
+  `MOV_METAL_LOCKER`
+
+  `static final ItemKey`
+
+  `MOV_METAL_STOOL`
+
+  `static final ItemKey`
+
+  `MOV_METAL_TURNSTILE`
+
+  `static final ItemKey`
+
+  `MOV_METAL_WALL_SHELVES`
+
+  `static final ItemKey`
+
+  `MOV_MICROPHONE`
+
+  `static final ItemKey`
+
+  `MOV_MICROSCOPE`
+
+  `static final ItemKey`
+
+  `MOV_MICROWAVE`
+
+  `static final ItemKey`
+
+  `MOV_MICROWAVE_2`
+
+  `static final ItemKey`
+
+  `MOV_MILITARY_CRATE`
+
+  `static final ItemKey`
+
+  `MOV_MILITARY_LOCKER`
+
+  `static final ItemKey`
+
+  `MOV_MIRROR_LARGE`
+
+  `static final ItemKey`
+
+  `MOV_MIRROR_SMALL`
+
+  `static final ItemKey`
+
+  `MOV_MIRROR_SMALL_WIDE`
+
+  `static final ItemKey`
+
+  `MOV_MIRROR_TALL`
+
+  `static final ItemKey`
+
+  `MOV_MIRROR_WOOD`
+
+  `static final ItemKey`
+
+  `MOV_MOBILE_BLOODBAG`
+
+  `static final ItemKey`
+
+  `MOV_MOBILE_COUNTER`
+
+  `static final ItemKey`
+
+  `MOV_MODERN_CORNER_COUNTER`
+
+  `static final ItemKey`
+
+  `MOV_MODERN_COUNTER`
+
+  `static final ItemKey`
+
+  `MOV_MODERN_OUTDOOR_LAMP`
+
+  `static final ItemKey`
+
+  `MOV_MODERN_OVEN`
+
+  `static final ItemKey`
+
+  `MOV_NAPKIN_DISPENSER`
+
+  `static final ItemKey`
+
+  `MOV_NEON_OPEN_SIGN`
+
+  `static final ItemKey`
+
+  `MOV_OAK_BENCH`
+
+  `static final ItemKey`
+
+  `MOV_OAK_CORNER_COUNTER`
+
+  `static final ItemKey`
+
+  `MOV_OAK_COUNTER`
+
+  `static final ItemKey`
+
+  `MOV_OAK_ROUND_TABLE`
+
+  `static final ItemKey`
+
+  `MOV_OAK_SHELVES`
+
+  `static final ItemKey`
+
+  `MOV_OFFICE_CHAIR`
+
+  `static final ItemKey`
+
+  `MOV_ORANGE_BARREL`
+
+  `static final ItemKey`
+
+  `MOV_ORANGE_FUTON`
+
+  `static final ItemKey`
+
+  `MOV_ORANGE_MODERN_CHAIR`
+
+  `static final ItemKey`
+
+  `MOV_OVAL_OUTDOOR_LAMP`
+
+  `static final ItemKey`
+
+  `MOV_PAINTING_AAAAAH`
+
+  `static final ItemKey`
+
+  `MOV_PAINTING_ABE_LINCOLN`
+
+  `static final ItemKey`
+
+  `MOV_PAINTING_APPLE_FACED_MAN`
+
+  `static final ItemKey`
+
+  `MOV_PAINTING_BEJAMIN_FRANKLIN`
+
+  `static final ItemKey`
+
+  `MOV_PAINTING_BETTY`
+
+  `static final ItemKey`
+
+  `MOV_PAINTING_CALVINIST`
+
+  `static final ItemKey`
+
+  `MOV_PAINTING_CHROMATIC_ACCIDENT`
+
+  `static final ItemKey`
+
+  `MOV_PAINTING_DESERT_LANDSCAPE`
+
+  `static final ItemKey`
+
+  `MOV_PAINTING_ELISA`
+
+  `static final ItemKey`
+
+  `MOV_PAINTING_FLOWERS_ON_TABLE`
+
+  `static final ItemKey`
+
+  `MOV_PAINTING_GEORGE_WASHINGTON`
+
+  `static final ItemKey`
+
+  `MOV_PAINTING_GREEN`
+
+  `static final ItemKey`
+
+  `MOV_PAINTING_HELIANTHUS`
+
+  `static final ItemKey`
+
+  `MOV_PAINTING_ISLAND_BEACH`
+
+  `static final ItemKey`
+
+  `MOV_PAINTING_JOHN_ADAMS`
+
+  `static final ItemKey`
+
+  `MOV_PAINTING_LAKESIDE`
+
+  `static final ItemKey`
+
+  `MOV_PAINTING_LIBRARY`
+
+  `static final ItemKey`
+
+  `MOV_PAINTING_LILLYS_WATERPOND`
+
+  `static final ItemKey`
+
+  `MOV_PAINTING_MAN_WITH_ONE_EAR`
+
+  `static final ItemKey`
+
+  `MOV_PAINTING_MARGARITE`
+
+  `static final ItemKey`
+
+  `MOV_PAINTING_MOUNT_NEVER_REST`
+
+  `static final ItemKey`
+
+  `MOV_PAINTING_NIGHT_WITH_STARS`
+
+  `static final ItemKey`
+
+  `MOV_PAINTING_NOMAD_ABOVE_THE_GLOOM`
+
+  `static final ItemKey`
+
+  `MOV_PAINTING_RIVERSIDE`
+
+  `static final ItemKey`
+
+  `MOV_PAINTING_SHES_GOT_IT`
+
+  `static final ItemKey`
+
+  `MOV_PAINTING_SIR_BRAKEFIRE`
+
+  `static final ItemKey`
+
+  `MOV_PAINTING_THOMAS_JEFFERSON`
+
+  `static final ItemKey`
+
+  `MOV_PAINTING_TWO_FRAME`
+
+  `static final ItemKey`
+
+  `MOV_PAINTING_VIOLETTA`
+
+  `static final ItemKey`
+
+  `MOV_PALLET_BRICKS`
+
+  `static final ItemKey`
+
+  `MOV_PALLET_EMPTY`
+
+  `static final ItemKey`
+
+  `MOV_PAY_PHONES`
+
+  `static final ItemKey`
+
+  `MOV_PILE_OCREPE_CHAIR`
+
+  `static final ItemKey`
+
+  `MOV_PINBALL_MACHINE`
+
+  `static final ItemKey`
+
+  `MOV_PINE_CORNER_COUNTER`
+
+  `static final ItemKey`
+
+  `MOV_PINE_COUNTER`
+
+  `static final ItemKey`
+
+  `MOV_PINK_CURTAIN`
+
+  `static final ItemKey`
+
+  `MOV_PINK_FLAMINGO`
+
+  `static final ItemKey`
+
+  `MOV_PINK_FLAMINGO_2`
+
+  `static final ItemKey`
+
+  `MOV_PLAIN_FRIDGE`
+
+  `static final ItemKey`
+
+  `MOV_PLASTIC_CHAIR`
+
+  `static final ItemKey`
+
+  `MOV_PLASTIC_LOW_TABLE`
+
+  `static final ItemKey`
+
+  `MOV_POPCORN_MACHINE`
+
+  `static final ItemKey`
+
+  `MOV_POPSICLE_FREEZER`
+
+  `static final ItemKey`
+
+  `MOV_POSTER_DROIDS`
+
+  `static final ItemKey`
+
+  `MOV_POSTER_ELEMENT`
+
+  `static final ItemKey`
+
+  `MOV_POSTER_MEDICAL`
+
+  `static final ItemKey`
+
+  `MOV_POSTER_OMEGA`
+
+  `static final ItemKey`
+
+  `MOV_POSTER_PAWS`
+
+  `static final ItemKey`
+
+  `MOV_POSTER_PIE_BLUE`
+
+  `static final ItemKey`
+
+  `MOV_POSTER_PIE_GREEN`
+
+  `static final ItemKey`
+
+  `MOV_POSTER_PIE_PINK`
+
+  `static final ItemKey`
+
+  `MOV_POSTER_PIE_RED`
+
+  `static final ItemKey`
+
+  `MOV_PROJECTOR`
+
+  `static final ItemKey`
+
+  `MOV_PUBLIC_GARBAGE_BIN`
+
+  `static final ItemKey`
+
+  `MOV_PUBLIC_MAIL_BOX`
+
+  `static final ItemKey`
+
+  `MOV_PURPLE_RATTAN_CHAIR`
+
+  `static final ItemKey`
+
+  `MOV_PURPLE_WOODEN_CHAIR`
+
+  `static final ItemKey`
+
+  `MOV_RAISED_PLANTBED`
+
+  `static final ItemKey`
+
+  `MOV_RECYCLE_BIN`
+
+  `static final ItemKey`
+
+  `MOV_RED_BBQ`
+
+  `static final ItemKey`
+
+  `MOV_RED_CHAIR`
+
+  `static final ItemKey`
+
+  `MOV_RED_FRIDGE`
+
+  `static final ItemKey`
+
+  `MOV_RED_OVEN`
+
+  `static final ItemKey`
+
+  `MOV_RED_ROTARY_PHONE`
+
+  `static final ItemKey`
+
+  `MOV_RED_WOODEN_CHAIR`
+
+  `static final ItemKey`
+
+  `MOV_ROAD_BARRIER`
+
+  `static final ItemKey`
+
+  `MOV_ROAD_CONE`
+
+  `static final ItemKey`
+
+  `MOV_ROAD_CONE_2`
+
+  `static final ItemKey`
+
+  `MOV_ROUND_OUTDOOR_LAMP`
+
+  `static final ItemKey`
+
+  `MOV_ROUND_TABLE`
+
+  `static final ItemKey`
+
+  `MOV_SALE_SIGN`
+
+  `static final ItemKey`
+
+  `MOV_SALT_LICK`
+
+  `static final ItemKey`
+
+  `MOV_SATELLITE_DISH`
+
+  `static final ItemKey`
+
+  `MOV_SCALE_MEDICAL`
+
+  `static final ItemKey`
+
+  `MOV_SCARECROW`
+
+  `static final ItemKey`
+
+  `MOV_SECURITY_TERMINAL`
+
+  `static final ItemKey`
+
+  `MOV_SECURITY_TERMINAL_2`
+
+  `static final ItemKey`
+
+  `MOV_SECURITY_WALL_MONITORS`
+
+  `static final ItemKey`
+
+  `MOV_SHOP_DISPLAY_COUNTER`
+
+  `static final ItemKey`
+
+  `MOV_SHOPPING_BASKETS`
+
+  `static final ItemKey`
+
+  `MOV_SIGN_ARMY`
+
+  `static final ItemKey`
+
+  `MOV_SIGN_CITRUS`
+
+  `static final ItemKey`
+
+  `MOV_SIGN_OUT_OF_GAS`
+
+  `static final ItemKey`
+
+  `MOV_SIGN_OUT_OF_GAS_FOSSOIL`
+
+  `static final ItemKey`
+
+  `MOV_SIGN_OUT_OF_GAS_GAS2GO`
+
+  `static final ItemKey`
+
+  `MOV_SIGN_RESTRICTED`
+
+  `static final ItemKey`
+
+  `MOV_SIGN_WARNING`
+
+  `static final ItemKey`
+
+  `MOV_SKELETON_DISPLAY`
+
+  `static final ItemKey`
+
+  `MOV_SMALL_BORDEAUX_CURTAIN`
+
+  `static final ItemKey`
+
+  `MOV_SMALL_CHEST`
+
+  `static final ItemKey`
+
+  `MOV_SMALL_GREEN_CURTAIN`
+
+  `static final ItemKey`
+
+  `MOV_SMALL_PEARL_CURTAIN`
+
+  `static final ItemKey`
+
+  `MOV_SMALL_PINE_CABINET`
+
+  `static final ItemKey`
+
+  `MOV_SMALL_TABLE`
+
+  `static final ItemKey`
+
+  `MOV_SMALL_WHITE_CURTAIN`
+
+  `static final ItemKey`
+
+  `MOV_SNACK_VENDING_MACHINE`
+
+  `static final ItemKey`
+
+  `MOV_SNAKE_PLANT`
+
+  `static final ItemKey`
+
+  `MOV_SNARE_DRUM`
+
+  `static final ItemKey`
+
+  `MOV_SODA_MACHINE`
+
+  `static final ItemKey`
+
+  `MOV_SODA_MACHINE_LARGE`
+
+  `static final ItemKey`
+
+  `MOV_SODA_VENDING_MACHINE`
+
+  `static final ItemKey`
+
+  `MOV_SQUARE_WALL_CLOCK`
+
+  `static final ItemKey`
+
+  `MOV_STANDING_VAULT`
+
+  `static final ItemKey`
+
+  `MOV_STEEL_CORNER_COUNTER`
+
+  `static final ItemKey`
+
+  `MOV_STEEL_COUNTER`
+
+  `static final ItemKey`
+
+  `MOV_STEEL_FRIDGE`
+
+  `static final ItemKey`
+
+  `MOV_STOP_SIGN`
+
+  `static final ItemKey`
+
+  `MOV_TOASTER`
+
+  `static final ItemKey`
+
+  `MOV_TOM_DRUM`
+
+  `static final ItemKey`
+
+  `MOV_TOWEL_DISPENSER`
+
+  `static final ItemKey`
+
+  `MOV_TRAILER_COUNTER`
+
+  `static final ItemKey`
+
+  `MOV_TRAILER_FRIDGE`
+
+  `static final ItemKey`
+
+  `MOV_TRAPEZOID_SHOP_SHELVES`
+
+  `static final ItemKey`
+
+  `MOV_TVCAMERA`
+
+  `static final ItemKey`
+
+  `MOV_UPRIGHT_COFFIN`
+
+  `static final ItemKey`
+
+  `MOV_URINAL`
+
+  `static final ItemKey`
+
+  `MOV_VIOLET_FLOWERS`
+
+  `static final ItemKey`
+
+  `MOV_WALL_CLOCK`
+
+  `static final ItemKey`
+
+  `MOV_WALL_SHOWER`
+
+  `static final ItemKey`
+
+  `MOV_WASHING_BIN`
+
+  `static final ItemKey`
+
+  `MOV_WATER_DISPENSER`
+
+  `static final ItemKey`
+
+  `MOV_WHEELIE_BIN`
+
+  `static final ItemKey`
+
+  `MOV_WHITE_COMFY_CHAIR`
+
+  `static final ItemKey`
+
+  `MOV_WHITE_CORNER_COUNTER`
+
+  `static final ItemKey`
+
+  `MOV_WHITE_COUNTER`
+
+  `static final ItemKey`
+
+  `MOV_WHITE_CURTAIN`
+
+  `static final ItemKey`
+
+  `MOV_WHITE_FANCY_DRAWERS`
+
+  `static final ItemKey`
+
+  `MOV_WHITE_FILE_CABINET`
+
+  `static final ItemKey`
+
+  `MOV_WHITE_FRIDGE`
+
+  `static final ItemKey`
+
+  `MOV_WHITE_HALF_COUNTER`
+
+  `static final ItemKey`
+
+  `MOV_WHITE_HANGING_SINK`
+
+  `static final ItemKey`
+
+  `MOV_WHITE_INDUSTRIAL_FRIDGE`
+
+  `static final ItemKey`
+
+  `MOV_WHITE_MODERN_PHONE`
+
+  `static final ItemKey`
+
+  `MOV_WHITE_ROTARY_PHONE`
+
+  `static final ItemKey`
+
+  `MOV_WHITE_SIMPLE_CHAIR`
+
+  `static final ItemKey`
+
+  `MOV_WHITE_SINK`
+
+  `static final ItemKey`
+
+  `MOV_WHITE_WOODEN_CHAIR`
+
+  `static final ItemKey`
+
+  `MOV_WINDOW_CHROME`
+
+  `static final ItemKey`
+
+  `MOV_WINDOW_SLIDER`
+
+  `static final ItemKey`
+
+  `MOV_WINDOW_TILED`
+
+  `static final ItemKey`
+
+  `MOV_WINDOW_WHITE`
+
+  `static final ItemKey`
+
+  `MOV_WINDOW_WHITE_TILED`
+
+  `static final ItemKey`
+
+  `MOV_WINDOW_WOODEN`
+
+  `static final ItemKey`
+
+  `MOV_WOOD_PEGBOARD`
+
+  `static final ItemKey`
+
+  `MOV_WOOD_SPEAKER_CABINET`
+
+  `static final ItemKey`
+
+  `MOV_WOODEN_CHAIR`
+
+  `static final ItemKey`
+
+  `MOV_WOODEN_CORNER_COUNTER`
+
+  `static final ItemKey`
+
+  `MOV_WOODEN_COUNTER`
+
+  `static final ItemKey`
+
+  `MOV_WOODEN_STOOL`
+
+  `static final ItemKey`
+
+  `MOV_YELLOW_MODERN_CHAIR`
+
+  `static final ItemKey`
+
+  `MOV_YELLOW_WALL_LOCKER`
+
+  `static final ItemKey`
+
+  `MOVEABLE`
+
+  `static final ItemKey`
+
+  `PIG_LEATHER_BLACK_FUR_TAN`
+
+  `static final ItemKey`
+
+  `PIG_LEATHER_LANDRACE_FUR_TAN`
+
+  `static final ItemKey`
+
+  `PIG_SKULL_WALL`
+
+  `static final ItemKey`
+
+  `PIGLET_LEATHER_BLACK_FUR_TAN`
+
+  `static final ItemKey`
+
+  `PIGLET_LEATHER_LANDRACE_FUR_TAN`
+
+  `static final ItemKey`
+
+  `RABBIT_LEATHER_FUR_TAN`
+
+  `static final ItemKey`
+
+  `SHEEP_LEATHER_FUR_TAN`
+
+  `static final ItemKey`
+
+  `SHEEP_SKULL_WALL`
+
+  `static final ItemKey`
+
+  `SLEEPING_BAG_BLUE_PLAID`
+
+  `static final ItemKey`
+
+  `SLEEPING_BAG_CAMO`
+
+  `static final ItemKey`
+
+  `SLEEPING_BAG_CHEAP_BLUE`
+
+  `static final ItemKey`
+
+  `SLEEPING_BAG_CHEAP_GREEN`
+
+  `static final ItemKey`
+
+  `SLEEPING_BAG_CHEAP_GREEN_2`
+
+  `static final ItemKey`
+
+  `SLEEPING_BAG_GREEN`
+
+  `static final ItemKey`
+
+  `SLEEPING_BAG_GREEN_PLAID`
+
+  `static final ItemKey`
+
+  `SLEEPING_BAG_HIDE`
+
+  `static final ItemKey`
+
+  `SLEEPING_BAG_HIGH_QUALITY_BROWN`
+
+  `static final ItemKey`
+
+  `SLEEPING_BAG_RED_PLAID`
+
+  `static final ItemKey`
+
+  `SLEEPING_BAG_SPIFFO`
+
+  `static final ItemKey`
+
+  `TENT_BLUE`
+
+  `static final ItemKey`
+
+  `TENT_BROWN`
+
+  `static final ItemKey`
+
+  `TENT_GREEN`
+
+  `static final ItemKey`
+
+  `TENT_YELLOW`
+* Constructor Summary
+  -------------------
+
+  Constructors
+
+  Constructor
+
+  Description
+
+  `Moveable()`
+* Method Summary
+  --------------
+
+  All MethodsStatic MethodsConcrete Methods
+
+  Modifier and Type
+
+  Method
+
+  Description
+
+  `private static ItemKey`
+
+  `moveable(String id)`
+
+  ### Methods inherited from class [Object](https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Object.html#method-summary "class or interface in java.lang")
+
+  `clone, equals, finalize, getClass, hashCode, notify, notifyAll, toString, wait, wait, wait`
+
+* Field Details
+  -------------
+
+  + ### ANTLERS\_WALL
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") ANTLERS\_WALL
+  + ### BLACKSMITH\_ANVIL\_ASSEMBLED
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") BLACKSMITH\_ANVIL\_ASSEMBLED
+  + ### BROKEN\_GLASS
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") BROKEN\_GLASS
+  + ### BULL\_SKULL\_WALL
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") BULL\_SKULL\_WALL
+  + ### CALF\_LEATHER\_ANGUS\_FUR\_TAN
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") CALF\_LEATHER\_ANGUS\_FUR\_TAN
+  + ### CALF\_LEATHER\_HOLSTEIN\_FUR\_TAN
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") CALF\_LEATHER\_HOLSTEIN\_FUR\_TAN
+  + ### CALF\_LEATHER\_SIMMENTAL\_FUR\_TAN
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") CALF\_LEATHER\_SIMMENTAL\_FUR\_TAN
+  + ### CAMPING\_TENT\_KIT\_2
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") CAMPING\_TENT\_KIT\_2
+  + ### COW\_HIDE
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") COW\_HIDE
+  + ### COW\_LEATHER\_ANGUS\_FUR\_TAN
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") COW\_LEATHER\_ANGUS\_FUR\_TAN
+  + ### COW\_LEATHER\_HOLSTEIN\_FUR\_TAN
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") COW\_LEATHER\_HOLSTEIN\_FUR\_TAN
+  + ### COW\_LEATHER\_SIMMENTAL\_FUR\_TAN
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") COW\_LEATHER\_SIMMENTAL\_FUR\_TAN
+  + ### COW\_SKULL\_WALL
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") COW\_SKULL\_WALL
+  + ### DAPPLE\_DEER\_HIDE
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") DAPPLE\_DEER\_HIDE
+  + ### DEER\_DOE\_SKULL\_WALL
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") DEER\_DOE\_SKULL\_WALL
+  + ### DEER\_HIDE
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") DEER\_HIDE
+  + ### DEER\_LEATHER\_FUR\_TAN
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") DEER\_LEATHER\_FUR\_TAN
+  + ### DEER\_STAG\_SKULL\_WALL
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") DEER\_STAG\_SKULL\_WALL
+  + ### FAWN\_LEATHER\_FUR\_TAN
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") FAWN\_LEATHER\_FUR\_TAN
+  + ### HEMATITE
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") HEMATITE
+  + ### HEMATITE\_LARGE
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") HEMATITE\_LARGE
+  + ### HIDE\_TENT
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") HIDE\_TENT
+  + ### IMPROVISED\_TENT\_KIT
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") IMPROVISED\_TENT\_KIT
+  + ### LAMB\_LEATHER\_FUR\_TAN
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") LAMB\_LEATHER\_FUR\_TAN
+  + ### LARGE\_BELLOWS
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") LARGE\_BELLOWS
+  + ### MALACHITE
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MALACHITE
+  + ### MALACHITE\_LARGE
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MALACHITE\_LARGE
+  + ### MATTRESS
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MATTRESS
+  + ### METAL\_DRUM
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") METAL\_DRUM
+  + ### MOVEABLE
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOVEABLE
+  + ### MOV\_AIR\_CONDITIONER
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_AIR\_CONDITIONER
+  + ### MOV\_ANTIQUE\_STOVE
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_ANTIQUE\_STOVE
+  + ### MOV\_ARCADE\_MACHINE\_1
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_ARCADE\_MACHINE\_1
+  + ### MOV\_ARCADE\_MACHINE\_2
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_ARCADE\_MACHINE\_2
+  + ### MOV\_BACKLESS\_WOODEN\_BENCH
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_BACKLESS\_WOODEN\_BENCH
+  + ### MOV\_BEACH\_CHAIR
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_BEACH\_CHAIR
+  + ### MOV\_BEIGE\_CURTAIN
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_BEIGE\_CURTAIN
+  + ### MOV\_BEIGE\_ROTARY\_PHONE
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_BEIGE\_ROTARY\_PHONE
+  + ### MOV\_BENCH\_GRINDER
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_BENCH\_GRINDER
+  + ### MOV\_BIN\_ROUND
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_BIN\_ROUND
+  + ### MOV\_BIRCH\_CORNER\_COUNTER
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_BIRCH\_CORNER\_COUNTER
+  + ### MOV\_BIRCH\_COUNTER
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_BIRCH\_COUNTER
+  + ### MOV\_BIRCH\_DRAWERS
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_BIRCH\_DRAWERS
+  + ### MOV\_BIRCH\_DRAWERS\_MIRROR
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_BIRCH\_DRAWERS\_MIRROR
+  + ### MOV\_BIRDBATH
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_BIRDBATH
+  + ### MOV\_BLACK\_BBQ
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_BLACK\_BBQ
+  + ### MOV\_BLACK\_CASH\_REGISTER
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_BLACK\_CASH\_REGISTER
+  + ### MOV\_BLACK\_CURTAIN
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_BLACK\_CURTAIN
+  + ### MOV\_BLACK\_LOW\_MODERN\_TABLE
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_BLACK\_LOW\_MODERN\_TABLE
+  + ### MOV\_BLACK\_MODERN\_PHONE
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_BLACK\_MODERN\_PHONE
+  + ### MOV\_BLACK\_ROTARY\_PHONE
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_BLACK\_ROTARY\_PHONE
+  + ### MOV\_BLACK\_SPEAKER\_CABINET
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_BLACK\_SPEAKER\_CABINET
+  + ### MOV\_BLUE\_COMBO\_WASHER\_DRYER
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_BLUE\_COMBO\_WASHER\_DRYER
+  + ### MOV\_BLUE\_COMFY\_CHAIR
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_BLUE\_COMFY\_CHAIR
+  + ### MOV\_BLUE\_CURTAIN
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_BLUE\_CURTAIN
+  + ### MOV\_BLUE\_FRIDGE
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_BLUE\_FRIDGE
+  + ### MOV\_BLUE\_PLASTIC\_CHAIR
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_BLUE\_PLASTIC\_CHAIR
+  + ### MOV\_BLUE\_RATTAN\_CHAIR
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_BLUE\_RATTAN\_CHAIR
+  + ### MOV\_BLUE\_WALL\_LOCKER
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_BLUE\_WALL\_LOCKER
+  + ### MOV\_BONSAI\_TREE
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_BONSAI\_TREE
+  + ### MOV\_BRAZIER
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_BRAZIER
+  + ### MOV\_BRICK\_PLANTER
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_BRICK\_PLANTER
+  + ### MOV\_BROWN\_COMFY\_CHAIR
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_BROWN\_COMFY\_CHAIR
+  + ### MOV\_BROWN\_CURTAIN
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_BROWN\_CURTAIN
+  + ### MOV\_BROWN\_DISHWASHER
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_BROWN\_DISHWASHER
+  + ### MOV\_BROWN\_LOW\_TABLE
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_BROWN\_LOW\_TABLE
+  + ### MOV\_CABINET\_MEDICAL
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_CABINET\_MEDICAL
+  + ### MOV\_CABINET\_TOOL
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_CABINET\_TOOL
+  + ### MOV\_CACTUS
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_CACTUS
+  + ### MOV\_CARDBOARD\_BOX
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_CARDBOARD\_BOX
+  + ### MOV\_CASH\_REGISTER
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_CASH\_REGISTER
+  + ### MOV\_CAST\_IRON\_PLANT
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_CAST\_IRON\_PLANT
+  + ### MOV\_CHEMICAL\_TOILET
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_CHEMICAL\_TOILET
+  + ### MOV\_CHEST\_FREEZER
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_CHEST\_FREEZER
+  + ### MOV\_CHINESE\_EVERGREEN
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_CHINESE\_EVERGREEN
+  + ### MOV\_CHROME\_SINK
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_CHROME\_SINK
+  + ### MOV\_CLOTHES\_STAND
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_CLOTHES\_STAND
+  + ### MOV\_COFFEE\_MAKER
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_COFFEE\_MAKER
+  + ### MOV\_COMICS\_SHOP\_SHELVES
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_COMICS\_SHOP\_SHELVES
+  + ### MOV\_CONCRETE\_MIXER
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_CONCRETE\_MIXER
+  + ### MOV\_CONCRETE\_ROAD\_BLOCK
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_CONCRETE\_ROAD\_BLOCK
+  + ### MOV\_CORK\_BOARD
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_CORK\_BOARD
+  + ### MOV\_COT
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_COT
+  + ### MOV\_DARK\_BLUE\_CHAIR
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_DARK\_BLUE\_CHAIR
+  + ### MOV\_DARK\_CORNER\_COUNTER
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_DARK\_CORNER\_COUNTER
+  + ### MOV\_DARK\_COUNTER
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_DARK\_COUNTER
+  + ### MOV\_DARK\_FANCY\_DRAWERS
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_DARK\_FANCY\_DRAWERS
+  + ### MOV\_DARK\_GREEN\_BARREL
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_DARK\_GREEN\_BARREL
+  + ### MOV\_DARK\_INDUSTRIAL\_SINK
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_DARK\_INDUSTRIAL\_SINK
+  + ### MOV\_DARK\_WOODEN\_CHAIR
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_DARK\_WOODEN\_CHAIR
+  + ### MOV\_DEEP\_FRYER
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_DEEP\_FRYER
+  + ### MOV\_DEGREE\_DOCTOR
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_DEGREE\_DOCTOR
+  + ### MOV\_DEGREE\_SURGEON
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_DEGREE\_SURGEON
+  + ### MOV\_DESKTOP\_COMPUTER
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_DESKTOP\_COMPUTER
+  + ### MOV\_DOGHOUSE
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_DOGHOUSE
+  + ### MOV\_DRAGON\_TREE
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_DRAGON\_TREE
+  + ### MOV\_DRUM\_STOOL
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_DRUM\_STOOL
+  + ### MOV\_ELECTRIC\_BLOWER\_FORGE
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_ELECTRIC\_BLOWER\_FORGE
+  + ### MOV\_ESPRESSO
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_ESPRESSO
+  + ### MOV\_EXTRACTOR\_HOOD
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_EXTRACTOR\_HOOD
+  + ### MOV\_FANCY\_BLACK\_CHAIR
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_FANCY\_BLACK\_CHAIR
+  + ### MOV\_FANCY\_CHESTNUT\_DRAWERS
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_FANCY\_CHESTNUT\_DRAWERS
+  + ### MOV\_FANCY\_DARK\_TABLE
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_FANCY\_DARK\_TABLE
+  + ### MOV\_FANCY\_HANGING\_SINK
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_FANCY\_HANGING\_SINK
+  + ### MOV\_FANCY\_LOW\_TABLE
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_FANCY\_LOW\_TABLE
+  + ### MOV\_FANCY\_OUTDOOR\_LAMP
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_FANCY\_OUTDOOR\_LAMP
+  + ### MOV\_FANCY\_TABLE
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_FANCY\_TABLE
+  + ### MOV\_FANCY\_TOILET
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_FANCY\_TOILET
+  + ### MOV\_FANCY\_WHITE\_CHAIR
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_FANCY\_WHITE\_CHAIR
+  + ### MOV\_FERN
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_FERN
+  + ### MOV\_FICUS
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_FICUS
+  + ### MOV\_FIRE\_HYDRANT
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_FIRE\_HYDRANT
+  + ### MOV\_FIRST\_AID\_CABINET
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_FIRST\_AID\_CABINET
+  + ### MOV\_FITNESS\_CONTRAPTION
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_FITNESS\_CONTRAPTION
+  + ### MOV\_FLAG\_ADMIN
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_FLAG\_ADMIN
+  + ### MOV\_FLAG\_USA
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_FLAG\_USA
+  + ### MOV\_FLAG\_USALARGE
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_FLAG\_USALARGE
+  + ### MOV\_FLAT\_COFFIN
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_FLAT\_COFFIN
+  + ### MOV\_FLOATING\_TRAILER\_COUNTER
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_FLOATING\_TRAILER\_COUNTER
+  + ### MOV\_FOLDING\_CHAIR
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_FOLDING\_CHAIR
+  + ### MOV\_FRIDGE\_MINI
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_FRIDGE\_MINI
+  + ### MOV\_GARDEN\_GNOME
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_GARDEN\_GNOME
+  + ### MOV\_GRAVE\_ARCHED
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_GRAVE\_ARCHED
+  + ### MOV\_GRAVE\_ROUND
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_GRAVE\_ROUND
+  + ### MOV\_GRAVE\_SQUARE
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_GRAVE\_SQUARE
+  + ### MOV\_GRAVE\_WORN
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_GRAVE\_WORN
+  + ### MOV\_GRAY\_CURTAIN
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_GRAY\_CURTAIN
+  + ### MOV\_GRAY\_GARBAGE\_BIN
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_GRAY\_GARBAGE\_BIN
+  + ### MOV\_GRAY\_LONG\_CURTAIN
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_GRAY\_LONG\_CURTAIN
+  + ### MOV\_GREEN\_CHAIR
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_GREEN\_CHAIR
+  + ### MOV\_GREEN\_COMFY\_CHAIR
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_GREEN\_COMFY\_CHAIR
+  + ### MOV\_GREEN\_CORNER\_COUNTER
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_GREEN\_CORNER\_COUNTER
+  + ### MOV\_GREEN\_COUNTER
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_GREEN\_COUNTER
+  + ### MOV\_GREEN\_CURTAIN
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_GREEN\_CURTAIN
+  + ### MOV\_GREEN\_FRIDGE
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_GREEN\_FRIDGE
+  + ### MOV\_GREEN\_GARBAGE\_BIN
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_GREEN\_GARBAGE\_BIN
+  + ### MOV\_GREEN\_OVEN
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_GREEN\_OVEN
+  + ### MOV\_GREEN\_WALL\_LOCKER
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_GREEN\_WALL\_LOCKER
+  + ### MOV\_GREY\_CHAIR
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_GREY\_CHAIR
+  + ### MOV\_GREY\_COMFY\_CHAIR
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_GREY\_COMFY\_CHAIR
+  + ### MOV\_GREY\_OVEN
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_GREY\_OVEN
+  + ### MOV\_GUITAR\_AMPLIFIER
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_GUITAR\_AMPLIFIER
+  + ### MOV\_GURNEY
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_GURNEY
+  + ### MOV\_GYMN\_MAT
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_GYMN\_MAT
+  + ### MOV\_HAYSTACK\_DOUBLE
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_HAYSTACK\_DOUBLE
+  + ### MOV\_HAYSTACK\_SINGLE
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_HAYSTACK\_SINGLE
+  + ### MOV\_HOTDOG\_MACHINE
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_HOTDOG\_MACHINE
+  + ### MOV\_HUNTING\_TROPHY
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_HUNTING\_TROPHY
+  + ### MOV\_INDUSTRIAL\_DISHWASHER
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_INDUSTRIAL\_DISHWASHER
+  + ### MOV\_INDUSTRIAL\_FRIDGE
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_INDUSTRIAL\_FRIDGE
+  + ### MOV\_INDUSTRIAL\_OVEN
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_INDUSTRIAL\_OVEN
+  + ### MOV\_INDUSTRIAL\_SINK
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_INDUSTRIAL\_SINK
+  + ### MOV\_JUKEBOX
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_JUKEBOX
+  + ### MOV\_KEY\_DUPLICATOR
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_KEY\_DUPLICATOR
+  + ### MOV\_KICK\_DRUM
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_KICK\_DRUM
+  + ### MOV\_LAMP\_1
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_LAMP\_1
+  + ### MOV\_LAMP\_2
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_LAMP\_2
+  + ### MOV\_LAMP\_3
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_LAMP\_3
+  + ### MOV\_LAMP\_4
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_LAMP\_4
+  + ### MOV\_LAMP\_5
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_LAMP\_5
+  + ### MOV\_LAMP\_6
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_LAMP\_6
+  + ### MOV\_LARGE\_INDUSTRIAL\_SINK
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_LARGE\_INDUSTRIAL\_SINK
+  + ### MOV\_LARGE\_OPEN\_TOPPED\_GARBAGE\_BIN
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_LARGE\_OPEN\_TOPPED\_GARBAGE\_BIN
+  + ### MOV\_LIGHT\_CONSTRUCTION
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_LIGHT\_CONSTRUCTION
+  + ### MOV\_LIGHT\_GREEN\_BARREL
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_LIGHT\_GREEN\_BARREL
+  + ### MOV\_LIGHT\_ROUND\_TABLE
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_LIGHT\_ROUND\_TABLE
+  + ### MOV\_LONG\_BEIGE\_CURTAIN
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_LONG\_BEIGE\_CURTAIN
+  + ### MOV\_LONG\_TABLE
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_LONG\_TABLE
+  + ### MOV\_LONG\_WHITE\_CURTAIN
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_LONG\_WHITE\_CURTAIN
+  + ### MOV\_LOW\_TOILET
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_LOW\_TOILET
+  + ### MOV\_MAILBOX
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_MAILBOX
+  + ### MOV\_MANNEQUIN\_FEMALE
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_MANNEQUIN\_FEMALE
+  + ### MOV\_MANNEQUIN\_MALE
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_MANNEQUIN\_MALE
+  + ### MOV\_MAP\_USA
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_MAP\_USA
+  + ### MOV\_METAL\_DISHWASHER
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_METAL\_DISHWASHER
+  + ### MOV\_METAL\_LOCKER
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_METAL\_LOCKER
+  + ### MOV\_METAL\_STOOL
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_METAL\_STOOL
+  + ### MOV\_METAL\_TURNSTILE
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_METAL\_TURNSTILE
+  + ### MOV\_METAL\_WALL\_SHELVES
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_METAL\_WALL\_SHELVES
+  + ### MOV\_MICROPHONE
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_MICROPHONE
+  + ### MOV\_MICROSCOPE
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_MICROSCOPE
+  + ### MOV\_MICROWAVE
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_MICROWAVE
+  + ### MOV\_MICROWAVE\_2
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_MICROWAVE\_2
+  + ### MOV\_MILITARY\_CRATE
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_MILITARY\_CRATE
+  + ### MOV\_MILITARY\_LOCKER
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_MILITARY\_LOCKER
+  + ### MOV\_MIRROR\_LARGE
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_MIRROR\_LARGE
+  + ### MOV\_MIRROR\_SMALL
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_MIRROR\_SMALL
+  + ### MOV\_MIRROR\_SMALL\_WIDE
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_MIRROR\_SMALL\_WIDE
+  + ### MOV\_MIRROR\_TALL
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_MIRROR\_TALL
+  + ### MOV\_MIRROR\_WOOD
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_MIRROR\_WOOD
+  + ### MOV\_MOBILE\_BLOODBAG
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_MOBILE\_BLOODBAG
+  + ### MOV\_MOBILE\_COUNTER
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_MOBILE\_COUNTER
+  + ### MOV\_MODERN\_CORNER\_COUNTER
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_MODERN\_CORNER\_COUNTER
+  + ### MOV\_MODERN\_COUNTER
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_MODERN\_COUNTER
+  + ### MOV\_MODERN\_OUTDOOR\_LAMP
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_MODERN\_OUTDOOR\_LAMP
+  + ### MOV\_MODERN\_OVEN
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_MODERN\_OVEN
+  + ### MOV\_NAPKIN\_DISPENSER
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_NAPKIN\_DISPENSER
+  + ### MOV\_NEON\_OPEN\_SIGN
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_NEON\_OPEN\_SIGN
+  + ### MOV\_OAK\_BENCH
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_OAK\_BENCH
+  + ### MOV\_OAK\_CORNER\_COUNTER
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_OAK\_CORNER\_COUNTER
+  + ### MOV\_OAK\_COUNTER
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_OAK\_COUNTER
+  + ### MOV\_OAK\_ROUND\_TABLE
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_OAK\_ROUND\_TABLE
+  + ### MOV\_OAK\_SHELVES
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_OAK\_SHELVES
+  + ### MOV\_OFFICE\_CHAIR
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_OFFICE\_CHAIR
+  + ### MOV\_ORANGE\_BARREL
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_ORANGE\_BARREL
+  + ### MOV\_ORANGE\_FUTON
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_ORANGE\_FUTON
+  + ### MOV\_ORANGE\_MODERN\_CHAIR
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_ORANGE\_MODERN\_CHAIR
+  + ### MOV\_OVAL\_OUTDOOR\_LAMP
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_OVAL\_OUTDOOR\_LAMP
+  + ### MOV\_PAINTING\_AAAAAH
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_PAINTING\_AAAAAH
+  + ### MOV\_PAINTING\_ABE\_LINCOLN
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_PAINTING\_ABE\_LINCOLN
+  + ### MOV\_PAINTING\_APPLE\_FACED\_MAN
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_PAINTING\_APPLE\_FACED\_MAN
+  + ### MOV\_PAINTING\_BEJAMIN\_FRANKLIN
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_PAINTING\_BEJAMIN\_FRANKLIN
+  + ### MOV\_PAINTING\_BETTY
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_PAINTING\_BETTY
+  + ### MOV\_PAINTING\_CALVINIST
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_PAINTING\_CALVINIST
+  + ### MOV\_PAINTING\_CHROMATIC\_ACCIDENT
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_PAINTING\_CHROMATIC\_ACCIDENT
+  + ### MOV\_PAINTING\_DESERT\_LANDSCAPE
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_PAINTING\_DESERT\_LANDSCAPE
+  + ### MOV\_PAINTING\_ELISA
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_PAINTING\_ELISA
+  + ### MOV\_PAINTING\_FLOWERS\_ON\_TABLE
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_PAINTING\_FLOWERS\_ON\_TABLE
+  + ### MOV\_PAINTING\_GEORGE\_WASHINGTON
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_PAINTING\_GEORGE\_WASHINGTON
+  + ### MOV\_PAINTING\_GREEN
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_PAINTING\_GREEN
+  + ### MOV\_PAINTING\_HELIANTHUS
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_PAINTING\_HELIANTHUS
+  + ### MOV\_PAINTING\_ISLAND\_BEACH
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_PAINTING\_ISLAND\_BEACH
+  + ### MOV\_PAINTING\_JOHN\_ADAMS
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_PAINTING\_JOHN\_ADAMS
+  + ### MOV\_PAINTING\_LAKESIDE
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_PAINTING\_LAKESIDE
+  + ### MOV\_PAINTING\_LIBRARY
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_PAINTING\_LIBRARY
+  + ### MOV\_PAINTING\_LILLYS\_WATERPOND
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_PAINTING\_LILLYS\_WATERPOND
+  + ### MOV\_PAINTING\_MAN\_WITH\_ONE\_EAR
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_PAINTING\_MAN\_WITH\_ONE\_EAR
+  + ### MOV\_PAINTING\_MARGARITE
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_PAINTING\_MARGARITE
+  + ### MOV\_PAINTING\_MOUNT\_NEVER\_REST
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_PAINTING\_MOUNT\_NEVER\_REST
+  + ### MOV\_PAINTING\_NIGHT\_WITH\_STARS
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_PAINTING\_NIGHT\_WITH\_STARS
+  + ### MOV\_PAINTING\_NOMAD\_ABOVE\_THE\_GLOOM
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_PAINTING\_NOMAD\_ABOVE\_THE\_GLOOM
+  + ### MOV\_PAINTING\_RIVERSIDE
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_PAINTING\_RIVERSIDE
+  + ### MOV\_PAINTING\_SHES\_GOT\_IT
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_PAINTING\_SHES\_GOT\_IT
+  + ### MOV\_PAINTING\_SIR\_BRAKEFIRE
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_PAINTING\_SIR\_BRAKEFIRE
+  + ### MOV\_PAINTING\_THOMAS\_JEFFERSON
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_PAINTING\_THOMAS\_JEFFERSON
+  + ### MOV\_PAINTING\_TWO\_FRAME
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_PAINTING\_TWO\_FRAME
+  + ### MOV\_PAINTING\_VIOLETTA
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_PAINTING\_VIOLETTA
+  + ### MOV\_PALLET\_BRICKS
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_PALLET\_BRICKS
+  + ### MOV\_PALLET\_EMPTY
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_PALLET\_EMPTY
+  + ### MOV\_PAY\_PHONES
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_PAY\_PHONES
+  + ### MOV\_PILE\_OCREPE\_CHAIR
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_PILE\_OCREPE\_CHAIR
+  + ### MOV\_PINBALL\_MACHINE
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_PINBALL\_MACHINE
+  + ### MOV\_PINE\_CORNER\_COUNTER
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_PINE\_CORNER\_COUNTER
+  + ### MOV\_PINE\_COUNTER
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_PINE\_COUNTER
+  + ### MOV\_PINK\_CURTAIN
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_PINK\_CURTAIN
+  + ### MOV\_PINK\_FLAMINGO
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_PINK\_FLAMINGO
+  + ### MOV\_PINK\_FLAMINGO\_2
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_PINK\_FLAMINGO\_2
+  + ### MOV\_PLAIN\_FRIDGE
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_PLAIN\_FRIDGE
+  + ### MOV\_PLASTIC\_CHAIR
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_PLASTIC\_CHAIR
+  + ### MOV\_PLASTIC\_LOW\_TABLE
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_PLASTIC\_LOW\_TABLE
+  + ### MOV\_POPCORN\_MACHINE
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_POPCORN\_MACHINE
+  + ### MOV\_POPSICLE\_FREEZER
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_POPSICLE\_FREEZER
+  + ### MOV\_POSTER\_DROIDS
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_POSTER\_DROIDS
+  + ### MOV\_POSTER\_ELEMENT
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_POSTER\_ELEMENT
+  + ### MOV\_POSTER\_MEDICAL
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_POSTER\_MEDICAL
+  + ### MOV\_POSTER\_OMEGA
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_POSTER\_OMEGA
+  + ### MOV\_POSTER\_PAWS
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_POSTER\_PAWS
+  + ### MOV\_POSTER\_PIE\_BLUE
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_POSTER\_PIE\_BLUE
+  + ### MOV\_POSTER\_PIE\_GREEN
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_POSTER\_PIE\_GREEN
+  + ### MOV\_POSTER\_PIE\_PINK
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_POSTER\_PIE\_PINK
+  + ### MOV\_POSTER\_PIE\_RED
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_POSTER\_PIE\_RED
+  + ### MOV\_PROJECTOR
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_PROJECTOR
+  + ### MOV\_PUBLIC\_GARBAGE\_BIN
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_PUBLIC\_GARBAGE\_BIN
+  + ### MOV\_PUBLIC\_MAIL\_BOX
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_PUBLIC\_MAIL\_BOX
+  + ### MOV\_PURPLE\_RATTAN\_CHAIR
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_PURPLE\_RATTAN\_CHAIR
+  + ### MOV\_PURPLE\_WOODEN\_CHAIR
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_PURPLE\_WOODEN\_CHAIR
+  + ### MOV\_RAISED\_PLANTBED
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_RAISED\_PLANTBED
+  + ### MOV\_RECYCLE\_BIN
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_RECYCLE\_BIN
+  + ### MOV\_RED\_BBQ
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_RED\_BBQ
+  + ### MOV\_RED\_CHAIR
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_RED\_CHAIR
+  + ### MOV\_RED\_FRIDGE
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_RED\_FRIDGE
+  + ### MOV\_RED\_OVEN
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_RED\_OVEN
+  + ### MOV\_RED\_ROTARY\_PHONE
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_RED\_ROTARY\_PHONE
+  + ### MOV\_RED\_WOODEN\_CHAIR
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_RED\_WOODEN\_CHAIR
+  + ### MOV\_ROAD\_BARRIER
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_ROAD\_BARRIER
+  + ### MOV\_ROAD\_CONE
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_ROAD\_CONE
+  + ### MOV\_ROAD\_CONE\_2
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_ROAD\_CONE\_2
+  + ### MOV\_ROUND\_OUTDOOR\_LAMP
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_ROUND\_OUTDOOR\_LAMP
+  + ### MOV\_ROUND\_TABLE
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_ROUND\_TABLE
+  + ### MOV\_SALE\_SIGN
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_SALE\_SIGN
+  + ### MOV\_SALT\_LICK
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_SALT\_LICK
+  + ### MOV\_SATELLITE\_DISH
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_SATELLITE\_DISH
+  + ### MOV\_SCALE\_MEDICAL
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_SCALE\_MEDICAL
+  + ### MOV\_SCARECROW
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_SCARECROW
+  + ### MOV\_SECURITY\_TERMINAL
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_SECURITY\_TERMINAL
+  + ### MOV\_SECURITY\_TERMINAL\_2
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_SECURITY\_TERMINAL\_2
+  + ### MOV\_SECURITY\_WALL\_MONITORS
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_SECURITY\_WALL\_MONITORS
+  + ### MOV\_SHOPPING\_BASKETS
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_SHOPPING\_BASKETS
+  + ### MOV\_SHOP\_DISPLAY\_COUNTER
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_SHOP\_DISPLAY\_COUNTER
+  + ### MOV\_SIGN\_ARMY
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_SIGN\_ARMY
+  + ### MOV\_SIGN\_CITRUS
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_SIGN\_CITRUS
+  + ### MOV\_SIGN\_OUT\_OF\_GAS
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_SIGN\_OUT\_OF\_GAS
+  + ### MOV\_SIGN\_OUT\_OF\_GAS\_FOSSOIL
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_SIGN\_OUT\_OF\_GAS\_FOSSOIL
+  + ### MOV\_SIGN\_OUT\_OF\_GAS\_GAS2GO
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_SIGN\_OUT\_OF\_GAS\_GAS2GO
+  + ### MOV\_SIGN\_RESTRICTED
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_SIGN\_RESTRICTED
+  + ### MOV\_SIGN\_WARNING
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_SIGN\_WARNING
+  + ### MOV\_SKELETON\_DISPLAY
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_SKELETON\_DISPLAY
+  + ### MOV\_SMALL\_BORDEAUX\_CURTAIN
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_SMALL\_BORDEAUX\_CURTAIN
+  + ### MOV\_SMALL\_CHEST
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_SMALL\_CHEST
+  + ### MOV\_SMALL\_GREEN\_CURTAIN
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_SMALL\_GREEN\_CURTAIN
+  + ### MOV\_SMALL\_PEARL\_CURTAIN
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_SMALL\_PEARL\_CURTAIN
+  + ### MOV\_SMALL\_PINE\_CABINET
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_SMALL\_PINE\_CABINET
+  + ### MOV\_SMALL\_TABLE
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_SMALL\_TABLE
+  + ### MOV\_SMALL\_WHITE\_CURTAIN
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_SMALL\_WHITE\_CURTAIN
+  + ### MOV\_SNACK\_VENDING\_MACHINE
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_SNACK\_VENDING\_MACHINE
+  + ### MOV\_SNAKE\_PLANT
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_SNAKE\_PLANT
+  + ### MOV\_SNARE\_DRUM
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_SNARE\_DRUM
+  + ### MOV\_SODA\_MACHINE
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_SODA\_MACHINE
+  + ### MOV\_SODA\_MACHINE\_LARGE
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_SODA\_MACHINE\_LARGE
+  + ### MOV\_SODA\_VENDING\_MACHINE
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_SODA\_VENDING\_MACHINE
+  + ### MOV\_SQUARE\_WALL\_CLOCK
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_SQUARE\_WALL\_CLOCK
+  + ### MOV\_STANDING\_VAULT
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_STANDING\_VAULT
+  + ### MOV\_STEEL\_CORNER\_COUNTER
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_STEEL\_CORNER\_COUNTER
+  + ### MOV\_STEEL\_COUNTER
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_STEEL\_COUNTER
+  + ### MOV\_STEEL\_FRIDGE
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_STEEL\_FRIDGE
+  + ### MOV\_STOP\_SIGN
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_STOP\_SIGN
+  + ### MOV\_TOASTER
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_TOASTER
+  + ### MOV\_TOM\_DRUM
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_TOM\_DRUM
+  + ### MOV\_TOWEL\_DISPENSER
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_TOWEL\_DISPENSER
+  + ### MOV\_TRAILER\_COUNTER
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_TRAILER\_COUNTER
+  + ### MOV\_TRAILER\_FRIDGE
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_TRAILER\_FRIDGE
+  + ### MOV\_TRAPEZOID\_SHOP\_SHELVES
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_TRAPEZOID\_SHOP\_SHELVES
+  + ### MOV\_TVCAMERA
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_TVCAMERA
+  + ### MOV\_UPRIGHT\_COFFIN
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_UPRIGHT\_COFFIN
+  + ### MOV\_URINAL
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_URINAL
+  + ### MOV\_VIOLET\_FLOWERS
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_VIOLET\_FLOWERS
+  + ### MOV\_WALL\_CLOCK
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_WALL\_CLOCK
+  + ### MOV\_WALL\_SHOWER
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_WALL\_SHOWER
+  + ### MOV\_WASHING\_BIN
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_WASHING\_BIN
+  + ### MOV\_WATER\_DISPENSER
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_WATER\_DISPENSER
+  + ### MOV\_WHEELIE\_BIN
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_WHEELIE\_BIN
+  + ### MOV\_WHITE\_COMFY\_CHAIR
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_WHITE\_COMFY\_CHAIR
+  + ### MOV\_WHITE\_CORNER\_COUNTER
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_WHITE\_CORNER\_COUNTER
+  + ### MOV\_WHITE\_COUNTER
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_WHITE\_COUNTER
+  + ### MOV\_WHITE\_CURTAIN
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_WHITE\_CURTAIN
+  + ### MOV\_WHITE\_FANCY\_DRAWERS
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_WHITE\_FANCY\_DRAWERS
+  + ### MOV\_WHITE\_FILE\_CABINET
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_WHITE\_FILE\_CABINET
+  + ### MOV\_WHITE\_FRIDGE
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_WHITE\_FRIDGE
+  + ### MOV\_WHITE\_HALF\_COUNTER
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_WHITE\_HALF\_COUNTER
+  + ### MOV\_WHITE\_HANGING\_SINK
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_WHITE\_HANGING\_SINK
+  + ### MOV\_WHITE\_INDUSTRIAL\_FRIDGE
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_WHITE\_INDUSTRIAL\_FRIDGE
+  + ### MOV\_WHITE\_MODERN\_PHONE
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_WHITE\_MODERN\_PHONE
+  + ### MOV\_WHITE\_ROTARY\_PHONE
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_WHITE\_ROTARY\_PHONE
+  + ### MOV\_WHITE\_SIMPLE\_CHAIR
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_WHITE\_SIMPLE\_CHAIR
+  + ### MOV\_WHITE\_SINK
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_WHITE\_SINK
+  + ### MOV\_WHITE\_WOODEN\_CHAIR
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_WHITE\_WOODEN\_CHAIR
+  + ### MOV\_WINDOW\_CHROME
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_WINDOW\_CHROME
+  + ### MOV\_WINDOW\_SLIDER
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_WINDOW\_SLIDER
+  + ### MOV\_WINDOW\_TILED
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_WINDOW\_TILED
+  + ### MOV\_WINDOW\_WHITE
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_WINDOW\_WHITE
+  + ### MOV\_WINDOW\_WHITE\_TILED
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_WINDOW\_WHITE\_TILED
+  + ### MOV\_WINDOW\_WOODEN
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_WINDOW\_WOODEN
+  + ### MOV\_WOODEN\_CHAIR
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_WOODEN\_CHAIR
+  + ### MOV\_WOODEN\_CORNER\_COUNTER
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_WOODEN\_CORNER\_COUNTER
+  + ### MOV\_WOODEN\_COUNTER
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_WOODEN\_COUNTER
+  + ### MOV\_WOODEN\_STOOL
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_WOODEN\_STOOL
+  + ### MOV\_WOOD\_PEGBOARD
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_WOOD\_PEGBOARD
+  + ### MOV\_WOOD\_SPEAKER\_CABINET
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_WOOD\_SPEAKER\_CABINET
+  + ### MOV\_YELLOW\_MODERN\_CHAIR
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_YELLOW\_MODERN\_CHAIR
+  + ### MOV\_YELLOW\_WALL\_LOCKER
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") MOV\_YELLOW\_WALL\_LOCKER
+  + ### PIG\_LEATHER\_BLACK\_FUR\_TAN
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") PIG\_LEATHER\_BLACK\_FUR\_TAN
+  + ### PIG\_LEATHER\_LANDRACE\_FUR\_TAN
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") PIG\_LEATHER\_LANDRACE\_FUR\_TAN
+  + ### PIGLET\_LEATHER\_BLACK\_FUR\_TAN
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") PIGLET\_LEATHER\_BLACK\_FUR\_TAN
+  + ### PIGLET\_LEATHER\_LANDRACE\_FUR\_TAN
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") PIGLET\_LEATHER\_LANDRACE\_FUR\_TAN
+  + ### PIG\_SKULL\_WALL
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") PIG\_SKULL\_WALL
+  + ### RABBIT\_LEATHER\_FUR\_TAN
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") RABBIT\_LEATHER\_FUR\_TAN
+  + ### SHEEP\_LEATHER\_FUR\_TAN
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") SHEEP\_LEATHER\_FUR\_TAN
+  + ### SHEEP\_SKULL\_WALL
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") SHEEP\_SKULL\_WALL
+  + ### SLEEPING\_BAG\_BLUE\_PLAID
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") SLEEPING\_BAG\_BLUE\_PLAID
+  + ### SLEEPING\_BAG\_CAMO
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") SLEEPING\_BAG\_CAMO
+  + ### SLEEPING\_BAG\_CHEAP\_BLUE
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") SLEEPING\_BAG\_CHEAP\_BLUE
+  + ### SLEEPING\_BAG\_CHEAP\_GREEN
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") SLEEPING\_BAG\_CHEAP\_GREEN
+  + ### SLEEPING\_BAG\_CHEAP\_GREEN\_2
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") SLEEPING\_BAG\_CHEAP\_GREEN\_2
+  + ### SLEEPING\_BAG\_GREEN
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") SLEEPING\_BAG\_GREEN
+  + ### SLEEPING\_BAG\_GREEN\_PLAID
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") SLEEPING\_BAG\_GREEN\_PLAID
+  + ### SLEEPING\_BAG\_HIDE
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") SLEEPING\_BAG\_HIDE
+  + ### SLEEPING\_BAG\_HIGH\_QUALITY\_BROWN
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") SLEEPING\_BAG\_HIGH\_QUALITY\_BROWN
+  + ### SLEEPING\_BAG\_RED\_PLAID
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") SLEEPING\_BAG\_RED\_PLAID
+  + ### SLEEPING\_BAG\_SPIFFO
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") SLEEPING\_BAG\_SPIFFO
+  + ### TENT\_BLUE
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") TENT\_BLUE
+  + ### TENT\_BROWN
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") TENT\_BROWN
+  + ### TENT\_GREEN
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") TENT\_GREEN
+  + ### TENT\_YELLOW
+
+    public static final [ItemKey](ItemKey.html "class in zombie.scripting.objects") TENT\_YELLOW
+* Constructor Details
+  -------------------
+
+  + ### Moveable
+
+    public Moveable()
+* Method Details
+  --------------
+
+  + ### moveable
+
+    private static [ItemKey](ItemKey.html "class in zombie.scripting.objects") moveable([String](https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html "class or interface in java.lang") id)

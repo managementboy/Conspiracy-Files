@@ -1,0 +1,25 @@
+{
+  "t0209-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "Brooks Public Library of Louisville",
+      "source": "print:BrooksLibrary"
+    },
+    "gloss": "A private briefing occupies a room listed as closed.",
+    "prov": {
+      "batch": "T0209",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A containment team could use a library room during a public closure; the card does not identify the briefing."
+  }
+}

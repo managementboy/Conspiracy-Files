@@ -1,0 +1,252 @@
+[
+  {
+    "body": "The bottle looked clean until it dried, when a green line appeared above the water. We had filled it at a tap beside the sprayed field, and the same green line rings the sprayer tank.\n\nThe dog would not drink from the dish left outside. The turnip tops by that tap have gone limp.",
+    "id": "t0427-01",
+    "kind": "written",
+    "pieces": [
+      "diary"
+    ],
+    "title": "Diary page",
+    "where": [
+      {
+        "containers": [
+          "bin",
+          "crate",
+          "cardboardbox",
+          "smallbox",
+          "locker",
+          "desk"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "I covered the herbs when the trial vehicle passed. By evening the leaves under the cover had curled too. The neighbor said the spray could not cross the fence. Her wash and my car both showed the pale dust.",
+    "id": "t0427-02",
+    "kind": "written",
+    "pieces": [
+      "notebook"
+    ],
+    "title": "Garden notes",
+    "where": [
+      {
+        "containers": [
+          "bin",
+          "crate",
+          "cardboardbox",
+          "smallbox",
+          "locker",
+          "desk"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "A driver came to the gate with a list of households and stopped to accept a cup of tea. He asked us not to use the back road, which was closed by a barrier.\n\nThe list had a number beside our name and he would not say what it counted. Everyone on the road was told to keep quiet about it.",
+    "id": "t0427-03",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "title": "Letter",
+    "where": [
+      {
+        "containers": [
+          "bin",
+          "crate",
+          "cardboardbox",
+          "smallbox",
+          "locker",
+          "desk"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "The workers removed their boots outside. By morning the pale dust had traveled inside on the dog’s paws. No one in the house had gone near the trial rows.\n\nI wrote down the day because the first warning arrived after it. I left the date on the page and did not try to straighten the damaged edge. Someone else might remember the same afternoon.",
+    "id": "t0427-04",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "Notepad page",
+    "where": [
+      {
+        "containers": [
+          "bin",
+          "crate",
+          "cardboardbox",
+          "smallbox",
+          "locker",
+          "desk"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "I was asked to keep this sample apart from the cooking jars. Its lid came loose on the way back from the orchard. The grocery bag was set on the table before I noticed the smell.\n\nThe child’s blanket was drying nearby and held the same fine dust. My family asked me to put the paper away with the bills. I kept it separate because the person involved might come back for it.",
+    "id": "t0427-05",
+    "kind": "written",
+    "pieces": [
+      "diary"
+    ],
+    "title": "Diary page",
+    "where": [
+      {
+        "containers": [
+          "counter",
+          "desk",
+          "sidetable",
+          "dresser",
+          "filingcabinet",
+          "shelves"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "We sprayed the lower field after the seed trial. The water path runs beside it, and the mist drifted over the rows we had walked that morning. The tomato vines there are spotted and curling.\n\nWe washed the small cup twice and put it away from the others. I kept this page to compare with next season's rows.",
+    "id": "t0427-06",
+    "kind": "written",
+    "pieces": [
+      "notebook"
+    ],
+    "title": "Notebook page",
+    "where": [
+      {
+        "containers": [
+          "counter",
+          "desk",
+          "shelves",
+          "sidetable",
+          "filingcabinet",
+          "smallbox"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "The calves refused their water. I poured it into a spare pail and found an oily rim once it settled, the same sheen as the puddles in the sprayed pasture. We draw from the same shallow well as the field.\n\nThe dog would not drink either. The rye along that pasture has gone patchy and pale.",
+    "id": "t0427-07",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "title": "Letter",
+    "where": [
+      {
+        "containers": [
+          "smallcrate",
+          "desk",
+          "filingcabinet",
+          "sidetable",
+          "cashregister",
+          "shelves"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "The driver washed the spray rig beside the feed shop. The rinse ran down the drain toward the vegetable plots behind the houses, and the beans there blistered and dropped their flowers within the week.\n\nI left the date on the page and did not smooth the torn edge. I kept notes on which rows were hit.",
+    "id": "t0427-08",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "Notepad page",
+    "where": [
+      {
+        "containers": [
+          "counter",
+          "desk",
+          "sidetable",
+          "filingcabinet",
+          "shelves",
+          "cashregister"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "The first rain after the field treatment left yellow flecks in a pan under the leak. We had shut the window before the truck came. I saved the pan because no one believed me when I described it.\n\nThe next family along the road noticed the smell without seeing the truck. My family asked me to put the paper away with the bills. I kept it separate because the person involved might come back for it.",
+    "id": "t0427-09",
+    "kind": "written",
+    "pieces": [
+      "diary"
+    ],
+    "title": "Diary page",
+    "where": [
+      {
+        "containers": [
+          "bin",
+          "crate",
+          "cardboardbox",
+          "smallbox",
+          "locker",
+          "desk"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "The seed counter receipt lists a small charge for sample jars and a sack of the new treated seed. The shopkeeper wrote a field number beside it. The corn from that sack came up grey-streaked and stunted.\n\nI wrote down the planting day beside the receipt so I could compare the rows after the rain.",
+    "id": "t0427-10",
+    "kind": "written",
+    "pieces": [
+      "notebook"
+    ],
+    "title": "Notebook page",
+    "where": [
+      {
+        "containers": [
+          "bin",
+          "crate",
+          "cardboardbox",
+          "smallbox",
+          "locker",
+          "desk"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

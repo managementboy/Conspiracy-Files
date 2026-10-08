@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "HouseforSale930"
+    },
+    "body": "The thread spool and first-aid kit have the same black paint. A fresh scrape shows an older evacuation color underneath.",
+    "id": "t0222-01",
+    "kind": "set",
+    "pieces": [
+      "Thread",
+      "FirstAidKit"
+    ],
+    "title": "Spool of thread and first-aid kit",
+    "where": [
+      {
+        "containers": [
+          "wardrobe",
+          "smallbox",
+          "toolcabinet",
+          "locker",
+          "crate",
+          "medicine"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

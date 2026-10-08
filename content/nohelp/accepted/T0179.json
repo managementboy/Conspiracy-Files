@@ -1,0 +1,60 @@
+[
+  {
+    "anchor": {
+      "print": "WellingtonHeightsGolfClub"
+    },
+    "body": "The black umbrella and camera are strapped with barrier tape. A checkpoint sticker is pressed over the knot. A numbered tag hangs from the strap, like it was left by the exit.",
+    "id": "t0179-01",
+    "kind": "set",
+    "pieces": [
+      "UmbrellaBlack",
+      "Camera"
+    ],
+    "title": "Black umbrella and camera",
+    "where": [
+      {
+        "containers": [
+          "crate",
+          "cardboardbox",
+          "smallbox",
+          "locker",
+          "wardrobe",
+          "dresser"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "print": "WellingtonHeightsGolfClub"
+    },
+    "body": "The notebook marks test strips along the spraying pathway. The pencil underlines a warning to avoid the drainage ditch.",
+    "id": "t0179-02",
+    "kind": "set",
+    "pieces": [
+      "Notebook",
+      "Pencil"
+    ],
+    "title": "Notebook and pencil",
+    "where": [
+      {
+        "containers": [
+          "locker",
+          "crate",
+          "cardboardbox",
+          "smallbox",
+          "bin",
+          "desk"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

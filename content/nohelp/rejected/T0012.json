@@ -1,0 +1,93 @@
+{
+  "ticket": "T0012",
+  "returned_by": "Claude review, DR-20260928-NOHELP-REVIEW-FAST, 2026-09-28",
+  "note": "The ticket is returned whole: a place must keep both conspiracies, a person ticket is accepted or returned as a whole, and a map design keeps its set share.",
+  "rows": [
+    {
+      "id": "t0012-01",
+      "codes": [],
+      "note": "Passed its blind read; returned only because its ticket is returned whole. Redeliver it unchanged: its receipt stays valid while title, body, pieces and places are unchanged.",
+      "votes": "A 1, B 0, neither 0 (declared A)",
+      "row": {
+        "body": "Transfer window: after road access ends. Return copy to sender. Reverse: “Bread for Mother, no crust if it is still warm.”",
+        "id": "t0012-01",
+        "kind": "written",
+        "person": "person-c",
+        "pieces": [
+          "businesscard"
+        ],
+        "title": "Courier card with a late return",
+        "where": [
+          {
+            "lean": "containment",
+            "place": "checkpoint",
+            "rival": "agricultural",
+            "spot": "vehicle"
+          }
+        ],
+        "axioms": {
+          "agricultural": [
+            "a-program",
+            "a-pathway"
+          ],
+          "containment": [
+            "c-orders",
+            "c-failure"
+          ]
+        },
+        "gloss": "A courier's card sets a return after the access window.",
+        "prov": {
+          "batch": "T0012",
+          "handoff": "2026-09-27",
+          "writer": "ChatGPT"
+        },
+        "rival_reading": "A field-delivery schedule could run past a road restriction; the late return line does not identify who changed access."
+      }
+    },
+    {
+      "id": "t0012-02",
+      "codes": [
+        "LEAN_MISMATCH"
+      ],
+      "note": "Two independent blind reads (DR-20260928-NOHELP-REVIEW-FAST) both missed the declared lean (declared B; votes A 2, B 0, neither 0). Rework so one detail tilts it to its own side while the rival reading stays possible. Keep place, spot, lean, rival, pieces and axioms.",
+      "votes": "A 2, B 0, neither 0 (declared B)",
+      "row": {
+        "body": "The map's route turns away from the gate. A key tag marked “last run” is tied to its corner, with a thread long enough to reach the road line.",
+        "id": "t0012-02",
+        "kind": "set",
+        "person": "person-c",
+        "pieces": [
+          "Map",
+          "KeyRing"
+        ],
+        "title": "The key marked for the last run",
+        "where": [
+          {
+            "lean": "agricultural",
+            "place": "checkpoint",
+            "rival": "containment",
+            "spot": "vehicle"
+          }
+        ],
+        "axioms": {
+          "agricultural": [
+            "a-program",
+            "a-pathway"
+          ],
+          "containment": [
+            "c-orders",
+            "c-failure"
+          ]
+        },
+        "gloss": "A last-run key points toward a route that no longer reaches its gate.",
+        "prov": {
+          "batch": "T0012",
+          "handoff": "2026-09-27",
+          "writer": "ChatGPT"
+        },
+        "rival_reading": "A delayed response crew could carry a key and route map after access changed; the tag could also belong to a field delivery."
+      }
+    }
+  ],
+  "drift": "Batch note (whole round, read once): a key ring appears in about ten of the 38 rows, a crop-row sketch in about eight and a water ring or stain in five. Not a return reason this round; vary objects and details in the redeliveries and in T0019 onward so a player does not meet the same arrangement at every place."
+}

@@ -1,0 +1,42 @@
+{
+  "containment": [
+    {
+      "id": "c-warning",
+      "gloss": "Decision-makers receive incomplete or contradictory warning before acting."
+    },
+    {
+      "id": "c-orders",
+      "gloss": "Authorities impose and revise measures to restrict movement or evacuate people as the emergency develops."
+    },
+    {
+      "id": "c-failure",
+      "gloss": "The measures fail in implementation, leaving people exposed or stranded."
+    },
+    {
+      "id": "c-accounting",
+      "gloss": "After failure becomes visible, official records or public explanations minimize its scale or responsibility."
+    }
+  ],
+  "agricultural": [
+    {
+      "id": "a-program",
+      "gloss": "An experimental agricultural or pesticide program is active before the outbreak."
+    },
+    {
+      "id": "a-malfunction",
+      "gloss": "Its development, handling, storage, or application fails outside intended controls."
+    },
+    {
+      "id": "a-pathway",
+      "gloss": "Exposure travels beyond the immediate program work to a wider population."
+    },
+    {
+      "id": "a-timing",
+      "gloss": "The malfunction precedes and plausibly contributes to the outbreak without fixing a specific biological mechanism."
+    },
+    {
+      "id": "a-obscured",
+      "gloss": "Public records or institutional explanations obscure the program's role once consequences appear."
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "t0205-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "Elvee Arena",
+      "source": "print:ElveeArena"
+    },
+    "gloss": "Workers kept increasing the pesticide concentration they applied.",
+    "prov": {
+      "batch": "T0205",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "None: one-sided on purpose"
+  }
+}

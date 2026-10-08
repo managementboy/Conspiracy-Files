@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "Fossoil4"
+    },
+    "body": "A petrol can sits with a notebook. The entry says the spray test was routine. Then it tells the next shift not to use this can again.",
+    "id": "t0162-01",
+    "kind": "set",
+    "pieces": [
+      "PetrolCan",
+      "Notebook"
+    ],
+    "title": "Petrol can and notebook",
+    "where": [
+      {
+        "containers": [
+          "metal_shelves",
+          "desk",
+          "toolcabinet",
+          "shelves",
+          "crate",
+          "filingcabinet"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

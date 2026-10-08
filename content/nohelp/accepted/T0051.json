@@ -1,0 +1,32 @@
+[
+  {
+    "anchor": {
+      "map": "LouisvilleStashMap3",
+      "mark": 1
+    },
+    "body": "The notebook logs repairs, key sign-out and return dates. Someone returned the basement key three days before the work ended. The screwdriver's still covered in rust from down there.",
+    "id": "t0051-01",
+    "kind": "set",
+    "pieces": [
+      "Screwdriver",
+      "Notebook"
+    ],
+    "title": "Screwdriver and notebook",
+    "where": [
+      {
+        "containers": [
+          "toolcabinet",
+          "metal_shelves",
+          "crate",
+          "smallcrate",
+          "smallbox",
+          "cardboardbox"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

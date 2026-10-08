@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "PizzaWhirledJobAdRosewood"
+    },
+    "body": "Pizza on a paper sheet with routes marked in pen.\nTwo stops listed at the field gate, both by the sprayer.\nThe second meal was never paid for.",
+    "id": "t0185-01",
+    "kind": "set",
+    "pieces": [
+      "Pizza",
+      "SheetPaper2"
+    ],
+    "title": "Pizza and paper sheet",
+    "where": [
+      {
+        "containers": [
+          "fridge",
+          "desk",
+          "counter",
+          "filingcabinet",
+          "freezer",
+          "sidetable"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

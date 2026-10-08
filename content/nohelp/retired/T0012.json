@@ -1,0 +1,85 @@
+[
+  {
+    "recall": "R1",
+    "row": {
+      "body": "The map routes past a checkpoint to the trial plots. A key tag says “sprayer pump.” In the margin, “wind turned at ten; east beans scorched by noon” is underlined twice.",
+      "id": "t0012-02",
+      "kind": "set",
+      "person": "person-c",
+      "pieces": [
+        "Map",
+        "KeyRing"
+      ],
+      "title": "The key marked for the last spray run",
+      "where": [
+        {
+          "lean": "agricultural",
+          "place": "checkpoint",
+          "rival": "containment",
+          "spot": "vehicle"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "gloss": "A spray route and a crop-damage note share the same marked key.",
+      "prov": {
+        "batch": "T0012",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A response crew could reroute through farm roads during a closure; wind damage might be ordinary field loss rather than a program failure."
+    }
+  },
+  {
+    "recall": "R2",
+    "row": {
+      "body": "yellow fertilizer crystals fill the seam between the wax crayons and animal-feed sack. the crystals are damp beneath a dry outer layer.",
+      "id": "t0012-02",
+      "kind": "set",
+      "person": "person-c",
+      "pieces": [
+        "Crayons",
+        "AnimalFeedBag"
+      ],
+      "title": "field residue on the wax crayons",
+      "where": [
+        {
+          "lean": "agricultural",
+          "place": "checkpoint",
+          "rival": "containment",
+          "spot": "vehicle"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-malfunction",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-warning",
+          "c-orders"
+        ]
+      },
+      "gloss": "A rare everyday object carries residue tied to field work before restriction.",
+      "prov": {
+        "batch": "T0012",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "Emergency workers crossing treated land could have picked up the same residue; the objects do not prove the farm program began the emergency."
+    }
+  }
+]

@@ -1,0 +1,25 @@
+{
+  "t0117-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "marked address in World / countryside",
+      "source": "map:WorldStashMap8"
+    },
+    "gloss": "A completed departure entry waits on a destination update.",
+    "prov": {
+      "batch": "T0117",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A field trip could also await a revised destination; the note does not say who issued the order."
+  }
+}

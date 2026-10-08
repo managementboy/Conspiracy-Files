@@ -1,0 +1,61 @@
+[
+  {
+    "anchor": {
+      "map": "BBurgStashMap2",
+      "mark": 1
+    },
+    "body": "The folded tarp and bath towel are wedged under unused warning tape. Footprints pass around the bundle rather than toward it.",
+    "id": "t0027-01",
+    "kind": "set",
+    "pieces": [
+      "Tarp",
+      "BathTowel"
+    ],
+    "title": "Tarp and bath towel",
+    "where": [
+      {
+        "containers": [
+          "wardrobe",
+          "toolcabinet",
+          "metal_shelves",
+          "dresser",
+          "crate",
+          "clothingrack"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "BBurgStashMap2",
+      "mark": 1
+    },
+    "body": "The caretaker says the grounds crew borrowed the kitchen sink for a rinse. Please keep the side room locked until the treated beds are dry; the folding chairs are still needed tomorrow.\n\nThe beds along the wall were sprayed that morning and the leaves already curl. I kept this page with the garden receipts, not the ordinary papers.",
+    "id": "t0027-02",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "title": "Letter",
+    "where": [
+      {
+        "containers": [
+          "filingcabinet",
+          "desk",
+          "sidetable",
+          "shelves",
+          "smallbox",
+          "cashregister"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

@@ -1,0 +1,183 @@
+[
+  {
+    "body": "A tire pump is wrapped in a tarp and tagged with a number. Tape on the tarp reads held for inspection. I think a patrol took the car and left this.",
+    "id": "t0431-01",
+    "kind": "set",
+    "pieces": [
+      "TirePump",
+      "Tarp"
+    ],
+    "title": "Tire pump and tarp",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "vehicle"
+      }
+    ]
+  },
+  {
+    "body": "This shovel carries two soils. There's red clay under a fresh layer of pale spray dust. The bucket holds only the pale dust and a few yellowed seedlings.",
+    "id": "t0431-02",
+    "kind": "set",
+    "pieces": [
+      "Shovel",
+      "Bucket"
+    ],
+    "title": "Shovel and bucket",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "vehicle"
+      }
+    ]
+  },
+  {
+    "body": "This shovel's been in the fertilizer. The handle has paint from another barn.",
+    "id": "t0431-03",
+    "kind": "set",
+    "pieces": [
+      "Shovel",
+      "Fertilizer"
+    ],
+    "title": "Shovel and fertilizer",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "vehicle"
+      }
+    ]
+  },
+  {
+    "body": "The duct tape holds a split spray hose together. Its inner edge is green. The water bottle beneath the patch is flecked the same way.",
+    "id": "t0431-04",
+    "kind": "set",
+    "pieces": [
+      "DuctTape",
+      "RubberHose",
+      "WaterBottle"
+    ],
+    "title": "Duct tape, hose and water bottle",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "vehicle"
+      }
+    ]
+  },
+  {
+    "body": "The tarp is stiff with dried yellow residue that flakes at touch. Rope coiled nearby shows the same yellow coating on every fiber. Both carry a sharp chemical smell.",
+    "id": "t0431-05",
+    "kind": "set",
+    "pieces": [
+      "Tarp",
+      "Rope"
+    ],
+    "title": "tarp and rope",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "vehicle"
+      }
+    ]
+  },
+  {
+    "body": "The seed bag is ripped open. Black dust coats the tarp underneath. Same dust I saw on those dead crops last week.",
+    "id": "t0431-06",
+    "kind": "set",
+    "pieces": [
+      "SeedBag",
+      "Tarp"
+    ],
+    "title": "Seed bag and tarp",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "vehicle"
+      }
+    ]
+  },
+  {
+    "body": "Someone tied this broom to a gate post with twine. A tag on the twine lists times of patrol passes. The last time is a day after the closure.",
+    "id": "t0431-07",
+    "kind": "set",
+    "pieces": [
+      "Broom",
+      "Twine"
+    ],
+    "title": "Broom and twine",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "vehicle"
+      }
+    ]
+  },
+  {
+    "body": "The bucket's full of green chemical residue, still wet. The rubber hose drips concentrate onto withered leaves below. Someone left it running.",
+    "id": "t0431-08",
+    "kind": "set",
+    "pieces": [
+      "RubberHose",
+      "Bucket"
+    ],
+    "title": "Rubber hose and bucket",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "vehicle"
+      }
+    ]
+  },
+  {
+    "body": "The rope has chemical burns where it touched the seed bag. Both reek of something harsh. This got hauled from the field to town.",
+    "id": "t0431-09",
+    "kind": "set",
+    "pieces": [
+      "Rope",
+      "SeedBag"
+    ],
+    "title": "Rope and seed bag",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "vehicle"
+      }
+    ]
+  },
+  {
+    "body": "The spade blade was rinsed. Green soil is left in the socket where the water couldn't reach.",
+    "id": "t0431-10",
+    "kind": "set",
+    "pieces": [
+      "HandShovel",
+      "WaterBottle"
+    ],
+    "title": "Hand shovel and water bottle",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "vehicle"
+      }
+    ]
+  }
+]

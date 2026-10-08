@@ -1,0 +1,60 @@
+[
+  {
+    "anchor": {
+      "print": "IrvingtonSpeedway"
+    },
+    "body": "The speeding ticket's dated after they shut down access. I see pencil marks changing the time. The beer bottle's still sealed, dropped at the gate.",
+    "id": "t0024-01",
+    "kind": "set",
+    "pieces": [
+      "SpeedingTicket",
+      "BeerBottle",
+      "Pencil"
+    ],
+    "title": "Speeding ticket, beer bottle and pencil",
+    "where": [
+      {
+        "containers": [
+          "cardboardbox",
+          "crate",
+          "smallbox",
+          "locker",
+          "desk",
+          "fridge"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "print": "IrvingtonSpeedway"
+    },
+    "body": "Applied the trial batch to the corn field just before sunrise. The sweet smell lingered past noon and the solution stayed wet. By evening my neighbor called to say his chickens were dead.",
+    "id": "t0024-02",
+    "kind": "written",
+    "pieces": [
+      "memo"
+    ],
+    "title": "Spray Log",
+    "where": [
+      {
+        "containers": [
+          "cardboardbox",
+          "crate",
+          "bin",
+          "smallbox",
+          "locker",
+          "desk"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

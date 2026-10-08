@@ -1,0 +1,32 @@
+[
+  {
+    "anchor": {
+      "map": "RiversideStashMap6",
+      "mark": 1
+    },
+    "body": "The pistol lies on a notebook of quarantine handoffs. Last entry records a room transfer. No recipient signed.",
+    "id": "t0099-01",
+    "kind": "set",
+    "pieces": [
+      "Pistol",
+      "Notebook"
+    ],
+    "title": "Pistol and notebook",
+    "where": [
+      {
+        "containers": [
+          "militarylocker",
+          "desk",
+          "locker",
+          "shelves",
+          "militarycrate",
+          "filingcabinet"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

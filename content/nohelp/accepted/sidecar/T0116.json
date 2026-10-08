@@ -1,0 +1,25 @@
+{
+  "t0116-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "fill up here",
+      "source": "map:WorldStashMap7"
+    },
+    "gloss": "Water and medical supplies were staged before a crew returned.",
+    "prov": {
+      "batch": "T0116",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "An emergency team might prepare water and first aid before entering; the note does not identify the cause of the infection."
+  }
+}

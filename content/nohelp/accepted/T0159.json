@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "Fossoil1"
+    },
+    "body": "Opposite route arrows are painted on the badge and the folded map. The older arrow was scraped away under fresh road grit.",
+    "id": "t0159-01",
+    "kind": "set",
+    "pieces": [
+      "Badge",
+      "Map"
+    ],
+    "title": "Badge and map",
+    "where": [
+      {
+        "containers": [
+          "dresser",
+          "desk",
+          "filingcabinet",
+          "sidetable",
+          "shelves",
+          "smallbox"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

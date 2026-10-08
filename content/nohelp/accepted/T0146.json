@@ -1,0 +1,32 @@
+[
+  {
+    "anchor": {
+      "map": "WpStashMap14",
+      "mark": 1
+    },
+    "body": "The bread was rationed for the wait. The map shows the spray zones marked in red. Someone drew a boat route avoiding those fields.",
+    "id": "t0146-01",
+    "kind": "set",
+    "pieces": [
+      "Bread",
+      "Map"
+    ],
+    "title": "Bread and map",
+    "where": [
+      {
+        "containers": [
+          "cardboardbox",
+          "grocerstand",
+          "smallbox",
+          "crate",
+          "counter",
+          "desk"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

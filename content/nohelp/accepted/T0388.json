@@ -1,0 +1,43 @@
+[
+  {
+    "anchor": {
+      "scene": "RZSHunterCamp"
+    },
+    "body": "The potato has a waxy film that won't rinse off. The empty jar smells like the crop spray from last week. I've never seen residue this thick before.",
+    "id": "t0388-01",
+    "kind": "set",
+    "pieces": [
+      "Potato",
+      "EmptyJar"
+    ],
+    "title": "Potato and empty jar",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RZSHunterCamp"
+    },
+    "body": "The group came back to find a notice saying the camp had been cleared. Their boots were still here and the fire was warm. I carried the notice along the trail because I knew the youngest had gone for water.",
+    "id": "t0388-02",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "title": "Letter",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
+  }
+]

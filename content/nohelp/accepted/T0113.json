@@ -1,0 +1,32 @@
+[
+  {
+    "anchor": {
+      "map": "WorldStashMap4",
+      "mark": 1
+    },
+    "body": "The tissues and first aid kit are sealed together, never opened. Soot darkens the bundle. The clean outlines look like it was packed before the fire.",
+    "id": "t0113-01",
+    "kind": "set",
+    "pieces": [
+      "Tissue",
+      "FirstAidKit"
+    ],
+    "title": "Tissues and first aid kit",
+    "where": [
+      {
+        "containers": [
+          "locker",
+          "smallbox",
+          "medicine",
+          "sidetable",
+          "dresser",
+          "wardrobe"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

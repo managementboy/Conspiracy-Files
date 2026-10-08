@@ -1,0 +1,43 @@
+[
+  {
+    "anchor": {
+      "scene": "RZSCampsite"
+    },
+    "body": "Wrapped bread and canned corn are tied with torn yellow-black tape. A numbered tag hangs from the knot, same number as on the tape. I think they were handed out before they closed off the route.",
+    "id": "t0380-01",
+    "kind": "set",
+    "pieces": [
+      "Bread",
+      "CannedCorn"
+    ],
+    "title": "Bread and canned corn",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RZSCampsite"
+    },
+    "body": "We pitched the tent beyond the trial orchard, well outside the sprayed rows. Rain ran down the canvas and left the same yellow dust on our cups. My daughter had not eaten anything from the orchard.",
+    "id": "t0380-02",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "Notepad page",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  }
+]

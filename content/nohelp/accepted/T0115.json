@@ -1,0 +1,177 @@
+[
+  {
+    "anchor": {
+      "map": "WorldStashMap6",
+      "mark": 1
+    },
+    "body": "Matching white stripes cross the candle and the clipboard. A name-sized patch on the candle has been scrubbed bare.",
+    "id": "t0115-01",
+    "kind": "set",
+    "pieces": [
+      "Candle",
+      "Clipboard"
+    ],
+    "title": "Candle and clipboard",
+    "where": [
+      {
+        "containers": [
+          "cardboardbox",
+          "crate",
+          "smallbox",
+          "locker",
+          "dresser",
+          "desk"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "WorldStashMap6",
+      "mark": 2
+    },
+    "body": "Photograph back: the cross marks the store used by the crop trial. One sample crate was removed before the seed inventory and left a blue outline on the floor.\n\nThe outline matched the blue coating on the trial seed. I saved the photo for the name written on the reverse.",
+    "id": "t0115-02",
+    "kind": "written",
+    "pieces": [
+      "diary"
+    ],
+    "title": "Diary page",
+    "where": [
+      {
+        "containers": [
+          "cardboardbox",
+          "crate",
+          "bin",
+          "smallbox",
+          "locker",
+          "desk"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "WorldStashMap6",
+      "note": 1
+    },
+    "body": "The jars were for soil samples from the test plots. Someone wrote the new spray made the plants grow wrong. All the gear is still here, left where the crew dropped it. I found beetles in one jar that should have been dead.",
+    "id": "t0115-03",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "Sample log sheet",
+    "where": [
+      {
+        "containers": [
+          "cardboardbox",
+          "crate",
+          "bin",
+          "smallbox",
+          "locker",
+          "desk"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "WorldStashMap6",
+      "note": 2
+    },
+    "body": "Personal farm log: the old packing floor was too big for one field crew. The trial team used only one bay, yet fresh powder reached the other bays overnight, settling on the sacks.\n\nWe swept it twice. The fine grit came back each morning on the unplanted side too.",
+    "id": "t0115-04",
+    "kind": "written",
+    "pieces": [
+      "receipt"
+    ],
+    "title": "Receipt",
+    "where": [
+      {
+        "containers": [
+          "cardboardbox",
+          "crate",
+          "bin",
+          "smallbox",
+          "locker",
+          "desk"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "WorldStashMap6",
+      "note": 3
+    },
+    "body": "Receipt margin: count the sealed seed sacks again at the cross. The driver signed for twelve, while only eleven appear on the field tally.\n\nNobody agreed on whose list this belonged to. I left it where the next person would look for the things we still owed each other.\n\nI could have mistaken the order in which those things happened. I could not mistake the empty place left for the person we had been waiting for.",
+    "id": "t0115-05",
+    "kind": "written",
+    "pieces": [
+      "photograph"
+    ],
+    "title": "Photograph",
+    "where": [
+      {
+        "containers": [
+          "smallbox",
+          "dresser",
+          "sidetable",
+          "desk",
+          "filingcabinet",
+          "shelves"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "WorldStashMap6",
+      "note": 4
+    },
+    "body": "On a faded photograph: the handwritten name by the cross belonged to the man counting treated rows. His tally ends one row before the plants turned black.\n\nI meant to ask him about the last row. The blackened stalks were still standing the next day.",
+    "id": "t0115-06",
+    "kind": "written",
+    "pieces": [
+      "notebook"
+    ],
+    "title": "Notebook page",
+    "where": [
+      {
+        "containers": [
+          "smallbox",
+          "desk",
+          "shelves",
+          "sidetable",
+          "filingcabinet",
+          "shelvesmag"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

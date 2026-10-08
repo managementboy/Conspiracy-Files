@@ -1,0 +1,60 @@
+[
+  {
+    "anchor": {
+      "scene": "RBSWATStation"
+    },
+    "body": "A first aid kit sits open beside a split seed sack. Yellow dust covers the gauze. Black road tape is stuck to the sack.",
+    "id": "t0305-01",
+    "kind": "set",
+    "pieces": [
+      "FirstAidKit",
+      "SeedBag"
+    ],
+    "title": "First aid kit and seed bag",
+    "where": [
+      {
+        "containers": [
+          "shelves",
+          "medicine",
+          "locker",
+          "metal_shelves",
+          "smallbox",
+          "cardboardbox"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RBSWATStation"
+    },
+    "body": "The battery looks new, and the radio is wrapped in a shirt. Tape holds the dial on the channel used before the order to leave.",
+    "id": "t0305-02",
+    "kind": "set",
+    "pieces": [
+      "Battery",
+      "RadioBlack"
+    ],
+    "title": "Battery and radio",
+    "where": [
+      {
+        "containers": [
+          "toolcabinet",
+          "sidetable",
+          "metal_shelves",
+          "desk",
+          "smallbox",
+          "shelves"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

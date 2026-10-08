@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "BrottAuction"
+    },
+    "body": "Checkpoint tape binds a lighter to an empty sprayer the patrol had filled with drinking water. Tag 7 reads two people, do not enter. A note under the tape orders everyone to stay silent about the count.",
+    "id": "t0256-01",
+    "kind": "set",
+    "pieces": [
+      "Lighter",
+      "GardeningSprayEmpty"
+    ],
+    "title": "Lighter and empty bottle",
+    "where": [
+      {
+        "containers": [
+          "toolcabinet",
+          "metal_shelves",
+          "cardboardbox",
+          "smallbox",
+          "crate",
+          "smallcrate"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

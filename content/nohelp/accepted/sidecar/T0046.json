@@ -1,0 +1,25 @@
+{
+  "t0046-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "marked address in Irvington",
+      "source": "map:IrvingtonStashMap7"
+    },
+    "gloss": "Notes from an agricultural experiment with escalated chemical dosing.",
+    "prov": {
+      "batch": "T0046",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "None: one-sided on purpose"
+  }
+}

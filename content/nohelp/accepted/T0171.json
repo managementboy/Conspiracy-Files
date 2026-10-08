@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "ArtGalleryofLouisville"
+    },
+    "body": "Red and blue cord join the baling twine to the torch. The red route is cut. The blue route ends in a sealed knot.",
+    "id": "t0171-01",
+    "kind": "set",
+    "pieces": [
+      "Twine",
+      "HandTorch"
+    ],
+    "title": "Twine and hand torch",
+    "where": [
+      {
+        "containers": [
+          "toolcabinet",
+          "desk",
+          "metal_shelves",
+          "shelves",
+          "crate",
+          "smallcrate"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

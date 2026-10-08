@@ -1,0 +1,58 @@
+[
+  {
+    "anchor": {
+      "scene": "RDSBandPractice"
+    },
+    "body": "the dilution was mixed wrong on the second batch. workers near the treated rows started smelling like harsh solvent.\n\nthe hens by the irrigation line went completely still. I saw foam pooling where the chemical runoff collected.\n\nI wrote this after the third time I noticed the same pattern.",
+    "id": "t0324-01",
+    "kind": "written",
+    "pieces": [
+      "diary"
+    ],
+    "title": "spray log page",
+    "where": [
+      {
+        "containers": [
+          "desk",
+          "filingcabinet",
+          "sidetable",
+          "shelves",
+          "smallbox",
+          "cashregister"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RDSBandPractice"
+    },
+    "body": "We were halfway through the same song for the third time when a visitor came in and asked us to lower the volume. He needed to hear the radio in the hallway.\n\nThe voice on it was reading street names. One of us lived on the first street and went to call home. The visitor shut the door before the next name.\n\nWe tried to play again. Nobody could remember the first line, so I wrote the streets down instead.",
+    "id": "t0324-02",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "Notepad page",
+    "where": [
+      {
+        "containers": [
+          "desk",
+          "filingcabinet",
+          "sidetable",
+          "shelves",
+          "smallbox",
+          "cashregister"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

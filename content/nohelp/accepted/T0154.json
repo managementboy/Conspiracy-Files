@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "TacodelPancho"
+    },
+    "body": "The pencil marked doses for the new growth accelerator trial. The empty jar beside it has crystallized residue inside. The numbers were doubled partway through the season.",
+    "id": "t0154-01",
+    "kind": "set",
+    "pieces": [
+      "EmptyJar",
+      "Pencil"
+    ],
+    "title": "Empty jar and pencil",
+    "where": [
+      {
+        "containers": [
+          "cardboardbox",
+          "smallbox",
+          "crate",
+          "dishescabinet",
+          "desk",
+          "overhead"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

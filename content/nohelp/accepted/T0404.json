@@ -1,0 +1,42 @@
+[
+  {
+    "anchor": {
+      "scene": "RZSTrapperCamp"
+    },
+    "body": "On the back: “No animals after the pasture trial sprayed. The sharp smell reached camp before the noon siren.”\n\nThe first account was spoken quickly, as if there might be a bus to catch. I wrote it down before another person could replace it.\n\nThe younger one wanted to throw it away. I promised we would ask in the morning, and put it where neither of us could forget.",
+    "id": "t0404-01",
+    "kind": "written",
+    "pieces": [
+      "photograph"
+    ],
+    "title": "Photograph with note",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RZSTrapperCamp"
+    },
+    "body": "The trapper was asked to clear the path for evacuation and left his traps open as instructed. The promised vehicles never used it. He went back at dusk to close the traps so no one walking in the dark would be hurt.",
+    "id": "t0404-02",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "Notepad page",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
+  }
+]

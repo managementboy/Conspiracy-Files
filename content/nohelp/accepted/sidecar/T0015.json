@@ -1,0 +1,46 @@
+{
+  "t0015-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-warning",
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "gloss": "A response bundle preserves a missing count, changed route, or erased identity.",
+    "prov": {
+      "batch": "T0015",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A farm-program crew could have counted routes, repacked tools, or removed ownership marks during hurried field work; the objects do not prove a concealed public response."
+  },
+  "t0015-02": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway",
+        "a-timing"
+      ],
+      "containment": [
+        "c-warning",
+        "c-orders"
+      ]
+    },
+    "cites": {
+      "quote": "forget them! Just get here",
+      "source": "map:EkronStashMap8"
+    },
+    "gloss": "A warning about an incorrect chemical mixture.",
+    "prov": {
+      "batch": "T0015",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "None: one-sided on purpose"
+  }
+}

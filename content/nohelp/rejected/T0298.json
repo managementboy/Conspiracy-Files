@@ -1,0 +1,51 @@
+{
+  "ticket": "T0298",
+  "returned_by": "Claude review, 2026-09-29",
+  "rows": [
+    {
+      "id": "t0298-01",
+      "codes": [
+        "DUPLICATE"
+      ],
+      "note": "Word-for-word copy of another clue delivered for a different scene (owner, 2026-09-29: copies go back). Write a clue of its own for this ticket.",
+      "row": {
+        "id": "t0298-01",
+        "kind": "set",
+        "pieces": [
+          "Lighter",
+          "Matches"
+        ],
+        "where": [
+          {
+            "place": "mapNamed",
+            "spot": "furniture",
+            "lean": "agricultural",
+            "rival": "containment"
+          }
+        ],
+        "anchor": {
+          "scene": "RBNolans"
+        },
+        "title": "A measure taken early",
+        "body": "A small item is kept ready beside a tool for routine work; neither label says what made the precaution necessary.",
+        "rival_reading": "Routine handling could explain the paired supplies; the arrangement alone does not establish a program or a response failure.",
+        "gloss": "A prepared pair is left without a clear account of why it was needed.",
+        "axioms": {
+          "containment": [
+            "c-orders",
+            "c-failure"
+          ],
+          "agricultural": [
+            "a-malfunction",
+            "a-pathway"
+          ]
+        },
+        "prov": {
+          "writer": "ChatGPT",
+          "handoff": "2026-09-28",
+          "batch": "T0298"
+        }
+      }
+    }
+  ]
+}

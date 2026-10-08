@@ -1,0 +1,38 @@
+{
+  "t0380-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-warning",
+        "c-failure"
+      ]
+    },
+    "gloss": "Numbered ration from a distribution point that was later shut down.",
+    "prov": {
+      "batch": "T0380",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "None: one-sided on purpose"
+  },
+  "t0380-02": {
+    "axioms": {
+      "agricultural": [
+        "a-pathway"
+      ],
+      "containment": [
+        "c-failure"
+      ]
+    },
+    "gloss": "A witness records evidence of exposure near treated land.",
+    "prov": {
+      "batch": "T0380",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "None: one-sided on purpose"
+  }
+}

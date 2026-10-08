@@ -1,0 +1,58 @@
+[
+  {
+    "anchor": {
+      "scene": "RBOther"
+    },
+    "body": "Before dawn: the crop trial crew brought rinsed gloves back from the rows. My brother started coughing. I washed everything twice and the water ran cloudy and sweet-smelling.\n\nThe beans along the fence turned black at the edges the same week. I meant to ask the crew about the spray in the morning.",
+    "id": "t0300-01",
+    "kind": "written",
+    "pieces": [
+      "diary"
+    ],
+    "title": "Diary page",
+    "where": [
+      {
+        "containers": [
+          "shelves",
+          "filingcabinet",
+          "sidetable",
+          "desk",
+          "smallbox",
+          "cashregister"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RBOther"
+    },
+    "body": "He wanted the room cleared before he opened his bag. We moved the chairs into the hall and he put three envelopes on the table.\n\nThe first was for the people still here. The other two had names of places already shut. He took those away when I asked him why he had come so late.\n\nI thought he would leave a copy. Instead he asked for the empty envelopes back, too. The chairs are still in the hall because no one knows whether the room is open.",
+    "id": "t0300-02",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "Notepad page",
+    "where": [
+      {
+        "containers": [
+          "sidetable",
+          "filingcabinet",
+          "desk",
+          "shelves",
+          "smallbox",
+          "cashregister"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

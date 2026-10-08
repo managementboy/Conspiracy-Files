@@ -1,0 +1,32 @@
+[
+  {
+    "anchor": {
+      "map": "MulStashMap6",
+      "mark": 1
+    },
+    "body": "A hammer and bandage on some checkpoint paperwork. No exit time logged. The person assigned to carry both never made it out.",
+    "id": "t0083-01",
+    "kind": "set",
+    "pieces": [
+      "Hammer",
+      "Bandage"
+    ],
+    "title": "Hammer and bandage",
+    "where": [
+      {
+        "containers": [
+          "toolcabinet",
+          "medicine",
+          "metal_shelves",
+          "smallbox",
+          "crate",
+          "sidetable"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

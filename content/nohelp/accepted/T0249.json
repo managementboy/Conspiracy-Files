@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "FallasLakeChurch"
+    },
+    "body": "A handwritten letter is tucked in a book. It says to cover the well after they sprayed the nearby fields. The water went cloudy and all the crops wilted.",
+    "id": "t0249-01",
+    "kind": "set",
+    "pieces": [
+      "Book",
+      "LetterHandwritten"
+    ],
+    "title": "Book and handwritten letter",
+    "where": [
+      {
+        "containers": [
+          "shelves",
+          "smallbox",
+          "desk",
+          "shelvesmag",
+          "filingcabinet",
+          "sidetable"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

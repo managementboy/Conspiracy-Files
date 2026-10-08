@@ -1,0 +1,58 @@
+[
+  {
+    "anchor": {
+      "scene": "RBBarn"
+    },
+    "body": "My note from dusk: the trial crew left their rinsed gloves on the fence rail after spraying the far rows. My brother started coughing as the wind turned toward the barn.\n\nI wrote it down while I still remembered which rows got the new mix. The smell stayed in the barn all night. I put this page apart from the ordinary feed tallies.",
+    "id": "t0284-01",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "Notepad page",
+    "where": [
+      {
+        "containers": [
+          "sidetable",
+          "filingcabinet",
+          "desk",
+          "shelves",
+          "smallbox",
+          "cashregister"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RBBarn"
+    },
+    "body": "I told them the barn was empty after the morning count. It was true if you counted people. The two calves were still there, and I could hear the smaller one pressing its head against the gate whenever a truck stopped outside.\n\nA man in a vest asked for the ledger, then wrote the barn down as cleared on the evacuation list and told me not to say otherwise. He took the kitchen calendar too. By evening the gate had a new chain. Nobody asked me to feed them, and nobody said I could go back in.\n\nI left the milk pail by the door because I thought a person who came to lock it would see it. In the morning the pail was gone. The list on the post still said cleared.",
+    "id": "t0284-02",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "Notepad page",
+    "where": [
+      {
+        "containers": [
+          "sidetable",
+          "filingcabinet",
+          "desk",
+          "shelves",
+          "smallbox",
+          "cashregister"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

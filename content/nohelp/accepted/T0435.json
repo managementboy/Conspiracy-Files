@@ -1,0 +1,184 @@
+[
+  {
+    "body": "The vehicle map has pencil ticks at three stops. Dark grain in its fold looks like that in the half empty bag.",
+    "id": "t0435-01",
+    "kind": "set",
+    "pieces": [
+      "Map",
+      "SeedBag",
+      "Pencil"
+    ],
+    "title": "Map, seed bag and pencil",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "vehicle"
+      }
+    ]
+  },
+  {
+    "body": "The bucket, soap and dish gloves share patrol tag 18. Tape on the bucket reads 'Hold for the convoy'. I think the guards ordered everyone to leave them.",
+    "id": "t0435-02",
+    "kind": "set",
+    "pieces": [
+      "Bucket",
+      "Soap2",
+      "Gloves_Dish"
+    ],
+    "title": "Bucket, soap and dish gloves",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "vehicle"
+      }
+    ]
+  },
+  {
+    "body": "This map bends along the farm road. The carrot seed in the crease is black and split. I avoided the fields.",
+    "id": "t0435-03",
+    "kind": "set",
+    "pieces": [
+      "Map",
+      "CarrotSeed"
+    ],
+    "title": "Map and carrot seed",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "vehicle"
+      }
+    ]
+  },
+  {
+    "body": "The tarp has a clean rectangle where a crate stood. The seed bag beside it is dusted with the same pale powder. Maybe the load spilled before the crate was taken.",
+    "id": "t0435-04",
+    "kind": "set",
+    "pieces": [
+      "Tarp",
+      "SeedBag"
+    ],
+    "title": "Tarp and seed bag",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "vehicle"
+      }
+    ]
+  },
+  {
+    "body": "The spoon is wrapped in newspaper from the day of the order. The paper lists road closures in a numbered column. Someone circled the closures nearest this stop.",
+    "id": "t0435-05",
+    "kind": "set",
+    "pieces": [
+      "Spoon",
+      "Newspaper"
+    ],
+    "title": "Spoon wrapped in newspaper",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "vehicle"
+      }
+    ]
+  },
+  {
+    "body": "A knotted rope divides the bags. The sack on one side has a green dust mark. The ones on the other side are clean.",
+    "id": "t0435-06",
+    "kind": "set",
+    "pieces": [
+      "Rope",
+      "SeedBag"
+    ],
+    "title": "Rope and seed bags",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "vehicle"
+      }
+    ]
+  },
+  {
+    "body": "A water bottle sits on the map where two roads meet. The map has a checkpoint mark in tape at that spot. A patrol schedule is penciled in the margin.",
+    "id": "t0435-07",
+    "kind": "set",
+    "pieces": [
+      "WaterBottle",
+      "Map"
+    ],
+    "title": "Water bottle and map",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "vehicle"
+      }
+    ]
+  },
+  {
+    "body": "The shovel's handle has two different colored clays. The tarp wrapped around it has fresh tears. They look shaped by a narrow truck bed.",
+    "id": "t0435-08",
+    "kind": "set",
+    "pieces": [
+      "Shovel",
+      "Tarp"
+    ],
+    "title": "Shovel and tarp",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "vehicle"
+      }
+    ]
+  },
+  {
+    "body": "A lunch pot is packed with a stack of numbered tags. The fork inside is taped to a list of names. Half the names are crossed out in the same hand.",
+    "id": "t0435-09",
+    "kind": "set",
+    "pieces": [
+      "Pot",
+      "Fork"
+    ],
+    "title": "Pot and fork",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "vehicle"
+      }
+    ]
+  },
+  {
+    "body": "This tire pump is streaked with pale dust. The seed bag has it too. Both were handled together before.",
+    "id": "t0435-10",
+    "kind": "set",
+    "pieces": [
+      "TirePump",
+      "SeedBag"
+    ],
+    "title": "Tire pump and seed bag",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "vehicle"
+      }
+    ]
+  }
+]

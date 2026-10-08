@@ -1,0 +1,38 @@
+{
+  "t0394-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-warning",
+        "c-failure"
+      ]
+    },
+    "gloss": "Field treatment residue appears on farming equipment.",
+    "prov": {
+      "batch": "T0394",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "None: one-sided on purpose"
+  },
+  "t0394-02": {
+    "axioms": {
+      "agricultural": [
+        "a-pathway"
+      ],
+      "containment": [
+        "c-failure"
+      ]
+    },
+    "gloss": "A witness records a failed evacuation count or route.",
+    "prov": {
+      "batch": "T0394",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "The agricultural trial may have caused the disorder that forced improvised decisions."
+  }
+}

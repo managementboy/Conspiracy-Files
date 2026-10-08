@@ -1,0 +1,60 @@
+[
+  {
+    "anchor": {
+      "scene": "RBTSSoup"
+    },
+    "body": "Chicken feed dust coats the inside of the water bottle. Dried crop spray crusts the tin opener's handle. Both smell like the sick corn rows.",
+    "id": "t0320-01",
+    "kind": "set",
+    "pieces": [
+      "WaterBottle",
+      "TinOpener"
+    ],
+    "title": "Water bottle and tin opener",
+    "where": [
+      {
+        "containers": [
+          "fridge",
+          "dishescabinet",
+          "counter",
+          "overhead",
+          "sidetable",
+          "freezer"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RBTSSoup"
+    },
+    "body": "Twenty-three scratches inside the bowl. The spoon shows nineteen notches, one crossed out. Both were carried to the table and left.",
+    "id": "t0320-02",
+    "kind": "set",
+    "pieces": [
+      "Bowl",
+      "Spoon"
+    ],
+    "title": "Bowl and spoon",
+    "where": [
+      {
+        "containers": [
+          "dishescabinet",
+          "overhead",
+          "counter",
+          "sidetable",
+          "shelves",
+          "smallbox"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

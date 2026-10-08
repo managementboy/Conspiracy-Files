@@ -1,0 +1,59 @@
+[
+  {
+    "anchor": {
+      "print": "AmericanTire"
+    },
+    "body": "A rubber band holds a seed-treatment slip to the screwdriver. The groove beside the wheel sketch is packed with green powder. It looks like the dust on treated seed, and the handle smells of it.",
+    "id": "t0014-01",
+    "kind": "set",
+    "pieces": [
+      "Screwdriver",
+      "RubberBand"
+    ],
+    "title": "Screwdriver and rubber band",
+    "where": [
+      {
+        "containers": [
+          "metal_shelves",
+          "desk",
+          "toolcabinet",
+          "filingcabinet",
+          "crate",
+          "sidetable"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "print": "AmericanTire"
+    },
+    "body": "The receipt charges four tires to the county road crew, but lists only three serial numbers. Beside the blank fourth line, someone wrote “keep off public return until clearance review.” Reverse: “Save the smoothest for the child's bicycle.”\n\nI asked for the old page back after the new instructions arrived. They said it had been destroyed, but its corner was still in my pocket.\n\nThe person who was supposed to collect it had no time to stop. I did not put it back with the rest of the ordinary papers.",
+    "id": "t0014-02",
+    "kind": "written",
+    "pieces": [
+      "receipt"
+    ],
+    "title": "Receipt",
+    "where": [
+      {
+        "containers": [
+          "filingcabinet",
+          "desk",
+          "sidetable",
+          "shelves",
+          "smallbox",
+          "cashregister"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

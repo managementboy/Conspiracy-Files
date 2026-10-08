@@ -1,0 +1,144 @@
+[
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "scene": "RBPileOCrepe"
+      },
+      "body": "The pair is streaked with clouded sample jar from treated rows. It was set aside after the flies vanished, before anyone marked the toolbox unsafe.",
+      "id": "t0301-01",
+      "kind": "set",
+      "pieces": [
+        "KeyRing",
+        "GardeningSprayEmpty"
+      ],
+      "title": "Clouded sample jar by the toolbox",
+      "where": [
+        {
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-warning",
+          "c-orders"
+        ]
+      },
+      "gloss": "A personal trace links trial residue to illness before a later restriction.",
+      "prov": {
+        "batch": "T0301",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A response team could have carried farm supplies while checking exposure; the objects and timing do not establish that the trial caused it."
+    }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "scene": "RBPileOCrepe"
+      },
+      "body": "The pair is streaked with clouded sample jar from treated rows. It was set aside after the flies vanished, before anyone marked the toolbox unsafe.",
+      "id": "t0301-01",
+      "kind": "set",
+      "pieces": [
+        "KeyRing",
+        "GardeningSprayEmpty"
+      ],
+      "title": "The sample lid turned opaque",
+      "where": [
+        {
+          "containers": [
+            "toolcabinet",
+            "crate",
+            "shelves",
+            "desk",
+            "counter",
+            "cardboardbox"
+          ],
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-warning",
+          "c-orders"
+        ]
+      },
+      "gloss": "A personal trace links trial residue to illness before a later restriction.",
+      "prov": {
+        "batch": "T0301",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A response team could have carried farm supplies while checking exposure; the objects and timing do not establish that the trial caused it."
+    }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "scene": "RBPileOCrepe"
+      },
+      "body": "I was told to leave the kitchen open for one more shift, though the road count already included its address. I set aside a clean apron for the morning cook. The second list, the one for people waiting inside, came back with no names.",
+      "id": "t0301-02",
+      "kind": "written",
+      "pieces": [
+        "letter"
+      ],
+      "title": "The flour stayed behind",
+      "where": [
+        {
+          "containers": [
+            "desk",
+            "dresser",
+            "shelves",
+            "counter",
+            "crate",
+            "bin"
+          ],
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-pathway"
+        ],
+        "containment": [
+          "c-failure"
+        ]
+      },
+      "gloss": "A witness records a failed evacuation count or route.",
+      "prov": {
+        "batch": "T0301",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "The agricultural trial may have caused the disorder that forced improvised decisions."
+    }
+  }
+]

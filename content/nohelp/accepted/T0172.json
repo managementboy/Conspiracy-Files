@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "FossoilField"
+    },
+    "body": "A water bottle lies beside a bat. The gate log says lock up early. The schedule still shows tonight's game open to fans.",
+    "id": "t0172-01",
+    "kind": "set",
+    "pieces": [
+      "BaseballBat",
+      "WaterBottle"
+    ],
+    "title": "Baseball bat and water bottle",
+    "where": [
+      {
+        "containers": [
+          "metal_shelves",
+          "smallbox",
+          "crate",
+          "toolcabinet",
+          "locker",
+          "fridge"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

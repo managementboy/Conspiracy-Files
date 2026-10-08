@@ -160,11 +160,17 @@ a future update that changes vanilla's own behavior shows up as a
 detected mismatch, not a silent drift nobody notices until a player
 reports content that no longer makes sense.
 
-**A blind re-read test, not author's memory, is the actual quality
-gate.** Weeks later, or with a second reader: hide which conspiracy an
-item targets, guess whether it corroborates or discredits, kill the item
-on a wrong guess. This tests whether the evidence reads the same cold as
-the author remembers writing it — the only test that catches drift.
+**Independent blind reading is a quality gate.** Hide the intended lean
+and show only the rendered clue to a model other than the writer. The current
+operational rule is one read per clue, with exactly one fresh retry when the
+first vote is `NEITHER` or misses the declared lean; a remaining
+disagreement or mismatch returns the clue for revision. The full batch also
+gets one pass for repetition and consistency. This tests whether evidence
+reads as intended to someone who has not seen its authoring notes. The
+current counts and return rules are defined by
+`DR-20260928-NOHELP-REVIEW-FAST` in `DECISIONS.md` and
+`tools/cluegates/blind_reread.md`; older operational descriptions are
+superseded.
 
 ## 3. How evidence should mean something
 
@@ -416,6 +422,16 @@ original mod did.
 
 ## 8. What this means for the existing engine
 
+> **Correction, 2026-09-27.** "`Generated/*` is not load-bearing" below is
+> wrong. The generated runtime (`GeneratedRuntime.lua` → `Generated/*`) is one
+> of two live, mutually exclusive, debug-gated placement paths, and the only
+> caller of `StaleClue.lua`; it also carries the whole-map address book and
+> live container checks. Its runtime *case generator* is what conflicts with
+> authored content. Placement itself is meant to be rule-based
+> (DR-20260927-NOHELP-RULE-PLACEMENT), so `Generated/*` is a candidate host
+> for it rather than ballast. Question 3 of section 9 is reopened on that
+> basis.
+
 `mod-nohelp/` already carries forward both of module B's
 content-generation systems: the legacy **procedural** engine
 (`Generated/*`, ~40 files — roles, carriers, evidence-kind tables) and
@@ -449,8 +465,10 @@ first.
    than belief-tracking — inventory of physical evidence objects, reading
    documents, moving around the map — is still open, but it's a much
    smaller question now than "what replaces the PDA."
-3. Should `Generated/*` be dropped from `mod-nohelp/` now that this
-   design confirms it's unused, or kept as inert ballast for now?
+3. ~~Should `Generated/*` be dropped from `mod-nohelp/`?~~ — **settled
+   2026-09-27, no:** it is the chosen placement engine
+   (DR-20260927-NOHELP-RULE-PLACEMENT). Its runtime case generator is what
+   gets replaced by authored content.
 4. **Permadeath half settled 2026-09-27, DR-20260927-WORLD-KEEPS-EVERYTHING:**
    accept it as a known, unaddressed cost. The world keeps everything a dead
    character took; consumed evidence never returns and nothing marks a

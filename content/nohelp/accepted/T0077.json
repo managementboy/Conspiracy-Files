@@ -1,0 +1,32 @@
+[
+  {
+    "anchor": {
+      "map": "MulStashMap11",
+      "mark": 1
+    },
+    "body": "Found a pistol on a sheet of paper. The sheet lists a weapon transfer order. Receiving signature is blank. Nobody ever came to pick it up.",
+    "id": "t0077-01",
+    "kind": "set",
+    "pieces": [
+      "Pistol2",
+      "SheetPaper2"
+    ],
+    "title": "Pistol and sheet of paper",
+    "where": [
+      {
+        "containers": [
+          "locker",
+          "desk",
+          "dresser",
+          "filingcabinet",
+          "wardrobe",
+          "sidetable"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

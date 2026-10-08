@@ -1,0 +1,25 @@
+{
+  "t0195-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "House for Sale (no. 903)",
+      "source": "print:HouseforSale903"
+    },
+    "gloss": "A tenant-room water sample is tied to cloudy water and crop-trial spray.",
+    "prov": {
+      "batch": "T0195",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "None: one-sided on purpose"
+  }
+}

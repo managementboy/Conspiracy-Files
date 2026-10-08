@@ -1,0 +1,25 @@
+{
+  "t0278-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "Sunderland Hills Sanatorium",
+      "source": "print:Sanatorium"
+    },
+    "gloss": "A tour map with its route taped shut and the stairs numbered.",
+    "prov": {
+      "batch": "T0278",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "None: one-sided on purpose"
+  }
+}

@@ -1,9 +1,11 @@
--- G2 development adapter: one case, manual start, automatic saved-case resume.
-local G=require("NHShared/Generated/Generator")
+-- No Help runtime: one world record of decided areas, created once per save,
+-- grown as the survivor comes near interesting places, and placed by the
+-- existing placement, filler, identity and relocation jobs.
+NHShared=NHShared or {}
 local Session=require("NHShared/Generated/Session")
+local AreaPlace=require("NHShared/Generated/AreaPlace")
+local Manifest=require("NHShared/Mystery/Manifest")
 local Cases=require("NHShared/Generated/SuccessiveCases")
-local Retired=require("NHShared/Generated/RetiredCase")
-local Story=require("NHShared/Generated/Story")
 local Storage=require("NHShared/Generated/Storage")
 local StorageChoices=require("NHShared/Generated/StorageChoices")
 local FixedContainers=require("NHShared/Generated/FixedContainerRuntime")
@@ -13,8 +15,13 @@ local Scheduler=require("NHShared/Scheduler")
 local Budget=require("NHShared/SaveBudget")
 local StaleClue=require("NHShared/StaleClue")
 local Carriers=require("NHShared/Carriers")
+local Kinds=require("NHShared/Generated/EvidenceKinds")
 local Visited=require("NHShared/VisitedBuildingLog")
 local Reachability=require("NHShared/ReachabilityAdapter")
+local MapSites=require("NHShared/Generated/MapSites")
+local GroundSpots=require("NHShared/GroundSpots")
+local Holders=require("NHShared/SetHolders")
+local MarkedArea=require("NHShared/MarkedArea")
 require("NHShared/DiscoveryLog")
 NHShared=NHShared or {}
 local R=NHShared.GeneratedRuntime or {}
@@ -22,29 +29,8 @@ NHShared.GeneratedRuntime=R
 NHEngine=NHEngine or {};NHEngine.GeneratedRuntime=R
 if R.loaded then return R end
 local sessions,scheduler,wrapper,ticks,preparing
--- Present only while the first case created in this running game is being
--- placed. The assigned container remains in the saved case as provenance and
--- fallback; this transient record merely performs the immediate handoff.
-local openingDelivery
--- Rows of retired cases. They have no Session to project from, but the player
--- learned them and FILES must still render them.
-local retiredRows={}
--- Every document of every archived case, rows or not (P4-R111): what marks a
--- clue Evidence / Old and answers "already in the organiser".
-local retiredIds={}
--- What the last refusal of a new case owed the player (P4-R133), and where and
--- when a later case last found nothing usable nearby (P4-R125). One record:
--- the wait P4-R125 asks for is one property of a refusal, not a separate fact.
---   code,count,sinceHours,dueHours,rung  the debt; mirrored into the case
---                                        store's schedule slot so a reload
---                                        does not reset the count
---   atHours                              when this code was last counted
---   x,y,waitHours                        only for a refusal that came from a
---                                        nearby scan: the 50 tiles / half hour
---                                        the survivor must move on. In memory
---                                        only, so loading a save clears the
---                                        wait but not the debt (P4-R125).
-local debt=nil
+-- The open Session of the No Help world record, when this save has one.
+local areaSession
 -- Declared with the identity scan further down. Retirement (R.inspect) reads
 -- both to keep where each clue was last seen, and sits above that code.
 local sightings,placeOf
@@ -88,8 +74,11 @@ local CFLog=require("NHShared/Log")
 -- Why a clue was not placed this step. See Log.declines.
 local declinePlacement=CFLog.declines("placement")
 local function log(message) CFLog.message("case","note",message) end
+-- No Help runs in every single-player game (owner, 2026-09-27: "Normal play
+-- now"); it was debug-only while the old case generator was a prototype.
+-- Multiplayer stays out of scope.
 local function allowed()
-    return getDebug and getDebug() and not (isClient and isClient()) and not (isServer and isServer())
+    return not (isClient and isClient()) and not (isServer and isServer())
         and not NHShared.T11Mode and not NHShared.T12Mode
 end
 local function checked(ok,why) if not ok then error(why or "generated session write rejected") end end
@@ -124,8 +113,6 @@ local function worldHours()
 end
 local function setup()
     if not allowed() then return false,"G2 requires debug single-player, without T11/T12" end
-    NHShared.GeneratedMode=true
-    if NHShared.Runtime then NHShared.Runtime.disabled=true end
     local store=ModData.getOrCreate(TAG)
     local active,err=Cases.current(store)
     -- Kahlua exposes pairs, but not the standard Lua next global.
@@ -154,10 +141,19 @@ local function writePages(item,doc,case)
     local ok,pages=pcall(Pages.pages,doc.body,context,map and map.describe)
     if not ok or type(pages)~="table" or #pages==0 then return end
     pcall(function()
+        -- The recipe T7 proved on Note, Notebook, LetterHandwritten and Photo:
+        -- enable pages on the item, write them, then lock it to a foreign owner
+        -- so the vanilla journal opens it READ-ONLY. Without the lock the paper
+        -- opens as something the player can write over; without canBeWrite a
+        -- Note or Photo has no pages to open at all.
+        if item.setCanBeWrite then item:setCanBeWrite(true) end
+        if item.setPageToWrite then item:setPageToWrite(#pages) end
         if item.setNumberOfPages then item:setNumberOfPages(math.max(#pages,1)) end
         for index,text in ipairs(pages) do item:addPage(index,text) end
+        if item.setLockedBy then item:setLockedBy("NoHelp") end
     end)
 end
+R.writePages=writePages
 -- Object evidence is found in the state its story implies. Condition is a core
 -- saved field, so this survives a reload; blood is deliberately NOT applied,
 -- because setBloodLevel exists on the installed jar but nothing has proven it
@@ -173,27 +169,25 @@ end
 -- Translate/EN/IG_UI.json (seen in play as "IGUI_ItemCat_Evidence" down a
 -- whole column). And it is a RUNTIME property: it is not saved with the item,
 -- which is why loading a game re-stamps it as well.
-local function stampEvidence(item,title)
+-- Object-SET pieces (doc.members is a table) keep their own vanilla item name
+-- (owner, 2026-10-03); only paper clues are named after their title. A piece
+-- an older save already renamed gets its script name back.
+local function isSet(doc) return type(doc)=="table" and type(doc.members)=="table" end
+local function resetVanillaName(item)
+    pcall(function()
+        item:setCustomName(false)
+        local script=item:getScriptItem()
+        if script then item:setName(script:getDisplayName()) end
+    end)
+end
+local function stampEvidence(item,title,doc)
     if not item then return end
-    item:setName(title); item:setCustomName(true)
+    if isSet(doc) then resetVanillaName(item)
+    else item:setName(title); item:setCustomName(true) end
     pcall(function() item:setDisplayCategory("Evidence") end)
 end
--- A finished case's evidence is Old. Owner, 2026-09-15, after finding two clues
--- of a completed case in the house with no Investigation option at all: "We
--- should change the category to Evidence / Old" (P4-R118). The loot list then
--- says the item belongs to a closed case. Same rules as Evidence: a
--- translation key (IGUI_ItemCat_EvidenceOld) and a runtime property, so every
--- place that stamps a category asks this instead of assuming Evidence.
--- Asked of every archived case, not only the ones that still carry rows: the
--- oldest lose their bulk to the archive cap (P4-R111) and their clues are
--- still lying in drawers around Muldraugh. A clue whose case no longer has a
--- row must still say Evidence / Old and still say it is already recorded,
--- because that missing menu is exactly what read as broken in play.
-local function retiredId(id)
-    if not id then return false end
-    return retiredIds[id]==true
-end
-local function categoryOf(id) return retiredId(id) and "EvidenceOld" or "Evidence" end
+-- Every clue in No Help is plain Evidence: no case ever finishes, so nothing is Old.
+local function categoryOf() return "Evidence" end
 
 local function applyWear(item,doc)
     if not item or not doc or not doc.wear then return end
@@ -210,9 +204,20 @@ end
 -- a cupboard of bleach rather than a bottle of it (ObjectRules.accumulation).
 local function expectedCount(api,id)
     for _,d in ipairs(api.snapshot().case.documents) do
-        if d.id==id then return d.quantity or 1 end
+        -- A set's number is the sum of its pieces, whether or not the
+        -- document also states a total (Session.pieceCount).
+        if d.id==id then return Session.pieceCount(d) end
     end
     return 1
+end
+
+-- An object SET: one clue made of several different real items, which only
+-- mean something together (No Help, owner 2026-09-27).
+local function isObjectSet(api,id)
+    for _,d in ipairs(api.snapshot().case.documents) do
+        if d.id==id then return type(d.members)=="table" and #d.members>0 end
+    end
+    return false
 end
 
 local function createEvidenceItem(doc,kind,target)
@@ -233,6 +238,33 @@ local function evidenceMembers(doc)
     return {{kind=doc.kind,quantity=doc.quantity or 1,wear=doc.wear}}
 end
 
+-- A set of 2+ pieces is found as ONE thing: a vanilla bag, box or case with the
+-- pieces inside (owner, 2026-10-03; docs/design/SET_HOLDERS.md). The pieces go
+-- into the holder first, and only the holder is then placed. If the holder
+-- cannot be made or refuses a piece, the pieces stay loose as they always were.
+-- The holder carries the clue's id and token and the cfHolder mark, so every
+-- id-keyed thing (recognition, inspect, relocation, hint) finds the clue from it
+-- while counting still counts pieces only (WorldAccess).
+local function wrapInHolder(pieces,id,token,fullType)
+    if type(fullType)~="string" or #pieces<Holders.MIN_PIECES then return pieces end
+    local holder=instanceItem(fullType)
+    if not holder then return pieces end
+    local okInv,inv=pcall(function() return holder:getInventory() end)
+    if not okInv or not inv then return pieces end
+    local landed={}
+    for _,piece in ipairs(pieces) do
+        local added=inv:AddItem(piece)
+        if not added then
+            for _,l in ipairs(landed) do pcall(function() inv:Remove(l) end) end
+            return pieces
+        end
+        landed[#landed+1]=piece
+    end
+    local md=holder:getModData()
+    md.cfGeneratedId=id; md.cfPhysicalToken=token; md.cfHolder=true
+    return {holder}
+end
+
 local function playerHouse(player)
     local square=player and player.getSquare and player:getSquare()
     local building=square and square.getBuilding and square:getBuilding()
@@ -240,140 +272,6 @@ local function playerHouse(player)
     return def and ("t3:"..tostring(def:getIDString())) or nil
 end
 
-local function playerIdentity(player)
-    local name,profession
-    local okD,descriptor=pcall(function() return player:getDescriptor() end)
-    if okD and descriptor then
-        local okN,fore=pcall(function() return descriptor:getForename() end)
-        local okS,sur=pcall(function() return descriptor:getSurname() end)
-        local parts={}
-        if okN and type(fore)=="string" and #fore>0 then parts[#parts+1]=fore end
-        if okS and type(sur)=="string" and #sur>0 then parts[#parts+1]=sur end
-        if #parts>0 then name=table.concat(parts," ") end
-        local okP,professionObject=pcall(function() return descriptor:getCharacterProfession() end)
-        if okP and professionObject then
-            local okI,id=pcall(function() return professionObject:getName() end)
-            if okI and type(id)=="string" then profession=string.lower(id) end
-        end
-    end
-    return name,profession
-end
-
-local function itemWithToken(container,token)
-    local items=container and container.getItems and container:getItems()
-    if not items then return nil end
-    for i=0,items:size()-1 do
-        local item=items:get(i)
-        local md=item and item.getModData and item:getModData()
-        if md and md.cfPhysicalToken==token then return item end
-    end
-end
-
-local PRIMED_HOUSE="cfPrimedOpeningHouse"
-local FITNESS_OPENING_VOICE="This opens the house. Why did I have access?"
-
-local function primedOpening(inventory,house)
-    local items=inventory and inventory.getItems and inventory:getItems()
-    if not items then return nil end
-    for i=0,items:size()-1 do
-        local item=items:get(i)
-        local md=item and item.getModData and item:getModData()
-        if md and md[PRIMED_HOUSE]==house and not md.cfGeneratedId then return item end
-    end
-end
-
--- The starting-house key is the inciting incident, not a reward for waiting
--- through the neighbourhood catalogue.  Issue only this one real object from
--- facts already loaded on the spawning player; the broad scan still builds the
--- case and places every other clue.  A marker on the item makes retries and a
--- save/reload before case attachment idempotent.
-function R.primeOpening()
-    if not allowed() then return true,"not available" end
-    local saved=ModData.get(TAG)
-    if saved and (saved.canonical or saved.campaign) then return true,"case already exists" end
-    local player=getPlayer and getPlayer()
-    if not player then return false,"player not ready" end
-    local house=playerHouse(player)
-    if not house then return false,"starting house not ready" end
-    local _,profession=playerIdentity(player)
-    -- A family whose pocket object is a key to this building primes it now;
-    -- any other opening delivers its object when the case attaches.
-    local Premises=require("NHShared/Generated/Premises")
-    if not (profession and Premises.forProfession(profession) and Premises.primedKey(profession)) then
-        return true,"no primed key for this opening"
-    end
-    local inventory=player.getInventory and player:getInventory()
-    if not inventory then return false,"inventory not ready" end
-    local existing=primedOpening(inventory,house)
-    if existing then return true,"opening already primed" end
-    local square=player.getSquare and player:getSquare()
-    local building=square and square.getBuilding and square:getBuilding()
-    local item,why=HouseKeys.createForBuilding(building)
-    if not item then return false,tostring(why) end
-    local md=item:getModData()
-    md[PRIMED_HOUSE]=house
-    md.cfOpeningVoice=Premises.openingVoice(profession) or FITNESS_OPENING_VOICE
-    local ok,added=pcall(function() return inventory:AddItem(item) end)
-    local carried=ok and added~=nil and added~=false
-    if not carried and item.getOutermostContainer then
-        local okOuter,outer=pcall(function() return item:getOutermostContainer() end)
-        carried=okOuter and outer==inventory
-    end
-    if not carried then return false,"inventory refused opening key" end
-    local voice=require("NHShared/InteractionAPI").PlayerVoice
-    if voice and voice.onOpeningClue then pcall(voice.onOpeningClue,item) end
-    log("Opening key issued before nearby scan; awaiting case attachment.")
-    return true,"opening primed"
-end
-
--- Move the opening paper from its assigned starting-house container into the
--- survivor's main inventory, then make this one discovery automatic. If any
--- prerequisite changed, leave the item untouched: the normal nearby cue and
--- ordinary container discovery remain a complete fallback.
-local function deliverOpening(api,id,source,expected)
-    local request=openingDelivery
-    if not request or request.id~=id then return end
-    openingDelivery=nil -- one attempt; failure deliberately becomes fallback
-    local p=getPlayer and getPlayer()
-    local inventory=p and p.getInventory and p:getInventory()
-    if expected~=1 or not inventory or playerHouse(p)~=request.house then
-        log("Opening clue remained in its starting-house container (delivery prerequisites changed).")
-        return
-    end
-    local item=itemWithToken(source,api.assignment(id).physicalToken)
-    if not item then
-        log("Opening clue remained in its starting-house container (placed item not found).")
-        return
-    end
-    -- ItemContainer's native B42 removal method is Remove.  RemoveItem was a
-    -- test-double invention and calling it here made the opening transaction
-    -- die immediately after successfully placing the clue.
-    local removed=pcall(function() source:Remove(item) end)
-    local added,answer=false,nil
-    if removed then added,answer=pcall(function() return inventory:AddItem(item) end) end
-    local carried=false
-    if added then
-        carried=answer~=nil and answer~=false
-        if not carried and item.getOutermostContainer then
-            local ok,outer=pcall(function() return item:getOutermostContainer() end)
-            carried=ok and outer==inventory
-        end
-    end
-    if not carried then
-        pcall(function() source:AddItem(item) end)
-        log("Opening clue remained in its starting-house container (inventory transfer refused).")
-        return
-    end
-    local recognised=R.recognise(item,"opening")
-    local inspected=recognised and R.inspect(item,false)
-    if not inspected then
-        log("Opening clue reached the survivor but could not be noted automatically.")
-        return
-    end
-    local voice=require("NHShared/InteractionAPI").PlayerVoice
-    if voice and voice.onOpeningClue then pcall(voice.onOpeningClue,item) end
-    CFLog.write("i","found",{doc=id,place=addressFor(request.house),how="carried-at-start"})
-end
 
 local function placement(api,id)
     local scan,count,finished,container,created
@@ -429,14 +327,26 @@ local function placement(api,id)
                 at=t and (t.x..","..t.y..","..t.z..":"..tostring(t.objectIndex)..":"..tostring(t.containerIndex)),
                 kind=placedDoc and placedDoc.kind or nil,
                 room=t and t.vehiclePart or nil,n=expected})
-            deliverOpening(api,id,current,expected)
             return true
         end
         if a.status=="placing" and not created then
-            checked(api.status(id,"unknown")); log("Interrupted placement is uncertain; no automatic replacement."); return true
+            if count==0 and not api.isShown(id) and not api.isRecognised(id) then
+                -- Clue placement was interrupted before any items were created, but the
+                -- clue was never shown to the survivor. Retry: allow item creation to proceed.
+                -- B4 (2026-09-28): provisional owner rule—retry only if never seen/recognised
+                -- The same open-loot-window refusal as a first placement: wait,
+                -- never create into a container the survivor is looking into.
+                if not FixedContainers.fresh(current,Session.isArea(api.snapshot())) then return true end
+                log("Clue placement interrupted but never shown/recognised; retrying.")
+                created=true
+            else
+                checked(api.status(id,"unknown")); log("Interrupted placement is uncertain; no automatic replacement."); return true
+            end
         end
         if a.status=="pending" then
-            local fresh,why=FixedContainers.fresh(current)
+            -- A No Help area clue may go in a drawer searched earlier; only
+            -- the open loot window refuses (owner, 2026-09-27).
+            local fresh,why=FixedContainers.fresh(current,Session.isArea(api.snapshot()))
             if not fresh then
                 local ok,deferWhy=api.deferTarget(id,worldHours())
                 if not ok then log("could not defer a searched target: "..tostring(deferWhy)) end
@@ -465,7 +375,7 @@ local function placement(api,id)
             end
             local md=item:getModData()
             md.cfGeneratedId=id; md.cfPhysicalToken=a.physicalToken
-            if doc.openingVoice then md.cfOpeningVoice=doc.openingVoice end
+            if isSet(doc) then md.cfPiece=#createdItems+1 end
             -- Each copy of a pile counts itself. Eleven items all reading "one
             -- of eleven" told the player nothing about which one they were
             -- holding (owner, 2026-09-10).
@@ -473,11 +383,22 @@ local function placement(api,id)
             -- the survivor recognises it (R.recognise).
             applyWear(item,member)
             writePages(item,doc,api.snapshot().case)
+            -- A card clue reads like a vanilla card with its name on it.
+            Kinds.nameAsVanillaCard(item,doc)
             createdItems[#createdItems+1]=item
           end
         end
+        if isSet(doc) then
+            local pieces=Holders.pieces(doc)
+            local pick=Holders.pick(R.worldSeed(),id,pieces,Holders.targetFits(current))
+            local wrapped=wrapInHolder(createdItems,id,a.physicalToken,pick and pick.fullType)
+            if wrapped~=createdItems then
+                log("holder "..tostring(pick.id).." holds the "..#createdItems.." pieces of "..tostring(id))
+                createdItems=wrapped
+            end
+        end
         for _,item in ipairs(createdItems) do
-            assert(current:AddItem(item),"could not add evidence")
+            assert(World.addEvidence(current,item),"could not add evidence")
         end
         -- Claim the part, once the items are actually in it.
         World.markVehiclePart(current,a.physicalToken)
@@ -486,13 +407,33 @@ local function placement(api,id)
         return false
     end
 end
+-- Only a document that still has something to write gets a job: every other
+-- status ends the job at once (placement above). The scheduler holds at most
+-- maxJobs placement jobs, so the walk resumes where the last one stopped and
+-- every waiting document gets its turn however many there are (first visible
+-- playtest: one job per document, every 120 ticks, filled the whole queue).
+local PLACING={pending=true,placing=true}
+local placeCursor={}
 local function enqueue()
     if not sessions then return end
-    for index,api in ipairs(sessions) do for _,d in ipairs(api.snapshot().case.documents) do
-        -- Nothing is placed while the save is refusing writes; the documents
-        -- are enqueued again when the case store is next opened.
-        if not saveRefused() then scheduler.enqueue("place:"..d.id,"placement",placement(api,d.id)) end
-    end
+    -- Nothing is placed while the save is refusing writes; the documents
+    -- are enqueued again when the case store is next opened.
+    if saveRefused() then return end
+    for index,api in ipairs(sessions) do
+        local snap=api.snapshot()
+        local docs=snap.case.documents
+        local n=#docs
+        local start=placeCursor[index] or 1
+        if start>n then start=1 end
+        for step=0,n-1 do
+            local i=(start-1+step)%n+1
+            if scheduler.full("placement") then break end
+            local d=docs[i]
+            local a=snap.assignments[d.id]
+            -- Already queued (same key) is fine: it is still being placed.
+            if a and PLACING[a.status] then scheduler.enqueue("place:"..d.id,"placement",placement(api,d.id)) end
+            placeCursor[index]=i%n+1
+        end
     end
 end
 local function copyValue(v)
@@ -508,181 +449,6 @@ local function swap(next)
     local store=ModData.getOrCreate(TAG); store.campaign=next; wrapper=next
     -- Validated just above: the cached readers need not validate it again.
     pcall(Cases.remember,store,getTimeInMillis and getTimeInMillis())
-end
--- Retired rows, re-read from the stored wrapper. A last-seen write changes
--- only these, so it refreshes them without reopening every live session.
-local function refreshRetired()
-    retiredRows={}; retiredIds={}
-    for _,root in ipairs(Cases.sessions(wrapper) or {}) do
-        if Retired.isRetired(root) then
-            -- `rows` is absent once a case is deep-archived; `known` is still
-            -- every document it placed, and that is what marks the items.
-            for _,row in ipairs(root.rows or {}) do retiredRows[#retiredRows+1]=row; retiredIds[row.id]=true end
-            for _,id in ipairs(root.known or {}) do retiredIds[id]=true end
-        end
-    end
-end
--- HONEST REFUSALS (P4-R133, docs/design/CASE_PACING.md).
---
--- A refusal used to be a sentence in a log line, so nothing could count them,
--- nothing could act on them, and nothing could say when the next case was due.
--- One long campaign run refused seventeen times and never delivered a second
--- case, and the mod said nothing at all. Now every refusal carries:
---   * a code from the closed set (SuccessiveCases.DEFER_CODES),
---   * a per-code count, which resets when the reason changes,
---   * dueHours, the in-game hour by which the next case IS expected, and
---   * the rung of the ladder the count has earned.
--- The count and rung are written into the case store's schedule slot, so they
--- survive a reload. Nothing of this reaches the player: no voice line, no
--- marker, no hint. The world simply thins out.
-local REFUSALS_PER_RUNG=Cases.REFUSALS_PER_RUNG
-R.RUNG_MAX=Cases.MAX_RUNG
--- A repeated refusal of the same code inside this much in-game time is the
--- same refusal still standing, not a new one: it neither counts nor writes to
--- the save. Without it a ten-second poll would count a standing wait a hundred
--- times an hour and validate the whole store each time - which is the fault
--- P4-R125 was written to fix, in a new place.
-R.DEBT_GAP_HOURS=0.25
--- The in-game clock as the reader sees it, for the log's `due` field.
-local function hhmm(h)
-    if type(h)~="number" or h~=h or h==math.huge then return nil end
-    local minutes=math.floor(h*60+0.5)%1440
-    return string.format("%02d:%02d",math.floor(minutes/60),minutes%60)
-end
--- When the next case is expected, AND IT IS ALWAYS A TIME IN THE FUTURE.
---
--- This used to return `math.max(now,last+gap)` for every code but `cooldown`,
--- and the generator is only ever ASKED once the gap has passed - so
--- `last+gap<=now`, the promised hour WAS the current hour, and a fresh
--- `no-containers` refusal was overdue a minute later (evidence
--- 20260918T045250-promise.txt, FAIL "the refusal promised 02:10 and it is
--- already 02:11"). A promise that cannot be kept cannot be broken either, so
--- P4-R133's "past the promised hour it is a failure" meant nothing at all, and
--- prove.py's promise-overdue mutation could not be caught because the clean
--- code already behaved as the bug.
---
--- Every refusal now promises the wait that actually applies to it, measured
--- from now, and no case can arrive before the ordinary gap either - so the
--- promise is the later of the two:
---   * `cooldown` is P4-R125's own wait still standing: its end, half an
---     in-game hour, is the whole of the promise.
---   * `no-containers` and `no-reach` impose that same wait (the generator is
---     not asked again until the survivor has moved about fifty tiles or half
---     an hour has passed), so it is their floor too.
---   * every other code - the cap, the active limit, `disabled`, and the
---     ordinary `gap` - waits for the gap measured from the last case created,
---     which is exactly what AutomaticInvestigations waits for, and never for
---     an hour already gone.
--- The rule itself is pure and lives in the domain module (Cases.dueHours); this
--- is only what the runtime knows that the rule needs.
-local function dueFor(code,now)
-    local auto=NHShared.AutomaticInvestigations
-    local gap=(auto and auto.config and auto.config.minGapHours) or 24
-    local schedule=wrapper and wrapper.schedule
-    local last=schedule and schedule.createdHours and schedule.createdHours[#schedule.createdHours]
-    return Cases.dueHours(code,now,R.DEFER_HOURS,gap,last)
-end
-local function rememberDebt()
-    if not wrapper or not wrapper.schedule then return end
-    local staged,why=Cases.setDefer(wrapper,debt and {code=debt.code,count=debt.count,
-        sinceHours=debt.sinceHours,dueHours=debt.dueHours,rung=debt.rung} or nil)
-    if not staged then log("refusal not recorded: "..tostring(why)); return end
-    -- A refusal must never throw: the debt is bookkeeping, and a save that
-    -- refuses the write is already saying something louder.
-    local ok,err=pcall(swap,staged)
-    if not ok then log("refusal not recorded: "..tostring(err)) end
-end
--- Refusals per code, so an interleaved `busy` cannot reset the count that the
--- ladder reads. Only the standing refusal's own count is written to the save;
--- the rest are this session's, which is what P4-R125 already assumed.
-local refusals={}
--- Two codes are never counted. A `cooldown` is the wait we imposed ourselves
--- (P4-R125) and `busy` is a placement in progress: neither is the world
--- failing to supply a case, and counting a ten-second poll would walk the
--- ladder up for nothing. Both are still logged, once per occurrence.
-local COUNTED={["no-reach"]=true,["no-containers"]=true,cap=true,["active-limit"]=true,disabled=true}
--- The rung the ladder has reached: the highest any one code has earned. A
--- property of the generator, not of one refusal, so a different code refusing
--- in between never lowers it back.
-local function rungNow()
-    local rung=0
-    for _,r in pairs(refusals) do
-        rung=math.max(rung,math.min(R.RUNG_MAX,math.floor(r.count/REFUSALS_PER_RUNG)))
-    end
-    return rung
-end
-function R.rung() return rungNow() end
--- THE REASON FOR THE SILENCE, counted or not. `debt` is what the save owes -
--- only a counted code writes that - and `silence` is the last reason a case did
--- not come, which is what a reader asking "why is nothing happening?" needs.
--- Before this, an uncounted code was logged and nothing else, so
--- automaticStatus().why was nil in exactly the states a long save sits in.
-local silence
--- `wait` marks the refusals that came from a nearby scan: those, and only
--- those, make the next attempt wait for the survivor to move on (P4-R125).
--- `dueAt` is for a caller that knows when it is waiting until better than
--- dueFor does (the poller's extra hour after a case finished, P4-R121).
-local function refuse(code,wait,dueAt)
-    assert(Cases.DEFER_CODES[code],"unknown refusal code "..tostring(code))
-    local now=worldHours()
-    if type(dueAt)~="number" or dueAt~=dueAt or dueAt==math.huge or dueAt==-math.huge then dueAt=nil end
-    local record={code=code,count=0,sinceHours=now,rung=rungNow(),
-        dueHours=dueAt or dueFor(code,now)}
-    local counted=false
-    if COUNTED[code] then
-        local r=refusals[code]
-        counted=not r or (now-r.atHours)>=R.DEBT_GAP_HOURS or now<r.atHours
-        if counted then
-            r=r or {count=0,sinceHours=now}
-            r.count=r.count+1; r.atHours=now; refusals[code]=r
-        end
-        record.count=r.count; record.sinceHours=r.sinceHours; record.rung=rungNow()
-        if wait then
-            local p=getPlayer()
-            record.x=p and p:getX(); record.y=p and p:getY(); record.waitHours=now
-        elseif debt and debt.x then
-            -- A standing wait is not cancelled by some other refusal happening.
-            record.x,record.y,record.waitHours=debt.x,debt.y,debt.waitHours
-        end
-        debt=record
-    else
-        -- Never counted, never written to the save: a cooldown, a placement in
-        -- progress and the ordinary gap between cases are all our own pacing
-        -- rather than the world failing to supply a case, and all three are
-        -- polled every ten seconds. The standing count is reported so the line
-        -- still says how much is owed.
-        record.count=debt and debt.count or 0
-    end
-    silence=record
-    CFLog.write(counted and "i" or "d","defer",
-        {why=code,n=record.count,rung=record.rung,due=hhmm(record.dueHours)})
-    if counted then rememberDebt() end
-    return false,code
-end
--- WHY NO CASE CAME, from the one place that decides whether to ask for one
--- (P4-R133). AutomaticInvestigations.poll had five silent early returns, so
--- "no case came" was still entirely unexplained - including `active=4/4`, the
--- state a long save actually sits in. This gives the poller's own silence a
--- code from the same closed set and the same `ev=defer` line. It changes
--- nothing about WHEN a case is created.
-function R.deferPoll(code,dueAt)
-    if not allowed() then return false,"debug single-player required" end
-    return refuse(code,false,dueAt)
-end
--- A case arrived: nothing is owed and the ladder starts from the bottom again.
-local function clearDebt()
-    debt=nil; refusals={}; silence=nil
-end
--- What the save still owes, after a reload (P4-R133). The count and the rung
--- come back; the wait does not - a load clears the wait, which is what P4-R125
--- decided and what the player expects after coming back to the game.
-local function restoreDebt()
-    debt=Cases.defer(wrapper)
-    refusals={}
-    if debt then
-        refusals[debt.code]={count=debt.count,sinceHours=debt.sinceHours,atHours=0}
-        debt.rung=rungNow()
-    end
 end
 local function openAll()
     -- Replacing the session set invalidates queued closures over old APIs.
@@ -700,66 +466,32 @@ local function openAll()
     end
     -- A flag with no preparation behind it would stop every later case.
     if not scheduler.has("preparation") then preparing=false end
-    sessions={}; refreshRetired(); local stale=0
+    sessions={}; areaSession=nil; local stale=0
     for index,root in ipairs(Cases.sessions(wrapper)) do
-        -- A retired root is not a Session and must never be opened as one
-        -- (its rows were collected by refreshRetired above).
-        -- The closure keeps the true wrapper index, which no longer matches
-        -- the position in `sessions` once any root has retired.
-        if not Retired.isRetired(root) then
-            -- A root written by an earlier generator revision no longer
-            -- validates, and asserting on it would throw once per tick
-            -- forever - the same shape of failure as the retired-case loop
-            -- fixed on 2026-09-09. A case from an older build is a case we
-            -- stop tracking, not a crash. Its evidence stays in the player's
-            -- world and its evidence rows stay readable; only placement and
-            -- discovery stop.
-            local api,why=Session.open(root,function(staged) swap(assert(Cases.replace(wrapper,index,staged))) end)
-            if api then
-                sessions[#sessions+1]=api
-            else
-                stale=stale+1
-                log("a saved case predates this build and is no longer tracked: "..tostring(why))
-            end
+        -- The closure keeps the true wrapper index.
+        -- A root written by an earlier build no longer validates, and
+        -- asserting on it would throw once per tick forever. A case from an
+        -- older build is a case we stop tracking, not a crash.
+        local api,why=Session.open(root,function(staged) swap(assert(Cases.replace(wrapper,index,staged))) end)
+        if api then
+            sessions[#sessions+1]=api
+            if Session.isArea(root) then areaSession=api end
+        else
+            stale=stale+1
+            log("a saved case predates this build and is no longer tracked: "..tostring(why))
         end
     end
     enqueue()
     if stale>0 then
-        log(stale.." saved case(s) predate this build. New cases will generate normally; the old ones stay on the organiser.")
+        log(stale.." saved case(s) predate this build and are no longer tracked.")
     end
-    log("Generated case active. Take an evidence item, then right-click Inspect Investigation Evidence.")
+    if not areaSession then
+        log("This save holds no No Help world record (an old generated case?); no areas will be decided in it.")
+    end
+    log("No Help world record open: "..#sessions.." session(s).")
 end
 local function currentHouse()
     return playerHouse(getPlayer())
-end
-local function firstCase(catalog,seed,options,context,house,candidates)
-    local Catalog=require("NHShared/Generated/Catalog")
-    local Reach=require("NHShared/Reach")
-    local eligible,why=Catalog.eligible(catalog,options.mapId,options.buildLine,false)
-    if not eligible then return nil,why,"no-containers" end
-    local radius=Reach.radius(context.hoursSurvived);if not radius then return nil,"invalid survival reach","no-reach" end
-    local intro,partners
-    partners={}
-    for _,site in ipairs(eligible) do if site.id==house and Reach.contains(site.bounds,context.anchor,radius) then intro=site end end
-    if not intro then return nil,"current house needs suitable loaded storage","no-containers" end
-    for _,site in ipairs(eligible) do
-        if Catalog.distinct(intro,site) and Reach.contains(site.bounds,context.anchor,radius) then partners[#partners+1]=site end
-    end
-    if #partners==0 then return nil,"no second loaded site within reach","no-reach" end
-    table.sort(partners,function(a,b) return a.id<b.id end)
-    -- Before commitment, try each deterministic partner once.  Capacity follows
-    -- the selected story roles, not the former 3/4 building split.
-    --
-    -- One container at each site is enough (P4-R133): the clues that do not fit
-    -- now wait as an open order and the filler places them as the survivor
-    -- moves about. Demanding every container up front is what stopped cases
-    -- coming for a player who stays in one house.
-    for offset=0,#partners-1 do
-        local partner=partners[(seed+offset)%#partners+1]
-        local case=G.generateSelected(catalog,seed,options,{intro.id,partner.id})
-        if case and #(candidates[intro.id] or {})>=1 and #(candidates[partner.id] or {})>=1 then return case end
-    end
-    return nil,"first house and partner lack containers for this generated evidence set","no-containers"
 end
 -- A basement candidate only ever becomes usable once NHShared/
 -- Connectivity, fed by ReachabilityAdapter, proves the exact square
@@ -778,475 +510,447 @@ local function withReachability(result,startStorage)
         startStorage(Reachability.predicate(cache))
     end))
 end
-local function prepare(result,seed,later,house)
-  withReachability(result,function(reachable)
-    local scan,why=Storage.scan(result,function(catalog,targets,candidates,rooms,occupied)
-        local p=getPlayer()
-        -- Sites earlier cases used are not reused. A retired case keeps no case
-        -- envelope, only its rows, and each row still names its site. Reading
-        -- root.case.locations for a retired case threw here, so once a player's
-        -- only case was complete no further case could ever be prepared
-        -- (Linux core-loop check, 2026-09-11; same class as 3fe1813).
-        -- THE LADDER (P4-R133). After three refusals of one code the generator
-        -- lowers its own standard, one rung at a time. Only for a later case:
-        -- the first case's site is the house the player is standing in
-        -- (P4-R66), which is not a standard that can be lowered.
-        local rung=later and rungNow() or 0
-        local used={}
-        -- RUNG 3: release the oldest finished case's sites back into the pool.
-        -- A deep-archived case (P4-R111) already has no rows and so excludes
-        -- nothing; this is the oldest one that still does.
-        local released=nil
-        if rung>=3 then
-            for index,root in ipairs(Cases.sessions(wrapper) or {}) do
-                if Retired.isRetired(root) and root.rows then released=index; break end
-            end
-        end
-        for index,root in ipairs(Cases.sessions(wrapper) or {}) do
-            if index~=released then
-                if root.case then for _,site in ipairs(root.case.locations) do used[site.id]=true end
-                else for _,row in ipairs(root.rows or {}) do if row.locationId then used[row.locationId]=true end end end
-            end
-        end
-        local filtered={revision=catalog.revision,locations={}}
-        for _,site in ipairs(catalog.locations) do
-            local available=candidates and candidates[site.id] or {}
-            if not used[site.id] and #available>=1 then filtered.locations[#filtered.locations+1]=site end
-        end
-        local anchor=later and {x=math.floor(p:getX()),y=math.floor(p:getY())} or result.anchor
-        preparing=false
-        if house and currentHouse()~=house then refuse("busy");return end
-        local options={mapId=result.map,buildLine=result.gameVersion}
-        -- The first case of a game carries the relay memo (P4-R96); later
-        -- cases never do, so a game holds exactly one.
-        if not later then options.relayMemo=true end
-        -- THE PERSONAL OPENING (DR-20260919-BUILD-PAIR, DR-20260919-Q31). The
-        -- first case of a save is the survivor's own: a collection scheduled in
-        -- their name, recorded at an address that is not the one they are at.
-        -- Only ever the first - a later case must never carry the survivor's
-        -- own name, which is why Premises.choose cannot draw this premise.
-        --
-        -- The name is read HERE, at creation, and saved in the case, exactly as
-        -- the cast and the steer are: re-reading it at load would break
-        -- validation, because the case rebuilds from its own record.
-        --
-        -- No name, no opening. The slip is the case's only personal anchor and
-        -- link A has no alternative (OPENING_PAIR_COMPLETION.md), so a nameless
-        -- survivor gets an ordinary first case rather than a blank slip. Both
-        -- the descriptor and its fields are read under pcall because a mod that
-        -- cannot generate a case is worse than one whose opening is ordinary.
-        if not later then
-            local name,profession=playerIdentity(p)
-            if name and #name<=60 then
-                options.opening=true; options.self=name
-                local Premises=require("NHShared/Generated/Premises")
-                local family=profession and Premises.forProfession(profession)
-                if family then
-                    options.profession=profession
-                    -- The least-played start on this install, the seed only
-                    -- deciding between equals (OpeningMemory, owner 2026-09-25).
-                    local variants=Premises.openingVariants(family.id)
-                    local okM,Store=pcall(require,"NHShared/OpeningMemoryStore")
-                    if okM and Store then
-                        local okC,chosen=pcall(Store.choose,profession,variants,seed)
-                        if okC and chosen then options.variant=chosen end
-                    end
-                    log("first case: one of "..tostring(variants).." "..profession
-                        .." openings, in the survivor's own name")
-                else
-                    log("first case: the personal opening, in the survivor's own name")
-                end
-            else
-                log("first case: no readable survivor name, so an ordinary case rather than a blank slip")
-            end
-        end
-        -- The people this case is about come from bodies the player has already
-        -- searched, when there are any. Read once, here, at creation, and saved
-        -- in the case - never re-read at load, which would break validation.
-        -- Named nameLog, not log: a local called `log` shadowed this file's own
-        -- log function, and the next line in scope that tried to log crashed
-        -- case creation outright (caught by automatic_investigations).
-        local nameLog=NHShared.PersonNameLog
-        if nameLog and nameLog.names then
-            local ok,met=pcall(nameLog.names)
-            if ok and type(met)=="table" and #met>0 then options.names=met end
-        end
-        -- "What do I make of it?" (P4-R113): the most recently changed unused
-        -- answers about a finished case steer this one. Read here, saved in
-        -- the case, and marked used in the same swap below.
-        local steerFrom
-        if later then
-            -- THE CONNECTED FOLLOW-UP FIRST (Phase C, DR-20260919-CONTINUITY).
-            -- A thread is what the survivor FOUND and where; a steer is what
-            -- they concluded, read from the closing questions. Only the first
-            -- may drive continuity, so a pending thread takes precedence and
-            -- the steer is left alone for the case after.
-            -- A pcall THAT SWALLOWS ITS ERROR DEGRADES THE FEATURE IN
-            -- SILENCE. If either of these raises, the case is built with no
-            -- continuity at all: no steer, no follows, no refusal and not one
-            -- line in the log. The survivor's answers then stay unused and the
-            -- case AFTER next picks them up - which is exactly what the
-            -- campaign gate saw on 2026-09-21 (case 3 carried case 1's steer)
-            -- and which nothing in the evidence could explain, because there
-            -- was nothing to explain it with.
-            --
-            -- Offline the mechanism is sound: test/steer_precedence proves the
-            -- answers reach the next case, mark themselves used, never reach a
-            -- third and survive a reload. So the question is what happens HERE,
-            -- in the game, and it cannot be answered until this says so.
-            local okThread,thread=pcall(Cases.pendingThread,wrapper)
-            if not okThread then
-                log("continuity: pendingThread failed, so no finding can be "
-                    .."followed: "..tostring(thread))
-            end
-            if okThread and thread then
-                options.follows=thread
-                log("next case follows the finding recorded in "..tostring(thread.fromCase))
-            else
-                local okSteer,steer,index=pcall(Cases.pendingSteer,wrapper)
-                if not okSteer then
-                    log("continuity: pendingSteer failed, so the survivor's "
-                        .."answers cannot steer this case: "..tostring(steer))
-                elseif not steer then
-                    -- Not a fault: nothing answered, or already used.
-                    log("continuity: no unused answers, so this case is unsteered")
-                else
-                    options.steer=steer; steerFrom=index
-                end
-            end
-        end
-        local context={hoursSurvived=p:getHoursSurvived(),anchor=anchor}
-        -- RUNG 2: one step wider reach. The nearby scan was already started at
-        -- the wider radius (R.nextCase); this is the generator's own filter
-        -- being told the same thing, or it would throw the extra buildings
-        -- straight back out. Reachability itself is never traded: an
-        -- unreachable clue is not a clue, and Storage.scan's basement gate is
-        -- untouched.
-        if rung>=2 then
-            local Reach=require("NHShared/Reach")
-            local base=Reach.radius(context.hoursSurvived)
-            context.radius=base and Reach.wider(base) or nil
-        end
-        local case,err,code
-        if house then case,err,code=firstCase(filtered,seed,options,context,house,candidates)
-        else
-            case,err=G.generateNew(filtered,seed,options,context)
-            -- RUNG 1: a smaller case. A case is re-derived from its seed, so
-            -- its clues cannot be trimmed - a smaller case is a DIFFERENT
-            -- case. So try a bounded, deterministic sequence of seeds and keep
-            -- the smallest case any of them gives, down to the generator's own
-            -- minimum (a claim and a record contradicting it, which every case
-            -- carries by construction). Bounded at three tries because each
-            -- one is a full generate-and-validate.
-            if rung>=1 then
-                local best=case
-                for step=1,R.RUNG1_TRIES do
-                    if best and #best.documents<=G.MIN_EVIDENCE then break end
-                    local other=(seed*31+step*1013904223)%2147483646+1
-                    local try=G.generateNew(filtered,other,options,context)
-                    if try and (not best or #try.documents<#best.documents) then best=try end
-                end
-                if best and best~=case then
-                    log("rung 1: a smaller case, "..#best.documents.." clue(s) instead of "
-                        ..(case and #case.documents or "none"))
-                    case=best
-                end
-            end
-        end
-        if not case then
-            -- Which refusal it is, honestly: nothing eligible within reach at
-            -- all is a different fault from buildings that hold no loaded
-            -- container, and only the second one is cured by walking inside.
-            if not code then
-                code=(#catalog.locations<2) and "no-reach" or "no-containers"
-            end
-            log("no case: "..tostring(err))
-            refuse(code,later==true); return
-        end
-        -- The fixed index gives us durable signatures before a distant chunk
-        -- is loaded. For a personal opening, only the STARTING HOUSE must be
-        -- concrete now: its key is delivered immediately from a real live
-        -- container. The partner may remain an indexed open order.
-        if house and case.opening then
-            local exact,exactRooms,exactOccupied={},{},{}
-            for index,candidate in ipairs(candidates[house] or {}) do
-                local target=candidate
-                if candidate.indexed==true then target=FixedContainers.resolve(candidate) end
-                if target and World.resolve(target) then
-                    exact[#exact+1]=target
-                    exactRooms[#exactRooms+1]=(rooms[house] or {})[index]
-                    exactOccupied[#exactOccupied+1]=(occupied[house] or {})[index]
-                end
-            end
-            if #exact==0 then refuse("busy"); return end
-            candidates[house],rooms[house],occupied[house]=exact,exactRooms,exactOccupied
-            targets[house]=exact[1]
-            for _,site in ipairs(case.locations) do
-                local target=targets[site.id]
-                if site.id==house then
-                    if not World.resolve(target) then refuse("busy"); return end
-                elseif not (target and target.indexed==true) and not World.resolve(target) then
-                    refuse("busy"); return
-                end
-            end
-        else
-            -- The same tolerance as the opening: an indexed signature is a
-            -- durable open order for a chunk not loaded yet (P4-R133), and
-            -- resolving it live answers "unloaded" for every distant site. Read
-            -- as "busy", that refused every second case whose sites were out
-            -- of sight (core loop 20260924T223914: "busy x0"). Only a live,
-            -- non-indexed target must resolve now.
-            for _,site in ipairs(case.locations) do
-                local target=targets[site.id]
-                if not (target and target.indexed==true) and not World.resolve(target) then refuse("busy"); return end
-            end
-        end
-        -- INSTALMENTS (P4-R133). The case goes live with the clues that fit
-        -- now; the rest wait as an open order and the filler places them as
-        -- the survivor moves about and more of the world loads. This is where
-        -- the old fault was: the whole case was thrown away unless every site
-        -- could supply its share of distinct containers at that moment, so a
-        -- player who stays in one house got no further cases at all.
-        local first=case.documents[1]
-        -- If the startup lane already put the Fitness Instructor's real key in
-        -- hand, this transaction adopts that exact object.  The container
-        -- assignment remains its provenance, but no second key is created.
-        local primed
-        if house and case.opening and case.opening.profession
-            and require("NHShared/Generated/Premises").primedKey(case.opening.profession) then
-            primed=primedOpening(p:getInventory(),house)
-        end
-        local preference=house and case.opening and {farFrom={documentId=first.id,x=p:getX(),y=p:getY()}} or nil
-        local root,waiting=Session.createDistributed(case,candidates,rooms,occupied,worldHours(),preference)
-        if not root then refuse("no-containers",later==true); return end
-        -- A case is a claim and a record that contradicts it, in two different
-        -- places (Generator.MIN_EVIDENCE). One clue on its own is not a case,
-        -- and a case with one clue could never finish - it would squat an
-        -- active slot for ever, which is worse than the refusal this change
-        -- exists to fix. So each of the two sites must take a clue now; the
-        -- rest may wait.
-        local placedAt={}
-        for _,doc in ipairs(case.documents) do
-            local a=root.assignments[doc.id]
-            if a.status~="deferred" then placedAt[doc.locationId]=(placedAt[doc.locationId] or 0)+1 end
-        end
-        for _,site in ipairs(case.locations) do
-            if not placedAt[site.id] then refuse("no-containers",later==true); return end
-        end
-        -- The opening clue of the FIRST case is in the house the player is
-        -- standing in (P4-R66), so it is never an instalment.
-        if house and case.opening and not root.assignments[case.documents[1].id].target then
-            refuse("no-containers",false); return
-        end
-        for _,assignment in pairs(root.assignments) do
-            if assignment.target and not World.resolve(assignment.target) then refuse("busy");return end
-        end
-        -- Validate once more before the single authoritative swap.
-        checked(Session.validate(root))
-        if later then
-            local staged=assert(Cases.stage(wrapper,root,wrapper.schedule and worldHours() or nil,steerFrom))
-            -- A case arrived: nothing is owed. Cleared in the same swap that
-            -- stages the case, so the store is never observably in debt for a
-            -- case it already has.
-            if staged.schedule then staged.schedule.defer=nil end
-            swap(staged)
-            clearDebt()
-            if steerFrom then log("Case shaped by the survivor's answers about "..tostring(case.steer and case.steer.fromCase)) end
-        elseif house then swap({canonical=root,schedule={schema=1,createdHours={worldHours()}}}); clearDebt()
-        else swap({canonical=root}); clearDebt() end
-        if house and case.opening and not primed then openingDelivery={id=first.id,house=house} end
-        -- Committed: this install has now played this start.
-        if case.opening and case.opening.profession and case.opening.variant then
-            local okM,Store=pcall(require,"NHShared/OpeningMemoryStore")
-            if okM and Store then pcall(Store.record,case.opening.profession,case.opening.variant) end
-        end
-        openAll()
-        -- Non-opening development cases may legitimately begin with an indexed
-        -- plan. The personal opening cannot (guarded above), but using the plan
-        -- as a diagnostic anchor prevents any post-commit nil dereference.
-        local t=root.assignments[first.id].target or root.assignments[first.id].planned
-        if house and case.opening then
-            log("Opening clue origin: "..t.x..", "..t.y..", floor "..t.z.."; immediate personal delivery requested.")
-        else
-            log("DEV first clue container: "..t.x..", "..t.y..", floor "..t.z..". No discoveries granted.")
-        end
-        -- How much of the case is an open order. A count, in the log, never on
-        -- any surface the player reads: the record shows what was found and
-        -- never a total (P4-R133).
-        if #waiting>0 then
-            CFLog.write("i","case",{case=case.caseId,n=#waiting,why="instalments"})
-        end
-        if primed then
-            local api
-            for _,candidate in ipairs(sessions or {}) do
-                if candidate.snapshot().case.caseId==case.caseId then api=candidate;break end
-            end
-            checked(api~=nil,"primed opening session missing")
-            checked(api.status(first.id,"placed",worldHours()))
-            local md=primed:getModData()
-            md.cfGeneratedId=first.id
-            md.cfPhysicalToken=api.assignment(first.id).physicalToken
-            md.cfOpeningVoice=first.openingVoice or FITNESS_OPENING_VOICE
-            md[PRIMED_HOUSE]=nil
-            applyWear(primed,first)
-            writePages(primed,first,case)
-            CFLog.write("i","placed",{doc=first.id,place=addressFor(house),
-                at=t.x..","..t.y..","..t.z..":"..tostring(t.objectIndex)..":"..tostring(t.containerIndex),
-                kind=first.kind,n=1,how="primed-at-start"})
-            local recognised=R.recognise(primed,"opening")
-            local inspected=recognised and R.inspect(primed,false)
-            if inspected then
-                CFLog.write("i","found",{doc=first.id,place=addressFor(house),how="carried-at-start"})
-            else
-                log("Primed opening key attached to the case but could not be noted automatically.")
-            end
-        end
-        -- Give the case's person a body. The case keeps its own name and a
-        -- nearby zombie is given THAT name and an ID to match, because a name
-        -- read off the world could never be rebuilt from the seed. See
-        -- NHShared/CasePerson.lua.
-        pcall(function()
-            local People=require("NHShared/CasePerson")
-            local person=case.identities and case.identities[1]
-            -- A person the player has already met is a body they have already
-            -- searched. Naming a second zombie after them would put the same
-            -- person in two graves.
-            if person and person.met then
-                log("case person "..tostring(person.name).." is someone already met; no new body")
-            elseif person and person.name then
-                local bound,why=People.bind(person.name,case.caseId,t.x,t.y,t.z)
-                if not bound then log("case person not bound: "..tostring(why)) end
-            end
-        end)
-    end,reachable)
-    if not scan then preparing=false; log(why); return end
-    scheduler.enqueue("storage","preparation",scan)
-  end)
-end
--- WHY THE FIRST CASE OF A SAVE IS STILL WAITING: the survivor is not inside a
--- building yet (the firstHouse option below; the first case is anchored on the
--- house the survivor is standing in). Named rather than written twice, because
--- AutomaticInvestigations turns exactly this wait into the typed refusal
--- `outdoors` (P4-R133, "every silence has a reason") and matching on a
--- sentence would come apart the day someone rewords it. Every other refusal
--- from R.start is a different reason and stays untyped.
-R.WAITING_INDOORS="waiting until player is inside a building"
-function R.start(seed,options)
-    -- Lazy, not a top-level require: InteractionAPI.lua's own construction
-    -- reaches GeneratedMenu.lua, which reaches EngineAPI.lua, which
-    -- reaches this file - a real circular require if resolved at file-load
-    -- time instead of here, at the point of use. require() itself, not any
-    -- field read, is what forces GeneratedMenu.lua/ClueCue.lua to load -
-    -- InteractionAPI.lua's own top level already required both.
-    require("NHShared/InteractionAPI")
-    if preparing then return false,"preparation already running" end
-    local house
-    local saved=ModData.get(TAG)
-    if options and options.firstHouse and not (saved and (saved.canonical or saved.campaign)) then
-        house=currentHouse();if not house then return false,R.WAITING_INDOORS end
+-- THE WORLD RECORD (No Help, owner 2026-09-27: the old case generator is gone
+-- completely). One record per save, created the first time a save is opened
+-- and kept for ever: a Session root whose case is the "nohelp-areas" record
+-- (Generated/AreaCase). Its world seed is drawn ONCE, here, and saved inside
+-- the record, so every later area is picked from the save alone.
+--
+-- Same gate as the old start (debug single-player, no T11/T12): setup()
+-- refuses anything else.
+local servicesStarted=false
+-- The organiser's map marks and the address book, which the old start path
+-- (Trial.start) switched on before the first case. Retried from the tick
+-- until the player exists, never allowed to stop the record from opening.
+local function startServices()
+    if not getPlayer or not getPlayer() or not getWorld or not getWorld() then return false end
+    local okM,markers=pcall(require,"NHShared/ClueMarkers")
+    if okM and markers and markers.start then
+        local ok,why=pcall(markers.start)
+        if not ok then log("map marks not started: "..tostring(why)) end
     end
-    seed=seed or (ZombRand(2147483646)+1)
-    if type(seed)~="number" or seed~=math.floor(seed) or seed<1 or seed>=2147483647 then return false,"invalid seed" end
+    local okA,addresses=pcall(require,"NHShared/AddressMap")
+    if okA and addresses and addresses.start then
+        local ok,started,why=pcall(addresses.start)
+        if not ok then log("address book not started: "..tostring(started))
+        elseif not started and why~="address index already building" then log("address book not started: "..tostring(why)) end
+    end
+    return true
+end
+function R.bootstrap()
+    -- Lazy, not a top-level require: InteractionAPI.lua's own construction
+    -- reaches GeneratedMenu.lua, which reaches EngineAPI.lua, which reaches
+    -- this file - a real circular require if resolved at file-load time.
+    require("NHShared/InteractionAPI")
     local ok,why=setup(); if not ok then return false,why end
-    if wrapper.canonical then openAll(); return true end
+    if not wrapper.canonical then
+        local worldSeed=ZombRand(2147483646)+1
+        local root,err=Session.createArea(worldSeed)
+        if not root then return false,"could not create the world record: "..tostring(err) end
+        swap({canonical=root})
+        CFLog.write("i","start",{why="world-record",seed=worldSeed})
+    end
+    openAll()
+    servicesStarted=startServices()
+    return true
+end
+-- DECIDING AREAS NEARBY (task 3 plan, phase 5). Replaces the old next-case
+-- poller. Every few seconds of play this may run the existing nearby scan
+-- (T3Nearby, then the storage scan through withReachability, exactly as the
+-- old case preparation did), and every eligible building it finds whose kind
+-- maps to one of the owner's interesting places (AreaPlace) is decided: its
+-- clues are picked from the clue list and added to the world record in one
+-- write, waiting at their own area for the filler to give each a spot of its
+-- own kind. A building is decided once; one with nothing to give is not
+-- decided at all, so a later clue list can still give it clues.
+--
+-- The scan is not free, so it waits until the survivor has moved on or half
+-- an in-game hour has passed since the last attempt (the same 50 tiles and
+-- half hour the old refusals waited, P4-R125).
+R.DECIDE_TILES=50
+R.DECIDE_HOURS=0.5
+local lastDecide=nil
+-- Sites already reported as having no clues to give, this session only.
+local emptyNoted={}
+local function worldRoot()
+    for _,root in ipairs(wrapper and Cases.sessions(wrapper) or {}) do
+        if Session.isArea(root) then return root end
+    end
+    return nil
+end
+-- What the nearby scan knows about each building that the catalogue drops:
+-- its T3 category and its room names, keyed by the catalogue's site id.
+local function placeFacts(result)
+    local hints,rooms={},{}
+    for _,row in ipairs(result and result.rows or {}) do
+        if row.kind=="building" then
+            hints["t3:"..tostring(row.id)]=row.categoryHint
+        elseif row.kind=="room" and type(row.building)=="string" and type(row.name)=="string" and row.name~="" then
+            local id="t3:"..row.building
+            rooms[id]=rooms[id] or {}
+            rooms[id][string.lower(row.name)]=true
+        end
+    end
+    return hints,rooms
+end
+-- THE PLACES VANILLA MAPS AND FLYERS NAME (task 3 plan, step 4). Every mark of
+-- every vanilla map, and every place a flyer names, is a clue place fixed in
+-- advance (Generated/MapSites). Indexed once: by area id, by design, and in a
+-- coarse grid so "near the survivor" looks at a handful of places, not all.
+local MAP_BUCKET=128
+local mapIndex
+local function mapSites()
+    if mapIndex then return mapIndex end
+    local byArea,byDesign,buckets={},{},{}
+    for _,e in ipairs(MapSites.sites) do
+        byArea[e.areaId]=e
+        local seen={}
+        for _,m in ipairs(e.marks) do
+            if m.design and not seen[m.design] then
+                seen[m.design]=true
+                byDesign[m.design]=byDesign[m.design] or {}
+                table.insert(byDesign[m.design],e)
+            end
+        end
+        local b=e.bounds
+        for bx=math.floor(b.x1/MAP_BUCKET),math.floor((b.x2-1)/MAP_BUCKET) do
+            for by=math.floor(b.y1/MAP_BUCKET),math.floor((b.y2-1)/MAP_BUCKET) do
+                local k=bx..":"..by
+                buckets[k]=buckets[k] or {}
+                table.insert(buckets[k],e)
+            end
+        end
+    end
+    mapIndex={byArea=byArea,byDesign=byDesign,buckets=buckets}
+    return mapIndex
+end
+-- A WHOLE AREA A MAP MARKS (MapSites kind "area", owner 2026-09-27): its
+-- marks and annotations as distinct points, or nil for any other place. The
+-- container scan, the ground scan and the arrival ring use them (MarkedArea).
+local areaPointCache={}
+local function areaPoints(site)
+    local id=site and site.id
+    if id==nil then return nil end
+    local cached=areaPointCache[id]
+    if cached==nil then
+        local e=mapSites().byArea[id]
+        cached=e and e.kind=="area" and MarkedArea.points(e.marks) or false
+        areaPointCache[id]=cached
+    end
+    return cached or nil
+end
+R.areaPoints=areaPoints
+-- A clue that belongs to one of its area's own marks (AreaCase.assignMarks):
+-- that mark's point, so its search starts there. Nil for any other clue, and
+-- for a clue being moved to another place.
+local function ownMarkPoint(site,docId)
+    local root=site and worldRoot()
+    local doc
+    for _,d in ipairs(root and root.case and root.case.documents or {}) do
+        if d.id==docId then doc=d; break end
+    end
+    if not doc or doc.mark==nil or doc.locationId~=site.id then return nil end
+    local e=mapSites().byArea[site.id]
+    for _,m in ipairs(e and e.marks or {}) do
+        if m.design and m.mark==doc.mark and type(m.x)=="number" and type(m.y)=="number" then return {x=m.x,y=m.y} end
+    end
+    return nil
+end
+R.ownMarkPoint=ownMarkPoint
+local function decideFrom(result)
+    local hints,rooms=placeFacts(result)
+    withReachability(result,function(reachable)
+        local scan,why=Storage.scan(result,function(catalog,targets,candidates)
+            preparing=false
+            local api=areaSession
+            local root=worldRoot()
+            if not api or not root then return end
+            local decided={}
+            for _,a in ipairs(root.case.areas or {}) do decided[a.id]=true end
+            local sites={}
+            for _,site in ipairs(catalog.locations) do sites[#sites+1]=site end
+            table.sort(sites,function(a,b) return a.id<b.id end)
+            -- One area per scheduler step (phase 5 review): every addArea
+            -- copies and validates the whole growing record, so a dense town
+            -- deciding many buildings in one tick would stall the game.
+            local index=0
+            scheduler.enqueue("area-decide","preparation",function()
+                index=index+1
+                local site=sites[index]
+                if not site then return true end
+                api=areaSession
+                if not api then return true end
+                -- A building a vanilla map or flyer names is the map path's
+                -- to decide (as a map-named place), never this scan's, so it
+                -- is decided once and as one kind of place.
+                if not site.excluded and #(candidates and candidates[site.id] or {})>=1 and not decided[site.id]
+                    and not mapSites().byArea[site.id] then
+                    local place=AreaPlace.of(hints[site.id],rooms[site.id])
+                    if place then
+                        local ok,ids=api.addArea{site=site,place=place,clues=Manifest.clues,
+                            version=Manifest.VERSION,hours=worldHours(),source="nearby"}
+                        if ok then
+                            CFLog.write("i","case",{case=site.id,place=place,n=#ids,why="area-decided"})
+                        elseif ids=="empty" then
+                            -- Normal while the clue list has nothing for this
+                            -- kind of place: said once per site per session.
+                            if not emptyNoted[site.id] then
+                                emptyNoted[site.id]=true
+                                CFLog.write("d","skip",{case=site.id,place=place,why="area-empty"})
+                            end
+                        elseif ids~="decided" then
+                            log("area "..tostring(site.id)..(NHShared.BlindLog and "" or " ("..place..")").." not decided: "..tostring(ids))
+                        end
+                    end
+                end
+                return false
+            end)
+        end,reachable)
+        if not scan then preparing=false; log("nearby storage scan refused: "..tostring(why)); return end
+        scheduler.enqueue("storage","preparation",scan)
+    end)
+end
+function R.decideNearby(force)
+    if not allowed() or not scheduler or not wrapper then return false,"not running" end
+    if preparing then return false,"busy" end
+    if not areaSession then return false,"no world record" end
+    if scheduler.isDisabled and scheduler.isDisabled("preparation") then return false,"disabled" end
+    local p=getPlayer and getPlayer()
+    if not p then return false,"no player" end
+    local now=worldHours()
+    if lastDecide and not force then
+        local dx,dy=p:getX()-lastDecide.x,p:getY()-lastDecide.y
+        local moved=dx*dx+dy*dy>=R.DECIDE_TILES*R.DECIDE_TILES
+        -- A clock that went backwards restarts the wait; it never counts as
+        -- the wait being over (phase 5 review).
+        if now<lastDecide.hours then lastDecide.hours=now end
+        local waited=now>=lastDecide.hours+R.DECIDE_HOURS
+        if not moved and not waited then return false,"wait" end
+    end
+    local root=worldRoot()
+    local seed=root and root.case and root.case.seed
+    if type(seed)~="number" then return false,"no world seed" end
     local probe=require("NHShared/T3Nearby")
-    ok,why=probe.start(nil,seed,house and house:sub(4)); if not ok then return false,why end
+    local ok,why=probe.start(nil,seed)
+    lastDecide={x=p:getX(),y=p:getY(),hours=now}
+    if not ok then return false,why end
     preparing=true
     local waited=0
-    scheduler.enqueue("metadata","preparation",function()
+    local queued=scheduler.enqueue("area-metadata","preparation",function()
         waited=waited+1
-        if probe.error then preparing=false;error(probe.error) end
-        if probe.result then prepare(probe.result,seed,false,house); return true end
+        if probe.error then preparing=false; error(probe.error) end
+        if probe.result then decideFrom(probe.result); return true end
         if waited>240000 then preparing=false; error("metadata extraction did not complete") end
         return false
     end)
+    -- A refused job never runs, so nothing else would ever clear the flag.
+    if not queued then preparing=false; return false,"busy" end
     return true
 end
--- Start the investigation over in the save the player is already in.
+-- DECIDING A MAP-MARKED PLACE (task 3 plan, step 4). When a map is read, all
+-- its marks' places are decided (source "read"); when the survivor comes
+-- within R.MAP_NEAR_TILES of any such place, map read or not, it is decided
+-- too (source "near"). What a place receives is fixed by the world (its seed,
+-- the static list of maps marking it, the clue list): reading only changes
+-- WHEN it is decided, never what it holds.
 --
--- Owner, 2026-09-12: every change to the case rules costs a fresh game, and
--- that happened four times in one day. The world, the character, the base and
--- the map knowledge are all still good; only the cases are stale. So this
--- abandons every case and builds new ones under the current rules, right here.
---
--- Nothing is preserved (P4-R77): the old paperwork is stripped back to
--- ordinary loot rather than deleted, because a player may be carrying it and
--- an item vanishing from a hand is worse than a page nobody records.
---
---     NHShared.GeneratedRuntime.reshuffle("dry")   say what would go
---     NHShared.GeneratedRuntime.reshuffle()        do it
---
--- Developer command: the same debug/single-player gate as nextCase.
-function R.reshuffle(mode)
-    local dry=mode=="dry"
-    if preparing then return false,"preparation already running" end
-    if not allowed() then return false,"debug single-player required" end
-    if not wrapper or not (wrapper.canonical or wrapper.campaign) then return false,"no generated case to reshuffle" end
-    local manifest,why=Cases.abandon(wrapper)
-    if not manifest then return false,tostring(why) end
-    -- The discovery ledger is append-only and finite. Reshuffling does not
-    -- consume it, but the cases that follow do, and a ledger that fills up
-    -- refuses every future discovery for the rest of the save. Say so while
-    -- there is still room rather than after.
-    local Ledger=require("NHShared/DiscoveryLedger")
-    local log2=NHShared.DiscoveryLog
-    local used=log2 and log2.events and #log2.events() or 0
-    local room=Ledger.MAX-used
-    log("Reshuffle: "..#manifest.caseIds.." case(s), "..#manifest.documentIds..
-        " document(s), "..room.." discovery slot(s) left of "..Ledger.MAX..(dry and " [dry run]" or ""))
-    if dry then return true,manifest end
-    if room<G.MAX_EVIDENCE*2 then
-        return false,"only "..room.." discovery slots left; a reshuffle now would run the ledger out"
-    end
-    -- Strip the mod's marks off what is already in the world, so a page in a
-    -- drawer becomes ordinary literature instead of evidence nothing knows
-    -- about. Bounded: only the containers the cases themselves recorded, plus
-    -- whatever the player is carrying.
-    local stripped=0
-    local function unmark(item)
-        local md=item and item.getModData and item:getModData()
-        if type(md)=="table" and md.cfGeneratedId then
-            md.cfGeneratedId=nil; md.cfPhysicalToken=nil; stripped=stripped+1
+-- One addArea per scheduler step, as the nearby scan does: every addArea
+-- copies and validates the whole world record.
+R.MAP_NEAR_TILES=100
+local mapQueue,mapQueued={},{}
+-- The maps, own marks and anchor keys of a place: Generated/MapSiteArgs,
+-- shared with the offline progress check (E7).
+local MapSiteArgs=require("NHShared/Generated/MapSiteArgs")
+local designsOf,ownMarksOf,anchorsOf=MapSiteArgs.designsOf,MapSiteArgs.ownMarksOf,MapSiteArgs.anchorsOf
+R.ownMarksOf=ownMarksOf
+R.anchorsOf=anchorsOf
+-- The site row the world record keeps, in the Catalog's shape. Nothing was
+-- observed there, so its storage is "unknown" (Session.unobserved).
+local function mapSiteRow(entry)
+    local b=entry.bounds
+    return {id=entry.areaId,areaId=entry.areaId,
+        name="Place named on a map at "..math.floor((b.x1+b.x2)/2)..", "..math.floor((b.y1+b.y2)/2),
+        mapId=MapSites.map,buildLine=MapSites.game,
+        bounds={x1=b.x1,y1=b.y1,x2=b.x2,y2=b.y2,z=b.z},
+        source={kind="map-research",reference=entry.reference},
+        paperStorage="unknown",containerTypes={},excluded=false}
+end
+local function decidedAreas()
+    local out={}
+    local root=worldRoot()
+    for _,a in ipairs(root and root.case and root.case.areas or {}) do out[a.id]=true end
+    return out
+end
+local function mapDrain()
+    local item=table.remove(mapQueue,1)
+    if not item then return true end
+    mapQueued[item.entry.areaId]=nil
+    local api=areaSession
+    if not api then return #mapQueue==0 end
+    local entry=item.entry
+    local designs=designsOf(entry)
+    local ok,ids=api.addArea{site=mapSiteRow(entry),place=entry.place,designs=#designs>0 and designs or nil,
+        marks=ownMarksOf(entry,designs),anchors=anchorsOf(entry),clues=Manifest.clues,version=Manifest.VERSION,hours=worldHours(),source=item.source}
+    if ok then
+        CFLog.write("i","case",{case=entry.areaId,place=entry.place,n=#ids,why="area-decided-"..item.source})
+    elseif ids=="empty" then
+        if not emptyNoted[entry.areaId] then
+            emptyNoted[entry.areaId]=true
+            CFLog.write("d","skip",{case=entry.areaId,place=entry.place,why="area-empty"})
         end
+    elseif ids~="decided" then
+        log("map place "..tostring(entry.areaId).." not decided: "..tostring(ids))
     end
-    for _,root in ipairs(Cases.sessions(wrapper) or {}) do
-        for _,assignment in pairs(root.assignments or {}) do
-            -- Only a clue that was written somewhere has anything to unmark;
-            -- a waiting one has no target (P4-R133).
-            if assignment.target then
-                local ok,container=pcall(World.resolve,assignment.target)
-                local items=ok and container and container.getItems and container:getItems()
-                if items and items.size then
-                    for i=0,items:size()-1 do pcall(unmark,items:get(i)) end
-                end
+    return #mapQueue==0
+end
+function R.decideMapArea(entry,source)
+    if not allowed() or not scheduler or not wrapper then return false,"not running" end
+    if not areaSession then return false,"no world record" end
+    if type(entry)~="table" or type(entry.areaId)~="string" or mapSites().byArea[entry.areaId]~=entry then
+        return false,"not a map place"
+    end
+    if mapQueued[entry.areaId] then return false,"queued" end
+    if decidedAreas()[entry.areaId] then return false,"decided" end
+    mapQueue[#mapQueue+1]={entry=entry,source=source=="read" and "read" or "near"}
+    mapQueued[entry.areaId]=true
+    scheduler.enqueue("map-areas","map-areas",mapDrain)
+    return true
+end
+-- A map was read: every place it marks.
+function R.decideMapDesign(design,source)
+    local n=0
+    for _,entry in ipairs(mapSites().byDesign[design] or {}) do
+        if R.decideMapArea(entry,source) then n=n+1 end
+    end
+    return n
+end
+-- The survivor is near: every undecided map or flyer place within reach.
+-- Looks only at the nine grid cells around the survivor.
+function R.decideMapNear()
+    if not allowed() or not scheduler or not areaSession then return 0 end
+    local p=getPlayer and getPlayer()
+    if not p then return 0 end
+    local px,py=p:getX(),p:getY()
+    local index=mapSites()
+    local bx,by=math.floor(px/MAP_BUCKET),math.floor(py/MAP_BUCKET)
+    local decided=decidedAreas()
+    local n=0
+    for dx=-1,1 do for dy=-1,1 do
+        for _,e in ipairs(index.buckets[(bx+dx)..":"..(by+dy)] or {}) do
+            if not decided[e.areaId] and not mapQueued[e.areaId] and not emptyNoted[e.areaId] then
+                local b=e.bounds
+                local ox=math.max(b.x1-px,0,px-(b.x2-1))
+                local oy=math.max(b.y1-py,0,py-(b.y2-1))
+                if ox*ox+oy*oy<=R.MAP_NEAR_TILES*R.MAP_NEAR_TILES and R.decideMapArea(e,"near") then n=n+1 end
+            end
+        end
+    end end
+    return n
+end
+-- VANILLA SCENES (task 3 plan, step 5; NH-D7). VanillaSceneRuntime finds
+-- them and saves what it finds through R.sceneSeen (Session `scenes`: a
+-- confirmed scene is set once; pending traces only grow). A confirmed scene,
+-- and the hand-checked citation (VanillaScenes.CITATIONS, always built by
+-- vanilla, so decided like a map place without being seen), is DECIDED once
+-- the survivor is within VanillaScenes.NEAR_TILES: its one clue is chosen and
+-- saved (AreaCase.decideScene), independent of every place's clues, and
+-- waits like any clue for the survivor to arrive (R.ARRIVE_TILES) before
+-- the filler creates it in its anchor's kind of spot. "empty" (no clue
+-- written for it yet) is not a decision: a later clue list still reaches it.
+local Scenes=require("NHShared/Generated/VanillaScenes")
+function R.scene(key)
+    local root=worldRoot()
+    local rec=root and root.scenes and root.scenes[key]
+    return rec and copyValue(rec) or nil
+end
+function R.sceneSeen(key,rec)
+    if not allowed() or not areaSession then return false,"no world record" end
+    local ok,why=areaSession.noteScene(key,rec)
+    if ok and rec.kind and why==nil then
+        CFLog.write("i","case",{case=key,why="scene-confirmed",kind=rec.kind})
+    end
+    return ok,why
+end
+-- The site row a scene area keeps, in the Catalog's shape. A seen scene
+-- observed no containers, so any fixed kind will do (Session.unobserved); the
+-- citation names its own. avoidProps: item types vanilla left there - a
+-- container whose square holds one is never chosen (the filler).
+local function sceneSiteRow(key,rec)
+    local cite
+    for _,c in ipairs(Scenes.CITATIONS) do if c.key==key then cite=c end end
+    local b=rec.bounds or {x1=rec.x,y1=rec.y,x2=rec.x+1,y2=rec.y+1}
+    local row={id="scene:"..key,areaId="scene:"..key,
+        name="A place at "..math.floor((b.x1+b.x2)/2)..", "..math.floor((b.y1+b.y2)/2),
+        mapId=MapSites.map,buildLine=MapSites.game,
+        bounds={x1=b.x1,y1=b.y1,x2=b.x2,y2=b.y2,z=rec.z},
+        source={kind="vanilla-scene",reference=rec.kind},
+        paperStorage="unknown",containerTypes={},excluded=false}
+    if cite then
+        local kinds,seen={}, {}
+        for _,c in ipairs(cite.containers) do
+            if not seen[c.containerType] then seen[c.containerType]=true; kinds[#kinds+1]=c.containerType end
+        end
+        row.paperStorage="indexed"; row.containerTypes=kinds
+        row.avoidProps=copyValue(cite.avoidProps)
+    else
+        local sig=require("NHShared/Generated/SceneMatch").signature(rec.kind)
+        for _,t in ipairs(sig and sig.traces or {}) do
+            if t.sort=="item" then
+                row.avoidProps=row.avoidProps or {}
+                for _,name in ipairs(t.any) do row.avoidProps[#row.avoidProps+1]=name end
             end
         end
     end
-    local player=getPlayer and getPlayer()
-    local inventory=player and player:getInventory()
-    local carried=inventory and inventory.getItems and inventory:getItems()
-    if carried and carried.size then for i=0,carried:size()-1 do pcall(unmark,carried:get(i)) end end
-    local markers=require("NHShared/InteractionAPI").ClueMarkers
-    local forgotten=0
-    if markers and markers.forget then
-        local ok,n=pcall(markers.forget,manifest.documentIds); forgotten=(ok and type(n)=="number") and n or 0
+    return row
+end
+R.sceneSiteRow=sceneSiteRow
+-- One scene decided per call, nearest first; the citation noted when near.
+function R.decideScenes()
+    if not allowed() or not areaSession then return 0 end
+    local root=worldRoot()
+    local p=getPlayer and getPlayer()
+    if not root or not p then return 0 end
+    local px,py=p:getX(),p:getY()
+    local function near(x,y) return math.max(math.abs(x-px),math.abs(y-py))<=Scenes.NEAR_TILES end
+    local now=worldHours()
+    for _,c in ipairs(Scenes.CITATIONS) do
+        local b=c.bounds
+        local cx,cy=math.floor((b.x1+b.x2)/2),math.floor((b.y1+b.y2)/2)
+        if not (root.scenes and root.scenes[c.key]) and near(cx,cy) then
+            local ok,why=R.sceneSeen(c.key,{kind=c.kind,x=cx,y=cy,z=b.z,hours=now,source="citation",room=c.room,
+                bounds={x1=b.x1,y1=b.y1,x2=b.x2,y2=b.y2}})
+            if not ok then log("citation "..c.key.." not noted: "..tostring(why)) end
+            root=worldRoot()
+        end
     end
-    -- Now the store itself. Clearing both fields is what lets R.start take the
-    -- first-house path again, exactly as it does in a brand-new save.
-    local store=ModData.getOrCreate(TAG)
-    store.canonical=nil; store.campaign=nil
-    wrapper=nil; sessions={}; retiredRows={}; retiredIds={}
-    pcall(Cases.remember,store,getTimeInMillis and getTimeInMillis())
-    -- Starting the new case here would race the automatic starter: both call
-    -- the nearby scan, and T3Nearby.cancel() means the second start kills the
-    -- first one's job, so neither waiter ever sees a result (reshuffle check,
-    -- 2026-09-12). AutomaticInvestigations.poll already starts a case whenever
-    -- there are none, in the building the player is standing in - which is
-    -- exactly what a reshuffle wants, and it is the same path a fresh save
-    -- takes. So: clear, and let it do its job.
-    log("Reshuffle: "..stripped.." item(s) returned to ordinary loot, "..forgotten..
-        " map mark(s) forgotten. A new case starts from where you stand, within a few seconds.")
-    return true,manifest
+    local decided=decidedAreas()
+    local rows={}
+    for key,rec in pairs(root.scenes or {}) do
+        if rec.kind and not decided["scene:"..key] and not emptyNoted["scene:"..key] and near(rec.x,rec.y) then
+            rows[#rows+1]={key=key,rec=rec,d=math.max(math.abs(rec.x-px),math.abs(rec.y-py))}
+        end
+    end
+    table.sort(rows,function(a,b) if a.d~=b.d then return a.d<b.d end return a.key<b.key end)
+    local row=rows[1]
+    if not row then return 0 end
+    local ok,ids=areaSession.addSceneArea{site=sceneSiteRow(row.key,row.rec),key=row.key,kind=row.rec.kind,
+        clues=Manifest.clues,version=Manifest.VERSION,hours=now}
+    if ok then
+        CFLog.write("i","case",{case="scene:"..row.key,kind=row.rec.kind,n=#ids,why="area-decided-scene"})
+        return 1
+    end
+    -- Nothing written for it yet, or it holds no clue: said once a session.
+    emptyNoted["scene:"..row.key]=true
+    CFLog.write("d","skip",{case="scene:"..row.key,kind=row.rec.kind,why="scene-"..tostring(ids)})
+    return 0
+end
+-- The world record's seed, or nil when this save has no world record. The map
+-- trails take their seed from it (MapMediaRuntime).
+function R.worldSeed()
+    local root=worldRoot()
+    local seed=root and root.case and root.case.seed
+    if type(seed)=="number" then return seed end
+    return nil
 end
 -- The address book builds in the background; anything it could not name before
 -- it finished deserves a second chance, once.
@@ -1258,79 +962,17 @@ local function refreshAddressCache()
     addressBookWasReady=ready
 end
 
+-- The world record's case, read-only, or nil (KeyObserver's area lookup).
+function R.worldCase()
+    local root=worldRoot()
+    return root and root.case or nil
+end
 function R.known()
     refreshAddressCache()
     if not wrapper or not sessions then return {} end
     local byId={}
-    for _,row in ipairs(retiredRows) do byId[row.id]=row end
     for _,api in ipairs(sessions) do for _,row in ipairs(api.project()) do byId[row.id]=row end end
     local rows={}; for _,id in ipairs(Cases.discoveries(wrapper)) do if byId[id] then rows[#rows+1]=byId[id] end end; return rows
-end
--- After a refused later case (P4-R125): how far the survivor must move, or how
--- long must pass, before the neighbourhood is scanned again.
-R.DEFER_TILES=50
-R.DEFER_HOURS=0.5
--- How many extra seeds the ladder's first rung may try for a smaller case.
--- Each one is a full generate-and-validate (about 20 ms on the test laptop),
--- and this runs inside the storage scan's own callback, so three is the most
--- a single frame should carry.
-R.RUNG1_TRIES=3
-function R.nextCase(seed)
-    if preparing then return refuse("busy") end
-    -- Not refusals of a case the world could have supplied, so they carry no
-    -- code and no debt: a caller asking for a second case before the first, or
-    -- with a seed no generator would take, is a caller bug.
-    if not wrapper or not wrapper.canonical then return false,"start the first generated case before requesting another" end
-    if type(seed)~="number" or seed~=math.floor(seed) or seed<1 or seed>=2147483647 then return false,"invalid seed" end
-    if not allowed() then return false,"debug single-player required" end
-    -- Finished cases are archived and no longer block a new one (P4-R111);
-    -- this is the store's own cap, reached only when the archive itself is
-    -- full - 16 cases on the measured worst case, where it used to be ten.
-    if #Cases.sessions(wrapper)>=Cases.MAX_CASES then return refuse("cap") end
-    -- Four unfinished cases is all the save allows (MAX_ACTIVE). A scan started
-    -- here could only be refused at the final swap; three refusals disabled
-    -- preparation, the next attempt set `preparing` with a job the scheduler
-    -- would not take, and no case ever came again - not even after one was
-    -- finished (campaign check, 2026-09-15). Refuse before scanning instead.
-    local active=0
-    for _,root in ipairs(Cases.sessions(wrapper)) do if not Retired.isRetired(root) then active=active+1 end end
-    if active>=Cases.MAX_ACTIVE then return refuse("active-limit") end
-    if scheduler.isDisabled("preparation") then return refuse("disabled") end
-    -- Nothing usable nearby last time: do not scan the same neighbourhood again
-    -- until the survivor has moved on or half an in-game hour has passed
-    -- (P4-R125; the campaign check saw 61 refused scans in about 25 minutes).
-    -- `debt.x` is set only by the refusals that came from a nearby scan, so
-    -- the other codes wait for nothing, exactly as before.
-    if debt and debt.x then
-        local p=getPlayer()
-        local dx=p and (p:getX()-debt.x) or 0
-        local dy=p and (p:getY()-debt.y) or 0
-        if dx*dx+dy*dy<R.DEFER_TILES*R.DEFER_TILES and worldHours()<debt.waitHours+R.DEFER_HOURS then
-            return refuse("cooldown")
-        end
-    end
-    for _,api in ipairs(sessions or {}) do
-        for _,a in pairs(api.snapshot().assignments) do
-            if a.status=="pending" or a.status=="placing" then return refuse("busy") end
-        end
-    end
-    local probe=require("NHShared/T3Nearby");local ok,why
-    -- RUNG 2 of the ladder (P4-R133): the scan itself looks one step further,
-    -- under its own label so the log still tells policy from a console
-    -- override. prepare widens the generator's filter to match.
-    local radius,radiusSource
-    if rungNow()>=2 then
-        local Reach=require("NHShared/Reach")
-        local p=getPlayer()
-        local base=p and Reach.radius(p:getHoursSurvived())
-        local wider=base and Reach.wider(base)
-        if wider and wider>base then radius,radiusSource=wider,"P4-R133-rung2" end
-    end
-    ok,why=probe.start(radius,seed,nil,radiusSource); if not ok then return false,why end
-    preparing=true; local waited=0; local queued=scheduler.enqueue("next-metadata","preparation",function() waited=waited+1;if probe.error then preparing=false;error(probe.error) end;if probe.result then prepare(probe.result,seed,true);return true end;if waited>240000 then preparing=false;error("metadata extraction did not complete") end;return false end)
-    -- A refused job never runs, so nothing else would ever clear the flag.
-    if not queued then preparing=false; return refuse("busy") end
-    return true
 end
 -- `inPlace` records a document without taking it. Owner, 2026-09-10: a right
 -- click should note it without putting it in the inventory - which is plainly right for a pile of eleven credit cards
@@ -1339,6 +981,7 @@ end
 -- Possession was required so that discovery stayed deliberate: a player must
 -- not be able to sweep a street by hovering over furniture. A right-click on a
 -- named menu option is just as deliberate, so the guarantee survives.
+local captioned={}
 function R.inspect(item,inPlace)
     if not allowed() or not sessions or not item then return false end
     if not inPlace and item:getOutermostContainer()~=getPlayer():getInventory() then return false end
@@ -1367,7 +1010,7 @@ function R.inspect(item,inPlace)
     -- Taken here, from the clue's own square, and before the discovery is
     -- committed: ClueMarkers refuses a location for a clue already known.
     if inPlace then
-        local markers=require("NHShared/InteractionAPI").ClueMarkers
+        local markers=require("NHShared/InteractionAPI").clueMarkers()
         if markers and markers.foundHere then pcall(markers.foundHere,item) end
     end
     checked(api.status(md.cfGeneratedId,"placed",worldHours())); checked(api.inspect(md.cfGeneratedId))
@@ -1375,28 +1018,13 @@ function R.inspect(item,inPlace)
     pcall(function() item:setDisplayCategory(categoryOf(md.cfGeneratedId)) end)
     local ledger=NHShared.DiscoveryLog
     if ledger and ledger.record then ledger.record("evidence",md.cfGeneratedId) end
-    -- The moment two records meet. A document only connects to one already
-    -- held, so this fires exactly when the player learns something they could
-    -- not have known a second earlier - which is the rule every voice trigger
-    -- has to pass. The survivor never says which record is true.
+    -- A pile is one document and many identical things; the count is the
+    -- whole of the evidence, so it is worth a beat, the first time only.
     local voice=require("NHShared/InteractionAPI").PlayerVoice
-    if voice and voice.onConnection and not already then
-        local snapshot=api.snapshot()
-        local held={}
-        for _,id in ipairs(snapshot.known or {}) do held[id]=true end
-        local finding=Story.newFinding(snapshot.case.story,held,md.cfGeneratedId)
-        if finding then pcall(voice.onConnection,finding.kind,md.cfGeneratedId) end
-        for _,doc in ipairs(snapshot.case.documents) do
+    if voice and voice.onPile and not already then
+        for _,doc in ipairs(api.snapshot().case.documents) do
             if doc.id==md.cfGeneratedId then
-                for _,link in ipairs(not snapshot.case.story and doc.links or {}) do
-                    if held[link.target] then
-                        pcall(voice.onConnection,link.kind,doc.id)
-                        break
-                    end
-                end
-                -- A pile is one document and many identical things; the count
-                -- is the whole of the evidence, so it is worth a beat.
-                if doc.quantity and voice.onPile then pcall(voice.onPile,doc.id) end
+                if doc.quantity then pcall(voice.onPile,doc.id) end
                 break
             end
         end
@@ -1410,73 +1038,18 @@ function R.inspect(item,inPlace)
     -- document would let a player find every clue by hovering, which would
     -- replace the investigation with a sweep of the furniture.
     pcall(function() item:setTooltip("Tooltip_NHShared_Recorded") end)
-    -- Record the discovery first, then retire: a case whose last document has
-    -- just been found no longer needs its placement bookkeeping, and shedding
-    -- it is what keeps later cases inside the shared save budget.
-    local done=api.snapshot()
-    -- Every clue accounted for, not merely every clue found (P4-R133): a clue
-    -- still waiting for a container is not accounted for, so "nothing left to
-    -- find" and the closing question cannot fire while one is unwritten. A
-    -- clue that waited three in-game days and was dropped IS accounted for -
-    -- a four-clue case is still a case.
-    if Session.accounted(done) then
-        for index,root in ipairs(Cases.sessions(wrapper)) do
-            if not Retired.isRetired(root) and root.case and root.case.caseId==done.case.caseId then
-                -- Keep where each clue was last seen. Owner, 2026-09-14: "I
-                -- lost my files somewhere?" - retiring dropped every placement
-                -- detail, and the record could no longer say (P4-R104). The
-                -- document in hand is where it is right now, not where the
-                -- last scan happened to see it.
-                local seen={}
-                for sid,s in pairs(sightings) do if s.where then seen[sid]=s.where end end
-                local okHere,here=pcall(placeOf,item)
-                if okHere and here then seen[md.cfGeneratedId]=here end
-                -- The hour it finished lets the next case wait a little for
-                -- the survivor's answers (P4-R121).
-                local staged,why=Cases.retire(wrapper,index,seen,worldHours())
-                if staged then
-                    swap(staged); openAll(); log("Case complete; placement details retired.")
-                    -- The item in hand is Old at once; the rest are marked
-                    -- as the last-seen scan passes them (P4-R118).
-                    pcall(function() item:setDisplayCategory(categoryOf(md.cfGeneratedId)) end)
-                    -- Not "solved" - the mod does not know that and never will.
-                    -- Only that there is nothing further to find - and where a
-                    -- clue was never placed at all, not even that
-                    -- (DR-20260919-SOLVABLE-WITHDRAWN). The count of clues the
-                    -- case ended without decides which closing line is honest;
-                    -- the log carries the ids so a run can be read afterwards.
-                    -- The log names each gap AND which history it had - never
-                    -- placed, or placed on a carrier that went away - because
-                    -- the two are different failures and looked identical
-                    -- before `droppedFrom` recorded them.
-                    local gaps,history=Session.gaps(done)
-                    if #gaps>0 then
-                        local parts={}
-                        for _,gid in ipairs(gaps) do parts[#parts+1]=gid.."("..tostring(history[gid])..")" end
-                        log("Case complete with "..#gaps.." clue(s) the case never had: "..table.concat(parts,", ")
-                            .." [case="..tostring(done.case.caseId).."]")
-                    end
-                    -- A CASE THAT LOST AN ESSENTIAL CLUE OWES A PAYOFF IT
-                    -- CANNOT DELIVER (DR-20260919-GAP-NOT-PROGRESSION). It
-                    -- still RETIRES - holding an active slot for ever is the
-                    -- stall P4-R142 exists to prevent - but it is recorded as
-                    -- incomplete, and its closing words and its "What do I make
-                    -- of it?" do not fire. Honest wording was never the point;
-                    -- not claiming a delivered mystery is.
-                    local essential=Session.essentialGaps(done)
-                    if #essential>0 then
-                        local names={}
-                        for _,eid in ipairs(essential) do names[#names+1]=eid.."("..tostring(history[eid])..")" end
-                        log("Case INCOMPLETE: ended without evidence its conclusion rests on: "
-                            ..table.concat(names,", ").." [case="..tostring(done.case.caseId).."]")
-                    end
-                    local v=require("NHShared/InteractionAPI").PlayerVoice
-                    if #essential==0 then
-                        if v and v.onCaseComplete then pcall(v.onCaseComplete,done.case.caseId,#gaps) end
-                    elseif v and v.onCaseIncomplete then
-                        pcall(v.onCaseIncomplete,done.case.caseId,#essential)
-                    end
-                else log("Case complete but not retired: "..tostring(why)) end
+    -- Its words, said out loud, on every Inspect (DR-20260929-NOHELP-GAP-PLAN).
+    if voice and voice.sayClue then
+        for _,doc in ipairs(root.case.documents or {}) do
+            if doc.id==md.cfGeneratedId then
+                -- A set is ONE clue: its words play for the holder, and for a
+                -- piece inside the holder only if they have not played yet.
+                local speak=true
+                if isSet(doc) then
+                    speak=Holders.shouldSpeak(Holders.roleOf(item),captioned[doc.id]==true)
+                    captioned[doc.id]=true
+                end
+                if speak and type(doc.body)=="string" and doc.body~="" then pcall(voice.sayClue,doc.title,doc.body) end
                 break
             end
         end
@@ -1509,7 +1082,6 @@ local function liveApi(id)
 end
 function R.isRecognisedId(id)
     if type(id)~="string" then return false end
-    if retiredId(id) then return true end
     if not wrapper then return false end
     local root=Cases.find(wrapper,id)
     if not root then return false end
@@ -1528,7 +1100,8 @@ local function stampRecognised(item,doc,id,copy,of)
     if not item or not doc then return end
     local name=doc.title
     if of and of>1 and doc.label then name=doc.label.." ("..copy.." of "..of..")" end
-    pcall(function() item:setName(name); item:setCustomName(true) end)
+    if isSet(doc) then resetVanillaName(item)
+    else pcall(function() item:setName(name); item:setCustomName(true) end) end
     pcall(function() item:setDisplayCategory(categoryOf(id)) end)
 end
 -- Every copy of document `id` the runtime can reach now: the survivor's
@@ -1570,6 +1143,14 @@ end
 -- (spotted in Search Mode), "look" (looked over in hand) or "debug" (checks).
 -- Returns true when the clue is recognised afterwards, and whether this call
 -- was the one that recognised it.
+-- The Search Mode icon has pointed at this clue (ClueSearch.addIcon): record
+-- it, so the clue never moves again.
+function R.shown(id)
+    if not allowed() or not sessions or type(id)~="string" then return false end
+    local api=liveApi(id)
+    if not api or not api.show then return false end
+    return api.show(id)
+end
 function R.recognise(target,how)
     if not allowed() or not sessions then return false,"no case" end
     local id=target
@@ -1578,11 +1159,10 @@ function R.recognise(target,how)
         id=ok and type(md)=="table" and md.cfGeneratedId or nil
     end
     if type(id)~="string" then return false,"not a clue" end
-    if retiredId(id) then return true,false end
     local api,root=liveApi(id)
     if not api then return false,"not a live clue" end
     if R.isRecognisedId(id) then return true,false end
-    local ok,why=api.recognise(id)
+    local ok,why=api.recognise(id,how)
     if not ok then return false,tostring(why) end
     -- The commit swapped the wrapper; stamp from the stored root now in it.
     root=Cases.find(wrapper,id) or root
@@ -1597,7 +1177,7 @@ function R.clueTargets()
     if not allowed() or not wrapper or not sessions then return {} end
     local out={}
     for _,root in ipairs(Cases.sessions(wrapper) or {}) do
-        if not Retired.isRetired(root) and root.assignments then
+        if root.assignments then
             local known,seen={},{}
             for _,id in ipairs(root.known or {}) do known[id]=true; seen[id]=true end
             for _,id in ipairs(root.recognised or {}) do seen[id]=true end
@@ -1628,47 +1208,6 @@ function R.clueTargets()
         end
     end
     return out
-end
--- Evidence of a case that has retired. Retirement drops the case's
--- assignments, so the item is no longer a subject and the menu used to offer
--- nothing at all, which read as broken in play (2026-09-15). Its id is still
--- in a retired row, so the menu can say it is already recorded (P4-R118).
-function R.retiredPaper(item)
-    if not item then return false end
-    local md=item:getModData(); if type(md)~="table" or not md.cfGeneratedId then return false end
-    return retiredId(md.cfGeneratedId) and not R.subject(item)
-end
--- Every finished case that carries questions ("What do I make of it?",
--- P4-R113), newest case first: its id, its place in the campaign, what it asks
--- about and the answers so far. Copies, so the organiser cannot change a save
--- by editing what it was handed.
-function R.questions()
-    if not wrapper then return {} end
-    local function dup(v) if type(v)~="table" then return v end local o={} for k,x in pairs(v) do o[k]=dup(x) end return o end
-    local out={}
-    for index,root in ipairs(Cases.sessions(wrapper) or {}) do
-        if Retired.isRetired(root) and root.offered then
-            out[#out+1]={caseId=root.caseId,number=index,offered=dup(root.offered),answers=dup(root.answers)}
-        end
-    end
-    table.sort(out,function(a,b) return a.number>b.number end)
-    return out
-end
--- The survivor's answers about a finished case ("What do I make of it?",
--- P4-R113): reading, who matters, way. An empty table clears them. Refused
--- once a case has been built from them. Used by the organiser's question
--- screen and by the Linux core-loop check.
-function R.setAnswers(caseId,answers)
-    if not allowed() or not wrapper then return false,"no campaign" end
-    for index,root in ipairs(Cases.sessions(wrapper) or {}) do
-        if Retired.isRetired(root) and root.caseId==caseId then
-            local staged,why=Cases.setAnswers(wrapper,index,answers,worldHours())
-            if not staged then return false,why end
-            swap(staged); refreshRetired()
-            return true
-        end
-    end
-    return false,"no finished case "..tostring(caseId)
 end
 -- True once the item's document id has been inspected (recorded in the
 -- ledger via R.inspect). Distinct from R.subject: a subject item can be
@@ -1731,6 +1270,11 @@ function R.devLocations()
         log("no documents placed")
         return "no documents placed"
     end
+    -- Blind mode: count only
+    if NHShared and NHShared.BlindLog then
+        log(#out.." clues placed; set NHShared.BlindLog=false for their locations")
+        return #out.." clues placed; set NHShared.BlindLog=false for their locations"
+    end
     for _,line in ipairs(out) do log(line) end
     return table.concat(out,"\n")
 end
@@ -1740,35 +1284,6 @@ function R.metrics()
         -- Steps run and jobs waiting, per subsystem. See Scheduler.counts.
         steps=scheduler.counts and scheduler.counts() or nil,
         queued=scheduler.queued and scheduler.queued() or nil}
-end
-function R.automaticStatus()
-    local roots=wrapper and Cases.sessions(wrapper) or {}
-    local schedule=wrapper and wrapper.schedule
-    -- When the most recent case finished, so the next one can wait a little
-    -- for the survivor's answers (P4-R121). nil when none recorded one.
-    local lastCompleted,active=nil,0
-    for _,root in ipairs(roots) do
-        local h=type(root)=="table" and root.completedHours
-        if type(h)=="number" and (not lastCompleted or h>lastCompleted) then lastCompleted=h end
-        if not Retired.isRetired(root) then active=active+1 end
-    end
-    -- WHY NO CASE HAS COME (P4-R133): the code, how many times it has refused,
-    -- when that started, the in-game hour a case is promised by and the rung of
-    -- the ladder. The last reason reported wins - counted or not, the
-    -- generator's or the poller's - and the debt the save came back with
-    -- answers before anything has refused this session. `defer` is nil only
-    -- when nothing is being withheld at all; the flat fields are there so a
-    -- check can read them without a nil test.
-    local reported=silence or debt
-    return {count=#roots,preparing=preparing==true,scheduled=schedule~=nil,
-        lastCreatedHours=schedule and schedule.createdHours[#schedule.createdHours],
-        lastCompletedHours=lastCompleted,limit=Cases.MAX_CASES,
-        active=active,activeLimit=Cases.MAX_ACTIVE,
-        defer=reported and {code=reported.code,count=reported.count,sinceHours=reported.sinceHours,
-            dueHours=reported.dueHours,rung=reported.rung} or nil,
-        why=reported and reported.code or nil,deferCount=reported and reported.count or 0,
-        dueHours=reported and reported.dueHours or nil,
-        rung=rungNow(),rungMax=R.RUNG_MAX}
 end
 -- Bounded scan of a destination site's own bounding box for any container of
 -- an allowed type. Mirrors Storage.scan's tile-stepping discipline, but the
@@ -1785,19 +1300,46 @@ end
 -- Session.target accepts one in. Only that kind is taken from the widened part:
 -- a clue never lands in something in the street that merely happens to be near
 -- a house (P4-R134, fixed 2026-09-18).
-local function boundsScan(site,done,accept,salt)
+--
+-- `searchedOk`: a No Help area clue may take a container the survivor searched
+-- earlier (FixedContainers.fresh); the open loot window still refuses. Within
+-- a place the spot is the world's seeded choice (StorageChoices.choose), with
+-- no layout order (owner, 2026-09-27: "clues sit at random").
+--
+-- A WHOLE AREA A MAP MARKS (up to 430 x 630 tiles) is never walked whole: each
+-- attempt walks one window of at most MarkedArea.WINDOW a side, centred on a
+-- mark the world picks for this clue and attempt, cycling through the marks,
+-- then the rest of the area (MarkedArea.window). The cost per step is the
+-- same as anywhere; the attempt count is session-only, like the ground cursor.
+local windowCursor={}
+-- `prefer` (optional, E2): container kinds in order of preference; the
+-- first one present wins, then any container the scan accepts.
+local function boundsScan(site,done,accept,salt,searchedOk,prefer)
     local b=site.bounds
     local kinds={}; for _,kind in ipairs(site.containerTypes) do kinds[kind]=true end
-    local margin=kinds[Storage.MAILBOX] and Session.OUTDOOR_RADIUS or 0
-    local x1,y1,x2,y2=b.x1-margin,b.y1-margin,b.x2+margin,b.y2+margin
+    -- A place decided from afar (a map's mark) observed nothing: any fixed
+    -- kind will do, each still checked live below (Session.unobserved).
+    local any=Session.unobserved(site)
+    local margin=(any or kinds[Storage.MAILBOX]) and Session.OUTDOOR_RADIUS or 0
+    local walk=b
+    local points=areaPoints(site)
+    if points then
+        local docId=tostring(salt or site.id)
+        local attempt=windowCursor[docId] or 0
+        windowCursor[docId]=attempt+1
+        walk=MarkedArea.window(R.worldSeed() or 0,site.id,docId,attempt,b,points,ownMarkPoint(site,docId))
+    end
+    local x1,y1,x2,y2=walk.x1-margin,walk.y1-margin,walk.x2+margin,walk.y2+margin
     local x,y,objects,oi,ci=x1,y1,nil,0,0
-    local pool=StorageChoices.new()
+    local pool=StorageChoices.new(prefer)
+    local rankOf={}
+    for r,kind in ipairs(prefer or {}) do rankOf[kind]=rankOf[kind] or r end
     return function()
         if y>=y2 then
             local list=StorageChoices.finish(pool)
             local i=StorageChoices.choose(list,salt or site.id,function(n)
                 return not accept or accept(list[n])
-            end)
+            end,prefer and function(n) return rankOf[list[n].containerType] or #prefer+1 end)
             done(i and list[i]); return true
         end
         if objects==nil then
@@ -1815,9 +1357,10 @@ local function boundsScan(site,done,accept,salt)
         local c=o:getContainerByIndex(ci)
         local sprite=o:getSprite(); local name=sprite and sprite:getName()
         local inside=x>=b.x1 and x<b.x2 and y>=b.y1 and y<b.y2
-        if c and name and Storage.fixedKind(c:getType()) and kinds[c:getType()] and (inside or c:getType()==Storage.MAILBOX) then
+        if c and name and Storage.fixedKind(c:getType()) and (any or kinds[c:getType()])
+            and (inside or c:getType()==Storage.MAILBOX or Session.outdoorSite(site)) then
             local found={x=x,y=y,z=b.z,objectIndex=oi,containerIndex=ci,containerType=c:getType(),sprite=name}
-            local fresh=FixedContainers.fresh(c)
+            local fresh=FixedContainers.fresh(c,searchedOk)
             if fresh and (not accept or accept(found)) and World.resolve(found)==c then
                 StorageChoices.offer(pool,found)
             end
@@ -1826,6 +1369,166 @@ local function boundsScan(site,done,accept,salt)
         return false
     end
 end
+R.boundsScan=boundsScan
+-- Every physical spot a clue already holds, in any case (P4-R67). Above the
+-- relocation job, which also asks it; the filler's note on it is below.
+local function usedPhysicalKeys()
+    local keys={}
+    -- A finished case has no assignments left (retirement drops them), so a
+    -- retired case contributes nothing here: its containers are free again,
+    -- which is also what the ladder's third rung trades on.
+    for _,root in ipairs(Cases.sessions(wrapper) or {}) do
+        for _,a in pairs(root.assignments or {}) do
+            if a.target then keys[Session.physicalKey(a.target)]=true end
+        end
+    end
+    return keys
+end
+-- OPEN GROUND FOR A CLUE (task 3 plan, step 2/4; owner, 2026-09-27: clues may
+-- lie "anywhere that is interesting"). Nothing offered ground before, so a
+-- ground clue waited forever. The rules are GroundSpots'; this reads the facts
+-- they ask for from the engine, lazily and each under pcall, so a square that
+-- fails an early rule costs no more calls.
+--
+-- The box is the site's bounds widened by Session.OUTDOOR_RADIUS (the same
+-- band Session.target accepts a ground spot in), clamped to 44 x 44. Squares
+-- are tried in the world's hash order, at most GroundSpots.MAX_TRIES per
+-- attempt; the next attempt carries on from where this one stopped (a
+-- session-only cursor, wrapping). The zombie list is read once per scan.
+--
+-- Engine calls used (Build 42, verified against projectzomboid.jar with javap
+-- and, where vanilla Lua uses them, against its Lua):
+--   IsoCell:getGridSquare, IsoCell:getZombieList (the original mod's CasePerson)
+--   IsoGridSquare:TreatAsSolidFloor/isSolid/isSolidTrans (ISTransferAction
+--     :canDropOnFloor, docs/research/B42_RUNTIME_PASSABILITY.md)
+--   IsoGridSquare:isOutside (ISPlowAction), :getDoor(GridSquareEdgeFacingDirection.NORTH_SOUTH/EAST_WEST) (build 42.20.4; the old boolean overload is gone, same enum as ISMoveableSpriteProps:getWindow)
+--   IsoGridSquare:isCouldSee(int)/isCanSee(int) (javap: public boolean,
+--     playerIndex; vanilla ISDestroyCursor, ISBaseIcon foraging), and
+--     IsoPlayer:getPlayerNum (ISScytheGrassCursor)
+-- A dark room is no reason any more (owner, 2026-09-27): the player's own
+-- light finds a loose floor clue there, like foraging.
+-- `keys` = {spent=, used=}: physical keys that may not take a clue.
+local groundCursor={}
+local ZOMBIE_READ_MAX=2000   -- zombies read from the cell list, at most
+local function groundFacts(x,y,z,key,keys,zombies,survivor)
+    local square,looked=nil,false
+    local function sq()
+        if not looked then
+            looked=true
+            local ok,s=pcall(function() return getCell():getGridSquare(x,y,z) end)
+            square=ok and s or nil
+        end
+        return square
+    end
+    local function ask(fn)
+        local s=sq(); if not s then return nil end
+        local ok,v=pcall(fn,s)
+        if ok then return v end
+        return nil
+    end
+    local readers={
+        exists=function() return sq()~=nil end,
+        z=function() return ask(function(s) return s:getZ() end) end,
+        floor=function() return ask(function(s) return s:TreatAsSolidFloor() end)==true end,
+        solid=function() return ask(function(s) return s:isSolid() or s:isSolidTrans() end)~=false end,
+        outside=function() return ask(function(s) return s:isOutside() end)==true end,
+        door=function() return ask(function(s) return s:getDoor(GridSquareEdgeFacingDirection.NORTH_SOUTH)~=nil or s:getDoor(GridSquareEdgeFacingDirection.EAST_WEST)~=nil end)==true end,
+        -- The survivor could be looking at it: same floor, within the guard
+        -- radius, and the square visible to them. An unreadable answer
+        -- counts as visible (StaleClue.outOfSight).
+        nearSurvivor=function()
+            if survivor==nil then return false end
+            local spot={x=x,y=y,z=z}
+            if not StaleClue.tooClose(survivor.x,survivor.y,survivor.z,spot) then return false end
+            local visible=ask(function(s) return s:isCouldSee(survivor.n) or s:isCanSee(survivor.n) end)
+            return not StaleClue.outOfSight(survivor.x,survivor.y,survivor.z,spot,visible)
+        end,
+        zombies=function() return GroundSpots.zombiesNear(zombies,x,y) end,
+    }
+    return setmetatable({key=key,spent=keys and keys.spent,used=keys and keys.used,wantZ=z},{__index=function(t,k)
+        local read=readers[k]
+        if not read then return nil end
+        local v=read()
+        if v==nil then v=false end
+        rawset(t,k,v)
+        return v
+    end})
+end
+-- A WHOLE AREA A MAP MARKS: squares come from MarkedArea.groundSquare
+-- instead - most near the map's marks in growing rings, the rest anywhere in
+-- the area - still at most MAX_TRIES per attempt. There a square not loaded is
+-- counted ("unloaded") and the attempt goes on: much of such an area is
+-- always far from the survivor, and the stream of squares never runs dry.
+local function groundScan(site,done,accept,salt,keys)
+    local b=site.bounds
+    local points=areaPoints(site)
+    local box=points and b or GroundSpots.box(b,Session.OUTDOOR_RADIUS)
+    local seed=R.worldSeed() or 0
+    local docId=tostring(salt or site.id)
+    local start=groundCursor[docId] or 0
+    local own=points and ownMarkPoint(site,docId)
+    local tries,found,refused,seen=0,nil,{},{}
+    local zombies,survivor
+    local function finish()
+        groundCursor[docId]=(start+tries)%(GroundSpots.MAX_TRIES*GroundSpots.MAX_ROUNDS)
+        done(found,refused)
+        return true
+    end
+    return function()
+        if not zombies then
+            -- Once per scan: the zombies near the box, and where the survivor is.
+            zombies={}
+            local reach=GroundSpots.CROWD_RADIUS
+            pcall(function()
+                local list=getCell():getZombieList()
+                local n=list and list:size() or 0
+                for i=0,math.min(n,ZOMBIE_READ_MAX)-1 do
+                    local zed=list:get(i)
+                    if zed then
+                        local zx,zy=math.floor(zed:getX()),math.floor(zed:getY())
+                        if zx>=box.x1-reach and zx<box.x2+reach and zy>=box.y1-reach and zy<box.y2+reach then
+                            zombies[#zombies+1]={x=zx,y=zy}
+                        end
+                    end
+                end
+            end)
+            local p=getPlayer and getPlayer()
+            if p then
+                pcall(function() survivor={x=math.floor(p:getX()),y=math.floor(p:getY()),z=math.floor(p:getZ())} end)
+                if survivor then pcall(function() survivor.n=p:getPlayerNum() end) end
+            end
+            return false
+        end
+        if tries>=GroundSpots.MAX_TRIES or found then return finish() end
+        tries=tries+1
+        local x,y
+        if points then x,y=MarkedArea.groundSquare(seed,site.id,docId,start+tries,tries,box,points,own)
+        else x,y=GroundSpots.square(seed,site.id,docId,start+tries,box) end
+        if not x then return finish() end
+        local key="ground:"..x..":"..y..":"..b.z
+        if seen[key] then return false end
+        seen[key]=true
+        local facts=groundFacts(x,y,b.z,key,keys,zombies,survivor)
+        -- A square not loaded yet (a fast arrival) is tried again on a later
+        -- attempt, not skipped: stop here without spending it.
+        if not facts.exists then
+            if points then refused.unloaded=(refused.unloaded or 0)+1; return false end
+            tries=tries-1; return finish()
+        end
+        local ok,why=GroundSpots.check(facts)
+        if ok then
+            local target={x=x,y=y,z=b.z,objectIndex=0,containerIndex=0,containerType=Session.GROUND_CONTAINER,
+                sprite=GroundSpots.label(facts),ground=true}
+            if not accept or accept(target) then found=target
+            else refused.accept=(refused.accept or 0)+1 end
+        else
+            refused[why]=(refused[why] or 0)+1
+        end
+        return false
+    end
+end
+R.groundScan=groundScan
+R.groundFacts=groundFacts   -- seam: tools/realengine/tests drives the readers with real squares
 -- Stale-clue relocation (docs/management/STALE_CLUE_RELOCATION.md). One job
 -- per session (like `identity`, not per document) keeps the job count
 -- bounded regardless of case/document count; it considers a single stale
@@ -1842,6 +1545,8 @@ local function relocation(api)
         local root=api.snapshot()
         if not id then
             local hours=worldHours()
+            -- One clue, one move per attempt, never a batch. Reading a map
+            -- starts no clock (owner, 2026-09-27).
             local stale=StaleClue.staleIds(root,hours)
             for _,candidate in ipairs(stale) do
                 -- A pile does not relocate. Relocation is built on there being
@@ -1850,8 +1555,11 @@ local function relocation(api)
                 -- copy without a yield. A quantity is a fact about a place
                 -- anyway; carrying it somewhere else would be a different
                 -- claim, not the same clue in a new drawer.
+                -- An object SET is the exception (owner, 2026-09-27, No
+                -- Help): its pieces mean something only together, so it moves
+                -- whole, every piece in one step, or not at all.
                 if StaleClue.canAttempt(root.assignments[candidate])
-                    and expectedCount(api,candidate)==1 then id=candidate; break end
+                    and (expectedCount(api,candidate)==1 or isObjectSet(api,candidate)) then id=candidate; break end
             end
             if not id then return true end
         end
@@ -1865,6 +1573,8 @@ local function relocation(api)
         if Session.isMobile(a.target) and type(a.target.carrierMark)=="string" then return true end
         if not StaleClue.canAttempt(a) then return true end
         local hours=worldHours()
+        -- A clue the Search Mode icon has shown never moves (owner, 2026-09-27).
+        if type(root.shown)=="table" and root.shown[id] then return true end
         if not StaleClue.isStale({status=a.status,placedHours=a.placedHours,id=id},root.known,hours) then return true end
         oldContainer=oldContainer or World.resolve(a.target)
         if not oldContainer then return true end -- nothing safe to verify against
@@ -1872,13 +1582,28 @@ local function relocation(api)
         local px,py,pz=math.floor(p:getX()),math.floor(p:getY()),math.floor(p:getZ())
         if StaleClue.tooClose(px,py,pz,a.target) then return false end
         if not site then
-            local candidates=StaleClue.destinations(root,Visited.set())
+            local candidates=StaleClue.destinations(root,Visited.set(),id)
             if #candidates==0 then
                 log("[CF-G2-RELOCATE] "..id..": no unvisited candidate; leaving in place")
                 return true
             end
             site=candidates[1]
-            scan=boundsScan(site,function(t) target=t end)
+            -- Only a spot the Session would take: the clue's own kind, not
+            -- one another clue holds, never a spot that gave up a clue.
+            -- Offering anything else was refused only AFTER the pieces had
+            -- moved.
+            local moving; for _,d in ipairs(root.case.documents) do if d.id==id then moving=d end end
+            local taken=usedPhysicalKeys()
+            local spentKeys=type(root.spent)=="table" and root.spent or {}
+            local accept=function(candidate)
+                local k=Session.physicalKey(candidate)
+                return not taken[k] and not spentKeys[k] and Session.intentMatches(moving,candidate)
+            end
+            if moving and moving.spot=="ground" then
+                scan=groundScan(site,function(t) target=t end,accept,id,{spent=spentKeys,used=taken})
+            else
+                scan=boundsScan(site,function(t) target=t end,accept,id,Session.isArea(root))
+            end
         end
         if not target then
             if scan() then
@@ -1890,51 +1615,112 @@ local function relocation(api)
         end
         if StaleClue.tooClose(px,py,pz,target) then return false end
         if not tokenDone then
-            tokenScan=tokenScan or World.count(oldContainer,a.physicalToken,function(n) tokenCount=n; tokenDone=true end)
+            tokenScan=tokenScan or World.count(oldContainer,a.physicalToken,function(n) tokenCount=n; tokenDone=true end,expectedCount(api,id))
             tokenScan(); if not tokenDone then return false end
         end
         if not carryDone then
-            carryScan=carryScan or World.count(p:getInventory(),a.physicalToken,function(n) carryCount=n; carryDone=true end)
+            carryScan=carryScan or World.count(p:getInventory(),a.physicalToken,function(n) carryCount=n; carryDone=true end,1,true)
             carryScan(); if not carryDone then return false end
         end
-        if not StaleClue.canRelocate(tokenCount,carryCount) then
+        if not StaleClue.canRelocate(tokenCount,carryCount,expectedCount(api,id)) then
             log("[CF-G2-RELOCATE] "..id..": guard refused (original="..tostring(tokenCount)..", carried="..tostring(carryCount)..")")
+            return true
+        end
+        -- A set with a holder moves only while every piece is inside it and
+        -- none is loose; a set from an older save (no holder) keeps the plain rule.
+        local shape=Holders.shape(oldContainer,a.physicalToken)
+        if shape.holder and not Holders.movesWhole(shape,expectedCount(api,id)) then
+            log("[CF-G2-RELOCATE] "..id..": holder set not whole (inside="..shape.inside..", loose="..shape.loose.."); leaving in place")
             return true
         end
         if not newItem then
             local doc; for _,d in ipairs(root.case.documents) do if d.id==id then doc=d end end
             local destination=World.resolve(target)
             if not destination then log("[CF-G2-RELOCATE] "..id..": destination changed before placement; leaving in place"); return true end
-            local carrier=assert(require("NHShared/Generated/EvidenceKinds").get(doc.kind))
-            newItem=assert(instanceItem(carrier.fullType),"could not create relocated evidence item")
-            local md=newItem:getModData()
-            md.cfGeneratedId=id; md.cfPhysicalToken=a.physicalToken
-            -- Relocation RECREATES the item, and used to set the name here
-            -- and nothing else - so a relocated document reverted to its
-            -- script's own category and appeared as "Literature" in the middle
-            -- of a session (owner, 2026-09-13, at 101 4th St). Same stamp as
-            -- first placement now, from one function, so a third creation path
-            -- cannot drift the same way.
-            -- Still a plain item unless the survivor had already recognised
-            -- it (P4-R132).
-            if R.isRecognisedId(id) then stampEvidence(newItem,doc.title) end
-            applyWear(newItem,doc)
-            writePages(newItem,doc,root.case)
+            -- Every piece of the clue is rebuilt before any old piece is
+            -- removed: one item for a single clue, all of them for a set.
+            newItem={}
+            for _,member in ipairs(evidenceMembers(doc)) do
+              for _=1,member.quantity do
+                local carrier=assert(require("NHShared/Generated/EvidenceKinds").get(member.kind))
+                local piece=assert(instanceItem(carrier.fullType),"could not create relocated evidence item")
+                local md=piece:getModData()
+                md.cfGeneratedId=id; md.cfPhysicalToken=a.physicalToken
+                if isSet(doc) then md.cfPiece=#newItem+1 end
+                -- Relocation RECREATES the item, and used to set the name here
+                -- and nothing else - so a relocated document reverted to its
+                -- script's own category and appeared as "Literature" in the middle
+                -- of a session (owner, 2026-09-13, at 101 4th St). Same stamp as
+                -- first placement now, from one function, so a third creation path
+                -- cannot drift the same way.
+                -- Still a plain item unless the survivor had already recognised
+                -- it (P4-R132).
+                if R.isRecognisedId(id) then stampEvidence(piece,doc.title,doc)
+                else Kinds.nameAsVanillaCard(piece,doc) end
+                applyWear(piece,member)
+                writePages(piece,doc,root.case)
+                newItem[#newItem+1]=piece
+              end
+            end
+            -- The same kind of holder again (read off the old one), pieces inside.
+            if shape.holder then
+                local okT,fullType=pcall(function() return shape.holder:getFullType() end)
+                local wrapped=wrapInHolder(newItem,id,a.physicalToken,okT and fullType or nil)
+                if wrapped~=newItem and R.isRecognisedId(id) then stampEvidence(wrapped[1],doc.title,doc) end
+                newItem=wrapped
+            end
             newDestination=destination
         end
         -- T4/T5 policy is loss over duplication, and it is not merely a
         -- preference here: two items sharing one cfPhysicalToken make the
         -- periodic identity scan mark the document "conflict", which is
         -- sticky, so the clue would be dead permanently and Inspect would
-        -- refuse it forever. Remove the one verified old item first; the new
-        -- copy is already built and detached, so the window is two engine
-        -- calls with no yield between them.
+        -- refuse it forever. Remove the verified old pieces first; the new
+        -- pieces are already built and detached, and the removes and adds
+        -- below run with no yield between them.
+        -- A set weighs more than the single item a destination was chosen
+        -- for. Ask first, and leave the clue where it is if there is no room:
+        -- refusing here keeps it whole, where a refused add below loses it.
+        do
+            local weight=0
+            for _,piece in ipairs(newItem) do
+                local okW,w=pcall(function() return piece:getWeight() end)
+                weight=weight+((okW and tonumber(w)) or 0)
+                -- A holder's own weight may or may not include what is in it:
+                -- count the contents too, so the check errs toward refusing.
+                local okI,inner=false,nil
+                if instanceof and instanceof(piece,"InventoryContainer") then
+                    okI,inner=pcall(function() return piece:getInventory():getItems() end)
+                end
+                if okI and inner then
+                    for i=0,inner:size()-1 do
+                        local okP,pw=pcall(function() return inner:get(i):getWeight() end)
+                        weight=weight+((okP and tonumber(pw)) or 0)
+                    end
+                end
+            end
+            local okRoom,room=pcall(function() return newDestination:hasRoomFor(p,weight) end)
+            if okRoom and room==false then
+                log("[CF-G2-RELOCATE] "..id..": no room for "..#newItem.." piece(s) at the destination; leaving in place")
+                return true
+            end
+        end
         local items=oldContainer:getItems()
+        local old={}
         for i=0,items:size()-1 do
             local it=items:get(i); local md=it and it:getModData()
-            if md and md.cfPhysicalToken==a.physicalToken then oldContainer:Remove(it); break end
+            if md and md.cfPhysicalToken==a.physicalToken then old[#old+1]=it end
         end
-        if not newDestination:AddItem(newItem) then
+        for _,it in ipairs(old) do oldContainer:Remove(it) end
+        -- Whole or not at all, on the way in too: if any piece is refused, the
+        -- pieces that did land are taken back out, so a set is never split
+        -- into two half-sets carrying one token.
+        local added,landed=true,{}
+        for _,piece in ipairs(newItem) do
+            if newDestination:AddItem(piece) then landed[#landed+1]=piece else added=false; break end
+        end
+        if not added then
+            for _,piece in ipairs(landed) do pcall(function() newDestination:Remove(piece) end) end
             -- The old copy is already gone. Record the honest uncertainty
             -- rather than leaving canonical state claiming a placed item.
             checked(api.status(id,"unknown"))
@@ -1960,18 +1746,6 @@ end
 -- already holds (P4-R67, live cases and finished ones alike), and the survivor
 -- is not standing next to it. Nothing is ever said to the player: a clue
 -- appearing is exactly as quiet as a clue placed at creation.
-local function usedPhysicalKeys()
-    local keys={}
-    -- A finished case has no assignments left (retirement drops them), so a
-    -- retired case contributes nothing here: its containers are free again,
-    -- which is also what the ladder's third rung trades on.
-    for _,root in ipairs(Cases.sessions(wrapper) or {}) do
-        for _,a in pairs(root.assignments or {}) do
-            if a.target then keys[Session.physicalKey(a.target)]=true end
-        end
-    end
-    return keys
-end
 -- A CARRIER FOR A CLUE WITH NOWHERE TO GO (P4-R134). Fixed containers are a
 -- finite resource near a settled player - that is the whole of P4-R133's fault
 -- - and carriers are not: the bodies in the street replenish themselves, and
@@ -1983,104 +1757,25 @@ end
 -- survivor has not already searched it, its loot window is not open, it is
 -- inside the site's footprint as S.target will demand, the case has no mobile
 -- clue yet (S.MOBILE_PER_CASE), and the survivor is not standing next to it.
--- RETIRE A CASE THAT HAS JUST BECOME ACCOUNTED FOR, FROM ANY PATH.
---
--- Session.accounted used to be consulted in exactly ONE place: the path that
--- runs when a clue is inspected. Both drop paths - a deferred clue that has
--- waited three in-game days, and a clue whose carrier is gone - dropped the
--- clue and never asked again. So this sequence stuck a case for the rest of
--- the save:
---   1. the survivor finds and inspects every clue that HAS a container;
---   2. the last one is still deferred, so the case is not accounted for and
---      does not retire - correct so far (P4-R133);
---   3. three in-game days later that clue expires and is dropped;
---   4. the case is NOW accounted for, and nothing will ever look again,
---      because looking only happened on inspection and there is nothing left
---      to inspect.
--- The case keeps its active slot for ever. With MAX_ACTIVE slots held that way
--- every later case is refused `active-limit`, and no ladder rung can free a
--- slot a finished case is still holding - the rungs release an old FINISHED
--- case's sites, which does nothing here.
---
--- Returns false when there is nothing to do, so a caller can tell "not ready"
--- from "retired". Exposed as R.retireIfAccounted for
--- test/retire_after_final_drop.lua, because the bug was that nothing was
--- called and only a test that watches the call can hold that.
-local function retireIfAccounted(done)
-    if type(done)~="table" or type(done.case)~="table" then return false end
-    if not Session.accounted(done) then return false end
-    -- No campaign loaded is a normal state, not a fault: a drop can fire during
-    -- a reset or before the store exists, and ipairs(nil) would throw inside a
-    -- scheduler job. Nothing to retire into, so nothing to do.
-    if type(wrapper)~="table" then return false end
-    -- A transport scene that never came is set aside before the case retires,
-    -- so the record lists it among the clues the case never had
-    -- (Session.unpromotedVehicleIds; the filler would otherwise keep waiting
-    -- for a car beside a retired case).
-    local unpromoted=Session.unpromotedVehicleIds(done)
-    if #unpromoted>0 then
-        for _,api in ipairs(sessions or {}) do
-            if api.snapshot().case.caseId==done.case.caseId then
-                for _,id in ipairs(unpromoted) do
-                    local ok,why=api.drop(id)
-                    if ok then CFLog.write("i","stale",{doc=id,why="no-scene-at-completion"})
-                    else log("could not set aside a transport clue at completion: "..tostring(why)) end
-                end
-                done=api.snapshot()
-            end
-        end
-    end
-    for index,root in ipairs(Cases.sessions(wrapper)) do
-        if not Retired.isRetired(root) and root.case and root.case.caseId==done.case.caseId then
-            -- Where each clue was last seen, from the scan's own sightings
-            -- (P4-R104). No item in hand on this path: nothing was just picked
-            -- up, a clue simply ran out of time.
-            local seen={}
-            for sid,s in pairs(sightings or {}) do if s.where then seen[sid]=s.where end end
-            local staged,why=Cases.retire(wrapper,index,seen,worldHours())
-            if not staged then log("case accounted for but not retired: "..tostring(why)); return false end
-            swap(staged); openAll()
-            local gaps,history=Session.gaps(done)
-            if #gaps>0 then
-                local parts={}
-                for _,gid in ipairs(gaps) do parts[#parts+1]=gid.."("..tostring(history[gid])..")" end
-                log("Case complete with "..#gaps.." clue(s) the case never had: "..table.concat(parts,", ")
-                    .." [case="..tostring(done.case.caseId).."]")
-            else
-                log("Case complete; placement details retired.")
-            end
-            -- Same rule on the drop path (P4-R142): a case completed by a drop
-            -- that took an essential clue with it has not delivered a payoff.
-            local essential=Session.essentialGaps(done)
-            if #essential>0 then
-                log("Case INCOMPLETE on the drop path: ended without "..#essential
-                    .." clue(s) its conclusion rests on [case="..tostring(done.case.caseId).."]")
-            end
-            local v=require("NHShared/InteractionAPI").PlayerVoice
-            if #essential==0 then
-                if v and v.onCaseComplete then pcall(v.onCaseComplete,done.case.caseId,#gaps) end
-            elseif v and v.onCaseIncomplete then
-                pcall(v.onCaseIncomplete,done.case.caseId,#essential)
-            end
-            return true
-        end
-    end
-    return false
-end
-R.retireIfAccounted=retireIfAccounted
-local function carrierScanFor(site,found)
+-- `hint` is a No Help clue's optional outfit class: among the bodies in reach
+-- one dressed that way is preferred, and no body is refused for its clothes.
+local function carrierScanFor(site,found,hint)
     local b=site.bounds
     local r=Session.CARRIER_RADIUS
     local reach=math.max(b.x2-b.x1,b.y2-b.y1)+r
     return Carriers.scan(math.floor((b.x1+b.x2)/2),math.floor((b.y1+b.y2)/2),b.z,reach,found,
         function(entry)
             return entry.x>=b.x1-r and entry.x<b.x2+r and entry.y>=b.y1-r and entry.y<b.y2+r and entry.z==b.z
-        end)
+        end,hint)
 end
 -- A late-bound transport finding waits for a real vehicle part at its authored
 -- address.  This is observation, not scene manufacture: no vehicle is spawned,
 -- moved or renamed, and a missing vehicle leaves the clue deferred.
-local function vehicleCandidateFor(site,taken)
+-- `needScene`: only an old transport clue needs a vehicle the scene observer
+-- confirmed. A No Help vehicle clue takes any car at its place: the observer
+-- only runs in debug, so requiring a signature left every No Help vehicle
+-- clue waiting forever in normal play (step 5 design pass).
+local function vehicleCandidateFor(site,taken,needScene)
     local b=site.bounds
     local cx=math.floor((b.x1+b.x2)/2)
     local cy=math.floor((b.y1+b.y2)/2)
@@ -2098,7 +1793,7 @@ local function vehicleCandidateFor(site,taken)
                     containerType=Session.VEHICLE_CONTAINER,sprite=tostring(script),vehiclePart=part.part,
                     sceneSignature=signature}
                 local key=Session.physicalKey(target)
-                if signature and Session.target(target,site) and not taken[key] then
+                if (signature or not needScene) and Session.target(target,site) and not taken[key] then
                     choices[#choices+1]={target=target,key=key}
                 end
             end
@@ -2110,8 +1805,111 @@ end
 -- Where each session's filler is in its turn order; the closure below is
 -- rebuilt every attempt, so this must live outside it (Session.pick).
 local fillCursor=setmetatable({},{__mode="k"})
-local function filler(api)
-    local id,site,scan,target,bodyScan,carrier,indexed,doc
+-- A clue that must go in a vehicle: an old transport scene, or a No Help clue
+-- whose spot is a vehicle.
+-- DECIDE EARLY, CREATE ON ARRIVAL (owner, 2026-09-27): which clues a place
+-- holds is decided and saved early, but nothing is created at a place until
+-- the survivor is within R.ARRIVE_TILES of its bounds - "nothing sits at a
+-- place before the player comes". Inside that ring a closed container may be
+-- filled at any distance (nobody sees into it; its open loot window refuses);
+-- open ground and a body only where the survivor cannot see the square, on
+-- another floor, or beyond StaleClue's guard radius (StaleClue.outOfSight).
+R.ARRIVE_TILES=40
+-- How far the survivor is from a site's bounds (Chebyshev, 0 inside), or nil
+-- when there is no survivor to measure from. A WHOLE AREA A MAP MARKS is
+-- measured from its nearest mark instead (MarkedArea.distance): its clues
+-- are sought near the marks first, and an area hundreds of tiles across
+-- would otherwise "arrive" from 40 tiles outside a far corner, with every
+-- square near its marks still unloaded.
+local function survivorDistance(site)
+    local p=getPlayer and getPlayer()
+    local b=site and site.bounds
+    if not p or not b then return nil end
+    local px,py=p:getX(),p:getY()
+    local points=areaPoints(site)
+    if points and #points>0 then return MarkedArea.distance(points,px,py) end
+    local ox=math.max(b.x1-px,0,px-(b.x2-1))
+    local oy=math.max(b.y1-py,0,py-(b.y2-1))
+    return math.floor(math.max(ox,oy))
+end
+R.survivorDistance=survivorDistance
+local function farFromSurvivor(site)
+    local d=survivorDistance(site)
+    return d~=nil and d>R.ARRIVE_TILES
+end
+-- NEAREST AREAS FIRST (task 3 plan, step 4 part 2). The waiting clues whose
+-- area the survivor has arrived at (within R.ARRIVE_TILES), nearest first
+-- (ties in document order), each with its distance. `onlyArea` keeps one
+-- area's clues (the arrival trigger). Without a survivor, all of them.
+local function nearestWaiting(root,waiting,onlyArea)
+    local sites={}
+    for _,s in ipairs(root.case.locations or {}) do sites[s.id]=s end
+    local rows={}
+    for i,wid in ipairs(waiting) do
+        local a=root.assignments[wid]
+        local s=a and sites[a.locationId]
+        local d=s and survivorDistance(s)
+        if s and (onlyArea==nil or s.id==onlyArea) and (d==nil or d<=R.ARRIVE_TILES) then
+            rows[#rows+1]={id=wid,d=d or 0,i=i}
+        end
+    end
+    table.sort(rows,function(x,y) if x.d~=y.d then return x.d<y.d end return x.i<y.i end)
+    local ids,dist={},{}
+    for k,r in ipairs(rows) do ids[k]=r.id; dist[r.id]=r.d end
+    return ids,dist
+end
+-- May a clue appear on this ground or body spot now? (StaleClue.outOfSight:
+-- another floor, beyond the guard radius, or a square the survivor cannot
+-- see.) Engine answers are read under pcall; unreadable counts as visible.
+local function hiddenFromSurvivor(target)
+    local p=getPlayer and getPlayer()
+    if not p or type(target)~="table" then return true end
+    local px,py,pz=math.floor(p:getX()),math.floor(p:getY()),math.floor(p:getZ())
+    if not StaleClue.tooClose(px,py,pz,target) then return true end
+    local visible
+    pcall(function()
+        local n=p:getPlayerNum()
+        local square=getCell():getGridSquare(target.x,target.y,target.z)
+        if square then visible=square:isCouldSee(n) or square:isCanSee(n) end
+    end)
+    return StaleClue.outOfSight(px,py,pz,target,visible)
+end
+R.hiddenFromSurvivor=hiddenFromSurvivor
+-- A SCENE'S OWN ITEMS (owner, 2026-09-27: beside vanilla's items, never on
+-- them): a container whose square holds a world item of one of these types
+-- is refused. Read live, under pcall; unreadable counts as holding them.
+local function holdsProps(candidate,props)
+    if type(props)~="table" or #props==0 then return false end
+    local want={}
+    for _,name in ipairs(props) do want[name]=true end
+    local ok,holds=pcall(function()
+        local square=getCell():getGridSquare(candidate.x,candidate.y,candidate.z)
+        if not square then return true end
+        local list=square:getWorldObjects()
+        for i=0,list:size()-1 do
+            local item=list:get(i):getItem()
+            if item and want[item:getFullType()] then return true end
+        end
+        return false
+    end)
+    return not ok or holds==true
+end
+R.holdsProps=holdsProps
+local function wantsVehicle(doc)
+    return doc~=nil and (doc.placementIntent=="vehicle" or doc.spot=="vehicle")
+end
+-- `onlyArea` (optional): one attempt for that area's clues only - the arrival
+-- trigger's attempt, run the moment the survivor enters the area's ring.
+local function filler(api,onlyArea)
+    local id,site,scan,target,bodyScan,carrier,indexed,doc,distance,groundWhy,areaClue
+    -- E2: a furniture or mailbox clue with nothing of its kind free falls back
+    -- to a body nearby, then the floor (`floorTried` once the floor was scanned).
+    local spentKeys,takenKeys,floorTried
+    -- A clue that could not be placed this attempt, said with where it is
+    -- and how far the survivor is from its area.
+    local function miss(why)
+        CFLog.write("d","skip",{doc=id,area=site and site.id,distance=distance,why=why})
+    end
     return function()
         local hours=worldHours()
         -- The whole case is read ONCE per attempt, not once per step: a
@@ -2127,34 +1925,76 @@ local function filler(api)
                 local ok,why=api.drop(expired[1])
                 if ok then
                     CFLog.write("i","stale",{doc=expired[1],why="expired",n=#expired})
-                    -- The drop may have been the event that completed this case.
-                    -- Nothing else will ever look again: retirement used to be
-                    -- checked only when a clue was inspected, and there is
-                    -- nothing left to inspect.
-                    retireIfAccounted(api.snapshot())
                 else log("could not drop a waiting clue: "..tostring(why)) end
                 return true
             end
-            local planned=Session.indexedIds(root)
+            local planned=onlyArea and {} or Session.indexedIds(root)
             local waiting=Session.deferredIds(root)
             if #planned==0 and #waiting==0 then return true end
             indexed=#planned>0
             -- Indexed plans first, as before; within a list, the next one in
             -- turn, so a clue that cannot go anywhere yet does not hold the
-            -- rest of the case behind it.
+            -- rest of the case behind it. Waiting clues are served nearest
+            -- area first, only where the survivor has arrived; the cursor
+            -- still turns over them.
+            local dist
+            if not indexed then
+                waiting,dist=nearestWaiting(root,waiting,onlyArea)
+                if #waiting==0 then
+                    -- Nothing is created at a place before the survivor
+                    -- arrives (owner, 2026-09-27); its clues stay decided.
+                    declinePlacement("no waiting clue's area has the survivor arrived at")
+                    return true
+                end
+            end
+            areaClue=Session.isArea(root)
             id,fillCursor[api]=Session.pick(indexed and planned or waiting,fillCursor[api])
+            distance=dist and dist[id]
             for _,s in ipairs(root.case.locations) do
                 if s.id==root.assignments[id].locationId then site=s end
             end
             for _,d in ipairs(root.case.documents) do if d.id==id then doc=d end end
             if not site then return true end
+            if not indexed and farFromSurvivor(site) then
+                declinePlacement("the area of "..tostring(id).." is far from the survivor")
+                return true
+            end
             if not indexed then
                 local taken=usedPhysicalKeys()
-                if doc and doc.placementIntent=="vehicle" then
-                    target=vehicleCandidateFor(site,taken)
-                else
+                spentKeys,takenKeys=type(root.spent)=="table" and root.spent or {},taken
+                -- Within a place the spots are the world's seeded choice, in
+                -- no layout order (owner, 2026-09-27).
+                local accept=function(candidate)
+                    return not taken[Session.physicalKey(candidate)] and Session.intentMatches(doc,candidate)
+                end
+                if wantsVehicle(doc) then
+                    target=vehicleCandidateFor(site,taken,doc and doc.placementIntent=="vehicle")
+                elseif doc and doc.spot=="ground" then
+                    -- Open ground (GroundSpots): checked squares in the
+                    -- world's order, never a spot that gave up a clue, never
+                    -- one the survivor could be looking at.
+                    scan=groundScan(site,function(t,refused)
+                        target=t
+                        if not t then
+                            local parts={}
+                            for why,n in pairs(refused or {}) do parts[#parts+1]=why.."="..n end
+                            table.sort(parts)
+                            groundWhy=table.concat(parts,",")
+                        end
+                    end,accept,id,{spent=type(root.spent)=="table" and root.spent or {},used=taken})
+                elseif not (doc and doc.spot=="corpse") then
+                    -- A clue only takes its own kind of spot (No Help: a
+                    -- mailbox clue only a mailbox, a furniture clue only
+                    -- furniture); Session.assign refuses anything else, so a
+                    -- container of the wrong kind is never even chosen.
+                    -- A drawer searched earlier may take a No Help clue.
+                    local prefer=doc and ((doc.containers and Session.containerOrder(doc.containers,R.worldSeed(),id))
+                        or (doc.spot=="mailbox" and {Storage.MAILBOX}))
                     scan=boundsScan(site,function(t) target=t end,
-                        function(candidate) return not taken[Session.physicalKey(candidate)] end,id)
+                        function(candidate)
+                            return not taken[Session.physicalKey(candidate)] and Session.intentMatches(doc,candidate)
+                                and not holdsProps(candidate,site.avoidProps)
+                        end,id,areaClue,prefer or nil)
                 end
             end
         end
@@ -2190,16 +2030,34 @@ local function filler(api)
             else return false end
         end
         if not target then
-            if doc and doc.placementIntent=="vehicle" then
+            if wantsVehicle(doc) then
                 -- Named: the fitness audit (20260924T191606) stood at this
                 -- clue's site for two minutes and could only report
                 -- "last reason: none". A clue that wants a vehicle waits for
                 -- a confirmed one at its site, and now says so.
                 declinePlacement("no confirmed vehicle at the site for "..tostring(id))
-                CFLog.write("d","skip",{doc=id,why="no-confirmed-vehicle"})
+                miss("no-confirmed-vehicle")
                 return true
             end
-            if not Session.mobileAllowed(api.snapshot(),id) then
+            local fallback=doc and (doc.spot=="furniture" or doc.spot=="mailbox")
+            if fallback and floorTried then
+                declinePlacement("no container, body or floor free at the area for "..tostring(id))
+                miss("no-"..tostring(doc.spot).."-no-fallback")
+                return true
+            end
+            -- A No Help clue that names a spot other than a body waits for a
+            -- spot of its own kind; a furniture or mailbox clue falls back to a
+            -- body and then the floor (E2) instead.
+            if doc and doc.spot~=nil and doc.spot~="corpse" and not fallback then
+                declinePlacement("no free "..tostring(doc.spot).." spot at the area for "..tostring(id))
+                if doc.spot=="ground" and groundWhy and groundWhy~="" then
+                    CFLog.write("d","skip",{doc=id,area=site.id,distance=distance,refused=groundWhy,why="no-ground"})
+                else miss("no-"..tostring(doc.spot)) end
+                return true
+            end
+            -- A body clue of the world record is not held to the one-mobile-
+            -- clue-per-case cap: the whole world is one record.
+            if not (doc and (doc.spot=="corpse" or fallback)) and not Session.mobileAllowed(api.snapshot(),id) then
                 -- Debug, not info: this is the ordinary state of an open order
                 -- and would otherwise be a line every two seconds. Named all
                 -- the same (Log.declines), so a check standing at the site can
@@ -2207,19 +2065,25 @@ local function filler(api)
                 declinePlacement("no free container at the site for "..tostring(id).." and no carrier allowed")
                 CFLog.write("d","skip",{doc=id,why="no-containers"}); return true
             end
-            if not bodyScan then bodyScan=carrierScanFor(site,function(entry) carrier=entry end) end
+            if not bodyScan then bodyScan=carrierScanFor(site,function(entry) carrier=entry end,doc and doc.outfit) end
             if not carrier then
                 if bodyScan() then
+                    if not carrier and fallback then
+                        -- No body either: the floor, scanned from the next step.
+                        floorTried=true
+                        scan=groundScan(site,function(t) target=t end,function(candidate)
+                            return not takenKeys[Session.physicalKey(candidate)] and Session.intentMatches(doc,candidate)
+                        end,id,{spent=spentKeys or {},used=takenKeys or {}})
+                        return false
+                    end
                     if not carrier then
                         declinePlacement("no free container at the site for "..tostring(id).." and no body nearby to carry it")
                         CFLog.write("d","skip",{doc=id,why="no-containers"}); return true
                     end
                 else return false end
             end
-            local pc=getPlayer()
-            if pc and StaleClue.tooClose(math.floor(pc:getX()),math.floor(pc:getY()),math.floor(pc:getZ()),carrier) then
-                return false
-            end
+            -- A body is in the open: never where the survivor could see it.
+            if not hiddenFromSurvivor(carrier) then return false end
             local mark=Carriers.newMark(carrier.x,carrier.y,carrier.z,hours)
             local claimed,whyNot=Carriers.claim(carrier,mark)
             if not claimed then
@@ -2228,17 +2092,25 @@ local function filler(api)
             end
             target={x=carrier.x,y=carrier.y,z=carrier.z,objectIndex=0,containerIndex=0,
                 containerType=Session.CARRIER_CONTAINER,sprite=carrier.kind,
-                carrierKind=carrier.kind,carrierMark=mark}
+                carrierKind=carrier.kind,carrierMark=mark,outfit=carrier.outfit}
         end
-        -- Nothing materialises under the survivor's feet: the same guard
-        -- relocation uses, with the same radius.
-        local p=getPlayer()
-        if p and StaleClue.tooClose(math.floor(p:getX()),math.floor(p:getY()),math.floor(p:getZ()),target) then
-            return false
+        -- Nothing materialises in the survivor's sight. Open ground and a
+        -- body: another floor, beyond the guard radius, or a square they
+        -- cannot see. A closed container (furniture, mailbox, vehicle) at any
+        -- distance: nobody sees into it, and its open loot window refuses
+        -- below. The old case kind keeps the plain guard radius.
+        local open=target.ground==true or target.containerType==Session.GROUND_CONTAINER
+            or target.containerType==Session.CARRIER_CONTAINER or type(target.carrierMark)=="string"
+        if not areaClue or open then
+            local p=getPlayer()
+            local hidden
+            if areaClue then hidden=hiddenFromSurvivor(target)
+            else hidden=not (p and StaleClue.tooClose(math.floor(p:getX()),math.floor(p:getY()),math.floor(p:getZ()),target)) end
+            if not hidden then return false end
         end
         local destination=World.resolve(target)
         if not destination then return true end
-        local fresh,why=FixedContainers.fresh(destination)
+        local fresh,why=FixedContainers.fresh(destination,areaClue)
         if not fresh then
             if indexed then api.unplan(id,hours) end
             CFLog.write("d","skip",{doc=id,why="container-"..tostring(why)})
@@ -2254,6 +2126,45 @@ local function filler(api)
         return true
     end
 end
+-- THE ARRIVAL TRIGGER (owner, 2026-09-27: create on arrival). When the
+-- survivor enters the ring of an area whose clues still wait, one filler
+-- attempt for that area is queued at once, nearest area first, instead of
+-- waiting for the regular pass every 120 ticks. Checked every
+-- R.ARRIVE_CHECK_TICKS on the stored world record (no snapshot copy). An area
+-- counts as entered once per stay in its ring; leaving and coming back
+-- enters it again.
+R.ARRIVE_CHECK_TICKS=30
+local inRing={}
+local function arrivals()
+    local api=areaSession
+    local root=worldRoot()
+    if not api or not scheduler or not root or type(root.assignments)~="table" then return 0 end
+    local sites={}
+    for _,site in ipairs(root.case and root.case.locations or {}) do sites[site.id]=site end
+    local waitingAt={}
+    for _,a in pairs(root.assignments) do
+        if a.status=="deferred" and type(a.locationId)=="string" then waitingAt[a.locationId]=true end
+    end
+    local now,rows={},{}
+    for areaId in pairs(waitingAt) do
+        local d=sites[areaId] and survivorDistance(sites[areaId])
+        if d~=nil and d<=R.ARRIVE_TILES then
+            now[areaId]=true
+            if not inRing[areaId] then rows[#rows+1]={id=areaId,d=d} end
+        end
+    end
+    inRing=now
+    table.sort(rows,function(x,y) if x.d~=y.d then return x.d<y.d end return x.id<y.id end)
+    local n=0
+    for _,row in ipairs(rows) do
+        if scheduler.enqueue("arrive:"..row.id,"filler",filler(api,row.id)) then
+            n=n+1
+            CFLog.write("d","case",{case=row.id,distance=row.d,why="arrived"})
+        end
+    end
+    return n
+end
+R.arrivals=arrivals
 -- A CARRIER THAT IS GONE (P4-R134). A body burns, a body is buried, a car is
 -- wrecked: the clue is then somewhere nobody will ever reach. It
 -- shares P4-R133's expiry to the hour - three in-game days and it is dropped,
@@ -2277,8 +2188,6 @@ local function carrierWatch(api)
             local ok,why=api.dropMissing(gone[1],hours)
             if ok then
                 CFLog.write("i","stale",{doc=gone[1],why="carrier-gone",n=#gone})
-                -- Same window as the expiry path above.
-                retireIfAccounted(api.snapshot())
             else log("could not drop a clue whose carrier is gone: "..tostring(why)) end
             return true
         end
@@ -2497,14 +2406,6 @@ function R.whereabouts(id)
             return "unchecked"
         end
     end
-    -- A finished case keeps no scan of its own, only where its evidence was last
-    -- seen (P4-R104). No record means we say nothing, never that it is gone.
-    for _,row in ipairs(retiredRows) do
-        if row.id==id then
-            if type(row.lastSeen)=="string" then return "lastseen",row.lastSeen end
-            return nil
-        end
-    end
     return nil
 end
 local function identity(api)
@@ -2514,7 +2415,7 @@ local function identity(api)
     -- document and many identical items; finding the second one is not a
     -- conflict, it is the pile.
     local expected={}
-    for _,d in ipairs(snapshot.case.documents) do expected[d.id]=d.quantity or 1 end
+    for _,d in ipairs(snapshot.case.documents) do expected[d.id]=Session.pieceCount(d) end
     local scan=World.identityScan(getPlayer(),snapshot.assignments,function(r) found=r; done=true end,expected)
     return function()
         if not done then scan(); return false end
@@ -2552,84 +2453,19 @@ local function identity(api)
         return true
     end
 end
--- Where a finished case's evidence is now (P4-R104). Owner, 2026-09-14: "I lost
--- my files somewhere?" The case had completed, retirement had dropped its
--- placement details, and nothing could say where the evidence had gone.
---
--- A retired case has no identity scan, so this is a smaller one: the player's
--- inventory with bags inside it (depth 3, as restampEvidence walks it) and the
--- containers the loot panel is showing, one item per scheduler step, at most
--- every ten seconds of real time. What it finds is written to the save only
--- when the words changed, and never more than once a minute per document: a
--- player walking round with the evidence album must not cost a 20 ms validation every
--- time a bag changes hands.
-local LAST_SEEN_EVERY_MS=10000
-local LAST_SEEN_WRITE_MS=60000
-local LAST_SEEN_CONTAINERS=64
-local LAST_SEEN_ITEMS=2048
-local lastSeenAt=nil
-local lastSeenWritten={}
-local function lastSeenJob()
-    local rows={}
-    for _,row in ipairs(retiredRows) do rows[row.id]=row end
-    local tasks,listed={},{}
-    local function add(container,depth)
-        if container and depth<=3 and not listed[container] and #tasks<LAST_SEEN_CONTAINERS then
-            listed[container]=true; tasks[#tasks+1]={container=container,depth=depth}
-        end
-    end
-    local player=getPlayer and getPlayer()
-    add(player and rd(player,"getInventory"),0)
-    -- The loot panel's containers are what the player is looking into; its
-    -- buttons already hold them, so reaching them costs nothing.
-    pcall(function()
-        local page=getPlayerLoot and getPlayerLoot(0)
-        for _,button in ipairs(page and page.backpacks or {}) do add(button.inventory,0) end
-    end)
-    local found,cursor,index,examined={},1,0,0
-    return function()
-        local task=tasks[cursor]
-        if task and examined<LAST_SEEN_ITEMS then
-            local items=rd(task.container,"getItems")
-            local size=items and rd(items,"size") or 0
-            if type(size)~="number" or index>=size then cursor=cursor+1; index=0; return false end
-            local item=rd(items,"get",index); index=index+1; examined=examined+1
-            local md=item and rd(item,"getModData")
-            local id=type(md)=="table" and md.cfGeneratedId
-            -- Marked Old wherever this scan meets it: after a reload, and in
-            -- saves whose case retired before the mark existed (P4-R118).
-            if id and rows[id] then pcall(function() item:setDisplayCategory("EvidenceOld") end) end
-            if id and rows[id] and not found[id] then
-                local ok,where=pcall(placeOf,item)
-                if ok and type(where)=="string" then found[id]=where end
-            end
-            local inner=item and rd(item,"getInventory")
-            if inner then add(inner,task.depth+1) end
-            return false
-        end
-        if saveRefused() or not wrapper then return true end
-        local now=getTimeInMillis and getTimeInMillis() or 0
-        local updates,any={},false
-        for id,where in pairs(found) do
-            local words=Retired.cleanLastSeen(where)
-            local at=lastSeenWritten[id]
-            if words and words~=rows[id].lastSeen and (not at or now-at>=LAST_SEEN_WRITE_MS or now<at) then
-                updates[id]=words; any=true
-            end
-        end
-        if not any then return true end
-        local staged,changed=Cases.noteLastSeen(wrapper,updates)
-        if not staged then log("Last-seen note refused: "..tostring(changed)); return true end
-        if changed then
-            swap(staged); refreshRetired()
-            for id in pairs(updates) do lastSeenWritten[id]=now end
-        end
-        return true
-    end
-end
 require("NHShared/Events/EngineEvents").on("OnTick", function()
     if not scheduler or not allowed() then return end
     ticks=ticks+1
+    -- The living player carries a mark so their body is never chosen to carry
+    -- a clue (Carriers.PLAYER_MARK); cheap and idempotent, and it covers a new
+    -- character after a death without an event of its own.
+    if ticks%120==0 then pcall(Carriers.stampPlayer,getPlayer and getPlayer()) end
+    -- The survivor arriving at a place creates its clues now, not at the
+    -- next regular pass.
+    if sessions and ticks%R.ARRIVE_CHECK_TICKS==0 then
+        local ok,err=pcall(arrivals)
+        if not ok then log("arrival check failed: "..tostring(err)) end
+    end
     if sessions and ticks%120==0 then
         enqueue(); for i,api in ipairs(sessions) do scheduler.enqueue("identity:"..i,"identity",identity(api)) end
         for i,api in ipairs(sessions) do scheduler.enqueue("relocate:"..i,"relocation",relocation(api)) end
@@ -2641,12 +2477,20 @@ require("NHShared/Events/EngineEvents").on("OnTick", function()
         for i,api in ipairs(sessions) do scheduler.enqueue("carrier:"..i,"carrier",carrierWatch(api)) end
 
         scheduler.enqueue("visited-building","tracking",trackVisited)
-        if #retiredRows>0 then
-            local now=getTimeInMillis and getTimeInMillis() or 0
-            if not lastSeenAt or now-lastSeenAt>=LAST_SEEN_EVERY_MS or now<lastSeenAt then
-                if scheduler.enqueue("last-seen","lastseen",lastSeenJob()) then lastSeenAt=now end
-            end
-        end
+        -- The map marks and the address book, once the player exists.
+        if not servicesStarted then servicesStarted=startServices() end
+        -- Decide the interesting places nearby. It waits on its own for the
+        -- survivor to move on or for time to pass, so asking often is cheap.
+        local ok,err=pcall(R.decideNearby)
+        if not ok then log("deciding nearby areas failed: "..tostring(err)) end
+        -- And the places vanilla maps and flyers name, as the survivor nears
+        -- them; a queue left by a reopened scheduler is picked up again.
+        ok,err=pcall(R.decideMapNear)
+        if not ok then log("deciding map places failed: "..tostring(err)) end
+        -- And the vanilla scenes found near the survivor (NH-D7).
+        ok,err=pcall(R.decideScenes)
+        if not ok then log("deciding scenes failed: "..tostring(err)) end
+        if #mapQueue>0 then scheduler.enqueue("map-areas","map-areas",mapDrain) end
     end
     scheduler.step()
 end)
@@ -2676,21 +2520,20 @@ local function restampEvidence(container,depth)
 end
 
 require("NHShared/Events/EngineEvents").on("OnGameStart", function()
-    sessions,scheduler,preparing,wrapper=nil,nil,false,nil
-    clearDebt()
+    sessions,scheduler,preparing,wrapper,areaSession=nil,nil,false,nil,nil
+    lastDecide=nil; emptyNoted={}; servicesStarted=false
+    mapQueue,mapQueued={},{}; inRing={}
     -- Forget what we could see last time. A new session has not looked yet,
     -- and should say so rather than inherit yesterday's confidence.
     sightings={}
-    lastSeenAt=nil
     if not allowed() then return end
-    local saved=ModData.getOrCreate(TAG)
-    if saved.canonical or saved.campaign then
-        local ok,why=pcall(function() checked(setup()); wrapper=assert(Cases.current(saved)); openAll() end)
-        if not ok then scheduler=nil; log("Saved case refused: "..tostring(why)) end
-        -- What the last session was still owed: the count and the rung, never
-        -- the wait (P4-R133, P4-R125). Read after the store is open, and never
-        -- allowed to stop a save from loading.
-        if ok then pcall(restoreDebt) end
+    -- Open this save's world record, creating it the first time. A save whose
+    -- store cannot be read (an old generated case from an earlier build) is
+    -- refused with a line in the log, never a crash.
+    local ok,started,why=pcall(R.bootstrap)
+    if not ok or not started then
+        scheduler=nil
+        log("World record refused: "..tostring(ok and why or started))
     end
     -- After the campaign is open, so recognition can be read (P4-R132).
     pcall(function()

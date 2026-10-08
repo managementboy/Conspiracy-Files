@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "RoxysRollerRink"
+    },
+    "body": "Black shoes next to a paper sheet with exit protocol. It says to keep the checkpoint open until all units return. They closed it early.",
+    "id": "t0204-01",
+    "kind": "set",
+    "pieces": [
+      "Shoes_Black",
+      "SheetPaper2"
+    ],
+    "title": "Black shoes and paper sheet",
+    "where": [
+      {
+        "containers": [
+          "wardrobe",
+          "desk",
+          "dresser",
+          "filingcabinet",
+          "clothingrack",
+          "sidetable"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

@@ -1,0 +1,32 @@
+[
+  {
+    "anchor": {
+      "map": "IrvingtonStashMap4",
+      "mark": 1
+    },
+    "body": "Someone penciled notes about who needed rides out. The paper has an official stamp: road closure, no exceptions. They never made it.",
+    "id": "t0043-01",
+    "kind": "set",
+    "pieces": [
+      "SheetPaper2",
+      "Pencil"
+    ],
+    "title": "Paper and pencil",
+    "where": [
+      {
+        "containers": [
+          "filingcabinet",
+          "desk",
+          "sidetable",
+          "shelves",
+          "smallbox",
+          "cashregister"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

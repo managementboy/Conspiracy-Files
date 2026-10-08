@@ -1,0 +1,42 @@
+[
+  {
+    "anchor": {
+      "scene": "RZSWasteDump"
+    },
+    "body": "Soap, work gloves, and two sample jars, paid cash. My note says the fertilizer crew left oily residue here before the road was closed.\n\nWe needed the supplies listed here for the following morning. The people who took the count left without asking whether we had them.\n\nIt may have started elsewhere; none of us saw the beginning. I only know what had reached this place before they closed the road.",
+    "id": "t0406-01",
+    "kind": "written",
+    "pieces": [
+      "receipt"
+    ],
+    "title": "Receipt with note",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RZSWasteDump"
+    },
+    "body": "The hauler was told the dump road was clear and took a detour to avoid the crowded main route. The gate had been welded shut that morning. He wrote down the time because the dispatch sheet still charged him for arriving late.",
+    "id": "t0406-02",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "title": "Letter",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
+  }
+]

@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "EkronCollege"
+    },
+    "body": "The book's about field trial procedures. The notebook ends in june. Someone shut down the program before collecting the final data.",
+    "id": "t0261-01",
+    "kind": "set",
+    "pieces": [
+      "Book",
+      "Notebook"
+    ],
+    "title": "Book and notebook",
+    "where": [
+      {
+        "containers": [
+          "displaycase",
+          "desk",
+          "shelvesmag",
+          "filingcabinet",
+          "shelves",
+          "sidetable"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

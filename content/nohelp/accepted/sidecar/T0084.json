@@ -1,0 +1,25 @@
+{
+  "t0084-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "Plan B",
+      "source": "map:MulStashMap7"
+    },
+    "gloss": "A stocked store with a closing order and a blank count box.",
+    "prov": {
+      "batch": "T0084",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "None: one-sided on purpose"
+  }
+}

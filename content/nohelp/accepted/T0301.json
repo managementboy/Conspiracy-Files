@@ -1,0 +1,59 @@
+[
+  {
+    "anchor": {
+      "scene": "RBPileOCrepe"
+    },
+    "body": "The key ring and empty sprayer are streaked from a clouded sample jar. Sprayer residue has dried hard on both. I think they were put aside once the flies left the field edge.",
+    "id": "t0301-01",
+    "kind": "set",
+    "pieces": [
+      "KeyRing",
+      "GardeningSprayEmpty"
+    ],
+    "title": "Key ring and empty sprayer",
+    "where": [
+      {
+        "containers": [
+          "dresser",
+          "metal_shelves",
+          "desk",
+          "shelves",
+          "sidetable",
+          "cardboardbox"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RBPileOCrepe"
+    },
+    "body": "I was told to leave the kitchen open for one more shift, though the road count already included its address. I set aside a clean apron for the morning cook.\n\nThe second list, the one for people waiting inside, came back with no names. The man who carried it said the count was final and I was not to correct it.",
+    "id": "t0301-02",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "title": "Handwritten letter",
+    "where": [
+      {
+        "containers": [
+          "filingcabinet",
+          "desk",
+          "sidetable",
+          "cashregister",
+          "shelves",
+          "smallbox"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

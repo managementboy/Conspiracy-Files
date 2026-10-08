@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "KnoxGunOwnersClubGetTogether"
+    },
+    "body": "The notebook tracks pesticide applications. One name at two sites, same hour. The pistol was standard issue for field staff.",
+    "id": "t0193-01",
+    "kind": "set",
+    "pieces": [
+      "Pistol",
+      "Notebook"
+    ],
+    "title": "Pistol and notebook",
+    "where": [
+      {
+        "containers": [
+          "militarylocker",
+          "desk",
+          "locker",
+          "shelves",
+          "militarycrate",
+          "filingcabinet"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

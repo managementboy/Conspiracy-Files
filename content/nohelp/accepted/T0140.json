@@ -1,0 +1,32 @@
+[
+  {
+    "anchor": {
+      "map": "WpStashMap7",
+      "mark": 1
+    },
+    "body": "The notebook is open to a blank plot line, a pencil across it. The sprayer and nozzles were checked out and not signed back. The tank still has residue in it.",
+    "id": "t0140-01",
+    "kind": "set",
+    "pieces": [
+      "Notebook",
+      "Pencil"
+    ],
+    "title": "Notebook and pencil",
+    "where": [
+      {
+        "containers": [
+          "filingcabinet",
+          "desk",
+          "sidetable",
+          "shelves",
+          "smallbox",
+          "cashregister"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

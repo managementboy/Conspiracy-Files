@@ -24,10 +24,11 @@ local player = {
 }
 getPlayer = function() return player end
 Events = { OnTick = { Add = function() end }, OnGameStart = { Add = function() end } }
-ConspiracyFiles = { GeneratedRuntime = {
+ConspiracyFiles = ConspiracyFiles or {}
+Engine.double("GeneratedRuntime", {
     subject = function(it) return it.md.cfGeneratedId ~= nil end,
     isInspected = function(it) return read[it.md.cfGeneratedId] == true end,
-} }
+})
 local E = dofile('mod/common/media/lua/client/ConspiracyFiles/EvidencePickupHint.lua')
 
 -- A pile counts once: three identical items are one piece of evidence.

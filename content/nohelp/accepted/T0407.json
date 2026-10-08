@@ -1,0 +1,43 @@
+[
+  {
+    "anchor": {
+      "scene": "RZSWaterPump"
+    },
+    "body": "A bucket and water bottle hold the same yellow scum. Dried irrigation water left the same crust in the field ditch. Dead corn covers every acre I can see from the porch.",
+    "id": "t0407-01",
+    "kind": "set",
+    "pieces": [
+      "Bucket",
+      "WaterBottle"
+    ],
+    "title": "Bucket and water bottle",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RZSWaterPump"
+    },
+    "body": "They shut the pump after assigning the households one pail apiece. More people came from the road, but their names belonged to a different district on the list. My father shared his pail while the clerk went to find another page.",
+    "id": "t0407-02",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "Notepad page",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
+  }
+]

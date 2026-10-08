@@ -1,0 +1,25 @@
+{
+  "t0105-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "Stashed guns",
+      "source": "map:RosewoodStashMap2"
+    },
+    "gloss": "A handover is complete at the last stop, but no driver is listed for the return.",
+    "prov": {
+      "batch": "T0105",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A program crew could have stored security equipment at the end of a work route; the missing driver does not say why the trip ended."
+  }
+}

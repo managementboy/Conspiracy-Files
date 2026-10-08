@@ -1,0 +1,32 @@
+[
+  {
+    "anchor": {
+      "map": "RosewoodStashMap2",
+      "mark": 1
+    },
+    "body": "The map has the last stop marked complete. Pistol signed out there but never signed back in. They knew it was one-way.",
+    "id": "t0105-01",
+    "kind": "set",
+    "pieces": [
+      "Pistol",
+      "Map"
+    ],
+    "title": "Pistol and map",
+    "where": [
+      {
+        "containers": [
+          "militarylocker",
+          "desk",
+          "locker",
+          "filingcabinet",
+          "militarycrate",
+          "shelves"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

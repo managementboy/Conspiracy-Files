@@ -1,0 +1,177 @@
+[
+  {
+    "anchor": {
+      "map": "WorldStashMap21",
+      "mark": 1
+    },
+    "body": "I found a seed bag next to a water bottle. The bag has a chemical smell. The seeds sprouted weird white threads that spread to the bottle.",
+    "id": "t0130-01",
+    "kind": "set",
+    "pieces": [
+      "SeedBag",
+      "WaterBottle"
+    ],
+    "title": "seed bag and water bottle",
+    "where": [
+      {
+        "containers": [
+          "metal_shelves",
+          "cardboardbox",
+          "crate",
+          "composter",
+          "smallcrate",
+          "grocerstand"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "WorldStashMap21",
+      "mark": 2
+    },
+    "body": "Orchard diary: at the apple mark, windfalls carried a waxy film after the trial pass. The buyer rejected the whole load as unfit.\n\nThe trees on the treated side had dropped fruit three weeks early. The untreated side held.\n\nI set a few windfalls aside to show the neighbor when she returned. They had split and gone sticky by evening.",
+    "id": "t0130-02",
+    "kind": "written",
+    "pieces": [
+      "diary"
+    ],
+    "title": "Diary page",
+    "where": [
+      {
+        "containers": [
+          "sidetable",
+          "desk",
+          "dresser",
+          "filingcabinet",
+          "shelves",
+          "smallbox"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "WorldStashMap21",
+      "mark": 3
+    },
+    "body": "Repair receipt: the hammer mark identifies the pump sealed after drawing cloudy field water. Its gasket was new, yet the metal inside had turned green.\n\nThe pump fed the spray tanks for the trial plots. The water in the tank had a sweet, solvent smell.\n\nI wrote the date of the repair here before the pump went back into the line.",
+    "id": "t0130-03",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "Notepad page",
+    "where": [
+      {
+        "containers": [
+          "sidetable",
+          "desk",
+          "filingcabinet",
+          "shelves",
+          "cashregister",
+          "smallbox"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "WorldStashMap21",
+      "note": 1
+    },
+    "body": "Cash slip at the fuel symbol: twelve gallons for the trial sprayer, though its tank holds eight. The clerk wrote the excess under a second farm number.\n\nThe extra four gallons went somewhere else on the trial grounds. The clerk would not say where.\n\nI kept the stained copy because it shows both farm numbers.",
+    "id": "t0130-04",
+    "kind": "written",
+    "pieces": [
+      "receipt"
+    ],
+    "title": "Receipt",
+    "where": [
+      {
+        "containers": [
+          "filingcabinet",
+          "bin",
+          "cardboardbox",
+          "smallbox",
+          "locker",
+          "desk"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "WorldStashMap21",
+      "note": 2
+    },
+    "body": "The photograph shows spotted fruit beneath clean ones in a crate. A field-trial ribbon marks it as part of the test batch. The same pattern appeared in every orchard using the new spray.",
+    "id": "t0130-05",
+    "kind": "written",
+    "pieces": [
+      "photograph"
+    ],
+    "title": "Field Test Photo",
+    "where": [
+      {
+        "containers": [
+          "locker",
+          "crate",
+          "cardboardbox",
+          "smallbox",
+          "bin",
+          "desk"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "WorldStashMap21",
+      "note": 3
+    },
+    "body": "Repair note at the hammer symbol: replace the pump gasket after the experimental feed runoff. The old rubber had turned green without cracking.\n\nThe runoff ran from the trial barn into the same ditch the pump draws from. Two gaskets had gone the same way that season.\n\nI wrote the pump number here for the next man to check.",
+    "id": "t0130-06",
+    "kind": "written",
+    "pieces": [
+      "notebook"
+    ],
+    "title": "Notebook page",
+    "where": [
+      {
+        "containers": [
+          "sidetable",
+          "bin",
+          "cardboardbox",
+          "smallbox",
+          "locker",
+          "desk"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

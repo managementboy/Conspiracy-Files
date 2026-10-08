@@ -1,0 +1,240 @@
+[
+  {
+    "body": "This seam has two colors of dust. The fertilizer reached the lower half. The dry seed at the top still looks clean to me.",
+    "id": "t0428-01",
+    "kind": "set",
+    "pieces": [
+      "SeedBag",
+      "Fertilizer"
+    ],
+    "title": "Seed bag and fertilizer",
+    "where": [
+      {
+        "containers": [
+          "desk",
+          "filingcabinet",
+          "shelves",
+          "cardboardbox",
+          "smallbox",
+          "crate"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "The soil on this shovel stops at a sharp pale band. Above it the blade is crusted with spray residue and field grit. The bucket holds stunted seedlings.",
+    "id": "t0428-02",
+    "kind": "set",
+    "pieces": [
+      "HandShovel",
+      "Bucket"
+    ],
+    "title": "Hand shovel and bucket",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "vehicle"
+      }
+    ]
+  },
+  {
+    "body": "Someone used twine to mark these corn seeds apart. Half are darker, almost rotted. The other half look ready to plant again.",
+    "id": "t0428-03",
+    "kind": "set",
+    "pieces": [
+      "CornSeed",
+      "Twine"
+    ],
+    "title": "Corn seed and twine",
+    "where": [
+      {
+        "containers": [
+          "fridge",
+          "counter",
+          "shelves",
+          "smallbox",
+          "bin",
+          "cardboardbox"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "A folded seed bag with loose feed at the bottom, tied by a rope. The rope also holds a strip of another bag with spray stains. The leaves nearby look sick and spotted.",
+    "id": "t0428-04",
+    "kind": "set",
+    "pieces": [
+      "SeedBag",
+      "Rope"
+    ],
+    "title": "Seed bag and rope",
+    "where": [
+      {
+        "containers": [
+          "toolcabinet",
+          "locker",
+          "crate",
+          "shelves",
+          "cardboardbox",
+          "desk"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "The jar is taped shut with a numbered strip. The water bottle beside it has an identical strip. I think they were counted at a checkpoint and left.",
+    "id": "t0428-05",
+    "kind": "set",
+    "pieces": [
+      "EmptyJar",
+      "WaterBottle"
+    ],
+    "title": "Empty jar and water bottle",
+    "where": [
+      {
+        "containers": [
+          "dresser",
+          "wardrobe",
+          "sidetable",
+          "desk",
+          "locker",
+          "smallbox"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "The lowest sack has sprouted through its stitches. The bag above it is dry and still sealed.",
+    "id": "t0428-06",
+    "kind": "set",
+    "pieces": [
+      "SeedBag",
+      "CompostBag"
+    ],
+    "title": "Seed bag and compost bag",
+    "where": [
+      {
+        "containers": [
+          "postbox",
+          "shelves",
+          "counter",
+          "smallbox",
+          "cardboardbox",
+          "desk"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "A garden glove is folded around a seed packet. The fingertips have a dark crust. The packet's paper doesn't.",
+    "id": "t0428-07",
+    "kind": "set",
+    "pieces": [
+      "Gloves_Dish",
+      "CarrotSeed"
+    ],
+    "title": "Dish gloves and carrot seed",
+    "where": [
+      {
+        "lean": "agricultural",
+        "outfit": "farm",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "corpse"
+      }
+    ]
+  },
+  {
+    "body": "Seedlings under the tarp stayed green. The shovel's from when I planted more - those went black by morning.",
+    "id": "t0428-08",
+    "kind": "set",
+    "pieces": [
+      "Tarp",
+      "HandShovel"
+    ],
+    "title": "Tarp and hand shovel",
+    "where": [
+      {
+        "containers": [
+          "filingcabinet",
+          "desk",
+          "shelves",
+          "crate",
+          "locker",
+          "cardboardbox"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "This corn seed never got planted, still sitting in the pot. The others all went in during treatment week. Only these two made it through whatever happened out there.",
+    "id": "t0428-09",
+    "kind": "set",
+    "pieces": [
+      "CornSeed",
+      "Pot"
+    ],
+    "title": "Corn seed and pot",
+    "where": [
+      {
+        "containers": [
+          "medicine",
+          "sidetable",
+          "dresser",
+          "desk",
+          "smallbox",
+          "locker"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "There is fresh soil in the lunch bowl and none on the fork. Someone set food down to carry a wet seed bag back in.",
+    "id": "t0428-10",
+    "kind": "set",
+    "pieces": [
+      "Bowl",
+      "Fork",
+      "SeedBag"
+    ],
+    "title": "Bowl, fork and seed bag",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "vehicle"
+      }
+    ]
+  }
+]

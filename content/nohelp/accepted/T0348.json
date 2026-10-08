@@ -1,0 +1,42 @@
+[
+  {
+    "anchor": {
+      "scene": "RDSSpecificProfession"
+    },
+    "body": "The night shift: two workers from the livestock-feed study carried a sweet chemical smell in on their boots.\n\nBy morning the creek below their plot smelled the same, and the minnows were floating.",
+    "id": "t0348-01",
+    "kind": "written",
+    "pieces": [
+      "diary"
+    ],
+    "title": "Diary entry",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "corpse"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RDSSpecificProfession"
+    },
+    "body": "The man writing the names asked what I did for a living. I told him, and he put down something else.\n\nHe said the form had no space for my work. I could see there was a space; it was already filled. The person beside me told me to let him finish.\n\nI wrote my own occupation here because I do not want the next person to think I lied about it.",
+    "id": "t0348-02",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "title": "Handwritten letter",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "corpse"
+      }
+    ]
+  }
+]

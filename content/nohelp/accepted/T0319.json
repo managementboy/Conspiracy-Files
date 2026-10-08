@@ -1,0 +1,58 @@
+[
+  {
+    "anchor": {
+      "scene": "RBTSSewing"
+    },
+    "body": "Friday: I mended three work shirts from the seed trial. White powder shook from every cuff and my hands blistered by evening. The thread I used went brittle in a day.\n\nI kept the stained shirt rather than a cleaned one, because the powder showed which field the crew had worked.",
+    "id": "t0319-01",
+    "kind": "written",
+    "pieces": [
+      "diary"
+    ],
+    "title": "Diary page",
+    "where": [
+      {
+        "containers": [
+          "dresser",
+          "desk",
+          "sidetable",
+          "filingcabinet",
+          "shelves",
+          "smallbox"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RBTSSewing"
+    },
+    "body": "The woman brought in a coat with its pocket torn. While I pinned it, a folded list fell out. She asked me to sew the pocket closed with the list inside.\n\nShe said her brother would need the coat if he returned, and that nobody official was to see the list. I used a different color along the seam so the paper could be found without ruining the whole coat.",
+    "id": "t0319-02",
+    "kind": "written",
+    "pieces": [
+      "diary"
+    ],
+    "title": "Diary page",
+    "where": [
+      {
+        "containers": [
+          "dresser",
+          "desk",
+          "sidetable",
+          "filingcabinet",
+          "shelves",
+          "smallbox"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

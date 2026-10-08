@@ -1,0 +1,106 @@
+[
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "map": "MarchRidgeStashMap2",
+        "mark": 1
+      },
+      "body": "A pistol is wrapped in a store receipt with a note to leave the remaining supplies for the next family. The collection time is earlier than the closure notice.",
+      "id": "t0065-01",
+      "kind": "set",
+      "pieces": [
+        "Pistol",
+        "SheetPaper2"
+      ],
+      "title": "Supplies at the store",
+      "where": [
+        {
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "left you a pistol",
+        "source": "map:MarchRidgeStashMap2"
+      },
+      "gloss": "A collection record predates a closure notice, leaving the next family’s supplies behind.",
+      "prov": {
+        "batch": "T0065",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A field crew could have collected equipment before access closed; the receipt does not identify the family or the purpose."
+    }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "map": "MarchRidgeStashMap2",
+        "mark": 1
+      },
+      "body": "A pistol is wrapped in a store receipt with a note to leave the remaining supplies for the next family. The collection time is earlier than the closure notice.",
+      "id": "t0065-01",
+      "kind": "set",
+      "pieces": [
+        "Pistol",
+        "SheetPaper2"
+      ],
+      "title": "Supplies at the store",
+      "where": [
+        {
+          "containers": [
+            "desk",
+            "crate",
+            "shelves",
+            "counter",
+            "cardboardbox",
+            "bin"
+          ],
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "left you a pistol",
+        "source": "map:MarchRidgeStashMap2"
+      },
+      "gloss": "A collection record predates a closure notice, leaving the next family’s supplies behind.",
+      "prov": {
+        "batch": "T0065",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A field crew could have collected equipment before access closed; the receipt does not identify the family or the purpose."
+    }
+  }
+]

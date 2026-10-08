@@ -1,0 +1,61 @@
+[
+  {
+    "anchor": {
+      "map": "MarchRidgeStashMap1",
+      "mark": 1
+    },
+    "body": "Road dust coats the lug wrench and the hand torch. Their ties are clean and newly cut. I think the bundle was repacked after travel.",
+    "id": "t0022-01",
+    "kind": "set",
+    "pieces": [
+      "LugWrench",
+      "HandTorch"
+    ],
+    "title": "Lug wrench and hand torch",
+    "where": [
+      {
+        "containers": [
+          "toolcabinet",
+          "metal_shelves",
+          "crate",
+          "smallcrate",
+          "smallbox",
+          "militarycrate"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "MarchRidgeStashMap1",
+      "mark": 1
+    },
+    "body": "Keep the pesticide trial jars sealed until the spray plot is dry. The neighbor's calves got into the treated rows and have not eaten since; the dog is still in the yard.\n\nI kept one copy for myself. The trial crew promised to come for the other jars and never did.\n\nThe label on the lid is the only part of that week I trusted.",
+    "id": "t0022-02",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "Notepad page",
+    "where": [
+      {
+        "containers": [
+          "desk",
+          "sidetable",
+          "filingcabinet",
+          "shelves",
+          "cashregister",
+          "smallbox"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

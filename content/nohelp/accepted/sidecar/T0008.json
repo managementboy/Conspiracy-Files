@@ -1,0 +1,40 @@
+{
+  "t0008-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-warning",
+        "c-orders"
+      ]
+    },
+    "gloss": "Farm residue and response markings share one deliberately ambiguous bundle.",
+    "prov": {
+      "batch": "T0008",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "None: one-sided on purpose (owner, 2026-10-02); the other side does not use this clue."
+  },
+  "t0008-02": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-malfunction"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "gloss": "A trial mixture remained active after application and damaged the test strip.",
+    "prov": {
+      "batch": "T0008",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A farm worker could record ordinary crop damage and a poorly shut valve; the notes do not establish an experimental program."
+  }
+}

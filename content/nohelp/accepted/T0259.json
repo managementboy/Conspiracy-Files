@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "ColdWarBunker"
+    },
+    "body": "The notebook logged checkpoint evacuations. Last headcount reads blank, pages after torn away. The hand torch lies on it, lens covered in barrier tape.",
+    "id": "t0259-01",
+    "kind": "set",
+    "pieces": [
+      "HandTorch",
+      "Notebook"
+    ],
+    "title": "Torch and notebook",
+    "where": [
+      {
+        "containers": [
+          "toolcabinet",
+          "metal_shelves",
+          "crate",
+          "smallbox",
+          "locker",
+          "smallcrate"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

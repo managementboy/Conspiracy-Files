@@ -1,0 +1,42 @@
+[
+  {
+    "anchor": {
+      "scene": "RDSBleach"
+    },
+    "body": "I saved the cloth with sticky pollen for you. The orchard spray test crew passed the late afternoon; the mare refused her feed, and afterward the bridge was blocked.\n\nI had promised to bring this home for supper. Its date and the empty chair at the table now belong to the same evening.\n\nI could have mistaken the order in which those things happened. I could not mistake the empty place left for the person we had been waiting for.",
+    "id": "t0328-01",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "title": "Handwritten letter",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "corpse"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RDSBleach"
+    },
+    "body": "I asked for clean water. The man with the bucket asked how many people were still here before he opened it.\n\nI pointed to the room behind me. He wrote down a smaller number and said the others would be counted separately. He would not say where.\n\nThe bucket was emptied on the floor after he left. I kept the scrap he dropped because it has the number he first wrote.",
+    "id": "t0328-02",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "title": "Handwritten letter",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "corpse"
+      }
+    ]
+  }
+]

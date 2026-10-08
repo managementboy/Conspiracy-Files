@@ -1,0 +1,38 @@
+{
+  "t0386-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-warning",
+        "c-failure"
+      ]
+    },
+    "gloss": "Multiple reassignments and missing supplies reveal botched shelter coordination.",
+    "prov": {
+      "batch": "T0386",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "None: one-sided on purpose"
+  },
+  "t0386-02": {
+    "axioms": {
+      "agricultural": [
+        "a-pathway"
+      ],
+      "containment": [
+        "c-failure"
+      ]
+    },
+    "gloss": "A witness records evidence of exposure near treated land.",
+    "prov": {
+      "batch": "T0386",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "The containment response might explain a contaminated object or warning being displaced."
+  }
+}

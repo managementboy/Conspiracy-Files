@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "MusicFest93"
+    },
+    "body": "The sheet of paper marks evacuation complete. The video tape shows roads jammed, people still fleeing. Someone signed it off early.",
+    "id": "t0273-01",
+    "kind": "set",
+    "pieces": [
+      "VHS_Retail",
+      "SheetPaper2"
+    ],
+    "title": "Video tape and sheet of paper",
+    "where": [
+      {
+        "containers": [
+          "displaycase",
+          "smallbox",
+          "desk",
+          "shelves",
+          "filingcabinet",
+          "shelvesmag"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

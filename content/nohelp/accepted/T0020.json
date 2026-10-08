@@ -1,0 +1,61 @@
+[
+  {
+    "anchor": {
+      "map": "BBurgStashMap1",
+      "mark": 1
+    },
+    "body": "The tire pump is tied to the first aid kit by a clipped lanyard. An empty loop shows where an identifying tag was cut off.",
+    "id": "t0020-01",
+    "kind": "set",
+    "pieces": [
+      "TirePump",
+      "FirstAidKit"
+    ],
+    "title": "Tire pump and first aid kit",
+    "where": [
+      {
+        "containers": [
+          "medicine",
+          "toolcabinet",
+          "metal_shelves",
+          "sidetable",
+          "crate",
+          "locker"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "BBurgStashMap1",
+      "mark": 1
+    },
+    "body": "Please keep the lesson room windows shut until the spray crew has finished the field across the road. The children can smell it from the front room, and the paint on the porch rail has gone dull since the new mix went on the corn.\n\nTheir mother has paid for the whole week already.",
+    "id": "t0020-02",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "title": "Letter",
+    "where": [
+      {
+        "containers": [
+          "filingcabinet",
+          "desk",
+          "sidetable",
+          "shelves",
+          "smallbox",
+          "cashregister"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

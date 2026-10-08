@@ -1,0 +1,32 @@
+[
+  {
+    "anchor": {
+      "map": "EkronStashMap1",
+      "mark": 1
+    },
+    "body": "A screwdriver and paper lie here. The sheet tracks pesticide runs, same field three times overnight. No crop needs that much treatment.",
+    "id": "t0034-01",
+    "kind": "set",
+    "pieces": [
+      "Screwdriver",
+      "SheetPaper2"
+    ],
+    "title": "Screwdriver and paper",
+    "where": [
+      {
+        "containers": [
+          "metal_shelves",
+          "desk",
+          "toolcabinet",
+          "filingcabinet",
+          "crate",
+          "sidetable"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

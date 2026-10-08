@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "A1Hay"
+    },
+    "body": "A seed bag and a water bottle sit under guard tag 22, both taped shut until the convoy comes. The count on the tag reads six people. Nobody came back for any of it.",
+    "id": "t0252-01",
+    "kind": "set",
+    "pieces": [
+      "SeedBag",
+      "WaterBottle"
+    ],
+    "title": "Seed bag and water bottle",
+    "where": [
+      {
+        "containers": [
+          "smallcrate",
+          "bin",
+          "crate",
+          "trough",
+          "composter",
+          "doghouse"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

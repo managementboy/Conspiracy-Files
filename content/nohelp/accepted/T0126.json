@@ -1,0 +1,32 @@
+[
+  {
+    "anchor": {
+      "map": "WorldStashMap17",
+      "mark": 1
+    },
+    "body": "A camera is packed with a field notebook. The notebook says to photograph the blind side of the fence. The sensor check is marked complete before the crew arrives.",
+    "id": "t0126-01",
+    "kind": "set",
+    "pieces": [
+      "Camera",
+      "Notebook"
+    ],
+    "title": "Camera and notebook",
+    "where": [
+      {
+        "containers": [
+          "locker",
+          "smallbox",
+          "dresser",
+          "desk",
+          "sidetable",
+          "shelves"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

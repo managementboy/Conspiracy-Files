@@ -1,0 +1,40 @@
+{
+  "t0344-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-warning",
+        "c-orders"
+      ]
+    },
+    "gloss": "A personal trace connects a water-treatment trial to fleeing rats and dead herbs.",
+    "prov": {
+      "batch": "T0344",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "None: one-sided on purpose"
+  },
+  "t0344-02": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-warning",
+        "c-accounting"
+      ]
+    },
+    "gloss": "An altered count or retained object was left at the scene.",
+    "prov": {
+      "batch": "T0344",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A response to an agricultural exposure could explain the same record or object."
+  }
+}

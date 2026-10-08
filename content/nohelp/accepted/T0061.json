@@ -1,0 +1,32 @@
+[
+  {
+    "anchor": {
+      "map": "LouisvilleStashMap13",
+      "mark": 1
+    },
+    "body": "The sweep report calls this gate secure. A tied garbage bag holds the latch. There's a hammer and note to check what's inside.",
+    "id": "t0061-01",
+    "kind": "set",
+    "pieces": [
+      "Hammer",
+      "Garbagebag"
+    ],
+    "title": "Hammer and garbage bag",
+    "where": [
+      {
+        "containers": [
+          "toolcabinet",
+          "desk",
+          "metal_shelves",
+          "filingcabinet",
+          "crate",
+          "sidetable"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

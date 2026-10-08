@@ -1,0 +1,38 @@
+[
+  {
+    "body": "The whistle and first aid kit are sealed together, never opened. Soot darkens the bundle. The clean outlines suggest it was packed before the fire.",
+    "id": "t0007-01",
+    "kind": "set",
+    "pieces": [
+      "Whistle",
+      "FirstAidKit"
+    ],
+    "title": "Whistle and first aid kit",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "transmission",
+        "rival": "agricultural",
+        "spot": "vehicle"
+      }
+    ]
+  },
+  {
+    "body": "The notebook tracks spray schedules for the back forty. The water bottle still has residue at the bottom. Last entry: 'Livestock won't touch the feed.'",
+    "id": "t0007-02",
+    "kind": "set",
+    "pieces": [
+      "Notebook",
+      "WaterBottle"
+    ],
+    "title": "notebook and water bottle",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "transmission",
+        "rival": "containment",
+        "spot": "vehicle"
+      }
+    ]
+  }
+]

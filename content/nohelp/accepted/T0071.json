@@ -1,0 +1,32 @@
+[
+  {
+    "anchor": {
+      "map": "MarchRidgeStashMap7",
+      "mark": 1
+    },
+    "body": "The notebook lists fever dates beside field spraying schedules. Someone marked days when people drank from the stream below. The water bottle sits empty. Every fever came within days of spraying.",
+    "id": "t0071-01",
+    "kind": "set",
+    "pieces": [
+      "Notebook",
+      "WaterBottle"
+    ],
+    "title": "Notebook and water bottle",
+    "where": [
+      {
+        "containers": [
+          "fridge",
+          "desk",
+          "filingcabinet",
+          "counter",
+          "sidetable",
+          "overhead"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

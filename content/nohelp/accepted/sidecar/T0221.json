@@ -1,0 +1,25 @@
+{
+  "t0221-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "House for Sale (no. 943)",
+      "source": "print:HouseforSale943"
+    },
+    "gloss": "A property survey ties a water color change to crop damage nearby.",
+    "prov": {
+      "batch": "T0221",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "None: one-sided on purpose"
+  }
+}

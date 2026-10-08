@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "HouseforSale903"
+    },
+    "body": "The notebook's floor plan marks two potential rooms. Water in my bottle from the upstairs tap ran cloudy, like the ditch. A field note asks whether the trial spray reached the water.",
+    "id": "t0195-01",
+    "kind": "set",
+    "pieces": [
+      "WaterBottle",
+      "Notebook"
+    ],
+    "title": "Water bottle and notebook",
+    "where": [
+      {
+        "containers": [
+          "fridge",
+          "desk",
+          "counter",
+          "filingcabinet",
+          "overhead",
+          "sidetable"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

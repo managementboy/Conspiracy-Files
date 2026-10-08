@@ -1,0 +1,25 @@
+{
+  "t0133-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "Sure this was where he lived",
+      "source": "map:WpStashMap1"
+    },
+    "gloss": "A missing-person mark precedes the weapon handover.",
+    "prov": {
+      "batch": "T0133",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A field crew could have left security equipment at an empty property; the missing driver does not identify who was expected."
+  }
+}

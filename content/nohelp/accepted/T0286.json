@@ -1,0 +1,42 @@
+[
+  {
+    "anchor": {
+      "scene": "RBBurntCorpse"
+    },
+    "body": "I kept the sealed seed packet you asked about. The trial crew sprayed the near rows around midnight; by morning the leaves had curled and my brother started coughing.\n\nWe needed the supplies listed here for the following morning. The crew left their empty sacks behind and never said what was in the mix.\n\nI do not know the name of it. The older packet is the one I had in my hands that day.",
+    "id": "t0286-01",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "title": "Letter",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "corpse"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RBBurntCorpse"
+    },
+    "body": "If they ask you who started it, tell them I went inside for the dog. I did. I also went back for the camera from the shelf, the silver one.\n\nThe men outside told me to leave it where it was. One held the door while the other watched me search. When I came out without it, they let me sit by the truck. They were careful with me then. They had already put the camera in a bag of their own.\n\nThe dog came out through the back, singed and furious. Please give her water first. I don't want her remembered as another thing I left inside.",
+    "id": "t0286-02",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "title": "Letter",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "corpse"
+      }
+    ]
+  }
+]

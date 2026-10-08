@@ -1,0 +1,60 @@
+[
+  {
+    "anchor": {
+      "scene": "RDSZombieLockedBathroom"
+    },
+    "body": "Red grit from the pest test is on the fertilizer sack and sprayer. I think they were bundled before the checkpoint appeared.",
+    "id": "t0353-01",
+    "kind": "set",
+    "pieces": [
+      "Fertilizer",
+      "GardeningSprayEmpty"
+    ],
+    "title": "Fertilizer sack and empty sprayer",
+    "where": [
+      {
+        "containers": [
+          "toolcabinet",
+          "metal_shelves",
+          "crate",
+          "smallcrate",
+          "shelves",
+          "bin"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RDSZombieLockedBathroom"
+    },
+    "body": "A pencil and sheet are pushed beneath the door together. The sheet has an earlier head count with a later number over it. I can't see any sign the door was opened.",
+    "id": "t0353-02",
+    "kind": "set",
+    "pieces": [
+      "Pencil",
+      "Sheet"
+    ],
+    "title": "Pencil and paper sheet",
+    "where": [
+      {
+        "containers": [
+          "desk",
+          "filingcabinet",
+          "sidetable",
+          "shelves",
+          "smallbox",
+          "cashregister"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

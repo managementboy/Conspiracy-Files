@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "DuCaseApartments"
+    },
+    "body": "The empty sandbag and briefcase are tied with cut warning tape. Six tally cuts mark the sandbag, and only four are crossed through.",
+    "id": "t0200-01",
+    "kind": "set",
+    "pieces": [
+      "EmptySandbag",
+      "Briefcase"
+    ],
+    "title": "Empty sandbag and briefcase",
+    "where": [
+      {
+        "containers": [
+          "metal_shelves",
+          "locker",
+          "cardboardbox",
+          "desk",
+          "crate",
+          "wardrobe"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

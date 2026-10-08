@@ -1,0 +1,32 @@
+[
+  {
+    "anchor": {
+      "map": "WpStashMap6",
+      "mark": 1
+    },
+    "body": "The alicepack is buckled shut, water bottle clipped on the side. A departure slip is tucked in the webbing. Time written in, but no signature on the authorization line.",
+    "id": "t0139-01",
+    "kind": "set",
+    "pieces": [
+      "WaterBottle",
+      "Bag_ALICEpack"
+    ],
+    "title": "Water bottle and pack",
+    "where": [
+      {
+        "containers": [
+          "wardrobe",
+          "fridge",
+          "counter",
+          "dresser",
+          "overhead",
+          "clothingrack"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

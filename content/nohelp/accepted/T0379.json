@@ -1,0 +1,42 @@
+[
+  {
+    "anchor": {
+      "scene": "RZSBuryingCamp"
+    },
+    "body": "My weathered bundle entry says the crop trial workers brushed off rust-colored grit.\n\nThe chickens stopped moving, and the grit lay in rust-colored streaks across the yard.",
+    "id": "t0379-01",
+    "kind": "written",
+    "pieces": [
+      "notebook"
+    ],
+    "title": "Notebook page",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RZSBuryingCamp"
+    },
+    "body": "I wrote down who we buried because the visitors collecting the numbers had counted tents instead of people. They asked for the notebook and left me the page for supplies. I kept this page folded under the coffee tin.",
+    "id": "t0379-02",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "title": "Letter",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
+  }
+]

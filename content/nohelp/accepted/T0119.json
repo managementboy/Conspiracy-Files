@@ -1,0 +1,293 @@
+[
+  {
+    "anchor": {
+      "map": "WorldStashMap10",
+      "mark": 1
+    },
+    "body": "The matches and hand torch smell sharply of bleach. Mud outlines between them look like something was taken.",
+    "id": "t0119-01",
+    "kind": "set",
+    "pieces": [
+      "Matches",
+      "HandTorch"
+    ],
+    "title": "Matches and hand torch",
+    "where": [
+      {
+        "containers": [
+          "smallbox",
+          "cardboardbox",
+          "crate",
+          "metal_shelves",
+          "toolcabinet",
+          "locker"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "WorldStashMap10",
+      "mark": 2
+    },
+    "body": "Laundry receipt: coveralls from the second circle carried orange pollen from the sprayed test rows. The clerk noted numb fingers after handling the bag.\n\nThe pollen would not wash out, even after the third rinse, and the water smelled of the spray tank.",
+    "id": "t0119-02",
+    "kind": "written",
+    "pieces": [
+      "diary"
+    ],
+    "title": "Diary page",
+    "where": [
+      {
+        "containers": [
+          "filingcabinet",
+          "desk",
+          "sidetable",
+          "shelves",
+          "smallbox",
+          "cashregister"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "WorldStashMap10",
+      "mark": 3
+    },
+    "body": "Meal receipt back: six lunches went to the greenhouse crew at the third circle. Two were untouched; beside them someone wrote, \"metal taste after noon spray.\"\n\nThe greenhouse tomatoes had curled by evening.",
+    "id": "t0119-03",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "Notepad page",
+    "where": [
+      {
+        "containers": [
+          "smallbox",
+          "crate",
+          "cardboardbox",
+          "bin",
+          "locker",
+          "desk"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "WorldStashMap10",
+      "mark": 4
+    },
+    "body": "Photograph note: the fourth circle shows where three cars were stopped behind the garage and their drivers lined up for a head count. Every plate was copied onto a list, and the road beyond was blocked with a sawhorse.\n\nThe list was numbered in chalk on the garage door.",
+    "id": "t0119-04",
+    "kind": "written",
+    "pieces": [
+      "receipt"
+    ],
+    "title": "Receipt",
+    "where": [
+      {
+        "containers": [
+          "cardboardbox",
+          "crate",
+          "bin",
+          "smallbox",
+          "locker",
+          "desk"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "WorldStashMap10",
+      "note": 1
+    },
+    "body": "Pocket ledger: gas at this circle was charged to the orchard rig. The return mileage exceeds the marked spray route by forty miles.\n\nThe rig's tank still held mix, and the hoses were crusted with yellow residue.",
+    "id": "t0119-05",
+    "kind": "written",
+    "pieces": [
+      "photograph"
+    ],
+    "title": "Photograph",
+    "where": [
+      {
+        "containers": [
+          "smallbox",
+          "dresser",
+          "sidetable",
+          "desk",
+          "filingcabinet",
+          "shelves"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "WorldStashMap10",
+      "note": 2
+    },
+    "body": "Torn note under the clothes label: bag the trial coveralls separately from the household wash. My wrists blistered while tying the second bag.\n\nThe cloth was stiff with dried spray and smelled of the crop sprayer.",
+    "id": "t0119-06",
+    "kind": "written",
+    "pieces": [
+      "notebook"
+    ],
+    "title": "Notebook page",
+    "where": [
+      {
+        "containers": [
+          "smallbox",
+          "desk",
+          "shelves",
+          "sidetable",
+          "filingcabinet",
+          "shelvesmag"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "WorldStashMap10",
+      "note": 3
+    },
+    "body": "Receipt from the marked restaurant: lunches for the crop crew, plus soap and bottled water. A handwritten line says the tap smelled sharp, like the spray mix, before closing.\n\nThe crew's hands were raw and cracked.",
+    "id": "t0119-07",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "title": "Handwritten letter",
+    "where": [
+      {
+        "containers": [
+          "smallbox",
+          "desk",
+          "filingcabinet",
+          "sidetable",
+          "cashregister",
+          "shelves"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "WorldStashMap10",
+      "note": 4
+    },
+    "body": "Mileage page: four cars left for the checkpoint, three returned to the garage. The blank driver line sits beside a note to keep the count off the radio.\n\nThe fourth car was never logged back in.",
+    "id": "t0119-08",
+    "kind": "written",
+    "pieces": [
+      "diary"
+    ],
+    "title": "Diary page",
+    "where": [
+      {
+        "containers": [
+          "smallbox",
+          "desk",
+          "sidetable",
+          "dresser",
+          "filingcabinet",
+          "shelves"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "WorldStashMap10",
+      "note": 5
+    },
+    "body": "Garage receipt at the car label: rinse three crop-study vehicles and keep the fourth outside. The fourth plate is the only one with treated-seed dust still in the trunk.\n\nThe rinse bill itself was small and ordinary.",
+    "id": "t0119-09",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "Notepad page",
+    "where": [
+      {
+        "containers": [
+          "smallbox",
+          "crate",
+          "cardboardbox",
+          "bin",
+          "locker",
+          "desk"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "WorldStashMap10",
+      "note": 6
+    },
+    "body": "I found a page from the application schedule for the test fields. Batch seven was marked at three times the normal concentration. Someone had written in the margin that the dilution system jammed.",
+    "id": "t0119-10",
+    "kind": "written",
+    "pieces": [
+      "receipt"
+    ],
+    "title": "Application Record",
+    "where": [
+      {
+        "containers": [
+          "cardboardbox",
+          "crate",
+          "bin",
+          "smallbox",
+          "locker",
+          "desk"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

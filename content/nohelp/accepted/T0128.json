@@ -1,0 +1,32 @@
+[
+  {
+    "anchor": {
+      "map": "WorldStashMap19",
+      "mark": 1
+    },
+    "body": "I found a pistol and a seed bag together on a shelf. Someone grouped them for a reason. The crops needed both protection and planting.",
+    "id": "t0128-01",
+    "kind": "set",
+    "pieces": [
+      "Pistol",
+      "SeedBag"
+    ],
+    "title": "Pistol and seed bag",
+    "where": [
+      {
+        "containers": [
+          "locker",
+          "trough",
+          "dresser",
+          "metal_shelves",
+          "wardrobe",
+          "toolcabinet"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

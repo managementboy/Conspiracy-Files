@@ -1,0 +1,25 @@
+{
+  "t0168-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "Cabin for Rent (West Point)",
+      "source": "print:BensCabin"
+    },
+    "gloss": "A cabin guest is warned off the stream after upstream spraying.",
+    "prov": {
+      "batch": "T0168",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "None: one-sided on purpose"
+  }
+}

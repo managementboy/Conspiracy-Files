@@ -1,0 +1,44 @@
+[
+  {
+    "anchor": {
+      "scene": "RVSPlonkies"
+    },
+    "body": "A broken barrier board crushed the pipe wrench against the road map. Clean undersides: both were here before the road was blocked.",
+    "id": "t0016-01",
+    "kind": "set",
+    "pieces": [
+      "PipeWrench",
+      "Map"
+    ],
+    "title": "Pipe wrench and map",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "transmission",
+        "rival": "agricultural",
+        "spot": "vehicle"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RVSPlonkies"
+    },
+    "body": "The seed sack is wedged against the fertilizer bag in the van. Its stitched mouth is green at one corner. The fertilizer label is clean where a thumb would lift it.",
+    "id": "t0016-02",
+    "kind": "set",
+    "pieces": [
+      "SeedBag",
+      "Fertilizer"
+    ],
+    "title": "Seed bag and fertilizer",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "farm",
+        "rival": "containment",
+        "spot": "vehicle"
+      }
+    ]
+  }
+]

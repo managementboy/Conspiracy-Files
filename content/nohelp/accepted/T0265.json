@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "HobbsandPerkinsHardware"
+    },
+    "body": "Found a hammer and nails by the fence. Repairs were on hold for a soil test. Those trial rows yellowed right after the spray.",
+    "id": "t0265-01",
+    "kind": "set",
+    "pieces": [
+      "Hammer",
+      "Nails"
+    ],
+    "title": "Hammer and nails",
+    "where": [
+      {
+        "containers": [
+          "toolcabinet",
+          "metal_shelves",
+          "crate",
+          "smallbox",
+          "smallcrate",
+          "militarycrate"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

@@ -1,0 +1,89 @@
+[
+  {
+    "recall": "R1",
+    "row": {
+      "anchor": {
+        "scene": "RVSPlonkies"
+      },
+      "body": "The route on the map ends at a closed road. A keyring is tucked beneath the last stop, its tag stamped “return”; the return line has been crossed out.",
+      "id": "t0016-01",
+      "kind": "set",
+      "pieces": [
+        "Map",
+        "KeyRing"
+      ],
+      "title": "The last stop crossed off the van route",
+      "where": [
+        {
+          "lean": "containment",
+          "place": "transmission",
+          "rival": "agricultural",
+          "spot": "vehicle"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "gloss": "A delivery key remains with a route whose return was cancelled.",
+      "prov": {
+        "batch": "T0016",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A field van could change its route when access changed and leave the key with an old map; the crossed line need not be an order to abandon anyone."
+    }
+  },
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "scene": "RVSPlonkies"
+      },
+      "body": "a broken barrier board crushed the pipe wrench against the folded road map. clean undersides show both were there before the road was blocked.",
+      "id": "t0016-01",
+      "kind": "set",
+      "pieces": [
+        "PipeWrench",
+        "Map"
+      ],
+      "title": "missing count beside the pipe wrench",
+      "where": [
+        {
+          "lean": "containment",
+          "place": "transmission",
+          "rival": "agricultural",
+          "spot": "vehicle"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-warning",
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "gloss": "A response bundle preserves a missing count, changed route, or erased identity.",
+      "prov": {
+        "batch": "T0016",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A farm-program crew could have counted routes, repacked tools, or removed ownership marks during hurried field work; the objects do not prove a concealed public response."
+    }
+  }
+]

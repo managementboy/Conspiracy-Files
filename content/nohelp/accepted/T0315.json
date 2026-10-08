@@ -1,0 +1,58 @@
+[
+  {
+    "anchor": {
+      "scene": "RBTSDrink"
+    },
+    "body": "I saved the bottle for you because it smelled like the trial orchard after spraying. I poured out the glasses before anyone drank, and the rinse water left a film on the sink.\n\nThe leaves on the pear tree outside the window had curled the same week. I could not mistake the empty place left for the person we had been waiting for.",
+    "id": "t0315-01",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "title": "Handwritten letter",
+    "where": [
+      {
+        "containers": [
+          "filingcabinet",
+          "desk",
+          "sidetable",
+          "cashregister",
+          "shelves",
+          "smallbox"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RBTSDrink"
+    },
+    "body": "I put aside four glasses after the men came in. They said the others would be back for them and asked me to write the names on a napkin.\n\nI watched them pour the drinks away when they thought I had gone. They kept the napkin, and one of them told me the names were not to be repeated to anyone, including the four.",
+    "id": "t0315-02",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "title": "Handwritten letter",
+    "where": [
+      {
+        "containers": [
+          "shelves",
+          "desk",
+          "filingcabinet",
+          "sidetable",
+          "cashregister",
+          "smallbox"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

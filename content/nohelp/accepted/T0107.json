@@ -1,0 +1,32 @@
+[
+  {
+    "anchor": {
+      "map": "RosewoodStashMap4",
+      "mark": 1
+    },
+    "body": "The pack's mostly empty, just a water bottle left inside. The card says pack light and leave before dawn. They promised pickup at sunrise but nobody ever came.",
+    "id": "t0107-01",
+    "kind": "set",
+    "pieces": [
+      "Bag_ALICEpack",
+      "WaterBottle"
+    ],
+    "title": "Backpack and water bottle",
+    "where": [
+      {
+        "containers": [
+          "locker",
+          "fridge",
+          "wardrobe",
+          "counter",
+          "militarylocker",
+          "cardboardbox"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

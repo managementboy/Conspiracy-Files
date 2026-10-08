@@ -1,0 +1,25 @@
+{
+  "t0249-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "Fallas Lake Church",
+      "source": "print:FallasLakeChurch"
+    },
+    "gloss": "A well is covered after nearby spraying and wilted crops.",
+    "prov": {
+      "batch": "T0249",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "None: one-sided on purpose"
+  }
+}

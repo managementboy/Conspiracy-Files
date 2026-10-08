@@ -1,0 +1,58 @@
+[
+  {
+    "anchor": {
+      "scene": "RDSHenDo"
+    },
+    "body": "Sunday after supper: two workers from the greenhouse trial carried a bitter residue on their sleeves. My hands blistered, and the cucumbers in our own plot yellowed by the next afternoon.\n\nI kept a pinch of the residue in a folded page as proof of what it smelled like.",
+    "id": "t0336-01",
+    "kind": "written",
+    "pieces": [
+      "diary"
+    ],
+    "title": "Diary entry",
+    "where": [
+      {
+        "containers": [
+          "sidetable",
+          "desk",
+          "dresser",
+          "filingcabinet",
+          "shelves",
+          "smallbox"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RDSHenDo"
+    },
+    "body": "We put the guests names on a sheet so we could keep the surprise. A stranger arrived with a copy that had two names removed.\n\nHe asked whether those two had already left. I said one was still upstairs, getting ready. He folded his copy and waited at the foot of the stairs.\n\nNobody wanted to spoil the party by arguing. I have kept our list because it is the only one with everyone on it.",
+    "id": "t0336-02",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "title": "Handwritten letter",
+    "where": [
+      {
+        "containers": [
+          "cashregister",
+          "desk",
+          "filingcabinet",
+          "sidetable",
+          "shelves",
+          "smallbox"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

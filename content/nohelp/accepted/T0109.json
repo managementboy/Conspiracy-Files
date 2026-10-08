@@ -1,0 +1,32 @@
+[
+  {
+    "anchor": {
+      "map": "RosewoodStashMap5",
+      "mark": 1
+    },
+    "body": "The bread and water bottle are marked for route pickup only. Someone crossed out the driver's name. It still says wait for the family.",
+    "id": "t0109-01",
+    "kind": "set",
+    "pieces": [
+      "Bread",
+      "WaterBottle"
+    ],
+    "title": "Bread and water bottle",
+    "where": [
+      {
+        "containers": [
+          "counter",
+          "fridge",
+          "overhead",
+          "cardboardbox",
+          "crate",
+          "grocerstand"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

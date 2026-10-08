@@ -26,6 +26,13 @@ function World.resolve(target,mark)
     if type(target)=="table" and type(target.carrierMark)=="string" then
         return require("NHShared/Carriers").resolve(target)
     end
+    -- Open ground (No Help, owner 2026-09-27: clues may lie anywhere
+    -- interesting). Addressed by its square alone; see World.ground.
+    if type(target)=="table" and target.ground==true then
+        local square=getCell():getGridSquare(target.x,target.y,target.z)
+        if not square then return nil,"unloaded" end
+        return World.ground(square)
+    end
     -- A vehicle target is not addressed by a square. See resolveVehicle.
     if type(target)=="table" and type(target.vehiclePart)=="string" then
         return World.resolveVehicle(target,mark)
@@ -80,6 +87,71 @@ World.BODY_WEIGHT=20
 -- Every usable container in one vehicle, as {part=id,container=container}.
 -- Ordered by VEHICLE_PARTS, never by engine iteration order, so selection is
 -- reproducible.
+-- A patch of open ground that answers the few questions the engine asks a
+-- container, so placing, counting, the hint, the search icon and relocation
+-- all work on it unchanged: its items are the items lying on the square.
+-- Nobody "loots" or "opens" ground, so it is never already searched, and it
+-- always has room. Removal follows vanilla's own single-player pickup
+-- (ISGrabItemAction:transferItem, 42.20).
+function World.ground(square)
+    local g={ground=true,square=square}
+    local function worldObjects()
+        local out={}
+        local ok=pcall(function()
+            local objects=square:getWorldObjects()
+            for i=0,objects:size()-1 do
+                local o=objects:get(i)
+                local item=o and o:getItem()
+                if item then out[#out+1]={object=o,item=item} end
+            end
+        end)
+        return ok and out or {}
+    end
+    function g:getItems()
+        local list=worldObjects()
+        return {size=function() return #list end,get=function(_,i) return list[i+1] and list[i+1].item end}
+    end
+    function g:AddItem(item)
+        local ok,placed=pcall(function() return square:AddWorldInventoryItem(item,0.5,0.5,0.0) end)
+        return ok and placed~=nil
+    end
+    function g:Remove(item)
+        for _,entry in ipairs(worldObjects()) do
+            if entry.item==item then
+                local o=entry.object
+                return pcall(function()
+                    square:transmitRemoveItemFromSquare(o)
+                    o:removeFromWorld()
+                    o:removeFromSquare()
+                    o:setSquare(nil)
+                    item:setWorldItem(nil)
+                end)
+            end
+        end
+        return false
+    end
+    function g:hasRoomFor() return true end
+    function g:isHasBeenLooted() return false end
+    function g:getParent() return nil end
+    function g:getType() return "floor" end
+    -- Where it stands, for anything that asks a container its square
+    -- (ClueMarkers.sourceSquare): the square itself.
+    function g:getSourceGrid() return square end
+    return g
+end
+-- ONE GROUND PER SQUARE. Placement checks that the container it counted is
+-- still the one it resolves (`current~=container`), which holds for the
+-- engine's own containers. A fresh table per resolve made every ground clue
+-- stop there, counted but never created (found by the reload test,
+-- 2026-09-28). Weak keys: an unloaded square takes its ground with it.
+local groundOf=setmetatable({},{__mode="k"})
+local newGround=World.ground
+function World.ground(square)
+    local g=groundOf[square]
+    if not g then g=newGround(square); groundOf[square]=g end
+    return g
+end
+
 function World.vehicleParts(vehicle)
     local out={}
     -- Ask the VEHICLE for each part. getParts() returns VehicleParts, a class
@@ -259,21 +331,87 @@ end
 -- scan reported 2, placement saw fewer than it expected, created the pile
 -- again, and the document ended in the sticky "conflict" state - dead
 -- permanently. Caught by test/g2_smoke.lua's exact item count.
-function World.count(container,token,done,limit)
+-- A set's HOLDER (SetHolders) carries the clue's token like its pieces but is
+-- packaging, not a piece: it is not counted, unless `withHolders` asks whether
+-- ANYTHING of the clue is there (the hint, the carried-by-player guard).
+function World.count(container,token,done,limit,withHolders)
     local items=container:getItems()
     local originalSize=items:size()
     local ceiling=(type(limit)=="number" and limit>=1) and limit or 1
     local index,count,seen=0,0,{}
+    -- A clue may sit one bag deep: a paper inside a wallet inside the container.
+    -- The top-level items are counted first, then each bag's own items, one item
+    -- a step like everything else here. Without this a clue placed in a wallet
+    -- counts as zero, and placement would create it a second time.
+    local bags,bagIndex,inner,innerIndex={},0,nil,0
+    local function check(item)
+        local md=item and item:getModData()
+        if md and md.cfPhysicalToken==token and not seen[item] and (withHolders or md.cfHolder~=true) then seen[item]=true; count=count+1 end
+    end
     return function()
         if items:size()~=originalSize then done(nil,"inventory-changed"); return true end
         if count>ceiling then done(ceiling+1); return true end
-        if index>=originalSize then done(count); return true end
-        local item=items:get(index); index=index+1
-        local md=item and item:getModData()
-        if md and md.cfPhysicalToken==token and not seen[item] then seen[item]=true; count=count+1 end
-        return false
+        if index<originalSize then
+            local item=items:get(index); index=index+1
+            check(item)
+            if item and instanceof and instanceof(item,"InventoryContainer") then bags[#bags+1]=item end
+            return false
+        end
+        while true do
+            if not inner then
+                bagIndex=bagIndex+1
+                local bag=bags[bagIndex]
+                if not bag then done(count); return true end
+                local ok,bagItems=pcall(function() return bag:getInventory():getItems() end)
+                if ok and bagItems then inner=bagItems; innerIndex=0 end
+            end
+            if inner then
+                if innerIndex>=inner:size() then inner=nil
+                else
+                    local item=inner:get(innerIndex); innerIndex=innerIndex+1
+                    check(item)
+                    return false
+                end
+            end
+        end
     end
 end
+
+-- A wallet is a bag that holds papers (Capacity 1 in the game's script). The
+-- inventory of the first wallet in `container`, or nil. Wallet, Wallet2.. are
+-- the vanilla types; nothing else counts, so a backpack is never used.
+function World.walletOf(container)
+    local ok,found=pcall(function()
+        local items=container:getItems()
+        for i=0,items:size()-1 do
+            local item=items:get(i)
+            if item and instanceof and instanceof(item,"InventoryContainer") then
+                local kind=tostring(item:getType() or "")
+                if kind:match("^Wallet") then return item:getInventory() end
+            end
+        end
+        return nil
+    end)
+    if ok then return found end
+    return nil
+end
+
+-- Put a clue into its container - a paper into the wallet there when there is
+-- one (owner, 2026-10-02: "wallets can contain papers"), otherwise loose. A
+-- wallet that refuses the item never loses it: it goes in the container.
+function World.addEvidence(container,item)
+    local paper=false
+    pcall(function() paper=item.IsLiterature~=nil and item:IsLiterature()==true end)
+    if paper then
+        local wallet=World.walletOf(container)
+        if wallet then
+            local ok,added=pcall(function() return wallet:AddItem(item) end)
+            if ok and added then return added,"wallet" end
+        end
+    end
+    return container:AddItem(item),"container"
+end
+
 -- Searches player inventory (including bags), nearby floor/corpse/container
 -- contents and the currently occupied vehicle. Coverage is explicitly partial:
 -- zero observations NEVER proves destruction or triggers fallback.
@@ -300,7 +438,8 @@ function World.identityScan(player,assignments,done,expected)
     local function observe(item)
         if not item then return end
         local md=item:getModData(); local id=md and tokens[md.cfPhysicalToken]
-        if id and not seenItems[item] and #found[id]<ceiling[id] then
+        -- A set's holder is packaging: pieces are counted, it is not.
+        if id and md.cfHolder~=true and not seenItems[item] and #found[id]<ceiling[id] then
             seenItems[item]=true
             found[id][#found[id]+1]=item
         end

@@ -1,0 +1,12 @@
+{
+  "clue": "t0004-01",
+  "sha256": "b42fd958f03b8d256cc3762402683b3004ca72aae38d67b137b66a24eb2f8365",
+  "model": "claude-haiku-4-5 (no repo access, no tools, fresh context per read)",
+  "date": "2026-10-03",
+  "votes": {
+    "A": 1,
+    "B": 0,
+    "both": 0,
+    "none": 0
+  }
+}

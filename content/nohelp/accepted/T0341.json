@@ -1,0 +1,44 @@
+[
+  {
+    "anchor": {
+      "scene": "RDSPrisonEscape"
+    },
+    "body": "Sticky pollen from the seed trial is on the kit and the bottle. The inside of the bottle went slimy with the same pollen. I think they were bundled after that.",
+    "id": "t0341-01",
+    "kind": "set",
+    "pieces": [
+      "FirstAidKit",
+      "WaterBottle"
+    ],
+    "title": "First-aid kit and water bottle",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "corpse"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RDSPrisonEscape"
+    },
+    "body": "The pencil and map share the same pocket. A route toward the road is overwritten with a line back inside. That line is traced twice, like it was copied.",
+    "id": "t0341-02",
+    "kind": "set",
+    "pieces": [
+      "Map",
+      "Pencil"
+    ],
+    "title": "Map and pencil",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "corpse"
+      }
+    ]
+  }
+]

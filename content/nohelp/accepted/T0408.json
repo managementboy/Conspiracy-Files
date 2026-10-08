@@ -1,0 +1,262 @@
+[
+  {
+    "body": "I see a road rubbed out on the map, with six small figures beside it. The pencil has worn through the paper where I think they waited. The date is on the wrapper, not the map.",
+    "id": "t0408-01",
+    "kind": "set",
+    "pieces": [
+      "Map",
+      "Pencil"
+    ],
+    "title": "Map and pencil",
+    "where": [
+      {
+        "containers": [
+          "shelves",
+          "bin",
+          "cardboardbox",
+          "smallbox",
+          "locker",
+          "desk"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "I found a clipboard listing four vehicles and departure times. The eraser sits next to where a fifth line was removed. Small handwriting is still pressed into the paper there.",
+    "id": "t0408-02",
+    "kind": "set",
+    "pieces": [
+      "Clipboard",
+      "Eraser"
+    ],
+    "title": "Clipboard and eraser",
+    "where": [
+      {
+        "containers": [
+          "shelves",
+          "bin",
+          "cardboardbox",
+          "smallbox",
+          "locker",
+          "desk"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "The sealed kit is tied to a towel marked for a passenger. The seat is crossed off, though the towel is still damp. There's a hurried thumbprint on the corner.",
+    "id": "t0408-03",
+    "kind": "set",
+    "pieces": [
+      "FirstAidKit",
+      "BathTowel"
+    ],
+    "title": "First-aid kit and towel",
+    "where": [
+      {
+        "containers": [
+          "wardrobe",
+          "medicine",
+          "locker",
+          "dresser",
+          "smallbox",
+          "clothingrack"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "The loose page shows a different route than the map. Someone traced both with a finger stained from a lunch wrapper. One edge was kept dry beneath a coat.",
+    "id": "t0408-04",
+    "kind": "set",
+    "pieces": [
+      "Map",
+      "SheetPaper2"
+    ],
+    "title": "Map and loose page",
+    "where": [
+      {
+        "containers": [
+          "cashregister",
+          "desk",
+          "filingcabinet",
+          "shelves",
+          "sidetable",
+          "smallbox"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "The battery is taped to a torch beside a handwritten departure time. I think the owner waited long enough to use up the spare. A short tally was added after the bundle was tied.",
+    "id": "t0408-05",
+    "kind": "set",
+    "pieces": [
+      "HandTorch",
+      "Battery"
+    ],
+    "title": "Torch and battery",
+    "where": [
+      {
+        "containers": [
+          "crate",
+          "toolcabinet",
+          "metal_shelves",
+          "smallbox",
+          "locker",
+          "desk"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "A badge and a band for counting arrivals are tied together. The band has an extra notch that isn't on the badge. The string has been retied since morning.",
+    "id": "t0408-06",
+    "kind": "set",
+    "pieces": [
+      "Badge",
+      "RubberBand"
+    ],
+    "title": "Badge and rubber band",
+    "where": [
+      {
+        "containers": [
+          "locker",
+          "dresser",
+          "desk",
+          "filingcabinet",
+          "sidetable",
+          "smallbox"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "The jack has fresh road grit and the wrench a strip of warning tape. The repair looks abandoned beside a penciled clearance time. The date is on the wrapper, not on the tools.",
+    "id": "t0408-07",
+    "kind": "set",
+    "pieces": [
+      "Jack",
+      "LugWrench"
+    ],
+    "title": "Jack and lug wrench",
+    "where": [
+      {
+        "containers": [
+          "dumpster",
+          "bin",
+          "smallcrate",
+          "crate",
+          "cardboardbox",
+          "smallbox"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "A frequency is scratched into the pencil's paint. The radio's label names another channel, and its paper says to wait. A strip of cloth keeps the pair together.",
+    "id": "t0408-08",
+    "kind": "set",
+    "pieces": [
+      "WalkieTalkie1",
+      "Pencil"
+    ],
+    "title": "Radio and pencil",
+    "where": [
+      {
+        "containers": [
+          "cashregister",
+          "crate",
+          "smallbox",
+          "metal_shelves",
+          "toolcabinet",
+          "locker"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "Six names in the notebook, listed for pickup. The red pen adds one more but runs out before finishing. There's a thumbprint smudged in the margin.",
+    "id": "t0408-09",
+    "kind": "set",
+    "pieces": [
+      "Notebook",
+      "RedPen"
+    ],
+    "title": "Notebook and red pen",
+    "where": [
+      {
+        "containers": [
+          "shelves",
+          "bin",
+          "cardboardbox",
+          "smallbox",
+          "locker",
+          "desk"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "The bag holds an unused lunch wrapper. The map is folded to a stop crossed out twice. A child wrote the original time on the strap.",
+    "id": "t0408-10",
+    "kind": "set",
+    "pieces": [
+      "Bag_Schoolbag",
+      "Map"
+    ],
+    "title": "Schoolbag and map",
+    "where": [
+      {
+        "containers": [
+          "wardrobe",
+          "cardboardbox",
+          "smallbox",
+          "locker",
+          "crate",
+          "desk"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

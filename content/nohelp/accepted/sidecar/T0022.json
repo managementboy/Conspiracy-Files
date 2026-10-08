@@ -1,0 +1,45 @@
+{
+  "t0022-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-warning",
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "gloss": "A response bundle preserves a missing count, changed route, or erased identity.",
+    "prov": {
+      "batch": "T0022",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A farm-program crew could have counted routes, repacked tools, or removed ownership marks during hurried field work; the objects do not prove a concealed public response."
+  },
+  "t0022-02": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-malfunction"
+      ],
+      "containment": [
+        "c-orders",
+        "c-accounting"
+      ]
+    },
+    "cites": {
+      "quote": "don't go",
+      "source": "map:MarchRidgeStashMap1"
+    },
+    "gloss": "A field-trial warning and a household access problem remain on the same note.",
+    "prov": {
+      "batch": "T0022",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "None: one-sided on purpose"
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "t0243-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "House for Sale (no. 860)",
+      "source": "print:HouseforSale860"
+    },
+    "gloss": "A tenant moves in beside sprayed fields and sweet-smelling water.",
+    "prov": {
+      "batch": "T0243",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "None: one-sided on purpose"
+  }
+}

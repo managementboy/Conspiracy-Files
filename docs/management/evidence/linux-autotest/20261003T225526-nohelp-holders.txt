@@ -1,0 +1,7 @@
+Linux No Help holders check 20261003T225526: PASS
+source: 0cd08234
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+note: placed sets in containers or on the ground: 1
+note: holder: Base.Bag_ALICE_BeltSus named "ALICE Belt and Suspenders"; pieces inside 2 of 2, loose 0, holders 1; weight/capacity 0.50/6
+note: inspect holder (known before, after one, after two; recognised; ok1; ok2; isRecognised): true 0 1 1 true true true true
+note: inspect a piece inside (known count; ok; piece number; category): true 1 true 1 Evidence

@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "ElveeArena"
+    },
+    "body": "The notebook tracks spray rates per acre, crossed out and raised. Water bottle reeks like the chemical mix from the sprayer. They kept increasing the concentration.",
+    "id": "t0205-01",
+    "kind": "set",
+    "pieces": [
+      "WaterBottle",
+      "Notebook"
+    ],
+    "title": "Water bottle and notebook",
+    "where": [
+      {
+        "containers": [
+          "fridge",
+          "desk",
+          "counter",
+          "filingcabinet",
+          "overhead",
+          "sidetable"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

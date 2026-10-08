@@ -24,7 +24,6 @@
 -- reaches this file before InteractionAPI.lua's own dependencies have
 -- necessarily finished loading).
 local PlaceNames=require("NHShared/Generated/PlaceNames")
-local RelayMemo=require("NHShared/Generated/RelayMemo")
 local PlaceIndex=require("NHShared/PlaceIndex")
 local Headings=require("NHShared/Headings")
 
@@ -51,22 +50,13 @@ function Rows.build(section,runtime)
     local wrapper=ModData and ModData.get and ModData.get("NHShared.Generated.G2")
     local Cases=wrapper and require("NHShared/Generated/SuccessiveCases")
     wrapper=Cases and Cases.current(wrapper)
-    -- The week is only pointed out once the relay memo that defines it has
-    -- been found (P4-R96); before that the dates are just dates.
-    local memoFound=false
-    for _,r in ipairs(known) do
-        titles[r.id]=r.title
-        if r.kind==RelayMemo.KIND then memoFound=true end
-    end
+    for _,r in ipairs(known) do titles[r.id]=r.title end
     -- "Disputes delivery in" was left over from when every case was about a
     -- delivery. Plain verbs that fit any of the twenty stories.
-    local meanings={corroborates="Agrees with",['disputes-delivery']="Does not match",recontextualises="Adds context to"}
+    local meanings=Headings.LINKS
     for i,r in ipairs(known) do
         local root=Cases and Cases.find(wrapper,r.id)
-        -- Retired evidence keeps its original places and reference. Resolving
-        -- a readable address must not stop working when placement work ends.
-        local case=root and (root.case or (root.locations and
-            {locations=root.locations,facts={code=root.reference},followsFrom=root.followsFrom}))
+        local case=root and root.case
         -- THE TWO WRITERS OF A PLACE, in order, not one or the other.
         -- AddressMap names the sites the shipped book has a number for
         -- (P4-R129); PlaceNames then reads whatever place words are LEFT the
@@ -95,15 +85,10 @@ function Rows.build(section,runtime)
             if ok and note then detail=detail.."\n\n"..Headings.MARKED.."\n"..note end
         end
         for _,link in ipairs(r.connections or {}) do
-            if titles[link.target] then detail=detail.."\n\n"..(meanings[link.kind] or "Connected to")..": "..titles[link.target] end
+            if titles[link.target] then detail=detail.."\n\n"..(meanings[link.kind] or Headings.LINK_OTHER).." "..titles[link.target] end
         end
         -- Unknown source titles cannot become hints through a backend link.
         -- Authored questions already live in the discovered source's own note.
-        -- A maybe, never a finding: the mod does not know the week means
-        -- anything. The memo is not noted against itself.
-        if memoFound and r.kind~=RelayMemo.KIND and RelayMemo.inWeek(r.body) then
-            detail=detail.."\n\n"..RelayMemo.NOTE
-        end
         -- Several cases interleave chronologically by design; the case's own
         -- short dispatch code (already shown in document titles, e.g.
         -- "Dispatch copy / R-482") orients the reader without grouping or
@@ -140,9 +125,9 @@ end
 Rows.WHEREABOUTS={
     -- The fallback stays deliberately plain for the rare case where the item
     -- was seen but its surroundings could not be read.
-    accounted="Last accounted for close by.",
-    uncertain="Not seen recently. Its whereabouts are uncertain.",
-    conflict="More than one copy has been seen. Which is the original is uncertain.",
+    accounted="I last saw it close by.",
+    uncertain="I have not seen it lately, so I am not sure where it is.",
+    conflict="I have seen more than one copy and cannot tell which is the original.",
     -- THE PDA IS AN IN-WORLD TOOL. Owner, 2026-09-24: "Why are we talking to
     -- the player about saves? The PDA is an immersive tool." This state means
     -- there has been no sighting since the session began, which the survivor
@@ -152,7 +137,7 @@ Rows.WHEREABOUTS={
     -- A finished case: where its evidence was last seen, kept in the save
     -- (P4-R104; owner, 2026-09-14: "I lost my files somewhere?"). Only shown
     -- with a place; never a claim of loss.
-    lastseen="Last seen: ",
+    lastseen="Last I saw it: ",
 }
 function Rows.where(id)
     local rt=NHShared and NHShared.GeneratedRuntime
@@ -163,7 +148,7 @@ function Rows.where(id)
     -- Say where it is when we saw it, rather than describing everywhere it
     -- might be. Vagueness is for what we cannot know.
     if state=="accounted" then return place or Rows.WHEREABOUTS.accounted end
-    if state=="uncertain" then return Rows.WHEREABOUTS.uncertain..(place and (" Last seen: "..place) or "") end
+    if state=="uncertain" then return Rows.WHEREABOUTS.uncertain..(place and (" Last I saw it: "..place) or "") end
     if state=="lastseen" then return place and (Rows.WHEREABOUTS.lastseen..place) or nil end
     return Rows.WHEREABOUTS[state]
 end

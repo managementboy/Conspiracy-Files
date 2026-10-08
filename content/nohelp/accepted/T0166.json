@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "Fossoil8"
+    },
+    "body": "The rope reeks of pesticide concentrate. Yellow chemical stains ring the water bottle. Both lay beside a split fertilizer bag.",
+    "id": "t0166-01",
+    "kind": "set",
+    "pieces": [
+      "Rope",
+      "WaterBottle"
+    ],
+    "title": "rope and water bottle",
+    "where": [
+      {
+        "containers": [
+          "toolcabinet",
+          "fridge",
+          "metal_shelves",
+          "counter",
+          "crate",
+          "overhead"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

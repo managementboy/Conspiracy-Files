@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "RiversideIndependenceDayPartyAllWelcome"
+    },
+    "body": "Matching white stripes cross the stapler and the first-aid kit. A name-sized patch on the stapler has been scrubbed bare.",
+    "id": "t0206-01",
+    "kind": "set",
+    "pieces": [
+      "Stapler",
+      "FirstAidKit"
+    ],
+    "title": "Stapler and first-aid kit",
+    "where": [
+      {
+        "containers": [
+          "sidetable",
+          "medicine",
+          "filingcabinet",
+          "desk",
+          "locker",
+          "shelves"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

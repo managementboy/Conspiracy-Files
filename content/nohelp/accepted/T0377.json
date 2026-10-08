@@ -1,0 +1,42 @@
+[
+  {
+    "anchor": {
+      "scene": "RZSBeachParty"
+    },
+    "body": "Feed, soap, and a clean jar, paid cash. My note below says violet powder came from the well-water study.\n\nThe mice abandoned the bin, and the powder was still on the lid.",
+    "id": "t0377-01",
+    "kind": "written",
+    "pieces": [
+      "receipt"
+    ],
+    "title": "Receipt with note",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RZSBeachParty"
+    },
+    "body": "A handwritten note beside the coolers says the coastal road was open through sundown. Someone came back for a forgotten shoe after dark and found the gate shut. The person responsible for the sign had gone home with the only key.",
+    "id": "t0377-02",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "Notepad page",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
+  }
+]

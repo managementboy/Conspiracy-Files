@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "SpiffosHiringLouisville"
+    },
+    "body": "The notebook has a schedule for the spray program. Same name is down for mixing chemicals and serving lunch. Both at eleven. The pencil marks are fresh.",
+    "id": "t0183-01",
+    "kind": "set",
+    "pieces": [
+      "Notebook",
+      "Pencil"
+    ],
+    "title": "Notebook and pencil",
+    "where": [
+      {
+        "containers": [
+          "shelves",
+          "smallbox",
+          "desk",
+          "sidetable",
+          "filingcabinet",
+          "shelvesmag"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

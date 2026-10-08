@@ -2,6 +2,16 @@ local V=require("NHShared/Validator")
 local M={MAX=128}
 local types={['Base.IDcard']=true,['Base.IDcard_Stolen']=true,['Base.IDcard_Female']=true,
  ['Base.IDcard_Male']=true,['Base.CreditCard']=true,['Base.CreditCard_Stolen']=true,['Base.ParkingTicket']=true,['Base.SpeedingTicket']=true,['Base.BusinessCard']=true,['Base.BusinessCard_Personal']=true,['Base.BusinessCard_Nolans']=true,['Base.Passport']=true,['Base.PressID']=true,['Base.Badge']=true,['Base.Diary1']=true,['Base.Diary2']=true}
+-- The vanilla identity documents, one list for the whole mod: the observer
+-- reads rows of these types, and a body already carrying one is never chosen
+-- to carry a No Help card (Carriers.refusal).
+M.TYPES=types
+-- Is this a vanilla identity document with a name on it? The game names its
+-- own "ID Card: Paris Stover" (InventoryItem.nameAfterDescriptor: the item's
+-- name, ": ", forename, " ", surname); a document without one names nobody.
+function M.isNamedIdentity(fullType,displayName)
+ return types[fullType]==true and type(displayName)=="string" and string.find(displayName,": ",1,true)~=nil
+end
 local fields={id=true,fullType=true,label=true,source=true,container=true,x=true,y=true,z=true,observedAt=true,token=true}
 -- What the thing IS. Owner, 2026-09-18, reading "I saw a document labelled
 -- \"Badge: Roger Whitfield\"": "a badge is not a document". The survivor names

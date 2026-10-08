@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "MailCarrierAdEkron"
+    },
+    "body": "A handwritten letter sits inside this military pack. Lists evacuation blocks, most crossed off, then nothing. Those last few streets never got the warning.",
+    "id": "t0216-01",
+    "kind": "set",
+    "pieces": [
+      "LetterHandwritten",
+      "Bag_ALICEpack"
+    ],
+    "title": "Handwritten letter and pack",
+    "where": [
+      {
+        "containers": [
+          "locker",
+          "desk",
+          "filingcabinet",
+          "wardrobe",
+          "sidetable",
+          "militarylocker"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

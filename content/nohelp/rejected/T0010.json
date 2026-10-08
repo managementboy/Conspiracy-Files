@@ -1,0 +1,97 @@
+{
+  "ticket": "T0010",
+  "returned_by": "Claude review, DR-20260928-NOHELP-REVIEW-FAST, 2026-09-28",
+  "rows": [
+    {
+      "id": "t0010-01",
+      "codes": [
+        "ONE_SIDED"
+      ],
+      "merged": true,
+      "note": "Passed its blind read. Returned only because, without T0003 (returned), the accepted list would leave farms with no object set for one conspiracy (converter rule: a ticket that breaks the merged list is returned whole, merged=true). Redeliver it UNCHANGED in the same round as T0003: its receipt stays valid while title, body, pieces and places are unchanged.",
+      "votes": "A 0, B 1, neither 0 (declared B)",
+      "row": {
+        "body": "Field plots: weekly soil checks. Road access may close at short notice. Reverse: “Keep the old mare in the dry stall tonight.”",
+        "id": "t0010-01",
+        "kind": "written",
+        "person": "person-a",
+        "pieces": [
+          "idcard"
+        ],
+        "title": "Temporary field access card",
+        "where": [
+          {
+            "lean": "agricultural",
+            "outfit": "farm",
+            "place": "farm",
+            "rival": "containment",
+            "spot": "corpse"
+          }
+        ],
+        "axioms": {
+          "agricultural": [
+            "a-program",
+            "a-timing"
+          ],
+          "containment": [
+            "c-orders",
+            "c-failure"
+          ]
+        },
+        "gloss": "A field card gives routine soil duties and a personal reminder.",
+        "prov": {
+          "batch": "T0010",
+          "handoff": "2026-09-27",
+          "writer": "ChatGPT"
+        },
+        "rival_reading": "A county worker could receive temporary plot access during an emergency survey; the animal reminder is private and does not establish a malfunction."
+      }
+    },
+    {
+      "id": "t0010-02",
+      "codes": [
+        "ONE_SIDED"
+      ],
+      "merged": true,
+      "note": "Passed its blind read. Returned only because, without T0003 (returned), the accepted list would leave farms with no object set for one conspiracy (converter rule: a ticket that breaks the merged list is returned whole, merged=true). Redeliver it UNCHANGED in the same round as T0003: its receipt stays valid while title, body, pieces and places are unchanged.",
+      "votes": "A 0, B 1, neither 0 (declared B)",
+      "row": {
+        "body": "The map's crop row reaches the road and stops at a thumb-smudged mark. Soil fills the shovel socket but not the blade; its grip is clean.",
+        "id": "t0010-02",
+        "kind": "set",
+        "person": "person-a",
+        "pieces": [
+          "Map",
+          "HandShovel"
+        ],
+        "title": "The row that ends at the road",
+        "where": [
+          {
+            "lean": "agricultural",
+            "outfit": "farm",
+            "place": "farm",
+            "rival": "containment",
+            "spot": "corpse"
+          }
+        ],
+        "axioms": {
+          "agricultural": [
+            "a-program",
+            "a-pathway"
+          ],
+          "containment": [
+            "c-orders",
+            "c-failure"
+          ]
+        },
+        "gloss": "A marked field row and a tool carry different traces.",
+        "prov": {
+          "batch": "T0010",
+          "handoff": "2026-09-27",
+          "writer": "ChatGPT"
+        },
+        "rival_reading": "A response crew could survey a field after access changed and carry a clean tool; the marked row need not belong to a program."
+      }
+    }
+  ]
+}

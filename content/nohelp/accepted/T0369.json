@@ -1,0 +1,42 @@
+[
+  {
+    "anchor": {
+      "scene": "RVSPoliceBlockadeShooting"
+    },
+    "body": "On the back: \"a greasy sheen in the cab after the greenhouse spray test. my wrists blistered. the tomato leaves went black within a day.\"",
+    "id": "t0369-01",
+    "kind": "written",
+    "pieces": [
+      "photograph"
+    ],
+    "title": "Annotated photograph",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "vehicle"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RVSPoliceBlockadeShooting"
+    },
+    "body": "I helped move the injured away from the barrier. Later an officer asked for the number of cars, not the number of people. He drew a fresh line under his total while two families were still behind the disabled van.",
+    "id": "t0369-02",
+    "kind": "written",
+    "pieces": [
+      "notebook"
+    ],
+    "title": "Notebook page",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "vehicle"
+      }
+    ]
+  }
+]

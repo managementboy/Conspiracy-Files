@@ -1,0 +1,145 @@
+[
+  {
+    "recall": "R1",
+    "row": {
+      "anchor": {
+        "print": "CardinalPlaza"
+      },
+      "body": "The café’s cup count is complete, but the plaza key is listed as returned before the shop’s closing receipt.",
+      "id": "t0212-01",
+      "kind": "set",
+      "pieces": [
+        "MugWhite",
+        "KeyRing"
+      ],
+      "title": "The plaza cup return",
+      "where": [
+        {
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "Cardinal Plaza",
+        "source": "print:CardinalPlaza"
+      },
+      "gloss": "A plaza key returns before the café closes.",
+      "prov": {
+        "batch": "T0212",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A maintenance worker could return the key early while the shop stayed open; the record does not identify why."
+    }
+  },
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "print": "CardinalPlaza"
+      },
+      "body": "chalk numbers run across the black pen and bath towel. the count skips one place, then resumes in a different hand.",
+      "id": "t0212-01",
+      "kind": "set",
+      "pieces": [
+        "Pen",
+        "BathTowel"
+      ],
+      "title": "missing count beside the black pen",
+      "where": [
+        {
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-warning",
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "gloss": "A response bundle preserves a missing count, changed route, or erased identity.",
+      "prov": {
+        "batch": "T0212",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A farm-program crew could have counted routes, repacked tools, or removed ownership marks during hurried field work; the objects do not prove a concealed public response."
+    }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "print": "CardinalPlaza"
+      },
+      "body": "chalk numbers run across the black pen and bath towel. the count skips one place, then resumes in a different hand.",
+      "id": "t0212-01",
+      "kind": "set",
+      "pieces": [
+        "Pen",
+        "BathTowel"
+      ],
+      "title": "Black pen with the unclosed tally",
+      "where": [
+        {
+          "containers": [
+            "crate",
+            "shelves",
+            "desk",
+            "counter",
+            "cardboardbox",
+            "bin"
+          ],
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-warning",
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "gloss": "A response bundle preserves a missing count, changed route, or erased identity.",
+      "prov": {
+        "batch": "T0212",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A farm-program crew could have counted routes, repacked tools, or removed ownership marks during hurried field work; the objects do not prove a concealed public response."
+    }
+  }
+]

@@ -1,0 +1,25 @@
+{
+  "t0058-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "old fuck with house full of food",
+      "source": "map:LouisvilleStashMap10"
+    },
+    "gloss": "A household asks for quiet while a garden delivery remains outstanding.",
+    "prov": {
+      "batch": "T0058",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "None: one-sided on purpose"
+  }
+}

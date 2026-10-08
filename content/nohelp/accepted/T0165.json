@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "Fossoil7"
+    },
+    "body": "The map shows this route already closed. The paper sheet orders a driver to wait at the fuel pump. The pickup never came.",
+    "id": "t0165-01",
+    "kind": "set",
+    "pieces": [
+      "Map",
+      "SheetPaper2"
+    ],
+    "title": "Map and paper sheet",
+    "where": [
+      {
+        "containers": [
+          "sidetable",
+          "bin",
+          "cardboardbox",
+          "smallbox",
+          "locker",
+          "desk"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

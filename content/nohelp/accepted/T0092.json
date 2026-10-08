@@ -1,0 +1,32 @@
+[
+  {
+    "anchor": {
+      "map": "MulStashMap18",
+      "mark": 1
+    },
+    "body": "The sprayer rig fuel gauge reads empty, petrol can beside it. Field trial notes list experimental compound batches. A pistol lies on the application schedule sheet.",
+    "id": "t0092-01",
+    "kind": "set",
+    "pieces": [
+      "Pistol",
+      "PetrolCan"
+    ],
+    "title": "pistol and petrol can",
+    "where": [
+      {
+        "containers": [
+          "militarylocker",
+          "metal_shelves",
+          "locker",
+          "toolcabinet",
+          "militarycrate",
+          "crate"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

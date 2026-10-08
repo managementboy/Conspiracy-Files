@@ -1,0 +1,32 @@
+[
+  {
+    "anchor": {
+      "map": "RiversideStashMap2",
+      "mark": 1
+    },
+    "body": "The briefcase clasp is broken, the soap wedged inside. Route maps inside mark crossings safe that I saw burning.",
+    "id": "t0095-01",
+    "kind": "set",
+    "pieces": [
+      "Soap2",
+      "Briefcase"
+    ],
+    "title": "soap and briefcase",
+    "where": [
+      {
+        "containers": [
+          "smallbox",
+          "crate",
+          "locker",
+          "wardrobe",
+          "dresser",
+          "clothingrack"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

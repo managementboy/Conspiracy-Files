@@ -1,0 +1,48 @@
+{
+  "t0023-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-warning",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "Need a radio repaired?",
+      "source": "print:CircuitalHealing"
+    },
+    "gloss": "A dispatch log records an acknowledgment from a receiver held for repair during an evacuation alert.",
+    "prov": {
+      "batch": "T0023",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A field monitor could have been under repair during a test transmission, and a charged battery does not prove it was tuned to the right channel."
+  },
+  "t0023-02": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-malfunction"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "Over 20 years experience in electronic repair and maintenance.",
+      "source": "print:CircuitalHealing"
+    },
+    "gloss": "A field-trial radio failure and its unpaid repair are recorded together.",
+    "prov": {
+      "batch": "T0023",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "None: one-sided on purpose"
+  }
+}

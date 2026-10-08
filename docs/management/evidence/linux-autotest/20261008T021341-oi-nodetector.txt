@@ -1,0 +1,24 @@
+Linux Of Interest no-detector check 20261008T021341: PASS
+source: 69574fdc
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+note: notice line after 45 s: why=scene-listener-notice shown=1
+note: listener-missing log lines: 1
+note: time until the stories pass finished: 250 s; scenes in the record: 250 193
+note: decided (detector inactive): scenes (all, standalone) = 250 193; (dup notes, unknown notes, shared buildings, digest) = 0 0 0 1003800299; towns (min, max, count) = 1 80 14; per town: 10:22 11:17 12:14 13:9 14:16 1:12 2:11 3:10 4:13 5:16 6:8 7:1 8:80 9:21; standalone hosts (building, vehicle, body) = 175 18 0
+note: plan line: why=plan held=4 matched=11 ms=1226 nofit=0 passes=51 placed=19 relaxed=1 scenes=250 standalone=193 stories=57 tagged=12
+note: batch line: vehicle=18 why=plan body=0 building=175 densityBand=0 heldBack=9 hostCap=0 matched=62 noCategoryBuilding=34 noFit=0 noRecipe=0 notDrawn=234 quota=193 relaxed=16 tagged=78
+note: kinds checked on arrival: story building vehicle
+note: story: first scene clue nh:note:ns101:ns101:1, note id Letter/InvitationLetter/0009
+note: story: created at 10269,12698,0
+note: story first scene: holders=1 inside=3 loose=0 want=3 holder=Base.RevolverCase2 pickRule=true note piece=1 item=Base.LetterHandwritten re=0 verify=ok
+note: story: find via Search Mode (ok,new) true true; Look it over (ok,new) true false; find events in the log: 1
+note: building: first scene clue nh:note:ns201:ns201:1, note id Letter/AcceptanceLetter/0002
+note: building: created at 11220,6708,0
+note: building first scene: holders=1 inside=3 loose=0 want=3 holder=Base.Handbag pickRule=true note piece=1 item=Base.LetterHandwritten re=0 verify=ok
+note: building: find via Search Mode (ok,new) true true; Look it over (ok,new) true false; find events in the log: 1
+note: vehicle: first scene clue nh:note:ns225:ns225:1, note id Letter/ChildsLetter/0021
+note: vehicle host: spawned (type, at) VanAmbulance 7714,14578
+note: vehicle: created at 7723,14555,0
+note: vehicle first scene: holders=1 inside=3 loose=0 want=3 holder=Base.Bag_ProtectiveCaseSmall_Pistol2 pickRule=true note piece=1 item=Base.LetterHandwritten re=0 verify=ok
+note: vehicle: find via Search Mode (ok,new) true true; Look it over (ok,new) true false; find events in the log: 1

@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "FiveAlarmChili"
+    },
+    "body": "The jar's empty. A pencil was left here with supply tallies. The marks stop mid-week, shifts still unfed.",
+    "id": "t0262-01",
+    "kind": "set",
+    "pieces": [
+      "EmptyJar",
+      "Pencil"
+    ],
+    "title": "Empty jar and pencil",
+    "where": [
+      {
+        "containers": [
+          "crate",
+          "cardboardbox",
+          "smallbox",
+          "locker",
+          "dishescabinet",
+          "desk"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

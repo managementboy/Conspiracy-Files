@@ -1,0 +1,25 @@
+{
+  "t0226-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "Farming & Rural Supply (Doe Valley)",
+      "source": "print:FarmingAndRuralSupplyDoeValley"
+    },
+    "gloss": "A sandbag improvised from an empty sack, and a sidearm, tagged beside a wiped evacuation list.",
+    "prov": {
+      "batch": "T0226",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "None: one-sided on purpose"
+  }
+}

@@ -1,0 +1,55 @@
+-- OIEngine's one PublicAPI table (module B, per docs/design/
+-- MODULE_SEPARATION_2026-09-26.md sections 2.2 and 3 step 3). A or C may
+-- call into B only through OIEngine.PublicAPI, never through B's own
+-- internal files directly.
+--
+-- Per the ADHD re-evaluation before this stage started (5 frames,
+-- independently convergent): this table is grown from real straddler
+-- call sites as they're resolved, not designed upfront from a guess at
+-- what B "should" expose. Each entry below is the exact object or
+-- function a real straddler already called before this file existed;
+-- resolving a straddler means redirecting its one remaining global reach
+-- here, not inventing a new interface.
+OIShared=OIShared or {}
+OIEngine=OIEngine or {}
+local PublicAPI=OIEngine.PublicAPI or {}
+OIEngine.PublicAPI=PublicAPI
+
+-- GeneratedMenu.lua (straddler, resolved to module A) picks whichever of
+-- these two claims a given item and calls the same duck-typed methods
+-- (subject/metrics/retiredPaper/isRecognised) on whichever one won - a
+-- real, working dispatch rule, kept exactly as it already was.
+--
+-- require(), not a read off the OIEngine global: PZ's own file-load order
+-- across a directory is not something this file can rely on, but
+-- require() returns the same cached, real, already-initialized table
+-- regardless of load order, executing the target module synchronously if
+-- it hasn't run yet.
+PublicAPI.MapMediaRuntime=require("OIShared/MapMediaRuntime")
+PublicAPI.GeneratedRuntime=require("OIShared/GeneratedRuntime")
+
+-- KnoxApps.lua and OrganiserScreen.lua (module C) read these four directly
+-- today to build the NAMES/DATES/FILES/PLACES programs - the same
+-- relocate-don't-redesign treatment as the two above.
+PublicAPI.DiscoveryLog=require("OIShared/DiscoveryLog")
+PublicAPI.AddressMap=require("OIShared/AddressMap")
+PublicAPI.PersonNameLog=require("OIShared/PersonNameLog")
+-- Found by the stage-5 boundary check: LocalPersonIntegration.lua
+-- (module A) reaches these two directly too.
+PublicAPI.KeyJournal=require("OIShared/KeyJournal")
+PublicAPI.BodyOutfitLog=require("OIShared/BodyOutfitLog")
+PublicAPI.IdentityObserver=require("OIShared/IdentityObserver")
+
+PublicAPI.SuccessiveCases=require("OIShared/Generated/SuccessiveCases")
+
+-- EvidenceRows.lua reclassified from unclear to module B this increment
+-- (docs/design/MODULE_SEPARATION_2026-09-26.md section 3a): "the
+-- projection from what the survivor has actually found to the rows the
+-- organiser shows" is content-assembly (it requires 4 Generated/*
+-- modules directly to build FILES/NAMES/PLACES row text), not PDA
+-- rendering. KnoxApps.lua (module C) now reaches it through here instead
+-- of requiring it directly - the real fix for the finding that aliasing
+-- alone can't invert a plain require() dependency.
+PublicAPI.EvidenceRows=require("OIShared/EvidenceRows")
+
+return PublicAPI

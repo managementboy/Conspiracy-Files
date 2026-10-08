@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "EPToolsLV"
+    },
+    "body": "Four notches on the leather strips match four marks on the towel. A fifth mark was sanded flat on both.",
+    "id": "t0233-01",
+    "kind": "set",
+    "pieces": [
+      "LeatherStrips",
+      "BathTowel"
+    ],
+    "title": "Leather strips and towel",
+    "where": [
+      {
+        "containers": [
+          "toolcabinet",
+          "wardrobe",
+          "metal_shelves",
+          "dresser",
+          "clothingrack",
+          "crate"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

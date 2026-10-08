@@ -1,0 +1,10 @@
+Stage 0 signed off by Claude, 2026-09-27.
+axioms.json sha256: e5dc907257497f4a44d0594b130889cc90a901c7bfacf170bf68fb65a92d020c
+Delivery: stage0-T0000.json (axioms and first-release story glosses, stories.json).
+Checked: shapes; ids short, lowercase, distinct; every gloss neutral with a
+rival reading; no retired-premise word or pair (tripwire, 0 hits); scene
+glosses match the scene table's anchors; lean split of the stories 7/6/5.
+Note for T0012: a person thread has no random lean (every row carries one
+fixed lean). Pick containment or agricultural when writing T0012; this does
+not void the sign-off.
+Editing axioms.json voids this sign-off; adding story glosses does not.

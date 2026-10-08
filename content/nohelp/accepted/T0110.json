@@ -1,0 +1,32 @@
+[
+  {
+    "anchor": {
+      "map": "WorldStashMap1",
+      "mark": 1
+    },
+    "body": "The toilet paper and water bottle are packed with treated seed. Every kernel has the same cracked green coating.",
+    "id": "t0110-01",
+    "kind": "set",
+    "pieces": [
+      "ToiletPaper",
+      "WaterBottle"
+    ],
+    "title": "Toilet paper and water bottle",
+    "where": [
+      {
+        "containers": [
+          "dresser",
+          "fridge",
+          "sidetable",
+          "counter",
+          "shelves",
+          "overhead"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

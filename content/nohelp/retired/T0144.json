@@ -1,0 +1,148 @@
+[
+  {
+    "recall": "R1",
+    "row": {
+      "anchor": {
+        "map": "WpStashMap12",
+        "mark": 1
+      },
+      "body": "A key to the office is tied to a fever list; the room is marked sealed, and the supply line says the crew took the food to the gun counter.",
+      "id": "t0144-01",
+      "kind": "set",
+      "pieces": [
+        "Bandage",
+        "KeyRing"
+      ],
+      "title": "The room behind the barricade",
+      "where": [
+        {
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "everyone in office got fever",
+        "source": "map:WpStashMap12"
+      },
+      "gloss": "A sealed office and a moved supply line accompany a fever list.",
+      "prov": {
+        "batch": "T0144",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "Containment staff could seal an office during a fever event and move food; the record does not identify the fever’s cause."
+    }
+  },
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "map": "WpStashMap12",
+        "mark": 1
+      },
+      "body": "the measuring tape and clipboard carry the same black paint. a fresh scrape exposes an older evacuation color beneath.",
+      "id": "t0144-01",
+      "kind": "set",
+      "pieces": [
+        "MeasuringTape",
+        "Clipboard"
+      ],
+      "title": "missing count beside the measuring tape",
+      "where": [
+        {
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-warning",
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "gloss": "A response bundle preserves a missing count, changed route, or erased identity.",
+      "prov": {
+        "batch": "T0144",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A farm-program crew could have counted routes, repacked tools, or removed ownership marks during hurried field work; the objects do not prove a concealed public response."
+    }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "map": "WpStashMap12",
+        "mark": 1
+      },
+      "body": "the measuring tape and clipboard carry the same black paint. a fresh scrape exposes an older evacuation color beneath.",
+      "id": "t0144-01",
+      "kind": "set",
+      "pieces": [
+        "MeasuringTape",
+        "Clipboard"
+      ],
+      "title": "Measuring tape with the unclosed tally",
+      "where": [
+        {
+          "containers": [
+            "crate",
+            "shelves",
+            "desk",
+            "counter",
+            "cardboardbox",
+            "bin"
+          ],
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-warning",
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "gloss": "A response bundle preserves a missing count, changed route, or erased identity.",
+      "prov": {
+        "batch": "T0144",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A farm-program crew could have counted routes, repacked tools, or removed ownership marks during hurried field work; the objects do not prove a concealed public response."
+    }
+  }
+]

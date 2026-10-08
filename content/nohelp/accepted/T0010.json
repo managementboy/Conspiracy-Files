@@ -1,0 +1,41 @@
+[
+  {
+    "body": "Field plots: weekly soil checks. Road access may close at short notice. Reverse: “Keep the old mare in the dry stall tonight.”",
+    "id": "t0010-01",
+    "kind": "written",
+    "person": "person-a",
+    "pieces": [
+      "idcard"
+    ],
+    "title": "ID card",
+    "where": [
+      {
+        "lean": "agricultural",
+        "outfit": "farm",
+        "place": "farm",
+        "rival": "containment",
+        "spot": "corpse"
+      }
+    ]
+  },
+  {
+    "body": "The crop row on the map is circled twice: “second pass, same mix.” Soil fills the shovel socket. The blade is stained blue-green from the treated rows.",
+    "id": "t0010-02",
+    "kind": "set",
+    "person": "person-a",
+    "pieces": [
+      "Map",
+      "HandShovel"
+    ],
+    "title": "Map and hand shovel",
+    "where": [
+      {
+        "lean": "agricultural",
+        "outfit": "farm",
+        "place": "farm",
+        "rival": "containment",
+        "spot": "corpse"
+      }
+    ]
+  }
+]

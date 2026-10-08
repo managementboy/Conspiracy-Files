@@ -1,0 +1,32 @@
+[
+  {
+    "anchor": {
+      "map": "MulStashMap16",
+      "mark": 1
+    },
+    "body": "A black radio and pistol left by the roadside gate. Someone was monitoring the crop program broadcasts here. The last transmission asked about backup generators at the silos.",
+    "id": "t0090-01",
+    "kind": "set",
+    "pieces": [
+      "RadioBlack",
+      "Pistol"
+    ],
+    "title": "Black radio and pistol",
+    "where": [
+      {
+        "containers": [
+          "sidetable",
+          "militarylocker",
+          "desk",
+          "locker",
+          "shelves",
+          "militarycrate"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

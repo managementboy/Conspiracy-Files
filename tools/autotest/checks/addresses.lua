@@ -2,18 +2,19 @@
 -- P4-R129) in the real game.
 CFAdr = CFAdr or {}
 local C = CFAdr
-local A = ConspiracyFiles.AddressMap
+-- No Help is the product and accepts every build from 42.20 on (the older mod stops at 42.20.4).
+local A = NHShared.AddressMap
 
 -- Ready at game start, before any case; how long the load took; nothing saved.
 function C.state()
-    local saved = ModData.get("ConspiracyFiles.AddressBook.Muldraugh")
+    local saved = ModData.get("NHShared.AddressBook.Muldraugh")
     return tostring(A.ready()), tostring(A.loadMs), tostring(saved ~= nil), tostring(A.status and A.status())
 end
 
 -- Every shipped building against the live world, a batch per call: the same id
 -- must exist with the same footprint. Returns done, checked, missing, moved.
 function C.verifyStart()
-    local B = require("ConspiracyFiles/Generated/AddressBook")
+    local B = require("NHShared/Generated/AddressBook")
     C.shipped = {}
     for _, row in ipairs(B.rows) do
         local id, x, y, x2, y2 = row:match("^([^|]+)|(%-?%d+)|(%-?%d+)|(%-?%d+)|(%-?%d+)|")
@@ -49,8 +50,8 @@ end
 
 -- A few real addresses, by town, straight from the book the game loaded.
 function C.samples()
-    local B = require("ConspiracyFiles/Generated/AddressBook")
-    local want = { Irvington = true, Riverside = true, WestPoint = true, Muldraugh = true, Brandenburg = true }
+    local B = require("NHShared/Generated/AddressBook")
+    local want = { Irvington = true, Riverside = true, WestPoint = true, ["West Point"] = true, Muldraugh = true, Brandenburg = true }
     local out, taken = {}, {}
     for _, row in ipairs(B.rows) do
         local id = row:match("^([^|]+)|")

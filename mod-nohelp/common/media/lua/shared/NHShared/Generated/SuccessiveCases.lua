@@ -1,130 +1,34 @@
--- Additive reader/stager for later generated cases.  The schema-1 `canonical`
--- root is deliberately retained byte-for-byte as the legacy first case.
+-- The reader and validator of the No Help case store: one `canonical` world
+-- record (Generated/Session over an AreaCase), with the successive-case
+-- aggregate still read so the store's shape is unchanged.
 local V=require("NHShared/Validator")
 local Session=require("NHShared/Generated/Session")
-local Generator=require("NHShared/Generated/Generator")
-local Retired=require("NHShared/Generated/RetiredCase")
--- Fresh-save campaign bounds: four live cases and sixteen cases in total.
--- Retirement removes placement bookkeeping, retaining every discovered row,
--- its source context and the survivor's answers. Age never deletes evidence.
--- SaveBudget checks the aggregate estimated allowance before a runtime swap;
--- the case-count limits do not promise that every combination fits it.
-local M={SCHEMA=1,MAX_CASES=16,MAX_ACTIVE=4}
--- HONEST REFUSALS (P4-R133, docs/design/CASE_PACING.md). The closed set of
--- reasons a new case did not come. It lives here, in the domain module,
--- because the debt a refusal leaves behind is stored in the case store's own
--- `schedule` slot and must be validated before it is ever written - a count
--- and a rung that reset on every reload would make the ladder unreachable for
--- a player who saves and loads in the same crowded house.
---   no-reach       nothing eligible within the survivor's reach
---   no-containers  no two loaded sites could supply a clue each
---   cap            the store's own case cap (MAX_CASES) is reached
---   active-limit   MAX_ACTIVE unfinished cases already
---   cooldown       a refusal is still standing (P4-R125's wait)
---   disabled       generation is off, or gave up after repeated failures
---   busy           a case is being prepared or placed right now
---   gap            the ordinary wait between cases has not passed yet
---                  (AutomaticInvestigations.config.minGapHours, and the extra
---                  hour after a case finished, P4-R121)
---
--- `gap` was added on 2026-09-18, and it is the only code added since the set
--- was closed. The five silent early returns in AutomaticInvestigations.poll
--- needed codes (P4-R133's honesty stopped at the generator's door: the poller
--- never reached it), and four of them had one already - cap, active-limit,
--- disabled and busy. The ordinary wait between cases had none: `cooldown` is
--- P4-R125's "move on fifty tiles" wait, whose promise is half an hour, and
--- reusing it would have told a reader a case was due in half an hour when it
--- was twenty-three hours away - and the long campaign check fails on a broken
--- promise. Like cooldown and busy it is never counted, because it is our own
--- pacing rather than the world failing to supply a case.
--- `outdoors` joined on 2026-09-18, for the LAST silence with no reason: the
--- first case of a save waits for the survivor to be inside a building
--- (GeneratedRuntime.start's firstHouse), and a player who spawned on a street
--- got nothing while automaticStatus() read why=nil - which travel.sh had
--- written into its own header as a fact to live with. None of the eight fitted:
--- `busy` is a placement already running, `cooldown` is P4-R125's fifty-tile
--- wait and would promise half an hour, `gap` is the wait between cases and
--- there is no previous case to pace from, and the counted codes would walk the
--- ladder up for a standard no rung can lower - only stepping indoors ends this
--- wait. Uncounted, like the other three waits of our own making.
-M.DEFER_CODES={["no-reach"]=true,["no-containers"]=true,cap=true,["active-limit"]=true,
- cooldown=true,disabled=true,busy=true,gap=true,outdoors=true}
--- The ladder: after this many refusals of the SAME code the generator lowers
--- its own standard by one rung. MAX_RUNG is the highest rung the code can
--- actually take (see docs/design/CASE_PACING.md on the fourth rung).
-M.REFUSALS_PER_RUNG=3
-M.MAX_RUNG=3
--- THE PROMISE A REFUSAL MAKES (P4-R133), and why it lives here.
---
--- `dueHours` is the in-game hour by which the next case IS expected. P4-R133
--- turned a passed deadline with no case into a FAILURE in the checks, and that
--- rule can only mean something if the hour promised is in the FUTURE when it is
--- made. It was computed in GeneratedRuntime as `math.max(now,last+gap)`, and
--- the generator is only ever asked once the gap has passed - so `last+gap<=now`
--- and every promise was already overdue: the real game failed on its own
--- promise a minute after making it (evidence 20260918T045250-promise.txt), and
--- the mutation written to prove the assertion could not be caught, because the
--- clean code behaved exactly as the bug.
---
--- It is a rule about pacing, not about the engine, so it is pure and here:
---   code  the refusal's own code
---   now   the in-game hour of the refusal
---   wait  the wait this refusal imposes before anything is tried again -
---         P4-R125's half hour for the codes that come from a nearby scan. No
---         scan happens inside it, so it is the floor under every promise.
---   gap   the ordinary wait between cases (AutomaticInvestigations.minGapHours)
---   last  the in-game hour the last case was created, when the save knows one
--- A `cooldown` is that wait still standing, so its end is the whole of its
--- promise; every other code also cannot beat the gap, so it promises whichever
--- of the two is later. Never `now`, and never a time already gone.
-M.MIN_PROMISE_HOURS=0.25
-function M.dueHours(code,now,wait,gap,last)
-    now=tonumber(now) or 0
-    wait=tonumber(wait) or 0
-    gap=tonumber(gap) or 0
-    -- A refusal of the same code inside a quarter of an in-game hour is the
-    -- same refusal still standing (DEBT_GAP_HOURS), so nothing can change
-    -- inside it either: that is the least a promise may be, even where a
-    -- check has turned the movement wait down to nothing.
-    local floor=now+math.max(wait,M.MIN_PROMISE_HOURS)
-    if code=="cooldown" then return floor end
-    local due=(type(last)=="number" and last+gap) or now+gap
-    if due>floor then return due end
-    return floor
-end
+local M={SCHEMA=1,MAX_CASES=16}
 local function copy(v) if type(v)~="table" then return v end local o={} for k,x in pairs(v) do o[k]=copy(x) end return o end
 local function fields(t,allowed) if type(t)~="table" then return false end for k in pairs(t) do if not allowed[k] then return false end end return true end
 local function text(v) return type(v)=="string" and v~="" and #v<=160 end
 local function dense(t,max) if type(t)~="table" then return false end local n=0 for k in pairs(t) do if type(k)~="number" or k~=math.floor(k) or k<1 then return false end n=n+1 end if n>max then return false end for i=1,n do if t[i]==nil then return false end end return true,n end
--- One root can be a live Session (schema 1) or a retired case (schema 2).
--- These helpers let every reader/validator treat both uniformly instead of
--- guessing at shape, without ever mutating either kind.
-local function rootValid(root) if Retired.isRetired(root) then return Retired.validate(root) end return Session.validate(root) end
-local function rootCaseId(root) if Retired.isRetired(root) then return root.caseId end return type(root)=="table" and type(root.case)=="table" and root.case.caseId end
+local function rootCaseId(root) return type(root)=="table" and type(root.case)=="table" and root.case.caseId end
 local function rootDocumentIds(root)
  local out={}
-  if Retired.isRetired(root) then for _,row in ipairs(root.rows) do out[#out+1]=row.id end return out end
  if type(root)=="table" and type(root.case)=="table" then for _,d in ipairs(root.case.documents) do out[#out+1]=d.id end end
  return out
 end
--- Retired roots dropped their physical tokens with the rest of the placement
--- bookkeeping; nil here means "no token to collide", never "skip the check".
-local function rootToken(root,id) if Retired.isRetired(root) then return nil end return root.assignments[id].physicalToken end
+local function rootToken(root,id) return root.assignments[id].physicalToken end
 local function aggregateOK(a)
  if not fields(a,{schema=true,cases=true,discoveries=true}) or a.schema~=M.SCHEMA then return false,"invalid successive-case aggregate" end
  local ok,n=dense(a.cases,M.MAX_CASES-1); if not ok then return false,"invalid successive-case list" end
  local ids,docs,tokens={}, {},{}
  for i=1,n do
-  local s=a.cases[i]; local valid,why=rootValid(s); if not valid then return false,"successive case "..i..": "..tostring(why) end
+  local s=a.cases[i]; local valid,why=Session.validate(s); if not valid then return false,"successive case "..i..": "..tostring(why) end
   local id=rootCaseId(s); if not text(id) or ids[id] then return false,"duplicate successive case ID" end; ids[id]=true
   for _,did in ipairs(rootDocumentIds(s)) do
    if docs[did] then return false,"duplicate document ID" end; docs[did]=true
    local token=rootToken(s,did); if token then if tokens[token] then return false,"duplicate physical token" end; tokens[token]=true end
   end
  end
- -- One clue per case beyond its story clues: the relay memo of the first case
- -- (P4-R96), or the radio transcript of a case steered to "Listen for it" (P4-R123).
- local ordered=dense(a.discoveries,M.MAX_CASES*(Generator.MAX_EVIDENCE+1)); if not ordered then return false,"invalid global discovery order" end
+ -- No maximum on the number of discoveries (owner, 2026-09-27).
+ local ordered=dense(a.discoveries,math.huge); if not ordered then return false,"invalid global discovery order" end
  return true
 end
 -- Global store compatibility: legacy canonical is fallback only.  Once a
@@ -163,42 +67,16 @@ function M.remember(store,now)
   wrapper=store.campaign or (store.canonical and {canonical=store.canonical}),why=nil}
 end
 function M.validate(wrapper)
- local safe=V.validateStructure(wrapper); if not safe or not fields(wrapper,{canonical=true,successive=true,schedule=true}) then return false,"unsupported generated wrapper" end
+ local safe=V.validateStructure(wrapper); if not safe or not fields(wrapper,{canonical=true,successive=true}) then return false,"unsupported generated wrapper" end
  if wrapper.canonical==nil then return false,"legacy canonical required" end
- local ok,why=rootValid(wrapper.canonical); if not ok then return false,"legacy canonical refused: "..tostring(why) end
+ local ok,why=Session.validate(wrapper.canonical); if not ok then return false,"legacy canonical refused: "..tostring(why) end
  if wrapper.successive~=nil then local ok,why=aggregateOK(wrapper.successive); if not ok then return false,why end end
- local ids,docs,tokens,active={},{},{},0
-  local roots=M.sessions(wrapper) or {}
- for _,root in ipairs(roots) do
+ local ids,docs,tokens={},{},{}
+ for _,root in ipairs(M.sessions(wrapper) or {}) do
   local id=rootCaseId(root); if ids[id] then return false,"duplicate case ID across generated roots" end; ids[id]=true
-   if not Retired.isRetired(root) then active=active+1 end
   for _,did in ipairs(rootDocumentIds(root)) do
    if docs[did] then return false,"duplicate document ID across generated roots" end; docs[did]=true
    local token=rootToken(root,did); if token then if tokens[token] then return false,"duplicate physical token across generated roots" end; tokens[token]=true end
-  end
- end
- -- Retirement is what makes a larger MAX_CASES affordable: only MAX_ACTIVE
- -- roots may be live (full-size) at once, the rest must already be retired.
- if active>M.MAX_ACTIVE then return false,"too many concurrently active generated cases" end
- if wrapper.schedule~=nil then
-  if not fields(wrapper.schedule,{schema=true,createdHours=true,defer=true}) or wrapper.schedule.schema~=1 or type(wrapper.schedule.createdHours)~="table" then return false,"invalid case schedule" end
-  local n=0;for k in pairs(wrapper.schedule.createdHours) do if type(k)~="number" or k~=math.floor(k) or k<1 then return false,"invalid case schedule" end;n=n+1 end
-  if n~=#M.sessions(wrapper) then return false,"case schedule count mismatch" end
-  local previous=nil;for i=1,n do local h=wrapper.schedule.createdHours[i];if type(h)~="number" or h~=h or h==math.huge or h==-math.huge or h<0 or (previous and h<previous) then return false,"invalid case schedule" end;previous=h end
-  -- The debt a refusal left behind (P4-R133). Optional, like the schedule
-  -- itself, so a save written before it loads unchanged; every field is
-  -- checked, because a hand-edited count or rung would silently lower the
-  -- generator's standard.
-  local d=wrapper.schedule.defer
-  if d~=nil then
-   if not fields(d,{code=true,count=true,sinceHours=true,dueHours=true,rung=true}) then return false,"invalid case defer record" end
-   if not M.DEFER_CODES[d.code] then return false,"invalid case defer record" end
-   if type(d.count)~="number" or d.count~=math.floor(d.count) or d.count<1 or d.count>1000000 then return false,"invalid case defer record" end
-   if type(d.rung)~="number" or d.rung~=math.floor(d.rung) or d.rung<0 or d.rung>M.MAX_RUNG then return false,"invalid case defer record" end
-   for _,k in ipairs({"sinceHours","dueHours"}) do
-    local h=d[k]
-    if type(h)~="number" or h~=h or h==math.huge or h==-math.huge or h<0 then return false,"invalid case defer record" end
-   end
   end
  end
  local discoveries=M.discoveries(wrapper); local seen={}
@@ -207,58 +85,6 @@ function M.validate(wrapper)
  for _,root in ipairs(M.sessions(wrapper)) do for _,id in ipairs(root.known) do if not seen[id] then return false,"session discovery missing from global order" end; known[id]=true end end
  for id in pairs(seen) do if not known[id] then return false,"global discovery is not known by its case" end end
  return true
-end
--- What a refusal left owed, or nil when nothing is (P4-R133). A copy: a reader
--- must not be able to change a save by editing what it was handed.
-function M.defer(wrapper)
- local s=type(wrapper)=="table" and wrapper.schedule
- local d=s and s.defer
- if not d then return nil end
- return copy(d)
-end
--- Record (or, with nil, clear) that debt, copy-on-write like every other
--- canonical change. A case arrived means nothing is owed, so the caller clears
--- it in the same swap that stages the case. Refused when the store has no
--- schedule at all: a legacy single-case save has nowhere to keep it, and the
--- runtime then carries the debt in memory only, as it did before.
-function M.setDefer(wrapper,record)
- local ok,why=M.validate(wrapper); if not ok then return nil,why end
- if not wrapper.schedule then return nil,"schedule absent" end
- local out={canonical=wrapper.canonical,schedule=copy(wrapper.schedule)}
- if wrapper.successive then out.successive=copy(wrapper.successive) end
- if record==nil then out.schedule.defer=nil
- elseif type(record)~="table" then return nil,"invalid defer record"
- else
-  out.schedule.defer={code=record.code,count=record.count,
-   sinceHours=record.sinceHours,dueHours=record.dueHours,rung=record.rung}
- end
- ok,why=M.validate(out); if not ok then return nil,why end
- return out
-end
--- Everything a reshuffle would have to clean up, captured BEFORE the store is
--- replaced: once the wrapper is swapped this list cannot be recovered from
--- anywhere, and the clues are already lying in drawers around Muldraugh.
---
--- Owner, 2026-09-12: every change to case rules costs a fresh game, several
--- times a day. A reshuffle builds new cases in the save the player is already
--- standing in; the world still holds the old documents, the map still holds
--- their marks, and both are keyed by the ids returned here.
---
--- Retired roots are included: their documents were placed in the world too.
--- A retired root keeps no assignments, so it contributes ids and no tokens.
-function M.abandon(wrapper)
- local roots=M.sessions(wrapper); if not roots then return nil,"generated wrapper missing" end
- local out={documentIds={},physicalTokens={},caseIds={}}
- for _,root in ipairs(roots) do
-  local caseId=rootCaseId(root)
-  if caseId then out.caseIds[#out.caseIds+1]=caseId end
-  for _,id in ipairs(rootDocumentIds(root) or {}) do
-   out.documentIds[#out.documentIds+1]=id
-   local token=rootToken(root,id)
-   if token then out.physicalTokens[#out.physicalTokens+1]=token end
-  end
- end
- return out
 end
 function M.sessions(wrapper)
  if type(wrapper)~="table" then return nil,"generated wrapper missing" end
@@ -270,7 +96,6 @@ function M.find(wrapper,documentId)
   local roots=M.sessions(wrapper); if not roots then return nil end
   for _,root in ipairs(roots) do
    if root.assignments and root.assignments[documentId] then return root end
-   if Retired.isRetired(root) then for _,id in ipairs(root.known or {}) do if id==documentId then return root end end end
   end
 end
 function M.discoveries(wrapper)
@@ -280,166 +105,11 @@ end
 function M.replace(wrapper,index,root)
  local ok,why=M.validate(wrapper); if not ok then return nil,why end; ok,why=Session.validate(root); if not ok then return nil,why end
  local roots=M.sessions(wrapper); if not roots[index] then return nil,"unknown generated case" end
- if Retired.isRetired(roots[index]) then return nil,"case already retired" end
- local out={canonical=index==1 and copy(root) or wrapper.canonical}; if wrapper.schedule then out.schedule=copy(wrapper.schedule) end; local cases={}
+ local out={canonical=index==1 and copy(root) or wrapper.canonical}; local cases={}
  for i=2,#roots do cases[i-1]=copy(i==index and root or roots[i]) end
  local discoveries=M.discoveries(wrapper); local seen={}; for _,id in ipairs(discoveries) do seen[id]=true end
  for _,id in ipairs(root.known) do if not seen[id] then discoveries[#discoveries+1]=id;seen[id]=true end end
  if #cases>0 or wrapper.successive then out.successive={schema=M.SCHEMA,cases=cases,discoveries=discoveries} end
  ok,why=M.validate(out); if not ok then return nil,why end; return out
-end
--- Staging never mutates or reconstructs `canonical`; only a new companion
--- aggregate is added/replaced after full validation by the caller.
--- `usedIndex` ("What do I make of it?", P4-R113): when the new case was built
--- from a finished case's answers, those answers are marked used by it IN THE
--- SAME SWAP, so there is never a moment where a case exists built from
--- answers that could still be changed.
-function M.stage(wrapper,root,createdHours,usedIndex)
- local ok,why=M.validate(wrapper); if not ok then return nil,why end
- ok,why=Session.validate(root); if not ok then return nil,why end
- if wrapper.schedule and (type(createdHours)~="number" or createdHours~=createdHours or createdHours==math.huge or createdHours==-math.huge or createdHours<0) then return nil,"valid created hours required" end
- if not wrapper.schedule and createdHours~=nil then return nil,"schedule absent" end
- local source
- if usedIndex~=nil then
-  source=M.sessions(wrapper)[usedIndex]
-  if not Retired.isRetired(source) or not source.answers or source.answers.usedBy
-   or not root.case.steer or root.case.steer.fromCase~=source.caseId then return nil,"steer source does not match" end
- end
- local out={canonical=wrapper.canonical}; if wrapper.schedule then out.schedule=copy(wrapper.schedule);local prior=out.schedule.createdHours[#out.schedule.createdHours];if prior and createdHours<prior then return nil,"schedule cannot move backwards" end;out.schedule.createdHours[#out.schedule.createdHours+1]=createdHours end; local cases={}
- if wrapper.successive then for i,s in ipairs(wrapper.successive.cases) do cases[i]=copy(s) end end
- if usedIndex==1 then out.canonical=copy(wrapper.canonical); out.canonical.answers.usedBy=root.case.caseId
- elseif usedIndex then cases[usedIndex-1].answers.usedBy=root.case.caseId end
- cases[#cases+1]=copy(root); out.successive={schema=M.SCHEMA,cases=cases,discoveries=M.discoveries(wrapper)}
- ok,why=M.validate(out); if not ok then return nil,why end
- return out
-end
--- Retire a completed case in place: copy-on-write the whole wrapper, replace
--- only the root at `index` with RetiredCase.retire's smaller record, then
--- fully validate the replacement before it is ever handed back -- same
--- validate-then-swap discipline as every other canonical mutation, so there
--- is never an observable half-retired wrapper. Idempotent: retiring an
--- already-retired root is a recognised no-op, not an error and not a second
--- shrink. `lastSeen` (document id -> words) is where the runtime last saw
--- each clue; it is kept on the retired rows (P4-R104).
-function M.retire(wrapper,index,lastSeen,completedHours)
- local ok,why=M.validate(wrapper); if not ok then return nil,why end
- local roots=M.sessions(wrapper); local root=roots[index]; if not root then return nil,"unknown generated case" end
- if Retired.isRetired(root) then return wrapper,false end
- local retired,rwhy=Retired.retire(root,lastSeen,completedHours); if not retired then return nil,rwhy end
- local out={canonical=index==1 and retired or wrapper.canonical}; if wrapper.schedule then out.schedule=copy(wrapper.schedule) end; local cases={}
- for i=2,#roots do cases[i-1]=copy(i==index and retired or roots[i]) end
- if #cases>0 or wrapper.successive then out.successive={schema=M.SCHEMA,cases=cases,discoveries=M.discoveries(wrapper)} end
- ok,why=M.validate(out); if not ok then return nil,why end
- return out,true
-end
--- Where a finished case's evidence was last seen, updated copy-on-write.
--- Owner, 2026-09-14: "I lost my files somewhere?" - a completed case had
--- dropped every placement detail. `updates` maps document id -> words; only
--- retired rows are touched (a live document has its own scan), unchanged or
--- unusable text is ignored, and nothing is returned changed unless a row
--- really changed. Same validate-then-swap discipline as retire.
-function M.noteLastSeen(wrapper,updates)
- if type(updates)~="table" then return wrapper,false end
- local ok,why=M.validate(wrapper); if not ok then return nil,why end
- local roots=M.sessions(wrapper); local changed=false; local out={}
- for index,root in ipairs(roots) do
-  local next=root
-  if Retired.isRetired(root) and root.rows then
-   for r,row in ipairs(root.rows) do
-    local words=Retired.cleanLastSeen(updates[row.id])
-    if words and words~=row.lastSeen then
-     if next==root then next=copy(root) end
-     next.rows[r].lastSeen=words; changed=true
-    end
-   end
-  end
-  out[index]=next
- end
- if not changed then return wrapper,false end
- local w={canonical=out[1]}; if wrapper.schedule then w.schedule=copy(wrapper.schedule) end; local cases={}
- for i=2,#out do cases[i-1]=copy(out[i]) end
- if #cases>0 or wrapper.successive then w.successive={schema=M.SCHEMA,cases=cases,discoveries=M.discoveries(wrapper)} end
- ok,why=M.validate(w); if not ok then return nil,why end
- return w,true
-end
--- The answers that will steer the next case (P4-R113, P4-R121): of the finished
--- cases whose answers no case has used yet, the most recently changed. "I can't
--- tell" and "nobody, really" steer nothing. Returns the steer and the index of
--- the case it came from, or nil when nothing is answered.
--- A FINISHED CASE'S THREAD THAT NOTHING HAS FOLLOWED YET (Phase C).
---
--- The analogue of pendingSteer, and deliberately NOT part of it: a steer carries
--- what the survivor concluded, from the closing questions; a thread carries what
--- the survivor FOUND and where (DR-20260919-CONTINUITY). Only the second may
--- drive continuity.
---
--- A thread is spent once any case follows it - live or retired. A retired
--- follow-up keeps `followsFrom` for exactly this, or the same finding would be
--- handed out again for every case that came after.
---
--- Returns the follows carrier and the index of the case it came from.
-function M.pendingThread(wrapper)
- local followed={}
- for _,root in ipairs(M.sessions(wrapper) or {}) do
-  if Retired.isRetired(root) then
-   if root.followsFrom then followed[root.followsFrom]=true end
-  elseif root.case and type(root.case.follows)=="table" then
-   followed[root.case.follows.fromCase]=true
-  end
- end
- for i,root in ipairs(M.sessions(wrapper) or {}) do
-  local sourceKnown=false
-  if type(root.thread)=="table" then
-   for _,id in ipairs(root.known or {}) do if id==root.thread.document then sourceKnown=true; break end end
-  end
-  if Retired.isRetired(root) and sourceKnown and root.completion~=Session.INCOMPLETE
-   and type(root.thread)=="table" and not followed[root.caseId] then
-   local follows=copy(root.thread); follows.fromCase=root.caseId
-   return follows,i
-  end
- end
- return nil
-end
-
-function M.pendingSteer(wrapper)
- local G=require("NHShared/Generated/Generator")
- local best,bestHours,bestIndex
- for i,root in ipairs(M.sessions(wrapper) or {}) do
-  local a=Retired.isRetired(root) and root.offered and root.answers
-  if a and not a.usedBy then
-   local s={fromCase=root.caseId,way=a.way}
-   if a.reading=="one" or a.reading=="two" then s.reading=a.reading end
-   if a.matters=="person1" then s.person=root.offered.people[1]
-   elseif a.matters=="person2" then s.person=root.offered.people[2]
-   elseif a.matters=="organisation" then s.organisation=root.offered.organisation end
-   local steer=G.steerFrom(s)
-   -- A name the generator would not take (an unusual organisation name) costs
-   -- only that part of the steer, not the survivor's other answers.
-   if not steer and (s.person or s.organisation) then s.person,s.organisation=nil,nil; steer=G.steerFrom(s) end
-   local hours=a.changedHours or 0
-   if steer and (not best or hours>=bestHours) then best,bestHours,bestIndex=steer,hours,i end
-  end
- end
- if best then return best,bestIndex end
- return nil
-end
--- The survivor answers, changes or clears the questions about a finished case,
--- copy-on-write like every other change. Refused once a case has been built
--- from the answers. An empty answer set clears them.
-local ANSWER_KEYS={"reading","matters","way"}
-function M.setAnswers(wrapper,index,answers,hours)
- local ok,why=M.validate(wrapper); if not ok then return nil,why end
- if type(answers)~="table" then return nil,"invalid answers" end
- local roots=M.sessions(wrapper); local root=roots[index]
- if not Retired.isRetired(root) or not root.offered then return nil,"no finished case to answer about" end
- if root.answers and root.answers.usedBy then return nil,"these answers already shaped a case" end
- local next=copy(root); local a={}; local any=false
- for _,k in ipairs(ANSWER_KEYS) do if answers[k]~=nil then a[k]=answers[k]; any=true end end
- if any then a.changedHours=hours; next.answers=a else next.answers=nil end
- local w={canonical=index==1 and next or wrapper.canonical}; if wrapper.schedule then w.schedule=copy(wrapper.schedule) end; local cases={}
- for i=2,#roots do cases[i-1]=copy(i==index and next or roots[i]) end
- if #cases>0 or wrapper.successive then w.successive={schema=M.SCHEMA,cases=cases,discoveries=M.discoveries(wrapper)} end
- ok,why=M.validate(w); if not ok then return nil,why end
- return w
 end
 return M

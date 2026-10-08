@@ -1,0 +1,144 @@
+[
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "scene": "RBJoanHartford"
+      },
+      "body": "at dusk: the crop trial crew brought sealed seed packet. my brother started coughing. I washed everything twice before the siren began.",
+      "id": "t0294-01",
+      "kind": "written",
+      "pieces": [
+        "diary"
+      ],
+      "title": "At dusk: sealed seed packet",
+      "where": [
+        {
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-warning",
+          "c-orders"
+        ]
+      },
+      "gloss": "A personal trace links trial residue to illness before a later restriction.",
+      "prov": {
+        "batch": "T0294",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A response team could have carried farm supplies while checking exposure; the objects and timing do not establish that the trial caused it."
+    }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "scene": "RBJoanHartford"
+      },
+      "body": "at dusk: the crop trial crew brought sealed seed packet. my brother started coughing. I washed everything twice before the siren began.\n\nThe mark was made in a hurry, before the queue moved. I checked it twice against the people standing with me.\n\nWhen I returned, the window was closed and the board was blank. I kept the page because it was the only one with our address.",
+      "id": "t0294-01",
+      "kind": "written",
+      "pieces": [
+        "diary"
+      ],
+      "title": "At dusk: sealed seed packet",
+      "where": [
+        {
+          "containers": [
+            "crate",
+            "shelves",
+            "desk",
+            "counter",
+            "cardboardbox",
+            "bin"
+          ],
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-warning",
+          "c-orders"
+        ]
+      },
+      "gloss": "A personal trace links trial residue to illness before a later restriction.",
+      "prov": {
+        "batch": "T0294",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A response team could have carried farm supplies while checking exposure; the objects and timing do not establish that the trial caused it."
+    }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "scene": "RBJoanHartford"
+      },
+      "body": "They told us the list was for families. I believed them until the families arrived and nobody would let them see it.\n\nOne woman recognized a coat through the window. The man at the door said the coat belonged to a different person and closed the curtain. She waited for hours because no one would tell her whose coat she had seen.\n\nI wrote down the time they took the list. If she comes back I can at least tell her when we stopped being allowed to answer.",
+      "id": "t0294-02",
+      "kind": "written",
+      "pieces": [
+        "letter"
+      ],
+      "title": "The visitor list",
+      "where": [
+        {
+          "containers": [
+            "desk",
+            "counter",
+            "crate",
+            "locker",
+            "shelves",
+            "bin"
+          ],
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-warning",
+          "c-accounting"
+        ]
+      },
+      "gloss": "A scene-specific count or record was controlled while people were still present.",
+      "prov": {
+        "batch": "T0294",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "The same trace could follow an investigation of contaminated farm goods or an ordinary emergency response."
+    }
+  }
+]

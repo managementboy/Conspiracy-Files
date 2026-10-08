@@ -1,0 +1,40 @@
+{
+  "t0294-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-warning",
+        "c-orders"
+      ]
+    },
+    "gloss": "A chemical application record connects trial materials to physical harm.",
+    "prov": {
+      "batch": "T0294",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "None: one-sided on purpose"
+  },
+  "t0294-02": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-warning",
+        "c-accounting"
+      ]
+    },
+    "gloss": "A scene-specific count or record was controlled while people were still present.",
+    "prov": {
+      "batch": "T0294",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "The same trace could follow an investigation of contaminated farm goods or an ordinary emergency response."
+  }
+}

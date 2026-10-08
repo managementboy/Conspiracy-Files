@@ -1,0 +1,25 @@
+{
+  "t0241-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "House for Sale (no. 851)",
+      "source": "print:HouseforSale851"
+    },
+    "gloss": "A self-sustaining garden is paused pending a soil test.",
+    "prov": {
+      "batch": "T0241",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A responder could test soil after a spill or fire; the note does not identify the source of concern."
+  }
+}

@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "HouseforSale787"
+    },
+    "body": "Three pickup dots mark the antibiotics and road map. Two were scratched away with no wear around them.",
+    "id": "t0266-01",
+    "kind": "set",
+    "pieces": [
+      "Antibiotics",
+      "Map"
+    ],
+    "title": "Antibiotics and map",
+    "where": [
+      {
+        "containers": [
+          "locker",
+          "smallbox",
+          "cardboardbox",
+          "medicine",
+          "desk",
+          "filingcabinet"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

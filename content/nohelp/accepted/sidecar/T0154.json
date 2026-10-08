@@ -1,0 +1,25 @@
+{
+  "t0154-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "Taco del Pancho",
+      "source": "print:TacodelPancho"
+    },
+    "gloss": "Agricultural workers doubled experimental chemical concentrations.",
+    "prov": {
+      "batch": "T0154",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "None: one-sided on purpose"
+  }
+}

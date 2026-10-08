@@ -1,0 +1,106 @@
+[
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "map": "WpStashMap16",
+        "mark": 1
+      },
+      "body": "The exit plan marks a fence and a southbound route; a note asks the crew to compare the likely attack path with the last field application.",
+      "id": "t0148-01",
+      "kind": "set",
+      "pieces": [
+        "Map",
+        "Pencil"
+      ],
+      "title": "Safest egress plan",
+      "where": [
+        {
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "Likely attacks",
+        "source": "map:WpStashMap16"
+      },
+      "gloss": "An exit plan links an attack path to a field-use record without settling the connection.",
+      "prov": {
+        "batch": "T0148",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A containment planner could compare routes and hazards after an attack; the plan does not say whether the application caused it."
+    }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "map": "WpStashMap16",
+        "mark": 1
+      },
+      "body": "The exit plan marks a fence and a southbound route; a note asks the crew to compare the likely attack path with the last field application.",
+      "id": "t0148-01",
+      "kind": "set",
+      "pieces": [
+        "Map",
+        "Pencil"
+      ],
+      "title": "Safest egress plan",
+      "where": [
+        {
+          "containers": [
+            "desk",
+            "crate",
+            "shelves",
+            "counter",
+            "cardboardbox",
+            "bin"
+          ],
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "Likely attacks",
+        "source": "map:WpStashMap16"
+      },
+      "gloss": "An exit plan links an attack path to a field-use record without settling the connection.",
+      "prov": {
+        "batch": "T0148",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A containment planner could compare routes and hazards after an attack; the plan does not say whether the application caused it."
+    }
+  }
+]

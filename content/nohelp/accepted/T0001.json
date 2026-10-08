@@ -1,0 +1,38 @@
+[
+  {
+    "body": "The photo and name are completely scratched off the badge. The map shows quarantine zones with routes crossed out in red. I count six tallies on the binding tape, only four crossed through.",
+    "id": "t0001-01",
+    "kind": "set",
+    "pieces": [
+      "Badge",
+      "Map"
+    ],
+    "title": "badge and map",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "police",
+        "rival": "agricultural",
+        "spot": "mailbox"
+      }
+    ]
+  },
+  {
+    "body": "Bucket in the mailbox with a water bottle. Tag says 'Site 12 - Compound B'. Same numbers on the spray schedule I found at the feed store. They were tracking something in the fields.",
+    "id": "t0001-02",
+    "kind": "set",
+    "pieces": [
+      "Bucket",
+      "WaterBottle"
+    ],
+    "title": "bucket and water bottle",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "police",
+        "rival": "containment",
+        "spot": "mailbox"
+      }
+    ]
+  }
+]

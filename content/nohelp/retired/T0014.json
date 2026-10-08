@@ -1,0 +1,204 @@
+[
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "print": "AmericanTire"
+      },
+      "body": "A rubber band holds a service slip to the screwdriver. Four circles are drawn beside one wheel sketch; only the outer groove is filled with dark dust.",
+      "id": "t0014-01",
+      "kind": "set",
+      "pieces": [
+        "Screwdriver",
+        "RubberBand"
+      ],
+      "title": "The tire offer marked on a tool handle",
+      "where": [
+        {
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "south of Iroquois Park",
+        "source": "print:AmericanTire"
+      },
+      "gloss": "A tire drawing and dark groove residue accompany a repair tool.",
+      "prov": {
+        "batch": "T0014",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A road crew could inspect tires after a closure and keep a service slip with its tools; the dust does not identify where it came from."
+    }
+  },
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "print": "AmericanTire"
+      },
+      "body": "The receipt charges four tires to the county road crew, but lists only three serial numbers. Beside the blank fourth line, someone wrote “keep off public return until clearance review.” Reverse: “Save the smoothest for the child's bicycle.”",
+      "id": "t0014-02",
+      "kind": "written",
+      "pieces": [
+        "receipt"
+      ],
+      "title": "The fourth tire omitted from the return",
+      "where": [
+        {
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-obscured"
+        ],
+        "containment": [
+          "c-orders",
+          "c-accounting"
+        ]
+      },
+      "cites": {
+        "quote": "Show this flyer at our outlet",
+        "source": "print:AmericanTire"
+      },
+      "gloss": "A county tire charge is incomplete, with a note delaying public accounting.",
+      "prov": {
+        "batch": "T0014",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A shop could hold one tire aside during inventory after a road closure; the private bicycle request may be ordinary family borrowing."
+    }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "print": "AmericanTire"
+      },
+      "body": "A rubber band holds a service slip to the screwdriver. Four circles are drawn beside one wheel sketch; only the outer groove is filled with dark dust.",
+      "id": "t0014-01",
+      "kind": "set",
+      "pieces": [
+        "Screwdriver",
+        "RubberBand"
+      ],
+      "title": "The tire offer marked on a tool handle",
+      "where": [
+        {
+          "containers": [
+            "toolcabinet",
+            "crate",
+            "shelves",
+            "desk",
+            "counter",
+            "cardboardbox"
+          ],
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "south of Iroquois Park",
+        "source": "print:AmericanTire"
+      },
+      "gloss": "A tire drawing and dark groove residue accompany a repair tool.",
+      "prov": {
+        "batch": "T0014",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A road crew could inspect tires after a closure and keep a service slip with its tools; the dust does not identify where it came from."
+    }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "print": "AmericanTire"
+      },
+      "body": "The receipt charges four tires to the county road crew, but lists only three serial numbers. Beside the blank fourth line, someone wrote “keep off public return until clearance review.” Reverse: “Save the smoothest for the child's bicycle.”\n\nI asked for the old page back after the new instructions arrived. They said it had been destroyed, but its corner was still in my pocket.\n\nThe person who was supposed to collect it had no time to stop. I did not put it back with the rest of the ordinary papers.",
+      "id": "t0014-02",
+      "kind": "written",
+      "pieces": [
+        "receipt"
+      ],
+      "title": "The fourth tire omitted from the return",
+      "where": [
+        {
+          "containers": [
+            "toolcabinet",
+            "crate",
+            "shelves",
+            "desk",
+            "counter",
+            "cardboardbox"
+          ],
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-obscured"
+        ],
+        "containment": [
+          "c-orders",
+          "c-accounting"
+        ]
+      },
+      "cites": {
+        "quote": "Show this flyer at our outlet",
+        "source": "print:AmericanTire"
+      },
+      "gloss": "A county tire charge is incomplete, with a note delaying public accounting.",
+      "prov": {
+        "batch": "T0014",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A shop could hold one tire aside during inventory after a road closure; the private bicycle request may be ordinary family borrowing."
+    }
+  }
+]

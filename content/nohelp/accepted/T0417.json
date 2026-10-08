@@ -1,0 +1,262 @@
+[
+  {
+    "body": "The empty jar and seed bag are knotted together with muddy string. I can read a test plot number on the jar's faded label. They're way out here on the roadside, nowhere near a field.",
+    "id": "t0417-01",
+    "kind": "set",
+    "pieces": [
+      "EmptyJar",
+      "SeedBag"
+    ],
+    "title": "Empty jar and seed bag",
+    "where": [
+      {
+        "containers": [
+          "overhead",
+          "dishescabinet",
+          "shelves",
+          "metal_shelves",
+          "counter",
+          "cardboardbox"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "I found a water bottle and bucket coated in fine dust. Both sat outside the marked plot. The trial spray reached too far.",
+    "id": "t0417-02",
+    "kind": "set",
+    "pieces": [
+      "WaterBottle",
+      "Bucket"
+    ],
+    "title": "Water bottle and bucket",
+    "where": [
+      {
+        "containers": [
+          "fridge",
+          "metal_shelves",
+          "counter",
+          "toolcabinet",
+          "cardboardbox",
+          "crate"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "One leather glove has field dust. The other has kitchen soap on it. The empty sprayer was carried indoors, I think.",
+    "id": "t0417-03",
+    "kind": "set",
+    "pieces": [
+      "Gloves_LeatherGloves",
+      "GardeningSprayEmpty"
+    ],
+    "title": "Leather gloves and empty sprayer",
+    "where": [
+      {
+        "containers": [
+          "wardrobe",
+          "metal_shelves",
+          "dresser",
+          "shelves",
+          "clothingrack",
+          "cardboardbox"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "The animal feed bag smells like pesticide, not grain. The bucket reeks of it too. Someone ran chemicals through the feed mill.",
+    "id": "t0417-04",
+    "kind": "set",
+    "pieces": [
+      "AnimalFeedBag",
+      "Bucket"
+    ],
+    "title": "Feed bag and bucket",
+    "where": [
+      {
+        "containers": [
+          "trough",
+          "metal_shelves",
+          "doghouse",
+          "toolcabinet",
+          "composter",
+          "crate"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "The seed bag has test markers and chemical residue inside. The duct tape holding it melted and corroded through. Found it in an experimental field plot.",
+    "id": "t0417-05",
+    "kind": "set",
+    "pieces": [
+      "SeedBag",
+      "DuctTape"
+    ],
+    "title": "seed bag and duct tape",
+    "where": [
+      {
+        "containers": [
+          "trough",
+          "dumpster",
+          "smallcrate",
+          "crate",
+          "bin",
+          "composter"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "The empty jar has a label with grid numbers. The map shows the same grid in a field somewhere. They were running trials.",
+    "id": "t0417-06",
+    "kind": "set",
+    "pieces": [
+      "EmptyJar",
+      "Map"
+    ],
+    "title": "Empty jar and map",
+    "where": [
+      {
+        "containers": [
+          "crate",
+          "cardboardbox",
+          "smallbox",
+          "locker",
+          "dishescabinet",
+          "desk"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "The bread has a numbered tag pinned to it. I wiped the tape off with the dish cloth. It matches the tags on the closure notices.",
+    "id": "t0417-07",
+    "kind": "set",
+    "pieces": [
+      "Bread",
+      "DishCloth"
+    ],
+    "title": "Bread and dish cloth",
+    "where": [
+      {
+        "containers": [
+          "cardboardbox",
+          "smallbox",
+          "fridge",
+          "dishescabinet",
+          "counter",
+          "overhead"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "The soap and sponge hang from a guard's numbered tag. Tape on the shelf reads 'Zone 2, closed, do not enter'. A list beside them counts 14 names, all crossed off.",
+    "id": "t0417-08",
+    "kind": "set",
+    "pieces": [
+      "Soap2",
+      "Sponge"
+    ],
+    "title": "soap and sponge",
+    "where": [
+      {
+        "containers": [
+          "crate",
+          "cardboardbox",
+          "smallbox",
+          "locker",
+          "wardrobe",
+          "dishescabinet"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "A postcard and an empty sprayer lie together. The card asks for supper to be kept warm. A ring from the sprayer smudges the ink.",
+    "id": "t0417-09",
+    "kind": "set",
+    "pieces": [
+      "GardeningSprayEmpty",
+      "Postcard"
+    ],
+    "title": "Postcard and empty sprayer",
+    "where": [
+      {
+        "containers": [
+          "dresser",
+          "metal_shelves",
+          "desk",
+          "shelves",
+          "sidetable",
+          "cardboardbox"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "Fine grains cling to the rim of a drinking glass. The fertilizer sack beside it is sealed with household thread. A strip of cloth holds the pair together.",
+    "id": "t0417-10",
+    "kind": "set",
+    "pieces": [
+      "Fertilizer",
+      "GlassTumbler"
+    ],
+    "title": "Fertilizer and drinking glass",
+    "where": [
+      {
+        "containers": [
+          "composter",
+          "dishescabinet",
+          "metal_shelves",
+          "overhead",
+          "shelves",
+          "counter"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

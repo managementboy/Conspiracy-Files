@@ -1,0 +1,19 @@
+Linux Of Interest story check 20261008T000715: PASS
+source: 1080a1b9
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+note: decided: story 9 (scenes, buildings, towns, areas) = 2 2 1 1; story 1 = 12 12 1 1; (dup notes, unknown notes, shared buildings) = 0 0 0
+note: plan line: why=plan held=4 matched=11 ms=401 nofit=0 placed=19 relaxed=1 scenes=14 tagged=12
+note: story 9: first scene clue nh:note:ns136:ns136:1, note id Letter/ChildsLetter/0024
+note: story 9: created at 9197,12153,0
+note: story 9 first scene: holders=1 inside=4 loose=0 want=4 holder=Base.Bag_RifleCase pickRule=true note piece=1 item=Base.LetterHandwritten re=0 verify=ok
+note: story 9: find via Search Mode (ok,new) true true; Look it over (ok,new) true false; find events in the log: 1
+note: story 1: first scene clue nh:note:ns101:ns101:1, note id Letter/InvitationLetter/0009
+note: story 1: created at 10275,12722,0
+note: story 1 first scene: holders=1 inside=3 loose=0 want=3 holder=Base.Plasticbag_Bags pickRule=true note piece=1 item=Base.LetterHandwritten re=0 verify=ok
+note: story 1: find via Search Mode (ok,new) true true; Look it over (ok,new) true false; find events in the log: 1
+note: reloaded: story 9 (scenes, buildings, towns, areas) = 2 2 1 1; story 1 = 12 12 1 1; (dup notes, unknown notes, shared buildings) = 0 0 0
+note: reload: the 14 scene:building decisions are identical
+note: reloaded story 9 first scene: holders=1 inside=4 loose=0 want=4 holder=Base.Bag_RifleCase pickRule=true note piece=1 item=Base.LetterHandwritten re=0 verify=ok
+note: reloaded story 1 first scene: holders=1 inside=3 loose=0 want=3 holder=Base.Plasticbag_Bags pickRule=true note piece=1 item=Base.LetterHandwritten re=0 verify=ok
+note: reload sweep line: foreign=0 gone=0 items=0 ok=0 op=sweep records=4 repaired=0 tracker=0

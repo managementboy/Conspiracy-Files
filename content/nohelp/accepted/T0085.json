@@ -1,0 +1,32 @@
+[
+  {
+    "anchor": {
+      "map": "MulStashMap8",
+      "mark": 1
+    },
+    "body": "Road dust coats the yarn and the hand torch. But their ties are clean and newly cut. I think the bundle was repacked after travel.",
+    "id": "t0085-01",
+    "kind": "set",
+    "pieces": [
+      "Yarn",
+      "HandTorch"
+    ],
+    "title": "Yarn and hand torch",
+    "where": [
+      {
+        "containers": [
+          "dresser",
+          "desk",
+          "sidetable",
+          "shelves",
+          "toolcabinet",
+          "smallbox"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

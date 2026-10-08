@@ -1,0 +1,42 @@
+[
+  {
+    "anchor": {
+      "scene": "RZSHillbillyHoedown"
+    },
+    "body": "On the back: “a cloying orchard smell in the weathered bundle after the livestock supplement test. my sister coughed all night. the ewes would not graze the sprayed edge.”",
+    "id": "t0387-01",
+    "kind": "written",
+    "pieces": [
+      "photograph"
+    ],
+    "title": "Photograph with note",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RZSHillbillyHoedown"
+    },
+    "body": "We counted people for a ride home by the pairs on the dance card. The driver was instructed to use the official total, two fewer than ours. He asked the two without partners to stand by the road until another truck came.",
+    "id": "t0387-02",
+    "kind": "written",
+    "pieces": [
+      "notebook"
+    ],
+    "title": "Notebook page",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
+  }
+]

@@ -1,0 +1,58 @@
+[
+  {
+    "anchor": {
+      "scene": "RBTSButcher"
+    },
+    "body": "I wrote down when the spray rig ran behind the shop and which rows it covered. The meat was still cold, but the flies were dying at the vents.\n\nI wrote the time and the field on a page before I went back for the others. The clock may have been slow; the yellow residue was on the back door by evening.",
+    "id": "t0312-01",
+    "kind": "written",
+    "pieces": [
+      "notebook"
+    ],
+    "title": "Notebook page",
+    "where": [
+      {
+        "containers": [
+          "desk",
+          "filingcabinet",
+          "sidetable",
+          "shelves",
+          "smallbox",
+          "cashregister"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RBTSButcher"
+    },
+    "body": "The shopkeeper made me bring the parcel through the back. He said the front counter was closed to anyone who had been beyond the roadblock.\n\nA visitor checked the wrapper but never asked what was inside. He took the slip with the customer name and told us both that the parcel was not to be handed out or discussed, and that the name would be kept on his list. He left the parcel on the table.",
+    "id": "t0312-02",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "Notepad page",
+    "where": [
+      {
+        "containers": [
+          "desk",
+          "filingcabinet",
+          "sidetable",
+          "shelves",
+          "smallbox",
+          "cashregister"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

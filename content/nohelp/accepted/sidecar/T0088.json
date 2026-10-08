@@ -1,0 +1,25 @@
+{
+  "t0088-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "safest house - barricade",
+      "source": "map:MulStashMap14"
+    },
+    "gloss": "A perimeter treatment delays a planned visit, leaving the contact unnamed.",
+    "prov": {
+      "batch": "T0088",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "None: one-sided on purpose"
+  }
+}

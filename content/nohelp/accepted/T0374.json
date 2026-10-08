@@ -1,0 +1,43 @@
+[
+  {
+    "anchor": {
+      "scene": "RVSUtilityVehicle"
+    },
+    "body": "The mop and bucket are tied together with torn warning tape. A paper tag with just a number hangs from the knot. I think there's a stamp smudged on the bucket.",
+    "id": "t0374-01",
+    "kind": "set",
+    "pieces": [
+      "Mop",
+      "Bucket"
+    ],
+    "title": "Mop and bucket",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "vehicle"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RVSUtilityVehicle"
+    },
+    "body": "A crew carried a tank used on the trial rows, still damp around the valve. I saw a worker rinse his hands in a ditch that flows toward the houses. The grass along that ditch was yellow.",
+    "id": "t0374-02",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "Notepad page",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "vehicle"
+      }
+    ]
+  }
+]

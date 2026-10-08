@@ -1,0 +1,120 @@
+[
+  {
+    "anchor": {
+      "map": "IrvingtonStashMap1",
+      "mark": 1
+    },
+    "body": "The black umbrella has a treated-seed stain on it. The camera carries a closure mark. One rope knot holds the two together.",
+    "id": "t0013-01",
+    "kind": "set",
+    "pieces": [
+      "UmbrellaBlack",
+      "Camera"
+    ],
+    "title": "Black umbrella and camera",
+    "where": [
+      {
+        "containers": [
+          "locker",
+          "cardboardbox",
+          "smallbox",
+          "wardrobe",
+          "dresser",
+          "sidetable"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "IrvingtonStashMap1",
+      "note": 1
+    },
+    "body": "A clear ring has dried across the notebook's crop-row drawing. The bottle cap is clean. The page is stained only where the drawn rows meet.",
+    "id": "t0013-02",
+    "kind": "set",
+    "pieces": [
+      "Notebook",
+      "WaterBottle"
+    ],
+    "title": "Notebook and water bottle",
+    "where": [
+      {
+        "containers": [
+          "cardboardbox",
+          "crate",
+          "smallbox",
+          "smallcrate",
+          "grocerstand",
+          "desk"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "IrvingtonStashMap1",
+      "note": 2
+    },
+    "body": "“Track access ends at the barrier. Keep the west lane clear for the last vehicle.” The receiving line is blank; on the back, someone asks for a green scarf to be saved.\n\nThe person who handed this to me asked me to keep the date. I did, though the next version left that day out entirely.\n\nThe next morning I looked for a second copy and found only the envelope. I left this one unfolded for whoever came after us.",
+    "id": "t0013-03",
+    "kind": "written",
+    "pieces": [
+      "dispatch"
+    ],
+    "title": "Dispatch slip",
+    "where": [
+      {
+        "containers": [
+          "smallbox",
+          "desk",
+          "filingcabinet",
+          "sidetable",
+          "cashregister",
+          "shelves"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "IrvingtonStashMap1",
+      "note": 3
+    },
+    "body": "The note lists three crop rows and a water check across both sides. A phone number is written below the last line.\n\nThe paper felt damp when I picked it up from the desk. The mark on my thumb did not come off when I washed my hands.\n\nI kept it because the number might still work. The stain spread to my other fingers by morning.",
+    "id": "t0013-04",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "Notepad page",
+    "where": [
+      {
+        "containers": [
+          "smallbox",
+          "desk",
+          "sidetable",
+          "filingcabinet",
+          "shelves",
+          "cashregister"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

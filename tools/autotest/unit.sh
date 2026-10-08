@@ -28,6 +28,20 @@ else
     parse="$(tools/kahlua/run.sh --parse-all 2>&1 | tail -1)"; echo "$parse"
     grep -q ", 0 failed" <<<"$parse" || fail=$((fail + 1))
 fi
+# THE REAL ENGINE. The checks below run Lua through the game's own Kahlua with its real classes
+# (tools/realengine), scan every engine call in the mod against the installed game
+# (tools/enginecalls), and compare the remaining hand-made fakes with the real classes.
+# Exit 20 = no game here: shown plainly, never counted as a pass, and only tolerated when
+# CF_SKIP_KAHLUA=1 (CI). 21 = the game is a different build than the one verified; 22 = too few
+# real tests ran. Both fail the suite on any machine.
+for gate in "tools/realengine/run.sh" "python3 tools/enginecalls/enginecalls.py" "python3 tools/realengine/fake_parity.py"; do
+    gout="$($gate 2>&1)"; gcode=$?
+    echo "$gout" | grep -E "^(contract:|real-engine:|enginecalls:|fake parity:)" | sed "s|^|  |"
+    if [ "$gcode" = 20 ]; then
+        echo "  $gate: NOT EXERCISED - no game on this machine. This is not a pass."
+        [ "${CF_SKIP_KAHLUA:-0}" = 1 ] || fail=$((fail + 1))
+    elif [ "$gcode" != 0 ]; then echo "$gout" | tail -12; fail=$((fail + 1)); fi
+done
 if ! out="$(timeout 300 lua5.1 test/run.lua 2>&1)"; then echo "$out" | tail -20; fail=$((fail + 1)); fi
 echo "specs: $(tail -1 <<<"$out")"
 for t in test/*.lua; do
@@ -42,6 +56,10 @@ if ! out="$(bash tools/autotest/checks/relocation_evidence_test.sh 2>&1)"; then
     fail=$((fail + 1))
 fi
 echo "$out"
+# Of Interest manifest linter (placement of the notes' scenes over several world seeds).
+if ! out="$(timeout 300 lua5.1 tools/ofinterest/lint_manifest.lua 2>&1)"; then
+    fail=$((fail + 1)); echo "FAIL tools/ofinterest/lint_manifest.lua"; echo "$out" | tail -12 | sed 's/^/    /'
+else echo "$out" | tail -1; fi
 # The packaging tool's own tests. Nothing else ran these before 2026-09-21.
 if ! out="$(cd test && timeout 120 python3 -m unittest discover -p '*_test.py' 2>&1)"; then
     fail=$((fail + 1)); echo "FAIL test/*_test.py"; echo "$out" | tail -10 | sed 's/^/    /'

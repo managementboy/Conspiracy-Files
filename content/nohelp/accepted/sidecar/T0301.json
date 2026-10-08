@@ -1,0 +1,38 @@
+{
+  "t0301-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-warning",
+        "c-orders"
+      ]
+    },
+    "gloss": "A personal trace links trial residue to dead insects and treated rows.",
+    "prov": {
+      "batch": "T0301",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "None: one-sided on purpose"
+  },
+  "t0301-02": {
+    "axioms": {
+      "agricultural": [
+        "a-pathway"
+      ],
+      "containment": [
+        "c-failure"
+      ]
+    },
+    "gloss": "A witness records a failed evacuation count and an order not to correct it.",
+    "prov": {
+      "batch": "T0301",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "None: one-sided on purpose"
+  }
+}

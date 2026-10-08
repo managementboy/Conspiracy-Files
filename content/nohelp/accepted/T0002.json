@@ -1,0 +1,40 @@
+[
+  {
+    "body": "The first aid kit is still sealed. A clean bandage is folded around its handle. A patient wrist label is tied through it, with no name on it.",
+    "id": "t0002-01",
+    "kind": "set",
+    "pieces": [
+      "FirstAidKit",
+      "Bandage"
+    ],
+    "title": "First aid kit and bandage",
+    "where": [
+      {
+        "lean": "containment",
+        "outfit": "medical",
+        "place": "hospital",
+        "rival": "agricultural",
+        "spot": "corpse"
+      }
+    ]
+  },
+  {
+    "body": "Notebook shows spray schedules for the crops. Water bottle beside it has yellowish residue. Last entry reads: 'livestock refusing the new feed.'",
+    "id": "t0002-02",
+    "kind": "set",
+    "pieces": [
+      "Notebook",
+      "WaterBottle"
+    ],
+    "title": "Notebook and water bottle",
+    "where": [
+      {
+        "lean": "agricultural",
+        "outfit": "medical",
+        "place": "hospital",
+        "rival": "containment",
+        "spot": "corpse"
+      }
+    ]
+  }
+]

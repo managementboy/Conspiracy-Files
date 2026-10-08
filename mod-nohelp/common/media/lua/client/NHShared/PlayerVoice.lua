@@ -190,12 +190,18 @@ local function log(message) CFLog.message("voice","voice",message) end
 -- colored and white. it makes more sence"): the white halo carries the
 -- survivor's words and holds the longer display; the coloured bubble carries
 -- the fact, in as few words as will fit.
-local function deliver(player,text,label)
+local function deliver(player,text,label,bubbleOnly)
     -- Call engine methods with colon syntax, the way vanilla does.
     -- pcall(obj.method, obj, ...) extracts the method first; Kahlua treats that
     -- differently from a real method call, and pcall then hides any complaint, so
     -- a true result can mean 'did not throw' rather than 'worked'.
     local halo=false
+    if bubbleOnly then
+        -- A clue caption: the words in the coloured bubble only, no halo, no title.
+        if player.Say then pcall(function() player:Say(text) end) end
+        log("said clue line \""..tostring(text).."\" bubble only")
+        return false,false
+    end
     if player.setHaloNote then
         halo=pcall(function() player:setHaloNote(text,255,255,255,HALO_DURATION) end)
     end
@@ -264,8 +270,8 @@ function V.drain()
     if t-lastSpokenAt<(V.HOLD_MS or lastHold) then return end
     local p=player(); if not p then return end
     local nextLine=table.remove(queue,1)
-    lastSpokenAt,lastHold=t,holdFor(nextLine.text)
-    deliver(p,nextLine.text,nextLine.label)
+    lastSpokenAt,lastHold=t,nextLine.hold or holdFor(nextLine.text)
+    deliver(p,nextLine.text,nextLine.label,nextLine.bubbleOnly)
 end
 require("NHShared/Events/InteractionEvents").on("OnTick", V.drain)
 
@@ -370,6 +376,62 @@ local function once(key)
     if said[key] then return false end
     said[key]=true
     return true
+end
+
+-- A CLUE'S OWN WORDS (DR-20260929-NOHELP-GAP-PLAN, owner 2026-09-29): on every
+-- Inspect the survivor says the clue's text, the white line carrying the words
+-- and the bubble its title. A long text is said a piece at a time, each piece
+-- held long enough to read; inspecting another clue drops what is left of the
+-- one before. Not bounded by QUEUE_MAX: a diary is as long as it is.
+-- Why one sentence at a time, short: the white halo is TextDrawObject with
+-- maxCharsLine=-1 (IsoGameCharacter builds it with no wrap; checked in the
+-- game's own jar), so it NEVER wraps - a long text is one line across the
+-- whole screen (owner, 2026-10-03). Owner decision 2026-10-03: a clue is now
+-- spoken in the coloured bubble only (no halo, no title). ChatElement wraps at
+-- 75 chars (setMaxCharsPerLine(75) in its constructor, checked in the jar), so
+-- 75 is the per-line cap; a bubble lives lineDisplayTime=314 ticks at 1.25 per
+-- update, about 4-8 s, and Say lines stack above one another (max 10).
+-- A line is one sentence; a longer one is cut between words.
+V.LINE_CHARS=75
+V.PIECE_CHARS=V.LINE_CHARS
+V.MS_PER_CHAR=60
+V.MIN_HOLD_MS=2500
+function V.readHold(text) return math.max(V.MIN_HOLD_MS,V.MS_PER_CHAR*#tostring(text)) end
+function V.pieces(text)
+    local out={}
+    local max=V.LINE_CHARS
+    for sentence in tostring(text or ""):gsub("%s+"," "):gmatch("[^%.!?]+[%.!?]*%s*") do
+        sentence=sentence:gsub("^%s+",""):gsub("%s+$","")
+        while #sentence>max do
+            local cut=sentence:sub(1,max+1):match("^.*()%s")
+            if not cut or cut<2 then cut=max+1 end
+            out[#out+1]=sentence:sub(1,cut-1)
+            sentence=sentence:sub(cut):gsub("^%s+","")
+        end
+        if sentence~="" then out[#out+1]=sentence end
+    end
+    return out
+end
+-- A short spoken cue ("Hm?" in the bubble, a varied line in the halo) goes
+-- through the same queue, so it never lands on a caption line being read.
+function V.sayCue(text,label)
+    local p=player(); if not p then return false,false end
+    text=tostring(text or "")
+    if text=="" or text==label then return false,false end
+    return speak(p,text,label)
+end
+function V.sayClue(title,text)
+    local p=player(); if not p then return 0 end
+    local kept={}
+    for _,q in ipairs(queue) do if not q.reading then kept[#kept+1]=q end end
+    queue=kept
+    local list=V.pieces(text)
+    for _,piece in ipairs(list) do
+        queue[#queue+1]={text=piece,label="...",reading=true,bubbleOnly=true,hold=V.readHold(piece)}
+    end
+    log("clue text: "..#list.." piece(s) queued")
+    V.drain()
+    return #list
 end
 
 -- Set E: a newly found document connects to one already held.

@@ -1,0 +1,32 @@
+[
+  {
+    "anchor": {
+      "map": "RiversideStashMap9",
+      "mark": 1
+    },
+    "body": "I found a petrol can marked for a medical run. Pills spilled nearby. A field worker got sick. They must have stopped here for help.",
+    "id": "t0102-01",
+    "kind": "set",
+    "pieces": [
+      "PetrolCan",
+      "Pills"
+    ],
+    "title": "Petrol can and pills",
+    "where": [
+      {
+        "containers": [
+          "toolcabinet",
+          "medicine",
+          "metal_shelves",
+          "sidetable",
+          "crate",
+          "locker"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

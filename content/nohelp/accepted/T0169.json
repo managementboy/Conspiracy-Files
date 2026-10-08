@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "GrandOhioMall"
+    },
+    "body": "The map shows downtown, every block marked evacuated. The wallet has a receipt from two hours after the sweep. Someone was still shopping when they called it clear.",
+    "id": "t0169-01",
+    "kind": "set",
+    "pieces": [
+      "Map",
+      "Wallet"
+    ],
+    "title": "Map and wallet",
+    "where": [
+      {
+        "containers": [
+          "cardboardbox",
+          "smallbox",
+          "locker",
+          "desk",
+          "dresser",
+          "filingcabinet"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

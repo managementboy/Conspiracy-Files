@@ -1,0 +1,25 @@
+{
+  "t0035-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "vegs",
+      "source": "map:EkronStashMap2"
+    },
+    "gloss": "Guard logs showing movement after lockdown, with identities removed.",
+    "prov": {
+      "batch": "T0035",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "None: one-sided on purpose"
+  }
+}

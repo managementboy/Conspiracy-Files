@@ -1,0 +1,32 @@
+[
+  {
+    "anchor": {
+      "map": "IrvingtonStashMap10",
+      "mark": 1
+    },
+    "body": "Chalk numbers run across the red pen and the camera. The count skips one place. Then it picks up again in a different hand.",
+    "id": "t0049-01",
+    "kind": "set",
+    "pieces": [
+      "RedPen",
+      "Camera"
+    ],
+    "title": "Red pen and camera",
+    "where": [
+      {
+        "containers": [
+          "desk",
+          "dresser",
+          "sidetable",
+          "filingcabinet",
+          "cashregister",
+          "locker"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

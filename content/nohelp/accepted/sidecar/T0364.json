@@ -1,0 +1,40 @@
+{
+  "t0364-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-warning",
+        "c-failure"
+      ]
+    },
+    "gloss": "Field residue from a farm trial sits on the belongings, before any restriction.",
+    "prov": {
+      "batch": "T0364",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "None: one-sided on purpose"
+  },
+  "t0364-02": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-warning"
+      ]
+    },
+    "gloss": "A crew was told to listen and keep quiet before any closure was public.",
+    "prov": {
+      "batch": "T0364",
+      "handoff": "2026-09-29",
+      "writer": "Claude"
+    },
+    "rival_reading": "A foreman could fix a radio to one channel for ordinary site safety; nothing says who gave the order."
+  }
+}

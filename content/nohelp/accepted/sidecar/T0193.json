@@ -1,0 +1,25 @@
+{
+  "t0193-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "Knox Gun Club Meeting (Velvet Tassel)",
+      "source": "print:KnoxGunOwnersClubGetTogether"
+    },
+    "gloss": "One attendee is logged at two simultaneous checks.",
+    "prov": {
+      "batch": "T0193",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "An emergency security meeting could overlap a work briefing; the sheet does not identify the purpose of either."
+  }
+}

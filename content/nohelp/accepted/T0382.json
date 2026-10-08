@@ -1,0 +1,43 @@
+[
+  {
+    "anchor": {
+      "scene": "RZSDean"
+    },
+    "body": "The fertilizer sack and empty sprayer are packed together. A greasy sheen crusts the nozzle and weeps from the sack seam. Looks like it's from a fertilizer trial.",
+    "id": "t0382-01",
+    "kind": "set",
+    "pieces": [
+      "Fertilizer",
+      "GardeningSprayEmpty"
+    ],
+    "title": "Fertilizer sack and sprayer",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RZSDean"
+    },
+    "body": "Our camp was told the pickup would stop where the smoke could be seen. A vehicle came, copied the number of tents, and drove away before the sleeping people woke. The next day someone had crossed our site off the rescue map.",
+    "id": "t0382-02",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "title": "Letter",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
+  }
+]

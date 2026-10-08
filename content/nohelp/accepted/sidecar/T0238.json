@@ -1,0 +1,25 @@
+{
+  "t0238-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "Louisville Police Headquarters",
+      "source": "print:LVPDHQ"
+    },
+    "gloss": "A roster stamped quarantine with two attendees missing from the final count.",
+    "prov": {
+      "batch": "T0238",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "None: one-sided on purpose"
+  }
+}

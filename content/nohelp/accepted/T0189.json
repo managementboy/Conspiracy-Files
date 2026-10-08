@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "KnoxBankJobAdRosewood"
+    },
+    "body": "The tire pump has fertilizer crust on the gauge. The first-aid kit reeks of that new pesticide. Both handles are sticky with dried spray.",
+    "id": "t0189-01",
+    "kind": "set",
+    "pieces": [
+      "TirePump",
+      "FirstAidKit"
+    ],
+    "title": "Tire pump and first-aid kit",
+    "where": [
+      {
+        "containers": [
+          "toolcabinet",
+          "medicine",
+          "metal_shelves",
+          "sidetable",
+          "crate",
+          "locker"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

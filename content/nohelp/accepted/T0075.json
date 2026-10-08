@@ -1,0 +1,32 @@
+[
+  {
+    "anchor": {
+      "map": "MulStashMap1",
+      "mark": 1
+    },
+    "body": "The sheet lists tools returned after containment. This hammer's serial number isn't on it. Extra tools, no record.",
+    "id": "t0075-01",
+    "kind": "set",
+    "pieces": [
+      "Hammer",
+      "SheetPaper2"
+    ],
+    "title": "Hammer and sheet of paper",
+    "where": [
+      {
+        "containers": [
+          "toolcabinet",
+          "desk",
+          "metal_shelves",
+          "filingcabinet",
+          "crate",
+          "sidetable"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "UStoreItLouisville"
+    },
+    "body": "The hand mirror and briefcase are bound with a torn sleeve. The fabric is smoke-stained outside and spotless beneath the knot.",
+    "id": "t0157-01",
+    "kind": "set",
+    "pieces": [
+      "Mirror",
+      "Briefcase"
+    ],
+    "title": "Mirror and briefcase",
+    "where": [
+      {
+        "containers": [
+          "dresser",
+          "cardboardbox",
+          "smallbox",
+          "locker",
+          "crate",
+          "wardrobe"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "KnoxPackKitchens"
+    },
+    "body": "The clipboard's tally is crossed out line by line. A dust outline between it and the hole punch shows something is gone. Barrier tape with a checkpoint number is stuck across the clip.",
+    "id": "t0210-01",
+    "kind": "set",
+    "pieces": [
+      "HolePuncher",
+      "Clipboard"
+    ],
+    "title": "Hole punch and clipboard",
+    "where": [
+      {
+        "containers": [
+          "filingcabinet",
+          "desk",
+          "sidetable",
+          "cashregister",
+          "shelves",
+          "smallbox"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

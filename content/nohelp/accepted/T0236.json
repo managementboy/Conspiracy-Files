@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "LVFD"
+    },
+    "body": "The notebook logs visitors until noon. The final entry says the briefing continues. The leather gloves were never signed back in.",
+    "id": "t0236-01",
+    "kind": "set",
+    "pieces": [
+      "Gloves_LeatherGloves",
+      "Notebook"
+    ],
+    "title": "Leather gloves and notebook",
+    "where": [
+      {
+        "containers": [
+          "wardrobe",
+          "desk",
+          "dresser",
+          "filingcabinet",
+          "clothingrack",
+          "sidetable"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

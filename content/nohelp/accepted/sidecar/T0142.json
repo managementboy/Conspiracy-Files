@@ -1,0 +1,25 @@
+{
+  "t0142-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "infected hell hole",
+      "source": "map:WpStashMap9"
+    },
+    "gloss": "A family ration is left beside a route warning after a crew departs.",
+    "prov": {
+      "batch": "T0142",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A response team could have left water and recorded a dangerous route; the note does not identify the heat source."
+  }
+}

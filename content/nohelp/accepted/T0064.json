@@ -1,0 +1,32 @@
+[
+  {
+    "anchor": {
+      "map": "LouisvilleStashMap16",
+      "mark": 1
+    },
+    "body": "A schoolbag holds a map with a route south marked out. The same map shows sprayed fields beside the eastern road. A warning pencilled in says to avoid the wet crops.",
+    "id": "t0064-01",
+    "kind": "set",
+    "pieces": [
+      "Bag_Schoolbag",
+      "Map"
+    ],
+    "title": "School bag and map",
+    "where": [
+      {
+        "containers": [
+          "locker",
+          "desk",
+          "wardrobe",
+          "filingcabinet",
+          "dresser",
+          "shelves"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

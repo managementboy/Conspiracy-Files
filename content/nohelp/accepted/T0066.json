@@ -1,0 +1,32 @@
+[
+  {
+    "anchor": {
+      "map": "MarchRidgeStashMap3",
+      "mark": 1
+    },
+    "body": "The bread tastes faintly chemical underneath the wrapper. The map shows crop dusting routes for the surrounding farms. The spray concentration was crossed out and rewritten higher.",
+    "id": "t0066-01",
+    "kind": "set",
+    "pieces": [
+      "Bread",
+      "Map"
+    ],
+    "title": "bread and map",
+    "where": [
+      {
+        "containers": [
+          "counter",
+          "desk",
+          "overhead",
+          "filingcabinet",
+          "fridge",
+          "shelves"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

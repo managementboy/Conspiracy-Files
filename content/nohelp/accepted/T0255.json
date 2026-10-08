@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "BeefChunk"
+    },
+    "body": "The bread and pack came with a note listing trial rows to spray. A receipt shows the delivery was paid before the crew left.",
+    "id": "t0255-01",
+    "kind": "set",
+    "pieces": [
+      "Bread",
+      "Bag_ALICEpack"
+    ],
+    "title": "Bread and pack",
+    "where": [
+      {
+        "containers": [
+          "fridge",
+          "wardrobe",
+          "counter",
+          "dresser",
+          "overhead",
+          "clothingrack"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

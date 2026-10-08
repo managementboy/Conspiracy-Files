@@ -1,0 +1,32 @@
+[
+  {
+    "anchor": {
+      "map": "WpStashMap2",
+      "mark": 1
+    },
+    "body": "The bandage smells like chemicals, not antiseptic. The notebook lists crop treatments alongside medical symptoms. Yellow residue stains both the pages and the wrapping.",
+    "id": "t0134-01",
+    "kind": "set",
+    "pieces": [
+      "Bandage",
+      "Notebook"
+    ],
+    "title": "Bandage and notebook",
+    "where": [
+      {
+        "containers": [
+          "medicine",
+          "desk",
+          "sidetable",
+          "filingcabinet",
+          "locker",
+          "dresser"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

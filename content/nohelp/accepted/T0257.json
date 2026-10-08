@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "CatonaHotTinGrill"
+    },
+    "body": "The fish fillet is cut halfway through. Kitchen knife set down beside it. The meat has an oily film that smells like chemicals.",
+    "id": "t0257-01",
+    "kind": "set",
+    "pieces": [
+      "FishFillet",
+      "KitchenKnife"
+    ],
+    "title": "Fish fillet and kitchen knife",
+    "where": [
+      {
+        "containers": [
+          "cardboardbox",
+          "grocerstand",
+          "crate",
+          "smallbox",
+          "freezer",
+          "dishescabinet"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

@@ -1,0 +1,245 @@
+[
+  {
+    "recall": "R1",
+    "row": {
+      "anchor": {
+        "print": "WellingtonHeightsGolfClub"
+      },
+      "body": "The clubhouse key is signed out for a pickup, while a grounds note says the water cart was already sent away. The passenger line is blank.",
+      "id": "t0179-01",
+      "kind": "set",
+      "pieces": [
+        "WaterBottle",
+        "KeyRing"
+      ],
+      "title": "The clubhouse pickup",
+      "where": [
+        {
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "Wellington Heights Golf Club",
+        "source": "print:WellingtonHeightsGolfClub"
+      },
+      "gloss": "A pickup is scheduled after its water cart has left.",
+      "prov": {
+        "batch": "T0179",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A field crew could take the cart for a work visit; the missing passenger line does not show who was expected."
+    }
+  },
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "print": "WellingtonHeightsGolfClub"
+      },
+      "body": "farm mud fills one crease of the black umbrella and camera; clean warning tape seals the opposite crease.",
+      "id": "t0179-01",
+      "kind": "set",
+      "pieces": [
+        "UmbrellaBlack",
+        "Camera"
+      ],
+      "title": "two traces on the black umbrella",
+      "where": [
+        {
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-warning",
+          "c-orders"
+        ]
+      },
+      "gloss": "Farm residue and response markings share one deliberately ambiguous bundle.",
+      "prov": {
+        "batch": "T0179",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "The farm program and the emergency response each explain one layer of the bundle, and the shared knot does not establish which purpose came first."
+    }
+  },
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "print": "WellingtonHeightsGolfClub"
+      },
+      "body": "A grounds notebook marks a test strip along the course edge; a handwritten note asks players to keep their shoes out of the drainage ditch.",
+      "id": "t0179-02",
+      "kind": "set",
+      "pieces": [
+        "Notebook",
+        "Pencil"
+      ],
+      "title": "The second fairway note",
+      "where": [
+        {
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "Wellington Heights Golf Club",
+        "source": "print:WellingtonHeightsGolfClub"
+      },
+      "gloss": "A test strip and a shoe warning share the course grounds log.",
+      "prov": {
+        "batch": "T0179",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A response team could mark off a ditch during a cleanup; the note does not identify what was applied to the strip."
+    }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "print": "WellingtonHeightsGolfClub"
+      },
+      "body": "farm mud fills one crease of the black umbrella and camera; clean warning tape seals the opposite crease.",
+      "id": "t0179-01",
+      "kind": "set",
+      "pieces": [
+        "UmbrellaBlack",
+        "Camera"
+      ],
+      "title": "Black umbrella with the second residue",
+      "where": [
+        {
+          "containers": [
+            "crate",
+            "shelves",
+            "desk",
+            "counter",
+            "cardboardbox",
+            "bin"
+          ],
+          "lean": "containment",
+          "place": "mapNamed",
+          "rival": "agricultural",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-warning",
+          "c-orders"
+        ]
+      },
+      "gloss": "Farm residue and response markings share one deliberately ambiguous bundle.",
+      "prov": {
+        "batch": "T0179",
+        "handoff": "2026-09-27",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "The farm program and the emergency response each explain one layer of the bundle, and the shared knot does not establish which purpose came first."
+    }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "print": "WellingtonHeightsGolfClub"
+      },
+      "body": "A grounds notebook marks a test strip along the course edge; a handwritten note asks players to keep their shoes out of the drainage ditch.",
+      "id": "t0179-02",
+      "kind": "set",
+      "pieces": [
+        "Notebook",
+        "Pencil"
+      ],
+      "title": "The second fairway note",
+      "where": [
+        {
+          "containers": [
+            "desk",
+            "crate",
+            "shelves",
+            "counter",
+            "cardboardbox",
+            "bin"
+          ],
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "Wellington Heights Golf Club",
+        "source": "print:WellingtonHeightsGolfClub"
+      },
+      "gloss": "A test strip and a shoe warning share the course grounds log.",
+      "prov": {
+        "batch": "T0179",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A response team could mark off a ditch during a cleanup; the note does not identify what was applied to the strip."
+    }
+  }
+]

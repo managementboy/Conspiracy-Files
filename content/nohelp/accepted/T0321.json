@@ -1,0 +1,60 @@
+[
+  {
+    "anchor": {
+      "scene": "RBTrashed"
+    },
+    "body": "Someone left this saw and plank ready for a repair. No record of what needed fixing, no orders I can find. They were prepared before anyone admitted there was a problem.",
+    "id": "t0321-01",
+    "kind": "set",
+    "pieces": [
+      "Saw",
+      "Plank"
+    ],
+    "title": "Saw and plank",
+    "where": [
+      {
+        "containers": [
+          "toolcabinet",
+          "metal_shelves",
+          "crate",
+          "smallcrate",
+          "shelves",
+          "bin"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RBTrashed"
+    },
+    "body": "A bucket has a faded field lot mark under a newer cleaning label. The hand shovel has the same fine yellow dust caught in its handle.",
+    "id": "t0321-02",
+    "kind": "set",
+    "pieces": [
+      "Bucket",
+      "HandShovel"
+    ],
+    "title": "Bucket and hand shovel",
+    "where": [
+      {
+        "containers": [
+          "toolcabinet",
+          "metal_shelves",
+          "crate",
+          "smallcrate",
+          "shelves",
+          "bin"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

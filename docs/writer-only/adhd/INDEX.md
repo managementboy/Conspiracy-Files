@@ -1,0 +1,1 @@
+2026-09-28 | T0001 | repeated DRIFT across T0001–T0013 | vary human trace, institutional blind spot, object arrangement, and spot; preserve anchors and leans

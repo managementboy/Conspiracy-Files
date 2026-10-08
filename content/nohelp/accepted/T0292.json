@@ -1,0 +1,58 @@
+[
+  {
+    "anchor": {
+      "scene": "RBHairSalon"
+    },
+    "body": "Three customers from the east fields brought the same sweet chemical smell in their hair. They said the crop trial crew had sprayed the rows before sunrise. I washed everyone twice and the smell stayed in the towels.\n\nThe next week their hands were raw, and the sprayed rows had gone yellow in strips. I wrote it down here so I would remember which field they named.",
+    "id": "t0292-01",
+    "kind": "written",
+    "pieces": [
+      "diary"
+    ],
+    "title": "Diary page",
+    "where": [
+      {
+        "containers": [
+          "sidetable",
+          "desk",
+          "dresser",
+          "filingcabinet",
+          "shelves",
+          "smallbox"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RBHairSalon"
+    },
+    "body": "I kept the book open so they could see when the last customer had come in. The woman asked for the names instead of the times.\n\nShe did not take the whole book. She tore out two pages and left the small notes about hair color and the money owed. One customer had asked me to call his wife. I still have her number, but I cannot remember which page it was on.\n\nWe swept after they left. A curl of paper caught under the chair and I put it here in case the customer comes back to pay.",
+    "id": "t0292-02",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "Notepad page",
+    "where": [
+      {
+        "containers": [
+          "filingcabinet",
+          "desk",
+          "sidetable",
+          "shelves",
+          "cashregister",
+          "smallbox"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

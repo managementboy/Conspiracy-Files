@@ -1,0 +1,177 @@
+[
+  {
+    "anchor": {
+      "map": "WorldStashMap11",
+      "mark": 1
+    },
+    "body": "The sheet shows signal dropped during crop spraying tests. A note says 'check field power' by the radio receiver. Calibration was never completed.",
+    "id": "t0120-01",
+    "kind": "set",
+    "pieces": [
+      "RadioReceiver",
+      "SheetPaper2"
+    ],
+    "title": "Radio receiver and sheet",
+    "where": [
+      {
+        "containers": [
+          "smallbox",
+          "cardboardbox",
+          "crate",
+          "metal_shelves",
+          "toolcabinet",
+          "locker"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "WorldStashMap11",
+      "note": 1
+    },
+    "body": "The monitor stopped during the night spray on the trial plots. Readings before dropout showed values I had never seen before. Equipment was intact but the plots looked different at dawn.",
+    "id": "t0120-02",
+    "kind": "written",
+    "pieces": [
+      "diary"
+    ],
+    "title": "Equipment log",
+    "where": [
+      {
+        "containers": [
+          "smallbox",
+          "crate",
+          "cardboardbox",
+          "bin",
+          "locker",
+          "desk"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "WorldStashMap11",
+      "note": 2
+    },
+    "body": "Torn meter log: near six gigahertz, power dipped as the spraying crew entered the eastern field. The station batteries were full and no storm was recorded.\n\nThe dips came with every pass of the spray rig and stopped when it left.",
+    "id": "t0120-03",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "Notepad page",
+    "where": [
+      {
+        "containers": [
+          "desk",
+          "smallbox",
+          "sidetable",
+          "filingcabinet",
+          "shelves",
+          "cashregister"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "WorldStashMap11",
+      "note": 3
+    },
+    "body": "Letter draft: ask the program office to compare the Lexington receiver with two leaf samples. The samples carry the same gray film found inside the tower cabinet.\n\nThe leaves came from the treated field beside the tower.",
+    "id": "t0120-04",
+    "kind": "written",
+    "pieces": [
+      "receipt"
+    ],
+    "title": "Receipt",
+    "where": [
+      {
+        "containers": [
+          "smallbox",
+          "cashregister",
+          "desk",
+          "filingcabinet",
+          "sidetable",
+          "shelves"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "WorldStashMap11",
+      "note": 4
+    },
+    "body": "The crop monitor had brown residue inside and smelled chemical. The spray log showed treatments I never authorized or applied.\n\nWhen I touched the panel my hands stained the same color. The marks stayed even after scrubbing with soap and water.",
+    "id": "t0120-05",
+    "kind": "written",
+    "pieces": [
+      "photograph"
+    ],
+    "title": "Monitor Photograph",
+    "where": [
+      {
+        "containers": [
+          "smallbox",
+          "dresser",
+          "sidetable",
+          "desk",
+          "filingcabinet",
+          "shelves"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "WorldStashMap11",
+      "note": 5
+    },
+    "body": "Technician's notebook: the cross marks the receiver used for crop-weather telemetry. It failed whenever the treated field pump ran, then recovered after the pump stopped.\n\nI logged the pump times beside each dropout. They lined up every day.",
+    "id": "t0120-06",
+    "kind": "written",
+    "pieces": [
+      "notebook"
+    ],
+    "title": "Notebook page",
+    "where": [
+      {
+        "containers": [
+          "smallbox",
+          "desk",
+          "shelves",
+          "sidetable",
+          "filingcabinet",
+          "shelvesmag"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

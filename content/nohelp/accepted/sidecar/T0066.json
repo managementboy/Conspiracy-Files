@@ -1,0 +1,25 @@
+{
+  "t0066-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "hunter guy here",
+      "source": "map:MarchRidgeStashMap3"
+    },
+    "gloss": "The pesticide mixture was applied at the wrong strength.",
+    "prov": {
+      "batch": "T0066",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "None: one-sided on purpose"
+  }
+}

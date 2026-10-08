@@ -1,0 +1,25 @@
+{
+  "t0053-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "The Carlins moved here Debbie",
+      "source": "map:LouisvilleStashMap5"
+    },
+    "gloss": "A family transfer is logged before the listed pickup.",
+    "prov": {
+      "batch": "T0053",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A field crew could have used the gym as a meeting point; the early transfer mark does not prove a failed evacuation."
+  }
+}

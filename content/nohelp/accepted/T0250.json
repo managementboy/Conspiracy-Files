@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "OldCGECorpBuilding"
+    },
+    "body": "Containment order on the paper. The book says assess the threat first. They didn't wait.",
+    "id": "t0250-01",
+    "kind": "set",
+    "pieces": [
+      "Book",
+      "SheetPaper2"
+    ],
+    "title": "Book and sheet of paper",
+    "where": [
+      {
+        "containers": [
+          "shelves",
+          "smallbox",
+          "desk",
+          "shelvesmag",
+          "filingcabinet",
+          "sidetable"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

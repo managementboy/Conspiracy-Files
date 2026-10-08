@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "Twiggys"
+    },
+    "body": "The sheet lists application dates for crop treatments. Someone checked off the final round before the first. The water bottle still has dilution marks on the side.",
+    "id": "t0282-01",
+    "kind": "set",
+    "pieces": [
+      "WaterBottle",
+      "SheetPaper2"
+    ],
+    "title": "Water bottle and sheet of paper",
+    "where": [
+      {
+        "containers": [
+          "crate",
+          "cardboardbox",
+          "smallcrate",
+          "smallbox",
+          "grocerstand",
+          "fridge"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

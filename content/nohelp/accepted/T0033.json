@@ -1,0 +1,61 @@
+[
+  {
+    "anchor": {
+      "map": "BBurgStashMap8",
+      "mark": 1
+    },
+    "body": "Opposite route arrows are painted on the paperclip box and radio. The older arrow was scraped away beneath fresh road grit.",
+    "id": "t0033-01",
+    "kind": "set",
+    "pieces": [
+      "PaperclipBox",
+      "WalkieTalkie1"
+    ],
+    "title": "Paperclip box and walkie-talkie",
+    "where": [
+      {
+        "containers": [
+          "desk",
+          "toolcabinet",
+          "filingcabinet",
+          "metal_shelves",
+          "sidetable",
+          "locker"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "BBurgStashMap8",
+      "mark": 1
+    },
+    "body": "The new spray made the room reek for days. Mom's throat is raw. The hens stopped laying after the field run. The seedlings in the test plot all withered.",
+    "id": "t0033-02",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "title": "Farm Note",
+    "where": [
+      {
+        "containers": [
+          "desk",
+          "filingcabinet",
+          "sidetable",
+          "cashregister",
+          "shelves",
+          "smallbox"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

@@ -1,0 +1,106 @@
+[
+  {
+    "recall": "R2",
+    "row": {
+      "anchor": {
+        "map": "LouisvilleStashMap2",
+        "mark": 1
+      },
+      "body": "A book is wrapped in a note asking someone to bring it on a family visit; the back mentions keeping the garden hose off the marked ground.",
+      "id": "t0050-01",
+      "kind": "set",
+      "pieces": [
+        "Book",
+        "LetterHandwritten"
+      ],
+      "title": "A gift for the visit",
+      "where": [
+        {
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "ground"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "gift from mom",
+        "source": "map:LouisvilleStashMap2"
+      },
+      "gloss": "A family gift travels with a warning to avoid using water on the marked ground.",
+      "prov": {
+        "batch": "T0050",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A responder could have restricted water use around a grave or household; the note does not identify the reason."
+    }
+  },
+  {
+    "recall": "R3",
+    "row": {
+      "anchor": {
+        "map": "LouisvilleStashMap2",
+        "mark": 1
+      },
+      "body": "A book is wrapped in a note asking someone to bring it on a family visit; the back mentions keeping the garden hose off the marked ground.",
+      "id": "t0050-01",
+      "kind": "set",
+      "pieces": [
+        "Book",
+        "LetterHandwritten"
+      ],
+      "title": "A gift for the visit",
+      "where": [
+        {
+          "containers": [
+            "desk",
+            "crate",
+            "shelves",
+            "counter",
+            "cardboardbox",
+            "bin"
+          ],
+          "lean": "agricultural",
+          "place": "mapNamed",
+          "rival": "containment",
+          "spot": "furniture"
+        }
+      ]
+    },
+    "sidecar": {
+      "axioms": {
+        "agricultural": [
+          "a-program",
+          "a-pathway"
+        ],
+        "containment": [
+          "c-orders",
+          "c-failure"
+        ]
+      },
+      "cites": {
+        "quote": "gift from mom",
+        "source": "map:LouisvilleStashMap2"
+      },
+      "gloss": "A family gift travels with a warning to avoid using water on the marked ground.",
+      "prov": {
+        "batch": "T0050",
+        "handoff": "2026-09-28",
+        "writer": "ChatGPT"
+      },
+      "rival_reading": "A responder could have restricted water use around a grave or household; the note does not identify the reason."
+    }
+  }
+]

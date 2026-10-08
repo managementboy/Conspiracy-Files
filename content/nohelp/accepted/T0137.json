@@ -1,0 +1,32 @@
+[
+  {
+    "anchor": {
+      "map": "WpStashMap11",
+      "mark": 1
+    },
+    "body": "The shotgun's logged on the paper sheet. Transfer was signed before they checked this place. Can't find who was supposed to hold it.",
+    "id": "t0137-01",
+    "kind": "set",
+    "pieces": [
+      "Shotgun",
+      "SheetPaper2"
+    ],
+    "title": "Shotgun and paper sheet",
+    "where": [
+      {
+        "containers": [
+          "militarylocker",
+          "desk",
+          "militarycrate",
+          "filingcabinet",
+          "locker",
+          "sidetable"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

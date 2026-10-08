@@ -20,20 +20,26 @@ Q.Rules=Rules
 Q.TAG="NHShared.ClueCue"
 Q.POLL_MS=500
 local SOUND="UIObjectMenuEnter"
+local HALO_DURATION=900 -- as PlayerVoice
+local Lines=require("NHShared/ClueCueLines")
+local recentSpoken={}
+-- Injectable for tests; in game the game's own random.
+Q.rand=function(n) return (ZombRand and ZombRand(n) or math.random(0,n-1))+1 end
 
 local function log(s) CFLog.message("hint","hint",s) end
 local function now() return getTimeInMillis and getTimeInMillis() or 0 end
 
 -- This session only: the last cue's time, and the clues weighed on this
--- approach (id -> {x,y,z}), so each approach rolls and logs once.
+-- approach (id -> {x,y,z}), so a failed roll is tried again every REROLL_MS while near, and logged once.
 local lastAt
 local weighed={}
 local unseen={}
 local nextPoll=0
 Q.counters={said=0,suppressed=0}
 
+-- Every single-player game, like the runtime it hints for (owner, 2026-09-27).
 local function enabled()
-    return getDebug and getDebug() and not (isClient and isClient()) and not (isServer and isServer())
+    return not (isClient and isClient()) and not (isServer and isServer())
         and not NHShared.T11Mode and not NHShared.T12Mode
 end
 
@@ -57,7 +63,7 @@ local function present(clue,player)
     end
     if not container then return false end
     local found
-    local scan=World.count(container,clue.token,function(n) found=n end,1)
+    local scan=World.count(container,clue.token,function(n) found=n end,1,true)
     for _=1,512 do if scan() then break end end
     return type(found)=="number" and found>=1
 end
@@ -72,8 +78,26 @@ local function conditions(player,square)
     return light,weather
 end
 
+-- The survivor's words go in the white halo (as PlayerVoice does for E1); the
+-- bubble keeps the short cue ("Hm?"). With no halo the words go in the bubble.
 local function say(player,line)
-    local spoke=pcall(function() player:Say(line) end)
+    local spoken=Rules.pickLine(Lines,recentSpoken,function(n) return Q.rand(n) end)
+    -- The first cue of a save explains the hint by itself (owner, 2026-10-03:
+    -- the extra line under it was repetitive): no varied line with it.
+    if line==Rules.FIRST then spoken=nil end
+    Q.lastSpoken=spoken
+    -- Through PlayerVoice's queue when it is loaded, so a cue never lands on a
+    -- caption line being read (one line on screen at a time).
+    local okV,Voice=pcall(require,"NHShared/PlayerVoice")
+    if okV and type(Voice)=="table" and Voice.sayCue and spoken and spoken~=line then
+        local _,audible=Voice.sayCue(spoken,line)
+        return true,audible
+    end
+    local halo=false
+    if spoken and player.setHaloNote then
+        halo=pcall(function() player:setHaloNote(spoken,255,255,255,HALO_DURATION) end)
+    end
+    local spoke=pcall(function() player:Say((spoken and not halo) and spoken or line) end)
     local audible=false
     if getSoundManager then
         local ok,manager=pcall(getSoundManager)
@@ -102,7 +126,7 @@ function Q.step()
     end
     local store
     for _,clue in ipairs(clues) do
-        if not clue.recognised and clue.status=="placed" and not weighed[clue.id]
+        if not clue.recognised and clue.status=="placed" and (not weighed[clue.id] or t>=weighed[clue.id].at)
             and (Q.debugOnly==nil or Q.debugOnly==clue.id)
             and Rules.near(px,py,pz,clue.x,clue.y,clue.z,Rules.RADIUS) then
             local square=getCell():getGridSquare(clue.x,clue.y,clue.z)
@@ -117,7 +141,8 @@ function Q.step()
                 log("cue not possible at "..tostring(clue.place).." doc="..tostring(clue.id)..": "..tostring(why))
             end
             if here then
-                weighed[clue.id]={x=clue.x,y=clue.y,z=clue.z}
+                local first=weighed[clue.id]==nil
+                weighed[clue.id]={x=clue.x,y=clue.y,z=clue.z,at=t+Rules.REROLL_MS}
                 store=store or Q.store()
                 if not store then return end
                 local light,weather=conditions(player,square)
@@ -130,12 +155,12 @@ function Q.step()
                     Q.counters.said=Q.counters.said+1
                     Q.last={id=clue.id,line=line,place=clue.place}
                     log(string.format("cue said \"%s\" at %s doc=%s light=%.2f weather=%.2f bubble=%s sound=%s",
-                        line,tostring(clue.place),tostring(clue.id),light,weather,tostring(spoke),tostring(audible)))
+                        line..(Q.lastSpoken and " / "..Q.lastSpoken or ""),tostring(clue.place),tostring(clue.id),light,weather,tostring(spoke),tostring(audible)))
                     return
                 end
                 Q.counters.suppressed=Q.counters.suppressed+1
-                log(string.format("cue suppressed at %s doc=%s: %s (light=%.2f weather=%.2f)",
-                    tostring(clue.place),tostring(clue.id),tostring(why),light,weather))
+                if first then log(string.format("cue suppressed at %s doc=%s: %s (light=%.2f weather=%.2f)",
+                    tostring(clue.place),tostring(clue.id),tostring(why),light,weather)) end
             end
         end
     end

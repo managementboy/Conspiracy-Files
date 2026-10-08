@@ -1,0 +1,22 @@
+Linux Of Interest drift check 20261008T014933: PASS
+source: 8d921985
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+note: boot: gate (level, missing, added, restored, poolsMissing, poolsExtra, placesExtra, forcedGone, entries) = 0 0 0 0 0 0 0 0 493
+note: boot drift line: why=- added=0 badids=0 entries=493 forcedGone=0 level=0 missing=0 placesExtra=0 poolsExtra=0 poolsMissing=0 restored=0
+note: mutated copy 'none': level 0, missing 0, added 0, why -
+note: mutated copy 'remove5': level 2, missing 5, added 0, why missing
+note: mutated copy 'key': level 3, missing 0, added 0, why key
+note: mutated copy 'reorder': level 3, missing 0, added 0, why place:1,place:2
+note: live state before/after the mutations identical: 284651955 2fedc12e07bfe3ba/49d310d73e5f86cc 0 493 true
+note: level-2 scenes: A clue nh:note:ns202:ns202:1 note Letter/ApplicationLetter/0001, B clue nh:note:ns203:ns203:1 note Letter/BankLetter/0001
+note: A (note hidden): objects only: forced pieces=0, plain pieces=3, stand-in kept the piece count (holders/inside/loose/want = 1 3 0 3)
+note: A: refusal lines for its note: 1
+note: B (recovered): note present as piece 1 (file ok, token ok, flag set, record id ok, verify ok), forced pieces=1
+note: A after the reload (stays objects-only, by design): objects only: forced pieces=0, plain pieces=3, stand-in kept the piece count (holders/inside/loose/want = 1 3 0 3)
+note: vehicle scene 1: clue nh:note:ns225:ns225:1 note Letter/ChildsLetter/0021 centre 7162,9683; no vehicle is spawned
+note: moved: now host=building building=10696165079121920 at 7168,9737, 54 tiles from the original centre; site note:ns225:fb
+note: fallback scene: note present as piece 1 (file ok, token ok, flag set, record id ok, verify ok), forced pieces=1
+note: fallback scene: found once (1 event)
+note: fallback scene after reload: note present as piece 1 (file ok, token ok, flag set, record id ok, verify ok), forced pieces=1
+note: stable after save and reload: true 1 placed note:ns225:fb 7168 9737 10696165079121920 building

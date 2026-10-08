@@ -1,0 +1,25 @@
+{
+  "t0164-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "Fossoil (Brandenburg)",
+      "source": "print:Fossoil6"
+    },
+    "gloss": "A field run has a fuel receipt that conflicts with the return check.",
+    "prov": {
+      "batch": "T0164",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "An evacuation trip could consume the same fuel; the mismatch does not identify who drove or where."
+  }
+}

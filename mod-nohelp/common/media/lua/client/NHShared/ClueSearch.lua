@@ -43,7 +43,13 @@ local function focusOf(character)
     return window and window.searchFocusCategory or nil
 end
 C.focusOf=focusOf
-local function iconIdFor(docId) return "cf-clue:"..tostring(docId) end
+-- No Help's own id prefix and icon table. Sharing the original mod's
+-- ("cf-clue:", manager.clueIcons) let each mod's sync drop the other's icon
+-- as a clue it does not know, every 15 ticks, so the spot timer never filled
+-- (first visible playtest, 2026-09-27).
+C.ICON_PREFIX="nh-clue:"
+C.ICON_TABLE="nhClueIcons"
+local function iconIdFor(docId) return C.ICON_PREFIX..tostring(docId) end
 C.iconIdFor=iconIdFor
 
 -- A clue is in furniture, and furniture blocks its own square: the game's
@@ -208,7 +214,7 @@ end
 -- The icon class. Only ever built while the game's ISBaseIcon exists, and kept
 -- on our own table rather than as a global.
 if ISBaseIcon and not C.Icon then
-    C.Icon=ISBaseIcon:derive("ISClueIcon")
+    C.Icon=ISBaseIcon:derive("ISNHClueIcon")
 end
 local ISClueIcon=C.Icon
 if ISClueIcon then
@@ -260,11 +266,11 @@ end
 C.managerFor=managerFor
 
 local function iconsOf(manager)
-    if not manager.clueIcons then
-        manager.clueIcons={}
-        manager.iconCategories.clueIcons="clueIcons"
+    if not manager[C.ICON_TABLE] then
+        manager[C.ICON_TABLE]={}
+        manager.iconCategories[C.ICON_TABLE]=C.ICON_TABLE
     end
-    return manager.clueIcons
+    return manager[C.ICON_TABLE]
 end
 
 local function addIcon(manager,clue)
@@ -285,6 +291,10 @@ local function addIcon(manager,clue)
     -- recognised, and the pin says only "here".
     icon.renderItemTexture=false
     C.counters.added=C.counters.added+1
+    -- The icon has shown the clue: from now on it never moves (owner,
+    -- 2026-09-27). Saved, so a reload does not forget it.
+    local R=require("NHShared/EngineAPI").GeneratedRuntime
+    if R and R.shown then pcall(R.shown,clue.id) end
     return icon
 end
 
@@ -312,7 +322,7 @@ function C.sync()
     local manager=player and managerFor(player)
     if not manager or not ISClueIcon then return 0 end
     local clues=C.liveClues(player)
-    local icons=manager.clueIcons or {}
+    local icons=manager[C.ICON_TABLE] or {}
     local byDoc={}
     for _,icon in pairs(icons) do
         if icon.clueId then
@@ -339,7 +349,7 @@ function C.sync()
         end
     end
     local n=0
-    for _ in pairs(manager.clueIcons or {}) do n=n+1 end
+    for _ in pairs(manager[C.ICON_TABLE] or {}) do n=n+1 end
     return n
 end
 
@@ -357,7 +367,7 @@ function C.state()
     local player=getPlayer and getPlayer()
     local manager=player and managerFor(player)
     local ids={}
-    for _,icon in pairs(manager and manager.clueIcons or {}) do
+    for _,icon in pairs(manager and manager[C.ICON_TABLE] or {}) do
         ids[#ids+1]=tostring(icon.clueId)..(icon:getIsSeen() and "*" or "")
     end
     table.sort(ids)

@@ -1,0 +1,61 @@
+[
+  {
+    "anchor": {
+      "map": "BBurgStashMap4",
+      "mark": 1
+    },
+    "body": "Four notches on the hoe, four on the camera. A fifth is filed down on both. Bound with roadblock tape. Last frame: empty checkpoint.",
+    "id": "t0029-01",
+    "kind": "set",
+    "pieces": [
+      "GardenHoe",
+      "Camera"
+    ],
+    "title": "garden hoe and camera",
+    "where": [
+      {
+        "containers": [
+          "metal_shelves",
+          "dresser",
+          "toolcabinet",
+          "sidetable",
+          "crate",
+          "desk"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "BBurgStashMap4",
+      "mark": 1
+    },
+    "body": "I marked the water barrel too, after the field crew sprayed the rows upwind. They call the rinse routine; I still will not let the dog drink until the tank is flushed.\n\nThe barrel water had a green skin on it by morning and the beans nearest the spray went limp. I wrote the time before I went back for the others.",
+    "id": "t0029-02",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "title": "Letter",
+    "where": [
+      {
+        "containers": [
+          "desk",
+          "filingcabinet",
+          "sidetable",
+          "cashregister",
+          "shelves",
+          "smallbox"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

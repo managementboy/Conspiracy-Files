@@ -1,0 +1,32 @@
+[
+  {
+    "anchor": {
+      "map": "MarchRidgeStashMap10",
+      "mark": 1
+    },
+    "body": "A book rests with a hand torch. A note inside warns to avoid the treated ground until it dries. A blessing is written at the end.",
+    "id": "t0074-01",
+    "kind": "set",
+    "pieces": [
+      "Book",
+      "HandTorch"
+    ],
+    "title": "Book and hand torch",
+    "where": [
+      {
+        "containers": [
+          "shelves",
+          "toolcabinet",
+          "shelvesmag",
+          "metal_shelves",
+          "desk",
+          "crate"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

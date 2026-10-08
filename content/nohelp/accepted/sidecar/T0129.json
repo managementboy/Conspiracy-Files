@@ -1,0 +1,25 @@
+{
+  "t0129-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "DICKHEAD",
+      "source": "map:WorldStashMap20"
+    },
+    "gloss": "An access complaint records several refusals without identifying the authority.",
+    "prov": {
+      "batch": "T0129",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A program site could also refuse entry to visitors; the complaint does not establish who ordered the closure."
+  }
+}

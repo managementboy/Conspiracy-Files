@@ -1,0 +1,61 @@
+[
+  {
+    "anchor": {
+      "map": "BBurgStashMap5",
+      "mark": 1
+    },
+    "body": "Do not sell the catch until the county finishes its water check. They called it routine, but the fish order is still in the icebox and the supplier wants payment.\n\nThe pond below the sprayed field had gone cloudy and the fish were up at the surface. I meant to ask about the runoff in the morning, but the farm crew had already left, and this was all that remained.",
+    "id": "t0030-01",
+    "kind": "written",
+    "pieces": [
+      "receipt"
+    ],
+    "title": "Receipt",
+    "where": [
+      {
+        "containers": [
+          "filingcabinet",
+          "desk",
+          "sidetable",
+          "shelves",
+          "smallbox",
+          "cashregister"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "map": "BBurgStashMap5",
+      "mark": 1
+    },
+    "body": "I found an empty sandbag with a faded unit number. The water bottle next to it has an unbroken quarantine seal. Someone knotted them together with the same cord.",
+    "id": "t0030-02",
+    "kind": "set",
+    "pieces": [
+      "EmptySandbag",
+      "WaterBottle"
+    ],
+    "title": "Empty sandbag and water bottle",
+    "where": [
+      {
+        "containers": [
+          "fridge",
+          "toolcabinet",
+          "metal_shelves",
+          "counter",
+          "crate",
+          "overhead"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

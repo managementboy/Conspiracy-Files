@@ -1,0 +1,32 @@
+[
+  {
+    "anchor": {
+      "map": "IrvingtonStashMap6",
+      "mark": 1
+    },
+    "body": "The hand torch rests on the map. Someone marked a route with times at each stop. The last address has no time beside it.",
+    "id": "t0045-01",
+    "kind": "set",
+    "pieces": [
+      "HandTorch",
+      "Map"
+    ],
+    "title": "Hand torch and map",
+    "where": [
+      {
+        "containers": [
+          "shelves",
+          "desk",
+          "filingcabinet",
+          "toolcabinet",
+          "sidetable",
+          "metal_shelves"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

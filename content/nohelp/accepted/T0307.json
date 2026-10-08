@@ -1,0 +1,60 @@
+[
+  {
+    "anchor": {
+      "scene": "RBSchool"
+    },
+    "body": "I find a water bottle and empty jar bound with twine. Pale spray residue lines the inside of both. The jar's label mentions crop treatment concentrate.",
+    "id": "t0307-01",
+    "kind": "set",
+    "pieces": [
+      "WaterBottle",
+      "EmptyJar"
+    ],
+    "title": "water bottle and empty jar",
+    "where": [
+      {
+        "containers": [
+          "fridge",
+          "dishescabinet",
+          "counter",
+          "overhead",
+          "sidetable",
+          "freezer"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RBSchool"
+    },
+    "body": "The roll book is open to an ordinary lesson. A pencil note on the back looks like a later head count. It includes pupils missing from the official list.",
+    "id": "t0307-02",
+    "kind": "set",
+    "pieces": [
+      "Book",
+      "Pencil"
+    ],
+    "title": "Book and pencil",
+    "where": [
+      {
+        "containers": [
+          "displaycase",
+          "desk",
+          "shelvesmag",
+          "filingcabinet",
+          "shelves",
+          "sidetable"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

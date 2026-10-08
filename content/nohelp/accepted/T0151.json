@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "NolansUsedCars"
+    },
+    "body": "The toothbrush and bath towel are wedged under unused warning tape. Footprints go around the bundle, not toward it.",
+    "id": "t0151-01",
+    "kind": "set",
+    "pieces": [
+      "Toothbrush",
+      "BathTowel"
+    ],
+    "title": "Toothbrush and bath towel",
+    "where": [
+      {
+        "containers": [
+          "medicine",
+          "smallbox",
+          "toolcabinet",
+          "locker",
+          "crate",
+          "wardrobe"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

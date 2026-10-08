@@ -1,0 +1,44 @@
+[
+  {
+    "anchor": {
+      "scene": "RDSHockeyPsycho"
+    },
+    "body": "The fertilizer sack and empty sprayer are tied together. One side has a sharp solvent smell. A torn strip of road tape covers the other.",
+    "id": "t0337-01",
+    "kind": "set",
+    "pieces": [
+      "Fertilizer",
+      "GardeningSprayEmpty"
+    ],
+    "title": "Fertilizer sack and empty sprayer",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "corpse"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RDSHockeyPsycho"
+    },
+    "body": "The paperclip holds two pages together. Someone used the pencil to change a seven to a one. I count the scratch marks underneath.",
+    "id": "t0337-02",
+    "kind": "set",
+    "pieces": [
+      "Pencil",
+      "Paperclip"
+    ],
+    "title": "Pencil and paperclip",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "corpse"
+      }
+    ]
+  }
+]

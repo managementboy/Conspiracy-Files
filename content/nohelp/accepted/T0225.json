@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "LeafhillHeights"
+    },
+    "body": "The notebook lists crop rotation schedules for every field. But pencil marks reserve one plot for a program test. That runs past the harvest date.",
+    "id": "t0225-01",
+    "kind": "set",
+    "pieces": [
+      "Notebook",
+      "Pencil"
+    ],
+    "title": "Notebook and pencil",
+    "where": [
+      {
+        "containers": [
+          "shelves",
+          "smallbox",
+          "desk",
+          "sidetable",
+          "filingcabinet",
+          "shelvesmag"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

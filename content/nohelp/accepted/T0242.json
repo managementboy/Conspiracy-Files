@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "HouseforSale855"
+    },
+    "body": "Opposite route arrows are painted on the sponge and road map. The older arrow was scraped away under fresh road grit.",
+    "id": "t0242-01",
+    "kind": "set",
+    "pieces": [
+      "Sponge",
+      "Map"
+    ],
+    "title": "Sponge and map",
+    "where": [
+      {
+        "containers": [
+          "cardboardbox",
+          "smallbox",
+          "dishescabinet",
+          "desk",
+          "counter",
+          "filingcabinet"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

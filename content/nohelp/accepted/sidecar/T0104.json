@@ -1,0 +1,25 @@
+{
+  "t0104-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "marked address in Rosewood",
+      "source": "map:RosewoodStashMap1"
+    },
+    "gloss": "A sample is held for a supply run after its instruction page disappears.",
+    "prov": {
+      "batch": "T0104",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "None: one-sided on purpose"
+  }
+}

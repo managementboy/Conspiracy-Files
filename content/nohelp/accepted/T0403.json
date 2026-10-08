@@ -1,0 +1,43 @@
+[
+  {
+    "anchor": {
+      "scene": "RZSTragicPicnic"
+    },
+    "body": "A wrapped loaf and a can of corn have the same pale field dust. The loaf is tied with twine, I think from a treated seed sack.",
+    "id": "t0403-01",
+    "kind": "set",
+    "pieces": [
+      "Bread",
+      "CannedCorn"
+    ],
+    "title": "Bread and canned corn",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RZSTragicPicnic"
+    },
+    "body": "At the picnic we were told a vehicle would come for each household. The first driver counted blankets spread on the grass instead. My little niece carried none, so I wrote her name twice to make sure she was seen.",
+    "id": "t0403-02",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "title": "Letter",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
+  }
+]

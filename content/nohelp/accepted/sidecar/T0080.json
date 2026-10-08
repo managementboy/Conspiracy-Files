@@ -1,0 +1,25 @@
+{
+  "t0080-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "shotgun - food in kitchen?",
+      "source": "map:MulStashMap12"
+    },
+    "gloss": "Food from an agricultural trial left where crops failed.",
+    "prov": {
+      "batch": "T0080",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "None: one-sided on purpose"
+  }
+}

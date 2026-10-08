@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "BrooksLibrary"
+    },
+    "body": "The book covers pest management and application pathways. A paper sheet schedules a closed briefing on the program. Someone didn't want this information shared.",
+    "id": "t0209-01",
+    "kind": "set",
+    "pieces": [
+      "Book",
+      "SheetPaper2"
+    ],
+    "title": "Book and paper sheet",
+    "where": [
+      {
+        "containers": [
+          "shelves",
+          "desk",
+          "shelvesmag",
+          "filingcabinet",
+          "sidetable",
+          "dresser"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

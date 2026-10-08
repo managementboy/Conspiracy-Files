@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "BrandenburgFD"
+    },
+    "body": "The broom and fertilizer sack share a sweet pesticide smell. Dead moths are stuck only where the two touched.",
+    "id": "t0235-01",
+    "kind": "set",
+    "pieces": [
+      "Broom",
+      "Fertilizer"
+    ],
+    "title": "Broom and fertilizer sack",
+    "where": [
+      {
+        "containers": [
+          "toolcabinet",
+          "composter",
+          "metal_shelves",
+          "dishescabinet",
+          "shelves",
+          "crate"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

@@ -1,0 +1,32 @@
+[
+  {
+    "anchor": {
+      "map": "WorldStashMap5",
+      "mark": 1
+    },
+    "body": "A pack of supplies is hidden with the seed bag. A note asks the next visitor to keep inspectors from the soil kit.",
+    "id": "t0114-01",
+    "kind": "set",
+    "pieces": [
+      "Bag_ALICEpack",
+      "SeedBag"
+    ],
+    "title": "Backpack and seed bag",
+    "where": [
+      {
+        "containers": [
+          "locker",
+          "shelves",
+          "wardrobe",
+          "metal_shelves",
+          "militarylocker",
+          "cardboardbox"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

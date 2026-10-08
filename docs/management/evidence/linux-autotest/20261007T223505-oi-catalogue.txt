@@ -1,0 +1,6 @@
+Linux Of Interest catalogue check 20261007T223505: PASS
+source: b2ad05f2
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+renderer: Intel Mesa Intel(R) Iris(R) Xe Graphics (RPL-U) on display :0
+boot 1: active=true pools=25 entries=493 stories=23 places=13 themes=30 dropped=7 unknown=0 placemismatch=0 dups=0 lang=EN fp-static=2fedc12e07bfe3ba fp-dynamic=49d310d73e5f86cc log-lines=1
+boot 2: active=true pools=25 entries=493 stories=23 places=13 themes=30 dropped=7 unknown=0 placemismatch=0 dups=0 lang=EN fp-static=2fedc12e07bfe3ba fp-dynamic=49d310d73e5f86cc log-lines=1

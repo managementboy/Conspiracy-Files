@@ -1,0 +1,60 @@
+[
+  {
+    "anchor": {
+      "scene": "RBMayorWestPoint"
+    },
+    "body": "The walkie talkie and first aid kit are soaked in pesticide. I found them where the spray crew worked that morning. Everyone got sick hours after the fields were treated.",
+    "id": "t0297-01",
+    "kind": "set",
+    "pieces": [
+      "WalkieTalkie1",
+      "FirstAidKit"
+    ],
+    "title": "Walkie talkie and first aid kit",
+    "where": [
+      {
+        "containers": [
+          "metal_shelves",
+          "toolcabinet",
+          "medicine",
+          "locker",
+          "smallbox",
+          "sidetable"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RBMayorWestPoint"
+    },
+    "body": "A newspaper and a pencil lie here. Someone penciled earlier times over the evacuation schedule. Makes it look like warnings went out sooner than they did.",
+    "id": "t0297-02",
+    "kind": "set",
+    "pieces": [
+      "Newspaper",
+      "Pencil"
+    ],
+    "title": "Newspaper and pencil",
+    "where": [
+      {
+        "containers": [
+          "filingcabinet",
+          "sidetable",
+          "desk",
+          "shelves",
+          "shelvesmag",
+          "cashregister"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

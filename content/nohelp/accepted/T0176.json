@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "TheSeaShanty"
+    },
+    "body": "Names are carved into the kitchen knife handle. One is scratched through. The fish fillet is from official evacuation rations.",
+    "id": "t0176-01",
+    "kind": "set",
+    "pieces": [
+      "FishFillet",
+      "KitchenKnife"
+    ],
+    "title": "Fish fillet and kitchen knife",
+    "where": [
+      {
+        "containers": [
+          "freezer",
+          "dishescabinet",
+          "fridge",
+          "overhead",
+          "counter",
+          "cardboardbox"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

@@ -1,0 +1,32 @@
+[
+  {
+    "anchor": {
+      "map": "MulStashMap4",
+      "mark": 1
+    },
+    "body": "A first aid kit and bandage by the side door. Orders routed people through here. The main entrance was already cleared.",
+    "id": "t0079-01",
+    "kind": "set",
+    "pieces": [
+      "Bandage",
+      "FirstAidKit"
+    ],
+    "title": "Bandage and first aid kit",
+    "where": [
+      {
+        "containers": [
+          "medicine",
+          "sidetable",
+          "locker",
+          "dresser",
+          "toolcabinet",
+          "fridge"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

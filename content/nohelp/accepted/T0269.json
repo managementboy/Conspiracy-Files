@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "IrvingtonGunClub"
+    },
+    "body": "I found a notebook tracking spray schedules and sick crop rows. The damage spread faster each week they kept spraying. A pistol lay beside it.",
+    "id": "t0269-01",
+    "kind": "set",
+    "pieces": [
+      "Pistol",
+      "Notebook"
+    ],
+    "title": "Pistol and notebook",
+    "where": [
+      {
+        "containers": [
+          "metal_shelves",
+          "cardboardbox",
+          "smallbox",
+          "crate",
+          "toolcabinet",
+          "locker"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

@@ -1,0 +1,60 @@
+[
+  {
+    "anchor": {
+      "print": "WestMapleCountryClub"
+    },
+    "body": "The paper sheet closes this route before dawn for pickups. The water bottle here was issued hours after that deadline.",
+    "id": "t0152-01",
+    "kind": "set",
+    "pieces": [
+      "WaterBottle",
+      "SheetPaper2"
+    ],
+    "title": "Water bottle and paper sheet",
+    "where": [
+      {
+        "containers": [
+          "cardboardbox",
+          "crate",
+          "smallcrate",
+          "smallbox",
+          "grocerstand",
+          "fridge"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "print": "WestMapleCountryClub"
+    },
+    "body": "The notebook has pencil entries tracking spray applications. Chemical amounts listed for each field section. Final entry: triple dose, circled and underlined.",
+    "id": "t0152-02",
+    "kind": "set",
+    "pieces": [
+      "Pencil",
+      "Notebook"
+    ],
+    "title": "Pencil and notebook",
+    "where": [
+      {
+        "containers": [
+          "sidetable",
+          "smallbox",
+          "desk",
+          "shelves",
+          "filingcabinet",
+          "cashregister"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "HouseforSale907"
+    },
+    "body": "Three pickup dots mark the magnifying glass and road map. Two look scratched away, with no wear around them. A route is traced in marker and stops at a barricade mark.",
+    "id": "t0218-01",
+    "kind": "set",
+    "pieces": [
+      "MagnifyingGlass",
+      "Map"
+    ],
+    "title": "Magnifying glass and map",
+    "where": [
+      {
+        "containers": [
+          "cardboardbox",
+          "smallbox",
+          "desk",
+          "sidetable",
+          "filingcabinet",
+          "dresser"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

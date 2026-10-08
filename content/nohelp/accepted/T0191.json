@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "FarmersMarket"
+    },
+    "body": "The tomato sits on an open notebook. Lot numbers and sample dates logged before the market opened. Someone was running tests on the crops.",
+    "id": "t0191-01",
+    "kind": "set",
+    "pieces": [
+      "Tomato",
+      "Notebook"
+    ],
+    "title": "Tomato and notebook",
+    "where": [
+      {
+        "containers": [
+          "cardboardbox",
+          "grocerstand",
+          "crate",
+          "smallbox",
+          "counter",
+          "desk"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

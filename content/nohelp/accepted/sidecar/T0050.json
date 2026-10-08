@@ -1,0 +1,25 @@
+{
+  "t0050-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "gift from mom",
+      "source": "map:LouisvilleStashMap2"
+    },
+    "gloss": "A family gift travels with a warning to avoid using water on the marked ground.",
+    "prov": {
+      "batch": "T0050",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "None: one-sided on purpose"
+  }
+}

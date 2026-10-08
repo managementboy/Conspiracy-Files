@@ -1,0 +1,25 @@
+{
+  "t0134-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "think she lived here",
+      "source": "map:WpStashMap2"
+    },
+    "gloss": "A patient's treatment record shares a room reservation with crop sample work.",
+    "prov": {
+      "batch": "T0134",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "None: one-sided on purpose"
+  }
+}

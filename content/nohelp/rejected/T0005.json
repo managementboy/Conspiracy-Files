@@ -1,0 +1,95 @@
+{
+  "ticket": "T0005",
+  "returned_by": "Claude blind re-read and batch read, 2026-09-28",
+  "drift": "Batch drift report (T0001-T0013, read together): the rows have converged on one template. About 20 of 28 say 'X was recorded before/after Y', add a child's drawing or sticker, and end with 'the only completed count is <returned objects>, not people'. Each row is fine on its own, but a player who finds three of them has found the same clue three times, and the world sounds like one clerk. The containment rows are all timestamp-and-form jokes and the agricultural rows are all 'water total before source'; a blind reader sorts them by that alone. Keep the tone (one human detail beside one institutional one), but vary it: different human stakes (not always a child), different institutional blind spots (not always a count), clues that are mostly an arrangement of objects with a short note or none, and other spots where both sides can use them (ground, vehicle, mailbox, corpse), not only furniture.",
+  "rows": [
+    {
+      "id": "t0005-01",
+      "codes": [
+        "NEVER_RIVAL",
+        "DRIFT"
+      ],
+      "note": "A blind re-read (5 independent reads, a different model, told nothing) never named the rival, so the row is one-sided. The lean should come from where the clue is placed and from one detail; the rest must leave the rival reading genuinely live. Rework title, body and if needed pieces; keep place, spot, lean and axioms. See the drift report at the top of this file.",
+      "votes": "A 5, B 0, neither 0 (clue lean A)",
+      "row": {
+        "body": "The road revision carries a time earlier than the restriction it repeats. A child's drawing is inside the lunchbox; the only completed box tracks returned forms, not the people listed.",
+        "id": "t0005-01",
+        "kind": "set",
+        "pieces": [
+          "Map",
+          "Lunchbox"
+        ],
+        "title": "Revision time predates the order",
+        "where": [
+          {
+            "lean": "containment",
+            "place": "office",
+            "rival": "agricultural",
+            "spot": "furniture"
+          }
+        ],
+        "axioms": {
+          "agricultural": [
+            "a-program",
+            "a-obscured"
+          ],
+          "containment": [
+            "c-orders",
+            "c-accounting"
+          ]
+        },
+        "gloss": "A route revision and a return record carry conflicting times.",
+        "prov": {
+          "batch": "T0005",
+          "handoff": "2026-09-27",
+          "writer": "ChatGPT"
+        },
+        "rival_reading": "A program's routine access revision could be entered late; the time mismatch alone does not show a failed evacuation or a minimized response."
+      }
+    },
+    {
+      "id": "t0005-02",
+      "codes": [
+        "NEVER_RIVAL",
+        "DRIFT"
+      ],
+      "note": "A blind re-read (5 independent reads, a different model, told nothing) never named the rival, so the row is one-sided. The lean should come from where the clue is placed and from one detail; the rest must leave the rival reading genuinely live. Rework title, body and if needed pieces; keep place, spot, lean and axioms. See the drift report at the top of this file.",
+      "votes": "A 0, B 4, neither 1 (clue lean B)",
+      "row": {
+        "body": "The plot's water total is copied onto the tally before any delivery time is entered. A worker folded a half-sandwich wrapper into the clipboard; the only signed line confirms the bucket came back.",
+        "id": "t0005-02",
+        "kind": "set",
+        "pieces": [
+          "Clipboard",
+          "Bucket"
+        ],
+        "title": "Plot total before delivery",
+        "where": [
+          {
+            "lean": "agricultural",
+            "place": "office",
+            "rival": "containment",
+            "spot": "furniture"
+          }
+        ],
+        "axioms": {
+          "agricultural": [
+            "a-program",
+            "a-malfunction"
+          ],
+          "containment": [
+            "c-orders",
+            "c-failure"
+          ]
+        },
+        "gloss": "A plot measurement and delivery record are carried forward with a returned container.",
+        "prov": {
+          "batch": "T0005",
+          "handoff": "2026-09-27",
+          "writer": "ChatGPT"
+        },
+        "rival_reading": "Officials could have collected field supplies during an emergency diversion; the tally does not establish that the program caused the event."
+      }
+    }
+  ]
+}

@@ -68,11 +68,18 @@ end
 
 -- Final guard immediately before insertion.  A container can be opened after
 -- it was selected but before its placement job runs.
-function R.fresh(container)
+--
+-- `searchedOk`: a No Help area clue may go in a container the survivor
+-- searched earlier (owner, 2026-09-27: a clue is only ever seen through the
+-- hint and the inspection tool, so a drawer emptied earlier may hold one).
+-- Then only the open loot window refuses: nobody sees into a closed drawer.
+function R.fresh(container,searchedOk)
     if not container then return false,"missing container" end
-    local wasExplored=explored(container)
-    if wasExplored==nil then return false,"search-state-unavailable" end
-    if wasExplored then return false,"already-searched" end
+    if not searchedOk then
+        local wasExplored=explored(container)
+        if wasExplored==nil then return false,"search-state-unavailable" end
+        if wasExplored then return false,"already-searched" end
+    end
     local open=false
     local ok=pcall(function()
         local page=getPlayerLoot and getPlayerLoot(0)

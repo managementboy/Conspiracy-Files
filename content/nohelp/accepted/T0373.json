@@ -1,0 +1,42 @@
+[
+  {
+    "anchor": {
+      "scene": "RVSTrailerCrash"
+    },
+    "body": "My cab entry says the pasture treatment workers brushed off mustard-colored dust.\n\nNot one fly remained on the trough, and the cows stood well back from it.",
+    "id": "t0373-01",
+    "kind": "written",
+    "pieces": [
+      "notebook"
+    ],
+    "title": "Notebook page",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "vehicle"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RVSTrailerCrash"
+    },
+    "body": "I watched them seal the trailer, then ask the driver to take the family home by a route that had already closed. He asked for the children to be counted with the cargo because the passenger column was full. Nobody laughed.",
+    "id": "t0373-02",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "title": "Handwritten letter",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "vehicle"
+      }
+    ]
+  }
+]

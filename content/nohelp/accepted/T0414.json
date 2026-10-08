@@ -1,0 +1,262 @@
+[
+  {
+    "body": "Pencil marks on the map tally people at checkpoints. Half are scratched out. Someone stopped updating it.",
+    "id": "t0414-01",
+    "kind": "set",
+    "pieces": [
+      "Map",
+      "Pencil"
+    ],
+    "title": "Map and pencil",
+    "where": [
+      {
+        "containers": [
+          "cardboardbox",
+          "desk",
+          "filingcabinet",
+          "sidetable",
+          "shelves",
+          "smallbox"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "The clipboard lists four vehicle numbers, no names. Someone used the eraser on a fifth line. I can still make out a child's writing underneath.",
+    "id": "t0414-02",
+    "kind": "set",
+    "pieces": [
+      "Clipboard",
+      "Eraser"
+    ],
+    "title": "Clipboard and eraser",
+    "where": [
+      {
+        "containers": [
+          "crate",
+          "desk",
+          "filingcabinet",
+          "sidetable",
+          "shelves",
+          "smallbox"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "Someone wrapped this kit in a damp towel and ran. The tag says collected but it never made it on board. I found it in the grass outside.",
+    "id": "t0414-03",
+    "kind": "set",
+    "pieces": [
+      "FirstAidKit",
+      "BathTowel"
+    ],
+    "title": "First aid kit and towel",
+    "where": [
+      {
+        "containers": [
+          "crate",
+          "smallbox",
+          "toolcabinet",
+          "locker",
+          "medicine",
+          "wardrobe"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "The map marks official shelter locations across the county. The page lists the same addresses with dates they were overrun. Someone's thumbprint smudged the ink on both.",
+    "id": "t0414-04",
+    "kind": "set",
+    "pieces": [
+      "Map",
+      "SheetPaper2"
+    ],
+    "title": "Map and loose page",
+    "where": [
+      {
+        "containers": [
+          "cashregister",
+          "bin",
+          "cardboardbox",
+          "smallbox",
+          "locker",
+          "desk"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "Gate torch and battery, but they don't fit together. Same kit. Someone sat here for hours trying anyway.",
+    "id": "t0414-05",
+    "kind": "set",
+    "pieces": [
+      "HandTorch",
+      "Battery"
+    ],
+    "title": "Torch and battery",
+    "where": [
+      {
+        "containers": [
+          "crate",
+          "cardboardbox",
+          "smallbox",
+          "metal_shelves",
+          "toolcabinet",
+          "locker"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "A rubber band looped around this badge six times over. Each loop for one evacuation run, scrawled on the back. They got through five.",
+    "id": "t0414-06",
+    "kind": "set",
+    "pieces": [
+      "Badge",
+      "RubberBand"
+    ],
+    "title": "Badge and rubber band",
+    "where": [
+      {
+        "containers": [
+          "cashregister",
+          "bin",
+          "cardboardbox",
+          "smallbox",
+          "locker",
+          "desk"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "The jack has checkpoint grit and the lug wrench has a route tag. Someone's name is scrawled on the evacuation log beside them.",
+    "id": "t0414-07",
+    "kind": "set",
+    "pieces": [
+      "Jack",
+      "LugWrench"
+    ],
+    "title": "Jack and lug wrench",
+    "where": [
+      {
+        "containers": [
+          "crate",
+          "metal_shelves",
+          "toolcabinet",
+          "smallcrate",
+          "militarycrate",
+          "doghouse"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "The walkie talkie's battery is dead on the evacuation channel. Pencil marks on the case track days, then hours, then nothing. Nobody ever answered the call for rescue.",
+    "id": "t0414-08",
+    "kind": "set",
+    "pieces": [
+      "WalkieTalkie1",
+      "Pencil"
+    ],
+    "title": "Radio and pencil",
+    "where": [
+      {
+        "containers": [
+          "crate",
+          "toolcabinet",
+          "desk",
+          "metal_shelves",
+          "sidetable",
+          "locker"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "I see evacuation routes in the notebook, half crossed out. The red pen added six street names in rushed handwriting. It dried up halfway through someone's phone number.",
+    "id": "t0414-09",
+    "kind": "set",
+    "pieces": [
+      "Notebook",
+      "RedPen"
+    ],
+    "title": "Notebook and red pen",
+    "where": [
+      {
+        "containers": [
+          "cashregister",
+          "desk",
+          "shelves",
+          "sidetable",
+          "filingcabinet",
+          "smallbox"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "The schoolbag has a class name tag still attached. The map shows routes they never opened for us. Someone circled our street in red ink.",
+    "id": "t0414-10",
+    "kind": "set",
+    "pieces": [
+      "Bag_Schoolbag",
+      "Map"
+    ],
+    "title": "Schoolbag and map",
+    "where": [
+      {
+        "containers": [
+          "wardrobe",
+          "locker",
+          "desk",
+          "filingcabinet",
+          "dresser",
+          "shelves"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

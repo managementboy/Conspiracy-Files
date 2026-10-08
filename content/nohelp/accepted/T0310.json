@@ -1,0 +1,58 @@
+[
+  {
+    "anchor": {
+      "scene": "RBStripclub"
+    },
+    "body": "Written on it: the application crew left yellow residue everywhere. We felt dizzy for hours and the potted plants all wilted.\n\nI found it filed with the other trial documents.",
+    "id": "t0310-01",
+    "kind": "written",
+    "pieces": [
+      "photograph"
+    ],
+    "title": "Photo with writing",
+    "where": [
+      {
+        "containers": [
+          "dresser",
+          "sidetable",
+          "desk",
+          "filingcabinet",
+          "shelves",
+          "smallbox"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RBStripclub"
+    },
+    "body": "I wrote the closing time on the chalkboard. Later a man asked me to rub it out and say we had shut earlier.\n\nThe people at the last table were still here when he came in. One of them had gone to call a friend and left a coat behind. I did not know whether to give the coat back when the man took their names.\n\nThe board is clean. The coat is in the cupboard with my own things. If anyone comes for it, I will tell them when I last saw its owner.",
+    "id": "t0310-02",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "title": "Handwritten letter",
+    "where": [
+      {
+        "containers": [
+          "cashregister",
+          "desk",
+          "filingcabinet",
+          "sidetable",
+          "shelves",
+          "smallbox"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

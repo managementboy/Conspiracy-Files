@@ -1,0 +1,25 @@
+{
+  "t0040-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "ekron",
+      "source": "map:EkronStashMap7"
+    },
+    "gloss": "A field check is pencilled onto an incomplete route.",
+    "prov": {
+      "batch": "T0040",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "None: one-sided on purpose"
+  }
+}

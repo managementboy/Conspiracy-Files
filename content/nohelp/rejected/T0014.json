@@ -1,0 +1,105 @@
+{
+  "ticket": "T0014",
+  "returned_by": "Claude review, DR-20260928-NOHELP-REVIEW-FAST, 2026-09-28",
+  "note": "The ticket is returned whole: a place must keep both conspiracies, a person ticket is accepted or returned as a whole, and a map design keeps its set share.",
+  "rows": [
+    {
+      "id": "t0014-01",
+      "codes": [],
+      "note": "Passed its blind read; returned only because its ticket is returned whole. Redeliver it unchanged: its receipt stays valid while title, body, pieces and places are unchanged.",
+      "votes": "A 0, B 1, neither 0 (declared B)",
+      "row": {
+        "anchor": {
+          "print": "AmericanTire"
+        },
+        "body": "A rubber band holds a service slip to the screwdriver. Four circles are drawn beside one wheel sketch; only the outer groove is filled with dark dust.",
+        "id": "t0014-01",
+        "kind": "set",
+        "pieces": [
+          "Screwdriver",
+          "RubberBand"
+        ],
+        "title": "The tire offer marked on a tool handle",
+        "where": [
+          {
+            "lean": "agricultural",
+            "place": "mapNamed",
+            "rival": "containment",
+            "spot": "ground"
+          }
+        ],
+        "axioms": {
+          "agricultural": [
+            "a-program",
+            "a-pathway"
+          ],
+          "containment": [
+            "c-orders",
+            "c-failure"
+          ]
+        },
+        "cites": {
+          "quote": "south of Iroquois Park",
+          "source": "print:AmericanTire"
+        },
+        "gloss": "A tire drawing and dark groove residue accompany a repair tool.",
+        "prov": {
+          "batch": "T0014",
+          "handoff": "2026-09-27",
+          "writer": "ChatGPT"
+        },
+        "rival_reading": "A road crew could inspect tires after a closure and keep a service slip with its tools; the dust does not identify where it came from."
+      }
+    },
+    {
+      "id": "t0014-02",
+      "codes": [
+        "LEAN_MISMATCH"
+      ],
+      "note": "Two independent blind reads (DR-20260928-NOHELP-REVIEW-FAST) both missed the declared lean (declared A; votes A 0, B 0, neither 2). Rework so one detail tilts it to its own side while the rival reading stays possible. Keep place, spot, lean, rival, pieces and axioms.",
+      "votes": "A 0, B 0, neither 2 (declared A)",
+      "row": {
+        "anchor": {
+          "print": "AmericanTire"
+        },
+        "body": "Four tires are listed on the receipt. Three grease circles appear on the reverse; a small note asks that the smoothest one be saved for a child's bicycle.",
+        "id": "t0014-02",
+        "kind": "written",
+        "pieces": [
+          "receipt"
+        ],
+        "title": "The service receipt for the unreturned wheel",
+        "where": [
+          {
+            "lean": "containment",
+            "place": "mapNamed",
+            "rival": "agricultural",
+            "spot": "ground"
+          }
+        ],
+        "axioms": {
+          "agricultural": [
+            "a-program",
+            "a-obscured"
+          ],
+          "containment": [
+            "c-orders",
+            "c-accounting"
+          ]
+        },
+        "cites": {
+          "quote": "Show this flyer at our outlet",
+          "source": "print:AmericanTire"
+        },
+        "gloss": "A tire receipt has one unmatched mark and a private request.",
+        "prov": {
+          "batch": "T0014",
+          "handoff": "2026-09-27",
+          "writer": "ChatGPT"
+        },
+        "rival_reading": "A farm delivery or ordinary repair could account for a missing tire mark; the receipt does not say that officials concealed an accident."
+      }
+    }
+  ],
+  "drift": "Batch note (whole round, read once): a key ring appears in about ten of the 38 rows, a crop-row sketch in about eight and a water ring or stain in five. Not a return reason this round; vary objects and details in the redeliveries and in T0019 onward so a player does not meet the same arrangement at every place."
+}

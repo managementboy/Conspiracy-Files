@@ -139,6 +139,26 @@ starting-house container and the normal proximity cue remains active.
 - Set D fires at most once per physical item, tracked on the item itself so it
   survives a drop/re-pickup or a save/reload.
 
+## Clue captions (owner decision, 2026-10-03)
+
+When the survivor inspects a clue, the clue body is spoken a sentence at a time
+in the coloured speech bubble (`player:Say`) only. No white halo and no title
+are used for captions (the title stays as the paper clue's inventory name, on
+map markers and in the notebook). One sentence per line; the per-line cap is 75
+characters, the engine bubble's own wrap width (`ChatElement` calls
+`setMaxCharsPerLine(75)`, checked in the game jar); a longer sentence breaks at
+a word boundary. Hold 60 ms per character, at least 2.5 s. Lines are queued so
+they never overlap, cue lines ("Hm?") share the queue, and a new inspect drops
+the unread lines of the old one. In the engine a bubble line lives
+`lineDisplayTime` = 314 ticks counted down 1.25 per update (about 4-8 s) and
+successive `Say` lines stack above one another (up to 10), so a bubble may fade
+slightly before a long line's hold ends; nothing is re-issued. The cue's
+"you are close" look is unchanged.
+
+Object-SET pieces keep their own vanilla item names in the inventory (Evidence
+category only); old-save pieces already renamed get the script name back when
+recognised or restamped. Paper clues keep their title as name.
+
 ## The wordless cue (P4-R132, stage 2)
 
 Not a voice line in the sense above, and not delivered through `speak`: near a

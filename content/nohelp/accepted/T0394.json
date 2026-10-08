@@ -1,0 +1,43 @@
+[
+  {
+    "anchor": {
+      "scene": "RZSOldFirepit"
+    },
+    "body": "The axe and seed bag have silver specks on them. I think they're from the orchard treatment. The residue wasn't in the application instructions.",
+    "id": "t0394-01",
+    "kind": "set",
+    "pieces": [
+      "Axe",
+      "SeedBag"
+    ],
+    "title": "axe and seed bag",
+    "where": [
+      {
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "ground"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RZSOldFirepit"
+    },
+    "body": "The group burned the map after the marked road failed them. One corner survived with an arrow pointing to a station that had stopped taking arrivals. I recognized my own handwriting on the corner; I had copied the directions from a uniformed man.",
+    "id": "t0394-02",
+    "kind": "written",
+    "pieces": [
+      "letter"
+    ],
+    "title": "Letter",
+    "where": [
+      {
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "ground"
+      }
+    ]
+  }
+]

@@ -1,0 +1,41 @@
+{
+  "t0017-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "gloss": "A sealed kit and one unused dressing remain behind a damaged board.",
+    "prov": {
+      "batch": "T0017",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "A household could keep supplies behind a damaged shelf while treating pests; the bandage does not show an official response failure."
+  },
+  "t0017-02": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-malfunction",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-accounting"
+      ]
+    },
+    "gloss": "A pest-control tool and a damaged root are recorded together.",
+    "prov": {
+      "batch": "T0017",
+      "handoff": "2026-09-27",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "Someone dealing with a household pest problem could use a garden sprayer and record damaged food; the sketch does not prove an experimental mixture."
+  }
+}

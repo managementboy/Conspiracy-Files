@@ -163,7 +163,7 @@ its area as known, so labels would appear there once data exists (P4-R59).
    cap. A whole-map book in ModData would conflict with P4-R17 and P4-R34.
 5. **The scan runs in each save.** Every new save repeats a background sweep
    of about 10,000 buildings. Cases cannot place documents until it finishes,
-   which is why `tools/autotest/warm_world.sh` exists.
+   which is why a warm-up script (tools/autotest/warm_world.sh, since removed; restore from tag spikes-t1-t11-2026-10-02) was once used.
 
 ## 3. Proposed pipeline
 

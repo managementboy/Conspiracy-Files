@@ -1,3 +1,421 @@
+## DR-20260929-NOHELP-MORE-THEORIES — two live theories from the full pool
+
+Owner decisions, 2026-09-29, responding to `docs/reviews/NO_HELP_MORE_THEORIES_2026-09-29.md`:
+
+1. In a new world, any pair of available theories can be selected. With N available theories, all N(N-1)/2 unordered pairs must be eligible; do not use a restricted compatibility list. Every newly added theory therefore requires complete content and coverage against every existing theory before it joins the selectable pool.
+2. All eligible pairs have equal odds. The ordering of the two theory IDs is not a different mystery; each distinct pair participates equally.
+3. Theories may both be partly right. Neither pair member has to logically exclude the other, but each needs an independently understandable argument.
+4. A world keeps the pair selected when it was created, including an existing A/B world. Updating the mod never rerolls that world's pair.
+5. The mod description tells players that a world randomly selects two theories at creation. In play, there is no further explanation and no disclosure of which pair was selected.
+6. The existing marked-target minimum remains: at least three clues with two leaning toward the target's favoured theory and one toward the other. The goal is to place more clues whenever possible; 2:1 describes the minimum composition, not a required ratio for larger groups. The two selected theories alone would require only two clues for representation, but the owner explicitly keeps this higher floor. The existing picker may reuse an object set at another target after fresh eligible clues run out; a written clue is placed once. This is existing behavior, not a new decision requested here.
+
+## DR-20260929-NOHELP-B-OWN-EVIDENCE — both theories stay; B gets its own evidence
+
+Owner decisions, 2026-09-29, after the B accessibility review
+(docs/reviews/NO_HELP_B_ACCESSIBILITY_2026-09-29.md):
+
+1. The theories never had to contradict each other: both are equally
+   possible, as with COVID-19's zoonotic and lab-leak origins. Evidence that
+   fits both is normal.
+2. B is broad: "their farm program went wrong" and "it spread through farms,
+   animals, feed and fields" are both B; its believers may argue either.
+3. Cover-up language in texts is fine.
+4. The balance gap (A-only 367, B-only 166 by read) is closed by adding about
+   140 clues written as B's OWN evidence - how it started and spread - as
+   stock tickets T0428-T0441. No theory change, nothing removed.
+
+## DR-20260929-NOHELP-GAP-PLAN — after the deep review
+
+Owner decisions, 2026-09-29 (plan: docs/management/NO_HELP_GAP_PLAN_2026-09-29.md):
+
+1. A clue's meaning reaches the player by the survivor saying its text out
+   loud on the first Inspect (not hover text, not an added note).
+2. Clue texts have no maximum; diaries and similar get much longer text.
+3. Clues use the full range of the game's containers, not only furniture,
+   cars, bodies and mailboxes; outdoor sites mostly have containers too.
+   Target: under 15% of clues on the floor.
+4. Scenes are known by hooking the moment the game generates them, through
+   ZombieBuddy. ZombieBuddy is a REQUIRED dependency of No Help ("we can use
+   it for so much more"). Supersedes ADR-0001's "Java only if needed" for
+   this mod.
+5. Thin marked sites are topped up from a stock of both-side clues.
+6. Map markers stay: a found clue gets its question mark on the world map
+   when the survivor carries a pen ("Absolutely!"). They are not "help".
+
+## DR-20260929-NOHELP-BALANCE-BY-READ — balance by what a reader sees; add B; ADHD cadence retired
+
+Owner decisions, 2026-09-29:
+
+1. The two sides are counted by the blind read (DR-20260928-NOHELP-CLUE-CHECK):
+   clues read A only against B only (`both` not counted), and they should
+   match: the larger at most 55% (`targets.leanMax`; owner moved it back from 52% after the map round landed at 53%). The writer's lean tag
+   no longer decides balance. Now: A only 163, B only 140 (54%).
+2. Balance is fixed by adding clues to the short side, never by removing
+   any ("More clues better game"). The ten partly covered map tickets are
+   finished in one ChatGPT round aimed at B (about 89 new clues).
+3. The every-5-tickets ADHD pass is retired (`targets.adhdEvery=nil`); the
+   one blind read replaced it.
+4. Paper items (notebooks, sheets, letters) may repeat freely: they suit
+   conspiracies.
+
+## DR-20260929-NOHELP-RECALLS — a repeatable recall round for quality problems
+
+Owner decision, 2026-09-29: an object appeared in 23% of the clues (players
+would learn that it means "clue"); the target is well under 5%, and the fix
+must be interesting and reusable for problems players report later. Every
+such problem becomes a recall (`content/nohelp/recalls.json`):
+
+1. The problem is written as a rule the converter checks (here: pieces banned).
+2. The affected clues are listed; each stays in the game until its
+   replacement passes.
+3. Each replacement keeps the form and aims at the same side, and a set uses
+   at least one piece that few other clues use, so the fix adds variety.
+4. The usual one blind read: A, B or both goes in; none is rewritten.
+5. The old clue moves to `content/nohelp/retired/` with its recall.
+
+Recall R1: 94 clues (all key-ring clues outside the 6 tickets whose recipe
+allows one); afterwards about 6 of ~429 clues carry one (about 1.4%).
+
+## DR-20260928-NOHELP-CLUE-CHECK — one read: A, B, both or none
+
+Owner decision, 2026-09-28, after asking why the review had become a test
+that a clue must fit one conspiracy:
+
+1. ChatGPT writes the clues.
+2. One blind read per clue answers: could a believer of A use it, could a
+   believer of B use it — so A, B, both, or none.
+3. A, B or both: the clue goes into the game as written; the read is
+   recorded with it.
+4. None: the clue is dropped, and ChatGPT writes a new one.
+
+No second reads and no returns for "wrong side". Owner: "That's the whole
+rule." Supersedes `DR-20260928-NOHELP-REVIEW-FAST` (its lean-matching test,
+second reads and LEAN_MISMATCH returns); the batch still gets one read-through
+for repetition and consistency, and receipts stay tied to the text hash.
+
+## DR-20260928-NOHELP-REVIEW-FAST — one blind read, targeted retry
+
+Owner decision, 2026-09-28: replace the repeated content-review workflow with
+one pass that reviews every clue and reserves a second pass for flagged clues.
+
+- Run the converter check and test suite first.
+- Read the full batch once for repetition and consistency.
+- An independent model reads each clue once, seeing only its rendered text.
+  One vote matching the declared lean passes.
+- A `NEITHER` vote or a vote against the declared lean gets exactly one
+  independent second read. If the votes disagree, or both miss the declared
+  lean, return the clue for revision. Never repeat reads to seek a passing
+  vote.
+- Tie receipts to the rendered-text hash; any edit voids the receipt.
+- The writer does one self-check per row and launches no repeated self-read
+  sessions.
+
+This is the only current content-review rule. It supersedes all older
+multi-read counts, rival-vote thresholds, and conflicting review instructions
+in handoffs, scripts, tests, and design notes. Other content and game rules
+remain in force. Executable details live in
+`tools/cluegates/blind_reread.md`.
+
+## DR-20260927-NOHELP-RULE-PLACEMENT — content is written, placement is not
+
+Owner decision, 2026-09-27, "No Help" content design, asked whether its
+placement should draw from hand-curated candidate spots or from rules: *"Goal
+is clearly [rules] as we will have hundreds of clues to be placed during hours
+or days of playtime."*
+
+**What a clue is and says is authored in advance; where it lands is decided by
+rules at runtime.** The ban in `NO_HELP_CONSPIRACY_DESIGN_2026-09-26.md` §1
+("evidence will not be generated procedurally") covers content only. It never
+covered placement, and it must not be read as if it did.
+
+- **Rule-based, not curated pools.** A clue may land in any building and
+  container the rules allow — container family, fixed vs. portable, minimum
+  distance between copies of one fact, theory affinity — not a pick from 3-4
+  hand-typed spots. The whole-map address book (`Generated/AddressBook.lua`)
+  is the location source; a live check confirms the container actually
+  exists before anything is placed there, per T3 (automatic room
+  categorisation stays advisory).
+- **Hundreds of clues**, not the ~40-100 the handoff assumed. Hand-typed
+  coordinates are not a design option at that scale.
+- **Placed across hours or days of play**, which makes placement standing,
+  bounded background work (T2) with exact-once per item (T4), not one pass at
+  game start.
+- **Rules must be provable offline.** With placement no longer fixed, the
+  cross-item rules (copies, families, distance, one fixed copy, one death
+  cannot reach every copy per DR-20260927-WORLD-KEEPS-EVERYTHING) have to be
+  checked by an offline tool against the rule set, not trusted per seed.
+
+**Engine consequence.** `NHShared/Placement.lua` (curated pools, 7 assets,
+hard-coded Dead Air counts) cannot carry this as data alone. The generated
+runtime already has live scanning, container checks, a site catalogue and
+the address book; its runtime *case generator* is the part that conflicts
+with authored content.
+
+**Engine: the generated runtime** (owner, 2026-09-27, same session). No
+Help's placement is built on `GeneratedRuntime.lua` + `Generated/*`. Its
+runtime case generator is to be replaced by authored content; its live
+scanning, container checks, site catalogue, address book and exact-once
+placement are kept. The fixed slice (`Runtime.lua` → `Session.lua` →
+`Placement.lua`) is not extended for this; whether and when it is retired is
+a separate cleanup, not part of this decision. Section 9, question 3 of the
+design doc ("drop `Generated/*`?") is answered: no.
+
+**Timing: decided as the survivor plays, around where they are heading**
+(owner, 2026-09-27, same session): *"We want to take advantage of the
+variability provided by vanilla PZ with maps and misteries."* There is no
+whole-world plan at start. Which clue lands where is chosen progressively,
+near the player's path and at sites vanilla itself points to (annotated and
+stash maps, vanilla story scenes), so vanilla's own per-world variety drives
+where the conspiracies surface.
+
+This was chosen over a start-of-world plan knowing the cost, so the rules
+that keep it honest are part of the decision:
+
+- **Meaning stays order-independent; availability does not.** Every clue must
+  still read cold (design doc §3, §4a). What varies by route is *which*
+  clues a survivor meets, never what any clue means. That is the split §4a
+  already makes between content-meaning order-independence (mandatory) and
+  timing-independence (not achievable).
+- **Commit before reveal, exactly once.** A site's choice is made once, when
+  it first becomes eligible, and persisted before anything player-visible
+  happens (round 3, mechanism ②; T4). A reload must not reroll it. The
+  residual hard-kill-during-save window from round 3 still needs its spike.
+- **The choice is a function of world, not of the player's beliefs.** Inputs
+  may be the world seed, the site, and what has already been placed; never
+  what the player has read or carried. Zero tracked belief state still holds.
+
+**Unfound clues may move** (owner, 2026-09-27, same session, asked in plain
+terms whether a clue nobody finds for a long time should be moved elsewhere,
+knowing that where it sits is part of its meaning): *allow moving.*
+`StaleClue.lua` stays on for No Help's authored clues. It was put to the owner
+that a move can change what a clue means; the owner chose it anyway. The task 3
+plan's recommendation to turn it off is withdrawn.
+
+**Clues may be placed anywhere interesting** (owner, same session): *"we
+don't see clues until searched for. The mod tells us something is interesting
+by a hint on top of our character. You can place the clues anywhere that is
+interesting."* Placement is not limited to furniture, mailboxes, vehicles and
+bodies; open ground, gardens, doorways and similar spots are allowed. A spot
+must be decided and saved before either signal can reach the player: the
+Search Mode icon (`ClueSearchRules.ADD_RADIUS`, 16 tiles) or the wordless hint
+(`ClueCueRules.RADIUS`, 3 tiles). The icon's radius is the larger, so it sets
+the deadline.
+
+**Found means spotted; half is counted per clue** (owner, same session). The
+"inspect tool" in the owner's directives is vanilla's Investigate Area window,
+i.e. Search Mode: a clue counts as found when Search Mode spots it, with
+P4-R132's "Look it over" as the fallback for one picked up without searching.
+Picking an item up is not finding it. "At least 50% objects" is counted per
+clue (a set of three things is one clue), on what is actually placed in a
+world, not only on the authored list; owner: *"whatever makes more sense"*.
+Every piece is a vanilla item type (ModData stamps and text do not change
+that), but only **object sets** count toward the half: a written clue on a
+vanilla paper item is still a written clue.
+
+**Map trails, scenes and reuse** (owner, same session, answering the task 3
+plan's directive check):
+
+- **Map trails lean.** The existing vanilla-map trails (`MapMediaRuntime`,
+  ~125 designs) are drawn into the two conspiracies: each trail's clues point
+  to one theory or the other. Their seed comes from the world, not the moment
+  of reading. Owner: *"If you need guidance ask me"* — story direction for the
+  trails goes to the owner rather than being invented.
+- **Scenes have a floor.** Every area with a confirmed vanilla scene gets at
+  least one clue beside it. The share of clues beside scenes is saved and
+  checked, so it cannot quietly fall to zero.
+- **Unreliable maps: a random share per world** (owner: *"make it random
+  between 1 and 20"*). Read as: each world, seeded from the world, makes
+  between 1% and 20% of annotated-map trails unreliable — they point at
+  evidence for the other theory. Confirmed by the owner as a percentage.
+- **First-development cap: 5 clues per theory per area** (owner, same
+  session), i.e. at most 10 per area until the cap is lifted.
+- **A scene not confirmed in time** waits for the next confirmed scene in the
+  same area, and every such wait is logged so the owner can see whether the
+  timing works.
+- **Interesting places** (owner, same session, told that the owner's own
+  12-place list from P4-R54 was never written down): clues are placed around
+  three sources together — (a) the research place types the game can
+  recognise anywhere (police stations, hospitals and clinics, offices,
+  bookstores, radio and transmission sites, warehouses, government offices;
+  T3, detection stays advisory); (b) the real places vanilla maps and flyers
+  name (`MapMediaCatalogue.lua`); (c) farms, barns and fields, and military or
+  police checkpoints and roadblocks.
+- **Bodies do not attract clues; spots are never reused** (owner, same
+  session): a dead character's body only keeps what they carried; a spot that
+  already gave up a clue never receives another.
+- **Real clues come after the picker:** the picker is built and tested on
+  placeholder clues first; then a short proposed list of real clues goes to
+  the owner a few at a time for direction before any is written for real.
+- **Clues per place: a random 2 to 10** (owner, same session), fixed by the
+  world so reload never changes it; at least one of each conspiracy.
+- **No holding back written clues** (owner, same session): *"we will be
+  generating much more text clues in the future. No need to hold back."*
+  Written clues appear as places are chosen; volume, not rationing, keeps late
+  game varied.
+- **No save-size limit** (owner, same session, told that the No Help world
+  record reached the 500 KB save budget after about 230 clues): *"No limit at
+  all."* No Help's save budget ceiling (`SaveBudget`, and the Session's
+  500 000-byte case check for the world record) is removed; structural
+  validation stays, because a bad value or cycle loses the whole save (T1).
+  This supersedes P4-R17's hard budget for No Help only. Put to the owner
+  first: T1 measured very large saves round-tripping but stalling for about
+  nine seconds per save, so save time is to be watched in long playtests.
+- **The old mini-case generator is removed from No Help completely** (owner,
+  same session: *"Remove it completely. It just distracts us."*). Everything
+  that only exists to make up runtime cases goes; the placement machinery the
+  new system runs on (Session, storage and container scans, the address book,
+  search, relocation) stays. No Help places nothing but authored clues.
+- **Dead Air goes too; body IDs stay** (owner, same session): the original
+  mod's fixed "Dead Air" slice is removed from No Help as well. The feature
+  that links a dead body's ID card and keys to cases is kept, not removed:
+  *"We should do this for our new mod too. Not every Id but IDs can be nice
+  additions to our conspiracies."* How to link IDs to the two conspiracies is
+  to be investigated (an `/adhd` run on the real code) and brought back to the
+  owner before building.
+- **Body IDs, keys and clothing** (owner, same session, after an `/adhd` run on
+  the real code): build (1) ID cards as written clues placed on bodies, with a
+  person thread — other clues elsewhere mention the same person; only cards
+  we write belong to a conspiracy, every other ID stays vanilla; (2) keys on
+  bodies that open a building holding clues lead the player there; (3) a
+  body's vanilla clothing as a soft preference when choosing which body
+  carries a clue — never a rule, never waited for. Fake IDs were not chosen.
+  Before it is recognised, one of our ID cards looks like a vanilla ID card
+  with a name on it.
+- **A body that burns or disappears:** a clue on it that was already found
+  disappears with it; an unfound one is placed somewhere else (owner, same
+  session). This replaces the old engine's drop-after-three-days for No Help.
+- **No Help runs in normal play now** (owner, same session): the clue system,
+  the hint, map marks and the clue menu run in every single-player game, no
+  longer only in debug mode. Debug-only shortcuts and hidden-state
+  diagnostics stay debug-only. Multiplayer stays out of scope.
+- **Annotated maps change the running game** (owner, same session): *"Reading
+  an annotated map changes the running game. It gives the player a reason to
+  leave the comfort of the current safe house by promising to give an answer
+  to any of the conspiracies. A promise not to be kept."* This replaces the
+  earlier "reading decides only when" rule for maps; how it works is to be
+  honed with an `/adhd` run and brought back. Settled with it: a marked place
+  leans toward its map's conspiracy but holds at least 3 clues, one of each
+  side; **every** mark on a map gets clues, and those clues are written from
+  the text of the map's own annotations; places named on vanilla flyers and
+  brochures become clue places too, now.
+- **How a read map changes the game** (owner, same session, after an `/adhd`
+  run): build all three — (1) the letdown in the layout: clues that fit the
+  map's promise sit nearest the entrance, the other side's clue deepest
+  inside; a multi-mark map's last mark is an exact tie; a place several maps
+  mark holds one extra other-side clue per extra map, fixed from the static
+  list of maps, never from reading order; (2) the promise clock: 3 in-game
+  days after a map is read, its marks' unfound, unshown clues begin their
+  silent within-place moves; unread maps' marks stay still; (3) zombies
+  gather: a read map's marked places quietly draw zombies with the game's own
+  zombie-only noise, more while clues remain unfound — only after a visible
+  live test shows it works far from the player. What each mark holds stays
+  fixed at world creation (superseded in part below: what is fixed at world creation is each map's side and whether it is unreliable; which clues a place gets is decided when the place is decided); reading and reloading never change it. A read
+  hour is saved as a world event, not as belief.
+- **Bodies:** filling a body's pockets a moment early (same contents as
+  opening it) is fine. Clothing classes per conspiracy for the rule that
+  sometimes dresses a body for the other side: containment — police,
+  military, medical staff, hazard suits; agricultural — farm clothes,
+  workers' overalls, hazard suits (both).
+- **Map and flyer leans, and minimums** (owner, same session): which
+  conspiracy each map or flyer points to stays random per world, fixed by the
+  world seed — *"We generate a story for each map that fits either
+  conspiracy."* Flyer and brochure places work like map marks (a lean; at
+  least 3 clues, one of the other side). An open mark's clues lie within 16
+  tiles of it. A place several maps or flyers point to has no extra minimum:
+  the usual random number, still both sides.
+- **Revised after an `/adhd` run on the owner's pushback** (owner, same
+  session), superseding parts of "How a read map changes the game":
+  - *Decide early, create on arrival.* Which clues a place holds is decided
+    and saved early (reload never changes it), but the objects only come
+    into the world as the player approaches, in spots the player cannot see
+    — nothing sits at a place before the player comes.
+  - *No layout order.* Within a place, clues sit at random; the "letdown in
+    the layout" (map's side near the entrance, the other side deepest) is
+    dropped.
+  - *No promise clock and no last-mark tie.* Owner: "what does arriving late
+    mean? No player is in a hurry in PZ" and "How do you know the order of
+    the marks? Why should this be relevant?" — reading a map starts no timer,
+    and no mark is special by its order.
+  - *Light:* the dark-floor rule is dropped; a loose floor clue in a dark
+    room is spotted with the player's own light, like foraging. Containers,
+    bodies and Look it over work in the dark.
+  - *Looted drawers:* no special rule — a clue is only ever seen through the
+    hint and the inspection tool, so a drawer emptied earlier may hold one.
+  - *Emptied buildings and searched bodies* may still hold clues later
+    (owner); only a container or body whose loot window is open refuses.
+  - Still standing: reading a map decides its places; zombies gather (to be
+    reconsidered with the owner at its live test, since it also grows with
+    time unfound).
+- **Step 4 review answers** (owner, same session): map places also fill when
+  the player walks near them, not only after the map is read; a place
+  several maps or flyers point to leans at random per world; flyers can be
+  unreliable too (the same 1-20% share); a map marking a large area may have
+  clues anywhere in that area, preferably near the map's own annotation marks.
+- **Each mark its own minimum** (owner, same session): a large area one map
+  marks several times (its own marks, not its annotations) gives each of
+  those marks at least 3 clues, one of the other side, placed near that mark
+  first. A place a map and a flyer both point to stays shared (specifics: docs/writer-only/NOHELP_SPOILERS.md):
+  random side per world, no extra minimum.
+- **Vanilla scenes** (owner, same session): a scene and the clues of the
+  place it appears in are independent — a scene appearing where clues are
+  already placed changes nothing; if the player empties a scene before it is
+  confirmed, its clue keeps waiting; where a scene's clue goes depends on the
+  kind of scene (a room scene: in that room; a car crash: on the bodies or in
+  the cars, and so on) — to be decided per kind of scene with an `/adhd` run
+  over the real list of vanilla scenes; the first hand-checked scene (a unique
+  scene; specifics in docs/writer-only/NOHELP_SPOILERS.md) can be built for either conspiracy, how best to be
+  honed with an `/adhd` run.
+- **Which vanilla scenes hold clues** (owner, same session, after an `/adhd`
+  run over all 140 vanilla scene kinds): scenes of suicide or self-harm are
+  allowed (*"it fits well into any conspiracy that someone has taken their
+  life or had to hurt themselves"*); killer scenes are allowed; party, meal
+  and comedy scenes hold clues just as much as any other; two scenes built
+  around vanilla named characters are left alone entirely (which ones: the
+  writer-only spoilers file). A scene kind gets no clue only
+  when there is nothing to put one in (animals with no vehicle, a named
+  zombie alone, the never-built base class, generic house dressing). A clue
+  never goes on a vanilla named character's body or ID. The first hand-checked
+  scene: lean random per world, one clue version per conspiracy, placed beside
+  vanilla's own items, never on them (details: writer-only spoilers file).
+- **Who does the content** (owner, 2026-09-27, after ChatGPT became the
+  content writer): ChatGPT writes the clue text and follows the delivery
+  format in `docs/management/NO_HELP_CONTENT_WRITER_HANDOFF_2026-09-27.md`
+  (Claude builds the converter). Claude finishes the vanilla scene list as
+  well as the engine side. The owner does not curate content: *"I do not want
+  to curate content. You and chatgpt will do that."* Stage-0 sign-off
+  (frozen axioms, glosses) and clue review move from the owner to Claude,
+  with a blind re-read by a different AI. The owner stays unspoiled
+  (blind-play protection): scene, character, location and evidence specifics
+  live in `docs/writer-only/`, never in owner-facing documents or updates.
+- **Tone and voice for No Help** (owner, 2026-09-27): the same tone as the
+  original mod — fatalistic, bureaucratic dark comedy throughout
+  (DR-20260919-Q24, DR-20260920-WRITING-GROUNDING-TONE), grounded in real
+  vanilla places and businesses, the humour arising from the event, the
+  institution's priorities and the person's own stake, never a joke line.
+  Voice: only the world's — clues are what people left behind; the survivor
+  never comments. Because generation must stay sparse, the comedy comes from
+  one human detail and an institution's misplaced priorities, never from
+  stacked official jargon.
+- **Two scene follow-ups** (owner, same session, after the scene list was
+  built): a different scene that features a character from one of the two
+  left-alone scenes still holds a clue, never on that character; a scene that
+  is mostly about an animal but also leaves a person and a dropped object
+  holds a clue on the ground. 125 scene kinds hold a clue, 15 do not.
+- **Content in rounds** (owner, same session: relaying every clue between the
+  two AIs took too long): ChatGPT delivers every open ticket in one round
+  (owner: "why not all at once"), one commit per ticket, without waiting, checking each clue with the blind-reader question first;
+  Claude reviews the round at once, fixes small wording itself and returns
+  only real problems. The owner relays one message per round.
+- **No maximum, for real.** Once the written clues are all placed, object sets
+  may be placed again elsewhere as new copies with new stamps. This is not a
+  respawn: a consumed copy never returns (DR-20260927-WORLD-KEEPS-EVERYTHING
+  still holds for it). It does replace that entry's "authoring volume is the
+  only mitigation" — reusing sets is a second one.
+
+**Moves are silent** (owner, same session, on whether a moved clue should
+leave a sign at its old spot): *"That is irrelevant in this game."* A moved
+clue leaves nothing behind.
+
 ## DR-20260927-WORLD-KEEPS-EVERYTHING — a world is used up, and nothing says so
 
 Owner decision, 2026-09-27, on the permadeath question open since

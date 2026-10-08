@@ -1,0 +1,32 @@
+[
+  {
+    "anchor": {
+      "map": "WpStashMap12",
+      "mark": 1
+    },
+    "body": "The measuring tape and clipboard have the same black paint. A fresh scrape shows an older evacuation color underneath.",
+    "id": "t0144-01",
+    "kind": "set",
+    "pieces": [
+      "MeasuringTape",
+      "Clipboard"
+    ],
+    "title": "Measuring tape and clipboard",
+    "where": [
+      {
+        "containers": [
+          "toolcabinet",
+          "desk",
+          "metal_shelves",
+          "filingcabinet",
+          "sidetable",
+          "smallbox"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

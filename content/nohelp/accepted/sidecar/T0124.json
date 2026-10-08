@@ -1,0 +1,25 @@
+{
+  "t0124-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "marked address in World / countryside",
+      "source": "map:WorldStashMap15"
+    },
+    "gloss": "A garden waits for a test result before watering resumes.",
+    "prov": {
+      "batch": "T0124",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "An emergency cleanup could also pause water use while awaiting a result; the page does not name what was tested."
+  }
+}

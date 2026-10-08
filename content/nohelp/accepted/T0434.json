@@ -1,0 +1,263 @@
+[
+  {
+    "body": "Under this tarp the cabbage stayed fresh. Past the edge, every head has those brown spots.",
+    "id": "t0434-01",
+    "kind": "set",
+    "pieces": [
+      "Tarp",
+      "Cabbage"
+    ],
+    "title": "Tarp and cabbage",
+    "where": [
+      {
+        "containers": [
+          "shelves",
+          "grocerstand",
+          "counter",
+          "smallcrate",
+          "cardboardbox",
+          "crate"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "The empty jar held brown soil from the fields. Gray dirt cakes the hand shovel now. All the roots died.",
+    "id": "t0434-02",
+    "kind": "set",
+    "pieces": [
+      "EmptyJar",
+      "HandShovel"
+    ],
+    "title": "Empty jar and hand shovel",
+    "where": [
+      {
+        "containers": [
+          "filingcabinet",
+          "desk",
+          "shelves",
+          "crate",
+          "locker",
+          "cardboardbox"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "This seed bag and pencil were marked for late sowing. Those beds are still green. The earlier ones collapsed.",
+    "id": "t0434-03",
+    "kind": "set",
+    "pieces": [
+      "SeedBag",
+      "Pencil"
+    ],
+    "title": "Seed bag and pencil",
+    "where": [
+      {
+        "containers": [
+          "medicine",
+          "sidetable",
+          "dresser",
+          "desk",
+          "smallbox",
+          "locker"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "Newspaper kept some safe. Field potatoes all rotted. Happened overnight. Strange residue on the dark ones.",
+    "id": "t0434-04",
+    "kind": "set",
+    "pieces": [
+      "Newspaper",
+      "Potato"
+    ],
+    "title": "newspaper potatoes",
+    "where": [
+      {
+        "containers": [
+          "smallbox",
+          "cardboardbox",
+          "shelves",
+          "desk",
+          "counter",
+          "crate"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "Patrol tag 9 hangs from the bucket. Orders on the tarp read 'Road closed, turn back'. A checkpoint list on the tarp counts 40 people.",
+    "id": "t0434-05",
+    "kind": "set",
+    "pieces": [
+      "Bucket",
+      "Tarp"
+    ],
+    "title": "Bucket and tarp",
+    "where": [
+      {
+        "containers": [
+          "dishescabinet",
+          "counter",
+          "shelves",
+          "sidetable",
+          "smallbox",
+          "bin"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "The twine here is caked in dried fertilizer. One side's crusted thick, facing the field. Someone left this during spraying season.",
+    "id": "t0434-06",
+    "kind": "set",
+    "pieces": [
+      "Twine",
+      "Fertilizer"
+    ],
+    "title": "Twine and fertilizer",
+    "where": [
+      {
+        "containers": [
+          "wardrobe",
+          "dresser",
+          "desk",
+          "filingcabinet",
+          "smallbox",
+          "shelves"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "The potato under the seed bag is firm and clean. The ones from the rows all have soft spots now. Timing mattered here.",
+    "id": "t0434-07",
+    "kind": "set",
+    "pieces": [
+      "Potato",
+      "SeedBag"
+    ],
+    "title": "Potatoes and seed bag",
+    "where": [
+      {
+        "containers": [
+          "shelvesmag",
+          "displaycase",
+          "counter",
+          "crate",
+          "smallbox",
+          "desk"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "The cloth hung indoors is tied with numbered tape. The rope is cut where a patrol sign hung. I counted three tags on it and none were mine.",
+    "id": "t0434-08",
+    "kind": "set",
+    "pieces": [
+      "RippedSheets",
+      "Rope"
+    ],
+    "title": "Torn sheets and rope",
+    "where": [
+      {
+        "containers": [
+          "locker",
+          "filingcabinet",
+          "desk",
+          "shelves",
+          "cardboardbox",
+          "crate"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "The water in this kettle is clear. A dish left in the yard has pale flecks like the soil in the shovel.",
+    "id": "t0434-09",
+    "kind": "set",
+    "pieces": [
+      "Kettle",
+      "Bowl",
+      "HandShovel"
+    ],
+    "title": "Kettle, bowl and hand shovel",
+    "where": [
+      {
+        "containers": [
+          "desk",
+          "filingcabinet",
+          "shelves",
+          "cardboardbox",
+          "smallbox",
+          "crate"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "The shovel is brown on one edge and gray on the other. The gray soil holds dead seedlings. The brown side has live roots.",
+    "id": "t0434-10",
+    "kind": "set",
+    "pieces": [
+      "HandShovel",
+      "CarrotSeed"
+    ],
+    "title": "Hand shovel and carrot seed",
+    "where": [
+      {
+        "containers": [
+          "crate",
+          "metal_shelves",
+          "counter",
+          "shelves",
+          "cardboardbox",
+          "locker"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

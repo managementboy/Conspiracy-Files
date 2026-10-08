@@ -1,0 +1,25 @@
+{
+  "t0213-01": {
+    "axioms": {
+      "agricultural": [
+        "a-program",
+        "a-pathway"
+      ],
+      "containment": [
+        "c-orders",
+        "c-failure"
+      ]
+    },
+    "cites": {
+      "quote": "Home Sweet Gnome",
+      "source": "print:GnomeSweetGnome"
+    },
+    "gloss": "A display garden is held unwatered after trial spray, with curling leaves.",
+    "prov": {
+      "batch": "T0213",
+      "handoff": "2026-09-28",
+      "writer": "ChatGPT"
+    },
+    "rival_reading": "None: one-sided on purpose"
+  }
+}

@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "CabinforRentDixie"
+    },
+    "body": "A fishing rod and hand torch by the dock, both left behind. The torch was still on when I got here this morning. They cleared out before the roadblock went up at dawn.",
+    "id": "t0246-01",
+    "kind": "set",
+    "pieces": [
+      "FishingRod",
+      "HandTorch"
+    ],
+    "title": "Fishing rod and torch",
+    "where": [
+      {
+        "containers": [
+          "smallcrate",
+          "bin",
+          "crate",
+          "tent",
+          "cardboardbox",
+          "smallbox"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

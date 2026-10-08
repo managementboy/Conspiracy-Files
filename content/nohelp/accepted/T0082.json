@@ -1,0 +1,32 @@
+[
+  {
+    "anchor": {
+      "map": "MulStashMap13",
+      "mark": 1
+    },
+    "body": "The alicepack reeks of crop spray. A pistol lies on top. Field application equipment hangs from the straps.",
+    "id": "t0082-01",
+    "kind": "set",
+    "pieces": [
+      "Bag_ALICEpack",
+      "Pistol"
+    ],
+    "title": "backpack and pistol",
+    "where": [
+      {
+        "containers": [
+          "locker",
+          "militarylocker",
+          "wardrobe",
+          "militarycrate",
+          "dresser",
+          "toolcabinet"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

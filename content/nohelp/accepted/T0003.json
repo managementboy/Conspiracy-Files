@@ -1,0 +1,54 @@
+[
+  {
+    "body": "Seed husks cling to the duct tape. The empty garden sprayer has bleach marks on it. Both are tied in one bundle, with road mud on them.",
+    "id": "t0003-01",
+    "kind": "set",
+    "pieces": [
+      "DuctTape",
+      "GardeningSprayEmpty"
+    ],
+    "title": "Duct tape and garden sprayer",
+    "where": [
+      {
+        "containers": [
+          "toolcabinet",
+          "metal_shelves",
+          "shelves",
+          "crate",
+          "cardboardbox",
+          "smallbox"
+        ],
+        "lean": "containment",
+        "place": "farm",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "body": "The seed bag is folded shut around the shovel handle. A straight line of dark soil runs from the blade to the bag's seam. The shovel's grip has no soil on it.",
+    "id": "t0003-02",
+    "kind": "set",
+    "pieces": [
+      "SeedBag",
+      "HandShovel"
+    ],
+    "title": "Seed bag and hand shovel",
+    "where": [
+      {
+        "containers": [
+          "shelves",
+          "metal_shelves",
+          "toolcabinet",
+          "cardboardbox",
+          "crate",
+          "doghouse"
+        ],
+        "lean": "agricultural",
+        "place": "farm",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

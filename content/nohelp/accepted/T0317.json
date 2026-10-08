@@ -1,0 +1,58 @@
+[
+  {
+    "anchor": {
+      "scene": "RBTSFoodPreparation"
+    },
+    "body": "My note says the farm crew washed their sample jars in this sink. The water turned milky and left a grey film on the pans. By morning the herbs in the window had gone limp and my tongue felt numb.\n\nI left this page where the next person would look.",
+    "id": "t0317-01",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "Notepad page",
+    "where": [
+      {
+        "containers": [
+          "desk",
+          "filingcabinet",
+          "sidetable",
+          "shelves",
+          "smallbox",
+          "cashregister"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RBTSFoodPreparation"
+    },
+    "body": "The last shift was marked complete but no one signed out. I found their gear still in the lockers. Someone wrote 'relocated' next to each name. The supervisor's notes for that day are torn out.",
+    "id": "t0317-02",
+    "kind": "written",
+    "pieces": [
+      "notepad"
+    ],
+    "title": "Duty log",
+    "where": [
+      {
+        "containers": [
+          "desk",
+          "filingcabinet",
+          "sidetable",
+          "shelves",
+          "smallbox",
+          "cashregister"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

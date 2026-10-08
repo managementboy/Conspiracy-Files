@@ -1,0 +1,31 @@
+[
+  {
+    "anchor": {
+      "print": "MuldraughBakeSale"
+    },
+    "body": "The sheet tracks who got pulled from this block. Someone's bread still here, their name checked off. They said everyone made it out.",
+    "id": "t0192-01",
+    "kind": "set",
+    "pieces": [
+      "Bread",
+      "SheetPaper2"
+    ],
+    "title": "Bread and paper sheet",
+    "where": [
+      {
+        "containers": [
+          "cardboardbox",
+          "grocerstand",
+          "smallbox",
+          "crate",
+          "counter",
+          "desk"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

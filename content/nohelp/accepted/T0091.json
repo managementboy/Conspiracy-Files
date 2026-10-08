@@ -1,0 +1,32 @@
+[
+  {
+    "anchor": {
+      "map": "MulStashMap17",
+      "mark": 1
+    },
+    "body": "I found bread near a garbage bag with an official tag. The tag said 'stay inside' and listed two removal dates. The first date is checked off but they returned.",
+    "id": "t0091-01",
+    "kind": "set",
+    "pieces": [
+      "Garbagebag",
+      "Bread"
+    ],
+    "title": "Bread and garbage bag",
+    "where": [
+      {
+        "containers": [
+          "bin",
+          "counter",
+          "dumpster",
+          "overhead",
+          "cardboardbox",
+          "fridge"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

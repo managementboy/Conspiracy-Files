@@ -1,0 +1,60 @@
+[
+  {
+    "anchor": {
+      "scene": "RBJudge"
+    },
+    "body": "Both still have the amber residue from those trial plots. I remember the mop handle smelled sweet before people got sick. The bucket sat outside the clinic once they banned further use.",
+    "id": "t0295-01",
+    "kind": "set",
+    "pieces": [
+      "Mop",
+      "Bucket"
+    ],
+    "title": "Mop and bucket",
+    "where": [
+      {
+        "containers": [
+          "toolcabinet",
+          "metal_shelves",
+          "crate",
+          "smallcrate",
+          "shelves",
+          "bin"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  },
+  {
+    "anchor": {
+      "scene": "RBJudge"
+    },
+    "body": "The notebook has two dates written over each other. The pencil points to the earlier entry. The margin says the hearing was closed before anyone arrived.",
+    "id": "t0295-02",
+    "kind": "set",
+    "pieces": [
+      "Notebook",
+      "Pencil"
+    ],
+    "title": "Notebook and pencil",
+    "where": [
+      {
+        "containers": [
+          "shelves",
+          "filingcabinet",
+          "sidetable",
+          "desk",
+          "smallbox",
+          "cashregister"
+        ],
+        "lean": "containment",
+        "place": "mapNamed",
+        "rival": "agricultural",
+        "spot": "furniture"
+      }
+    ]
+  }
+]

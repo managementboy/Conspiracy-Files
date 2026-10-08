@@ -1,0 +1,32 @@
+[
+  {
+    "anchor": {
+      "map": "MulStashMap9",
+      "mark": 1
+    },
+    "body": "A field notebook is closed under a torch. Its last page lists soil and leaf samples from sprayed plots. It asks whether the sample was taken before or after the second spray.",
+    "id": "t0086-01",
+    "kind": "set",
+    "pieces": [
+      "HandTorch",
+      "Notebook"
+    ],
+    "title": "Hand torch and notebook",
+    "where": [
+      {
+        "containers": [
+          "shelves",
+          "desk",
+          "filingcabinet",
+          "toolcabinet",
+          "sidetable",
+          "metal_shelves"
+        ],
+        "lean": "agricultural",
+        "place": "mapNamed",
+        "rival": "containment",
+        "spot": "furniture"
+      }
+    ]
+  }
+]
