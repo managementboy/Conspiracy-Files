@@ -345,14 +345,48 @@ function R.generated(kind,family,x1,y1,x2,y2,z,cx,cy)
     CFLog.write(ok and "i" or "d","scan",{why=ok and "scene-generated" or ("scene-generated-"..tostring(why)),area=key,kind=kind,family=family})
     return ok,why
 end
+-- THE VISIBLE NOTICE (phase 8). When the detector (the ZombieBuddy jar) is not
+-- live R.NOTICE_GRACE_MS after the game started, the player is told ONCE PER
+-- SAVE, in neutral words in the halo (not the survivor's voice, not the voice
+-- queue), plus one log line (ev=scan why=scene-listener-notice). It never
+-- fires while the listener answers. R.forceInactive is the check's test
+-- injection: the listener is treated as missing.
+R.NOTICE_GRACE_MS=45000
+R.NOTICE_TAG="OIShared_detector_notice"
+R.NOTICE_TEXT="Of Interest: the scene detector is not running (ZombieBuddy). Only part of the game's own scenes will get clues."
+local missingSince,noticeDone
+local function noticeStore()
+    if not (ModData and ModData.getOrCreate) then return nil end
+    local ok,t=pcall(ModData.getOrCreate,R.NOTICE_TAG)
+    return ok and type(t)=="table" and t or nil
+end
+local function showNotice()
+    local store=noticeStore(); if not store then return false end
+    if store.shown then noticeDone=true; return false end
+    local p=getPlayer and getPlayer(); if not p then return false end
+    local shown=false
+    if p.setHaloNote then shown=pcall(function() p:setHaloNote(R.NOTICE_TEXT,255,200,80,1500) end) end
+    if not shown and HaloTextHelper and HaloTextHelper.addText then
+        shown=pcall(function() HaloTextHelper.addText(p,R.NOTICE_TEXT,255,200,80) end)
+    end
+    store.shown=true; noticeDone=true
+    CFLog.write("w","scan",{why="scene-listener-notice",shown=shown and 1 or 0})
+    return true
+end
+R.showNotice=showNotice
+local function listenerLive() return not R.forceInactive and type(OISceneDrain)=="function" end
 local function listen()
-    if type(OISceneDrain)~="function" then
+    if not listenerLive() then
         if not listenerMissingNoted then
             listenerMissingNoted=true
             CFLog.write("w","scan",{why="scene-listener-missing"})
         end
+        local now=getTimeInMillis and getTimeInMillis() or 0
+        missingSince=missingSince or now
+        if not noticeDone and now-missingSince>=R.NOTICE_GRACE_MS then pcall(showNotice) end
         return false
     end
+    missingSince=nil
     local gr=runtime()
     if not gr or not gr.scene or not gr.sceneSeen or not gr.worldSeed or not gr.worldSeed() then return true end
     statusLine(lastStatusAt==nil)
@@ -414,7 +448,7 @@ function R._testRecordWait(mode,hours)
     recordWait(mode,hours)
 end
 function R.reset()
-    lastStatusAt,lastBad=nil,nil
+    lastStatusAt,lastBad,missingSince,noticeDone=nil,nil,nil,nil
     flagged,nFlagged,job,waiting,confirmed={},0,nil,{},{}
     allow,allowRead,ticks=nil,false,0
     waitCounts={walk_h0_1=0,walk_h1_6=0,walk_h6_24=0,walk_h24_plus=0,
