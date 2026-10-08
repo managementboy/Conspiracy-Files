@@ -352,7 +352,7 @@ end
 -- fires while the listener answers. R.forceInactive is the check's test
 -- injection: the listener is treated as missing.
 R.NOTICE_GRACE_MS=45000
-R.NOTICE_TAG="OIShared_detector_notice"
+R.NOTICE_TAG="OIShared.detectorNotice"
 R.NOTICE_TEXT="Of Interest: the scene detector is not running (ZombieBuddy). Only part of the game's own scenes will get clues."
 local missingSince,noticeDone
 local function noticeStore()
