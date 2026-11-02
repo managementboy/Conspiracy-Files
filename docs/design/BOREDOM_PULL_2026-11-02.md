@@ -1,6 +1,6 @@
 # The bored survivor and the pull across Knox
 
-**Status:** design answer, not built. Written in the project's ADHD shape
+**Status:** diagnosis stands; mechanisms superseded by [round 2](BOREDOM_PULL_ROUND2_2026-11-02.md), which the owner asked for after judging these a rehash. Written in the project's ADHD shape
 (brief, wide set, converge, focus, provocation) at the owner's request.
 **Question asked, 2026-11-02:** *"None of the mods we have developed in the
 past have solved the premise I had at the beginning. How do we make the player
